@@ -180,8 +180,7 @@ class TableStructurePrediction(BaseModel):
     table_map: Dict[int, TableElement] = {}
 
 
-class TextElement(BasePageElement):
-    ...
+class TextElement(BasePageElement): ...
 
 
 class FigureData(BaseModel):
