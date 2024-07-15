@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/ds4sd/docling"> <img loading="lazy" alt="Docling" src="logo.png" width="150" /> </a>
+  <a href="https://github.com/ds4sd/docling"> <img loading="lazy" alt="Docling" src="https://github.com/DS4SD/docling/raw/main/logo.png" width="150" /> </a>
 </p>
 
 # Docling
