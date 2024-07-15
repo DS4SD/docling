@@ -75,7 +75,7 @@ You can limit the CPU threads used by `docling` by setting the environment varia
 
 ## Contributing
 
-Please read [Contributing to Docling](./CONTRIBUTING.md) for details.
+Please read [Contributing to Docling](https://github.com/DS4SD/docling/blob/main/CONTRIBUTING.md) for details.
 
 
 ## References
