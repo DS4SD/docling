@@ -6,8 +6,7 @@ RUN apt-get update \
     && apt-get install -y libgl1 libglib2.0-0 curl wget git \
     && apt-get clean
 
-RUN --mount=type=ssh \
-    pip install --no-cache-dir https://github.com/DS4SD/docling.git
+RUN pip install --no-cache-dir docling
 
 ENV HF_HOME=/tmp/
 ENV TORCH_HOME=/tmp/
