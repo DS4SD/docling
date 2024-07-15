@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/ds4sd/docling"> <img loading="lazy" alt="Docling" src="logo.png" width="150" /> </a>
+  <a href="https://github.com/ds4sd/docling"> <img loading="lazy" alt="Docling" src="https://github.com/DS4SD/docling/raw/main/logo.png" width="150" /> </a>
 </p>
 
 # Docling
@@ -75,7 +75,7 @@ You can limit the CPU threads used by `docling` by setting the environment varia
 
 ## Contributing
 
-Please read [Contributing to Docling](./CONTRIBUTING.md) for details.
+Please read [Contributing to Docling](https://github.com/DS4SD/docling/blob/main/CONTRIBUTING.md) for details.
 
 
 ## References
