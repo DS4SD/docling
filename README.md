@@ -4,7 +4,7 @@
 
 # Docling
 
-Dockling bundles PDF document conversion to JSON and Markdown in an easy, self-contained package.
+Docling bundles PDF document conversion to JSON and Markdown in an easy, self-contained package.
 
 ## Features
 * ⚡ Converts any PDF document to JSON or Markdown format, stable and lightning fast
@@ -30,7 +30,7 @@ poetry install
 
 ## Usage
 
-For basic usage, see the [convert.py](examples/convert.py) example module. Run with:
+For basic usage, see the [convert.py](https://github.com/DS4SD/docling/blob/main/examples/convert.py) example module. Run with:
 
 ```
 python examples/convert.py
