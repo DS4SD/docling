@@ -1,0 +1,72 @@
+[tool.poetry]
+name = "docling"
+version = "0.1.0"
+description = "Docling PDF conversion package"
+authors = ["Christoph Auer <cau@zurich.ibm.com>", "Michele Dolfi <dol@zurich.ibm.com>", "Maxim Lysak <mly@zurich.ibm.com>", "Nikos Livathinos <nli@zurich.ibm.com>", "Ahmed Nassar <ahn@zurich.ibm.com>", "Peter Staar <taa@zurich.ibm.com>"]
+license = "MIT"
+readme = "README.md"
+keywords= ["docling", "convert", "document", "pdf", "layout model", "segmentation", "table structure", "table former"]
+ classifiers = [
+     "License :: OSI Approved :: MIT License",
+     "Operating System :: MacOS :: MacOS X",
+     "Operating System :: POSIX :: Linux",
+     "Development Status :: 5 - Production/Stable",
+     "Intended Audience :: Developers",
+     "Intended Audience :: Science/Research",
+     "Topic :: Scientific/Engineering :: Artificial Intelligence",
+     "Programming Language :: Python :: 3"
+ ]
+packages = [{include = "docling"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "^2.0.0"
+docling-core = "^0.2.0"
+docling-ibm-models = "^0.2.0"
+deepsearch-glm = ">=0.18.4,<1"
+deepsearch-toolkit = ">=0.47.0,<1"
+filetype = "^1.2.0"
+pypdfium2 = "^4.30.0"
+pydantic-settings = "^2.3.0"
+huggingface_hub = ">=0.23,<1"
+
+[tool.poetry.group.ocr.dependencies]
+easyocr = "^1.7"
+
+[tool.poetry.group.dev.dependencies]
+black = {extras = ["jupyter"], version = "^24.4.2"}
+pytest = "^7.2.2"
+pre-commit = "^3.7.1"
+mypy = "^1.10.1"
+isort = "^5.10.1"
+python-semantic-release = "^7.32.2"
+flake8 = "^6.0.0"
+pyproject-flake8 = "^6.0.0"
+pytest-xdist = "^3.3.1"
+types-requests = "^2.31.0.2"
+flake8-pyproject = "^1.2.3"
+pylint = "^2.17.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 88
+py_version=311
+
+[tool.mypy]
+pretty = true
+# strict = true
+no_implicit_optional = true
+python_version = "3.11"
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = ["E203", "E501"]
