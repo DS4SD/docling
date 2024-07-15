@@ -1,0 +1,59 @@
+name: "Run CD"
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  # disable keyring (https://github.com/actions/runner-images/issues/6185):
+  PYTHON_KEYRING_BACKEND: keyring.backends.null.Keyring
+
+jobs:
+  docs:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-poetry
+      - name: Build and push docs
+        run: poetry run mkdocs gh-deploy --force
+  code-checks:
+    uses: ./.github/workflows/checks.yml
+  pre-release-check:
+    runs-on: ubuntu-latest
+    outputs:
+      TARGET_TAG_V: ${{ steps.version_check.outputs.TRGT_VERSION }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # for fetching tags, required for semantic-release
+      - uses: ./.github/actions/setup-poetry
+      - name: Check version of potential release
+        id: version_check
+        run: |
+            TRGT_VERSION=$(poetry run semantic-release print-version)
+            echo "TRGT_VERSION=${TRGT_VERSION}" >> $GITHUB_OUTPUT
+            echo "${TRGT_VERSION}"
+      - name: Check notes of potential release
+        run: poetry run semantic-release changelog --unreleased
+  release:
+    needs: [code-checks, pre-release-check]
+    if: needs.pre-release-check.outputs.TARGET_TAG_V != ''
+    environment: auto-release
+    runs-on: ubuntu-latest
+    concurrency: release
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0  # for fetching tags, required for semantic-release
+      - uses: ./.github/actions/setup-poetry
+      - name: Run release script
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          TARGET_VERSION: ${{ needs.pre-release-check.outputs.TARGET_TAG_V }}
+          CHGLOG_FILE: CHANGELOG.md
+        run: ./.github/scripts/release.sh
+        shell: bash

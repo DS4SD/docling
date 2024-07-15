@@ -1,0 +1,21 @@
+name: "Build and publish package"
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+env:
+  # disable keyring (https://github.com/actions/runner-images/issues/6185):
+  PYTHON_KEYRING_BACKEND: keyring.backends.null.Keyring
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-poetry
+      - name: Build and publish
+        run: poetry publish --build --no-interaction --username=__token__ --password=${{ secrets.PYPI_TOKEN }}
