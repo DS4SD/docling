@@ -46,8 +46,6 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     input_doc_paths = [
-        # Path("/Users/cau/Downloads/Issue-36122.pdf"),
-        # Path("/Users/cau/Downloads/IBM_Storage_Insights_Fact_Sheet.pdf"),
         Path("./test/data/2206.01062.pdf"),
         Path("./test/data/2203.01017v2.pdf"),
         Path("./test/data/2305.03393v1.pdf"),
