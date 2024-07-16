@@ -14,19 +14,25 @@ Docling bundles PDF document conversion to JSON and Markdown in an easy, self-co
 
 ## Setup
 
-You need Python 3.11 and poetry. Install poetry from [here](https://python-poetry.org/docs/#installing-with-the-official-installer).
+For general usage, you can simply install `docling` through `pip` from the pypi package index.
+```
+pip install docling
+```
 
-Once you have `poetry` installed, create an environment and install the package:
+**Notes**:
+* Works on macOS and Linux environments. Windows platforms are currently not tested.
+
+### Development setup
+
+To develop for `docling`, you need Python 3.11 and `poetry`. Install poetry from [here](https://python-poetry.org/docs/#installing-with-the-official-installer).
+
+Once you have `poetry` installed and cloned this repo, create an environment and install `docling` from the repo root:
 
 ```bash
 poetry env use $(which python3.11)
 poetry shell
 poetry install
 ```
-
-**Notes**:
-* Works on macOS and Linux environments. Windows platforms are currently not tested.
-
 
 ## Usage
 
