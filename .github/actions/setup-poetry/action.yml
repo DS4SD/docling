@@ -3,7 +3,7 @@ description: 'Set up a specific version of Poetry and install dependencies using
 inputs:
   python-version:
     description: "Version range or exact version of Python or PyPy to use, using SemVer's version range syntax."
-    default: '3.10'
+    default: '3.11'
 runs:
   using: 'composite'
   steps:
