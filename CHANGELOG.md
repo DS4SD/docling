@@ -1,3 +1,9 @@
+## [v0.4.0](https://github.com/DS4SD/docling/releases/tag/v0.4.0) - 2024-07-17
+
+### Feature
+
+* Optimize table extraction quality, add configuration options ([#11](https://github.com/DS4SD/docling/issues/11)) ([`e9526bb`](https://github.com/DS4SD/docling/commit/e9526bb11e21dc85c787af5c38e6f77eaca05f69))
+
 ## [v0.3.1](https://github.com/DS4SD/docling/releases/tag/v0.3.1) - 2024-07-17
 
 ### Fix
