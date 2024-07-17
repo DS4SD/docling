@@ -71,11 +71,11 @@ This can improve output quality if you find that multiple columns in extracted t
 ```python
 
 pipeline_options = PipelineOptions(do_table_structure=True)
-pipeline_options.table_structure_options.do_cell_matching = True
+pipeline_options.table_structure_options.do_cell_matching = False # Uses text cells predicted from table structure model
 
 doc_converter = DocumentConverter(
     artifacts_path=artifacts_path,
-    pipeline_options=pipeline_options, # Controls if OCR is applied (ignores programmatic content)
+    pipeline_options=pipeline_options,
 )
 ```
 
