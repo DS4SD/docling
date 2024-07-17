@@ -75,17 +75,6 @@ tests-mypy = ["mypy (>=1.6)", "pytest-mypy-plugins"]
 tests-no-zope = ["attrs[tests-mypy]", "cloudpickle", "hypothesis", "pympler", "pytest (>=4.3.0)", "pytest-xdist[psutil]"]
 
 [[package]]
-name = "bashlex"
-version = "0.18"
-description = "Python parser for bash"
-optional = false
-python-versions = ">=2.7, !=3.0, !=3.1, !=3.2, !=3.3, !=3.4"
-files = [
-    {file = "bashlex-0.18-py2.py3-none-any.whl", hash = "sha256:91d73a23a3e51711919c1c899083890cdecffc91d8c088942725ac13e9dcfffa"},
-    {file = "bashlex-0.18.tar.gz", hash = "sha256:5bb03a01c6d5676338c36fd1028009c8ad07e7d61d8a1ce3f513b7fff52796ee"},
-]
-
-[[package]]
 name = "black"
 version = "24.4.2"
 description = "The uncompromising code formatter."
@@ -130,17 +119,6 @@ colorama = ["colorama (>=0.4.3)"]
 d = ["aiohttp (>=3.7.4)", "aiohttp (>=3.7.4,!=3.9.0)"]
 jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
-
-[[package]]
-name = "bracex"
-version = "2.4"
-description = "Bash style brace expander."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "bracex-2.4-py3-none-any.whl", hash = "sha256:efdc71eff95eaff5e0f8cfebe7d01adf2c8637c8c92edaf63ef348c241a82418"},
-    {file = "bracex-2.4.tar.gz", hash = "sha256:a27eaf1df42cf561fed58b7a8f3fdf129d1ea16a81e1fadd1d17989bc6384beb"},
-]
 
 [[package]]
 name = "build"
@@ -370,32 +348,6 @@ files = [
     {file = "charset_normalizer-3.3.2-cp39-cp39-win_amd64.whl", hash = "sha256:b01b88d45a6fcb69667cd6d2f7a9aeb4bf53760d7fc536bf679ec94fe9f3ff3d"},
     {file = "charset_normalizer-3.3.2-py3-none-any.whl", hash = "sha256:3e4d1f6587322d2788836a99c69062fbb091331ec940e02d12d179c1d53e25fc"},
 ]
-
-[[package]]
-name = "cibuildwheel"
-version = "2.19.2"
-description = "Build Python wheels on CI with minimal configuration."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "cibuildwheel-2.19.2-py3-none-any.whl", hash = "sha256:02ead5d7e3e81fe2ee0afb78746b1494af6b37afc1e32fae12f9c9a28c14e369"},
-    {file = "cibuildwheel-2.19.2.tar.gz", hash = "sha256:d331c81c505106ee585333b871718cf0516ac10d55c4dda2c00c8a7405743cab"},
-]
-
-[package.dependencies]
-bashlex = "!=0.13"
-bracex = "*"
-certifi = "*"
-filelock = "*"
-packaging = ">=20.9"
-platformdirs = "*"
-
-[package.extras]
-bin = ["click", "packaging (>=21.0)", "pip-tools", "pygithub", "pyyaml", "requests", "rich (>=9.6)"]
-dev = ["build", "click", "jinja2", "packaging (>=21.0)", "pip-tools", "pygithub", "pytest (>=6)", "pytest-timeout", "pytest-xdist", "pyyaml", "requests", "rich (>=9.6)", "tomli-w", "validate-pyproject"]
-docs = ["jinja2 (>=3.1.2)", "mkdocs (==1.3.1)", "mkdocs-include-markdown-plugin (==2.8.0)", "mkdocs-macros-plugin", "pymdown-extensions"]
-test = ["build", "jinja2", "pytest (>=6)", "pytest-timeout", "pytest-xdist", "tomli-w", "validate-pyproject"]
-uv = ["uv"]
 
 [[package]]
 name = "cleo"
@@ -643,32 +595,45 @@ files = [
 
 [[package]]
 name = "deepsearch-glm"
-version = "0.18.4"
+version = "0.19.0"
 description = "Graph Language Models"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "deepsearch_glm-0.18.4-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:ad88c5bf3c203174ef81e0699405aec0f5386130cbc6a975b165f81887bc1a52"},
-    {file = "deepsearch_glm-0.18.4-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:21d51a0671f0713d23be57030287a0f907f4a5f0627a45ea07e2caf54129a71a"},
-    {file = "deepsearch_glm-0.18.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7fc853941ea751a15f65e83f9bee9f988d0ecac4b28fac067b2aab49e15edb74"},
-    {file = "deepsearch_glm-0.18.4-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:cab5e577cf724343f2a5987ff4488c69e86a2dbca8cb0359c9243a07c6cd7d69"},
-    {file = "deepsearch_glm-0.18.4-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:dda02391306d657a884b12f21cc3d1228663f940ec6001c833893dd2844bcc25"},
-    {file = "deepsearch_glm-0.18.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9dccd4286a93ee1a216acba27e1fc76f5d14e280d968998cfeae11a00ad1b6cb"},
-    {file = "deepsearch_glm-0.18.4-cp38-cp38-macosx_14_0_arm64.whl", hash = "sha256:cf38368bc72eab673459ea0fc96c02b1f3ae120df2d9443e1a63e010764ac1e9"},
-    {file = "deepsearch_glm-0.18.4-cp38-cp38-macosx_14_0_x86_64.whl", hash = "sha256:d3fd83ea3b2bce11bac1d710f12547728f4dd48bfaa8bd472366ef144469d52c"},
-    {file = "deepsearch_glm-0.18.4-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5fb4bfd43ac3b996cdd151c35e94fa399953ee3952d7e86390a825880ece95f3"},
-    {file = "deepsearch_glm-0.18.4-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:57cb67e435cacb6c4a6b6a9109d943267c493ebbba252a88ca40909976f60225"},
-    {file = "deepsearch_glm-0.18.4-cp39-cp39-macosx_14_0_x86_64.whl", hash = "sha256:edc399939b6464f96600d2f23796ae2641d668fb794b77199e87abdef77f8853"},
-    {file = "deepsearch_glm-0.18.4-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:00ad8d932e7f0d1be4fd99fc0d4c8d50cb1ff10764f146b6ecb310a1379123d4"},
+    {file = "deepsearch_glm-0.19.0-cp310-cp310-macosx_13_6_arm64.whl", hash = "sha256:d420c7eb4e27b64cdc33c0beba159147fc4be14e141133f0f6ef080465b2529c"},
+    {file = "deepsearch_glm-0.19.0-cp310-cp310-macosx_13_6_x86_64.whl", hash = "sha256:8af4583ea6d914e87d6db96cae1d73272af6fe85193e67406f0c700064e794c2"},
+    {file = "deepsearch_glm-0.19.0-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:772e6e245b4d77d9df84af07693f9c19bc2f3dc6de4cb44deaf5fdd4a6c8e68d"},
+    {file = "deepsearch_glm-0.19.0-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:6a0c29f8cf8a1ee392c68985f8952a01b43dd8f2c5a1476b890f2c90d7ecbc96"},
+    {file = "deepsearch_glm-0.19.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bb4f34bb5e45df2790eb6bbaf5caa625393d903da502b086de65df9ce4e3fff2"},
+    {file = "deepsearch_glm-0.19.0-cp311-cp311-macosx_13_6_arm64.whl", hash = "sha256:320195914e96b8197e53665594c4480b86f3fc4cacd5e6782befb2bb94494a40"},
+    {file = "deepsearch_glm-0.19.0-cp311-cp311-macosx_13_6_x86_64.whl", hash = "sha256:7221851c304ef364a13eeffa940a7c15592e9d5b0050b97904221a65be33f3ab"},
+    {file = "deepsearch_glm-0.19.0-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:b9b9e7102cf4355be8458569c7a44133b54446ae623923772db6942ce0fb2e87"},
+    {file = "deepsearch_glm-0.19.0-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:fa8d8d718149cfecd724a0eca246a3bd57588dffb757f204b629a35623d8f946"},
+    {file = "deepsearch_glm-0.19.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2ae251cf69b43d945fbf2cd41a89ba12312cd319a1c28d41c99d35cc476376b5"},
+    {file = "deepsearch_glm-0.19.0-cp312-cp312-macosx_13_6_arm64.whl", hash = "sha256:ad9a1fbf76e2561bc37e238ee9dd320b4b9cd49e61c55613e3977eedadee52bc"},
+    {file = "deepsearch_glm-0.19.0-cp312-cp312-macosx_13_6_x86_64.whl", hash = "sha256:2030aec8ce751927fe20ca1788e125e9b0c37f994c30062e59c4d7b7a87cbb64"},
+    {file = "deepsearch_glm-0.19.0-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:e57611b5d6cc2da91901e4b39fab6c9131dffe8766f43c20093bff75a0039100"},
+    {file = "deepsearch_glm-0.19.0-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:efbcf157cd6bd2dd6138312cef5df378598fd67e6c3f6f0b63ed3342c1de7f49"},
+    {file = "deepsearch_glm-0.19.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9febce49f365fcc5ada1ded720d387c51328ee470d4fcc89044b0684e074e699"},
+    {file = "deepsearch_glm-0.19.0-cp38-cp38-macosx_13_6_arm64.whl", hash = "sha256:04a29ba5e942f32659ae1a65cfe5e90e93d50e058d53b4763fe13df93f30492f"},
+    {file = "deepsearch_glm-0.19.0-cp38-cp38-macosx_13_6_x86_64.whl", hash = "sha256:a0024f42d6711f574dcab52ef2914a55f31b4fd804d3ad20ca7f211498e8a19b"},
+    {file = "deepsearch_glm-0.19.0-cp38-cp38-macosx_14_0_arm64.whl", hash = "sha256:513e5f1de14f0b12c916a52118083094a9ced439e4800d3442b2dd04f3cdbead"},
+    {file = "deepsearch_glm-0.19.0-cp38-cp38-macosx_14_0_x86_64.whl", hash = "sha256:6d3dd07a549b8cd4408308b0b6b8ca65397ce7e8c819d050d8b2deb03cd1977e"},
+    {file = "deepsearch_glm-0.19.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7be341a85ce1ff164963a6d58b50955599dc33b34040975c972a798ae0f6f12c"},
+    {file = "deepsearch_glm-0.19.0-cp39-cp39-macosx_13_6_arm64.whl", hash = "sha256:b6c3c0d1295666a8a68f76262c020ffdc6de64cdd95671bf24c0592fa1317533"},
+    {file = "deepsearch_glm-0.19.0-cp39-cp39-macosx_13_6_x86_64.whl", hash = "sha256:cf290fe3824bd0de01b7c1d681aa14c89c5e60c6735fa471e04a985e55aead44"},
+    {file = "deepsearch_glm-0.19.0-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:92943c495646660aef99ba64a7e3b77ffeca4866e96044f8be5e14dfa7ee660e"},
+    {file = "deepsearch_glm-0.19.0-cp39-cp39-macosx_14_0_x86_64.whl", hash = "sha256:a7c89d6fae4ed9dc960f9ee9734e91d321222080bf439e1d89e8c67270afc282"},
+    {file = "deepsearch_glm-0.19.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fb6398a34f5afac6282c4a5b7ea5a89f27fcf4c0adac43af27ecbac9e2731ce3"},
 ]
 
 [package.dependencies]
-cibuildwheel = ">=2.17.0,<3.0.0"
 deepsearch-toolkit = ">=0.31.0"
 matplotlib = ">=3.7.1,<4.0.0"
 networkx = ">=3.1,<4.0"
 netwulf = ">=0.1.5,<0.2.0"
 numerize = ">=0.12,<0.13"
+numpy = {version = ">=1.26.4,<2.0.0", markers = "python_version >= \"3.9\""}
 pandas = ">=1.5.1"
 pybind11 = ">=2.10.4,<3.0.0"
 python-dotenv = ">=1.0.0,<2.0.0"
@@ -4862,4 +4827,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "1f0c0eb64cdce7e5c21670841d5dea047b3f918a3041bb22bb9c615b9085da20"
+content-hash = "dc19329559f190dfe687b4ee272eb6dac66b3d9fe0398c95c2572e8c63fa23ac"
