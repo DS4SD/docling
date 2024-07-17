@@ -1,3 +1,13 @@
+## [v0.3.1](https://github.com/DS4SD/docling/releases/tag/v0.3.1) - 2024-07-17
+
+### Fix
+
+* Missing type for default values ([#12](https://github.com/DS4SD/docling/issues/12)) ([`d1d1724`](https://github.com/DS4SD/docling/commit/d1d1724537d6a1f37591cdea44052207caae2ee2))
+
+### Documentation
+
+* Reflect supported Python versions, add badges ([#10](https://github.com/DS4SD/docling/issues/10)) ([`2baa35c`](https://github.com/DS4SD/docling/commit/2baa35c548dd6d15dba449eb1dc707f8f08c0a2a))
+
 ## [v0.3.0](https://github.com/DS4SD/docling/releases/tag/v0.3.0) - 2024-07-17
 
 ### Feature
