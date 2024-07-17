@@ -43,7 +43,9 @@ python examples/convert.py
 ```
 The output of the above command will be written to `./scratch`.
 
-### Enable or disable pipeline features
+### Adjust pipeline features
+
+**Control pipeline options**
 
 You can control if table structure recognition or OCR should be performed by arguments passed to `DocumentConverter` 
 ```python
@@ -51,6 +53,23 @@ doc_converter = DocumentConverter(
     artifacts_path=artifacts_path,
     pipeline_options=PipelineOptions(do_table_structure=False, # Controls if table structure is recovered. 
                                      do_ocr=True), # Controls if OCR is applied (ignores programmatic content)
+)
+```
+
+**Control table extraction options**
+
+You can control if table structure recognition should map the recognized structure back to PDF cells (default) or use text cells from the structure prediction itself.
+This can improve output quality if you find that multiple columns in extracted tables are erroneously merged into one.
+
+
+```python
+
+pipeline_options = PipelineOptions(do_table_structure=True)
+pipeline_options.table_structure_options.do_cell_matching = True
+
+doc_converter = DocumentConverter(
+    artifacts_path=artifacts_path,
+    pipeline_options=pipeline_options, # Controls if OCR is applied (ignores programmatic content)
 )
 ```
 
