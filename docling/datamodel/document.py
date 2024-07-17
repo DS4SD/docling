@@ -117,9 +117,9 @@ class ConvertedDocument(BaseModel):
     errors: List[Dict] = []  # structure to keep errors
 
     pages: List[Page] = []
-    assembled: AssembledUnit = None
+    assembled: Optional[AssembledUnit] = None
 
-    output: DsDocument = None
+    output: Optional[DsDocument] = None
 
     def to_ds_document(self) -> DsDocument:
         title = ""
