@@ -1,3 +1,4 @@
+import copy
 from enum import Enum, auto
 from io import BytesIO
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -46,6 +47,15 @@ class BoundingBox(BaseModel):
     @property
     def height(self):
         return abs(self.t - self.b)
+
+    def scaled(self, scale: float) -> "BoundingBox":
+        out_bbox = copy.deepcopy(self)
+        out_bbox.l *= scale
+        out_bbox.r *= scale
+        out_bbox.t *= scale
+        out_bbox.b *= scale
+
+        return out_bbox
 
     def as_tuple(self):
         if self.coord_origin == CoordOrigin.TOPLEFT:
@@ -241,6 +251,17 @@ class DocumentStream(BaseModel):
     stream: BytesIO
 
 
+class TableStructureOptions(BaseModel):
+    do_cell_matching: bool = (
+        True
+        # True:  Matches predictions back to PDF cells. Can break table output if PDF cells
+        #        are merged across table columns.
+        # False: Let table structure model define the text cells, ignore PDF cells.
+    )
+
+
 class PipelineOptions(BaseModel):
-    do_table_structure: bool = True
-    do_ocr: bool = False
+    do_table_structure: bool = True  # True: perform table structure extraction
+    do_ocr: bool = False  # True: perform OCR, replace programmatic PDF text
+
+    table_structure_options: TableStructureOptions = TableStructureOptions()

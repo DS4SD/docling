@@ -19,18 +19,6 @@ class PageAssembleModel:
     def __init__(self, config):
         self.config = config
 
-        # self.line_wrap_pattern = re.compile(r'(?<=[^\W_])- \n(?=\w)')
-
-    # def sanitize_text_poor(self, lines):
-    #     text = '\n'.join(lines)
-    #
-    #     # treat line wraps.
-    #     sanitized_text = self.line_wrap_pattern.sub('', text)
-    #
-    #     sanitized_text = sanitized_text.replace('\n', ' ')
-    #
-    #     return sanitized_text
-
     def sanitize_text(self, lines):
         if len(lines) <= 1:
             return " ".join(lines)
