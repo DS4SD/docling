@@ -1,5 +1,7 @@
 <p align="center">
-  <a href="https://github.com/ds4sd/docling"> <img loading="lazy" alt="Docling" src="https://github.com/DS4SD/docling/raw/main/logo.png" width="150" />
+  <a href="https://github.com/ds4sd/docling">
+    <img loading="lazy" alt="Docling" src="https://github.com/DS4SD/docling/raw/main/logo.png" width="150" />
+  </a>
 </p>
 
 # Docling
@@ -11,7 +13,7 @@
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 [![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://pydantic.dev)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
-[![License MIT](https://img.shields.io/github/license/ds4sd/deepsearch-toolkit)](https://opensource.org/licenses/MIT)
+[![License MIT](https://img.shields.io/github/license/DS4SD/docling)](https://opensource.org/licenses/MIT)
 
 Docling bundles PDF document conversion to JSON and Markdown in an easy, self-contained package.
 
@@ -49,7 +51,7 @@ The output of the above command will be written to `./scratch`.
 
 ### Adjust pipeline features
 
-**Control pipeline options**
+#### Control pipeline options
 
 You can control if table structure recognition or OCR should be performed by arguments passed to `DocumentConverter`:
 ```python
@@ -62,16 +64,15 @@ doc_converter = DocumentConverter(
 )
 ```
 
-**Control table extraction options**
+#### Control table extraction options
 
 You can control if table structure recognition should map the recognized structure back to PDF cells (default) or use text cells from the structure prediction itself.
 This can improve output quality if you find that multiple columns in extracted tables are erroneously merged into one.
 
 
 ```python
-
 pipeline_options = PipelineOptions(do_table_structure=True)
-pipeline_options.table_structure_options.do_cell_matching = False # Uses text cells predicted from table structure model
+pipeline_options.table_structure_options.do_cell_matching = False  # uses text cells predicted from table structure model
 
 doc_converter = DocumentConverter(
     artifacts_path=artifacts_path,
