@@ -3,7 +3,6 @@ from io import BytesIO
 from pathlib import Path, PurePath
 from typing import ClassVar, Dict, Iterable, List, Optional, Type, Union
 
-from deepsearch.documents.core.export import export_to_markdown
 from docling_core.types import BaseCell, BaseText
 from docling_core.types import BoundingBox as DsBoundingBox
 from docling_core.types import Document as DsDocument
@@ -299,9 +298,7 @@ class ConvertedDocument(BaseModel):
 
     def render_as_markdown(self):
         if self.output:
-            return export_to_markdown(
-                self.output.model_dump(by_alias=True, exclude_none=True)
-            )
+            return self.output.export_to_markdown()
         else:
             return ""
 

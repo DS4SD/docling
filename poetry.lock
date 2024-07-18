@@ -707,13 +707,13 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "0.2.0"
+version = "1.1.0"
 description = "A python library to define and validate data types in Docling."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "docling_core-0.2.0-py3-none-any.whl", hash = "sha256:e8ff3af4f13a3a1709e2d0be8f1a258bfa71a820a70acab1a3b41f9c10e428b5"},
-    {file = "docling_core-0.2.0.tar.gz", hash = "sha256:3fa8920d12ce5cf687fc0c43b103a6c3a54a53f9eecdde9fad5dc5f0a0c76d6d"},
+    {file = "docling_core-1.1.0-py3-none-any.whl", hash = "sha256:80096ec6bbce9e616700ccd6bdd5a50e5d1a9a832d7968da3874d54b29962536"},
+    {file = "docling_core-1.1.0.tar.gz", hash = "sha256:69bc83d3b192d9e56bb91d77d8434d9fc109f8cb25ab5a285d2f3bccc10899cb"},
 ]
 
 [package.dependencies]
@@ -723,6 +723,7 @@ jsonschema = ">=4.16.0,<5.0.0"
 poetry = ">=1.8.3,<2.0.0"
 pydantic = ">=2.6.0,<3.0.0"
 pyproject-toml = ">=0.0.10,<0.0.11"
+tabulate = ">=0.9.0,<0.10.0"
 
 [[package]]
 name = "docling-ibm-models"
@@ -4827,4 +4828,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "dc19329559f190dfe687b4ee272eb6dac66b3d9fe0398c95c2572e8c63fa23ac"
+content-hash = "a2de0e26ae072cae8ca01360b4242695427ae2493e860a0bc9e8c11d2d4cf58e"
