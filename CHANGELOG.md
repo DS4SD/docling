@@ -1,3 +1,13 @@
+## [v1.0.0](https://github.com/DS4SD/docling/releases/tag/v1.0.0) - 2024-07-18
+
+### Feature
+
+* V1.0.0 release ([#16](https://github.com/DS4SD/docling/issues/16)) ([`71c3a9c`](https://github.com/DS4SD/docling/commit/71c3a9c8cde5b3a8884430eddcb33a9fbd7bf354))
+
+### Breaking
+
+* v1.0.0 release ([#16](https://github.com/DS4SD/docling/issues/16)) ([`71c3a9c`](https://github.com/DS4SD/docling/commit/71c3a9c8cde5b3a8884430eddcb33a9fbd7bf354))
+
 ## [v0.4.0](https://github.com/DS4SD/docling/releases/tag/v0.4.0) - 2024-07-17
 
 ### Feature
