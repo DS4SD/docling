@@ -32,3 +32,10 @@ repos:
 #       pass_filenames: false
 #       language: system
 #       files: '\.py$'
+  - repo: local
+    hooks:
+      - id: system
+        name: Poetry check
+        entry: poetry check --lock
+        pass_filenames: false
+        language: system
