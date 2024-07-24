@@ -32,9 +32,6 @@ pydantic-settings = "^2.3.0"
 huggingface_hub = ">=0.23,<1"
 easyocr = { version = "^1.7", optional = true }
 
-[tool.poetry.group.ocr.dependencies]
-easyocr = "^1.7"
-
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
 pytest = "^7.2.2"
