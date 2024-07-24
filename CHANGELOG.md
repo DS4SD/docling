@@ -1,3 +1,9 @@
+## [v1.0.1](https://github.com/DS4SD/docling/releases/tag/v1.0.1) - 2024-07-24
+
+### Fix
+
+* Expose ocr as extra ([#18](https://github.com/DS4SD/docling/issues/18)) ([`b0725e0`](https://github.com/DS4SD/docling/commit/b0725e0aa693058b4962efa69730777dbe1d5bec))
+
 ## [v1.0.0](https://github.com/DS4SD/docling/releases/tag/v1.0.0) - 2024-07-18
 
 ### Feature
