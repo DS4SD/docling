@@ -30,9 +30,7 @@ filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"
 pydantic-settings = "^2.3.0"
 huggingface_hub = ">=0.23,<1"
-
-[tool.poetry.group.ocr.dependencies]
-easyocr = "^1.7"
+easyocr = { version = "^1.7", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
