@@ -1,3 +1,9 @@
+## [v1.0.2](https://github.com/DS4SD/docling/releases/tag/v1.0.2) - 2024-07-24
+
+### Fix
+
+* Add easyocr to main deps for valid extra ([#19](https://github.com/DS4SD/docling/issues/19)) ([`54b3dda`](https://github.com/DS4SD/docling/commit/54b3dda141fc09e8c17ba4cb301d0c4394b680d8))
+
 ## [v1.0.1](https://github.com/DS4SD/docling/releases/tag/v1.0.1) - 2024-07-24
 
 ### Fix
