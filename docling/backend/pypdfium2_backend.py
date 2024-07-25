@@ -201,13 +201,7 @@ class PyPdfiumPageBackend(PdfPageBackend):
 class PyPdfiumDocumentBackend(PdfDocumentBackend):
     def __init__(self, path_or_stream: Iterable[Union[BytesIO, Path]]):
         super().__init__(path_or_stream)
-
-        if isinstance(path_or_stream, Path):
-            self._pdoc = pdfium.PdfDocument(path_or_stream)
-        elif isinstance(path_or_stream, BytesIO):
-            self._pdoc = pdfium.PdfDocument(
-                path_or_stream
-            )  # TODO Fix me, won't accept bytes.
+        self._pdoc = pdfium.PdfDocument(path_or_stream)
 
     def page_count(self) -> int:
         return len(self._pdoc)
