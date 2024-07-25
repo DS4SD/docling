@@ -6,7 +6,7 @@ import time
 import traceback
 from pathlib import Path
 from typing import Iterable, Optional, Type, Union
-from urllib.request import urlopen, urlretrieve
+from urllib.request import urlopen
 
 from docling_core.types import Document
 from PIL import ImageDraw
