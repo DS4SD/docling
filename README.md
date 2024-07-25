@@ -30,19 +30,35 @@ To use Docling, simply install `docling` from your package manager, e.g. pip:
 pip install docling
 ```
 
-> [!NOTE]  
+> [!NOTE]
 > Works on macOS and Linux environments. Windows platforms are currently not tested.
 
 ### Development setup
 
 To develop for Docling, you need Python 3.10 / 3.11 / 3.12 and Poetry. You can then install from your local clone's root dir:
 ```bash
-poetry install
+poetry install --all-extras
 ```
 
 ## Usage
 
-For basic usage, see the [convert.py](https://github.com/DS4SD/docling/blob/main/examples/convert.py) example module. Run with:
+### Convert a single document
+
+To convert invidual PDF documents, use `convert_single()`, for example:
+```python
+from docling.document_converter import DocumentConverter
+
+source = "https://arxiv.org/pdf/2206.01062"  # PDF path or URL
+converter = DocumentConverter()
+doc = converter.convert_single(source)
+print(doc.export_to_markdown())  # output: "## DocLayNet: A Large Human-Annotated Dataset for Document-Layout Analysis [...]"
+```
+
+### Convert a batch of documents
+
+For an example of converting multiple documents, see [convert.py](https://github.com/DS4SD/docling/blob/main/examples/convert.py).
+
+From a local repo clone, you can run it with:
 
 ```
 python examples/convert.py
@@ -58,7 +74,7 @@ You can control if table structure recognition or OCR should be performed by arg
 doc_converter = DocumentConverter(
     artifacts_path=artifacts_path,
     pipeline_options=PipelineOptions(
-        do_table_structure=False,  # controls if table structure is recovered 
+        do_table_structure=False,  # controls if table structure is recovered
         do_ocr=True,  # controls if OCR is applied (ignores programmatic content)
     ),
 )
@@ -90,7 +106,7 @@ conv_input = DocumentConversionInput.from_paths(
 )
 ```
 
-### Convert from binary PDF streams 
+### Convert from binary PDF streams
 
 You can convert PDFs from a binary stream instead of from the filesystem as follows:
 ```python
