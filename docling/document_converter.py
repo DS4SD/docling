@@ -1,4 +1,3 @@
-import cgi
 import functools
 import logging
 import tempfile
@@ -6,8 +5,8 @@ import time
 import traceback
 from pathlib import Path
 from typing import Iterable, Optional, Type, Union
-from urllib.request import urlopen
 
+import requests
 from docling_core.types import Document
 from PIL import ImageDraw
 from pydantic import AnyHttpUrl, TypeAdapter, ValidationError
@@ -102,17 +101,23 @@ class DocumentConverter:
         with tempfile.TemporaryDirectory() as temp_dir:
             try:
                 http_url: AnyHttpUrl = TypeAdapter(AnyHttpUrl).validate_python(source)
-                with urlopen(str(source)) as resp:
-                    cont_disp = resp.info().get("Content-Disposition")
-                    content = resp.read()
-                if cont_disp:
-                    _, params = cgi.parse_header(cont_disp)
-                    filename = params.get("filename", self._default_download_filename)
-                else:
-                    filename = http_url.path or self._default_download_filename
-                local_path = Path(temp_dir) / filename
+                res = requests.get(http_url, stream=True)
+                res.raise_for_status()
+                fname = None
+                # try to get filename from response header
+                if cont_disp := res.headers.get("Content-Disposition"):
+                    for par in cont_disp.strip().split(";"):
+                        # currently only handling directive "filename" (not "*filename")
+                        if (split := par.split("=")) and split[0].strip() == "filename":
+                            fname = "=".join(split[1:]).strip().strip("'\"") or None
+                            break
+                # otherwise, use name from URL:
+                if fname is None:
+                    fname = Path(http_url.path).name or self._default_download_filename
+                local_path = Path(temp_dir) / fname
                 with open(local_path, "wb") as f:
-                    f.write(content)
+                    for chunk in res.iter_content(chunk_size=1024):  # using 1-KB chunks
+                        f.write(chunk)
             except ValidationError:
                 try:
                     local_path = TypeAdapter(Path).validate_python(source)

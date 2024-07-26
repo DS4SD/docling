@@ -30,6 +30,7 @@ filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"
 pydantic-settings = "^2.3.0"
 huggingface_hub = ">=0.23,<1"
+requests = "^2.32.3"
 easyocr = { version = "^1.7", optional = true }
 
 [tool.poetry.group.dev.dependencies]
