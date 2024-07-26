@@ -1,11 +1,15 @@
 import functools
 import logging
+import tempfile
 import time
 import traceback
 from pathlib import Path
 from typing import Iterable, Optional, Type, Union
 
+import requests
+from docling_core.types import Document
 from PIL import ImageDraw
+from pydantic import AnyHttpUrl, TypeAdapter, ValidationError
 
 from docling.backend.abstract_backend import PdfDocumentBackend
 from docling.datamodel.base_models import (
@@ -32,6 +36,7 @@ _log = logging.getLogger(__name__)
 class DocumentConverter:
     _layout_model_path = "model_artifacts/layout/beehive_v0.0.5"
     _table_model_path = "model_artifacts/tableformer"
+    _default_download_filename = "file.pdf"
 
     def __init__(
         self,
@@ -79,6 +84,57 @@ class DocumentConverter:
 
             # Note: Pdfium backend is not thread-safe, thread pool usage was disabled.
             yield from map(self.process_document, input_batch)
+
+    def convert_single(self, source: Path | AnyHttpUrl | str) -> Document:
+        """Convert a single document.
+
+        Args:
+            source (Path | AnyHttpUrl | str): The PDF input source. Can be a path or URL.
+
+        Raises:
+            ValueError: If source is of unexpected type.
+            RuntimeError: If conversion fails.
+
+        Returns:
+            Document: The converted document object.
+        """
+        with tempfile.TemporaryDirectory() as temp_dir:
+            try:
+                http_url: AnyHttpUrl = TypeAdapter(AnyHttpUrl).validate_python(source)
+                res = requests.get(http_url, stream=True)
+                res.raise_for_status()
+                fname = None
+                # try to get filename from response header
+                if cont_disp := res.headers.get("Content-Disposition"):
+                    for par in cont_disp.strip().split(";"):
+                        # currently only handling directive "filename" (not "*filename")
+                        if (split := par.split("=")) and split[0].strip() == "filename":
+                            fname = "=".join(split[1:]).strip().strip("'\"") or None
+                            break
+                # otherwise, use name from URL:
+                if fname is None:
+                    fname = Path(http_url.path).name or self._default_download_filename
+                local_path = Path(temp_dir) / fname
+                with open(local_path, "wb") as f:
+                    for chunk in res.iter_content(chunk_size=1024):  # using 1-KB chunks
+                        f.write(chunk)
+            except ValidationError:
+                try:
+                    local_path = TypeAdapter(Path).validate_python(source)
+                except ValidationError:
+                    raise ValueError(
+                        f"Unexpected file path type encountered: {type(source)}"
+                    )
+            conv_inp = DocumentConversionInput.from_paths(paths=[local_path])
+            converted_docs_iter = self.convert(conv_inp)
+            converted_doc: ConvertedDocument = next(converted_docs_iter)
+        if converted_doc.status not in {
+            ConversionStatus.SUCCESS,
+            ConversionStatus.SUCCESS_WITH_ERRORS,
+        }:
+            raise RuntimeError(f"Conversion failed with status: {converted_doc.status}")
+        doc = converted_doc.to_ds_document()
+        return doc
 
     def process_document(self, in_doc: InputDocument) -> ConvertedDocument:
         start_doc_time = time.time()
