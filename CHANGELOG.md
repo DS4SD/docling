@@ -1,3 +1,9 @@
+## [v1.1.0](https://github.com/DS4SD/docling/releases/tag/v1.1.0) - 2024-07-26
+
+### Feature
+
+* Add simplified single-doc conversion ([#20](https://github.com/DS4SD/docling/issues/20)) ([`d603137`](https://github.com/DS4SD/docling/commit/d60313738340c20f9af64dfe51e28b7670ff64ef))
+
 ## [v1.0.2](https://github.com/DS4SD/docling/releases/tag/v1.0.2) - 2024-07-24
 
 ### Fix
