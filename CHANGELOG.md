@@ -1,3 +1,9 @@
+## [v1.1.1](https://github.com/DS4SD/docling/releases/tag/v1.1.1) - 2024-07-30
+
+### Fix
+
+* Correct text extraction for table cells ([#21](https://github.com/DS4SD/docling/issues/21)) ([`f4bf3d2`](https://github.com/DS4SD/docling/commit/f4bf3d25b955b71729833a18aa3a5b643fecfa75))
+
 ## [v1.1.0](https://github.com/DS4SD/docling/releases/tag/v1.1.0) - 2024-07-26
 
 ### Feature
