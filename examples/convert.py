@@ -58,8 +58,7 @@ def main():
     pipeline_options.table_structure_options.do_cell_matching = False
 
     doc_converter = DocumentConverter(
-        artifacts_path=artifacts_path,
-        pipeline_options=pipeline_options
+        artifacts_path=artifacts_path, pipeline_options=pipeline_options
     )
 
     input = DocumentConversionInput.from_paths(input_doc_paths)
