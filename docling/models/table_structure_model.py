@@ -114,12 +114,15 @@ class TableStructureModel:
                     for element in table_out["tf_responses"]:
 
                         if not self.do_cell_matching:
-                            the_bbox = BoundingBox.model_validate(element["bbox"])
+                            the_bbox = BoundingBox.model_validate(
+                                element["bbox"]
+                            ).scaled(1 / self.scale)
                             text_piece = page._backend.get_text_in_rect(the_bbox)
                             element["bbox"]["token"] = text_piece
 
                         tc = TableCell.model_validate(element)
-                        tc.bbox = tc.bbox.scaled(1 / self.scale)
+                        if self.do_cell_matching:
+                            tc.bbox = tc.bbox.scaled(1 / self.scale)
                         table_cells.append(tc)
 
                     # Retrieving cols/rows, after post processing:

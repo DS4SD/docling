@@ -53,7 +53,13 @@ def main():
 
     artifacts_path = DocumentConverter.download_models_hf()
 
-    doc_converter = DocumentConverter(artifacts_path=artifacts_path)
+    pipeline_options = PipelineOptions(do_table_structure=True)
+    # use text cells predicted from table structure model, instead of matching with pdf cells
+    pipeline_options.table_structure_options.do_cell_matching = False
+
+    doc_converter = DocumentConverter(
+        artifacts_path=artifacts_path, pipeline_options=pipeline_options
+    )
 
     input = DocumentConversionInput.from_paths(input_doc_paths)
 
