@@ -125,7 +125,7 @@ class ConvertedDocument(BaseModel):
         desc = DsDocumentDescription(logs=[])
 
         page_hashes = [
-            PageReference(hash=p.page_hash, page=p.page_no, model="default")
+            PageReference(hash=p.page_hash, page=p.page_no + 1, model="default")
             for p in self.pages
         ]
 
@@ -159,7 +159,7 @@ class ConvertedDocument(BaseModel):
                         prov=[
                             Prov(
                                 bbox=target_bbox,
-                                page=element.page_no,
+                                page=element.page_no + 1,
                                 span=[0, len(element.text)],
                             )
                         ],
@@ -242,7 +242,7 @@ class ConvertedDocument(BaseModel):
                         prov=[
                             Prov(
                                 bbox=target_bbox,
-                                page=element.page_no,
+                                page=element.page_no + 1,
                                 span=[0, 0],
                             )
                         ],
@@ -264,7 +264,7 @@ class ConvertedDocument(BaseModel):
                         prov=[
                             Prov(
                                 bbox=target_bbox,
-                                page=element.page_no,
+                                page=element.page_no + 1,
                                 span=[0, 0],
                             )
                         ],
@@ -274,7 +274,7 @@ class ConvertedDocument(BaseModel):
                 )
 
         page_dimensions = [
-            PageDimensions(page=p.page_no, height=p.size.height, width=p.size.width)
+            PageDimensions(page=p.page_no + 1, height=p.size.height, width=p.size.width)
             for p in self.pages
         ]
 
