@@ -715,13 +715,13 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "1.1.0"
+version = "1.1.2"
 description = "A python library to define and validate data types in Docling."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "docling_core-1.1.0-py3-none-any.whl", hash = "sha256:80096ec6bbce9e616700ccd6bdd5a50e5d1a9a832d7968da3874d54b29962536"},
-    {file = "docling_core-1.1.0.tar.gz", hash = "sha256:69bc83d3b192d9e56bb91d77d8434d9fc109f8cb25ab5a285d2f3bccc10899cb"},
+    {file = "docling_core-1.1.2-py3-none-any.whl", hash = "sha256:bdff5643e3e37a24204449eee99505db0f1cf620b8e1ce4cf4b71850bf49496b"},
+    {file = "docling_core-1.1.2.tar.gz", hash = "sha256:969cde6795631a5f5f8cbb5e7ca0e4032864c1abc8fff762415a09a9b1f7146c"},
 ]
 
 [package.dependencies]
@@ -4882,4 +4882,4 @@ ocr = ["easyocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "dcb00c6601f61b087fd204d040149c20a7dcd72ab353e912e78dc265c86e4d00"
+content-hash = "a6685d5cf1b283d805e10193a437662a1807f99dad40b56ab1e58e1b708fc184"
