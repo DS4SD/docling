@@ -1,3 +1,9 @@
+## [v1.1.2](https://github.com/DS4SD/docling/releases/tag/v1.1.2) - 2024-07-31
+
+### Fix
+
+* Set page number using 1-based indexing ([#22](https://github.com/DS4SD/docling/issues/22)) ([`d2d9543`](https://github.com/DS4SD/docling/commit/d2d9543415d37c54add917803b96d9959dc4d2cc))
+
 ## [v1.1.1](https://github.com/DS4SD/docling/releases/tag/v1.1.1) - 2024-07-30
 
 ### Fix
