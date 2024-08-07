@@ -760,6 +760,30 @@ torchvision = "0.17.2"
 tqdm = ">=4.64.0,<5.0.0"
 
 [[package]]
+name = "docling-parse"
+version = "0.0.1"
+description = "Simple package to extract text with coordinates from programmatic PDFs"
+optional = false
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "docling_parse-0.0.1-cp310-cp310-macosx_13_6_arm64.whl", hash = "sha256:d6301dde11157f94b6436bb87186b4723cce7b1e59e0f74b0a7333339d6f911d"},
+    {file = "docling_parse-0.0.1-cp310-cp310-macosx_13_6_x86_64.whl", hash = "sha256:ac5fb3b6ac568159930103521f2e7002b78c37f6555f23d767b2e247ddbce740"},
+    {file = "docling_parse-0.0.1-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:ec9066ad9e7f11a18aa230f67b733d64433185be1da8e887ac273c9683e02938"},
+    {file = "docling_parse-0.0.1-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:3e5d560ac3527a9bda5bf01905ec6a5fb9eb889a5bec2c3c909cf9c75642e2d3"},
+    {file = "docling_parse-0.0.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d56de1a5b45b19117d4fe1f444878501796ec5f17de880c06c1ce3184ac360e7"},
+    {file = "docling_parse-0.0.1-cp311-cp311-macosx_13_6_arm64.whl", hash = "sha256:110a08f4663ee18833b2b89013993c2326b519a7fe21a64940d9f2789f52be29"},
+    {file = "docling_parse-0.0.1-cp311-cp311-macosx_13_6_x86_64.whl", hash = "sha256:19cf275ce78d2ebb7c3e577b5126f1f2af6fd28557b63c42d1455f1cc87be454"},
+    {file = "docling_parse-0.0.1-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:1fdd07ac20951935e3f74b1ec1f503c4493440664aaa8e30ab7fa6334c2a4937"},
+    {file = "docling_parse-0.0.1-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:d8018263eba239c702f79149ed16ec4e749bdec5396aea9e78b9cdfbae1b86bd"},
+    {file = "docling_parse-0.0.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:299281bfc14ca95cc1db677f48f152105be0f96beab171313004cdb7ce448df4"},
+    {file = "docling_parse-0.0.1-cp312-cp312-macosx_13_6_arm64.whl", hash = "sha256:b05d40d6570212ca1e3b98fb55ce1c861d28484db2bde513b6c5e8b3339f4021"},
+    {file = "docling_parse-0.0.1-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:11bdddc8f767bdd14b317bcb25d7fc46b656f867f137a5d8fe6d0f95d61d2ce9"},
+    {file = "docling_parse-0.0.1-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:14a52b46c887c00b0a1da0f5ea4e6652ab9e23deeac43f6d98b239a6cba7fbf1"},
+    {file = "docling_parse-0.0.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:17caa551f7432555823f01a4882e869068198a8b27eec1449afc6c821b594330"},
+    {file = "docling_parse-0.0.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:27aac51dd7753fac57466fa5de55e0ff0294367cf62a539941e72cfff8fb7e87"},
+]
+
+[[package]]
 name = "docutils"
 version = "0.21.2"
 description = "Docutils -- Python Documentation Utilities"
@@ -2510,7 +2534,6 @@ description = "Nvidia JIT LTO Library"
 optional = false
 python-versions = ">=3"
 files = [
-    {file = "nvidia_nvjitlink_cu12-12.5.82-py3-none-manylinux2014_aarch64.whl", hash = "sha256:98103729cc5226e13ca319a10bbf9433bbbd44ef64fe72f45f067cacc14b8d27"},
     {file = "nvidia_nvjitlink_cu12-12.5.82-py3-none-manylinux2014_x86_64.whl", hash = "sha256:f9b37bc5c8cf7509665cb6ada5aaa0ce65618f2332b7d3e78e9790511f111212"},
     {file = "nvidia_nvjitlink_cu12-12.5.82-py3-none-win_amd64.whl", hash = "sha256:e782564d705ff0bf61ac3e1bf730166da66dd2fe9012f111ede5fc49b64ae697"},
 ]
@@ -4882,4 +4905,4 @@ ocr = ["easyocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "a6685d5cf1b283d805e10193a437662a1807f99dad40b56ab1e58e1b708fc184"
+content-hash = "9dfea6fabd2b8be0183a671c1540446cadc1da45a5460e636c71ae5b24abee0d"

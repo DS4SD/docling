@@ -4,7 +4,8 @@ import time
 from pathlib import Path
 from typing import Iterable
 
-from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
+# from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
+from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, PipelineOptions
 from docling.datamodel.document import ConvertedDocument, DocumentConversionInput
 from docling.document_converter import DocumentConverter
@@ -54,11 +55,12 @@ def main():
     artifacts_path = DocumentConverter.download_models_hf()
 
     pipeline_options = PipelineOptions(do_table_structure=True)
-    # use text cells predicted from table structure model, instead of matching with pdf cells
-    pipeline_options.table_structure_options.do_cell_matching = False
+    pipeline_options.table_structure_options.do_cell_matching = True
 
     doc_converter = DocumentConverter(
-        artifacts_path=artifacts_path, pipeline_options=pipeline_options
+        artifacts_path=artifacts_path,
+        pipeline_options=pipeline_options,
+        pdf_backend=DoclingParseDocumentBackend,
     )
 
     input = DocumentConversionInput.from_paths(input_doc_paths)
