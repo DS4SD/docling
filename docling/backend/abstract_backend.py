@@ -35,7 +35,7 @@ class PdfPageBackend(ABC):
 
 class PdfDocumentBackend(ABC):
     @abstractmethod
-    def __init__(self, path_or_stream: Iterable[Union[BytesIO, Path]]):
+    def __init__(self, path_or_stream: Union[BytesIO, Path]):
         pass
 
     @abstractmethod
