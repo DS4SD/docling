@@ -1,3 +1,14 @@
+## [v1.2.1](https://github.com/DS4SD/docling/releases/tag/v1.2.1) - 2024-08-07
+
+### Fix
+
+* Update (vuln) deps ([#29](https://github.com/DS4SD/docling/issues/29)) ([`79ef8d2`](https://github.com/DS4SD/docling/commit/79ef8d2f2f6732f94c6777877ac9d0a45915ac84))
+* Type of path_or_stream in PdfDocumentBackend ([#28](https://github.com/DS4SD/docling/issues/28)) ([`794b20a`](https://github.com/DS4SD/docling/commit/794b20a50ad089b39d4a4a84dcd826935b2b83ed))
+
+### Documentation
+
+* Improve examples ([#27](https://github.com/DS4SD/docling/issues/27)) ([`9550db8`](https://github.com/DS4SD/docling/commit/9550db8e64c4d638a429be33c10f10f18871f795))
+
 ## [v1.2.0](https://github.com/DS4SD/docling/releases/tag/v1.2.0) - 2024-08-07
 
 ### Feature
