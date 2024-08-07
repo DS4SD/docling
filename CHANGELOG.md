@@ -1,3 +1,9 @@
+## [v1.2.0](https://github.com/DS4SD/docling/releases/tag/v1.2.0) - 2024-08-07
+
+### Feature
+
+* Introducing docling_backend ([#26](https://github.com/DS4SD/docling/issues/26)) ([`b8f5e38`](https://github.com/DS4SD/docling/commit/b8f5e38a8c8b3fd734fa119cae216a3da0b363f7))
+
 ## [v1.1.2](https://github.com/DS4SD/docling/releases/tag/v1.1.2) - 2024-07-31
 
 ### Fix
