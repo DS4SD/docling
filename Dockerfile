@@ -15,7 +15,6 @@ COPY examples/minimal.py /root/minimal.py
 
 RUN python -c 'from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_models; load_pretrained_nlp_models(verbose=True);'
 RUN python -c 'from docling.document_converter import DocumentConverter; artifacts_path = DocumentConverter.download_models_hf(force=True);'
-RUN wget "https://www.ibm.com/docs/en/SSQRB8/com.ibm.spectrum.si.pdfs/IBM_Storage_Insights_Fact_Sheet.pdf" -O /root/factsheet.pdf
 
 # On container shell:
 # > cd /root/

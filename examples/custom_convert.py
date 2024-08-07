@@ -4,8 +4,8 @@ import time
 from pathlib import Path
 from typing import Iterable
 
-# from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
+from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, PipelineOptions
 from docling.datamodel.document import ConvertedDocument, DocumentConversionInput
 from docling.document_converter import DocumentConverter
@@ -52,17 +52,63 @@ def main():
         Path("./test/data/2305.03393v1.pdf"),
     ]
 
-    artifacts_path = DocumentConverter.download_models_hf()
+    ###########################################################################
 
-    pipeline_options = PipelineOptions(do_table_structure=True)
+    # The following sections contain a combination of PipelineOptions
+    # and PDF Backends for various configurations.
+    # Uncomment one section at the time to see the differences in the output.
+
+    # PyPdfium without OCR
+    # --------------------
+    # pipeline_options = PipelineOptions()
+    # pipeline_options.do_ocr=False
+    # pipeline_options.do_table_structure=True
+    # pipeline_options.table_structure_options.do_cell_matching = False
+
+    # doc_converter = DocumentConverter(
+    #     pipeline_options=pipeline_options,
+    #     pdf_backend=PyPdfiumDocumentBackend,
+    # )
+
+    # PyPdfium with OCR
+    # -----------------
+    # pipeline_options = PipelineOptions()
+    # pipeline_options.do_ocr=False
+    # pipeline_options.do_table_structure=True
+    # pipeline_options.table_structure_options.do_cell_matching = True
+
+    # doc_converter = DocumentConverter(
+    #     pipeline_options=pipeline_options,
+    #     pdf_backend=PyPdfiumDocumentBackend,
+    # )
+
+    # Docling Parse without OCR
+    # -------------------------
+    pipeline_options = PipelineOptions()
+    pipeline_options.do_ocr = False
+    pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
 
     doc_converter = DocumentConverter(
-        artifacts_path=artifacts_path,
         pipeline_options=pipeline_options,
         pdf_backend=DoclingParseDocumentBackend,
     )
 
+    # Docling Parse with OCR
+    # ----------------------
+    # pipeline_options = PipelineOptions()
+    # pipeline_options.do_ocr=True
+    # pipeline_options.do_table_structure=True
+    # pipeline_options.table_structure_options.do_cell_matching = True
+
+    # doc_converter = DocumentConverter(
+    #     pipeline_options=pipeline_options,
+    #     pdf_backend=DoclingParseDocumentBackend,
+    # )
+
+    ###########################################################################
+
+    # Define input files
     input = DocumentConversionInput.from_paths(input_doc_paths)
 
     start_time = time.time()

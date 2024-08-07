@@ -56,16 +56,20 @@ print(doc.export_to_markdown())  # output: "## DocLayNet: A Large Human-Annotate
 
 ### Convert a batch of documents
 
-For an example of batch-converting documents, see [convert.py](https://github.com/DS4SD/docling/blob/main/examples/convert.py).
+For an example of batch-converting documents, see [batch_convert.py](https://github.com/DS4SD/docling/blob/main/examples/batch_convert.py).
 
 From a local repo clone, you can run it with:
 
 ```
-python examples/convert.py
+python examples/batch_convert.py
 ```
 The output of the above command will be written to `./scratch`.
 
 ### Adjust pipeline features
+
+The example file [custom_convert.py](https://github.com/DS4SD/docling/blob/main/examples/custom_convert.py) contains multiple ways
+one can adjust the conversion pipeline and features.
+
 
 #### Control pipeline options
 

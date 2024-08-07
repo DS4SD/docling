@@ -1,11 +1,8 @@
-from docling.datamodel.document import DocumentConversionInput
 from docling.document_converter import DocumentConverter
 
-artifacts_path = DocumentConverter.download_models_hf()
-doc_converter = DocumentConverter(artifacts_path=artifacts_path)
-
-input = DocumentConversionInput.from_paths(["factsheet.pdf"])
-converted_docs = doc_converter.convert(input)
-
-for d in converted_docs:
-    print(d.render_as_dict())
+source = "https://arxiv.org/pdf/2206.01062"  # PDF path or URL
+converter = DocumentConverter()
+doc = converter.convert_single(source)
+print(
+    doc.export_to_markdown()
+)  # output: "## DocLayNet: A Large Human-Annotated Dataset for Document-Layout Analysis [...]"
