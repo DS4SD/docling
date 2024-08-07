@@ -199,7 +199,7 @@ class PyPdfiumPageBackend(PdfPageBackend):
 
 
 class PyPdfiumDocumentBackend(PdfDocumentBackend):
-    def __init__(self, path_or_stream: Iterable[Union[BytesIO, Path]]):
+    def __init__(self, path_or_stream: Union[BytesIO, Path]):
         super().__init__(path_or_stream)
         self._pdoc = pdfium.PdfDocument(path_or_stream)
 
