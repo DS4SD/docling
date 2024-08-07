@@ -33,6 +33,7 @@ huggingface_hub = ">=0.23,<1"
 requests = "^2.32.3"
 easyocr = { version = "^1.7", optional = true }
 docling-parse = "^0.0.1"
+certifi = ">=2024.7.4"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
