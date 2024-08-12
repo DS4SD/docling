@@ -1,3 +1,9 @@
+## [v1.3.0](https://github.com/DS4SD/docling/releases/tag/v1.3.0) - 2024-08-12
+
+### Feature
+
+* Output page images and extracted bbox ([#31](https://github.com/DS4SD/docling/issues/31)) ([`63d80ed`](https://github.com/DS4SD/docling/commit/63d80edca2fa4e64a07d8b00172d563d81ecb781))
+
 ## [v1.2.1](https://github.com/DS4SD/docling/releases/tag/v1.2.1) - 2024-08-07
 
 ### Fix
