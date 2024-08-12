@@ -188,7 +188,7 @@ class DocumentConverter:
                     # Free up mem resources before moving on with next batch
 
                     # Remove page images (can be disabled)
-                    if self.assemble_options.remove_page_images:
+                    if not self.assemble_options.keep_page_images:
                         assembled_page.image = (
                             None  # Comment this if you want to visualize page images
                         )

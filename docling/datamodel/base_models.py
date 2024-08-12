@@ -268,6 +268,6 @@ class PipelineOptions(BaseModel):
 
 
 class AssembleOptions(BaseModel):
-    remove_page_images: bool = (
-        True  # True: page images are removed in the assemble step
+    keep_page_images: bool = (
+        False  # False: page images are removed in the assemble step
     )
