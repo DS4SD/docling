@@ -265,3 +265,9 @@ class PipelineOptions(BaseModel):
     do_ocr: bool = False  # True: perform OCR, replace programmatic PDF text
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
+
+
+class AssembleOptions(BaseModel):
+    remove_page_images: bool = (
+        True  # True: page images are removed in the assemble step
+    )
