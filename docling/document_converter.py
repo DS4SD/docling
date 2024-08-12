@@ -14,6 +14,7 @@ from pydantic import AnyHttpUrl, TypeAdapter, ValidationError
 from docling.backend.abstract_backend import PdfDocumentBackend
 from docling.datamodel.base_models import (
     AssembledUnit,
+    AssembleOptions,
     ConversionStatus,
     Page,
     PipelineOptions,
@@ -44,6 +45,7 @@ class DocumentConverter:
         pipeline_options: PipelineOptions = PipelineOptions(),
         pdf_backend: Type[PdfDocumentBackend] = DocumentConversionInput.DEFAULT_BACKEND,
         pipeline_cls: Type[BaseModelPipeline] = StandardModelPipeline,
+        assemble_options: AssembleOptions = AssembleOptions(),
     ):
         if not artifacts_path:
             artifacts_path = self.download_models_hf()
@@ -57,6 +59,7 @@ class DocumentConverter:
         self.page_assemble_model = PageAssembleModel(config={})
         self.glm_model = GlmModel(config={})
         self.pdf_backend = pdf_backend
+        self.assemble_options = assemble_options
 
     @staticmethod
     def download_models_hf(
@@ -174,17 +177,23 @@ class DocumentConverter:
                     pages_with_images,
                 )
 
+                # 4. Run pipeline stages
                 pipeline_pages = self.model_pipeline.apply(pages_with_cells)
 
-                # 7. Assemble page elements (per page)
+                # 5. Assemble page elements (per page)
                 assembled_pages = self.page_assemble_model(pipeline_pages)
 
                 # exhaust assembled_pages
                 for assembled_page in assembled_pages:
                     # Free up mem resources before moving on with next batch
-                    assembled_page.image = (
-                        None  # Comment this if you want to visualize page images
-                    )
+
+                    # Remove page images (can be disabled)
+                    if not self.assemble_options.keep_page_images:
+                        assembled_page.image = (
+                            None  # Comment this if you want to visualize page images
+                        )
+
+                    # Unload backend
                     assembled_page._backend.unload()
 
                     all_assembled_pages.append(assembled_page)
