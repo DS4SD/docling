@@ -797,13 +797,13 @@ tabulate = ">=0.9.0,<0.10.0"
 
 [[package]]
 name = "docling-ibm-models"
-version = "1.1.0"
+version = "1.1.1"
 description = "This package contains the AI models used by the Docling PDF conversion package"
 optional = false
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "docling_ibm_models-1.1.0-py3-none-any.whl", hash = "sha256:c06fc0a2c3a520e566aade5bf7f719d4b26a75261f56f3e76c1c8fb5db370285"},
-    {file = "docling_ibm_models-1.1.0.tar.gz", hash = "sha256:e0e409c9b4bed5b83560bba8a2dc7b48583c250b0ab78169b6eaa03f7bd68de6"},
+    {file = "docling_ibm_models-1.1.1-py3-none-any.whl", hash = "sha256:90e15c70199f896776ce31693b63e77f08908431389861333b799458a8d4abdc"},
+    {file = "docling_ibm_models-1.1.1.tar.gz", hash = "sha256:df781a8b45fa927d57ea222553bf36f8d2a599fef98a560d1c995780746792c5"},
 ]
 
 [package.dependencies]
@@ -817,8 +817,8 @@ onnxruntime = ">=1.16.2,<2.0.0"
 opencv-python = {version = ">=4.9.0.80,<5.0.0.0", markers = "sys_platform != \"linux\""}
 opencv-python-headless = {version = ">=4.9.0.80,<5.0.0.0", markers = "sys_platform == \"linux\""}
 Pillow = ">=10.0.0,<11.0.0"
-torch = "2.2.2"
-torchvision = "0.17.2"
+torch = ">=2.2.2,<3.0.0"
+torchvision = ">=0.17.2"
 tqdm = ">=4.64.0,<5.0.0"
 
 [[package]]
@@ -5111,4 +5111,4 @@ ocr = ["easyocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "a708b642cd69e4545f3bbcc3231e2207e62aea23fd9742330ac0c623c8232662"
+content-hash = "1b8f8f79c26b79a1421f9c587eb8972a4434cc2ea8d7112b97ebb56ab7cda845"
