@@ -69,6 +69,10 @@ class LayoutModel:
             "Key-Value Region": 0.45,
         }
 
+        CLASS_REMAPPINGS = {
+            "Document Index": "Table",
+        }
+
         _log.debug("================= Start postprocess function ====================")
         start_time = time.time()
         # Apply Confidence Threshold to cluster predictions
@@ -79,6 +83,10 @@ class LayoutModel:
             confidence = CLASS_THRESHOLDS[cluster.label]
             if cluster.confidence >= confidence:
                 # annotation["created_by"] = "high_conf_pred"
+
+                # Remap class labels where needed.
+                if cluster.label in CLASS_REMAPPINGS.keys():
+                    cluster.label = CLASS_REMAPPINGS[cluster.label]
                 clusters_out.append(cluster)
 
         # map to dictionary clusters and cells, with bottom left origin
