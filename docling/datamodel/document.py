@@ -14,7 +14,7 @@ from docling_core.types import TableCell
 from pydantic import BaseModel
 
 from docling.backend.abstract_backend import PdfDocumentBackend
-from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
+from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.datamodel.base_models import (
     AssembledUnit,
     ConversionStatus,
@@ -64,7 +64,7 @@ class InputDocument(BaseModel):
         path_or_stream: Union[BytesIO, Path],
         filename: Optional[str] = None,
         limits: Optional[DocumentLimits] = None,
-        pdf_backend=PyPdfiumDocumentBackend,
+        pdf_backend=DoclingParseDocumentBackend,
     ):
         super().__init__()
 
@@ -308,7 +308,7 @@ class DocumentConversionInput(BaseModel):
     _path_or_stream_iterator: Iterable[Union[Path, DocumentStream]] = None
     limits: Optional[DocumentLimits] = DocumentLimits()
 
-    DEFAULT_BACKEND: ClassVar = PyPdfiumDocumentBackend
+    DEFAULT_BACKEND: ClassVar = DoclingParseDocumentBackend
 
     def docs(
         self, pdf_backend: Optional[Type[PdfDocumentBackend]] = None
