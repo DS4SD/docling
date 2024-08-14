@@ -1,3 +1,13 @@
+## [v1.4.0](https://github.com/DS4SD/docling/releases/tag/v1.4.0) - 2024-08-14
+
+### Feature
+
+* Update parser with bytesio interface and set as new default backend ([#32](https://github.com/DS4SD/docling/issues/32)) ([`90dd676`](https://github.com/DS4SD/docling/commit/90dd676422f87584395a8949fa842fc9a6bdbd19))
+
+### Fix
+
+* Allow newer torch versions ([#34](https://github.com/DS4SD/docling/issues/34)) ([`349b0e9`](https://github.com/DS4SD/docling/commit/349b0e914f7194ee778571a7189b7eaff6f5966a))
+
 ## [v1.3.0](https://github.com/DS4SD/docling/releases/tag/v1.3.0) - 2024-08-12
 
 ### Feature
