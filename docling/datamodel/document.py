@@ -308,7 +308,7 @@ class DocumentConversionInput(BaseModel):
     _path_or_stream_iterator: Iterable[Union[Path, DocumentStream]] = None
     limits: Optional[DocumentLimits] = DocumentLimits()
 
-    DEFAULT_BACKEND: ClassVar = PyPdfiumDocumentBackend
+    DEFAULT_BACKEND: ClassVar = DoclingParseDocumentBackend
 
     def docs(
         self, pdf_backend: Optional[Type[PdfDocumentBackend]] = None
