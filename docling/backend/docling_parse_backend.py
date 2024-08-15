@@ -1,4 +1,6 @@
+import logging
 import random
+import time
 from io import BytesIO
 from pathlib import Path
 from typing import Iterable, List, Optional, Union
@@ -10,6 +12,8 @@ from pypdfium2 import PdfPage
 
 from docling.backend.abstract_backend import PdfDocumentBackend, PdfPageBackend
 from docling.datamodel.base_models import BoundingBox, Cell, CoordOrigin, PageSize
+
+_log = logging.getLogger(__name__)
 
 
 class DoclingParsePageBackend(PdfPageBackend):
@@ -151,10 +155,18 @@ class DoclingParseDocumentBackend(PdfDocumentBackend):
         self._pdoc = pdfium.PdfDocument(path_or_stream)
         # Parsing cells with docling_parser call
         parser = pdf_parser()
+
+        start_pb_time = time.time()
+
         if isinstance(path_or_stream, BytesIO):
             self._parser_doc = parser.find_cells_from_bytesio(path_or_stream)
         else:
             self._parser_doc = parser.find_cells(str(path_or_stream))
+
+        end_pb_time = time.time() - start_pb_time
+        _log.info(
+            f"Time to parse {path_or_stream.name} with docling-parse: time={end_pb_time:.3f}"
+        )
 
     def page_count(self) -> int:
         return len(self._parser_doc["pages"])
