@@ -34,7 +34,9 @@ class TableStructureModel:
             self.scale = 2.0  # Scale up table input images to 144 dpi
 
     def draw_table_and_cells(self, page: Page, tbl_list: List[TableElement]):
-        image = page._backend.get_page_image()
+        image = (
+            page._backend.get_page_image()
+        )  # make new image to avoid drawing on the saved ones
         draw = ImageDraw.Draw(image)
 
         for table_element in tbl_list:
@@ -94,13 +96,7 @@ class TableStructureModel:
                 "width": page.size.width * self.scale,
                 "height": page.size.height * self.scale,
             }
-            # add image to page input.
-            if self.scale == 1.0:
-                page_input["image"] = numpy.asarray(page.image)
-            else:  # render new page image on the fly at desired scale
-                page_input["image"] = numpy.asarray(
-                    page._backend.get_page_image(scale=self.scale)
-                )
+            page_input["image"] = numpy.asarray(page.get_image(scale=self.scale))
 
             table_clusters, table_bboxes = zip(*in_tables)
 

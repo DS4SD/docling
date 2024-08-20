@@ -234,14 +234,29 @@ class Page(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     page_no: int
-    page_hash: str = None
-    size: PageSize = None
-    image: Image = None
+    page_hash: Optional[str] = None
+    size: Optional[PageSize] = None
     cells: List[Cell] = None
     predictions: PagePredictions = PagePredictions()
-    assembled: AssembledUnit = None
+    assembled: Optional[AssembledUnit] = None
 
-    _backend: PdfPageBackend = None  # Internal PDF backend
+    _backend: Optional[PdfPageBackend] = (
+        None  # Internal PDF backend. By default it is cleared during assembling.
+    )
+    _image_cache: Dict[float, Image] = (
+        {}
+    )  # Cache of images in different scales. By default it is cleared during assembling.
+
+    def get_image(self, scale: float = 1.0) -> Optional[Image]:
+        if self._backend is None:
+            return self._image_cache.get(scale, None)
+        if not scale in self._image_cache:
+            self._image_cache[scale] = self._backend.get_page_image(scale=scale)
+        return self._image_cache[scale]
+
+    @property
+    def image(self) -> Optional[Image]:
+        return self.get_image()
 
 
 class DocumentStream(BaseModel):
