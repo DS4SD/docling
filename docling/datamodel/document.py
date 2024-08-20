@@ -1,7 +1,7 @@
 import logging
 from io import BytesIO
 from pathlib import Path, PurePath
-from typing import ClassVar, Dict, Iterable, List, Optional, Type, Union
+from typing import ClassVar, Dict, Iterable, List, Optional, Tuple, Type, Union
 
 from docling_core.types import BaseCell, BaseText
 from docling_core.types import BoundingBox as DsBoundingBox
@@ -21,6 +21,7 @@ from docling.datamodel.base_models import (
     DocumentStream,
     FigureElement,
     Page,
+    PageElement,
     TableElement,
     TextElement,
 )
@@ -301,6 +302,20 @@ class ConvertedDocument(BaseModel):
             return self.output.export_to_markdown()
         else:
             return ""
+
+    def render_element_images(
+        self, element_types: Tuple[PageElement] = (FigureElement,)
+    ):
+        for element in self.assembled.elements:
+            if isinstance(element, element_types):
+                page_ix = element.page_no
+                scale = self.pages[page_ix]._default_image_scale
+                crop_bbox = element.cluster.bbox.scaled(scale=scale).to_top_left_origin(
+                    page_height=self.pages[page_ix].size.height * scale
+                )
+
+                cropped_im = self.pages[page_ix].image.crop(crop_bbox.as_tuple())
+                yield element, cropped_im
 
 
 class DocumentConversionInput(BaseModel):

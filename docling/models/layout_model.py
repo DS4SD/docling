@@ -267,7 +267,9 @@ class LayoutModel:
     def __call__(self, page_batch: Iterable[Page]) -> Iterable[Page]:
         for page in page_batch:
             clusters = []
-            for ix, pred_item in enumerate(self.layout_predictor.predict(page.image)):
+            for ix, pred_item in enumerate(
+                self.layout_predictor.predict(page.get_image(scale=1.0))
+            ):
                 cluster = Cluster(
                     id=ix,
                     label=pred_item["label"],
