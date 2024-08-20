@@ -1,3 +1,9 @@
+## [v1.6.0](https://github.com/DS4SD/docling/releases/tag/v1.6.0) - 2024-08-20
+
+### Feature
+
+* Add adaptive OCR, factor out treatment of OCR areas and cell filtering ([#38](https://github.com/DS4SD/docling/issues/38)) ([`e94d317`](https://github.com/DS4SD/docling/commit/e94d317c022d2b916332d43cdc2aa90fd4738df9))
+
 ## [v1.5.0](https://github.com/DS4SD/docling/releases/tag/v1.5.0) - 2024-08-20
 
 ### Feature
