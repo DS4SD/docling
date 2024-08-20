@@ -6,6 +6,7 @@
 
 # Docling
 
+[![arXiv](https://img.shields.io/badge/arXiv-2408.09869-b31b1b.svg)](https://arxiv.org/abs/2408.09869)
 [![PyPI version](https://img.shields.io/pypi/v/docling)](https://pypi.org/project/docling/)
 ![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)
 [![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
@@ -134,13 +135,15 @@ Please read [Contributing to Docling](https://github.com/DS4SD/docling/blob/main
 If you use Docling in your projects, please consider citing the following:
 
 ```bib
-@software{Docling,
-author = {Deep Search Team},
-month = {7},
-title = {{Docling}},
-url = {https://github.com/DS4SD/docling},
-version = {main},
-year = {2024}
+@techreport{Docling,
+  author = {Deep Search Team},
+  month = {8},
+  title = {{Docling Technical Report}},
+  url={https://arxiv.org/abs/2408.09869},
+  eprint={2408.09869},
+  doi = "10.48550/arXiv.2408.09869",
+  version = {1.0.0},
+  year = {2024}
 }
 ```
 

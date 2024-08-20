@@ -48,6 +48,8 @@ def main():
         Path("./test/data/2206.01062.pdf"),
         Path("./test/data/2203.01017v2.pdf"),
         Path("./test/data/2305.03393v1.pdf"),
+        Path("./test/data/redp5110.pdf"),
+        Path("./test/data/redp5695.pdf"),
     ]
 
     doc_converter = DocumentConverter()
