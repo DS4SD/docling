@@ -30,7 +30,7 @@ class EasyOcrModel:
 
         for page in page_batch:
             # rects = page._fpage.
-            high_res_image = page._backend.get_page_image(scale=self.scale)
+            high_res_image = page.get_image(scale=self.scale)
             im = numpy.array(high_res_image)
             result = self.reader.readtext(im)
 

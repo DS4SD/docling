@@ -134,7 +134,9 @@ class PyPdfiumPageBackend(PdfPageBackend):
             return merged_cells
 
         def draw_clusters_and_cells():
-            image = self.get_page_image()
+            image = (
+                self.get_page_image()
+            )  # make new image to avoid drawing on the saved ones
             draw = ImageDraw.Draw(image)
             for c in cells:
                 x0, y0, x1, y1 = c.bbox.as_tuple()

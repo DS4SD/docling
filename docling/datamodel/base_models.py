@@ -1,10 +1,12 @@
 import copy
+import warnings
 from enum import Enum, auto
 from io import BytesIO
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
 
 from PIL.Image import Image
-from pydantic import BaseModel, ConfigDict, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
+from typing_extensions import Self
 
 from docling.backend.abstract_backend import PdfPageBackend
 
@@ -234,14 +236,30 @@ class Page(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     page_no: int
-    page_hash: str = None
-    size: PageSize = None
-    image: Image = None
+    page_hash: Optional[str] = None
+    size: Optional[PageSize] = None
     cells: List[Cell] = None
     predictions: PagePredictions = PagePredictions()
-    assembled: AssembledUnit = None
+    assembled: Optional[AssembledUnit] = None
 
-    _backend: PdfPageBackend = None  # Internal PDF backend
+    _backend: Optional[PdfPageBackend] = (
+        None  # Internal PDF backend. By default it is cleared during assembling.
+    )
+    _default_image_scale: float = 1.0  # Default image scale for external usage.
+    _image_cache: Dict[float, Image] = (
+        {}
+    )  # Cache of images in different scales. By default it is cleared during assembling.
+
+    def get_image(self, scale: float = 1.0) -> Optional[Image]:
+        if self._backend is None:
+            return self._image_cache.get(scale, None)
+        if not scale in self._image_cache:
+            self._image_cache[scale] = self._backend.get_page_image(scale=scale)
+        return self._image_cache[scale]
+
+    @property
+    def image(self) -> Optional[Image]:
+        return self.get_image(scale=self._default_image_scale)
 
 
 class DocumentStream(BaseModel):
@@ -268,6 +286,19 @@ class PipelineOptions(BaseModel):
 
 
 class AssembleOptions(BaseModel):
-    keep_page_images: bool = (
-        False  # False: page images are removed in the assemble step
-    )
+    keep_page_images: Annotated[
+        bool,
+        Field(
+            deprecated="`keep_page_images` is depreacted, set the value of `images_scale` instead"
+        ),
+    ] = False  # False: page images are removed in the assemble step
+    images_scale: Optional[float] = None  # if set, the scale for generated images
+
+    @model_validator(mode="after")
+    def set_page_images_from_deprecated(self) -> Self:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", DeprecationWarning)
+            default_scale = 1.0
+            if self.keep_page_images and self.images_scale is None:
+                self.images_scale = default_scale
+        return self

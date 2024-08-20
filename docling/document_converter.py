@@ -188,10 +188,8 @@ class DocumentConverter:
                     # Free up mem resources before moving on with next batch
 
                     # Remove page images (can be disabled)
-                    if not self.assemble_options.keep_page_images:
-                        assembled_page.image = (
-                            None  # Comment this if you want to visualize page images
-                        )
+                    if self.assemble_options.images_scale is None:
+                        assembled_page._image_cache = {}
 
                     # Unload backend
                     assembled_page._backend.unload()
@@ -231,7 +229,15 @@ class DocumentConverter:
 
     # Generate the page image and store it in the page object
     def populate_page_images(self, doc: InputDocument, page: Page) -> Page:
-        page.image = page._backend.get_page_image()
+        # default scale
+        page.get_image(scale=1.0)
+
+        # user requested scales
+        if self.assemble_options.images_scale is not None:
+            page._default_image_scale = self.assemble_options.images_scale
+            page.get_image(
+                scale=self.assemble_options.images_scale
+            )  # this will trigger storing the image in the internal cache
 
         return page
 
@@ -247,7 +253,7 @@ class DocumentConverter:
                 draw.rectangle([(x0, y0), (x1, y1)], outline="red")
             image.show()
 
-        # draw_text_boxes(page.image, cells)
+        # draw_text_boxes(page.get_image(scale=1.0), cells)
 
         return page
 
