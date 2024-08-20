@@ -10,6 +10,10 @@ from docling.datamodel.base_models import BoundingBox
 def test_doc_path():
     return Path("./data/2206.01062.pdf")
 
+@pytest.fixture
+def test_image_doc_path():
+    return Path("/Users/cau/Documents/Data/test_data/test-image.pdf")
+
 def test_get_text_from_rect(test_doc_path):
     doc_backend = PyPdfiumDocumentBackend(test_doc_path)
     page_backend: PyPdfiumPageBackend = doc_backend.load_page(0)
@@ -31,3 +35,12 @@ def test_crop_page_image(test_doc_path):
 def test_num_pages(test_doc_path):
     doc_backend = PyPdfiumDocumentBackend(test_doc_path)
     doc_backend.page_count() == 9
+
+def test_get_bitmaps(test_doc_path):
+    doc_backend = PyPdfiumDocumentBackend(test_doc_path)
+    for i in range(doc_backend.page_count()):
+        page = doc_backend.load_page(i)
+        bitmaps = page.get_bitmaps()
+        for b in bitmaps:
+            img = page.get_page_image(cropbox=b)
+            img.show()

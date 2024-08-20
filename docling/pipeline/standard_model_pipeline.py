@@ -1,10 +1,8 @@
 from pathlib import Path
-from typing import Iterable
 
-from docling.datamodel.base_models import Page, PipelineOptions
+from docling.datamodel.base_models import PipelineOptions
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
-from docling.models.page_assemble_model import PageAssembleModel
 from docling.models.table_structure_model import TableStructureModel
 from docling.pipeline.base_model_pipeline import BaseModelPipeline
 
