@@ -1,3 +1,13 @@
+## [v1.5.0](https://github.com/DS4SD/docling/releases/tag/v1.5.0) - 2024-08-20
+
+### Feature
+
+* Allow computing page images on-demand with scale and cache them ([#36](https://github.com/DS4SD/docling/issues/36)) ([`78347bf`](https://github.com/DS4SD/docling/commit/78347bf679c393378eab0bd383929fced88afeae))
+
+### Documentation
+
+* Add technical paper ref ([#37](https://github.com/DS4SD/docling/issues/37)) ([`a13114b`](https://github.com/DS4SD/docling/commit/a13114bafdcf4b62eb97df32cbfaf5695596b77c))
+
 ## [v1.4.0](https://github.com/DS4SD/docling/releases/tag/v1.4.0) - 2024-08-14
 
 ### Feature
