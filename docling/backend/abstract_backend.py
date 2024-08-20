@@ -19,6 +19,10 @@ class PdfPageBackend(ABC):
         pass
 
     @abstractmethod
+    def get_bitmap_rects(self, scale: int = 1) -> Iterable["BoundingBox"]:
+        pass
+
+    @abstractmethod
     def get_page_image(
         self, scale: int = 1, cropbox: Optional["BoundingBox"] = None
     ) -> Image.Image:

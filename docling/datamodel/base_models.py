@@ -68,13 +68,21 @@ class BoundingBox(BaseModel):
     @classmethod
     def from_tuple(cls, coord: Tuple[float], origin: CoordOrigin):
         if origin == CoordOrigin.TOPLEFT:
-            return BoundingBox(
-                l=coord[0], t=coord[1], r=coord[2], b=coord[3], coord_origin=origin
-            )
+            l, t, r, b = coord[0], coord[1], coord[2], coord[3]
+            if r < l:
+                l, r = r, l
+            if b < t:
+                b, t = t, b
+
+            return BoundingBox(l=l, t=t, r=r, b=b, coord_origin=origin)
         elif origin == CoordOrigin.BOTTOMLEFT:
-            return BoundingBox(
-                l=coord[0], b=coord[1], r=coord[2], t=coord[3], coord_origin=origin
-            )
+            l, b, r, t = coord[0], coord[1], coord[2], coord[3]
+            if r < l:
+                l, r = r, l
+            if b > t:
+                b, t = t, b
+
+            return BoundingBox(l=l, t=t, r=r, b=b, coord_origin=origin)
 
     def area(self) -> float:
         return (self.r - self.l) * (self.b - self.t)
@@ -280,7 +288,7 @@ class TableStructureOptions(BaseModel):
 
 class PipelineOptions(BaseModel):
     do_table_structure: bool = True  # True: perform table structure extraction
-    do_ocr: bool = False  # True: perform OCR, replace programmatic PDF text
+    do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
 

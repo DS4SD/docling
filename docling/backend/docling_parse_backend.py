@@ -3,7 +3,7 @@ import random
 import time
 from io import BytesIO
 from pathlib import Path
-from typing import Iterable, List, Optional, Union
+from typing import Iterable, Optional, Union
 
 import pypdfium2 as pdfium
 from docling_parse.docling_parse import pdf_parser
@@ -43,7 +43,7 @@ class DoclingParsePageBackend(PdfPageBackend):
                 r=x1 * scale * page_size.width / parser_width,
                 t=y1 * scale * page_size.height / parser_height,
                 coord_origin=CoordOrigin.BOTTOMLEFT,
-            ).to_top_left_origin(page_size.height * scale)
+            ).to_top_left_origin(page_height=page_size.height * scale)
 
             overlap_frac = cell_bbox.intersection_area_with(bbox) / cell_bbox.area()
 
@@ -66,6 +66,12 @@ class DoclingParsePageBackend(PdfPageBackend):
         for i in range(len(self._dpage["cells"])):
             rect = self._dpage["cells"][i]["box"]["device"]
             x0, y0, x1, y1 = rect
+
+            if x1 < x0:
+                x0, x1 = x1, x0
+            if y1 < y0:
+                y0, y1 = y1, y0
+
             text_piece = self._dpage["cells"][i]["content"]["rnormalized"]
             cells.append(
                 Cell(
@@ -107,6 +113,20 @@ class DoclingParsePageBackend(PdfPageBackend):
         # draw_clusters_and_cells()
 
         return cells
+
+    def get_bitmap_rects(self, scale: int = 1) -> Iterable[BoundingBox]:
+        AREA_THRESHOLD = 32 * 32
+
+        for i in range(len(self._dpage["images"])):
+            bitmap = self._dpage["images"][i]
+            cropbox = BoundingBox.from_tuple(
+                bitmap["box"], origin=CoordOrigin.BOTTOMLEFT
+            ).to_top_left_origin(self.get_size().height)
+
+            if cropbox.area() > AREA_THRESHOLD:
+                cropbox = cropbox.scaled(scale=scale)
+
+                yield cropbox
 
     def get_page_image(
         self, scale: int = 1, cropbox: Optional[BoundingBox] = None
@@ -173,7 +193,7 @@ class DoclingParseDocumentBackend(PdfDocumentBackend):
     def page_count(self) -> int:
         return len(self._parser_doc["pages"])
 
-    def load_page(self, page_no: int) -> PdfPage:
+    def load_page(self, page_no: int) -> DoclingParsePageBackend:
         return DoclingParsePageBackend(
             self._pdoc[page_no], self._parser_doc["pages"][page_no]
         )

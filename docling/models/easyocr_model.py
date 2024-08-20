@@ -1,20 +1,18 @@
-import copy
 import logging
-import random
 from typing import Iterable
 
 import numpy
-from PIL import ImageDraw
 
 from docling.datamodel.base_models import BoundingBox, CoordOrigin, OcrCell, Page
+from docling.models.base_ocr_model import BaseOcrModel
 
 _log = logging.getLogger(__name__)
 
 
-class EasyOcrModel:
+class EasyOcrModel(BaseOcrModel):
     def __init__(self, config):
-        self.config = config
-        self.enabled = config["enabled"]
+        super().__init__(config)
+
         self.scale = 3  # multiplier for 72 dpi == 216 dpi.
 
         if self.enabled:
@@ -29,49 +27,44 @@ class EasyOcrModel:
             return
 
         for page in page_batch:
-            # rects = page._fpage.
-            high_res_image = page.get_image(scale=self.scale)
-            im = numpy.array(high_res_image)
-            result = self.reader.readtext(im)
+            ocr_rects = self.get_ocr_rects(page)
 
-            del high_res_image
-            del im
-
-            cells = [
-                OcrCell(
-                    id=ix,
-                    text=line[1],
-                    confidence=line[2],
-                    bbox=BoundingBox.from_tuple(
-                        coord=(
-                            line[0][0][0] / self.scale,
-                            line[0][0][1] / self.scale,
-                            line[0][2][0] / self.scale,
-                            line[0][2][1] / self.scale,
-                        ),
-                        origin=CoordOrigin.TOPLEFT,
-                    ),
+            all_ocr_cells = []
+            for ocr_rect in ocr_rects:
+                high_res_image = page._backend.get_page_image(
+                    scale=self.scale, cropbox=ocr_rect
                 )
-                for ix, line in enumerate(result)
-            ]
+                im = numpy.array(high_res_image)
+                result = self.reader.readtext(im)
 
-            page.cells = cells  # For now, just overwrites all digital cells.
+                del high_res_image
+                del im
+
+                cells = [
+                    OcrCell(
+                        id=ix,
+                        text=line[1],
+                        confidence=line[2],
+                        bbox=BoundingBox.from_tuple(
+                            coord=(
+                                (line[0][0][0] / self.scale) + ocr_rect.l,
+                                (line[0][0][1] / self.scale) + ocr_rect.t,
+                                (line[0][2][0] / self.scale) + ocr_rect.l,
+                                (line[0][2][1] / self.scale) + ocr_rect.t,
+                            ),
+                            origin=CoordOrigin.TOPLEFT,
+                        ),
+                    )
+                    for ix, line in enumerate(result)
+                ]
+                all_ocr_cells.extend(cells)
+
+            ## Remove OCR cells which overlap with programmatic cells.
+            filtered_ocr_cells = self.filter_ocr_cells(all_ocr_cells, page.cells)
+
+            page.cells.extend(filtered_ocr_cells)
 
             # DEBUG code:
-            def draw_clusters_and_cells():
-                image = copy.deepcopy(page.image)
-                draw = ImageDraw.Draw(image)
-
-                cell_color = (
-                    random.randint(30, 140),
-                    random.randint(30, 140),
-                    random.randint(30, 140),
-                )
-                for tc in cells:
-                    x0, y0, x1, y1 = tc.bbox.as_tuple()
-                    draw.rectangle([(x0, y0), (x1, y1)], outline=cell_color)
-                image.show()
-
-            # draw_clusters_and_cells()
+            # self.draw_ocr_rects_and_cells(page, ocr_rects)
 
             yield page

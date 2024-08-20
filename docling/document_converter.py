@@ -35,8 +35,6 @@ _log = logging.getLogger(__name__)
 
 
 class DocumentConverter:
-    _layout_model_path = "model_artifacts/layout/beehive_v0.0.5"
-    _table_model_path = "model_artifacts/tableformer"
     _default_download_filename = "file.pdf"
 
     def __init__(

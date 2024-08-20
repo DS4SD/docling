@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
+import pypdfium2.raw as pdfium_c
 from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage
 
@@ -16,6 +17,19 @@ class PyPdfiumPageBackend(PdfPageBackend):
         super().__init__(page_obj)
         self._ppage = page_obj
         self.text_page = None
+
+    def get_bitmap_rects(self, scale: int = 1) -> Iterable[BoundingBox]:
+        AREA_THRESHOLD = 32 * 32
+        for obj in self._ppage.get_objects(filter=[pdfium_c.FPDF_PAGEOBJ_IMAGE]):
+            pos = obj.get_pos()
+            cropbox = BoundingBox.from_tuple(
+                pos, origin=CoordOrigin.BOTTOMLEFT
+            ).to_top_left_origin(page_height=self.get_size().height)
+
+            if cropbox.area() > AREA_THRESHOLD:
+                cropbox = cropbox.scaled(scale=scale)
+
+                yield cropbox
 
     def get_text_in_rect(self, bbox: BoundingBox) -> str:
         if not self.text_page:
@@ -208,7 +222,7 @@ class PyPdfiumDocumentBackend(PdfDocumentBackend):
     def page_count(self) -> int:
         return len(self._pdoc)
 
-    def load_page(self, page_no: int) -> PdfPage:
+    def load_page(self, page_no: int) -> PyPdfiumPageBackend:
         return PyPdfiumPageBackend(self._pdoc[page_no])
 
     def is_valid(self) -> bool:
