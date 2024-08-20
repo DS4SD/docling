@@ -43,7 +43,7 @@ class DoclingParsePageBackend(PdfPageBackend):
                 r=x1 * scale * page_size.width / parser_width,
                 t=y1 * scale * page_size.height / parser_height,
                 coord_origin=CoordOrigin.BOTTOMLEFT,
-            ).to_top_left_origin(page_size.height * scale)
+            ).to_top_left_origin(page_height=page_size.height * scale)
 
             overlap_frac = cell_bbox.intersection_area_with(bbox) / cell_bbox.area()
 
@@ -66,6 +66,12 @@ class DoclingParsePageBackend(PdfPageBackend):
         for i in range(len(self._dpage["cells"])):
             rect = self._dpage["cells"][i]["box"]["device"]
             x0, y0, x1, y1 = rect
+
+            if x1 < x0:
+                x0, x1 = x1, x0
+            if y1 < y0:
+                y0, y1 = y1, y0
+
             text_piece = self._dpage["cells"][i]["content"]["rnormalized"]
             cells.append(
                 Cell(

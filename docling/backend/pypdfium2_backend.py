@@ -22,7 +22,9 @@ class PyPdfiumPageBackend(PdfPageBackend):
         AREA_THRESHOLD = 32 * 32
         for obj in self._ppage.get_objects(filter=[pdfium_c.FPDF_PAGEOBJ_IMAGE]):
             pos = obj.get_pos()
-            cropbox = BoundingBox.from_tuple(pos, origin=CoordOrigin.TOPLEFT)
+            cropbox = BoundingBox.from_tuple(
+                pos, origin=CoordOrigin.BOTTOMLEFT
+            ).to_top_left_origin(page_height=self.get_size().height)
 
             if cropbox.area() > AREA_THRESHOLD:
                 cropbox = cropbox.scaled(scale=scale)
