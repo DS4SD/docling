@@ -188,7 +188,7 @@ class DocumentConverter:
                     # Free up mem resources before moving on with next batch
 
                     # Remove page images (can be disabled)
-                    if not self.assemble_options.keep_page_images:
+                    if self.assemble_options.images_scale is None:
                         assembled_page._image_cache = {}
 
                     # Unload backend
@@ -229,7 +229,15 @@ class DocumentConverter:
 
     # Generate the page image and store it in the page object
     def populate_page_images(self, doc: InputDocument, page: Page) -> Page:
-        page.get_image()  # this will trigger storing the image in the internal cache
+        # default scale
+        page.get_image(scale=1.0)
+
+        # user requested scales
+        if self.assemble_options.images_scale is not None:
+            page._default_image_scale = self.assemble_options.images_scale
+            page.get_image(
+                scale=self.assemble_options.images_scale
+            )  # this will trigger storing the image in the internal cache
 
         return page
 
