@@ -289,7 +289,7 @@ class AssembleOptions(BaseModel):
     keep_page_images: Annotated[
         bool,
         Field(
-            deprecated="`keep_page_images` is depreacted, set the value of `page_images_scales` instead"
+            deprecated="`keep_page_images` is depreacted, set the value of `images_scale` instead"
         ),
     ] = False  # False: page images are removed in the assemble step
     images_scale: Optional[float] = None  # if set, the scale for generated images
