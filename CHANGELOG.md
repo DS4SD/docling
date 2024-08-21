@@ -1,3 +1,9 @@
+## [v1.6.1](https://github.com/DS4SD/docling/releases/tag/v1.6.1) - 2024-08-21
+
+### Fix
+
+* Add scipy as dependency ([#40](https://github.com/DS4SD/docling/issues/40)) ([`f19871a`](https://github.com/DS4SD/docling/commit/f19871a5a164b5369da10f7753d7c7da7fde35cc))
+
 ## [v1.6.0](https://github.com/DS4SD/docling/releases/tag/v1.6.0) - 2024-08-20
 
 ### Feature
