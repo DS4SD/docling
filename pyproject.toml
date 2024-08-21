@@ -35,6 +35,7 @@ easyocr = { version = "^1.7"}
 docling-parse = "^0.2.0"
 certifi = ">=2024.7.4"
 rtree = "^1.3.0"
+scipy = "^1.14.1"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
