@@ -24,7 +24,7 @@ packages = [{include = "docling"}]
 python = "^3.10"
 pydantic = "^2.0.0"
 docling-core = "^1.1.2"
-docling-ibm-models = "^1.1.1"
+docling-ibm-models = "^1.1.2"
 deepsearch-glm = ">=0.19.0,<1"
 filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"
