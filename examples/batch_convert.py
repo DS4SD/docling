@@ -4,7 +4,7 @@ import time
 from pathlib import Path
 from typing import Iterable
 
-from docling.datamodel.base_models import ConversionStatus
+from docling.datamodel.base_models import ConversionStatus, PipelineOptions
 from docling.datamodel.document import ConvertedDocument, DocumentConversionInput
 from docling.document_converter import DocumentConverter
 
@@ -52,7 +52,7 @@ def main():
         Path("./test/data/redp5695.pdf"),
     ]
 
-    doc_converter = DocumentConverter()
+    doc_converter = DocumentConverter(pipeline_options=PipelineOptions(do_ocr=False))
 
     input = DocumentConversionInput.from_paths(input_doc_paths)
 

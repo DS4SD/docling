@@ -1,6 +1,5 @@
 import logging
 import random
-import time
 from io import BytesIO
 from pathlib import Path
 from typing import Iterable, Optional, Union
@@ -17,11 +16,16 @@ _log = logging.getLogger(__name__)
 
 
 class DoclingParsePageBackend(PdfPageBackend):
-    def __init__(self, page_obj: PdfPage, docling_page_obj):
+    def __init__(
+        self, parser: pdf_parser, pdf_bytes: BytesIO, page_no: int, page_obj: PdfPage
+    ):
         super().__init__(page_obj)
         self._ppage = page_obj
-        self._dpage = docling_page_obj
-        self.text_page = None
+
+        parsed_page = parser.find_cells_from_bytesio_on_page(pdf_bytes, page_no)
+        self._dpage = parsed_page["pages"][0]
+
+        print(f"Parsed page {page_no} of doc.")
 
     def get_text_in_rect(self, bbox: BoundingBox) -> str:
         # Find intersecting cells on the page
@@ -168,34 +172,25 @@ class DoclingParsePageBackend(PdfPageBackend):
     def unload(self):
         self._ppage = None
         self._dpage = None
-        self.text_page = None
 
 
 class DoclingParseDocumentBackend(PdfDocumentBackend):
     def __init__(self, path_or_stream: Union[BytesIO, Path]):
         super().__init__(path_or_stream)
+
+        with open(path_or_stream, "rb") as fh:
+            self.pdf_bytes = BytesIO(fh.read())
+
         self._pdoc = pdfium.PdfDocument(path_or_stream)
-        # Parsing cells with docling_parser call
-        parser = pdf_parser()
-
-        start_pb_time = time.time()
-
-        if isinstance(path_or_stream, BytesIO):
-            self._parser_doc = parser.find_cells_from_bytesio(path_or_stream)
-        else:
-            self._parser_doc = parser.find_cells(str(path_or_stream))
-
-        end_pb_time = time.time() - start_pb_time
-        _log.info(
-            f"Time to parse {path_or_stream.name} with docling-parse: time={end_pb_time:.3f}"
-        )
+        self.parser = pdf_parser()
 
     def page_count(self) -> int:
-        return len(self._parser_doc["pages"])
+        return len(self._pdoc)  # To be replaced with docling-parse API
 
     def load_page(self, page_no: int) -> DoclingParsePageBackend:
+
         return DoclingParsePageBackend(
-            self._pdoc[page_no], self._parser_doc["pages"][page_no]
+            self.parser, self.pdf_bytes, page_no, self._pdoc[page_no]
         )
 
     def is_valid(self) -> bool:
