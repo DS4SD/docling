@@ -1,10 +1,15 @@
 import json
 import logging
 import time
+from io import BytesIO
 from pathlib import Path
 from typing import Iterable
 
-from docling.datamodel.base_models import ConversionStatus, PipelineOptions
+from docling.datamodel.base_models import (
+    ConversionStatus,
+    DocumentStream,
+    PipelineOptions,
+)
 from docling.datamodel.document import ConvertedDocument, DocumentConversionInput
 from docling.document_converter import DocumentConverter
 
@@ -51,6 +56,10 @@ def main():
         Path("./test/data/redp5110.pdf"),
         Path("./test/data/redp5695.pdf"),
     ]
+
+    # buf = BytesIO(Path("./test/data/2206.01062.pdf").open("rb").read())
+    # docs = [DocumentStream(filename="my_doc.pdf", stream=buf)]
+    # input = DocumentConversionInput.from_streams(docs)
 
     doc_converter = DocumentConverter(pipeline_options=PipelineOptions(do_ocr=False))
 

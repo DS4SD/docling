@@ -39,8 +39,9 @@ class PdfPageBackend(ABC):
 
 class PdfDocumentBackend(ABC):
     @abstractmethod
-    def __init__(self, path_or_stream: Union[BytesIO, Path]):
-        pass
+    def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
+        self.path_or_stream = path_or_stream
+        self.document_hash = document_hash
 
     @abstractmethod
     def load_page(self, page_no: int) -> PdfPageBackend:
@@ -56,4 +57,7 @@ class PdfDocumentBackend(ABC):
 
     @abstractmethod
     def unload(self):
-        pass
+        if isinstance(self.path_or_stream, BytesIO):
+            self.path_or_stream.close()
+
+        self.path_or_stream = None

@@ -215,8 +215,8 @@ class PyPdfiumPageBackend(PdfPageBackend):
 
 
 class PyPdfiumDocumentBackend(PdfDocumentBackend):
-    def __init__(self, path_or_stream: Union[BytesIO, Path]):
-        super().__init__(path_or_stream)
+    def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
+        super().__init__(path_or_stream, document_hash)
         self._pdoc = pdfium.PdfDocument(path_or_stream)
 
     def page_count(self) -> int:
@@ -229,5 +229,6 @@ class PyPdfiumDocumentBackend(PdfDocumentBackend):
         return self.page_count() > 0
 
     def unload(self):
+        super().unload()
         self._pdoc.close()
         self._pdoc = None

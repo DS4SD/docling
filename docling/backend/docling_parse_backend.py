@@ -17,15 +17,13 @@ _log = logging.getLogger(__name__)
 
 class DoclingParsePageBackend(PdfPageBackend):
     def __init__(
-        self, parser: pdf_parser, pdf_bytes: BytesIO, page_no: int, page_obj: PdfPage
+        self, parser: pdf_parser, document_hash: str, page_no: int, page_obj: PdfPage
     ):
         super().__init__(page_obj)
         self._ppage = page_obj
 
-        parsed_page = parser.find_cells_from_bytesio_on_page(pdf_bytes, page_no)
+        parsed_page = parser.parse_pdf_from_key_on_page(document_hash, page_no)
         self._dpage = parsed_page["pages"][0]
-
-        print(f"Parsed page {page_no} of doc.")
 
     def get_text_in_rect(self, bbox: BoundingBox) -> str:
         # Find intersecting cells on the page
@@ -175,28 +173,36 @@ class DoclingParsePageBackend(PdfPageBackend):
 
 
 class DoclingParseDocumentBackend(PdfDocumentBackend):
-    def __init__(self, path_or_stream: Union[BytesIO, Path]):
-        super().__init__(path_or_stream)
-
-        with open(path_or_stream, "rb") as fh:
-            self.pdf_bytes = BytesIO(fh.read())
+    def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
+        super().__init__(path_or_stream, document_hash)
 
         self._pdoc = pdfium.PdfDocument(path_or_stream)
         self.parser = pdf_parser()
+
+        success = False
+        if isinstance(path_or_stream, BytesIO):
+            success = self.parser.load_document_from_bytesio(
+                document_hash, path_or_stream
+            )
+        elif isinstance(path_or_stream, Path):
+            success = self.parser.load_document(document_hash, str(path_or_stream))
+
+        if not success:
+            raise RuntimeError("docling-parse could not load this document.")
 
     def page_count(self) -> int:
         return len(self._pdoc)  # To be replaced with docling-parse API
 
     def load_page(self, page_no: int) -> DoclingParsePageBackend:
-
         return DoclingParsePageBackend(
-            self.parser, self.pdf_bytes, page_no, self._pdoc[page_no]
+            self.parser, self.document_hash, page_no, self._pdoc[page_no]
         )
 
     def is_valid(self) -> bool:
         return self.page_count() > 0
 
     def unload(self):
+        super().unload()
+        self.parser.unload_document(self.document_hash)
         self._pdoc.close()
         self._pdoc = None
-        self._parser_doc = None
