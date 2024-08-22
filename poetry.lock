@@ -829,10 +829,21 @@ python-versions = "<4.0,>=3.9"
 files = [
     {file = "docling_parse-1.0.0-cp310-cp310-macosx_13_6_arm64.whl", hash = "sha256:068db83a192b21783cc7bc66e9d3efb9072a57edeb8c07ef1a83a93353efcc36"},
     {file = "docling_parse-1.0.0-cp310-cp310-macosx_13_6_x86_64.whl", hash = "sha256:f57f9bba3ac6a81fc30c34bb08261d7308b0a780d90cbee903821aec2f5fbd88"},
+    {file = "docling_parse-1.0.0-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:ae02643485eb28cb54bac8523243a536751c561dddd86846a8dd9b3804a3c491"},
+    {file = "docling_parse-1.0.0-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:01cbb011a337bc4dcdddb281841378af36cbce0898bdf528543c7c54d66e6ecc"},
     {file = "docling_parse-1.0.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fdf142dea82f0a5f5e1bcaa74cc9feeda12899077589e3eb6c728d334b43cdda"},
     {file = "docling_parse-1.0.0-cp311-cp311-macosx_13_6_arm64.whl", hash = "sha256:8834a8387a55b4082c20da184e7d09f705c17558c465da9a5f35974b19013fe5"},
+    {file = "docling_parse-1.0.0-cp311-cp311-macosx_13_6_x86_64.whl", hash = "sha256:4d1cfe98a7594fac3c7afd8fb08b28e4b1aba8b317e60cc64a85fb19043230b0"},
+    {file = "docling_parse-1.0.0-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:f5da27cd03f1ba8859ebde525db388dd1d862be2712f38a13b6985f95061280c"},
+    {file = "docling_parse-1.0.0-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:8aa6bdda40483af52591bdff11a578837eb4d6be51c12d44b4e489f520757ae6"},
     {file = "docling_parse-1.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a5c4b80a8d5e8f832910f32188501a9a6718a0223fb9921ee7cc5cfe62adb857"},
+    {file = "docling_parse-1.0.0-cp312-cp312-macosx_13_6_arm64.whl", hash = "sha256:c86b263b4b089c3a71cde2a4fb8314614350dd76b3769b0950b371c2964e10d6"},
+    {file = "docling_parse-1.0.0-cp312-cp312-macosx_13_6_x86_64.whl", hash = "sha256:93ef15628d663c036d48d466bf3de7c90a172cf52ba11883990640c758331720"},
+    {file = "docling_parse-1.0.0-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:37218472773ed94b8ed07eeccfa68457f064227759350404fea5f45c311242a7"},
+    {file = "docling_parse-1.0.0-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:9f863d9788c62dd34b2cdfd79480785e9a6bb382144b630ceb8b527aaee56351"},
     {file = "docling_parse-1.0.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0358eb13822ce2120362d6e7d63eb80a50d819b5bed5a2ccb7bd9beee4d83a61"},
+    {file = "docling_parse-1.0.0-cp39-cp39-macosx_13_6_arm64.whl", hash = "sha256:5651185fbec4357b7638e1a39a0854a712a0cc74d6644518e64f066ce38ed976"},
+    {file = "docling_parse-1.0.0-cp39-cp39-macosx_13_6_x86_64.whl", hash = "sha256:d5efedf361b4c58e372d355c0bb3fa5a20dcd3d002952ccbafb09580a924f426"},
     {file = "docling_parse-1.0.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d4a67df4699b4ffc2b01e77395ef35843ab23f40ac62bcdf593b6cc1f443eca6"},
 ]
 
@@ -2683,8 +2694,8 @@ files = [
 numpy = [
     {version = ">=1.21.4", markers = "python_version >= \"3.10\" and platform_system == \"Darwin\" and python_version < \"3.11\""},
     {version = ">=1.21.2", markers = "platform_system != \"Darwin\" and python_version >= \"3.10\" and python_version < \"3.11\""},
-    {version = ">=1.23.5", markers = "python_version >= \"3.11\" and python_version < \"3.12\""},
     {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
+    {version = ">=1.23.5", markers = "python_version >= \"3.11\" and python_version < \"3.12\""},
 ]
 
 [[package]]
@@ -2739,8 +2750,8 @@ files = [
 [package.dependencies]
 numpy = [
     {version = ">=1.22.4", markers = "python_version < \"3.11\""},
-    {version = ">=1.23.2", markers = "python_version == \"3.11\""},
     {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
+    {version = ">=1.23.2", markers = "python_version == \"3.11\""},
 ]
 python-dateutil = ">=2.8.2"
 pytz = ">=2020.1"
