@@ -1,3 +1,9 @@
+## [v1.6.3](https://github.com/DS4SD/docling/releases/tag/v1.6.3) - 2024-08-22
+
+### Fix
+
+* Usage of bytesio with docling-parse ([#43](https://github.com/DS4SD/docling/issues/43)) ([`fac5745`](https://github.com/DS4SD/docling/commit/fac5745dc846281bfae64bc631658bb2a2c90982))
+
 ## [v1.6.2](https://github.com/DS4SD/docling/releases/tag/v1.6.2) - 2024-08-22
 
 ### Fix
