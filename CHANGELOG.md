@@ -1,3 +1,9 @@
+## [v1.6.2](https://github.com/DS4SD/docling/releases/tag/v1.6.2) - 2024-08-22
+
+### Fix
+
+* Remove [ocr] extra to fix wheel install ([#42](https://github.com/DS4SD/docling/issues/42)) ([`6995268`](https://github.com/DS4SD/docling/commit/69952682edd014a3f252e9c87edffa7c34f1033b))
+
 ## [v1.6.1](https://github.com/DS4SD/docling/releases/tag/v1.6.1) - 2024-08-21
 
 ### Fix
