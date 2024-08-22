@@ -141,6 +141,8 @@ class DocumentConverter:
         start_doc_time = time.time()
         converted_doc = ConvertedDocument(input=in_doc)
 
+        _log.info(f"Processing document {in_doc.file.name}")
+
         if not in_doc.valid:
             converted_doc.status = ConversionStatus.FAILURE
             return converted_doc

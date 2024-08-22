@@ -79,7 +79,9 @@ class InputDocument(BaseModel):
                     self.valid = False
                 else:
                     self.document_hash = create_file_hash(path_or_stream)
-                    self._backend = pdf_backend(path_or_stream=path_or_stream)
+                    self._backend = pdf_backend(
+                        path_or_stream=path_or_stream, document_hash=self.document_hash
+                    )
 
             elif isinstance(path_or_stream, BytesIO):
                 self.file = PurePath(filename)
@@ -89,7 +91,9 @@ class InputDocument(BaseModel):
                     self.valid = False
                 else:
                     self.document_hash = create_file_hash(path_or_stream)
-                    self._backend = pdf_backend(path_or_stream=path_or_stream)
+                    self._backend = pdf_backend(
+                        path_or_stream=path_or_stream, document_hash=self.document_hash
+                    )
 
             if self.document_hash and self._backend.page_count() > 0:
                 self.page_count = self._backend.page_count()
