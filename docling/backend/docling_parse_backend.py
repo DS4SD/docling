@@ -186,9 +186,7 @@ class DoclingParseDocumentBackend(PdfDocumentBackend):
             self._parser_doc = parser.find_cells(str(path_or_stream))
 
         end_pb_time = time.time() - start_pb_time
-        _log.info(
-            f"Time to parse {path_or_stream.name} with docling-parse: time={end_pb_time:.3f}"
-        )
+        _log.info(f"Time to parse with docling-parse: time={end_pb_time:.3f}")
 
     def page_count(self) -> int:
         return len(self._parser_doc["pages"])
