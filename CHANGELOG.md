@@ -1,3 +1,9 @@
+## [v1.7.0](https://github.com/DS4SD/docling/releases/tag/v1.7.0) - 2024-08-22
+
+### Feature
+
+* Upgrade docling-parse PDF backend and interface to use page-by-page parsing ([#44](https://github.com/DS4SD/docling/issues/44)) ([`a8c6b29`](https://github.com/DS4SD/docling/commit/a8c6b29a67ca303d6eec3fabb6b5e75ad5a7676d))
+
 ## [v1.6.3](https://github.com/DS4SD/docling/releases/tag/v1.6.3) - 2024-08-22
 
 ### Fix
