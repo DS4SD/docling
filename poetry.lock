@@ -5139,10 +5139,7 @@ files = [
 doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-lint"]
 test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-itertools", "pytest (>=6,!=8.1.*)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-ignore-flaky", "pytest-mypy", "pytest-ruff (>=0.2.1)"]
 
-[extras]
-ocr = ["easyocr"]
-
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "b500d11dcacd08180cf586a5710e94e7686e8cb5c709b20373ff3b65eacc6605"
+content-hash = "4b0af4695af17ce1cdbcd04b4c29360cacd866acc77b5a0529749651ee633323"
