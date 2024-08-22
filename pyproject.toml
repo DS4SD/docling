@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "docling"
-version = "1.6.0"  # DO NOT EDIT, updated automatically
+version = "1.6.2"  # DO NOT EDIT, updated automatically
 description = "Docling PDF conversion package"
 authors = ["Christoph Auer <cau@zurich.ibm.com>", "Michele Dolfi <dol@zurich.ibm.com>", "Maxim Lysak <mly@zurich.ibm.com>", "Nikos Livathinos <nli@zurich.ibm.com>", "Ahmed Nassar <ahn@zurich.ibm.com>", "Peter Staar <taa@zurich.ibm.com>"]
 license = "MIT"
@@ -24,17 +24,18 @@ packages = [{include = "docling"}]
 python = "^3.10"
 pydantic = "^2.0.0"
 docling-core = "^1.1.2"
-docling-ibm-models = "^1.1.1"
+docling-ibm-models = "^1.1.2"
 deepsearch-glm = ">=0.19.0,<1"
 filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"
 pydantic-settings = "^2.3.0"
 huggingface_hub = ">=0.23,<1"
 requests = "^2.32.3"
-easyocr = { version = "^1.7"}
+easyocr = "^1.7"
 docling-parse = "^0.2.0"
 certifi = ">=2024.7.4"
 rtree = "^1.3.0"
+scipy = "^1.14.1"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
@@ -49,9 +50,6 @@ pytest-xdist = "^3.3.1"
 types-requests = "^2.31.0.2"
 flake8-pyproject = "^1.2.3"
 pylint = "^2.17.5"
-
-[tool.poetry.extras]
-ocr = ["easyocr"]
 
 [build-system]
 requires = ["poetry-core"]
