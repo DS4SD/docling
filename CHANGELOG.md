@@ -1,3 +1,9 @@
+## [v1.8.0](https://github.com/DS4SD/docling/releases/tag/v1.8.0) - 2024-08-23
+
+### Feature
+
+* Page-level error reporting from PDF backend, introduce PARTIAL_SUCCESS status ([#47](https://github.com/DS4SD/docling/issues/47)) ([`a294b7e`](https://github.com/DS4SD/docling/commit/a294b7e64a4d66ebb9fd328c084e5f74647805ee))
+
 ## [v1.7.1](https://github.com/DS4SD/docling/releases/tag/v1.7.1) - 2024-08-23
 
 ### Fix
