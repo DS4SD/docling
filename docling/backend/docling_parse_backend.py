@@ -28,6 +28,10 @@ class DoclingParsePageBackend(PdfPageBackend):
         self.broken_page = "pages" not in parsed_page
         if not self.broken_page:
             self._dpage = parsed_page["pages"][0]
+        else:
+            raise RuntimeError(
+                f"Page {page_no} of document {document_hash} could not be parsed."
+            )
 
     def get_text_in_rect(self, bbox: BoundingBox) -> str:
         if self.broken_page:
