@@ -19,7 +19,6 @@ class DoclingParsePageBackend(PdfPageBackend):
     def __init__(
         self, parser: pdf_parser, document_hash: str, page_no: int, page_obj: PdfPage
     ):
-        super().__init__(page_obj)
         self._ppage = page_obj
 
         parsed_page = parser.parse_pdf_from_key_on_page(document_hash, page_no)

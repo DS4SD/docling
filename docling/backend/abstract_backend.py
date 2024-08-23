@@ -7,8 +7,6 @@ from PIL import Image
 
 
 class PdfPageBackend(ABC):
-    def __init__(self, page_obj: Any) -> object:
-        pass
 
     @abstractmethod
     def get_text_in_rect(self, bbox: "BoundingBox") -> str:

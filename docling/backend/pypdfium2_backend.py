@@ -13,9 +13,8 @@ from docling.datamodel.base_models import BoundingBox, Cell, CoordOrigin, PageSi
 
 
 class PyPdfiumPageBackend(PdfPageBackend):
-    def __init__(self, page_obj: PdfPage):
-        super().__init__(page_obj)
-        self._ppage = page_obj
+    def __init__(self, pdfium_doc: pdfium.PdfDocument, page_no: int):
+        self._ppage: pdfium.PdfPage = pdfium_doc[page_no]
         self.text_page = None
 
     def get_bitmap_rects(self, scale: int = 1) -> Iterable[BoundingBox]:
@@ -223,7 +222,7 @@ class PyPdfiumDocumentBackend(PdfDocumentBackend):
         return len(self._pdoc)
 
     def load_page(self, page_no: int) -> PyPdfiumPageBackend:
-        return PyPdfiumPageBackend(self._pdoc[page_no])
+        return PyPdfiumPageBackend(self._pdoc, page_no)
 
     def is_valid(self) -> bool:
         return self.page_count() > 0
