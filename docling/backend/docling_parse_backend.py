@@ -19,22 +19,23 @@ class DoclingParsePageBackend(PdfPageBackend):
     def __init__(
         self, parser: pdf_parser, document_hash: str, page_no: int, page_obj: PdfPage
     ):
-        super().__init__(page_obj)
         self._ppage = page_obj
-
         parsed_page = parser.parse_pdf_from_key_on_page(document_hash, page_no)
 
         self._dpage = None
-        self.broken_page = "pages" not in parsed_page
-        if not self.broken_page:
+        self.valid = "pages" in parsed_page
+        if self.valid:
             self._dpage = parsed_page["pages"][0]
         else:
-            raise RuntimeError(
-                f"Page {page_no} of document {document_hash} could not be parsed."
+            _log.info(
+                f"An error occured when loading page {page_no} of document {document_hash}."
             )
 
+    def is_valid(self) -> bool:
+        return self.valid
+
     def get_text_in_rect(self, bbox: BoundingBox) -> str:
-        if self.broken_page:
+        if not self.valid:
             return ""
         # Find intersecting cells on the page
         text_piece = ""
@@ -70,7 +71,7 @@ class DoclingParsePageBackend(PdfPageBackend):
         cells = []
         cell_counter = 0
 
-        if self.broken_page:
+        if not self.valid:
             return cells
 
         page_size = self.get_size()
@@ -201,7 +202,9 @@ class DoclingParseDocumentBackend(PdfDocumentBackend):
             success = self.parser.load_document(document_hash, str(path_or_stream))
 
         if not success:
-            raise RuntimeError("docling-parse could not load this document.")
+            raise RuntimeError(
+                f"docling-parse could not load document {document_hash}."
+            )
 
     def page_count(self) -> int:
         return len(self._pdoc)  # To be replaced with docling-parse API

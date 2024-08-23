@@ -1,3 +1,4 @@
+import logging
 import random
 from io import BytesIO
 from pathlib import Path
@@ -7,16 +8,31 @@ import pypdfium2 as pdfium
 import pypdfium2.raw as pdfium_c
 from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage
+from pypdfium2._helpers.misc import PdfiumError
 
 from docling.backend.abstract_backend import PdfDocumentBackend, PdfPageBackend
 from docling.datamodel.base_models import BoundingBox, Cell, CoordOrigin, PageSize
 
+_log = logging.getLogger(__name__)
+
 
 class PyPdfiumPageBackend(PdfPageBackend):
-    def __init__(self, page_obj: PdfPage):
-        super().__init__(page_obj)
-        self._ppage = page_obj
+    def __init__(
+        self, pdfium_doc: pdfium.PdfDocument, document_hash: str, page_no: int
+    ):
+        self.valid = True  # No better way to tell from pypdfium.
+        try:
+            self._ppage: pdfium.PdfPage = pdfium_doc[page_no]
+        except PdfiumError as e:
+            _log.info(
+                f"An exception occured when loading page {page_no} of document {document_hash}.",
+                exc_info=True,
+            )
+            self.valid = False
         self.text_page = None
+
+    def is_valid(self) -> bool:
+        return self.valid
 
     def get_bitmap_rects(self, scale: int = 1) -> Iterable[BoundingBox]:
         AREA_THRESHOLD = 32 * 32
@@ -217,13 +233,18 @@ class PyPdfiumPageBackend(PdfPageBackend):
 class PyPdfiumDocumentBackend(PdfDocumentBackend):
     def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
         super().__init__(path_or_stream, document_hash)
-        self._pdoc = pdfium.PdfDocument(path_or_stream)
+        try:
+            self._pdoc = pdfium.PdfDocument(path_or_stream)
+        except PdfiumError as e:
+            raise RuntimeError(
+                f"pypdfium could not load document {document_hash}"
+            ) from e
 
     def page_count(self) -> int:
         return len(self._pdoc)
 
     def load_page(self, page_no: int) -> PyPdfiumPageBackend:
-        return PyPdfiumPageBackend(self._pdoc[page_no])
+        return PyPdfiumPageBackend(self._pdoc, self.document_hash, page_no)
 
     def is_valid(self) -> bool:
         return self.page_count() > 0

@@ -16,6 +16,8 @@ from docling.datamodel.base_models import (
     AssembledUnit,
     AssembleOptions,
     ConversionStatus,
+    DoclingComponentType,
+    ErrorItem,
     Page,
     PipelineOptions,
 )
@@ -157,7 +159,6 @@ class DocumentConverter:
             for page_batch in chunkify(
                 converted_doc.pages, settings.perf.page_batch_size
             ):
-
                 start_pb_time = time.time()
                 # Pipeline
 
@@ -205,12 +206,27 @@ class DocumentConverter:
             converted_doc.pages = all_assembled_pages
             self.assemble_doc(converted_doc)
 
-            converted_doc.status = ConversionStatus.SUCCESS
+            status = ConversionStatus.SUCCESS
+            for page in converted_doc.pages:
+                if not page._backend.is_valid():
+                    converted_doc.errors.append(
+                        ErrorItem(
+                            component_type=DoclingComponentType.PDF_BACKEND,
+                            module_name=type(page._backend).__name__,
+                            error_message=f"Page {page.page_no} failed to parse.",
+                        )
+                    )
+                    status = ConversionStatus.PARTIAL_SUCCESS
+
+            converted_doc.status = status
 
         except Exception as e:
             converted_doc.status = ConversionStatus.FAILURE
             trace = "\n".join(traceback.format_exception(e))
-            _log.info(f"Encountered an error during conversion: {trace}")
+            _log.info(
+                f"Encountered an error during conversion of document {in_doc.document_hash}:\n"
+                f"{trace}"
+            )
 
         end_doc_time = time.time() - start_doc_time
         _log.info(
@@ -230,7 +246,9 @@ class DocumentConverter:
     # Generate the page image and store it in the page object
     def populate_page_images(self, doc: InputDocument, page: Page) -> Page:
         # default scale
-        page.get_image(scale=1.0)
+        page.get_image(
+            scale=1.0
+        )  # puts the page image on the image cache at default scale
 
         # user requested scales
         if self.assemble_options.images_scale is not None:
