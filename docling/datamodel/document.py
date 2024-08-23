@@ -19,6 +19,7 @@ from docling.datamodel.base_models import (
     AssembledUnit,
     ConversionStatus,
     DocumentStream,
+    ErrorItem,
     FigureElement,
     Page,
     PageElement,
@@ -118,7 +119,7 @@ class ConvertedDocument(BaseModel):
     input: InputDocument
 
     status: ConversionStatus = ConversionStatus.PENDING  # failure, success
-    errors: List[Dict] = []  # structure to keep errors
+    errors: List[ErrorItem] = []  # structure to keep errors
 
     pages: List[Page] = []
     assembled: Optional[AssembledUnit] = None

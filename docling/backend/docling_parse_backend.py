@@ -26,6 +26,10 @@ class DoclingParsePageBackend(PdfPageBackend):
         self.valid = "pages" in parsed_page
         if self.valid:
             self._dpage = parsed_page["pages"][0]
+        else:
+            _log.info(
+                f"An error occured when loading page {page_no} of document {document_hash}."
+            )
 
     def is_valid(self) -> bool:
         return self.valid
@@ -198,7 +202,9 @@ class DoclingParseDocumentBackend(PdfDocumentBackend):
             success = self.parser.load_document(document_hash, str(path_or_stream))
 
         if not success:
-            raise RuntimeError("docling-parse could not load this document.")
+            raise RuntimeError(
+                f"docling-parse could not load document {document_hash}."
+            )
 
     def page_count(self) -> int:
         return len(self._pdoc)  # To be replaced with docling-parse API

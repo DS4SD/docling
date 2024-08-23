@@ -1,15 +1,10 @@
 import json
 import logging
 import time
-from io import BytesIO
 from pathlib import Path
 from typing import Iterable
 
-from docling.datamodel.base_models import (
-    ConversionStatus,
-    DocumentStream,
-    PipelineOptions,
-)
+from docling.datamodel.base_models import ConversionStatus, PipelineOptions
 from docling.datamodel.document import ConvertedDocument, DocumentConversionInput
 from docling.document_converter import DocumentConverter
 
@@ -24,6 +19,7 @@ def export_documents(
 
     success_count = 0
     failure_count = 0
+    partial_success_count = 0
 
     for doc in converted_docs:
         if doc.status == ConversionStatus.SUCCESS:
@@ -37,12 +33,21 @@ def export_documents(
             # Export Markdown format:
             with (output_dir / f"{doc_filename}.md").open("w") as fp:
                 fp.write(doc.render_as_markdown())
+        elif doc.status == ConversionStatus.PARTIAL_SUCCESS:
+            _log.info(
+                f"Document {doc.input.file} was partially converted with the following errors:"
+            )
+            for item in doc.errors:
+                _log.info(f"\t{item.error_message}")
+            partial_success_count += 1
         else:
             _log.info(f"Document {doc.input.file} failed to convert.")
             failure_count += 1
 
     _log.info(
-        f"Processed {success_count + failure_count} docs, of which {failure_count} failed"
+        f"Processed {success_count + partial_success_count + failure_count} docs, "
+        f"of which {failure_count} failed "
+        f"and {partial_success_count} were partially converted."
     )
 
 
@@ -61,7 +66,7 @@ def main():
     # docs = [DocumentStream(filename="my_doc.pdf", stream=buf)]
     # input = DocumentConversionInput.from_streams(docs)
 
-    doc_converter = DocumentConverter(pipeline_options=PipelineOptions(do_ocr=False))
+    doc_converter = DocumentConverter()
 
     input = DocumentConversionInput.from_paths(input_doc_paths)
 

@@ -16,7 +16,7 @@ class ConversionStatus(str, Enum):
     STARTED = auto()
     FAILURE = auto()
     SUCCESS = auto()
-    SUCCESS_WITH_ERRORS = auto()
+    PARTIAL_SUCCESS = auto()
 
 
 class DocInputType(str, Enum):
@@ -27,6 +27,18 @@ class DocInputType(str, Enum):
 class CoordOrigin(str, Enum):
     TOPLEFT = auto()
     BOTTOMLEFT = auto()
+
+
+class DoclingComponentType(str, Enum):
+    PDF_BACKEND = auto()
+    MODEL = auto()
+    DOC_ASSEMBLER = auto()
+
+
+class ErrorItem(BaseModel):
+    component_type: DoclingComponentType
+    module_name: str
+    error_message: str
 
 
 class PageSize(BaseModel):

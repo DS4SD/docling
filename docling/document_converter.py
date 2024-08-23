@@ -16,6 +16,8 @@ from docling.datamodel.base_models import (
     AssembledUnit,
     AssembleOptions,
     ConversionStatus,
+    DoclingComponentType,
+    ErrorItem,
     Page,
     PipelineOptions,
 )
@@ -157,54 +159,46 @@ class DocumentConverter:
             for page_batch in chunkify(
                 converted_doc.pages, settings.perf.page_batch_size
             ):
-                try:
+                start_pb_time = time.time()
+                # Pipeline
 
-                    start_pb_time = time.time()
-                    # Pipeline
+                # 1. Initialise the page resources
+                init_pages = map(
+                    functools.partial(self.initialize_page, in_doc), page_batch
+                )
 
-                    # 1. Initialise the page resources
-                    init_pages = map(
-                        functools.partial(self.initialize_page, in_doc), page_batch
-                    )
+                # 2. Populate page image
+                pages_with_images = map(
+                    functools.partial(self.populate_page_images, in_doc), init_pages
+                )
 
-                    # 2. Populate page image
-                    pages_with_images = map(
-                        functools.partial(self.populate_page_images, in_doc), init_pages
-                    )
+                # 3. Populate programmatic page cells
+                pages_with_cells = map(
+                    functools.partial(self.parse_page_cells, in_doc),
+                    pages_with_images,
+                )
 
-                    # 3. Populate programmatic page cells
-                    pages_with_cells = map(
-                        functools.partial(self.parse_page_cells, in_doc),
-                        pages_with_images,
-                    )
+                # 4. Run pipeline stages
+                pipeline_pages = self.model_pipeline.apply(pages_with_cells)
 
-                    # 4. Run pipeline stages
-                    pipeline_pages = self.model_pipeline.apply(pages_with_cells)
+                # 5. Assemble page elements (per page)
+                assembled_pages = self.page_assemble_model(pipeline_pages)
 
-                    # 5. Assemble page elements (per page)
-                    assembled_pages = self.page_assemble_model(pipeline_pages)
+                # exhaust assembled_pages
+                for assembled_page in assembled_pages:
+                    # Free up mem resources before moving on with next batch
 
-                    # exhaust assembled_pages
-                    for assembled_page in assembled_pages:
-                        # Free up mem resources before moving on with next batch
+                    # Remove page images (can be disabled)
+                    if self.assemble_options.images_scale is None:
+                        assembled_page._image_cache = {}
 
-                        # Remove page images (can be disabled)
-                        if self.assemble_options.images_scale is None:
-                            assembled_page._image_cache = {}
+                    # Unload backend
+                    assembled_page._backend.unload()
 
-                        # Unload backend
-                        assembled_page._backend.unload()
+                    all_assembled_pages.append(assembled_page)
 
-                        all_assembled_pages.append(assembled_page)
-
-                    end_pb_time = time.time() - start_pb_time
-                    _log.info(f"Finished converting page batch time={end_pb_time:.3f}")
-
-                except Exception as e:
-                    trace = "\n".join(traceback.format_exception(e))
-                    _log.info(
-                        f"Encountered an error during processing of page batch: {trace}"
-                    )
+                end_pb_time = time.time() - start_pb_time
+                _log.info(f"Finished converting page batch time={end_pb_time:.3f}")
 
             # Free up mem resources of PDF backend
             in_doc._backend.unload()
@@ -212,12 +206,27 @@ class DocumentConverter:
             converted_doc.pages = all_assembled_pages
             self.assemble_doc(converted_doc)
 
-            converted_doc.status = ConversionStatus.SUCCESS
+            status = ConversionStatus.SUCCESS
+            for page in converted_doc.pages:
+                if not page._backend.is_valid():
+                    converted_doc.errors.append(
+                        ErrorItem(
+                            component_type=DoclingComponentType.PDF_BACKEND,
+                            module_name=type(page._backend).__name__,
+                            error_message=f"Page {page.page_no} failed to parse.",
+                        )
+                    )
+                    status = ConversionStatus.PARTIAL_SUCCESS
+
+            converted_doc.status = status
 
         except Exception as e:
             converted_doc.status = ConversionStatus.FAILURE
             trace = "\n".join(traceback.format_exception(e))
-            _log.info(f"Encountered an error during conversion: {trace}")
+            _log.info(
+                f"Encountered an error during conversion of document {in_doc.document_hash}:\n"
+                f"{trace}"
+            )
 
         end_doc_time = time.time() - start_doc_time
         _log.info(

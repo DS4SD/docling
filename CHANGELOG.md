@@ -1,3 +1,10 @@
+## [v1.7.1](https://github.com/DS4SD/docling/releases/tag/v1.7.1) - 2024-08-23
+
+### Fix
+
+* Better raise exception when a page fails to parse ([#46](https://github.com/DS4SD/docling/issues/46)) ([`8808463`](https://github.com/DS4SD/docling/commit/8808463cecd7ff3a92bd99d2e3d65fd248672c9e))
+* Upgrade docling-parse to 1.1.1, safety checks for failed parse on pages ([#45](https://github.com/DS4SD/docling/issues/45)) ([`7e84533`](https://github.com/DS4SD/docling/commit/7e845332992ab37386daee087573773051bfd065))
+
 ## [v1.7.0](https://github.com/DS4SD/docling/releases/tag/v1.7.0) - 2024-08-22
 
 ### Feature
