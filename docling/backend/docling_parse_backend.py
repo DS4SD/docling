@@ -20,16 +20,18 @@ class DoclingParsePageBackend(PdfPageBackend):
         self, parser: pdf_parser, document_hash: str, page_no: int, page_obj: PdfPage
     ):
         self._ppage = page_obj
-
         parsed_page = parser.parse_pdf_from_key_on_page(document_hash, page_no)
 
         self._dpage = None
-        self.broken_page = "pages" not in parsed_page
-        if not self.broken_page:
+        self.valid = "pages" in parsed_page
+        if self.valid:
             self._dpage = parsed_page["pages"][0]
 
+    def is_valid(self) -> bool:
+        return self.valid
+
     def get_text_in_rect(self, bbox: BoundingBox) -> str:
-        if self.broken_page:
+        if not self.valid:
             return ""
         # Find intersecting cells on the page
         text_piece = ""
@@ -65,7 +67,7 @@ class DoclingParsePageBackend(PdfPageBackend):
         cells = []
         cell_counter = 0
 
-        if self.broken_page:
+        if not self.valid:
             return cells
 
         page_size = self.get_size()

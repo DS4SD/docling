@@ -16,6 +16,10 @@ class PyPdfiumPageBackend(PdfPageBackend):
     def __init__(self, pdfium_doc: pdfium.PdfDocument, page_no: int):
         self._ppage: pdfium.PdfPage = pdfium_doc[page_no]
         self.text_page = None
+        self.valid = True
+
+    def is_valid(self) -> bool:
+        return self.valid
 
     def get_bitmap_rects(self, scale: int = 1) -> Iterable[BoundingBox]:
         AREA_THRESHOLD = 32 * 32

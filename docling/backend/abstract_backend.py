@@ -31,6 +31,10 @@ class PdfPageBackend(ABC):
         pass
 
     @abstractmethod
+    def is_valid(self) -> bool:
+        pass
+
+    @abstractmethod
     def unload(self):
         pass
 
