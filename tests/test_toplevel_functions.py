@@ -101,7 +101,7 @@ def test_conversions():
         if GENERATE:
 
             with open(json_path, "w") as fw:
-                fw.write(doc_pred_json.json())
+                fw.write(doc_pred_json.model_dump_json()())
 
             with open(md_path, "w") as fw:
                 fw.write(doc_pred_md)
@@ -114,7 +114,7 @@ def test_conversions():
             with open(md_path, "r") as fr:
                 doc_true_md = "".join(fr.readlines())
 
-            doc_ = json.loads(doc_pred_json.json())
+            doc_ = json.loads(doc_pred_json.model_dump_json())
             # print(json.dumps(doc_, indent=2))
 
             assert verify_json(
