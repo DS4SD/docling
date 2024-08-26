@@ -1,3 +1,9 @@
+## [v1.8.1](https://github.com/DS4SD/docling/releases/tag/v1.8.1) - 2024-08-26
+
+### Fix
+
+* Align output formats ([#49](https://github.com/DS4SD/docling/issues/49)) ([`8cc147b`](https://github.com/DS4SD/docling/commit/8cc147bc56753144915709a48b08830d0c3ad44e))
+
 ## [v1.8.0](https://github.com/DS4SD/docling/releases/tag/v1.8.0) - 2024-08-23
 
 ### Feature
