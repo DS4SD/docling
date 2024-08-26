@@ -1,3 +1,5 @@
+import glob
+
 from pathlib import Path
 
 import pytest
@@ -5,6 +7,7 @@ import pytest
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend, DoclingParsePageBackend
 from docling.datamodel.base_models import BoundingBox
 
+from docling.document_converter import DocumentConverter
 
 @pytest.fixture
 def test_doc_path():
@@ -31,3 +34,4 @@ def test_crop_page_image(test_doc_path):
 def test_num_pages(test_doc_path):
     doc_backend = DoclingParseDocumentBackend(test_doc_path)
     doc_backend.page_count() == 9
+
