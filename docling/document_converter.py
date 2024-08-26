@@ -88,7 +88,7 @@ class DocumentConverter:
             # Note: Pdfium backend is not thread-safe, thread pool usage was disabled.
             yield from map(self.process_document, input_batch)
 
-    def convert_single(self, source: Path | AnyHttpUrl | str) -> Document:
+    def convert_single(self, source: Path | AnyHttpUrl | str) -> ConvertedDocument:
         """Convert a single document.
 
         Args:
@@ -133,11 +133,10 @@ class DocumentConverter:
             converted_doc: ConvertedDocument = next(converted_docs_iter)
         if converted_doc.status not in {
             ConversionStatus.SUCCESS,
-            ConversionStatus.SUCCESS_WITH_ERRORS,
+            ConversionStatus.PARTIAL_SUCCESS,
         }:
             raise RuntimeError(f"Conversion failed with status: {converted_doc.status}")
-        doc = converted_doc.to_ds_document()
-        return doc
+        return converted_doc
 
     def process_document(self, in_doc: InputDocument) -> ConvertedDocument:
         start_doc_time = time.time()
