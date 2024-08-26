@@ -16,9 +16,11 @@ from docling.datamodel.document import ConvertedDocument
 class GlmModel:
     def __init__(self, config):
         self.config = config
-        self.model_names = self.config.get("model_names", "") #"language;term;reference"
+        self.model_names = self.config.get(
+            "model_names", ""
+        )  # "language;term;reference"
         load_pretrained_nlp_models()
-        #model = init_nlp_model(model_names="language;term;reference")
+        # model = init_nlp_model(model_names="language;term;reference")
         model = init_nlp_model(model_names=self.model_names)
         self.model = model
 
