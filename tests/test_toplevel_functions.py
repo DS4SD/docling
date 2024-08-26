@@ -1,3 +1,4 @@
+import json
 import glob
 from pathlib import Path
 
@@ -59,7 +60,7 @@ def test_conversions():
         if GENERATE:
 
             with open(json_path, "w") as fw:
-                fw.write(json.dumps(doc_pred_json, indent=2))
+                fw.write(json.dumps(doc_pred_json.json(), indent=2))
 
             with open(md_path, "w") as fw:
                 fw.write(doc_pred_md)
