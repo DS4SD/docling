@@ -6,8 +6,7 @@ from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, PipelineOptions
 from docling.document_converter import DocumentConverter
 
-GENERATE = True
-
+GENERATE = False
 
 def get_pdf_paths():
 
@@ -18,10 +17,39 @@ def get_pdf_paths():
     pdf_files = sorted(directory.rglob("*.pdf"))
     return pdf_files
 
-
 def verify_json(doc_pred_json, doc_true_json):
-    return True
 
+    if doc_pred_json.keys()!=doc_true_json.keys():
+        return False
+
+    if doc_pred_json["output"].keys()!=doc_true_json["output"].keys():
+        return False
+
+    for l,true_item in enumerate(doc_true_json["output"]["main_text"]):
+        if "text" in true_item:
+
+            pred_item = doc_pred_json["output"]["main_text"][l]
+            
+            assert "text" in pred_item, f"`text` is in {pred_item}"
+            assert true_item["text"]==pred_item["text"]
+
+    for l,true_item in enumerate(doc_true_json["output"]["tables"]):
+        if "data" in true_item:
+            
+            pred_item = doc_pred_json["output"]["tables"][l]
+            
+            assert "data" in pred_item, f"`data` is in {pred_item}"
+            assert len(true_item["data"])==len(pred_item["data"]), "table does not have the same #-rows"
+            assert len(true_item["data"][0])==len(pred_item["data"][0]), "table does not have the same #-cols"
+
+            for i,row in enumerate(true_item["data"]):
+                for j,col in enumerate(true_item["data"][i]):
+
+                    if "text" in true_item["data"][i][j]:
+                        assert "text" in pred_item["data"][i][j], "table-cell does not contain text"
+                        assert true_item["data"][i][j]["text"]==pred_item["data"][i][j]["text"], "table-cell does not have the same text"
+                    
+    return True
 
 def verify_md(doc_pred_md, doc_true_md):
     return doc_pred_md == doc_true_md
@@ -30,7 +58,7 @@ def verify_md(doc_pred_md, doc_true_md):
 def test_conversions():
 
     pdf_paths = get_pdf_paths()
-    print(f"#-documents: {pdf_paths}")
+    #print(f"#-documents: {pdf_paths}")
 
     pipeline_options = PipelineOptions()
     pipeline_options.do_ocr = False
@@ -45,9 +73,10 @@ def test_conversions():
     for path in pdf_paths:
 
         doc_pred_json = None
+        doc_true_json = None
 
         try:
-            print(f"converting {path}")
+            #print(f"converting {path}")
             doc_pred_json = converter.convert_single(path)
         except:
             continue
@@ -60,21 +89,24 @@ def test_conversions():
         if GENERATE:
 
             with open(json_path, "w") as fw:
-                fw.write(json.dumps(doc_pred_json.json(), indent=2))
+                fw.write(doc_pred_json.json())
 
             with open(md_path, "w") as fw:
                 fw.write(doc_pred_md)
 
         else:
 
-            with open(path, "r") as fr:
+            with open(json_path, "r") as fr:
                 doc_true_json = json.load(fr)
+                
+            with open(md_path, "r") as fr:
+                doc_true_md = "".join(fr.readlines())
 
-            with open(path, "r") as fr:
-                doc_true_md = json.load(fr)
-
+            doc_ = json.loads(doc_pred_json.json())
+            #print(json.dumps(doc_, indent=2))
+                
             assert verify_json(
-                doc_pred_json, doc_true_json
+                doc_, doc_true_json
             ), f"failed json prediction for {path}"
 
             assert verify_md(
