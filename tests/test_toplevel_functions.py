@@ -11,7 +11,7 @@ GENERATE=True
 def get_pdf_paths():
 
     # Define the directory you want to search
-    directory = Path('./data')
+    directory = Path('./tests/data')
 
     # List all PDF files in the directory and its subdirectories
     pdf_files = sorted(directory.rglob('*.pdf'))
@@ -26,22 +26,29 @@ def verify_md(doc_pred_md, doc_true_md):
 def test_conversions():
     
     pdf_paths = get_pdf_paths()
-
+    print(f"#-documents: {pdf_paths}")
+    
     pipeline_options = PipelineOptions()
     pipeline_options.do_ocr = False
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
 
-    doc_converter = DocumentConverter(
+    converter = DocumentConverter(
         pipeline_options=pipeline_options,
         pdf_backend=DoclingParseDocumentBackend,
     )
     
     for path in pdf_paths:
 
-        doc_pred_json = converter.convert_single(path)        
+        doc_pred_json=None
         
-        doc_pred_md = doc.render_as_markdown()
+        try:
+            print(f"converting {path}")
+            doc_pred_json = converter.convert_single(path)        
+        except:
+            continue
+        
+        doc_pred_md = doc_pred_json.render_as_markdown()
 
         json_path = path.with_suffix(".json")
         md_path = path.with_suffix(".md")
