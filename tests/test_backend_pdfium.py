@@ -11,7 +11,7 @@ from docling.datamodel.base_models import BoundingBox
 
 @pytest.fixture
 def test_doc_path():
-    return Path("./data/2206.01062.pdf")
+    return Path("./tests/data/2206.01062.pdf")
 
 
 def test_get_text_from_rect(test_doc_path):
