@@ -10,7 +10,7 @@ from docling_core.types import Ref
 from PIL import ImageDraw
 
 from docling.datamodel.base_models import BoundingBox, Cluster, CoordOrigin
-from docling.datamodel.document import ConvertedDocument
+from docling.datamodel.document import ConversionResult
 
 
 class GlmModel:
@@ -20,8 +20,8 @@ class GlmModel:
         model = init_nlp_model(model_names="language;term;reference")
         self.model = model
 
-    def __call__(self, document: ConvertedDocument) -> DsDocument:
-        ds_doc = document.to_ds_document()
+    def __call__(self, conv_res: ConversionResult) -> DsDocument:
+        ds_doc = conv_res._to_ds_document()
         ds_doc_dict = ds_doc.model_dump(by_alias=True)
 
         glm_doc = self.model.apply_on_doc(ds_doc_dict)
@@ -34,7 +34,7 @@ class GlmModel:
         # DEBUG code:
         def draw_clusters_and_cells(ds_document, page_no):
             clusters_to_draw = []
-            image = copy.deepcopy(document.pages[page_no].image)
+            image = copy.deepcopy(conv_res.pages[page_no].image)
             for ix, elem in enumerate(ds_document.main_text):
                 if isinstance(elem, BaseText):
                     prov = elem.prov[0]
@@ -56,7 +56,7 @@ class GlmModel:
                             bbox=BoundingBox.from_tuple(
                                 coord=prov.bbox,
                                 origin=CoordOrigin.BOTTOMLEFT,
-                            ).to_top_left_origin(document.pages[page_no].size.height),
+                            ).to_top_left_origin(conv_res.pages[page_no].size.height),
                         )
                     )
 

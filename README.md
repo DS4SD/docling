@@ -49,10 +49,10 @@ To convert invidual PDF documents, use `convert_single()`, for example:
 ```python
 from docling.document_converter import DocumentConverter
 
-source = "https://arxiv.org/pdf/2206.01062"  # PDF path or URL
+source = "https://arxiv.org/pdf/2408.09869"  # PDF path or URL
 converter = DocumentConverter()
-doc = converter.convert_single(source)
-print(doc.render_as_markdown())  # output: "## DocLayNet: A Large Human-Annotated Dataset for Document-Layout Analysis [...]"
+result = converter.convert_single(source)
+print(result.render_as_markdown())  # output: "## Docling Technical Report[...]"
 ```
 
 ### Convert a batch of documents
@@ -118,7 +118,7 @@ You can convert PDFs from a binary stream instead of from the filesystem as foll
 buf = BytesIO(your_binary_stream)
 docs = [DocumentStream(filename="my_doc.pdf", stream=buf)]
 conv_input = DocumentConversionInput.from_streams(docs)
-converted_docs = doc_converter.convert(conv_input)
+results = doc_converter.convert(conv_input)
 ```
 ### Limit resource usage
 

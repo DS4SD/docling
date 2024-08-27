@@ -10,7 +10,7 @@ from docling.datamodel.base_models import (
     PageElement,
     TableElement,
 )
-from docling.datamodel.document import ConvertedDocument, DocumentConversionInput
+from docling.datamodel.document import DocumentConversionInput
 from docling.document_converter import DocumentConverter
 
 _log = logging.getLogger(__name__)
@@ -39,25 +39,25 @@ def main():
 
     start_time = time.time()
 
-    converted_docs = doc_converter.convert(input_files)
+    conv_results = doc_converter.convert(input_files)
 
     output_dir.mkdir(parents=True, exist_ok=True)
-    for doc in converted_docs:
-        if doc.status != ConversionStatus.SUCCESS:
-            _log.info(f"Document {doc.input.file} failed to convert.")
+    for conv_res in conv_results:
+        if conv_res.status != ConversionStatus.SUCCESS:
+            _log.info(f"Document {conv_res.input.file} failed to convert.")
             continue
 
-        doc_filename = doc.input.file.stem
+        doc_filename = conv_res.input.file.stem
 
         # Export page images
-        for page in doc.pages:
+        for page in conv_res.pages:
             page_no = page.page_no + 1
             page_image_filename = output_dir / f"{doc_filename}-{page_no}.png"
             with page_image_filename.open("wb") as fp:
                 page.image.save(fp, format="PNG")
 
         # Export figures and tables
-        for element, image in doc.render_element_images(
+        for element, image in conv_res.render_element_images(
             element_types=(FigureElement, TableElement)
         ):
             element_image_filename = (
