@@ -321,7 +321,7 @@ class LayoutModel:
                 clusters, page.cells, page.size.height
             )
 
-            # draw_clusters_and_cells()
+            draw_clusters_and_cells()
 
             page.predictions.layout = LayoutPrediction(clusters=clusters)
 

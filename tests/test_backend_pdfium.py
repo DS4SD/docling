@@ -15,7 +15,7 @@ def test_doc_path():
 
 
 def test_get_text_from_rect(test_doc_path):
-    doc_backend = PyPdfiumDocumentBackend(test_doc_path)
+    doc_backend = PyPdfiumDocumentBackend(test_doc_path, "123456xyz")
     page_backend: PyPdfiumPageBackend = doc_backend.load_page(0)
 
     # Get the title text of the DocLayNet paper
@@ -28,7 +28,7 @@ def test_get_text_from_rect(test_doc_path):
 
 
 def test_crop_page_image(test_doc_path):
-    doc_backend = PyPdfiumDocumentBackend(test_doc_path)
+    doc_backend = PyPdfiumDocumentBackend(test_doc_path, "123456xyz")
     page_backend: PyPdfiumPageBackend = doc_backend.load_page(0)
 
     # Crop out "Figure 1" from the DocLayNet paper
@@ -39,5 +39,5 @@ def test_crop_page_image(test_doc_path):
 
 
 def test_num_pages(test_doc_path):
-    doc_backend = PyPdfiumDocumentBackend(test_doc_path)
+    doc_backend = PyPdfiumDocumentBackend(test_doc_path, "123456xyz")
     doc_backend.page_count() == 9
