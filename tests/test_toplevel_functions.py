@@ -85,11 +85,11 @@ def test_conversions():
     for path in pdf_paths:
 
         print(f"converting {path}")
-        
+
         doc_pred_json = None
         doc_true_json = None
 
-        try:            
+        try:
             doc_pred_json = converter.convert_single(path)
         except:
             continue
@@ -115,7 +115,7 @@ def test_conversions():
             with open(md_path, "r") as fr:
                 doc_true_md = "".join(fr.readlines())
 
-            #doc_ = json.loads(doc_pred_json.model_dump_json())
+            # doc_ = json.loads(doc_pred_json.model_dump_json())
             # print(json.dumps(doc_, indent=2))
 
             assert verify_json(
