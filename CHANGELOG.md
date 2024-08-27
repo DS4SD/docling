@@ -1,3 +1,13 @@
+## [v1.8.2](https://github.com/DS4SD/docling/releases/tag/v1.8.2) - 2024-08-27
+
+### Fix
+
+* Refine conversion result ([#52](https://github.com/DS4SD/docling/issues/52)) ([`e46a66a`](https://github.com/DS4SD/docling/commit/e46a66a17606a26f351b798ecf4fdeae71465f9c))
+
+### Documentation
+
+* Update interface in README ([#50](https://github.com/DS4SD/docling/issues/50)) ([`fe817b1`](https://github.com/DS4SD/docling/commit/fe817b11d730c55d48b6a60fc4e6f173da51a66b))
+
 ## [v1.8.1](https://github.com/DS4SD/docling/releases/tag/v1.8.1) - 2024-08-26
 
 ### Fix

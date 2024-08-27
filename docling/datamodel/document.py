@@ -12,6 +12,7 @@ from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
 from docling_core.types import TableCell
 from pydantic import BaseModel
+from typing_extensions import deprecated
 
 from docling.backend.abstract_backend import PdfDocumentBackend
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
@@ -48,6 +49,15 @@ layout_label_to_ds_type = {
     "Picture": "figure",
     "Text": "paragraph",
 }
+
+_EMPTY_DOC = DsDocument(
+    _name="",
+    description=DsDocumentDescription(logs=[]),
+    file_info=DsFileInfoObject(
+        filename="",
+        document_hash="",
+    ),
+)
 
 
 class InputDocument(BaseModel):
@@ -115,6 +125,7 @@ class InputDocument(BaseModel):
             # raise
 
 
+@deprecated("Use `ConversionResult` instead.")
 class ConvertedDocument(BaseModel):
     input: InputDocument
 
@@ -122,11 +133,11 @@ class ConvertedDocument(BaseModel):
     errors: List[ErrorItem] = []  # structure to keep errors
 
     pages: List[Page] = []
-    assembled: Optional[AssembledUnit] = None
+    assembled: AssembledUnit = AssembledUnit()
 
-    output: Optional[DsDocument] = None
+    output: DsDocument = _EMPTY_DOC
 
-    def to_ds_document(self) -> DsDocument:
+    def _to_ds_document(self) -> DsDocument:
         title = ""
         desc = DsDocumentDescription(logs=[])
 
@@ -297,16 +308,10 @@ class ConvertedDocument(BaseModel):
         return ds_doc
 
     def render_as_dict(self):
-        if self.output:
-            return self.output.model_dump(by_alias=True, exclude_none=True)
-        else:
-            return {}
+        return self.output.model_dump(by_alias=True, exclude_none=True)
 
     def render_as_markdown(self):
-        if self.output:
-            return self.output.export_to_markdown()
-        else:
-            return ""
+        return self.output.export_to_markdown()
 
     def render_element_images(
         self, element_types: Tuple[PageElement] = (FigureElement,)
@@ -321,6 +326,10 @@ class ConvertedDocument(BaseModel):
 
                 cropped_im = self.pages[page_ix].image.crop(crop_bbox.as_tuple())
                 yield element, cropped_im
+
+
+class ConversionResult(ConvertedDocument):
+    pass
 
 
 class DocumentConversionInput(BaseModel):
