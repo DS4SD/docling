@@ -247,9 +247,9 @@ PageElement = Union[TextElement, TableElement, FigureElement]
 
 
 class AssembledUnit(BaseModel):
-    elements: List[PageElement]
-    body: List[PageElement]
-    headers: List[PageElement]
+    elements: List[PageElement] = []
+    body: List[PageElement] = []
+    headers: List[PageElement] = []
 
 
 class Page(BaseModel):
