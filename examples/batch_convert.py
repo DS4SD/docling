@@ -5,14 +5,14 @@ from pathlib import Path
 from typing import Iterable
 
 from docling.datamodel.base_models import ConversionStatus, PipelineOptions
-from docling.datamodel.document import ConvertedDocument, DocumentConversionInput
+from docling.datamodel.document import ConversionResult, DocumentConversionInput
 from docling.document_converter import DocumentConverter
 
 _log = logging.getLogger(__name__)
 
 
 def export_documents(
-    converted_docs: Iterable[ConvertedDocument],
+    conv_results: Iterable[ConversionResult],
     output_dir: Path,
 ):
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -21,27 +21,27 @@ def export_documents(
     failure_count = 0
     partial_success_count = 0
 
-    for doc in converted_docs:
-        if doc.status == ConversionStatus.SUCCESS:
+    for conv_res in conv_results:
+        if conv_res.status == ConversionStatus.SUCCESS:
             success_count += 1
-            doc_filename = doc.input.file.stem
+            doc_filename = conv_res.input.file.stem
 
             # Export Deep Search document JSON format:
             with (output_dir / f"{doc_filename}.json").open("w") as fp:
-                fp.write(json.dumps(doc.render_as_dict()))
+                fp.write(json.dumps(conv_res.render_as_dict()))
 
             # Export Markdown format:
             with (output_dir / f"{doc_filename}.md").open("w") as fp:
-                fp.write(doc.render_as_markdown())
-        elif doc.status == ConversionStatus.PARTIAL_SUCCESS:
+                fp.write(conv_res.render_as_markdown())
+        elif conv_res.status == ConversionStatus.PARTIAL_SUCCESS:
             _log.info(
-                f"Document {doc.input.file} was partially converted with the following errors:"
+                f"Document {conv_res.input.file} was partially converted with the following errors:"
             )
-            for item in doc.errors:
+            for item in conv_res.errors:
                 _log.info(f"\t{item.error_message}")
             partial_success_count += 1
         else:
-            _log.info(f"Document {doc.input.file} failed to convert.")
+            _log.info(f"Document {conv_res.input.file} failed to convert.")
             failure_count += 1
 
     _log.info(
@@ -72,8 +72,8 @@ def main():
 
     start_time = time.time()
 
-    converted_docs = doc_converter.convert(input)
-    export_documents(converted_docs, output_dir=Path("./scratch"))
+    conv_results = doc_converter.convert(input)
+    export_documents(conv_results, output_dir=Path("./scratch"))
 
     end_time = time.time() - start_time
 

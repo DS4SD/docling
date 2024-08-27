@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import Iterable, Optional, Type, Union
 
 import requests
-from docling_core.types import Document
 from PIL import ImageDraw
 from pydantic import AnyHttpUrl, TypeAdapter, ValidationError
 
@@ -22,7 +21,7 @@ from docling.datamodel.base_models import (
     PipelineOptions,
 )
 from docling.datamodel.document import (
-    ConvertedDocument,
+    ConversionResult,
     DocumentConversionInput,
     InputDocument,
 )
@@ -73,7 +72,7 @@ class DocumentConverter:
 
         return Path(download_path)
 
-    def convert(self, input: DocumentConversionInput) -> Iterable[ConvertedDocument]:
+    def convert(self, input: DocumentConversionInput) -> Iterable[ConversionResult]:
 
         for input_batch in chunkify(
             input.docs(pdf_backend=self.pdf_backend), settings.perf.doc_batch_size
@@ -86,9 +85,9 @@ class DocumentConverter:
             #   yield from pool.map(self.process_document, input_batch)
 
             # Note: Pdfium backend is not thread-safe, thread pool usage was disabled.
-            yield from map(self.process_document, input_batch)
+            yield from map(self._process_document, input_batch)
 
-    def convert_single(self, source: Path | AnyHttpUrl | str) -> ConvertedDocument:
+    def convert_single(self, source: Path | AnyHttpUrl | str) -> ConversionResult:
         """Convert a single document.
 
         Args:
@@ -99,7 +98,7 @@ class DocumentConverter:
             RuntimeError: If conversion fails.
 
         Returns:
-            Document: The converted document object.
+            ConversionResult: The conversion result object.
         """
         with tempfile.TemporaryDirectory() as temp_dir:
             try:
@@ -129,51 +128,49 @@ class DocumentConverter:
                         f"Unexpected file path type encountered: {type(source)}"
                     )
             conv_inp = DocumentConversionInput.from_paths(paths=[local_path])
-            converted_docs_iter = self.convert(conv_inp)
-            converted_doc: ConvertedDocument = next(converted_docs_iter)
-        if converted_doc.status not in {
+            conv_res_iter = self.convert(conv_inp)
+            conv_res: ConversionResult = next(conv_res_iter)
+        if conv_res.status not in {
             ConversionStatus.SUCCESS,
             ConversionStatus.PARTIAL_SUCCESS,
         }:
-            raise RuntimeError(f"Conversion failed with status: {converted_doc.status}")
-        return converted_doc
+            raise RuntimeError(f"Conversion failed with status: {conv_res.status}")
+        return conv_res
 
-    def process_document(self, in_doc: InputDocument) -> ConvertedDocument:
+    def _process_document(self, in_doc: InputDocument) -> ConversionResult:
         start_doc_time = time.time()
-        converted_doc = ConvertedDocument(input=in_doc)
+        conv_res = ConversionResult(input=in_doc)
 
         _log.info(f"Processing document {in_doc.file.name}")
 
         if not in_doc.valid:
-            converted_doc.status = ConversionStatus.FAILURE
-            return converted_doc
+            conv_res.status = ConversionStatus.FAILURE
+            return conv_res
 
         for i in range(0, in_doc.page_count):
-            converted_doc.pages.append(Page(page_no=i))
+            conv_res.pages.append(Page(page_no=i))
 
         all_assembled_pages = []
 
         try:
             # Iterate batches of pages (page_batch_size) in the doc
-            for page_batch in chunkify(
-                converted_doc.pages, settings.perf.page_batch_size
-            ):
+            for page_batch in chunkify(conv_res.pages, settings.perf.page_batch_size):
                 start_pb_time = time.time()
                 # Pipeline
 
                 # 1. Initialise the page resources
                 init_pages = map(
-                    functools.partial(self.initialize_page, in_doc), page_batch
+                    functools.partial(self._initialize_page, in_doc), page_batch
                 )
 
                 # 2. Populate page image
                 pages_with_images = map(
-                    functools.partial(self.populate_page_images, in_doc), init_pages
+                    functools.partial(self._populate_page_images, in_doc), init_pages
                 )
 
                 # 3. Populate programmatic page cells
                 pages_with_cells = map(
-                    functools.partial(self.parse_page_cells, in_doc),
+                    functools.partial(self._parse_page_cells, in_doc),
                     pages_with_images,
                 )
 
@@ -202,13 +199,13 @@ class DocumentConverter:
             # Free up mem resources of PDF backend
             in_doc._backend.unload()
 
-            converted_doc.pages = all_assembled_pages
-            self.assemble_doc(converted_doc)
+            conv_res.pages = all_assembled_pages
+            self._assemble_doc(conv_res)
 
             status = ConversionStatus.SUCCESS
-            for page in converted_doc.pages:
+            for page in conv_res.pages:
                 if not page._backend.is_valid():
-                    converted_doc.errors.append(
+                    conv_res.errors.append(
                         ErrorItem(
                             component_type=DoclingComponentType.PDF_BACKEND,
                             module_name=type(page._backend).__name__,
@@ -217,10 +214,10 @@ class DocumentConverter:
                     )
                     status = ConversionStatus.PARTIAL_SUCCESS
 
-            converted_doc.status = status
+            conv_res.status = status
 
         except Exception as e:
-            converted_doc.status = ConversionStatus.FAILURE
+            conv_res.status = ConversionStatus.FAILURE
             trace = "\n".join(traceback.format_exception(e))
             _log.info(
                 f"Encountered an error during conversion of document {in_doc.document_hash}:\n"
@@ -232,10 +229,10 @@ class DocumentConverter:
             f"Finished converting document time-pages={end_doc_time:.2f}/{in_doc.page_count}"
         )
 
-        return converted_doc
+        return conv_res
 
     # Initialise and load resources for a page, before downstream steps (populate images, cells, ...)
-    def initialize_page(self, doc: InputDocument, page: Page) -> Page:
+    def _initialize_page(self, doc: InputDocument, page: Page) -> Page:
         page._backend = doc._backend.load_page(page.page_no)
         page.size = page._backend.get_size()
         page.page_hash = create_hash(doc.document_hash + ":" + str(page.page_no))
@@ -243,7 +240,7 @@ class DocumentConverter:
         return page
 
     # Generate the page image and store it in the page object
-    def populate_page_images(self, doc: InputDocument, page: Page) -> Page:
+    def _populate_page_images(self, doc: InputDocument, page: Page) -> Page:
         # default scale
         page.get_image(
             scale=1.0
@@ -259,7 +256,7 @@ class DocumentConverter:
         return page
 
     # Extract and populate the page cells and store it in the page object
-    def parse_page_cells(self, doc: InputDocument, page: Page) -> Page:
+    def _parse_page_cells(self, doc: InputDocument, page: Page) -> Page:
         page.cells = page._backend.get_text_cells()
 
         # DEBUG code:
@@ -274,12 +271,12 @@ class DocumentConverter:
 
         return page
 
-    def assemble_doc(self, converted_doc: ConvertedDocument):
+    def _assemble_doc(self, conv_res: ConversionResult):
         all_elements = []
         all_headers = []
         all_body = []
 
-        for p in converted_doc.pages:
+        for p in conv_res.pages:
 
             for el in p.assembled.body:
                 all_body.append(el)
@@ -288,8 +285,8 @@ class DocumentConverter:
             for el in p.assembled.elements:
                 all_elements.append(el)
 
-        converted_doc.assembled = AssembledUnit(
+        conv_res.assembled = AssembledUnit(
             elements=all_elements, headers=all_headers, body=all_body
         )
 
-        converted_doc.output = self.glm_model(converted_doc)
+        conv_res.output = self.glm_model(conv_res)
