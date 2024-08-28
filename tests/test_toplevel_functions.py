@@ -139,10 +139,10 @@ def test_e2e_conversions():
     for path in pdf_paths:
         print(f"converting {path}")
 
-        try:
-            doc_result: ConversionResult = converter.convert_single(path)
-        except:
-            continue
+        doc_result: ConversionResult = converter.convert_single(path)
+        assert (
+            doc_result.status == ConversionStatus.SUCCESS
+        ), f"Doc {path} did not convert successfully."
 
         doc_pred_pages: PageList = doc_result.pages
         doc_pred: DsDocument = doc_result.output
