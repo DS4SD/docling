@@ -71,6 +71,15 @@ class BoundingBox(BaseModel):
 
         return out_bbox
 
+    def normalized(self, page_size: PageSize) -> "BoundingBox":
+        out_bbox = copy.deepcopy(self)
+        out_bbox.l /= page_size.width
+        out_bbox.r /= page_size.width
+        out_bbox.t /= page_size.height
+        out_bbox.b /= page_size.height
+
+        return out_bbox
+
     def as_tuple(self):
         if self.coord_origin == CoordOrigin.TOPLEFT:
             return (self.l, self.t, self.r, self.b)
