@@ -16,14 +16,14 @@ jobs:
         run: poetry run pre-commit run --all-files
       - name: Install with poetry
         run: poetry install --all-extras
+      - name: Testing
+        run: |
+          poetry run pytest -v tests
       - name: Run examples
         run: |
           for file in examples/*.py; do
             echo "Running example $file"
             poetry run python "$file" || exit 1
           done
-      - name: Testing
-        run: |
-          poetry run pytest -v tests
       - name: Build with poetry
         run: poetry build
