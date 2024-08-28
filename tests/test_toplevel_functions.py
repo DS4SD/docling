@@ -56,6 +56,13 @@ def verify_cells(doc_pred_json, doc_true_json):
 
     for pid, page_true_item in enumerate(doc_true_json["pages"]):
 
+        num_true_cells = len(page_true_item["cells"])
+        num_pred_cells = len(doc_pred_json["pages"][pid]["cells"])
+
+        assert (
+            num_true_cells == num_pred_cells
+        ), f"num_true_cells!=num_pred_cells {num_true_cells}!={num_pred_cells}"
+
         for cid, cell_true_item in enumerate(page_true_item["cells"]):
 
             cell_pred_item = doc_pred_json["pages"][pid]["cells"][cid]
