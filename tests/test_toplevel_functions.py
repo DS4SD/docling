@@ -1,6 +1,6 @@
 import glob
 import json
-from pathlib import Path
+from pathlib import Path, PosixPath
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, PipelineOptions
@@ -19,17 +19,46 @@ def get_pdf_paths():
     return pdf_files
 
 
+def get_converter():
+
+    pipeline_options = PipelineOptions()
+    pipeline_options.do_ocr = False
+    pipeline_options.do_table_structure = True
+    pipeline_options.table_structure_options.do_cell_matching = True
+
+    converter = DocumentConverter(
+        pipeline_options=pipeline_options,
+        pdf_backend=DoclingParseDocumentBackend,
+    )
+
+    return converter
+
+
+def convert_paths(data):
+    if isinstance(data, dict):
+        return {k: convert_paths(v) for k, v in data.items()}
+    elif isinstance(data, list):
+        return [convert_paths(v) for v in data]
+    elif isinstance(data, PosixPath):
+        return str(data)
+    else:
+        return data
+
+
 def verify_cells(doc_pred_json, doc_true_json):
 
-    assert len(doc_pred_json["input"]["pages"]) == len(
-        doc_true_json["input"]["pages"]
+    print(doc_pred_json.keys())
+    print(doc_pred_json["input"].keys())
+
+    assert len(doc_pred_json["pages"]) == len(
+        doc_true_json["pages"]
     ), "pred- and true-doc do not have the same number of pages"
 
-    for pid, page_true_item in enumerate(doc_true_json["input"]["pages"]):
+    for pid, page_true_item in enumerate(doc_true_json["pages"]):
 
-        for cid, cell_true_item in enumerate(page_true_json["cells"]):
+        for cid, cell_true_item in enumerate(page_true_item["cells"]):
 
-            cell_pred_item = doc_pred_json["input"]["pages"][pid]["cells"][cid]
+            cell_pred_item = doc_pred_json["pages"][pid]["cells"][cid]
 
             true_text = cell_true_item["text"]
             pred_text = cell_pred_item["text"]
@@ -37,8 +66,8 @@ def verify_cells(doc_pred_json, doc_true_json):
             assert true_text == pred_text, f"{true_text}!={pred_text}"
 
             for _ in ["t", "b", "l", "r"]:
-                true_val = np.round(cell_true_item["bbox"][_])
-                pred_val = np.round(cell_pred_item["bbox"][_])
+                true_val = round(cell_true_item["bbox"][_])
+                pred_val = round(cell_pred_item["bbox"][_])
 
                 assert (
                     pred_val == true_val
@@ -111,20 +140,11 @@ def verify_md(doc_pred_md, doc_true_md):
     return doc_pred_md == doc_true_md
 
 
-def test_conversions():
+def test_e2e_conversions():
 
     pdf_paths = get_pdf_paths()
-    # print(f"#-documents: {pdf_paths}")
 
-    pipeline_options = PipelineOptions()
-    pipeline_options.do_ocr = False
-    pipeline_options.do_table_structure = True
-    pipeline_options.table_structure_options.do_cell_matching = True
-
-    converter = DocumentConverter(
-        pipeline_options=pipeline_options,
-        pdf_backend=DoclingParseDocumentBackend,
-    )
+    converter = get_converter()
 
     for path in pdf_paths:
 
@@ -146,7 +166,9 @@ def test_conversions():
         if GENERATE:
 
             with open(json_path, "w") as fw:
-                fw.write(doc_pred_json.model_dump_json()())
+                _ = doc_pred_json.model_dump()
+                _ = convert_paths(_)
+                fw.write(json.dumps(_, indent=2))
 
             with open(md_path, "w") as fw:
                 fw.write(doc_pred_md)
@@ -159,8 +181,9 @@ def test_conversions():
             with open(md_path, "r") as fr:
                 doc_true_md = "".join(fr.readlines())
 
-            # doc_ = json.loads(doc_pred_json.model_dump_json())
-            # print(json.dumps(doc_, indent=2))
+            assert verify_cells(
+                doc_pred_json.model_dump(), doc_true_json
+            ), f"verify_cells(doc_pred_json, doc_true_json) for {path}"
 
             # assert verify_json(
             #     doc_pred_json.model_dump(), doc_true_json
