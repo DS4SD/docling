@@ -14,6 +14,27 @@ def test_doc_path():
     return Path("./tests/data/2206.01062.pdf")
 
 
+def test_text_cell_counts():
+    pdf_doc = Path("./tests/data/redp5695.pdf")
+
+    doc_backend = PyPdfiumDocumentBackend(pdf_doc, "123456xyz")
+
+    for page_index in range(0, doc_backend.page_count()):
+        last_cell_count = None
+        for i in range(10):
+            page_backend: PyPdfiumPageBackend = doc_backend.load_page(0)
+            cells = list(page_backend.get_text_cells())
+
+            if last_cell_count is None:
+                last_cell_count = len(cells)
+
+            if len(cells) != last_cell_count:
+                assert (
+                    False
+                ), "Loading page multiple times yielded non-identical text cell counts"
+            last_cell_count = len(cells)
+
+
 def test_get_text_from_rect(test_doc_path):
     doc_backend = PyPdfiumDocumentBackend(test_doc_path, "123456xyz")
     page_backend: PyPdfiumPageBackend = doc_backend.load_page(0)
