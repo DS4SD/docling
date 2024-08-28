@@ -47,9 +47,6 @@ def convert_paths(data):
 
 def verify_cells(doc_pred_json, doc_true_json):
 
-    print(doc_pred_json.keys())
-    print(doc_pred_json["input"].keys())
-
     assert len(doc_pred_json["pages"]) == len(
         doc_true_json["pages"]
     ), "pred- and true-doc do not have the same number of pages"
