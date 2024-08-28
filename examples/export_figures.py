@@ -22,7 +22,7 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     input_doc_paths = [
-        Path("./test/data/2206.01062.pdf"),
+        Path("./tests/data/2206.01062.pdf"),
     ]
     output_dir = Path("./scratch")
 
@@ -41,10 +41,13 @@ def main():
 
     conv_results = doc_converter.convert(input_files)
 
+    success_count = 0
+    failure_count = 0
     output_dir.mkdir(parents=True, exist_ok=True)
     for conv_res in conv_results:
         if conv_res.status != ConversionStatus.SUCCESS:
             _log.info(f"Document {conv_res.input.file} failed to convert.")
+            failure_count += 1
             continue
 
         doc_filename = conv_res.input.file.stem
@@ -66,9 +69,16 @@ def main():
             with element_image_filename.open("wb") as fp:
                 image.save(fp, "PNG")
 
+        success_count += 1
+
     end_time = time.time() - start_time
 
     _log.info(f"All documents were converted in {end_time:.2f} seconds.")
+
+    if failure_count > 0:
+        raise RuntimeError(
+            f"The example failed converting {failure_count} on {len(input_doc_paths)}."
+        )
 
 
 if __name__ == "__main__":
