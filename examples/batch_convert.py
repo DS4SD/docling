@@ -56,11 +56,11 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     input_doc_paths = [
-        Path("./test/data/2206.01062.pdf"),
-        Path("./test/data/2203.01017v2.pdf"),
-        Path("./test/data/2305.03393v1.pdf"),
-        Path("./test/data/redp5110.pdf"),
-        Path("./test/data/redp5695.pdf"),
+        Path("./tests/data/2206.01062.pdf"),
+        Path("./tests/data/2203.01017v2.pdf"),
+        Path("./tests/data/2305.03393v1.pdf"),
+        Path("./tests/data/redp5110.pdf"),
+        Path("./tests/data/redp5695.pdf"),
     ]
 
     # buf = BytesIO(Path("./test/data/2206.01062.pdf").open("rb").read())

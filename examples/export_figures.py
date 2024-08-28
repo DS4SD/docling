@@ -22,7 +22,7 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     input_doc_paths = [
-        Path("./test/data/2206.01062.pdf"),
+        Path("./tests/data/2206.01062.pdf"),
     ]
     output_dir = Path("./scratch")
 
