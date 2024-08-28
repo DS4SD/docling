@@ -130,12 +130,6 @@ def verify_md(doc_pred_md, doc_true_md):
     return doc_pred_md == doc_true_md
 
 
-def serialize_json(obj):
-    if isinstance(obj, PosixPath):
-        return str(obj)
-    raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
-
-
 def test_e2e_conversions():
     PageList = TypeAdapter(List[Page])
 
