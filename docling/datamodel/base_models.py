@@ -238,9 +238,9 @@ class EquationPrediction(BaseModel):
 
 class PagePredictions(BaseModel):
     layout: LayoutPrediction = None
-    tablestructure: TableStructurePrediction = None
-    figures_classification: FigureClassificationPrediction = None
-    equations_prediction: EquationPrediction = None
+    tablestructure: Optional[TableStructurePrediction] = None
+    figures_classification: Optional[FigureClassificationPrediction] = None
+    equations_prediction: Optional[EquationPrediction] = None
 
 
 PageElement = Union[TextElement, TableElement, FigureElement]
