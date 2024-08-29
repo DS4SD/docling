@@ -50,8 +50,6 @@ def main():
 
     input_doc_paths = [
         Path("./tests/data/2206.01062.pdf"),
-        Path("./tests/data/2203.01017v2.pdf"),
-        Path("./tests/data/2305.03393v1.pdf"),
     ]
 
     ###########################################################################
