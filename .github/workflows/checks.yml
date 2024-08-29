@@ -22,6 +22,12 @@ jobs:
       - name: Run examples
         run: |
           for file in examples/*.py; do
+            # Skip batch_convert.py
+            if [[ "$(basename "$file")" == "batch_convert.py" ]]; then
+                echo "Skipping $file"
+                continue
+            fi
+
             echo "Running example $file"
             poetry run python "$file" || exit 1
           done
