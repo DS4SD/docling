@@ -1,3 +1,9 @@
+## [v1.8.3](https://github.com/DS4SD/docling/releases/tag/v1.8.3) - 2024-08-28
+
+### Fix
+
+* Table cells overlap and model warnings ([#53](https://github.com/DS4SD/docling/issues/53)) ([`f49ee82`](https://github.com/DS4SD/docling/commit/f49ee825c3b95ffd5de29242aec764b074c773f7))
+
 ## [v1.8.2](https://github.com/DS4SD/docling/releases/tag/v1.8.2) - 2024-08-27
 
 ### Fix
