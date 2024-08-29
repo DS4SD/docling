@@ -48,7 +48,7 @@ def verify_maintext(doc_pred: DsDocument, doc_true: DsDocument):
 
     assert len(doc_true.main_text) == len(
         doc_pred.main_text
-    ), "document has different length of main-text than expected."
+    ), f"document has different length of main-text than expected. {len(doc_true.main_text)}!={len(doc_pred.main_text)}"
 
     for l, true_item in enumerate(doc_true.main_text):
         if isinstance(true_item, BaseText):
