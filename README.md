@@ -34,6 +34,23 @@ pip install docling
 > [!NOTE]
 > Works on macOS and Linux environments. Windows platforms are currently not tested.
 
+
+### Use alternative PyTorch distributions
+
+The Docling models depend on the [PyTorch](https://pytorch.org/) library.
+Depending on your architecture, you might want to use a different distribution of `torch`.
+For example, you might want support for different accelerator or for a cpu-only version.
+All the different ways for installing `torch` are listed on their website <https://pytorch.org/>.
+
+One common situation is the installation on Linux systems with cpu-only support.
+In this case, we suggest the installation of Docling with the following options
+
+```bash
+# Example for installing on the Linux cpu-only version
+pip install docling --extra-index-url https://download.pytorch.org/whl/cpu
+```
+
+
 ### Development setup
 
 To develop for Docling, you need Python 3.10 / 3.11 / 3.12 and Poetry. You can then install from your local clone's root dir:
