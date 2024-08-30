@@ -49,17 +49,18 @@ def export_documents(
         f"of which {failure_count} failed "
         f"and {partial_success_count} were partially converted."
     )
+    return success_count, partial_success_count, failure_count
 
 
 def main():
     logging.basicConfig(level=logging.INFO)
 
     input_doc_paths = [
-        Path("./test/data/2206.01062.pdf"),
-        Path("./test/data/2203.01017v2.pdf"),
-        Path("./test/data/2305.03393v1.pdf"),
-        Path("./test/data/redp5110.pdf"),
-        Path("./test/data/redp5695.pdf"),
+        Path("./tests/data/2206.01062.pdf"),
+        Path("./tests/data/2203.01017v2.pdf"),
+        Path("./tests/data/2305.03393v1.pdf"),
+        Path("./tests/data/redp5110.pdf"),
+        Path("./tests/data/redp5695.pdf"),
     ]
 
     # buf = BytesIO(Path("./test/data/2206.01062.pdf").open("rb").read())
@@ -73,11 +74,18 @@ def main():
     start_time = time.time()
 
     conv_results = doc_converter.convert(input)
-    export_documents(conv_results, output_dir=Path("./scratch"))
+    success_count, partial_success_count, failure_count = export_documents(
+        conv_results, output_dir=Path("./scratch")
+    )
 
     end_time = time.time() - start_time
 
     _log.info(f"All documents were converted in {end_time:.2f} seconds.")
+
+    if failure_count > 0:
+        raise RuntimeError(
+            f"The example failed converting {failure_count} on {len(input_doc_paths)}."
+        )
 
 
 if __name__ == "__main__":

@@ -44,7 +44,16 @@ class TableStructureModel:
 
             for tc in table_element.table_cells:
                 x0, y0, x1, y1 = tc.bbox.as_tuple()
-                draw.rectangle([(x0, y0), (x1, y1)], outline="blue")
+                if tc.column_header:
+                    width = 3
+                else:
+                    width = 1
+                draw.rectangle([(x0, y0), (x1, y1)], outline="blue", width=width)
+                draw.text(
+                    (x0 + 3, y0 + 3),
+                    text=f"{tc.start_row_offset_idx}, {tc.start_col_offset_idx}",
+                    fill="black",
+                )
 
         image.show()
 

@@ -4,7 +4,7 @@ repos:
     hooks:
       - id: system
         name: Black
-        entry: poetry run black docling examples
+        entry: poetry run black docling examples tests
         pass_filenames: false
         language: system
         files: '\.py$'
@@ -12,7 +12,7 @@ repos:
     hooks:
       - id: system
         name: isort
-        entry: poetry run isort docling examples
+        entry: poetry run isort docling examples tests
         pass_filenames: false
         language: system
         files: '\.py$'

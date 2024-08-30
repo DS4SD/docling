@@ -16,8 +16,12 @@ from docling.datamodel.document import ConversionResult
 class GlmModel:
     def __init__(self, config):
         self.config = config
+        self.model_names = self.config.get(
+            "model_names", ""
+        )  # "language;term;reference"
         load_pretrained_nlp_models()
-        model = init_nlp_model(model_names="language;term;reference")
+        # model = init_nlp_model(model_names="language;term;reference")
+        model = init_nlp_model(model_names=self.model_names)
         self.model = model
 
     def __call__(self, conv_res: ConversionResult) -> DsDocument:
