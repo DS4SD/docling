@@ -1,3 +1,4 @@
+import datetime
 import logging
 import time
 from pathlib import Path
@@ -18,7 +19,7 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     input_doc_paths = [
-        Path("./test/data/2206.01062.pdf"),
+        Path("./tests/data/2206.01062.pdf"),
     ]
     output_dir = Path("./scratch")
 
@@ -37,10 +38,13 @@ def main():
 
     converted_docs = doc_converter.convert(input_files)
 
+    success_count = 0
+    failure_count = 0
     output_dir.mkdir(parents=True, exist_ok=True)
     for doc in converted_docs:
         if doc.status != ConversionStatus.SUCCESS:
             _log.info(f"Document {doc.input.file} failed to convert.")
+            failure_count += 1
             continue
 
         doc_filename = doc.input.file.stem
@@ -73,14 +77,22 @@ def main():
                     },
                 }
             )
-        df = pd.json_normalize(rows)
+        success_count += 1
 
-        output_filename = output_dir / f"{doc_filename}.parquet"
-        df.to_parquet(output_filename)
+    # Generate one parquet from all documents
+    df = pd.json_normalize(rows)
+    now = datetime.datetime.now()
+    output_filename = output_dir / f"multimodal_{now:%Y-%m-%d_%H%M%S}.parquet"
+    df.to_parquet(output_filename)
 
     end_time = time.time() - start_time
 
     _log.info(f"All documents were converted in {end_time:.2f} seconds.")
+
+    if failure_count > 0:
+        raise RuntimeError(
+            f"The example failed converting {failure_count} on {len(input_doc_paths)}."
+        )
 
 
 if __name__ == "__main__":
