@@ -222,6 +222,8 @@ class ConvertedDocument(BaseModel):
                                 celltype = "col_header"
                             elif cell.row_header:
                                 celltype = "row_header"
+                            elif cell.row_section:
+                                celltype = "row_section"
 
                             def make_spans(cell):
                                 for rspan in range(
