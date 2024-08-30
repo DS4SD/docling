@@ -1,3 +1,13 @@
+## [v1.8.4](https://github.com/DS4SD/docling/releases/tag/v1.8.4) - 2024-08-30
+
+### Fix
+
+* Propagate row_section in tables ([#57](https://github.com/DS4SD/docling/issues/57)) ([`de85e46`](https://github.com/DS4SD/docling/commit/de85e46ced293bdef7957f72fff301fec178cc94))
+
+### Documentation
+
+* Add instructions for cpu-only installation ([#56](https://github.com/DS4SD/docling/issues/56)) ([`a8a60d5`](https://github.com/DS4SD/docling/commit/a8a60d52b17fc25e71a421d4f89240bc7f02e154))
+
 ## [v1.8.3](https://github.com/DS4SD/docling/releases/tag/v1.8.3) - 2024-08-28
 
 ### Fix
