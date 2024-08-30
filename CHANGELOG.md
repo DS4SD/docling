@@ -1,3 +1,9 @@
+## [v1.8.5](https://github.com/DS4SD/docling/releases/tag/v1.8.5) - 2024-08-30
+
+### Fix
+
+* Add unit tests ([#51](https://github.com/DS4SD/docling/issues/51)) ([`48f4d1b`](https://github.com/DS4SD/docling/commit/48f4d1ba5288b54d96740a1132b0d7977bef01cf))
+
 ## [v1.8.4](https://github.com/DS4SD/docling/releases/tag/v1.8.4) - 2024-08-30
 
 ### Fix
