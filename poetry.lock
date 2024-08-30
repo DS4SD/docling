@@ -613,36 +613,36 @@ files = [
 
 [[package]]
 name = "deepsearch-glm"
-version = "0.19.0"
+version = "0.19.1"
 description = "Graph Language Models"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "deepsearch_glm-0.19.0-cp310-cp310-macosx_13_6_arm64.whl", hash = "sha256:d420c7eb4e27b64cdc33c0beba159147fc4be14e141133f0f6ef080465b2529c"},
-    {file = "deepsearch_glm-0.19.0-cp310-cp310-macosx_13_6_x86_64.whl", hash = "sha256:8af4583ea6d914e87d6db96cae1d73272af6fe85193e67406f0c700064e794c2"},
-    {file = "deepsearch_glm-0.19.0-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:772e6e245b4d77d9df84af07693f9c19bc2f3dc6de4cb44deaf5fdd4a6c8e68d"},
-    {file = "deepsearch_glm-0.19.0-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:6a0c29f8cf8a1ee392c68985f8952a01b43dd8f2c5a1476b890f2c90d7ecbc96"},
-    {file = "deepsearch_glm-0.19.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:bb4f34bb5e45df2790eb6bbaf5caa625393d903da502b086de65df9ce4e3fff2"},
-    {file = "deepsearch_glm-0.19.0-cp311-cp311-macosx_13_6_arm64.whl", hash = "sha256:320195914e96b8197e53665594c4480b86f3fc4cacd5e6782befb2bb94494a40"},
-    {file = "deepsearch_glm-0.19.0-cp311-cp311-macosx_13_6_x86_64.whl", hash = "sha256:7221851c304ef364a13eeffa940a7c15592e9d5b0050b97904221a65be33f3ab"},
-    {file = "deepsearch_glm-0.19.0-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:b9b9e7102cf4355be8458569c7a44133b54446ae623923772db6942ce0fb2e87"},
-    {file = "deepsearch_glm-0.19.0-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:fa8d8d718149cfecd724a0eca246a3bd57588dffb757f204b629a35623d8f946"},
-    {file = "deepsearch_glm-0.19.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2ae251cf69b43d945fbf2cd41a89ba12312cd319a1c28d41c99d35cc476376b5"},
-    {file = "deepsearch_glm-0.19.0-cp312-cp312-macosx_13_6_arm64.whl", hash = "sha256:ad9a1fbf76e2561bc37e238ee9dd320b4b9cd49e61c55613e3977eedadee52bc"},
-    {file = "deepsearch_glm-0.19.0-cp312-cp312-macosx_13_6_x86_64.whl", hash = "sha256:2030aec8ce751927fe20ca1788e125e9b0c37f994c30062e59c4d7b7a87cbb64"},
-    {file = "deepsearch_glm-0.19.0-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:e57611b5d6cc2da91901e4b39fab6c9131dffe8766f43c20093bff75a0039100"},
-    {file = "deepsearch_glm-0.19.0-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:efbcf157cd6bd2dd6138312cef5df378598fd67e6c3f6f0b63ed3342c1de7f49"},
-    {file = "deepsearch_glm-0.19.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9febce49f365fcc5ada1ded720d387c51328ee470d4fcc89044b0684e074e699"},
-    {file = "deepsearch_glm-0.19.0-cp38-cp38-macosx_13_6_arm64.whl", hash = "sha256:04a29ba5e942f32659ae1a65cfe5e90e93d50e058d53b4763fe13df93f30492f"},
-    {file = "deepsearch_glm-0.19.0-cp38-cp38-macosx_13_6_x86_64.whl", hash = "sha256:a0024f42d6711f574dcab52ef2914a55f31b4fd804d3ad20ca7f211498e8a19b"},
-    {file = "deepsearch_glm-0.19.0-cp38-cp38-macosx_14_0_arm64.whl", hash = "sha256:513e5f1de14f0b12c916a52118083094a9ced439e4800d3442b2dd04f3cdbead"},
-    {file = "deepsearch_glm-0.19.0-cp38-cp38-macosx_14_0_x86_64.whl", hash = "sha256:6d3dd07a549b8cd4408308b0b6b8ca65397ce7e8c819d050d8b2deb03cd1977e"},
-    {file = "deepsearch_glm-0.19.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7be341a85ce1ff164963a6d58b50955599dc33b34040975c972a798ae0f6f12c"},
-    {file = "deepsearch_glm-0.19.0-cp39-cp39-macosx_13_6_arm64.whl", hash = "sha256:b6c3c0d1295666a8a68f76262c020ffdc6de64cdd95671bf24c0592fa1317533"},
-    {file = "deepsearch_glm-0.19.0-cp39-cp39-macosx_13_6_x86_64.whl", hash = "sha256:cf290fe3824bd0de01b7c1d681aa14c89c5e60c6735fa471e04a985e55aead44"},
-    {file = "deepsearch_glm-0.19.0-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:92943c495646660aef99ba64a7e3b77ffeca4866e96044f8be5e14dfa7ee660e"},
-    {file = "deepsearch_glm-0.19.0-cp39-cp39-macosx_14_0_x86_64.whl", hash = "sha256:a7c89d6fae4ed9dc960f9ee9734e91d321222080bf439e1d89e8c67270afc282"},
-    {file = "deepsearch_glm-0.19.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fb6398a34f5afac6282c4a5b7ea5a89f27fcf4c0adac43af27ecbac9e2731ce3"},
+    {file = "deepsearch_glm-0.19.1-cp310-cp310-macosx_13_6_arm64.whl", hash = "sha256:340dcf42e16e5d1ed7d16a4707d1ec20f5af864ffd24c5baedce92d98205f334"},
+    {file = "deepsearch_glm-0.19.1-cp310-cp310-macosx_13_6_x86_64.whl", hash = "sha256:f448a08c80c8cadda1e042bbcf63c38cc070c17093fd57a1a1b94cf44a1753cf"},
+    {file = "deepsearch_glm-0.19.1-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:9c1e22d5e21c285fc217343673788b969220645a42f7bd4e43d97d3d60f6e63d"},
+    {file = "deepsearch_glm-0.19.1-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:0c0654c71a19f0413717201f8b6c815387ffb7c3351a48db89829082e01b784a"},
+    {file = "deepsearch_glm-0.19.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cb1b74440228e621c83c4a19032c4cb71eb0a6037a7087f368679355b09d9d40"},
+    {file = "deepsearch_glm-0.19.1-cp311-cp311-macosx_13_6_arm64.whl", hash = "sha256:01bfd641a8dab9621fe9ef4fb66d40306279093942050fbf097f4a17985a7316"},
+    {file = "deepsearch_glm-0.19.1-cp311-cp311-macosx_13_6_x86_64.whl", hash = "sha256:0cf94ddc34a59595be62d4cab10076e5679531159e4a51d783d2265ed961551e"},
+    {file = "deepsearch_glm-0.19.1-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:e6f6bb4b3d4ba10e4cac4fc5b810021555374e97d55ee4af0cc9b5996e29174f"},
+    {file = "deepsearch_glm-0.19.1-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:cc9559218bc14e961a83bc5dfaeab01c1eea3f155ac78db3f1446cde0d6e48de"},
+    {file = "deepsearch_glm-0.19.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fa0db3185c1ca6ec88638d112502348367229c04274560f1ea9cd1b68bb02400"},
+    {file = "deepsearch_glm-0.19.1-cp312-cp312-macosx_13_6_arm64.whl", hash = "sha256:c22da061176311edf44fce3ce19b8709ab85be41a3550f591ec9e30757a5dce0"},
+    {file = "deepsearch_glm-0.19.1-cp312-cp312-macosx_13_6_x86_64.whl", hash = "sha256:e28327cf0642f0c541ebda3533e890b1fcf8d2435e9bbb6e34214426744238a4"},
+    {file = "deepsearch_glm-0.19.1-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:a660b85466acec2fb0e2682e840687f87dda79ad0d4c8cc0b3dbe3f689759a13"},
+    {file = "deepsearch_glm-0.19.1-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:d9a351e18677fb0f04c399b661ca5c1227c61d970ec193a8a557cd29c4b382a8"},
+    {file = "deepsearch_glm-0.19.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f5b9cc480b3f689b637ebcb03720c75ddea3da3973cdad17cf098be9c38db575"},
+    {file = "deepsearch_glm-0.19.1-cp38-cp38-macosx_13_6_arm64.whl", hash = "sha256:5adeb3eacd41fbf3d4c5f6f62159c41a101d8baafda5466878f221d0dfade64a"},
+    {file = "deepsearch_glm-0.19.1-cp38-cp38-macosx_13_6_x86_64.whl", hash = "sha256:039f93b37a84813e397ae5861c84acdd7d32863ebbc2426d379598eaa3a5cbfb"},
+    {file = "deepsearch_glm-0.19.1-cp38-cp38-macosx_14_0_arm64.whl", hash = "sha256:7bcf4b0e96bd5a7770750e4ae7f58c7f3032fee1606fef18d9a2e209c996aedb"},
+    {file = "deepsearch_glm-0.19.1-cp38-cp38-macosx_14_0_x86_64.whl", hash = "sha256:727208c494469c49ae240a40bb383f3f421eacee4d684d56ae63fd12d73fbca9"},
+    {file = "deepsearch_glm-0.19.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8dcacbebb079674e028bf0f5d4fc058574d49c54855d6c13ec0eedafbab4a8e3"},
+    {file = "deepsearch_glm-0.19.1-cp39-cp39-macosx_13_6_arm64.whl", hash = "sha256:5d038657bd384ae6676b99cf40c64377992c3e512e6bda6cb0e024027828ab2f"},
+    {file = "deepsearch_glm-0.19.1-cp39-cp39-macosx_13_6_x86_64.whl", hash = "sha256:a8571ea049c5533b71f7e7f911190f6d9b5ac43bfd938393f2a7ea5d02894c41"},
+    {file = "deepsearch_glm-0.19.1-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:8e87a68f44187c28c265c051d35b5312c918330fa2c809955bde43137267e81b"},
+    {file = "deepsearch_glm-0.19.1-cp39-cp39-macosx_14_0_x86_64.whl", hash = "sha256:02496ebbce192a0745b46bdd992d1bc41f27345a272eaedd689c3b27aaa12f63"},
+    {file = "deepsearch_glm-0.19.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9ee4ae30f4c571da6169d6dc5340758d6720c01bf7ca909f3c37c07ecf9c2076"},
 ]
 
 [package.dependencies]
@@ -777,26 +777,8 @@ description = "Simple package to extract text with coordinates from programmatic
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "docling_parse-1.1.2-cp310-cp310-macosx_13_0_arm64.whl", hash = "sha256:e1a7d97110b0ef46a90b5c9390752ed8c637016df4c6d092076d04c460e15775"},
-    {file = "docling_parse-1.1.2-cp310-cp310-macosx_13_0_x86_64.whl", hash = "sha256:3d00ac91f14f03c6882e7c8e99c588500cf8d4142b8b660dd72a8c692c4d4c84"},
     {file = "docling_parse-1.1.2-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:74a2c2e8ed64fca2f344ce3bb8371c1b6952fd97922e56fdf930fa8e63f247db"},
     {file = "docling_parse-1.1.2-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:695d972d2b9f907d0cc70f0f825fc1b373b4cefb1425ee5b1522026756a1f576"},
-    {file = "docling_parse-1.1.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d0ab88da3aa0ae4a53ecde69aa688889bb0941fddf9a047203d55598195a6f56"},
-    {file = "docling_parse-1.1.2-cp311-cp311-macosx_13_0_arm64.whl", hash = "sha256:d1a434c8a7c5b3e82c2470d2801aca578059dd66b2c74d4ca1261838d1865273"},
-    {file = "docling_parse-1.1.2-cp311-cp311-macosx_13_0_x86_64.whl", hash = "sha256:10aa8a563f5ae7e4f03a0d420b234a5d42390e178e5ee118ca4d3162cc316e2b"},
-    {file = "docling_parse-1.1.2-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:b5783a03a8fd2372ff03ecca08ef84519c8a5773a063bf214b667732f6b3f490"},
-    {file = "docling_parse-1.1.2-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:388bdbcf9c892e8921fc8f9d4ec2deb552bfa0b8f9047e4a9d19c6319d8b4b65"},
-    {file = "docling_parse-1.1.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4f9d28c5270c1cc56faa868390cf79807851ab92fd83107ff6904b4852e1b82d"},
-    {file = "docling_parse-1.1.2-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:e06e848e24c3cbe9696d2d56f0adab6d455c8bf7a109be5e9a9bd3aaf83126d9"},
-    {file = "docling_parse-1.1.2-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:9cf957e63793e4721db0865a3f57aa0254dcf0fdd0c0415c72e1ab2258777976"},
-    {file = "docling_parse-1.1.2-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:38a6df97a83a764d9fab6b890b073d5231090a217348c4c3a8fb5413236b6639"},
-    {file = "docling_parse-1.1.2-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:2bab419c902542eed25eb29bb70692ba9e196423fd6726f92c53e817c8a18de0"},
-    {file = "docling_parse-1.1.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:133b2f5a3aba4e767172ea3a0d82ded4dfd5f018758070b7c55997913169adc8"},
-    {file = "docling_parse-1.1.2-cp39-cp39-macosx_13_0_arm64.whl", hash = "sha256:cead0768f0a13cfad7ecc502f1d9a228ebc947adc063f91232db19af50f1b47b"},
-    {file = "docling_parse-1.1.2-cp39-cp39-macosx_13_0_x86_64.whl", hash = "sha256:2815201b69639a47650734d8f2fd9f4831d7a96014833d73d27fd054462c9007"},
-    {file = "docling_parse-1.1.2-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:262c9438d9b24bc56b5304310aea1fe74d30504d8010cf75912d4e4a9d4edd54"},
-    {file = "docling_parse-1.1.2-cp39-cp39-macosx_14_0_x86_64.whl", hash = "sha256:d807dc616ed996ba216d94f8923d07013357c53e613d4e4e67a20f095e572939"},
-    {file = "docling_parse-1.1.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e3c192231a7163c41f64d3d38278284da3b7392ff19ce520136d48e8bbc424c1"},
 ]
 
 [package.dependencies]
@@ -5092,4 +5074,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "5e497bff840ad235164057e399adb4a418b9c672217c3def99b0f0704648ba77"
+content-hash = "bb00b553fec80a66f8a2dcd2c2c4dee64f35f2a65b1074284d252d2e4941bf26"
