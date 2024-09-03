@@ -47,11 +47,14 @@ def main():
             failure_count += 1
             continue
 
-        doc_filename = doc.input.file.stem
-
         rows = []
-        for _columns in generate_multimodal_pages(doc):
-            content_text, content_md, page_cells, page_segments, page = _columns
+        for (
+            content_text,
+            content_md,
+            page_cells,
+            page_segments,
+            page,
+        ) in generate_multimodal_pages(doc):
 
             dpi = page._default_image_scale * 72
 
