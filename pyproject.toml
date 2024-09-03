@@ -52,6 +52,10 @@ types-requests = "^2.31.0.2"
 flake8-pyproject = "^1.2.3"
 pylint = "^2.17.5"
 
+
+[tool.poetry.group.examples.dependencies]
+datasets = "^2.21.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
