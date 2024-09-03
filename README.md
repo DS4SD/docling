@@ -24,6 +24,8 @@ Docling bundles PDF document conversion to JSON and Markdown in an easy, self-co
 * 📝 Extracts metadata from the document, such as title, authors, references and language
 * 🔍 Optionally applies OCR (use with scanned PDFs)
 
+Doing RAG or Q/A? Also consider [Quackling](https://github.com/DS4SD/quackling) to get the most out of your documents. 
+
 ## Installation
 
 To use Docling, simply install `docling` from your package manager, e.g. pip:
