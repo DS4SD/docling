@@ -1,3 +1,14 @@
+## [v1.9.0](https://github.com/DS4SD/docling/releases/tag/v1.9.0) - 2024-09-03
+
+### Feature
+
+* Export document pages as multimodal output ([#54](https://github.com/DS4SD/docling/issues/54)) ([`1de2e4f`](https://github.com/DS4SD/docling/commit/1de2e4f924f562139c2a1e6314364845f9256575))
+
+### Documentation
+
+* Update MAINTAINERS.md ([#59](https://github.com/DS4SD/docling/issues/59)) ([`69e5d95`](https://github.com/DS4SD/docling/commit/69e5d951a389a9d36134629cfa2a0496c3bf095a))
+* Mention quackling on README ([#58](https://github.com/DS4SD/docling/issues/58)) ([`85b7348`](https://github.com/DS4SD/docling/commit/85b7348846c87b28981f23c4855e49857c5bb782))
+
 ## [v1.8.5](https://github.com/DS4SD/docling/releases/tag/v1.8.5) - 2024-08-30
 
 ### Fix
