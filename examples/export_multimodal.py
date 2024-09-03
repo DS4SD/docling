@@ -50,8 +50,8 @@ def main():
         doc_filename = doc.input.file.stem
 
         rows = []
-        for _pack in generate_multimodal_pages(doc):
-            content_text, content_md, page_cells, page_segments, page = _pack
+        for _columns in generate_multimodal_pages(doc):
+            content_text, content_md, page_cells, page_segments, page = _columns
 
             dpi = page._default_image_scale * 72
 
