@@ -159,14 +159,14 @@ If you use Docling in your projects, please consider citing the following:
 
 ```bib
 @techreport{Docling,
-  author = "Deep Search Team",
-  month = 8,
-  title = "Docling Technical Report",
-  url = "https://arxiv.org/abs/2408.09869",
-  eprint = "2408.09869",
-  doi = "10.48550/arXiv.2408.09869",
-  version = "1.0.0",
-  year = 2024
+  author = {Deep Search Team},
+  month = {8},
+  title = {Docling Technical Report},
+  url = {https://arxiv.org/abs/2408.09869},
+  eprint = {2408.09869},
+  doi = {10.48550/arXiv.2408.09869},
+  version = {1.0.0},
+  year = {2024}
 }
 ```
 
