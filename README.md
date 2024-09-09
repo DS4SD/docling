@@ -24,7 +24,7 @@ Docling bundles PDF document conversion to JSON and Markdown in an easy, self-co
 * 📝 Extracts metadata from the document, such as title, authors, references and language
 * 🔍 Optionally applies OCR (use with scanned PDFs)
 
-Doing RAG or Q/A? Also consider [Quackling](https://github.com/DS4SD/quackling) to get the most out of your documents. 
+For RAG, check out [Quackling](https://github.com/DS4SD/quackling) to get the most out of your docs, be it using LlamaIndex, LangChain or your pipeline.
 
 ## Installation
 
@@ -144,6 +144,10 @@ results = doc_converter.convert(conv_input)
 You can limit the CPU threads used by Docling by setting the environment variable `OMP_NUM_THREADS` accordingly. The default setting is using 4 CPU threads.
 
 
+## Technical report
+
+For more details on Docling's inner workings, check out the [Docling Technical Report](https://arxiv.org/abs/2408.09869).
+
 ## Contributing
 
 Please read [Contributing to Docling](https://github.com/DS4SD/docling/blob/main/CONTRIBUTING.md) for details.
@@ -157,10 +161,10 @@ If you use Docling in your projects, please consider citing the following:
 @techreport{Docling,
   author = {Deep Search Team},
   month = {8},
-  title = {{Docling Technical Report}},
-  url={https://arxiv.org/abs/2408.09869},
-  eprint={2408.09869},
-  doi = "10.48550/arXiv.2408.09869",
+  title = {Docling Technical Report},
+  url = {https://arxiv.org/abs/2408.09869},
+  eprint = {2408.09869},
+  doi = {10.48550/arXiv.2408.09869},
   version = {1.0.0},
   year = {2024}
 }
