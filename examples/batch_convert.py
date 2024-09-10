@@ -30,9 +30,18 @@ def export_documents(
             with (output_dir / f"{doc_filename}.json").open("w") as fp:
                 fp.write(json.dumps(conv_res.render_as_dict()))
 
+            # Export Text format:
+            with (output_dir / f"{doc_filename}.txt").open("w") as fp:
+                fp.write(conv_res.render_as_text())
+
             # Export Markdown format:
             with (output_dir / f"{doc_filename}.md").open("w") as fp:
                 fp.write(conv_res.render_as_markdown())
+
+            # Export Document Tags format:
+            with (output_dir / f"{doc_filename}.doctags").open("w") as fp:
+                fp.write(conv_res.render_as_doctags())
+
         elif conv_res.status == ConversionStatus.PARTIAL_SUCCESS:
             _log.info(
                 f"Document {conv_res.input.file} was partially converted with the following errors:"

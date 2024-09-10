@@ -51,6 +51,7 @@ def main():
         for (
             content_text,
             content_md,
+            content_dt,
             page_cells,
             page_segments,
             page,
@@ -71,6 +72,7 @@ def main():
                     "cells": page_cells,
                     "contents": content_text,
                     "contents_md": content_md,
+                    "contents_dt": content_dt,
                     "segments": page_segments,
                     "extra": {
                         "page_num": page.page_no + 1,

@@ -23,8 +23,8 @@ packages = [{include = "docling"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 pydantic = "^2.0.0"
-docling-core = "^1.1.3"
-docling-ibm-models = "^1.1.3"
+docling-core = "^1.2.0"
+docling-ibm-models = "^1.1.7"
 deepsearch-glm = "^0.21.0"
 filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"

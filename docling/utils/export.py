@@ -163,8 +163,12 @@ def generate_multimodal_pages(
         content_md = doc.export_to_markdown(
             main_text_start=start_ix, main_text_stop=end_ix
         )
+        # No page-tagging since we only do 1 page at the time
+        content_dt = doc.export_to_document_tokens(
+            main_text_start=start_ix, main_text_stop=end_ix, page_tagging=False
+        )
 
-        return content_text, content_md, page_cells, page_segments, page
+        return content_text, content_md, content_dt, page_cells, page_segments, page
 
     for ix, orig_item in enumerate(doc.main_text):
 

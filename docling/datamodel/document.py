@@ -11,6 +11,7 @@ from docling_core.types import FileInfoObject as DsFileInfoObject
 from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
 from docling_core.types import TableCell
+from docling_core.types.doc.base import Figure
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
@@ -279,7 +280,7 @@ class ConvertedDocument(BaseModel):
                     ),
                 )
                 figures.append(
-                    BaseCell(
+                    Figure(
                         prov=[
                             Prov(
                                 bbox=target_bbox,
@@ -312,8 +313,76 @@ class ConvertedDocument(BaseModel):
     def render_as_dict(self):
         return self.output.model_dump(by_alias=True, exclude_none=True)
 
-    def render_as_markdown(self):
-        return self.output.export_to_markdown()
+    def render_as_markdown(
+        self,
+        delim: str = "\n\n",
+        main_text_start: int = 0,
+        main_text_stop: Optional[int] = None,
+        main_text_labels: list[str] = [
+            "title",
+            "subtitle-level-1",
+            "paragraph",
+            "caption",
+            "table",
+        ],
+        strict_text: bool = False,
+    ):
+        return self.output.export_to_markdown(
+            delim=delim,
+            main_text_start=main_text_start,
+            main_text_stop=main_text_stop,
+            main_text_labels=main_text_labels,
+            strict_text=strict_text,
+        )
+
+    def render_as_text(
+        self,
+        delim: str = "\n\n",
+        main_text_start: int = 0,
+        main_text_stop: Optional[int] = None,
+        main_text_labels: list[str] = [
+            "title",
+            "subtitle-level-1",
+            "paragraph",
+            "caption",
+        ],
+    ):
+        return self.output.export_to_markdown(
+            delim=delim,
+            main_text_start=main_text_start,
+            main_text_stop=main_text_stop,
+            main_text_labels=main_text_labels,
+            strict_text=True,
+        )
+
+    def render_as_doctags(
+        self,
+        delim: str = "\n\n",
+        main_text_start: int = 0,
+        main_text_stop: Optional[int] = None,
+        main_text_labels: list[str] = [
+            "title",
+            "subtitle-level-1",
+            "paragraph",
+            "caption",
+            "table",
+            "figure",
+        ],
+        page_tagging: bool = True,
+        location_tagging: bool = True,
+        location_dimensions: Tuple[int, int] = (100, 100),
+        add_new_line: bool = True,
+    ) -> str:
+        return self.output.export_to_document_tokens(
+            delim=delim,
+            main_text_start=main_text_start,
+            main_text_stop=main_text_stop,
+            main_text_labels=main_text_labels,
+            page_tagging=page_tagging,
+            location_tagging=location_tagging,
+            location_dimensions=location_dimensions,
+            add_new_line=add_new_line,
+        )
 
     def render_element_images(
         self, element_types: Tuple[PageElement] = (FigureElement,)
