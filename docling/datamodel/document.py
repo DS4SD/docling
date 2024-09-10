@@ -344,9 +344,7 @@ class ConvertedDocument(BaseModel):
             "subtitle-level-1",
             "paragraph",
             "caption",
-            "table",
-        ],
-        strict_text: bool = False,
+        ]
     ):
         return self.output.export_to_markdown(
             delim=delim,
