@@ -2,7 +2,7 @@ import copy
 import random
 
 from deepsearch_glm.nlp_utils import init_nlp_model
-from deepsearch_glm.utils.ds_utils import to_legacy_document_format
+from deepsearch_glm.utils.doc_utils import to_legacy_document_format
 from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_models
 from docling_core.types import BaseText
 from docling_core.types import Document as DsDocument
