@@ -1,3 +1,9 @@
+## [v1.11.0](https://github.com/DS4SD/docling/releases/tag/v1.11.0) - 2024-09-10
+
+### Feature
+
+* Adding txt and doctags output ([#68](https://github.com/DS4SD/docling/issues/68)) ([`bdfdfbf`](https://github.com/DS4SD/docling/commit/bdfdfbf092fdaca43ddef28f763ef04456b82890))
+
 ## [v1.10.0](https://github.com/DS4SD/docling/releases/tag/v1.10.0) - 2024-09-10
 
 ### Feature
