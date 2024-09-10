@@ -11,6 +11,7 @@ from docling_core.types import FileInfoObject as DsFileInfoObject
 from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
 from docling_core.types import TableCell
+from docling_core.types.doc.base import Figure
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
@@ -279,7 +280,7 @@ class ConvertedDocument(BaseModel):
                     ),
                 )
                 figures.append(
-                    BaseCell(
+                    Figure(
                         prov=[
                             Prov(
                                 bbox=target_bbox,
@@ -344,7 +345,7 @@ class ConvertedDocument(BaseModel):
             "subtitle-level-1",
             "paragraph",
             "caption",
-        ]
+        ],
     ):
         return self.output.export_to_markdown(
             delim=delim,
