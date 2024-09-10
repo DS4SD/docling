@@ -1,3 +1,9 @@
+## [v1.10.0](https://github.com/DS4SD/docling/releases/tag/v1.10.0) - 2024-09-10
+
+### Feature
+
+* Linux arm64 support and reducing dependencies ([#69](https://github.com/DS4SD/docling/issues/69)) ([`27a7a15`](https://github.com/DS4SD/docling/commit/27a7a152e1123df7a22c44bb1adab5acce8f5390))
+
 ## [v1.9.0](https://github.com/DS4SD/docling/releases/tag/v1.9.0) - 2024-09-03
 
 ### Feature
