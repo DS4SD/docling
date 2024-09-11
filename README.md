@@ -23,8 +23,7 @@ Docling bundles PDF document conversion to JSON and Markdown in an easy, self-co
 * 📑 Understands detailed page layout, reading order and recovers table structures
 * 📝 Extracts metadata from the document, such as title, authors, references and language
 * 🔍 Optionally applies OCR (use with scanned PDFs)
-
-For RAG, check out [Quackling](https://github.com/DS4SD/quackling) to get the most out of your docs, be it using LlamaIndex, LangChain or your pipeline.
+* 🤖 Integrates easily with LLM app / RAG frameworks like 🦙 LlamaIndex and 🦜🔗 LangChain
 
 ## Installation
 
@@ -143,6 +142,10 @@ results = doc_converter.convert(conv_input)
 
 You can limit the CPU threads used by Docling by setting the environment variable `OMP_NUM_THREADS` accordingly. The default setting is using 4 CPU threads.
 
+### RAG
+Check out the following examples showcasing RAG using Docling with standard LLM application frameworks:
+- [Basic RAG pipeline with 🦙 LlamaIndex](https://github.com/DS4SD/docling/tree/main/examples/rag_llamaindex.ipynb)
+- [Basic RAG pipeline with 🦜🔗 LangChain](https://github.com/DS4SD/docling/tree/main/examples/rag_langchain.ipynb)
 
 ## Technical report
 
