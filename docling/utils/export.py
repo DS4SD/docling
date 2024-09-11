@@ -1,10 +1,10 @@
 import logging
-from typing import Any, Dict, Iterable, List, Tuple
+from typing import Any, Dict, Iterable, List, Tuple, Union
 
-from docling_core.types.doc.base import BaseCell, Ref, Table, TableCell
+from docling_core.types.doc.base import BaseCell, BaseText, Ref, Table, TableCell
 
 from docling.datamodel.base_models import BoundingBox, CoordOrigin, OcrCell
-from docling.datamodel.document import ConvertedDocument, Page
+from docling.datamodel.document import ConversionResult, Page
 
 _log = logging.getLogger(__name__)
 
@@ -15,7 +15,10 @@ def _export_table_to_html(table: Table):
     # to the docling-core package.
 
     def _get_tablecell_span(cell: TableCell, ix):
-        span = set([s[ix] for s in cell.spans])
+        if cell.spans is None:
+            span = set()
+        else:
+            span = set([s[ix] for s in cell.spans])
         if len(span) == 0:
             return 1, None, None
         return len(span), min(span), max(span)
@@ -24,6 +27,8 @@ def _export_table_to_html(table: Table):
     nrows = table.num_rows
     ncols = table.num_cols
 
+    if table.data is None:
+        return ""
     for i in range(nrows):
         body += "<tr>"
         for j in range(ncols):
@@ -66,7 +71,7 @@ def _export_table_to_html(table: Table):
 
 
 def generate_multimodal_pages(
-    doc_result: ConvertedDocument,
+    doc_result: ConversionResult,
 ) -> Iterable[Tuple[str, str, List[Dict[str, Any]], List[Dict[str, Any]], Page]]:
 
     label_to_doclaynet = {
@@ -94,7 +99,7 @@ def generate_multimodal_pages(
     page_no = 0
     start_ix = 0
     end_ix = 0
-    doc_items = []
+    doc_items: List[Tuple[int, Union[BaseCell, BaseText]]] = []
 
     doc = doc_result.output
 
@@ -105,11 +110,11 @@ def generate_multimodal_pages(
             item_type = item.obj_type
             label = label_to_doclaynet.get(item_type, None)
 
-            if label is None:
+            if label is None or item.prov is None or page.size is None:
                 continue
 
             bbox = BoundingBox.from_tuple(
-                item.prov[0].bbox, origin=CoordOrigin.BOTTOMLEFT
+                tuple(item.prov[0].bbox), origin=CoordOrigin.BOTTOMLEFT
             )
             new_bbox = bbox.to_top_left_origin(page_height=page.size.height).normalized(
                 page_size=page.size
@@ -137,13 +142,15 @@ def generate_multimodal_pages(
         return segments
 
     def _process_page_cells(page: Page):
-        cells = []
+        cells: List[dict] = []
+        if page.size is None:
+            return cells
         for cell in page.cells:
             new_bbox = cell.bbox.to_top_left_origin(
                 page_height=page.size.height
             ).normalized(page_size=page.size)
             is_ocr = isinstance(cell, OcrCell)
-            ocr_confidence = cell.confidence if is_ocr else 1.0
+            ocr_confidence = cell.confidence if isinstance(cell, OcrCell) else 1.0
             cells.append(
                 {
                     "text": cell.text,
@@ -170,6 +177,8 @@ def generate_multimodal_pages(
 
         return content_text, content_md, content_dt, page_cells, page_segments, page
 
+    if doc.main_text is None:
+        return
     for ix, orig_item in enumerate(doc.main_text):
 
         item = doc._resolve_ref(orig_item) if isinstance(orig_item, Ref) else orig_item

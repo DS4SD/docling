@@ -1,9 +1,12 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
 from pathlib import Path
-from typing import Any, Iterable, Optional, Union
+from typing import TYPE_CHECKING, Any, Iterable, Optional, Union
 
 from PIL import Image
+
+if TYPE_CHECKING:
+    from docling.datamodel.base_models import BoundingBox, Cell, PageSize
 
 
 class PdfPageBackend(ABC):
@@ -17,12 +20,12 @@ class PdfPageBackend(ABC):
         pass
 
     @abstractmethod
-    def get_bitmap_rects(self, scale: int = 1) -> Iterable["BoundingBox"]:
+    def get_bitmap_rects(self, float: int = 1) -> Iterable["BoundingBox"]:
         pass
 
     @abstractmethod
     def get_page_image(
-        self, scale: int = 1, cropbox: Optional["BoundingBox"] = None
+        self, scale: float = 1, cropbox: Optional["BoundingBox"] = None
     ) -> Image.Image:
         pass
 
