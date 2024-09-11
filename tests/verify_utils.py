@@ -51,9 +51,14 @@ def verify_maintext(doc_pred: DsDocument, doc_true: DsDocument):
     ), f"document has different length of main-text than expected. {len(doc_true.main_text)}!={len(doc_pred.main_text)}"
 
     for l, true_item in enumerate(doc_true.main_text):
-        if isinstance(true_item, BaseText):
-            pred_item = doc_pred.main_text[l]
+        pred_item = doc_pred.main_text[l]
+        # Validate type
+        assert (
+            true_item.obj_type == pred_item.obj_type
+        ), f"Item[{l}] type does not match. expected[{true_item.obj_type}] != predicted [{pred_item.obj_type}]"
 
+        # Validate text ceels
+        if isinstance(true_item, BaseText):
             assert isinstance(
                 pred_item, BaseText
             ), f"{pred_item} is not a BaseText element, but {true_item} is."
