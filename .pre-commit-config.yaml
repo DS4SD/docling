@@ -2,39 +2,43 @@ fail_fast: true
 repos:
   - repo: local
     hooks:
-      - id: system
+      - id: black
         name: Black
         entry: poetry run black docling examples tests
         pass_filenames: false
         language: system
         files: '\.py$'
-  - repo: local
-    hooks:
-      - id: system
+      - id: isort
         name: isort
         entry: poetry run isort docling examples tests
         pass_filenames: false
         language: system
         files: '\.py$'
-#  - repo: local
-#    hooks:
-#      - id: system
+#      - id: flake8
 #        name: flake8
 #        entry: poetry run flake8 docling
 #        pass_filenames: false
 #        language: system
 #        files: '\.py$'
-#  - repo: local
-#    hooks:
-#     - id: system
+#     - id: mypy
 #       name: MyPy
 #       entry: poetry run mypy docling
 #       pass_filenames: false
 #       language: system
 #       files: '\.py$'
-  - repo: local
-    hooks:
-      - id: system
+      - id: nbqa_black
+        name: nbQA Black
+        entry: poetry run nbqa black examples
+        pass_filenames: false
+        language: system
+        files: '\.ipynb$'
+      - id: nbqa_isort
+        name: nbQA isort
+        entry: poetry run nbqa isort examples
+        pass_filenames: false
+        language: system
+        files: '\.ipynb$'
+      - id: poetry
         name: Poetry check
         entry: poetry check --lock
         pass_filenames: false
