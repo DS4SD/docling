@@ -81,6 +81,7 @@ nbqa = "^1.9.0"
 [tool.poetry.group.examples.dependencies]
 datasets = "^2.21.0"
 rich = "^13.8.1"
+jsonpath-ng = "^1.6.1"
 
 [tool.poetry.extras]
 examples = [
