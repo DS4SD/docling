@@ -7169,4 +7169,4 @@ examples = ["langchain-huggingface", "langchain-milvus", "langchain-text-splitte
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "5ce8fc1e245442e355b967430e211b1378fed2e9fd20d2ddbea47f0e9f1dfcd5"
+content-hash = "fe428eb26a2f4a9a353a0e04d7e9a6d3740401cf4bbc9e6d6999de1646884884"
