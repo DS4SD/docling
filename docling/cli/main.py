@@ -1,9 +1,14 @@
-import argparse
+import importlib
 import json
 import logging
 import time
+import warnings
+from enum import Enum
 from pathlib import Path
-from typing import Iterable
+from typing import Annotated, Iterable, List, Optional
+
+import typer
+from pydantic import AnyUrl
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
@@ -11,14 +16,39 @@ from docling.datamodel.base_models import ConversionStatus, PipelineOptions
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
 from docling.document_converter import DocumentConverter
 
-_log = logging.getLogger(__name__)
+warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
+warnings.filterwarnings(action="ignore", category=FutureWarning, module="easyocr")
 
-from enum import Enum
+_log = logging.getLogger(__name__)
+from rich.console import Console
+
+err_console = Console(stderr=True)
+
+
+app = typer.Typer(
+    name="Docling",
+    no_args_is_help=True,
+    add_completion=False,
+    pretty_exceptions_enable=False,
+)
+
+
+def version_callback(value: bool):
+    if value:
+        docling_version = importlib.metadata.version("docling")
+        docling_core_version = importlib.metadata.version("docling-core")
+        docling_ibm_models_version = importlib.metadata.version("docling-ibm-models")
+        docling_parse_version = importlib.metadata.version("docling-parse")
+        print(f"Docling version: {docling_version}")
+        print(f"Docling Core version: {docling_core_version}")
+        print(f"Docling IBM Models version: {docling_ibm_models_version}")
+        print(f"Docling Parse version: {docling_parse_version}")
+        raise typer.Exit()
 
 
 # Define an enum for the backend options
-class Backend(Enum):
-    PDFIUM = "pdfium"
+class Backend(str, Enum):
+    PYPDFIUM2 = "pypdfium2"
     DOCLING = "docling"
 
 
@@ -26,7 +56,6 @@ def export_documents(
     conv_results: Iterable[ConversionResult],
     output_dir: Path,
 ):
-    output_dir.mkdir(parents=True, exist_ok=True)
 
     success_count = 0
     failure_count = 0
@@ -62,13 +91,52 @@ def export_documents(
         f"Processed {success_count + failure_count} docs, of which {failure_count} failed"
     )
 
-    return success_count, failure_count
 
-
-def main(pdf, ocr, backend):
+@app.command(no_args_is_help=True)
+def convert(
+    input_files: Annotated[
+        List[Path],
+        typer.Argument(
+            ...,
+            metavar="file",
+            help="PDF files to convert. Directories are also accepted.",
+        ),
+    ],
+    ocr: Annotated[
+        bool,
+        typer.Option(
+            ..., help="If enabled, the bitmap content will be processed using OCR."
+        ),
+    ] = True,
+    backend: Annotated[
+        Backend, typer.Option(..., help="The PDF backend to use.")
+    ] = Backend.DOCLING,
+    output: Annotated[
+        Path, typer.Option(..., help="Output directory where results are saved.")
+    ] = Path("."),
+    version: Annotated[
+        Optional[bool],
+        typer.Option(
+            "--version",
+            callback=version_callback,
+            is_eager=True,
+            help="Show version information.",
+        ),
+    ] = None,
+):
     logging.basicConfig(level=logging.INFO)
 
-    input_doc_paths = [Path(pdf)]
+    input_doc_paths: List[Path] = []
+    for source in input_files:
+        if not source.exists():
+            err_console.print(
+                f"[red]Error: The input file {source} does not exist.[/red]"
+            )
+            raise typer.Abort()
+        elif source.is_dir():
+            input_doc_paths.extend(list(source.glob("**/*.pdf", case_sensitive=False)))
+        else:
+            input_doc_paths.append(source)
 
     ###########################################################################
 
@@ -77,7 +145,7 @@ def main(pdf, ocr, backend):
     # Uncomment one section at the time to see the differences in the output.
 
     doc_converter = None
-    if backend == Backend.PDFIUM.value and not ocr:  # PyPdfium without OCR
+    if backend == Backend.PYPDFIUM2 and not ocr:  # PyPdfium without OCR
         pipeline_options = PipelineOptions()
         pipeline_options.do_ocr = False
         pipeline_options.do_table_structure = True
@@ -88,7 +156,7 @@ def main(pdf, ocr, backend):
             pdf_backend=PyPdfiumDocumentBackend,
         )
 
-    elif backend == Backend.PDFIUM.value and ocr:  # PyPdfium with OCR
+    elif backend == Backend.PYPDFIUM2.value and ocr:  # PyPdfium with OCR
         pipeline_options = PipelineOptions()
         pipeline_options.do_ocr = False
         pipeline_options.do_table_structure = True
@@ -121,8 +189,6 @@ def main(pdf, ocr, backend):
             pdf_backend=DoclingParseDocumentBackend,
         )
 
-    else:
-        return
     ###########################################################################
 
     # Define input files
@@ -131,44 +197,14 @@ def main(pdf, ocr, backend):
     start_time = time.time()
 
     conv_results = doc_converter.convert(input)
-    success_count, failure_count = export_documents(
-        conv_results, output_dir=Path("./scratch")
-    )
+
+    output.mkdir(parents=True, exist_ok=True)
+    export_documents(conv_results, output_dir=output)
 
     end_time = time.time() - start_time
 
     _log.info(f"All documents were converted in {end_time:.2f} seconds.")
 
-    if failure_count > 0:
-        raise RuntimeError(
-            f"The example failed converting {failure_count} on {len(input_doc_paths)}."
-        )
-
 
 if __name__ == "__main__":
-
-    # Create an argument parser
-    parser = argparse.ArgumentParser(description="Process PDF files with optional OCR.")
-
-    # Add arguments
-    parser.add_argument(
-        "--pdf",
-        type=str,
-        default="./tests/data/2206.01062.pdf",
-        help="Path to the PDF file.",
-    )
-    parser.add_argument(
-        "--ocr", type=bool, default=False, help="Enable OCR (True or False)."
-    )
-    parser.add_argument(
-        "--backend",
-        type=lambda b: Backend[b.upper()],
-        choices=list(Backend),
-        default=Backend.DOCLING,
-        help="Select backend (pdfium or docling). Default is docling.",
-    )
-
-    # Parse the arguments
-    args = parser.parse_args()
-
-    main(args.pdf, args.ocr, args.backend.value)
+    app()
