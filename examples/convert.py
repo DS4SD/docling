@@ -151,14 +151,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process PDF files with optional OCR.")
 
     # Add arguments
-    parser.add_argument("--pdf",
-                        type=str,
-                        default="./tests/data/2206.01062.pdf",
-                        help="Path to the PDF file.")
     parser.add_argument(
-        "--ocr", type=bool,
-        default=False,
-        help="Enable OCR (True or False)."
+        "--pdf",
+        type=str,
+        default="./tests/data/2206.01062.pdf",
+        help="Path to the PDF file.",
+    )
+    parser.add_argument(
+        "--ocr", type=bool, default=False, help="Enable OCR (True or False)."
     )
     parser.add_argument(
         "--backend",
