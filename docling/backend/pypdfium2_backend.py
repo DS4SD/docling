@@ -7,7 +7,7 @@ from typing import Iterable, List, Optional, Union
 import pypdfium2 as pdfium
 import pypdfium2.raw as pdfium_c
 from PIL import Image, ImageDraw
-from pypdfium2 import PdfPage
+from pypdfium2 import PdfPage, PdfTextPage
 from pypdfium2._helpers.misc import PdfiumError
 
 from docling.backend.abstract_backend import PdfDocumentBackend, PdfPageBackend
@@ -29,12 +29,12 @@ class PyPdfiumPageBackend(PdfPageBackend):
                 exc_info=True,
             )
             self.valid = False
-        self.text_page = None
+        self.text_page: Optional[PdfTextPage] = None
 
     def is_valid(self) -> bool:
         return self.valid
 
-    def get_bitmap_rects(self, scale: int = 1) -> Iterable[BoundingBox]:
+    def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:
         AREA_THRESHOLD = 32 * 32
         for obj in self._ppage.get_objects(filter=[pdfium_c.FPDF_PAGEOBJ_IMAGE]):
             pos = obj.get_pos()
@@ -189,7 +189,7 @@ class PyPdfiumPageBackend(PdfPageBackend):
         return cells
 
     def get_page_image(
-        self, scale: int = 1, cropbox: Optional[BoundingBox] = None
+        self, scale: float = 1, cropbox: Optional[BoundingBox] = None
     ) -> Image.Image:
 
         page_size = self.get_size()

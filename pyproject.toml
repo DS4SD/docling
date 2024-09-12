@@ -74,6 +74,7 @@ pytest-xdist = "^3.3.1"
 types-requests = "^2.31.0.2"
 flake8-pyproject = "^1.2.3"
 pylint = "^2.17.5"
+pandas-stubs = "^2.2.2.240909"
 ipykernel = "^6.29.5"
 ipywidgets = "^8.1.5"
 nbqa = "^1.9.0"
@@ -113,6 +114,14 @@ pretty = true
 # strict = true
 no_implicit_optional = true
 python_version = "3.10"
+
+[[tool.mypy.overrides]]
+module = [
+    "docling_parse.*",
+    "pypdfium2.*",
+    "networkx.*",
+]
+ignore_missing_imports = true
 
 [tool.flake8]
 max-line-length = 88

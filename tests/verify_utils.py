@@ -45,6 +45,8 @@ def verify_cells(doc_pred_pages: List[Page], doc_true_pages: List[Page]):
 
 
 def verify_maintext(doc_pred: DsDocument, doc_true: DsDocument):
+    assert doc_true.main_text is not None, "doc_true cannot be None"
+    assert doc_pred.main_text is not None, "doc_true cannot be None"
 
     assert len(doc_true.main_text) == len(
         doc_pred.main_text
@@ -68,6 +70,13 @@ def verify_maintext(doc_pred: DsDocument, doc_true: DsDocument):
 
 
 def verify_tables(doc_pred: DsDocument, doc_true: DsDocument):
+    if doc_true.tables is None:
+        # No tables to check
+        assert doc_pred.tables is None, "not expecting any table on this document"
+        return True
+
+    assert doc_pred.tables is not None, "no tables predicted, but expected in doc_true"
+
     assert len(doc_true.tables) == len(
         doc_pred.tables
     ), "document has different count of tables than expected."
@@ -82,6 +91,8 @@ def verify_tables(doc_pred: DsDocument, doc_true: DsDocument):
             true_item.num_cols == pred_item.num_cols
         ), "table does not have the same #-cols"
 
+        assert true_item.data is not None, "documents are expected to have table data"
+        assert pred_item.data is not None, "documents are expected to have table data"
         for i, row in enumerate(true_item.data):
             for j, col in enumerate(true_item.data[i]):
 
@@ -135,7 +146,7 @@ def verify_conversion_result(
             doc_true_pages = PageList.validate_json(fr.read())
 
         with open(json_path, "r") as fr:
-            doc_true = DsDocument.model_validate_json(fr.read())
+            doc_true: DsDocument = DsDocument.model_validate_json(fr.read())
 
         with open(md_path, "r") as fr:
             doc_true_md = fr.read()

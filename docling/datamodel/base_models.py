@@ -87,7 +87,7 @@ class BoundingBox(BaseModel):
             return (self.l, self.b, self.r, self.t)
 
     @classmethod
-    def from_tuple(cls, coord: Tuple[float], origin: CoordOrigin):
+    def from_tuple(cls, coord: Tuple[float, ...], origin: CoordOrigin):
         if origin == CoordOrigin.TOPLEFT:
             l, t, r, b = coord[0], coord[1], coord[2], coord[3]
             if r < l:
@@ -246,7 +246,7 @@ class EquationPrediction(BaseModel):
 
 
 class PagePredictions(BaseModel):
-    layout: LayoutPrediction = None
+    layout: Optional[LayoutPrediction] = None
     tablestructure: Optional[TableStructurePrediction] = None
     figures_classification: Optional[FigureClassificationPrediction] = None
     equations_prediction: Optional[EquationPrediction] = None
@@ -267,7 +267,7 @@ class Page(BaseModel):
     page_no: int
     page_hash: Optional[str] = None
     size: Optional[PageSize] = None
-    cells: List[Cell] = None
+    cells: List[Cell] = []
     predictions: PagePredictions = PagePredictions()
     assembled: Optional[AssembledUnit] = None
 

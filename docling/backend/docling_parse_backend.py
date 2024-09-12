@@ -2,7 +2,7 @@ import logging
 import random
 from io import BytesIO
 from pathlib import Path
-from typing import Iterable, Optional, Union
+from typing import Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
 from docling_parse.docling_parse import pdf_parser
@@ -22,7 +22,6 @@ class DoclingParsePageBackend(PdfPageBackend):
         self._ppage = page_obj
         parsed_page = parser.parse_pdf_from_key_on_page(document_hash, page_no)
 
-        self._dpage = None
         self.valid = "pages" in parsed_page
         if self.valid:
             self._dpage = parsed_page["pages"][0]
@@ -68,7 +67,7 @@ class DoclingParsePageBackend(PdfPageBackend):
         return text_piece
 
     def get_text_cells(self) -> Iterable[Cell]:
-        cells = []
+        cells: List[Cell] = []
         cell_counter = 0
 
         if not self.valid:
@@ -130,7 +129,7 @@ class DoclingParsePageBackend(PdfPageBackend):
 
         return cells
 
-    def get_bitmap_rects(self, scale: int = 1) -> Iterable[BoundingBox]:
+    def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:
         AREA_THRESHOLD = 32 * 32
 
         for i in range(len(self._dpage["images"])):
@@ -145,7 +144,7 @@ class DoclingParsePageBackend(PdfPageBackend):
                 yield cropbox
 
     def get_page_image(
-        self, scale: int = 1, cropbox: Optional[BoundingBox] = None
+        self, scale: float = 1, cropbox: Optional[BoundingBox] = None
     ) -> Image.Image:
 
         page_size = self.get_size()
