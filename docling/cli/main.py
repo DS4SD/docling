@@ -68,23 +68,29 @@ def export_documents(
             # Export Deep Search document JSON format:
             fname = output_dir / f"{doc_filename}.json"
             with fname.open("w") as fp:
-                _log.info(f"writing {fname}")
+                _log.info(f"writing JSON output to {fname}")
                 fp.write(json.dumps(conv_res.render_as_dict()))
 
             # Export Text format:
-            with (output_dir / f"{doc_filename}.txt").open("w") as fp:
+            fname = output_dir / f"{doc_filename}.txt"
+            with fname.open("w") as fp:
+                _log.info(f"writing Text output to {fname}")
                 fp.write(conv_res.render_as_text())
 
             # Export Markdown format:
-            with (output_dir / f"{doc_filename}.md").open("w") as fp:
+            fname = output_dir / f"{doc_filename}.md"
+            with fname.open("w") as fp:
+                _log.info(f"writing Markdown output to {fname}")
                 fp.write(conv_res.render_as_markdown())
 
             # Export Document Tags format:
-            with (output_dir / f"{doc_filename}.doctags").open("w") as fp:
+            fname = output_dir / f"{doc_filename}.doctags"
+            with fname.open("w") as fp:
+                _log.info(f"writing Doc Tags output to {fname}")
                 fp.write(conv_res.render_as_doctags())
 
         else:
-            _log.info(f"Document {conv_res.input.file} failed to convert.")
+            _log.warning(f"Document {conv_res.input.file} failed to convert.")
             failure_count += 1
 
     _log.info(
