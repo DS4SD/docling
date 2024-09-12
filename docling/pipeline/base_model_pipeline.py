@@ -1,12 +1,12 @@
 from pathlib import Path
-from typing import Iterable
+from typing import Callable, Iterable, List
 
 from docling.datamodel.base_models import Page, PipelineOptions
 
 
 class BaseModelPipeline:
     def __init__(self, artifacts_path: Path, pipeline_options: PipelineOptions):
-        self.model_pipe = []
+        self.model_pipe: List[Callable] = []
         self.artifacts_path = artifacts_path
         self.pipeline_options = pipeline_options
 
