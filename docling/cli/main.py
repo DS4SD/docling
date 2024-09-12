@@ -55,6 +55,10 @@ class Backend(str, Enum):
 def export_documents(
     conv_results: Iterable[ConversionResult],
     output_dir: Path,
+    export_json: bool,
+    export_md: bool,
+    export_txt: bool,
+    export_doctags: bool,
 ):
 
     success_count = 0
@@ -66,28 +70,32 @@ def export_documents(
             doc_filename = conv_res.input.file.stem
 
             # Export Deep Search document JSON format:
-            fname = output_dir / f"{doc_filename}.json"
-            with fname.open("w") as fp:
-                _log.info(f"writing JSON output to {fname}")
-                fp.write(json.dumps(conv_res.render_as_dict()))
+            if export_json:
+                fname = output_dir / f"{doc_filename}.json"
+                with fname.open("w") as fp:
+                    _log.info(f"writing JSON output to {fname}")
+                    fp.write(json.dumps(conv_res.render_as_dict()))
 
             # Export Text format:
-            fname = output_dir / f"{doc_filename}.txt"
-            with fname.open("w") as fp:
-                _log.info(f"writing Text output to {fname}")
-                fp.write(conv_res.render_as_text())
+            if export_txt:
+                fname = output_dir / f"{doc_filename}.txt"
+                with fname.open("w") as fp:
+                    _log.info(f"writing Text output to {fname}")
+                    fp.write(conv_res.render_as_text())
 
             # Export Markdown format:
-            fname = output_dir / f"{doc_filename}.md"
-            with fname.open("w") as fp:
-                _log.info(f"writing Markdown output to {fname}")
-                fp.write(conv_res.render_as_markdown())
+            if export_md:
+                fname = output_dir / f"{doc_filename}.md"
+                with fname.open("w") as fp:
+                    _log.info(f"writing Markdown output to {fname}")
+                    fp.write(conv_res.render_as_markdown())
 
             # Export Document Tags format:
-            fname = output_dir / f"{doc_filename}.doctags"
-            with fname.open("w") as fp:
-                _log.info(f"writing Doc Tags output to {fname}")
-                fp.write(conv_res.render_as_doctags())
+            if export_doctags:
+                fname = output_dir / f"{doc_filename}.doctags"
+                with fname.open("w") as fp:
+                    _log.info(f"writing Doc Tags output to {fname}")
+                    fp.write(conv_res.render_as_doctags())
 
         else:
             _log.warning(f"Document {conv_res.input.file} failed to convert.")
@@ -100,14 +108,40 @@ def export_documents(
 
 @app.command(no_args_is_help=True)
 def convert(
-    input_files: Annotated[
+    input_sources: Annotated[
         List[Path],
         typer.Argument(
             ...,
-            metavar="file",
+            metavar="source",
             help="PDF files to convert. Directories are also accepted.",
         ),
     ],
+    export_json: Annotated[
+        bool,
+        typer.Option(
+            ..., "--json/--no-json", help="If enabled the document is exported as JSON."
+        ),
+    ] = False,
+    export_md: Annotated[
+        bool,
+        typer.Option(
+            ..., "--md/--no-md", help="If enabled the document is exported as Markdown."
+        ),
+    ] = True,
+    export_txt: Annotated[
+        bool,
+        typer.Option(
+            ..., "--txt/--no-txt", help="If enabled the document is exported as Text."
+        ),
+    ] = False,
+    export_doctags: Annotated[
+        bool,
+        typer.Option(
+            ...,
+            "--doctags/--no-doctags",
+            help="If enabled the document is exported as Doc Tags.",
+        ),
+    ] = False,
     ocr: Annotated[
         bool,
         typer.Option(
@@ -133,7 +167,7 @@ def convert(
     logging.basicConfig(level=logging.INFO)
 
     input_doc_paths: List[Path] = []
-    for source in input_files:
+    for source in input_sources:
         if not source.exists():
             err_console.print(
                 f"[red]Error: The input file {source} does not exist.[/red]"
@@ -205,7 +239,14 @@ def convert(
     conv_results = doc_converter.convert(input)
 
     output.mkdir(parents=True, exist_ok=True)
-    export_documents(conv_results, output_dir=output)
+    export_documents(
+        conv_results,
+        output_dir=output,
+        export_json=export_json,
+        export_md=export_md,
+        export_txt=export_txt,
+        export_doctags=export_doctags,
+    )
 
     end_time = time.time() - start_time
 
