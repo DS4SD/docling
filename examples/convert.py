@@ -1,10 +1,9 @@
+import argparse
 import json
 import logging
 import time
 from pathlib import Path
 from typing import Iterable
-
-import argparse
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
@@ -15,6 +14,7 @@ from docling.document_converter import DocumentConverter
 _log = logging.getLogger(__name__)
 
 from enum import Enum
+
 
 # Define an enum for the backend options
 class Backend(Enum):
@@ -68,9 +68,7 @@ def export_documents(
 def main(pdf, ocr, backend):
     logging.basicConfig(level=logging.INFO)
 
-    input_doc_paths = [
-        Path(pdf)
-    ]
+    input_doc_paths = [Path(pdf)]
 
     ###########################################################################
 
@@ -79,49 +77,49 @@ def main(pdf, ocr, backend):
     # Uncomment one section at the time to see the differences in the output.
 
     doc_converter = None
-    if backend==Backend.PDFIUM.value and not ocr: # PyPdfium without OCR
+    if backend == Backend.PDFIUM.value and not ocr:  # PyPdfium without OCR
         pipeline_options = PipelineOptions()
-        pipeline_options.do_ocr=False
-        pipeline_options.do_table_structure=True
+        pipeline_options.do_ocr = False
+        pipeline_options.do_table_structure = True
         pipeline_options.table_structure_options.do_cell_matching = False
-        
+
         doc_converter = DocumentConverter(
             pipeline_options=pipeline_options,
             pdf_backend=PyPdfiumDocumentBackend,
         )
 
-    elif backend==Backend.PDFIUM.value and ocr: # PyPdfium with OCR
-        pipeline_options = PipelineOptions()
-        pipeline_options.do_ocr=False
-        pipeline_options.do_table_structure=True
-        pipeline_options.table_structure_options.do_cell_matching = True
-        
-        doc_converter = DocumentConverter(
-            pipeline_options=pipeline_options,
-            pdf_backend=PyPdfiumDocumentBackend,
-        )
-
-    elif backend==Backend.DOCLING.value and not ocr: # Docling Parse without OCR
+    elif backend == Backend.PDFIUM.value and ocr:  # PyPdfium with OCR
         pipeline_options = PipelineOptions()
         pipeline_options.do_ocr = False
         pipeline_options.do_table_structure = True
         pipeline_options.table_structure_options.do_cell_matching = True
-        
+
+        doc_converter = DocumentConverter(
+            pipeline_options=pipeline_options,
+            pdf_backend=PyPdfiumDocumentBackend,
+        )
+
+    elif backend == Backend.DOCLING.value and not ocr:  # Docling Parse without OCR
+        pipeline_options = PipelineOptions()
+        pipeline_options.do_ocr = False
+        pipeline_options.do_table_structure = True
+        pipeline_options.table_structure_options.do_cell_matching = True
+
         doc_converter = DocumentConverter(
             pipeline_options=pipeline_options,
             pdf_backend=DoclingParseDocumentBackend,
         )
 
-    elif backend==Backend.DOCLING.value and ocr:# Docling Parse with OCR
-         pipeline_options = PipelineOptions()
-         pipeline_options.do_ocr=True
-         pipeline_options.do_table_structure=True
-         pipeline_options.table_structure_options.do_cell_matching = True
+    elif backend == Backend.DOCLING.value and ocr:  # Docling Parse with OCR
+        pipeline_options = PipelineOptions()
+        pipeline_options.do_ocr = True
+        pipeline_options.do_table_structure = True
+        pipeline_options.table_structure_options.do_cell_matching = True
 
-         doc_converter = DocumentConverter(
-             pipeline_options=pipeline_options,
-             pdf_backend=DoclingParseDocumentBackend,
-         )
+        doc_converter = DocumentConverter(
+            pipeline_options=pipeline_options,
+            pdf_backend=DoclingParseDocumentBackend,
+        )
 
     else:
         return
@@ -154,16 +152,20 @@ if __name__ == "__main__":
 
     # Add arguments
     parser.add_argument("--pdf", type=str, help="Path to the PDF file.")
-    parser.add_argument("--ocr", type=bool, default=False, help="Enable OCR (True or False).")
+    parser.add_argument(
+        "--ocr", type=bool, default=False, help="Enable OCR (True or False)."
+    )
 
     # Add the backend option as an enum
-    parser.add_argument("--backend", type=lambda b: Backend[b.upper()], 
-                        choices=list(Backend), default=Backend.DOCLING,
-                        help="Select backend (pdfium or docling). Default is docling.")
+    parser.add_argument(
+        "--backend",
+        type=lambda b: Backend[b.upper()],
+        choices=list(Backend),
+        default=Backend.DOCLING,
+        help="Select backend (pdfium or docling). Default is docling.",
+    )
 
-
-    
     # Parse the arguments
     args = parser.parse_args()
-    
+
     main(args.pdf, args.ocr, args.backend.value)
