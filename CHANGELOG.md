@@ -1,3 +1,13 @@
+## [v1.12.0](https://github.com/DS4SD/docling/releases/tag/v1.12.0) - 2024-09-13
+
+### Feature
+
+* Add docling cli ([#75](https://github.com/DS4SD/docling/issues/75)) ([`9899078`](https://github.com/DS4SD/docling/commit/98990784dfa6009b72ee2e1508948b22b00245ec))
+
+### Documentation
+
+* Showcase RAG with LlamaIndex and LangChain ([#71](https://github.com/DS4SD/docling/issues/71)) ([`53569a1`](https://github.com/DS4SD/docling/commit/53569a10238a821dfbbfcef9d2376d179e62a1db))
+
 ## [v1.11.0](https://github.com/DS4SD/docling/releases/tag/v1.11.0) - 2024-09-10
 
 ### Feature
