@@ -60,6 +60,7 @@ torchvision = [
   {version = "^0", optional = true, markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'"},
   {version = "~0.17.2", optional = true, markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'"}
 ]
+typer = "^0.12.5"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
@@ -94,6 +95,10 @@ examples = [
     "langchain-milvus",
     "langchain-text-splitters",
 ]
+
+
+[tool.poetry.scripts]
+docling = "docling.cli.main:app"
 
 [build-system]
 requires = ["poetry-core"]
