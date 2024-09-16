@@ -1,3 +1,9 @@
+## [v1.12.1](https://github.com/DS4SD/docling/releases/tag/v1.12.1) - 2024-09-16
+
+### Fix
+
+* CLI compatibility with python 3.10 and 3.11 ([#79](https://github.com/DS4SD/docling/issues/79)) ([`2870fdc`](https://github.com/DS4SD/docling/commit/2870fdc857d02efeb8f1de7852e9577dd3eb2f51))
+
 ## [v1.12.0](https://github.com/DS4SD/docling/releases/tag/v1.12.0) - 2024-09-13
 
 ### Feature
