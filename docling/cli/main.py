@@ -174,7 +174,8 @@ def convert(
             )
             raise typer.Abort()
         elif source.is_dir():
-            input_doc_paths.extend(list(source.glob("**/*.pdf", case_sensitive=False)))
+            input_doc_paths.extend(list(source.glob("**/*.pdf")))
+            input_doc_paths.extend(list(source.glob("**/*.PDF")))
         else:
             input_doc_paths.append(source)
 
