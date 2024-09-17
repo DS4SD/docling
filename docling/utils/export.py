@@ -129,7 +129,7 @@ def generate_multimodal_pages(
             }
 
             if isinstance(item, Table):
-                table_html = _export_table_to_html(item)
+                table_html = item.export_to_html()
                 new_segment["data"].append(
                     {
                         "html_seq": table_html,
