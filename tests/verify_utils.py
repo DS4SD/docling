@@ -98,7 +98,7 @@ def verify_tables(doc_pred: DsDocument, doc_true: DsDocument):
 
                 print("true: ", true_item.data[i][j])
                 print("pred: ", pred_item.data[i][j])
-                
+
                 assert (
                     true_item.data[i][j].text == pred_item.data[i][j].text
                 ), "table-cell does not have the same text"
@@ -107,7 +107,6 @@ def verify_tables(doc_pred: DsDocument, doc_true: DsDocument):
                     true_item.data[i][j].type == pred_item.data[i][j].type
                 ), "table-cell does not have the same type"
 
-                
     return True
 
 
