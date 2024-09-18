@@ -17,7 +17,7 @@ def test_doc_path():
 def test_text_cell_counts():
     pdf_doc = Path("./tests/data/redp5695.pdf")
 
-    doc_backend = DoclingParseDocumentBackend(pdf_doc, "123456xyz")
+    doc_backend = DoclingParseDocumentBackend(pdf_doc, "123456xyz5")
 
     for page_index in range(0, doc_backend.page_count()):
         last_cell_count = None
@@ -36,7 +36,7 @@ def test_text_cell_counts():
 
 
 def test_get_text_from_rect(test_doc_path):
-    doc_backend = DoclingParseDocumentBackend(test_doc_path, "123456xyz")
+    doc_backend = DoclingParseDocumentBackend(test_doc_path, "123456xyz4")
     page_backend: DoclingParsePageBackend = doc_backend.load_page(0)
 
     # Get the title text of the DocLayNet paper
@@ -46,10 +46,11 @@ def test_get_text_from_rect(test_doc_path):
     ref = "DocLayNet: A Large Human-Annotated Dataset for Document-Layout Analysis"
 
     assert textpiece.strip() == ref
+    doc_backend.unload()
 
 
 def test_crop_page_image(test_doc_path):
-    doc_backend = DoclingParseDocumentBackend(test_doc_path, "123456xyz")
+    doc_backend = DoclingParseDocumentBackend(test_doc_path, "123456xyz3")
     page_backend: DoclingParsePageBackend = doc_backend.load_page(0)
 
     # Crop out "Figure 1" from the DocLayNet paper
@@ -57,8 +58,10 @@ def test_crop_page_image(test_doc_path):
         scale=2, cropbox=BoundingBox(l=317, t=246, r=574, b=527)
     )
     # im.show()
+    doc_backend.unload()
 
 
 def test_num_pages(test_doc_path):
-    doc_backend = DoclingParseDocumentBackend(test_doc_path, "123456xyz")
+    doc_backend = DoclingParseDocumentBackend(test_doc_path, "123456xyz2")
     doc_backend.page_count() == 9
+    doc_backend.unload()
