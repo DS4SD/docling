@@ -9,67 +9,6 @@ from docling.datamodel.document import ConversionResult, Page
 _log = logging.getLogger(__name__)
 
 
-def _export_table_to_html(table: Table):
-
-    # TODO: this is flagged as internal, because we will move it
-    # to the docling-core package.
-
-    def _get_tablecell_span(cell: TableCell, ix):
-        if cell.spans is None:
-            span = set()
-        else:
-            span = set([s[ix] for s in cell.spans])
-        if len(span) == 0:
-            return 1, None, None
-        return len(span), min(span), max(span)
-
-    body = ""
-    nrows = table.num_rows
-    ncols = table.num_cols
-
-    if table.data is None:
-        return ""
-    for i in range(nrows):
-        body += "<tr>"
-        for j in range(ncols):
-            cell: TableCell = table.data[i][j]
-
-            rowspan, rowstart, rowend = _get_tablecell_span(cell, 0)
-            colspan, colstart, colend = _get_tablecell_span(cell, 1)
-
-            if rowstart is not None and rowstart != i:
-                continue
-            if colstart is not None and colstart != j:
-                continue
-
-            if rowstart is None:
-                rowstart = i
-            if colstart is None:
-                colstart = j
-
-            content = cell.text.strip()
-            label = cell.obj_type
-            label_class = "body"
-            celltag = "td"
-            if label in ["row_header", "row_multi_header", "row_title"]:
-                label_class = "header"
-            elif label in ["col_header", "col_multi_header"]:
-                label_class = "header"
-                celltag = "th"
-
-            opening_tag = f"{celltag}"
-            if rowspan > 1:
-                opening_tag += f' rowspan="{rowspan}"'
-            if colspan > 1:
-                opening_tag += f' colspan="{colspan}"'
-
-            body += f"<{opening_tag}>{content}</{celltag}>"
-        body += "</tr>"
-    body = f"<table>{body}</table>"
-
-    return body
-
-
 def generate_multimodal_pages(
     doc_result: ConversionResult,
 ) -> Iterable[Tuple[str, str, List[Dict[str, Any]], List[Dict[str, Any]], Page]]:
@@ -129,7 +68,7 @@ def generate_multimodal_pages(
             }
 
             if isinstance(item, Table):
-                table_html = _export_table_to_html(item)
+                table_html = item.export_to_html()
                 new_segment["data"].append(
                     {
                         "html_seq": table_html,
