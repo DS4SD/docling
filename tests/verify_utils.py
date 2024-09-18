@@ -96,15 +96,15 @@ def verify_tables(doc_pred: DsDocument, doc_true: DsDocument):
         for i, row in enumerate(true_item.data):
             for j, col in enumerate(true_item.data[i]):
 
-                print("true: ", true_item.data[i][j])
-                print("pred: ", pred_item.data[i][j])
+                #print("true: ", true_item.data[i][j])
+                #print("pred: ", pred_item.data[i][j])
 
                 assert (
                     true_item.data[i][j].text == pred_item.data[i][j].text
                 ), "table-cell does not have the same text"
 
                 assert (
-                    true_item.data[i][j].type == pred_item.data[i][j].type
+                    true_item.data[i][j].obj_type == pred_item.data[i][j].obj_type
                 ), "table-cell does not have the same type"
 
     return True
