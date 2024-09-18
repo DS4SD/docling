@@ -1,3 +1,17 @@
+## [v1.13.0](https://github.com/DS4SD/docling/releases/tag/v1.13.0) - 2024-09-18
+
+### Feature
+
+* Add table exports ([#86](https://github.com/DS4SD/docling/issues/86)) ([`f19bd43`](https://github.com/DS4SD/docling/commit/f19bd437984f77067d33d591e25c5d5c92d7e0a9))
+
+### Fix
+
+* Bumped the glm version and adjusted the tests ([#83](https://github.com/DS4SD/docling/issues/83)) ([`442443a`](https://github.com/DS4SD/docling/commit/442443a102d91b19a7eb38b316dada89c86ea8a8))
+
+### Documentation
+
+* Updated Docling logo.png with transparent background ([#88](https://github.com/DS4SD/docling/issues/88)) ([`0da7519`](https://github.com/DS4SD/docling/commit/0da75198967c9cffd42be3f3acd6ade2341fc1f5))
+
 ## [v1.12.2](https://github.com/DS4SD/docling/releases/tag/v1.12.2) - 2024-09-17
 
 ### Fix
