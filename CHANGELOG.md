@@ -1,3 +1,9 @@
+## [v1.12.2](https://github.com/DS4SD/docling/releases/tag/v1.12.2) - 2024-09-17
+
+### Fix
+
+* **tests:** Adjust the test data to match the new version of LayoutPredictor ([#82](https://github.com/DS4SD/docling/issues/82)) ([`fa9699f`](https://github.com/DS4SD/docling/commit/fa9699fa3cd2d367382d7b952d0365983a870848))
+
 ## [v1.12.1](https://github.com/DS4SD/docling/releases/tag/v1.12.1) - 2024-09-16
 
 ### Fix

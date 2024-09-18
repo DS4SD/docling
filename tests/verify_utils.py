@@ -96,9 +96,16 @@ def verify_tables(doc_pred: DsDocument, doc_true: DsDocument):
         for i, row in enumerate(true_item.data):
             for j, col in enumerate(true_item.data[i]):
 
+                # print("true: ", true_item.data[i][j])
+                # print("pred: ", pred_item.data[i][j])
+
                 assert (
                     true_item.data[i][j].text == pred_item.data[i][j].text
                 ), "table-cell does not have the same text"
+
+                assert (
+                    true_item.data[i][j].obj_type == pred_item.data[i][j].obj_type
+                ), "table-cell does not have the same type"
 
     return True
 
@@ -156,8 +163,12 @@ def verify_conversion_result(
         ), f"Mismatch in PDF cell prediction for {input_path}"
 
         # assert verify_output(
-        #     doc_pred, doc_true
+        #    doc_pred, doc_true
         # ), f"Mismatch in JSON prediction for {input_path}"
+
+        assert verify_tables(
+            doc_pred, doc_true
+        ), f"verify_tables(doc_pred, doc_true) mismatch for {input_path}"
 
         assert verify_md(
             doc_pred_md, doc_true_md
