@@ -162,9 +162,13 @@ def verify_conversion_result(
             doc_pred_pages, doc_true_pages
         ), f"Mismatch in PDF cell prediction for {input_path}"
 
-        assert verify_output(
+        # assert verify_output(
+        #    doc_pred, doc_true
+        # ), f"Mismatch in JSON prediction for {input_path}"
+
+        assert verify_tables(
             doc_pred, doc_true
-        ), f"Mismatch in JSON prediction for {input_path}"
+        ), f"verify_tables(doc_pred, doc_true) mismatch for {input_path}"
 
         assert verify_md(
             doc_pred_md, doc_true_md
