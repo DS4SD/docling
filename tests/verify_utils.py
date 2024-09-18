@@ -96,8 +96,8 @@ def verify_tables(doc_pred: DsDocument, doc_true: DsDocument):
         for i, row in enumerate(true_item.data):
             for j, col in enumerate(true_item.data[i]):
 
-                #print("true: ", true_item.data[i][j])
-                #print("pred: ", pred_item.data[i][j])
+                # print("true: ", true_item.data[i][j])
+                # print("pred: ", pred_item.data[i][j])
 
                 assert (
                     true_item.data[i][j].text == pred_item.data[i][j].text
