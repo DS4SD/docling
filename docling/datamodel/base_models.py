@@ -24,6 +24,11 @@ class DocInputType(str, Enum):
     STREAM = auto()
 
 
+class TableFormerMode(str, Enum):
+    FAST = auto()
+    ACCURATE = auto()
+
+
 class CoordOrigin(str, Enum):
     TOPLEFT = auto()
     BOTTOMLEFT = auto()
@@ -305,6 +310,7 @@ class TableStructureOptions(BaseModel):
         #        are merged across table columns.
         # False: Let table structure model define the text cells, ignore PDF cells.
     )
+    mode: TableFormerMode = TableFormerMode.FAST
 
 
 class PipelineOptions(BaseModel):

@@ -32,6 +32,7 @@ class StandardModelPipeline(BaseModelPipeline):
                     "artifacts_path": artifacts_path
                     / StandardModelPipeline._table_model_path,
                     "enabled": pipeline_options.do_table_structure,
+                    "mode": pipeline_options.table_structure_options.mode,
                     "do_cell_matching": pipeline_options.table_structure_options.do_cell_matching,
                 }
             ),

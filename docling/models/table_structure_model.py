@@ -1,4 +1,5 @@
 import copy
+from pathlib import Path
 from typing import Iterable, List
 
 import numpy
@@ -10,6 +11,7 @@ from docling.datamodel.base_models import (
     Page,
     TableCell,
     TableElement,
+    TableFormerMode,
     TableStructurePrediction,
 )
 
@@ -18,10 +20,15 @@ class TableStructureModel:
     def __init__(self, config):
         self.config = config
         self.do_cell_matching = config["do_cell_matching"]
+        self.mode = config["mode"]
 
         self.enabled = config["enabled"]
         if self.enabled:
-            artifacts_path = config["artifacts_path"]
+            artifacts_path: Path = config["artifacts_path"]
+
+            if self.mode == TableFormerMode.ACCURATE:
+                artifacts_path = artifacts_path / "fat"
+
             # Third Party
             import docling_ibm_models.tableformer.common as c
 
