@@ -10,8 +10,8 @@ from docling_core.types import FileInfoObject as DsFileInfoObject
 from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
 from docling_core.types import TableCell
-from docling_core.types.legacy.base import BoundingBox as DsBoundingBox
-from docling_core.types.legacy.base import Figure
+from docling_core.types.doc.base import BoundingBox as DsBoundingBox
+from docling_core.types.doc.base import Figure
 from pydantic import BaseModel
 from typing_extensions import deprecated
 

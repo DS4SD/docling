@@ -5,8 +5,9 @@ import pytest
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import DocumentStream, PipelineOptions
+from docling.datamodel.base_models import DocumentStream
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
+from docling.datamodel.pipeline_options import PipelineOptions
 from docling.document_converter import DocumentConverter
 
 from .verify_utils import verify_conversion_result
