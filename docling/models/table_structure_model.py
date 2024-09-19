@@ -11,9 +11,9 @@ from docling.datamodel.base_models import (
     Page,
     TableCell,
     TableElement,
-    TableFormerMode,
     TableStructurePrediction,
 )
+from docling.datamodel.pipeline_options import TableFormerMode
 
 
 class TableStructureModel:

@@ -4,7 +4,7 @@ import time
 from pathlib import Path
 from typing import Iterable
 
-from docling.datamodel.base_models import ConversionStatus, PipelineOptions
+from docling.datamodel.base_models import ConversionStatus
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
 from docling.document_converter import DocumentConverter
 

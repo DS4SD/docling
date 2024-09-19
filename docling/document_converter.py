@@ -18,13 +18,13 @@ from docling.datamodel.base_models import (
     DoclingComponentType,
     ErrorItem,
     Page,
-    PipelineOptions,
 )
 from docling.datamodel.document import (
     ConversionResult,
     DocumentConversionInput,
     InputDocument,
 )
+from docling.datamodel.pipeline_options import PipelineOptions
 from docling.datamodel.settings import settings
 from docling.models.ds_glm_model import GlmModel
 from docling.models.page_assemble_model import PageAssembleModel

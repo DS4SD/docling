@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from docling.datamodel.base_models import PipelineOptions
+from docling.datamodel.pipeline_options import PipelineOptions
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
 from docling.models.table_structure_model import TableStructureModel
