@@ -47,14 +47,19 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: release
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/create-github-app-token@v1
+        id: app-token
         with:
-          token: ${{ secrets.GH_PAT }}
+          app-id: ${{ vars.CI_APP_ID }}
+          private-key: ${{ secrets.CI_PRIVATE_KEY }}
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
           fetch-depth: 0  # for fetching tags, required for semantic-release
       - uses: ./.github/actions/setup-poetry
       - name: Run release script
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           TARGET_VERSION: ${{ needs.pre-release-check.outputs.TARGET_TAG_V }}
           CHGLOG_FILE: CHANGELOG.md
         run: ./.github/scripts/release.sh
