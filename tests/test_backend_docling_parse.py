@@ -1,12 +1,12 @@
 from pathlib import Path
 
 import pytest
+from docling_core.types.experimental.base import BoundingBox
 
 from docling.backend.docling_parse_backend import (
     DoclingParseDocumentBackend,
     DoclingParsePageBackend,
 )
-from docling.datamodel.base_models import BoundingBox
 
 
 @pytest.fixture

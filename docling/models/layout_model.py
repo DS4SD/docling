@@ -4,6 +4,7 @@ import random
 import time
 from typing import Iterable, List
 
+from docling_core.types.experimental.base import CoordOrigin
 from docling_ibm_models.layoutmodel.layout_predictor import LayoutPredictor
 from PIL import ImageDraw
 
@@ -11,7 +12,6 @@ from docling.datamodel.base_models import (
     BoundingBox,
     Cell,
     Cluster,
-    CoordOrigin,
     LayoutPrediction,
     Page,
 )

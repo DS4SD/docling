@@ -1,9 +1,17 @@
 import logging
 from typing import Any, Dict, Iterable, List, Tuple, Union
 
-from docling_core.types.doc.base import BaseCell, BaseText, Ref, Table, TableCell
+from docling_core.types.doc.base import (
+    BaseCell,
+    BaseText,
+    BoundingBox,
+    Ref,
+    Table,
+    TableCell,
+)
+from docling_core.types.experimental.base import CoordOrigin
 
-from docling.datamodel.base_models import BoundingBox, CoordOrigin, OcrCell
+from docling.datamodel.base_models import OcrCell
 from docling.datamodel.document import ConversionResult, Page
 
 _log = logging.getLogger(__name__)

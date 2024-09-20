@@ -7,9 +7,10 @@ from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_mode
 from docling_core.types import BaseText
 from docling_core.types import Document as DsDocument
 from docling_core.types import Ref
+from docling_core.types.experimental.base import BoundingBox, CoordOrigin
 from PIL import ImageDraw
 
-from docling.datamodel.base_models import BoundingBox, Cluster, CoordOrigin
+from docling.datamodel.base_models import Cluster
 from docling.datamodel.document import ConversionResult
 
 

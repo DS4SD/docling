@@ -857,49 +857,32 @@ name = "deepsearch-glm"
 version = "0.21.1"
 description = "Graph Language Models"
 optional = false
-python-versions = "<4.0,>=3.8"
-files = [
-    {file = "deepsearch_glm-0.21.1-cp310-cp310-macosx_13_0_arm64.whl", hash = "sha256:b765d371ab0a4f57dd2532c651d7dc1b4a187395153e619a77b6f0d0f6aefb32"},
-    {file = "deepsearch_glm-0.21.1-cp310-cp310-macosx_13_0_x86_64.whl", hash = "sha256:c69e055b98d0a22267a1d0b6139801aecc5b7386289b89f53f976ab723352728"},
-    {file = "deepsearch_glm-0.21.1-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:3eaa245e5ac4ab3e9d0c95a93e23f58d61d70f11431b76b6705fae358eb31c62"},
-    {file = "deepsearch_glm-0.21.1-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:63d195f6c5b30f4f908436589cffd4a5b9e18553c44c57fb635068a2afbd7fab"},
-    {file = "deepsearch_glm-0.21.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:91c9296a2e417a30bf030de0c7c2e2cce4773c58bead039d5e6fccbf7deb2269"},
-    {file = "deepsearch_glm-0.21.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:166b9958d3a8a98d0671a1e3fdf8083ded9ccf12c2ab80fb9709908a2cf81784"},
-    {file = "deepsearch_glm-0.21.1-cp311-cp311-macosx_13_0_arm64.whl", hash = "sha256:13bea2b4e8c04647ec743c3feb1ee66c784db542ab9dbed8dad7eb66fca74b70"},
-    {file = "deepsearch_glm-0.21.1-cp311-cp311-macosx_13_0_x86_64.whl", hash = "sha256:c5b8b8e2207615ff99e535f00548c7b0b8e4ca4593e59edd83fcad98fc318284"},
-    {file = "deepsearch_glm-0.21.1-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:ba74868243caf5ac850fff7c45c8a372c1cac0193431e22eb41888d45ac79719"},
-    {file = "deepsearch_glm-0.21.1-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:7815b06aa1c3953488496f191ce0265d0ee7bed5a6b96454a5f9d6f1add28f69"},
-    {file = "deepsearch_glm-0.21.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d1a7dd2a1e63cee47f6090ebfebc15f68d24f61d5f4f45a21f22120b2267798d"},
-    {file = "deepsearch_glm-0.21.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d52bd2934a27fdc9db5f2d0713dbeec0c94e5c5843d29996e85d641a11498ad0"},
-    {file = "deepsearch_glm-0.21.1-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:fd4d0d4ff853e566b05769c704a4ea3c050c0cfc5721e4e2035e550fb2a8fe91"},
-    {file = "deepsearch_glm-0.21.1-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:802a59a8a3bea1801bce848d58d19fcdbbcea27d9e2c23f163419d13cdec2345"},
-    {file = "deepsearch_glm-0.21.1-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:1ead7958bc044000a8d43cce53c9b82be0d341b0ca5cf7b39a0c09f9c4fd8ceb"},
-    {file = "deepsearch_glm-0.21.1-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:312cf2b0b6560c8dfe5331a5a80a0ed5cb409d29ee6cc999a81696774d50f5e7"},
-    {file = "deepsearch_glm-0.21.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:bc3d6f6ca2cffbe5e112818c8aba9a783af8ab7cffff04624bfb5bf8d185b707"},
-    {file = "deepsearch_glm-0.21.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8bc537d5e9d108233b7e7249c6739292dc9c36a0f39c11e7f430700df35ff884"},
-    {file = "deepsearch_glm-0.21.1-cp39-cp39-macosx_13_0_arm64.whl", hash = "sha256:4db0a700c08ff2d6285461dc5f4a68ccd36876a59b62131f847dc4be76a85989"},
-    {file = "deepsearch_glm-0.21.1-cp39-cp39-macosx_13_0_x86_64.whl", hash = "sha256:f1041c44d1a4d1a43a324781795b03edfdfd8076c49a610c4dd384c86f2a6236"},
-    {file = "deepsearch_glm-0.21.1-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:efb0e9678fe07640bd9b6dc07651eaf1f8e5d5602e379b4cf78dbcddc62b50e9"},
-    {file = "deepsearch_glm-0.21.1-cp39-cp39-macosx_14_0_x86_64.whl", hash = "sha256:f8d46922d74339ec7fd7a6933220ebc36b2ff39738ad9bb74ea55a198dd31b2f"},
-    {file = "deepsearch_glm-0.21.1-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:2872de101ce6d262f57afd3f4d68452064c214c5ab001b7ac698a948e0725314"},
-    {file = "deepsearch_glm-0.21.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:187da7dabc11317badbf6983ee508c367299eb39ed78938623206be6b21e41bd"},
-]
+python-versions = "^3.9"
+files = []
+develop = false
 
 [package.dependencies]
+docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", branch = "cau/new-format-dev"}
 docutils = "!=0.21"
-matplotlib = ">=3.7.1,<4.0.0"
-networkx = ">=3.1,<4.0"
-netwulf = ">=0.1.5,<0.2.0"
-numerize = ">=0.12,<0.13"
-numpy = {version = ">=1.26.4,<2.0.0", markers = "python_version >= \"3.9\""}
+matplotlib = "^3.7.1"
+networkx = "^3.1"
+netwulf = "^0.1.5"
+numerize = "^0.12"
+numpy = {version = "^1.26.4", markers = "python_version >= \"3.9\""}
 pandas = ">=1.5.1"
-python-dotenv = ">=1.0.0,<2.0.0"
-rich = ">=13.7.0,<14.0.0"
+python-dotenv = "^1.0.0"
+rich = "^13.7.0"
 tabulate = ">=0.8.9"
-tqdm = ">=4.64.0,<5.0.0"
+tqdm = "^4.64.0"
 
 [package.extras]
 toolkit = ["deepsearch-toolkit (>=0.31.0)"]
+
+[package.source]
+type = "git"
+url = "ssh://git@github.com/DS4SD/deepsearch-glm.git"
+reference = "cau/new-format-dev"
+resolved_reference = "6d86b7ddaa8911ec57df9bbabf981a42166e53d2"
 
 [[package]]
 name = "deprecated"
@@ -957,23 +940,27 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "1.4.0"
+version = "1.4.1"
 description = "A python library to define and validate data types in Docling."
 optional = false
-python-versions = "<4.0,>=3.9"
-files = [
-    {file = "docling_core-1.4.0-py3-none-any.whl", hash = "sha256:11cd6228d5f321fd11427cf61f40148afd544170e82236228794300f14f8a15a"},
-    {file = "docling_core-1.4.0.tar.gz", hash = "sha256:6ea151974172a87a9bca0d63787dc16bdb4170ecb73f18e61e3c2e95eb3fe3d8"},
-]
+python-versions = "^3.9"
+files = []
+develop = false
 
 [package.dependencies]
-json-schema-for-humans = ">=1.0.0,<2.0.0"
-jsonref = ">=1.1.0,<2.0.0"
-jsonschema = ">=4.16.0,<5.0.0"
-pandas = ">=2.2.2,<3.0.0"
-pydantic = ">=2.6.0,<3.0.0"
-pyproject-toml = ">=0.0.10,<0.0.11"
-tabulate = ">=0.9.0,<0.10.0"
+json-schema-for-humans = "^1.0.0"
+jsonref = "^1.1.0"
+jsonschema = "^4.16.0"
+pandas = "^2.2.2"
+pydantic = "^2.6.0"
+pyproject-toml = "^0.0.10"
+tabulate = "^0.9.0"
+
+[package.source]
+type = "git"
+url = "ssh://git@github.com/DS4SD/docling-core.git"
+reference = "cau/new-format-dev"
+resolved_reference = "ed087646ec9ad86c5b54eb37d7b99322d03487f0"
 
 [[package]]
 name = "docling-ibm-models"
@@ -4698,6 +4685,21 @@ files = [
 six = ">=1.5"
 
 [[package]]
+name = "python-docx"
+version = "1.1.2"
+description = "Create, read, and update Microsoft Word .docx files."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "python_docx-1.1.2-py3-none-any.whl", hash = "sha256:08c20d6058916fb19853fcf080f7f42b6270d89eac9fa5f8c15f691c0017fabe"},
+    {file = "python_docx-1.1.2.tar.gz", hash = "sha256:0cf1f22e95b9002addca7948e16f2cd7acdfd498047f1941ca5d293db7762efd"},
+]
+
+[package.dependencies]
+lxml = ">=3.1.0"
+typing-extensions = ">=4.9.0"
+
+[[package]]
 name = "python-dotenv"
 version = "1.0.1"
 description = "Read key-value pairs from a .env file and set them as environment variables"
@@ -7257,4 +7259,4 @@ examples = ["langchain-huggingface", "langchain-milvus", "langchain-text-splitte
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7dc789b3c981898fdabec03f85ebb92273f2bb55b2bf1e18dad1d4c361c6b97b"
+content-hash = "1b908180d822d74ae8033e8b6c650b8d00b4365fc7dd36cea6505305651b79b6"

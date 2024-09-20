@@ -2,11 +2,11 @@ import copy
 from typing import Iterable, List
 
 import numpy
+from docling_core.types.experimental.base import BoundingBox
 from docling_ibm_models.tableformer.data_management.tf_predictor import TFPredictor
 from PIL import ImageDraw
 
 from docling.datamodel.base_models import (
-    BoundingBox,
     Page,
     TableCell,
     TableElement,

@@ -4,13 +4,13 @@ from pathlib import Path, PurePath
 from typing import ClassVar, Dict, Iterable, List, Optional, Tuple, Type, Union
 
 from docling_core.types import BaseCell, BaseText
-from docling_core.types import BoundingBox as DsBoundingBox
 from docling_core.types import Document as DsDocument
 from docling_core.types import DocumentDescription as DsDocumentDescription
 from docling_core.types import FileInfoObject as DsFileInfoObject
 from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
 from docling_core.types import TableCell
+from docling_core.types.doc.base import BoundingBox as DsBoundingBox
 from docling_core.types.doc.base import Figure
 from pydantic import BaseModel
 from typing_extensions import deprecated
