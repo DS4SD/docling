@@ -289,4 +289,4 @@ class DocumentConverter:
             elements=all_elements, headers=all_headers, body=all_body
         )
 
-        conv_res.output = self.glm_model(conv_res)
+        conv_res.output, conv_res.experimental = self.glm_model(conv_res)

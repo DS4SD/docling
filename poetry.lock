@@ -150,13 +150,13 @@ files = [
 
 [[package]]
 name = "anyio"
-version = "4.4.0"
+version = "4.5.0"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
 optional = true
 python-versions = ">=3.8"
 files = [
-    {file = "anyio-4.4.0-py3-none-any.whl", hash = "sha256:c1b2d8f46a8a812513012e1107cb0e68c17159a7a594208005a57dc776e1bdc7"},
-    {file = "anyio-4.4.0.tar.gz", hash = "sha256:5aadc6a1bbb7cdb0bede386cac5e2940f5e2ff3aa20277e991cf028e0585ce94"},
+    {file = "anyio-4.5.0-py3-none-any.whl", hash = "sha256:fdeb095b7cc5a5563175eedd926ec4ae55413bb4be5770c424af0ba46ccb4a78"},
+    {file = "anyio-4.5.0.tar.gz", hash = "sha256:c5a275fe5ca0afd788001f58fca1e69e29ce706d746e317d660e21f70c530ef9"},
 ]
 
 [package.dependencies]
@@ -166,9 +166,9 @@ sniffio = ">=1.1"
 typing-extensions = {version = ">=4.1", markers = "python_version < \"3.11\""}
 
 [package.extras]
-doc = ["Sphinx (>=7)", "packaging", "sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme"]
-test = ["anyio[trio]", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypothesis (>=4.0)", "psutil (>=5.9)", "pytest (>=7.0)", "pytest-mock (>=3.6.1)", "trustme", "uvloop (>=0.17)"]
-trio = ["trio (>=0.23)"]
+doc = ["Sphinx (>=7.4,<8.0)", "packaging", "sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme"]
+test = ["anyio[trio]", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypothesis (>=4.0)", "psutil (>=5.9)", "pytest (>=7.0)", "pytest-mock (>=3.6.1)", "trustme", "uvloop (>=0.21.0b1)"]
+trio = ["trio (>=0.26.1)"]
 
 [[package]]
 name = "appnope"
@@ -882,7 +882,7 @@ toolkit = ["deepsearch-toolkit (>=0.31.0)"]
 type = "git"
 url = "ssh://git@github.com/DS4SD/deepsearch-glm.git"
 reference = "cau/new-format-dev"
-resolved_reference = "6d86b7ddaa8911ec57df9bbabf981a42166e53d2"
+resolved_reference = "60e4bda21fbe7ee8849d27a9321ba37cca04e7aa"
 
 [[package]]
 name = "deprecated"
@@ -960,17 +960,17 @@ tabulate = "^0.9.0"
 type = "git"
 url = "ssh://git@github.com/DS4SD/docling-core.git"
 reference = "cau/new-format-dev"
-resolved_reference = "ed087646ec9ad86c5b54eb37d7b99322d03487f0"
+resolved_reference = "bdbd93e3297b7618483f76c85f2fecf876f0af2b"
 
 [[package]]
 name = "docling-ibm-models"
-version = "1.2.0"
+version = "1.2.1"
 description = "This package contains the AI models used by the Docling PDF conversion package"
 optional = false
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "docling_ibm_models-1.2.0-py3-none-any.whl", hash = "sha256:1bad8fb67ab1ff71a6120530c76272e48b71c5829383d381927e8e51c2204eee"},
-    {file = "docling_ibm_models-1.2.0.tar.gz", hash = "sha256:e5558c66433603a7acfe0dd9e7bc12e99680af9484b26cf3e61e03b1cbdd3e2d"},
+    {file = "docling_ibm_models-1.2.1-py3-none-any.whl", hash = "sha256:f87e091cc6ead17bcde3bd74dd00325719874b6353569c692285f6b8e733efec"},
+    {file = "docling_ibm_models-1.2.1.tar.gz", hash = "sha256:5a3be3a67ecca3af168d69ebee48cf0c295abe33fbb074c5313138d39520c7ff"},
 ]
 
 [package.dependencies]
@@ -993,35 +993,35 @@ tqdm = ">=4.64.0,<5.0.0"
 
 [[package]]
 name = "docling-parse"
-version = "1.2.0"
+version = "1.2.1"
 description = "Simple package to extract text with coordinates from programmatic PDFs"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "docling_parse-1.2.0-cp310-cp310-macosx_13_0_arm64.whl", hash = "sha256:a85e5cc3e075d8628ced33595f2f4768e0dee40d1ed39cdec99b2dcff7eee596"},
-    {file = "docling_parse-1.2.0-cp310-cp310-macosx_13_0_x86_64.whl", hash = "sha256:e4fc3875207b837d9849a32f2c15a1fd0244cfdcc268e39858faf83b4bb1ff47"},
-    {file = "docling_parse-1.2.0-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:0724b13fc6ff02bddacbc7b3b11a7f648bad39a5af9df039efd8724ff6a2cdac"},
-    {file = "docling_parse-1.2.0-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:c2ebaf97d9f6d8c50f4846ff8927d41c55087c8229d0e1b6944efad810fbe8e4"},
-    {file = "docling_parse-1.2.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:63a0f5a1e06873470e252c3c09268cdf294fc3fff081f8c0aa2df0480b772faa"},
-    {file = "docling_parse-1.2.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:accefe923784147c11f13b1195fe8f6024bc3a895b63c2c0f7c0e2a6536252f5"},
-    {file = "docling_parse-1.2.0-cp311-cp311-macosx_13_0_arm64.whl", hash = "sha256:a2deac4e69d3de46647970df973189ee19dbe5939ec379c91bc67fa09641ac49"},
-    {file = "docling_parse-1.2.0-cp311-cp311-macosx_13_0_x86_64.whl", hash = "sha256:c17516e76d57fe9ab36d139f7fa022517087b84249cc4d74fbf6d7e380725f3b"},
-    {file = "docling_parse-1.2.0-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:739adf1f3354864efc2b80bb684202c8bca687221e482be3798ce64e8c3d5c8f"},
-    {file = "docling_parse-1.2.0-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:709a3ade0a08661d4e2ceba0f5ad188f07d614114708c2458a7c00d15cb21164"},
-    {file = "docling_parse-1.2.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6d944c6789179df77f1fd35d26aadf451cae8e8ae1801ab6a17e8acf7e1c320c"},
-    {file = "docling_parse-1.2.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a24c7bb0f7628a7174bc8ee94ab6004443b2908e91a6a9a8616ad3d57bce9256"},
-    {file = "docling_parse-1.2.0-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:b4218d6f3234a22e2de929e77d84fa940bdaef0e2644bd8e291f6f95930c1c27"},
-    {file = "docling_parse-1.2.0-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:39444e9e758edf72d9a4f7e035872fd75159566a1f62ddafdba46c7c0ac92cc4"},
-    {file = "docling_parse-1.2.0-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:344f1f6296d5c6f5a2052d6490a7abc2b381b8861ee1ed23898db3a5d2801af3"},
-    {file = "docling_parse-1.2.0-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:0f71f0d8c8bdec16b847d031eb02aa9bb08b3a1f5a3bcc286b3f2ebc882eb038"},
-    {file = "docling_parse-1.2.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:144900e82af7c3089c1c0f9b3f3f42b89a313cfba75faa2e08c8b705fe48a742"},
-    {file = "docling_parse-1.2.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:78fd07f9a09e71c96f445ae8b951b5e6f69b6b79dd2011e88531dbf66d7f7944"},
-    {file = "docling_parse-1.2.0-cp39-cp39-macosx_13_0_arm64.whl", hash = "sha256:2118ea097dfee3d082a640d14d69fc2ad4716ae297b97ecef9a2f3a34baacad9"},
-    {file = "docling_parse-1.2.0-cp39-cp39-macosx_13_0_x86_64.whl", hash = "sha256:38434455ddbca4e525154a3545d1ed71a80db48c0424cd6c3236e4590971bfca"},
-    {file = "docling_parse-1.2.0-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:34514dec15c6f2e462d48c5691f136ee1913a0927a15d2e13bacc38dc261c0d5"},
-    {file = "docling_parse-1.2.0-cp39-cp39-macosx_14_0_x86_64.whl", hash = "sha256:ea08b8c996234e18aaf65bff1e3ee954cff2960ef0d11414e5e14d674d343407"},
-    {file = "docling_parse-1.2.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:205d15200ababa614e14f604e64cfeed39c188da982f34705735232f8960c23d"},
-    {file = "docling_parse-1.2.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8fa3bfdb205662ab28d2b8c029b331be9bc8186153edc8ebc494042c1689b86f"},
+    {file = "docling_parse-1.2.1-cp310-cp310-macosx_13_0_arm64.whl", hash = "sha256:851971d19bca8f29685da91679c62797bcaf072ed4add51cbd021602aaff1a71"},
+    {file = "docling_parse-1.2.1-cp310-cp310-macosx_13_0_x86_64.whl", hash = "sha256:d7c32cfb8038500c8624e333313f46501675adaba2837c8294d562e2991c0864"},
+    {file = "docling_parse-1.2.1-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:6a16ffdb3c55168c4a9d4ab634a09fb2a6395d71da713b8d7186d198ae72818e"},
+    {file = "docling_parse-1.2.1-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:a58bba545cefeec7f48bedda540534e960ec63f063500b57ae72e87343802647"},
+    {file = "docling_parse-1.2.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6048cc403c2c72d54669b6f9661deb25ebcbee8d7e68ba752d73721921313da1"},
+    {file = "docling_parse-1.2.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8e78ea38eb7ddcb48b604abaf84f81b5a822c1e7eba63c1758074091554ca6db"},
+    {file = "docling_parse-1.2.1-cp311-cp311-macosx_13_0_arm64.whl", hash = "sha256:c8f7b90092ee6758a9b211c2b11fc7f36c2c1b15bec442ad68f84a8f1d2ac4e9"},
+    {file = "docling_parse-1.2.1-cp311-cp311-macosx_13_0_x86_64.whl", hash = "sha256:1f8bbc3a53991a730b790b0878412abe9a927114489355a9ac803df32bf1f45b"},
+    {file = "docling_parse-1.2.1-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:aac1134ccbb41276e65001e08abc49ee3b59a67eeb301ea4609671dad0d1e2ff"},
+    {file = "docling_parse-1.2.1-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:1122b95b33e5bde97c0c2a12485ba68d0e43e21ee158586e8cde144e22bd107b"},
+    {file = "docling_parse-1.2.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:bc922641637b3e172d180b1970492baa2f28bf43d67b3bfe2257ea423dbf2096"},
+    {file = "docling_parse-1.2.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3d6d54c36252dbaee3a6ec66942fa862ad2f6700e64f5a740c30bb498ee35350"},
+    {file = "docling_parse-1.2.1-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:71af21014d8e0bf08ad629d55f5b637892e333fc8d17351ca597f976e6930a7f"},
+    {file = "docling_parse-1.2.1-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:9eff4e10ed8d0e4dada4f79248d9dce13d747c7d353af67f8db4162ca9a772a5"},
+    {file = "docling_parse-1.2.1-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:ada6b1b3447fe2be96063a9902e965a34b5afd73f6f757f7b07bf88efd3c7d05"},
+    {file = "docling_parse-1.2.1-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:e7c212578d93c1e0ea8327f7cdca94aa4421ae1957343552d75a3d58fce8f48d"},
+    {file = "docling_parse-1.2.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d533902bc58649d8d47c2f616d726720f2a6ae931975a1191246800cb4ec4337"},
+    {file = "docling_parse-1.2.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:69929026cdf2e85b85ab082e91262ae581ab292f0328a9bf5f03787bfcae87d8"},
+    {file = "docling_parse-1.2.1-cp39-cp39-macosx_13_0_arm64.whl", hash = "sha256:68b095f82bc75c88f79196402292b37111bc941e654a1bc9089bcb6584614bc4"},
+    {file = "docling_parse-1.2.1-cp39-cp39-macosx_13_0_x86_64.whl", hash = "sha256:a2ab761aa874808e6e68a6a42001e55d2c0b60d6245f2eb9005523ab2305f0e6"},
+    {file = "docling_parse-1.2.1-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:61056d6061139907de9c029c5ed532db82960c12e84fe34c3f68b9561894d9d4"},
+    {file = "docling_parse-1.2.1-cp39-cp39-macosx_14_0_x86_64.whl", hash = "sha256:277b3921c14f17b890478fef2743e74c40d27f2fed9f4a537ef7810fe0166439"},
+    {file = "docling_parse-1.2.1-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:97f5ab23c32b91d80fe8947dd69379c00c207272283e6ff66d83e07abbafba8e"},
+    {file = "docling_parse-1.2.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9e93746818278101df56efd105b5e64b90fb7e35b329732849de23bdfeb7c53b"},
 ]
 
 [package.dependencies]
@@ -2329,13 +2329,13 @@ files = [
 
 [[package]]
 name = "langchain-core"
-version = "0.2.40"
+version = "0.2.41"
 description = "Building applications with LLMs through composability"
 optional = true
 python-versions = "<4.0,>=3.8.1"
 files = [
-    {file = "langchain_core-0.2.40-py3-none-any.whl", hash = "sha256:71fff5cafa4b9c82a3a716e985f071383be452c35d8cc3169b3a393e6857fc99"},
-    {file = "langchain_core-0.2.40.tar.gz", hash = "sha256:c838ea0c0b73475a8e58ced3e306b6d926ef063721abd164f237c8664916f502"},
+    {file = "langchain_core-0.2.41-py3-none-any.whl", hash = "sha256:3278fda5ba9a05defae8bb19f1226032add6aab21917db7b3bc74e750e263e84"},
+    {file = "langchain_core-0.2.41.tar.gz", hash = "sha256:bc12032c5a298d85be754ccb129bc13ea21ccb1d6e22f8d7ba18b8da64315bb5"},
 ]
 
 [package.dependencies]
@@ -2403,13 +2403,13 @@ langchain-core = ">=0.2.38,<0.3.0"
 
 [[package]]
 name = "langsmith"
-version = "0.1.121"
+version = "0.1.125"
 description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform."
 optional = true
 python-versions = "<4.0,>=3.8.1"
 files = [
-    {file = "langsmith-0.1.121-py3-none-any.whl", hash = "sha256:fdb1ac8a671d3904201bfeea197d87bded46a10d08f1034af464211872e29893"},
-    {file = "langsmith-0.1.121.tar.gz", hash = "sha256:e9381b82a5bd484af9a51c3e96faea572746b8d617b070c1cda40cbbe48e33df"},
+    {file = "langsmith-0.1.125-py3-none-any.whl", hash = "sha256:74ce8eb2663e1ed20bfcfc88d41e0712879306956c9938d1cdbab7d60458bdca"},
+    {file = "langsmith-0.1.125.tar.gz", hash = "sha256:2c0eb0c3cbf22cff55bf519b8e889041f9a591bcf97af5152c8e130333c5940e"},
 ]
 
 [package.dependencies]
@@ -4000,22 +4000,22 @@ wcwidth = "*"
 
 [[package]]
 name = "protobuf"
-version = "5.28.1"
+version = "5.28.2"
 description = ""
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "protobuf-5.28.1-cp310-abi3-win32.whl", hash = "sha256:fc063acaf7a3d9ca13146fefb5b42ac94ab943ec6e978f543cd5637da2d57957"},
-    {file = "protobuf-5.28.1-cp310-abi3-win_amd64.whl", hash = "sha256:4c7f5cb38c640919791c9f74ea80c5b82314c69a8409ea36f2599617d03989af"},
-    {file = "protobuf-5.28.1-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:4304e4fceb823d91699e924a1fdf95cde0e066f3b1c28edb665bda762ecde10f"},
-    {file = "protobuf-5.28.1-cp38-abi3-manylinux2014_aarch64.whl", hash = "sha256:0dfd86d2b5edf03d91ec2a7c15b4e950258150f14f9af5f51c17fa224ee1931f"},
-    {file = "protobuf-5.28.1-cp38-abi3-manylinux2014_x86_64.whl", hash = "sha256:51f09caab818707ab91cf09cc5c156026599cf05a4520779ccbf53c1b352fb25"},
-    {file = "protobuf-5.28.1-cp38-cp38-win32.whl", hash = "sha256:1b04bde117a10ff9d906841a89ec326686c48ececeb65690f15b8cabe7149495"},
-    {file = "protobuf-5.28.1-cp38-cp38-win_amd64.whl", hash = "sha256:cabfe43044ee319ad6832b2fda332646f9ef1636b0130186a3ae0a52fc264bb4"},
-    {file = "protobuf-5.28.1-cp39-cp39-win32.whl", hash = "sha256:4b4b9a0562a35773ff47a3df823177ab71a1f5eb1ff56d8f842b7432ecfd7fd2"},
-    {file = "protobuf-5.28.1-cp39-cp39-win_amd64.whl", hash = "sha256:f24e5d70e6af8ee9672ff605d5503491635f63d5db2fffb6472be78ba62efd8f"},
-    {file = "protobuf-5.28.1-py3-none-any.whl", hash = "sha256:c529535e5c0effcf417682563719e5d8ac8d2b93de07a56108b4c2d436d7a29a"},
-    {file = "protobuf-5.28.1.tar.gz", hash = "sha256:42597e938f83bb7f3e4b35f03aa45208d49ae8d5bcb4bc10b9fc825e0ab5e423"},
+    {file = "protobuf-5.28.2-cp310-abi3-win32.whl", hash = "sha256:eeea10f3dc0ac7e6b4933d32db20662902b4ab81bf28df12218aa389e9c2102d"},
+    {file = "protobuf-5.28.2-cp310-abi3-win_amd64.whl", hash = "sha256:2c69461a7fcc8e24be697624c09a839976d82ae75062b11a0972e41fd2cd9132"},
+    {file = "protobuf-5.28.2-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:a8b9403fc70764b08d2f593ce44f1d2920c5077bf7d311fefec999f8c40f78b7"},
+    {file = "protobuf-5.28.2-cp38-abi3-manylinux2014_aarch64.whl", hash = "sha256:35cfcb15f213449af7ff6198d6eb5f739c37d7e4f1c09b5d0641babf2cc0c68f"},
+    {file = "protobuf-5.28.2-cp38-abi3-manylinux2014_x86_64.whl", hash = "sha256:5e8a95246d581eef20471b5d5ba010d55f66740942b95ba9b872d918c459452f"},
+    {file = "protobuf-5.28.2-cp38-cp38-win32.whl", hash = "sha256:87317e9bcda04a32f2ee82089a204d3a2f0d3c8aeed16568c7daf4756e4f1fe0"},
+    {file = "protobuf-5.28.2-cp38-cp38-win_amd64.whl", hash = "sha256:c0ea0123dac3399a2eeb1a1443d82b7afc9ff40241433296769f7da42d142ec3"},
+    {file = "protobuf-5.28.2-cp39-cp39-win32.whl", hash = "sha256:ca53faf29896c526863366a52a8f4d88e69cd04ec9571ed6082fa117fac3ab36"},
+    {file = "protobuf-5.28.2-cp39-cp39-win_amd64.whl", hash = "sha256:8ddc60bf374785fb7cb12510b267f59067fa10087325b8e1855b898a0d81d276"},
+    {file = "protobuf-5.28.2-py3-none-any.whl", hash = "sha256:52235802093bd8a2811abbe8bf0ab9c5f54cca0a751fdd3f6ac2a21438bffece"},
+    {file = "protobuf-5.28.2.tar.gz", hash = "sha256:59379674ff119717404f7454647913787034f03fe7049cbef1d74a97bb4593f0"},
 ]
 
 [[package]]
@@ -4487,13 +4487,13 @@ wheel = "*"
 
 [[package]]
 name = "pyreadline3"
-version = "3.5.3"
+version = "3.5.4"
 description = "A python implementation of GNU readline."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pyreadline3-3.5.3-py3-none-any.whl", hash = "sha256:ddede153a92e5aad9c1fe63d692efd6a3e478f686adcd4938a051ffb63ec4f52"},
-    {file = "pyreadline3-3.5.3.tar.gz", hash = "sha256:9234684ca75a00a702fda42b17cc26ca665bc9d7c2da06af450468253099ff61"},
+    {file = "pyreadline3-3.5.4-py3-none-any.whl", hash = "sha256:eaf8e6cc3c49bcccf145fc6067ba8643d1df34d604a1ec0eccbf7a18e6d3fae6"},
+    {file = "pyreadline3-3.5.4.tar.gz", hash = "sha256:8d57d53039a1c75adba8e50dd3d992b28143480816187ea5efbd5c78e6c885b7"},
 ]
 
 [package.extras]
@@ -5629,18 +5629,17 @@ files = [
 
 [[package]]
 name = "sentence-transformers"
-version = "3.1.0"
-description = "Multilingual text embeddings"
+version = "3.1.1"
+description = "State-of-the-Art Text Embeddings"
 optional = true
 python-versions = ">=3.8"
 files = [
-    {file = "sentence_transformers-3.1.0-py3-none-any.whl", hash = "sha256:94ff19c478ada7340ee8bd5ed46db1e322f8c98a16b04a337634956ac9d4530d"},
-    {file = "sentence_transformers-3.1.0.tar.gz", hash = "sha256:5e5b7bd84c634c11cb127b840ff96215a456de2dc9c5ecf97ecfa67002b1116f"},
+    {file = "sentence_transformers-3.1.1-py3-none-any.whl", hash = "sha256:c73bf6f17e3676bb9372a6133a254ebfb5907586b470f2bac5a840c64c3cf97e"},
+    {file = "sentence_transformers-3.1.1.tar.gz", hash = "sha256:8f00020ef4ad6b918475c38af545c22f61403b67eb22d994860bab06902db160"},
 ]
 
 [package.dependencies]
 huggingface-hub = ">=0.19.3"
-numpy = "<2.0.0"
 Pillow = "*"
 scikit-learn = "*"
 scipy = "*"
@@ -6001,13 +6000,13 @@ tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
 
 [[package]]
 name = "sympy"
-version = "1.13.2"
+version = "1.13.3"
 description = "Computer algebra system (CAS) in Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "sympy-1.13.2-py3-none-any.whl", hash = "sha256:c51d75517712f1aed280d4ce58506a4a88d635d6b5dd48b39102a7ae1f3fcfe9"},
-    {file = "sympy-1.13.2.tar.gz", hash = "sha256:401449d84d07be9d0c7a46a64bd54fe097667d5e7181bfe67ec777be9e01cb13"},
+    {file = "sympy-1.13.3-py3-none-any.whl", hash = "sha256:54612cf55a62755ee71824ce692986f23c88ffa77207b30c1368eda4a7060f73"},
+    {file = "sympy-1.13.3.tar.gz", hash = "sha256:b27fd2c6530e0ab39e275fc9b683895367e51d5da91baa8d3d64db2565fec4d9"},
 ]
 
 [package.dependencies]

@@ -4,6 +4,8 @@ import time
 from pathlib import Path
 from typing import Iterable
 
+import yaml
+
 from docling.datamodel.base_models import ConversionStatus, PipelineOptions
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
 from docling.document_converter import DocumentConverter
@@ -29,6 +31,14 @@ def export_documents(
             # Export Deep Search document JSON format:
             with (output_dir / f"{doc_filename}.json").open("w") as fp:
                 fp.write(json.dumps(conv_res.render_as_dict()))
+
+            # Export Docling document format to YAML (experimental):
+            with (output_dir / f"{doc_filename}.yaml").open("w") as fp:
+                fp.write(
+                    yaml.safe_dump(
+                        conv_res.experimental.model_dump(mode="json", by_alias=True)
+                    )
+                )
 
             # Export Text format:
             with (output_dir / f"{doc_filename}.txt").open("w") as fp:

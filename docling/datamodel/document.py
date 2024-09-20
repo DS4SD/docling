@@ -3,7 +3,7 @@ from io import BytesIO
 from pathlib import Path, PurePath
 from typing import ClassVar, Dict, Iterable, List, Optional, Tuple, Type, Union
 
-from docling_core.types import BaseCell, BaseText
+from docling_core.types import BaseCell, BaseText, DoclingDocument
 from docling_core.types import Document as DsDocument
 from docling_core.types import DocumentDescription as DsDocumentDescription
 from docling_core.types import FileInfoObject as DsFileInfoObject
@@ -59,6 +59,8 @@ _EMPTY_DOC = DsDocument(
         document_hash="",
     ),
 )
+
+_EMPTY_DOCLING_DOC = DoclingDocument(description={}, file_info={})  # TODO: Stub
 
 
 class InputDocument(BaseModel):
@@ -137,6 +139,7 @@ class ConvertedDocument(BaseModel):
     assembled: AssembledUnit = AssembledUnit()
 
     output: DsDocument = _EMPTY_DOC
+    experimental: DoclingDocument = _EMPTY_DOCLING_DOC
 
     def _to_ds_document(self) -> DsDocument:
         title = ""
