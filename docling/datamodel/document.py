@@ -388,7 +388,7 @@ class ConvertedDocument(BaseModel):
             add_page_index=add_page_index,
             # table specific flags
             add_table_cell_location=add_table_cell_location,
-            add_table_cell_label=add_table_cell_labe
+            add_table_cell_label=add_table_cell_label,
             add_table_cell_text=add_table_cell_text     
         )
 
