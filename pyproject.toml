@@ -41,6 +41,7 @@ pyarrow = "^16.1.0"
 #########
 # extras:
 #########
+# vllm = { version = "^0.5.0", optional = true, markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'" }
 python-dotenv = { version = "^1.0.1", optional = true }
 llama-index-embeddings-huggingface = { version = "^0.3.1", optional = true }
 llama-index-llms-huggingface-api = { version = "^0.2.0", optional = true }
@@ -84,6 +85,7 @@ nbqa = "^1.9.0"
 datasets = "^2.21.0"
 
 [tool.poetry.extras]
+# vllm = ["vllm"]
 examples = [
     "python-dotenv",
     # LlamaIndex examples:

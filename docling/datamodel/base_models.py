@@ -224,18 +224,27 @@ class TableStructurePrediction(BaseModel):
 class TextElement(BasePageElement): ...
 
 
+class FigureClassificationData(BaseModel):
+    provenance: str
+    predicted_class: str
+    confidence: float
+
+
+class FigureDescriptionData(BaseModel):
+    text: str
+    provenance: str = ""
+
+
 class FigureData(BaseModel):
-    pass
+    classification: Optional[FigureClassificationData] = None
+    description: Optional[FigureDescriptionData] = None
 
 
 class FigureElement(BasePageElement):
-    data: Optional[FigureData] = None
-    provenance: Optional[str] = None
-    predicted_class: Optional[str] = None
-    confidence: Optional[float] = None
+    data: FigureData = FigureData()
 
 
-class FigureClassificationPrediction(BaseModel):
+class FigurePrediction(BaseModel):
     figure_count: int = 0
     figure_map: Dict[int, FigureElement] = {}
 
@@ -248,7 +257,7 @@ class EquationPrediction(BaseModel):
 class PagePredictions(BaseModel):
     layout: Optional[LayoutPrediction] = None
     tablestructure: Optional[TableStructurePrediction] = None
-    figures_classification: Optional[FigureClassificationPrediction] = None
+    figures_prediction: Optional[FigurePrediction] = None
     equations_prediction: Optional[EquationPrediction] = None
 
 

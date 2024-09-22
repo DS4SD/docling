@@ -98,18 +98,17 @@ class PageAssembleModel:
                     body.append(tbl)
                 elif cluster.label == LayoutModel.FIGURE_LABEL:
                     fig = None
-                    if page.predictions.figures_classification:
-                        fig = page.predictions.figures_classification.figure_map.get(
+                    if page.predictions.figures_prediction:
+                        fig = page.predictions.figures_prediction.figure_map.get(
                             cluster.id, None
                         )
                     if (
                         not fig
-                    ):  # fallback: add figure without classification, if it isn't present
+                    ):  # fallback: add figure with default data, if it isn't present
                         fig = FigureElement(
                             label=cluster.label,
                             id=cluster.id,
                             text="",
-                            data=None,
                             cluster=cluster,
                             page_no=page.page_no,
                         )
