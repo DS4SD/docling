@@ -3,7 +3,7 @@ from io import BytesIO
 from pathlib import Path, PurePath
 from typing import ClassVar, Dict, Iterable, List, Optional, Tuple, Type, Union
 
-from docling_core.types import BaseCell, BaseText, DoclingDocument
+from docling_core.types import BaseCell, BaseText
 from docling_core.types import Document as DsDocument
 from docling_core.types import DocumentDescription as DsDocumentDescription
 from docling_core.types import FileInfoObject as DsFileInfoObject
@@ -11,6 +11,7 @@ from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
 from docling_core.types.doc.base import BoundingBox as DsBoundingBox
 from docling_core.types.doc.base import Figure, TableCell
+from docling_core.types.experimental.document import DoclingDocument, FileInfo
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
@@ -59,7 +60,9 @@ _EMPTY_DOC = DsDocument(
     ),
 )
 
-_EMPTY_DOCLING_DOC = DoclingDocument(description={}, file_info={})  # TODO: Stub
+_EMPTY_DOCLING_DOC = DoclingDocument(
+    description={}, file_info=FileInfo(document_hash="123xyz")
+)  # TODO: Stub
 
 
 class InputDocument(BaseModel):
