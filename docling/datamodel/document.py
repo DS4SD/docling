@@ -368,20 +368,30 @@ class ConvertedDocument(BaseModel):
             "table",
             "figure",
         ],
-        page_tagging: bool = True,
-        location_tagging: bool = True,
-        location_dimensions: Tuple[int, int] = (100, 100),
-        add_new_line: bool = True,
+        xsize: int = 100,
+        ysize: int = 100,
+        add_location: bool = True,
+        add_content: bool = True,
+        add_page_index: bool = True,
+        # table specific flags
+        add_table_cell_location: bool = False,
+        add_table_cell_label: bool = True,
+        add_table_cell_text: bool = True,
     ) -> str:
         return self.output.export_to_document_tokens(
             delim=delim,
             main_text_start=main_text_start,
             main_text_stop=main_text_stop,
             main_text_labels=main_text_labels,
-            page_tagging=page_tagging,
-            location_tagging=location_tagging,
-            location_dimensions=location_dimensions,
-            add_new_line=add_new_line,
+            xsize=xsize,
+            ysize=ysize,
+            add_location=add_location,
+            add_content=add_content,
+            add_page_index=add_page_index,
+            # table specific flags
+            add_table_cell_location=add_table_cell_location,
+            add_table_cell_label=add_table_cell_label,
+            add_table_cell_text=add_table_cell_text,
         )
 
     def render_element_images(

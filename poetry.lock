@@ -957,13 +957,13 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "1.4.0"
+version = "1.5.0"
 description = "A python library to define and validate data types in Docling."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "docling_core-1.4.0-py3-none-any.whl", hash = "sha256:11cd6228d5f321fd11427cf61f40148afd544170e82236228794300f14f8a15a"},
-    {file = "docling_core-1.4.0.tar.gz", hash = "sha256:6ea151974172a87a9bca0d63787dc16bdb4170ecb73f18e61e3c2e95eb3fe3d8"},
+    {file = "docling_core-1.5.0-py3-none-any.whl", hash = "sha256:1a8bb4940ecbf98c6381298f3ad121d95aa8895883150a5dd113a348a0987d09"},
+    {file = "docling_core-1.5.0.tar.gz", hash = "sha256:bc8ddbae16e2b740225f37758125eb95b9fcd4202542c4547a9683a7ad423e10"},
 ]
 
 [package.dependencies]
@@ -7257,4 +7257,4 @@ examples = ["langchain-huggingface", "langchain-milvus", "langchain-text-splitte
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7dc789b3c981898fdabec03f85ebb92273f2bb55b2bf1e18dad1d4c361c6b97b"
+content-hash = "7ee1e9e99c23e075fb1f8722e4fc9e6c0b02a4282f4e67ebbcd75598720536b7"
