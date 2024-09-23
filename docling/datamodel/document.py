@@ -383,6 +383,8 @@ class ConvertedDocument(BaseModel):
             main_text_start=main_text_start,
             main_text_stop=main_text_stop,
             main_text_labels=main_text_labels,
+            xsize=xsize,
+            ysize=ysize,
             add_location=add_location,
             add_content=add_content,
             add_page_index=add_page_index,
