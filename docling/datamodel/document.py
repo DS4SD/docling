@@ -389,7 +389,7 @@ class ConvertedDocument(BaseModel):
             # table specific flags
             add_table_cell_location=add_table_cell_location,
             add_table_cell_label=add_table_cell_label,
-            add_table_cell_text=add_table_cell_text     
+            add_table_cell_text=add_table_cell_text,
         )
 
     def render_element_images(

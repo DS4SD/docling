@@ -156,7 +156,7 @@ def verify_conversion_result(
             fw.write(doc_pred_md)
 
         with open(dt_path, "w") as fw:
-            fw.write(doc_pred_dt)            
+            fw.write(doc_pred_dt)
     else:  # default branch in test
         with open(pages_path, "r") as fr:
             doc_true_pages = PageList.validate_json(fr.read())
@@ -168,7 +168,7 @@ def verify_conversion_result(
             doc_true_md = fr.read()
 
         with open(dt_path, "r") as fr:
-            doc_true_dt = fr.read()            
+            doc_true_dt = fr.read()
 
         assert verify_cells(
             doc_pred_pages, doc_true_pages
@@ -188,4 +188,4 @@ def verify_conversion_result(
 
         assert verify_dt(
             doc_pred_dt, doc_true_dt
-        ), f"Mismatch in DocTags prediction for {input_path}"        
+        ), f"Mismatch in DocTags prediction for {input_path}"
