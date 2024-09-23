@@ -111,7 +111,7 @@ def generate_multimodal_pages(
         )
         # No page-tagging since we only do 1 page at the time
         content_dt = doc.export_to_document_tokens(
-            main_text_start=start_ix, main_text_stop=end_ix, page_tagging=False
+            main_text_start=start_ix, main_text_stop=end_ix, add_page_index=False
         )
 
         return content_text, content_md, content_dt, page_cells, page_segments, page
