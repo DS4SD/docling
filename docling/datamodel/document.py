@@ -9,9 +9,8 @@ from docling_core.types import DocumentDescription as DsDocumentDescription
 from docling_core.types import FileInfoObject as DsFileInfoObject
 from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
-from docling_core.types import TableCell
 from docling_core.types.doc.base import BoundingBox as DsBoundingBox
-from docling_core.types.doc.base import Figure
+from docling_core.types.doc.base import Figure, TableCell
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
@@ -25,7 +24,7 @@ from docling.datamodel.base_models import (
     FigureElement,
     Page,
     PageElement,
-    TableElement,
+    Table,
     TextElement,
 )
 from docling.datamodel.settings import DocumentLimits
@@ -186,7 +185,7 @@ class ConvertedDocument(BaseModel):
                         ],
                     )
                 )
-            elif isinstance(element, TableElement):
+            elif isinstance(element, Table):
                 index = len(tables)
                 ref_str = f"#/tables/{index}"
                 main_text.append(

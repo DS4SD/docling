@@ -8,7 +8,7 @@ from docling.datamodel.base_models import (
     ConversionStatus,
     FigureElement,
     PageElement,
-    TableElement,
+    Table,
 )
 from docling.datamodel.document import DocumentConversionInput
 from docling.document_converter import DocumentConverter
@@ -61,7 +61,7 @@ def main():
 
         # Export figures and tables
         for element, image in conv_res.render_element_images(
-            element_types=(FigureElement, TableElement)
+            element_types=(FigureElement, Table)
         ):
             element_image_filename = (
                 output_dir / f"{doc_filename}-element-{element.id}.png"

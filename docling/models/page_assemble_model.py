@@ -7,7 +7,7 @@ from docling.datamodel.base_models import (
     FigureElement,
     Page,
     PageElement,
-    TableElement,
+    Table,
     TextElement,
 )
 from docling.models.layout_model import LayoutModel
@@ -84,7 +84,7 @@ class PageAssembleModel:
                     if (
                         not tbl
                     ):  # fallback: add table without structure, if it isn't present
-                        tbl = TableElement(
+                        tbl = Table(
                             label=cluster.label,
                             id=cluster.id,
                             text="",

@@ -5,6 +5,7 @@ from io import BytesIO
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
 
 from docling_core.types.experimental.base import BoundingBox, Size
+from docling_core.types.experimental.document import BaseFigureData, TableCell
 from PIL.Image import Image
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing_extensions import Self
@@ -67,37 +68,7 @@ class LayoutPrediction(BaseModel):
     clusters: List[Cluster] = []
 
 
-class TableCell(BaseModel):
-    bbox: BoundingBox
-    row_span: int
-    col_span: int
-    start_row_offset_idx: int
-    end_row_offset_idx: int
-    start_col_offset_idx: int
-    end_col_offset_idx: int
-    text: str
-    column_header: bool = False
-    row_header: bool = False
-    row_section: bool = False
-
-    @model_validator(mode="before")
-    @classmethod
-    def from_dict_format(cls, data: Any) -> Any:
-        if isinstance(data, Dict):
-            text = data["bbox"].get("token", "")
-            if not len(text):
-                text_cells = data.pop("text_cell_bboxes", None)
-                if text_cells:
-                    for el in text_cells:
-                        text += el["token"] + " "
-
-                text = text.strip()
-            data["text"] = text
-
-        return data
-
-
-class TableElement(BasePageElement):
+class Table(BasePageElement):
     otsl_seq: List[str]
     num_rows: int = 0
     num_cols: int = 0
@@ -105,18 +76,14 @@ class TableElement(BasePageElement):
 
 
 class TableStructurePrediction(BaseModel):
-    table_map: Dict[int, TableElement] = {}
+    table_map: Dict[int, Table] = {}
 
 
 class TextElement(BasePageElement): ...
 
 
-class FigureData(BaseModel):
-    pass
-
-
 class FigureElement(BasePageElement):
-    data: Optional[FigureData] = None
+    data: Optional[BaseFigureData] = None
     provenance: Optional[str] = None
     predicted_class: Optional[str] = None
     confidence: Optional[float] = None
@@ -139,7 +106,7 @@ class PagePredictions(BaseModel):
     equations_prediction: Optional[EquationPrediction] = None
 
 
-PageElement = Union[TextElement, TableElement, FigureElement]
+PageElement = Union[TextElement, Table, FigureElement]
 
 
 class AssembledUnit(BaseModel):

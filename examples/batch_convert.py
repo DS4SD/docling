@@ -32,8 +32,16 @@ def export_documents(
             with (output_dir / f"{doc_filename}.json").open("w") as fp:
                 fp.write(json.dumps(conv_res.render_as_dict()))
 
+            # Export Docling document format to JSON (experimental):
+            with (output_dir / f"{doc_filename}.experimental.json").open("w") as fp:
+                fp.write(
+                    json.dumps(
+                        conv_res.experimental.model_dump(mode="json", by_alias=True)
+                    )
+                )
+
             # Export Docling document format to YAML (experimental):
-            with (output_dir / f"{doc_filename}.yaml").open("w") as fp:
+            with (output_dir / f"{doc_filename}.experimental.yaml").open("w") as fp:
                 fp.write(
                     yaml.safe_dump(
                         conv_res.experimental.model_dump(mode="json", by_alias=True)

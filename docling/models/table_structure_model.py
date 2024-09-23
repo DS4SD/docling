@@ -3,15 +3,11 @@ from typing import Iterable, List
 
 import numpy
 from docling_core.types.experimental.base import BoundingBox
+from docling_core.types.experimental.document import TableCell
 from docling_ibm_models.tableformer.data_management.tf_predictor import TFPredictor
 from PIL import ImageDraw
 
-from docling.datamodel.base_models import (
-    Page,
-    TableCell,
-    TableElement,
-    TableStructurePrediction,
-)
+from docling.datamodel.base_models import Page, Table, TableStructurePrediction
 
 
 class TableStructureModel:
@@ -32,7 +28,7 @@ class TableStructureModel:
             self.tf_predictor = TFPredictor(self.tm_config)
             self.scale = 2.0  # Scale up table input images to 144 dpi
 
-    def draw_table_and_cells(self, page: Page, tbl_list: List[TableElement]):
+    def draw_table_and_cells(self, page: Page, tbl_list: List[Table]):
         image = (
             page._backend.get_page_image()
         )  # make new image to avoid drawing on the saved ones
@@ -134,7 +130,7 @@ class TableStructureModel:
                     num_cols = table_out["predict_details"]["num_cols"]
                     otsl_seq = table_out["predict_details"]["prediction"]["rs_seq"]
 
-                    tbl = TableElement(
+                    tbl = Table(
                         otsl_seq=otsl_seq,
                         table_cells=table_cells,
                         num_rows=num_rows,
