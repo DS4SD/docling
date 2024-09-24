@@ -1,3 +1,17 @@
+## [v1.14.0](https://github.com/DS4SD/docling/releases/tag/v1.14.0) - 2024-09-24
+
+### Feature
+
+* Add URL support to CLI ([#99](https://github.com/DS4SD/docling/issues/99)) ([`3c46e42`](https://github.com/DS4SD/docling/commit/3c46e4266cf1ad8d3a99aa33636d84d34222b4fe))
+
+### Fix
+
+* Fix OCR setting for pypdfium, minor refactor ([#102](https://github.com/DS4SD/docling/issues/102)) ([`d96b96c`](https://github.com/DS4SD/docling/commit/d96b96c8481a8ae68545a34aaf9b8d5a6637a6be))
+
+### Documentation
+
+* Document CLI, minor README revamp ([#100](https://github.com/DS4SD/docling/issues/100)) ([`f8f2303`](https://github.com/DS4SD/docling/commit/f8f2303348c4bbcb7903ff172746a69607e53271))
+
 ## [v1.13.1](https://github.com/DS4SD/docling/releases/tag/v1.13.1) - 2024-09-23
 
 ### Fix
