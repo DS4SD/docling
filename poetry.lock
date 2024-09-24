@@ -862,7 +862,7 @@ files = []
 develop = false
 
 [package.dependencies]
-docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", branch = "cau/new-format-dev"}
+docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "a83ff0056138d83ac2cb52bfb2ab1728ff86972f"}
 docutils = "!=0.21"
 matplotlib = "^3.7.1"
 networkx = "^3.1"
@@ -882,7 +882,7 @@ toolkit = ["deepsearch-toolkit (>=0.31.0)"]
 type = "git"
 url = "ssh://git@github.com/DS4SD/deepsearch-glm.git"
 reference = "cau/new-format-dev"
-resolved_reference = "60e4bda21fbe7ee8849d27a9321ba37cca04e7aa"
+resolved_reference = "c26b52e8faf789cb31fcbed816d25e775391832f"
 
 [[package]]
 name = "deprecated"
@@ -960,8 +960,8 @@ tabulate = "^0.9.0"
 [package.source]
 type = "git"
 url = "ssh://git@github.com/DS4SD/docling-core.git"
-reference = "cau/new-format-dev"
-resolved_reference = "0a1e6ce9559ffccf50c5e63c33962ac8fde35648"
+reference = "a83ff0056138d83ac2cb52bfb2ab1728ff86972f"
+resolved_reference = "a83ff0056138d83ac2cb52bfb2ab1728ff86972f"
 
 [[package]]
 name = "docling-ibm-models"
@@ -1059,12 +1059,12 @@ files = [
 
 [[package]]
 name = "easyocr"
-version = "1.7.1"
+version = "1.7.2"
 description = "End-to-End Multi-Lingual Optical Character Recognition (OCR) Solution"
 optional = false
 python-versions = "*"
 files = [
-    {file = "easyocr-1.7.1-py3-none-any.whl", hash = "sha256:5b0a2e7cfdfc6c1ec99d9583663e570e4189dca6fbf373f074b21b8809e44d2b"},
+    {file = "easyocr-1.7.2-py3-none-any.whl", hash = "sha256:5be12f9b0e595d443c9c3d10b0542074b50f0ec2d98b141a109cd961fd1c177c"},
 ]
 
 [package.dependencies]
@@ -7314,4 +7314,4 @@ examples = ["langchain-huggingface", "langchain-milvus", "langchain-text-splitte
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "1b908180d822d74ae8033e8b6c650b8d00b4365fc7dd36cea6505305651b79b6"
+content-hash = "325aebca1bdc6e0cfeb8fc59a84102a804d750211fe8e59cd4cb15876c1ca12e"

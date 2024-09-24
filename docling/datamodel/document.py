@@ -12,6 +12,7 @@ from docling_core.types import Table as DsSchemaTable
 from docling_core.types.doc.base import BoundingBox as DsBoundingBox
 from docling_core.types.doc.base import Figure, TableCell
 from docling_core.types.experimental.document import DoclingDocument, FileInfo
+from docling_core.types.experimental.labels import PageLabel
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
@@ -34,21 +35,21 @@ from docling.utils.utils import create_file_hash
 _log = logging.getLogger(__name__)
 
 layout_label_to_ds_type = {
-    "Title": "title",
-    "Document Index": "table-of-path_or_stream",
-    "Section-header": "subtitle-level-1",
-    "Checkbox-Selected": "checkbox-selected",
-    "Checkbox-Unselected": "checkbox-unselected",
-    "Caption": "caption",
-    "Page-header": "page-header",
-    "Page-footer": "page-footer",
-    "Footnote": "footnote",
-    "Table": "table",
-    "Formula": "equation",
-    "List-item": "paragraph",
-    "Code": "paragraph",
-    "Picture": "figure",
-    "Text": "paragraph",
+    PageLabel.TITLE: "title",
+    PageLabel.DOCUMENT_INDEX: "table-of-contents",
+    PageLabel.SECTION_HEADER: "subtitle-level-1",
+    PageLabel.CHECKBOX_SELECTED: "checkbox-selected",
+    PageLabel.CHECKBOX_UNSELECTED: "checkbox-unselected",
+    PageLabel.CAPTION: "caption",
+    PageLabel.PAGE_HEADER: "page-header",
+    PageLabel.PAGE_FOOTER: "page-footer",
+    PageLabel.FOOTNOTE: "footnote",
+    PageLabel.TABLE: "table",
+    PageLabel.FORMULA: "equation",
+    PageLabel.LIST_ITEM: "paragraph",
+    PageLabel.CODE: "paragraph",
+    PageLabel.PICTURE: "figure",
+    PageLabel.TEXT: "paragraph",
 }
 
 _EMPTY_DOC = DsDocument(

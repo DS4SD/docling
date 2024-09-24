@@ -23,7 +23,7 @@ packages = [{include = "docling"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 pydantic = "^2.0.0"
-docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", branch = "cau/new-format-dev"}
+docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "a83ff0056138d83ac2cb52bfb2ab1728ff86972f"}
 docling-ibm-models = "^1.2.0"
 deepsearch-glm = {git = "ssh://git@github.com/DS4SD/deepsearch-glm.git", branch = "cau/new-format-dev"}
 

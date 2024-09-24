@@ -48,6 +48,14 @@ def export_documents(
                     )
                 )
 
+            # Export Docling document format to doctags (experimental):
+            with (output_dir / f"{doc_filename}.experimental.doctags").open("w") as fp:
+                fp.write(conv_res.experimental.export_to_document_tokens())
+
+            # Export Docling document format to markdown (experimental):
+            with (output_dir / f"{doc_filename}.experimental.md").open("w") as fp:
+                fp.write(conv_res.experimental.export_to_markdown())
+
             # Export Text format:
             with (output_dir / f"{doc_filename}.txt").open("w") as fp:
                 fp.write(conv_res.render_as_text())

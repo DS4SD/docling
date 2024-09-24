@@ -6,6 +6,7 @@ from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
 
 from docling_core.types.experimental.base import BoundingBox, Size
 from docling_core.types.experimental.document import BaseFigureData, TableCell
+from docling_core.types.experimental.labels import PageLabel
 from PIL.Image import Image
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing_extensions import Self
@@ -50,14 +51,14 @@ class OcrCell(Cell):
 
 class Cluster(BaseModel):
     id: int
-    label: str
+    label: PageLabel
     bbox: BoundingBox
     confidence: float = 1.0
     cells: List[Cell] = []
 
 
 class BasePageElement(BaseModel):
-    label: str
+    label: PageLabel
     id: int
     page_no: int
     cluster: Cluster
