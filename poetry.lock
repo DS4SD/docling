@@ -862,7 +862,7 @@ files = []
 develop = false
 
 [package.dependencies]
-docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "a83ff0056138d83ac2cb52bfb2ab1728ff86972f"}
+docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "622f625df626bee12f15b6218bc831996925bb97"}
 docutils = "!=0.21"
 matplotlib = "^3.7.1"
 networkx = "^3.1"
@@ -881,8 +881,8 @@ toolkit = ["deepsearch-toolkit (>=0.31.0)"]
 [package.source]
 type = "git"
 url = "ssh://git@github.com/DS4SD/deepsearch-glm.git"
-reference = "cau/new-format-dev"
-resolved_reference = "c26b52e8faf789cb31fcbed816d25e775391832f"
+reference = "d527b9aff90f5bc7ae86bd19bb6f88dda2cc56ae"
+resolved_reference = "d527b9aff90f5bc7ae86bd19bb6f88dda2cc56ae"
 
 [[package]]
 name = "deprecated"
@@ -960,8 +960,8 @@ tabulate = "^0.9.0"
 [package.source]
 type = "git"
 url = "ssh://git@github.com/DS4SD/docling-core.git"
-reference = "a83ff0056138d83ac2cb52bfb2ab1728ff86972f"
-resolved_reference = "a83ff0056138d83ac2cb52bfb2ab1728ff86972f"
+reference = "622f625df626bee12f15b6218bc831996925bb97"
+resolved_reference = "622f625df626bee12f15b6218bc831996925bb97"
 
 [[package]]
 name = "docling-ibm-models"
@@ -7314,4 +7314,4 @@ examples = ["langchain-huggingface", "langchain-milvus", "langchain-text-splitte
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "325aebca1bdc6e0cfeb8fc59a84102a804d750211fe8e59cd4cb15876c1ca12e"
+content-hash = "ad7eaa5f92a5ad2fefae2b284175e82dc4635dda7f26179f5c94d1be611c157e"
