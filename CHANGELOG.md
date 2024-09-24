@@ -1,3 +1,9 @@
+## [v1.15.0](https://github.com/DS4SD/docling/releases/tag/v1.15.0) - 2024-09-24
+
+### Feature
+
+* Add figure in markdown ([#98](https://github.com/DS4SD/docling/issues/98)) ([`6a03c20`](https://github.com/DS4SD/docling/commit/6a03c208ecc9176b0be413594114ce8a3f213371))
+
 ## [v1.14.0](https://github.com/DS4SD/docling/releases/tag/v1.14.0) - 2024-09-24
 
 ### Feature
