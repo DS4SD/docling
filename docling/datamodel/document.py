@@ -324,8 +324,10 @@ class ConvertedDocument(BaseModel):
             "paragraph",
             "caption",
             "table",
+            "figure",
         ],
         strict_text: bool = False,
+        image_placeholder: str = "<!-- image -->",
     ):
         return self.output.export_to_markdown(
             delim=delim,
@@ -333,6 +335,7 @@ class ConvertedDocument(BaseModel):
             main_text_stop=main_text_stop,
             main_text_labels=main_text_labels,
             strict_text=strict_text,
+            image_placeholder=image_placeholder,
         )
 
     def render_as_text(

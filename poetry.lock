@@ -957,13 +957,13 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "1.5.0"
+version = "1.6.2"
 description = "A python library to define and validate data types in Docling."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "docling_core-1.5.0-py3-none-any.whl", hash = "sha256:1a8bb4940ecbf98c6381298f3ad121d95aa8895883150a5dd113a348a0987d09"},
-    {file = "docling_core-1.5.0.tar.gz", hash = "sha256:bc8ddbae16e2b740225f37758125eb95b9fcd4202542c4547a9683a7ad423e10"},
+    {file = "docling_core-1.6.2-py3-none-any.whl", hash = "sha256:1473ab13910d76552015c10fe351b90079a00c225f76ada3cd4fc7442183ffd0"},
+    {file = "docling_core-1.6.2.tar.gz", hash = "sha256:63f2b8a683dec56568ee1cd7d25cea419c0291211a88a11f74079ff2d62ccd5e"},
 ]
 
 [package.dependencies]
@@ -972,7 +972,6 @@ jsonref = ">=1.1.0,<2.0.0"
 jsonschema = ">=4.16.0,<5.0.0"
 pandas = ">=2.2.2,<3.0.0"
 pydantic = ">=2.6.0,<3.0.0"
-pyproject-toml = ">=0.0.10,<0.0.11"
 tabulate = ">=0.9.0,<0.10.0"
 
 [[package]]
@@ -4482,23 +4481,6 @@ flake8 = "6.1.0"
 tomli = {version = "*", markers = "python_version < \"3.11\""}
 
 [[package]]
-name = "pyproject-toml"
-version = "0.0.10"
-description = "Project intend to implement PEP 517, 518, 621, 631 and so on."
-optional = false
-python-versions = "*"
-files = [
-    {file = "pyproject-toml-0.0.10.tar.gz", hash = "sha256:f0ce0e9934ecb00c0e529b4a1c380edd3034c4be65516769c5f080bdb23dfcb3"},
-    {file = "pyproject_toml-0.0.10-py3-none-any.whl", hash = "sha256:257a7070617e1a0bcfd8f790817b30bd9193876023a9b9e7a6b4fc976acf4c3e"},
-]
-
-[package.dependencies]
-jsonschema = "*"
-setuptools = ">=42"
-toml = "*"
-wheel = "*"
-
-[[package]]
 name = "pyreadline3"
 version = "3.5.3"
 description = "A python implementation of GNU readline."
@@ -6257,17 +6239,6 @@ docs = ["setuptools-rust", "sphinx", "sphinx-rtd-theme"]
 testing = ["black (==22.3)", "datasets", "numpy", "pytest", "requests", "ruff"]
 
 [[package]]
-name = "toml"
-version = "0.10.2"
-description = "Python Library for Tom's Obvious, Minimal Language"
-optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
-files = [
-    {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
-    {file = "toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"},
-]
-
-[[package]]
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
@@ -7257,4 +7228,4 @@ examples = ["langchain-huggingface", "langchain-milvus", "langchain-text-splitte
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7ee1e9e99c23e075fb1f8722e4fc9e6c0b02a4282f4e67ebbcd75598720536b7"
+content-hash = "d6ede0493d8d2d0e250ba391d9ad32ced98541fbd4795b2b955d6f640736b3bc"
