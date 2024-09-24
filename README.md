@@ -22,8 +22,9 @@ Docling bundles PDF document conversion to JSON and Markdown in an easy, self-co
 * ⚡ Converts any PDF document to JSON or Markdown format, stable and lightning fast
 * 📑 Understands detailed page layout, reading order and recovers table structures
 * 📝 Extracts metadata from the document, such as title, authors, references and language
-* 🔍 Optionally applies OCR (use with scanned PDFs)
+* 🔍 Includes OCR support for scanned PDFs
 * 🤖 Integrates easily with LLM app / RAG frameworks like 🦙 LlamaIndex and 🦜🔗 LangChain
+* 💻 Provides a simple and convenient CLI
 
 ## Installation
 
@@ -35,31 +36,33 @@ pip install docling
 > [!NOTE]
 > Works on macOS and Linux environments. Windows platforms are currently not tested.
 
+<details>
+  <summary><b>Alternative PyTorch distributions</b></summary>
 
-### Use alternative PyTorch distributions
+  The Docling models depend on the [PyTorch](https://pytorch.org/) library.
+  Depending on your architecture, you might want to use a different distribution of `torch`.
+  For example, you might want support for different accelerator or for a cpu-only version.
+  All the different ways for installing `torch` are listed on their website <https://pytorch.org/>.
 
-The Docling models depend on the [PyTorch](https://pytorch.org/) library.
-Depending on your architecture, you might want to use a different distribution of `torch`.
-For example, you might want support for different accelerator or for a cpu-only version.
-All the different ways for installing `torch` are listed on their website <https://pytorch.org/>.
+  One common situation is the installation on Linux systems with cpu-only support.
+  In this case, we suggest the installation of Docling with the following options
 
-One common situation is the installation on Linux systems with cpu-only support.
-In this case, we suggest the installation of Docling with the following options
+  ```bash
+  # Example for installing on the Linux cpu-only version
+  pip install docling --extra-index-url https://download.pytorch.org/whl/cpu
+  ```
+</details>
 
-```bash
-# Example for installing on the Linux cpu-only version
-pip install docling --extra-index-url https://download.pytorch.org/whl/cpu
-```
+<details>
+  <summary><b>Docling development setup</b></summary>
 
+  To develop for Docling (features, bugfixes etc.), install as follows from your local clone's root dir:
+  ```bash
+  poetry install --all-extras
+  ```
+</details>
 
-### Development setup
-
-To develop for Docling, you need Python 3.10 / 3.11 / 3.12 and Poetry. You can then install from your local clone's root dir:
-```bash
-poetry install --all-extras
-```
-
-## Usage
+## Getting started
 
 ### Convert a single document
 
@@ -70,7 +73,6 @@ from docling.document_converter import DocumentConverter
 source = "https://arxiv.org/pdf/2408.09869"  # PDF path or URL
 converter = DocumentConverter()
 result = converter.convert_single(source)
-
 print(result.render_as_markdown())  # output: "## Docling Technical Report[...]"
 print(result.render_as_doctags())  # output: "<document><title><page_1><loc_20>..."
 ```
@@ -85,6 +87,51 @@ From a local repo clone, you can run it with:
 python examples/batch_convert.py
 ```
 The output of the above command will be written to `./scratch`.
+
+### CLI
+
+You can also use Docling directly from your command line to convert individual files —be it local or by URL— or whole directories.
+
+A simple example would look like this:
+```console
+docling https://arxiv.org/pdf/2206.01062
+```
+
+To see all available options (export formats etc.) run `docling --help`.
+
+<details>
+  <summary><b>CLI reference</b></summary>
+
+  Here are the available options as of this writing (for an up-to-date listing, run `docling --help`):
+
+  ```console
+  $ docling --help
+
+  Usage: docling [OPTIONS] source
+
+  ╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+  │ *    input_sources      source  PDF files to convert. Can be local file / directory paths or URL. [default: None] [required] │
+  ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+  ╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+  │ --json       --no-json                            If enabled the document is exported as JSON. [default: no-json]            │
+  │ --md         --no-md                              If enabled the document is exported as Markdown. [default: md]             │
+  │ --txt        --no-txt                             If enabled the document is exported as Text. [default: no-txt]             │
+  │ --doctags    --no-doctags                         If enabled the document is exported as Doc Tags. [default: no-doctags]     │
+  │ --ocr        --no-ocr                             If enabled, the bitmap content will be processed using OCR. [default: ocr] │
+  │ --backend                    [pypdfium2|docling]  The PDF backend to use. [default: docling]                                 │
+  │ --output                     PATH                 Output directory where results are saved. [default: .]                     │
+  │ --version                                         Show version information.                                                  │
+  │ --help                                            Show this message and exit.                                                │
+  ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+  ```
+</details>
+
+### RAG
+Check out the following examples showcasing RAG using Docling with standard LLM application frameworks:
+- [Basic RAG pipeline with 🦙 LlamaIndex](https://github.com/DS4SD/docling/tree/main/examples/rag_llamaindex.ipynb)
+- [Basic RAG pipeline with 🦜🔗 LangChain](https://github.com/DS4SD/docling/tree/main/examples/rag_langchain.ipynb)
+
+## Advanced features
 
 ### Adjust pipeline features
 
@@ -143,11 +190,6 @@ results = doc_converter.convert(conv_input)
 ### Limit resource usage
 
 You can limit the CPU threads used by Docling by setting the environment variable `OMP_NUM_THREADS` accordingly. The default setting is using 4 CPU threads.
-
-### RAG
-Check out the following examples showcasing RAG using Docling with standard LLM application frameworks:
-- [Basic RAG pipeline with 🦙 LlamaIndex](https://github.com/DS4SD/docling/tree/main/examples/rag_llamaindex.ipynb)
-- [Basic RAG pipeline with 🦜🔗 LangChain](https://github.com/DS4SD/docling/tree/main/examples/rag_langchain.ipynb)
 
 ## Technical report
 
