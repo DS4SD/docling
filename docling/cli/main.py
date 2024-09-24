@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Annotated, Iterable, List, Optional
 
 import typer
-from pydantic import AnyUrl
+from docling_core.utils.file import resolve_file_source
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
@@ -109,11 +109,11 @@ def export_documents(
 @app.command(no_args_is_help=True)
 def convert(
     input_sources: Annotated[
-        List[Path],
+        List[str],
         typer.Argument(
             ...,
             metavar="source",
-            help="PDF files to convert. Directories are also accepted.",
+            help="PDF files to convert. Can be local file / directory paths or URL.",
         ),
     ],
     export_json: Annotated[
@@ -167,7 +167,8 @@ def convert(
     logging.basicConfig(level=logging.INFO)
 
     input_doc_paths: List[Path] = []
-    for source in input_sources:
+    for src in input_sources:
+        source = resolve_file_source(source=src)
         if not source.exists():
             err_console.print(
                 f"[red]Error: The input file {source} does not exist.[/red]"
@@ -179,58 +180,25 @@ def convert(
         else:
             input_doc_paths.append(source)
 
-    ###########################################################################
+    match backend:
+        case Backend.PYPDFIUM2:
+            do_cell_matching = ocr  # only do cell matching when OCR enabled
+            pdf_backend = PyPdfiumDocumentBackend
+        case Backend.DOCLING:
+            do_cell_matching = True
+            pdf_backend = DoclingParseDocumentBackend
+        case _:
+            raise RuntimeError(f"Unexpected backend type {backend}")
 
-    # The following sections contain a combination of PipelineOptions
-    # and PDF Backends for various configurations.
-    # Uncomment one section at the time to see the differences in the output.
-
-    doc_converter = None
-    if backend == Backend.PYPDFIUM2 and not ocr:  # PyPdfium without OCR
-        pipeline_options = PipelineOptions()
-        pipeline_options.do_ocr = False
-        pipeline_options.do_table_structure = True
-        pipeline_options.table_structure_options.do_cell_matching = False
-
-        doc_converter = DocumentConverter(
-            pipeline_options=pipeline_options,
-            pdf_backend=PyPdfiumDocumentBackend,
-        )
-
-    elif backend == Backend.PYPDFIUM2.value and ocr:  # PyPdfium with OCR
-        pipeline_options = PipelineOptions()
-        pipeline_options.do_ocr = False
-        pipeline_options.do_table_structure = True
-        pipeline_options.table_structure_options.do_cell_matching = True
-
-        doc_converter = DocumentConverter(
-            pipeline_options=pipeline_options,
-            pdf_backend=PyPdfiumDocumentBackend,
-        )
-
-    elif backend == Backend.DOCLING.value and not ocr:  # Docling Parse without OCR
-        pipeline_options = PipelineOptions()
-        pipeline_options.do_ocr = False
-        pipeline_options.do_table_structure = True
-        pipeline_options.table_structure_options.do_cell_matching = True
-
-        doc_converter = DocumentConverter(
-            pipeline_options=pipeline_options,
-            pdf_backend=DoclingParseDocumentBackend,
-        )
-
-    elif backend == Backend.DOCLING.value and ocr:  # Docling Parse with OCR
-        pipeline_options = PipelineOptions()
-        pipeline_options.do_ocr = True
-        pipeline_options.do_table_structure = True
-        pipeline_options.table_structure_options.do_cell_matching = True
-
-        doc_converter = DocumentConverter(
-            pipeline_options=pipeline_options,
-            pdf_backend=DoclingParseDocumentBackend,
-        )
-
-    ###########################################################################
+    pipeline_options = PipelineOptions(
+        do_ocr=ocr,
+        do_table_structure=True,
+    )
+    pipeline_options.table_structure_options.do_cell_matching = do_cell_matching
+    doc_converter = DocumentConverter(
+        pipeline_options=pipeline_options,
+        pdf_backend=pdf_backend,
+    )
 
     # Define input files
     input = DocumentConversionInput.from_paths(input_doc_paths)
