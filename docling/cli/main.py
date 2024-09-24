@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Annotated, Iterable, List, Optional
 
 import typer
+from docling_core.utils.file import resolve_file_source
 from pydantic import AnyUrl
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
@@ -109,11 +110,11 @@ def export_documents(
 @app.command(no_args_is_help=True)
 def convert(
     input_sources: Annotated[
-        List[Path],
+        List[str],
         typer.Argument(
             ...,
             metavar="source",
-            help="PDF files to convert. Directories are also accepted.",
+            help="PDF files to convert. Can be local file / directory paths or URL.",
         ),
     ],
     export_json: Annotated[
@@ -167,7 +168,8 @@ def convert(
     logging.basicConfig(level=logging.INFO)
 
     input_doc_paths: List[Path] = []
-    for source in input_sources:
+    for src in input_sources:
+        source = resolve_file_source(source=src)
         if not source.exists():
             err_console.print(
                 f"[red]Error: The input file {source} does not exist.[/red]"
