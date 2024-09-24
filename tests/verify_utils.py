@@ -122,6 +122,10 @@ def verify_md(doc_pred_md, doc_true_md):
     return doc_pred_md == doc_true_md
 
 
+def verify_dt(doc_pred_dt, doc_true_dt):
+    return doc_pred_dt == doc_true_dt
+
+
 def verify_conversion_result(
     input_path: Path, doc_result: ConversionResult, generate=False
 ):
@@ -134,10 +138,12 @@ def verify_conversion_result(
     doc_pred_pages: List[Page] = doc_result.pages
     doc_pred: DsDocument = doc_result.output
     doc_pred_md = doc_result.render_as_markdown()
+    doc_pred_dt = doc_result.render_as_doctags()
 
     pages_path = input_path.with_suffix(".pages.json")
     json_path = input_path.with_suffix(".json")
     md_path = input_path.with_suffix(".md")
+    dt_path = input_path.with_suffix(".doctags.txt")
 
     if generate:  # only used when re-generating truth
         with open(pages_path, "w") as fw:
@@ -148,6 +154,9 @@ def verify_conversion_result(
 
         with open(md_path, "w") as fw:
             fw.write(doc_pred_md)
+
+        with open(dt_path, "w") as fw:
+            fw.write(doc_pred_dt)
     else:  # default branch in test
         with open(pages_path, "r") as fr:
             doc_true_pages = PageList.validate_json(fr.read())
@@ -157,6 +166,9 @@ def verify_conversion_result(
 
         with open(md_path, "r") as fr:
             doc_true_md = fr.read()
+
+        with open(dt_path, "r") as fr:
+            doc_true_dt = fr.read()
 
         assert verify_cells(
             doc_pred_pages, doc_true_pages
@@ -173,3 +185,7 @@ def verify_conversion_result(
         assert verify_md(
             doc_pred_md, doc_true_md
         ), f"Mismatch in Markdown prediction for {input_path}"
+
+        assert verify_dt(
+            doc_pred_dt, doc_true_dt
+        ), f"Mismatch in DocTags prediction for {input_path}"

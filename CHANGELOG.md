@@ -1,3 +1,9 @@
+## [v1.13.1](https://github.com/DS4SD/docling/releases/tag/v1.13.1) - 2024-09-23
+
+### Fix
+
+* Updated the render_as_doctags with the new arguments from docling-core ([#93](https://github.com/DS4SD/docling/issues/93)) ([`4794ce4`](https://github.com/DS4SD/docling/commit/4794ce460a542a730fd5a72a7be7f94a07ed5d12))
+
 ## [v1.13.0](https://github.com/DS4SD/docling/releases/tag/v1.13.0) - 2024-09-18
 
 ### Feature
