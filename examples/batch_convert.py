@@ -12,6 +12,8 @@ from docling.document_converter import DocumentConverter
 
 _log = logging.getLogger(__name__)
 
+USE_EXPERIMENTAL = False
+
 
 def export_documents(
     conv_results: Iterable[ConversionResult],
@@ -32,30 +34,6 @@ def export_documents(
             with (output_dir / f"{doc_filename}.json").open("w") as fp:
                 fp.write(json.dumps(conv_res.render_as_dict()))
 
-            # Export Docling document format to JSON (experimental):
-            with (output_dir / f"{doc_filename}.experimental.json").open("w") as fp:
-                fp.write(
-                    json.dumps(
-                        conv_res.experimental.model_dump(mode="json", by_alias=True)
-                    )
-                )
-
-            # Export Docling document format to YAML (experimental):
-            with (output_dir / f"{doc_filename}.experimental.yaml").open("w") as fp:
-                fp.write(
-                    yaml.safe_dump(
-                        conv_res.experimental.model_dump(mode="json", by_alias=True)
-                    )
-                )
-
-            # Export Docling document format to doctags (experimental):
-            with (output_dir / f"{doc_filename}.experimental.doctags").open("w") as fp:
-                fp.write(conv_res.experimental.export_to_document_tokens())
-
-            # Export Docling document format to markdown (experimental):
-            with (output_dir / f"{doc_filename}.experimental.md").open("w") as fp:
-                fp.write(conv_res.experimental.export_to_markdown())
-
             # Export Text format:
             with (output_dir / f"{doc_filename}.txt").open("w") as fp:
                 fp.write(conv_res.render_as_text())
@@ -67,6 +45,33 @@ def export_documents(
             # Export Document Tags format:
             with (output_dir / f"{doc_filename}.doctags").open("w") as fp:
                 fp.write(conv_res.render_as_doctags())
+
+            if USE_EXPERIMENTAL:
+                # Export Docling document format to JSON (experimental):
+                with (output_dir / f"{doc_filename}.experimental.json").open("w") as fp:
+                    fp.write(
+                        json.dumps(
+                            conv_res.experimental.model_dump(mode="json", by_alias=True)
+                        )
+                    )
+
+                # Export Docling document format to YAML (experimental):
+                with (output_dir / f"{doc_filename}.experimental.yaml").open("w") as fp:
+                    fp.write(
+                        yaml.safe_dump(
+                            conv_res.experimental.model_dump(mode="json", by_alias=True)
+                        )
+                    )
+
+                # Export Docling document format to doctags (experimental):
+                with (output_dir / f"{doc_filename}.experimental.doctags").open(
+                    "w"
+                ) as fp:
+                    fp.write(conv_res.experimental.export_to_document_tokens())
+
+                # Export Docling document format to markdown (experimental):
+                with (output_dir / f"{doc_filename}.experimental.md").open("w") as fp:
+                    fp.write(conv_res.experimental.export_to_markdown())
 
         elif conv_res.status == ConversionStatus.PARTIAL_SUCCESS:
             _log.info(
