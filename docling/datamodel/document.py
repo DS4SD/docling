@@ -16,7 +16,7 @@ from docling_core.types.experimental.labels import PageLabel
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
-from docling.backend.abstract_backend import PdfDocumentBackend
+from docling.backend.abstract_backend import AbstractDocumentBackend, PdfDocumentBackend
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.datamodel.base_models import (
     AssembledUnit,
@@ -24,6 +24,7 @@ from docling.datamodel.base_models import (
     DocumentStream,
     ErrorItem,
     FigureElement,
+    InputFormat,
     Page,
     PageElement,
     Table,
@@ -65,6 +66,13 @@ _EMPTY_DOCLING_DOC = DoclingDocument(
     description={}, file_info=FileInfo(document_hash="123xyz")
 )  # TODO: Stub
 
+_input_format_default_backends: Dict[InputFormat, Type[AbstractDocumentBackend]] = {
+    InputFormat.PDF: DoclingParseDocumentBackend,
+    InputFormat.DOCX: None,
+    InputFormat.PPTX: None,
+    InputFormat.IMAGE: None,
+}
+
 
 class InputDocument(BaseModel):
     file: PurePath = None
@@ -82,9 +90,12 @@ class InputDocument(BaseModel):
         path_or_stream: Union[BytesIO, Path],
         filename: Optional[str] = None,
         limits: Optional[DocumentLimits] = None,
-        pdf_backend=DoclingParseDocumentBackend,
+        backend: Optional[Type[AbstractDocumentBackend]] = None,
     ):
         super().__init__()
+
+        if not backend:
+            backend = _input_format_default_backends[InputFormat.PDF]
 
         self.limits = limits or DocumentLimits()
 
@@ -96,7 +107,7 @@ class InputDocument(BaseModel):
                     self.valid = False
                 else:
                     self.document_hash = create_file_hash(path_or_stream)
-                    self._backend = pdf_backend(
+                    self._backend = backend(
                         path_or_stream=path_or_stream, document_hash=self.document_hash
                     )
 
@@ -108,7 +119,7 @@ class InputDocument(BaseModel):
                     self.valid = False
                 else:
                     self.document_hash = create_file_hash(path_or_stream)
-                    self._backend = pdf_backend(
+                    self._backend = backend(
                         path_or_stream=path_or_stream, document_hash=self.document_hash
                     )
 
@@ -435,14 +446,14 @@ class DocumentConversionInput(BaseModel):
         for obj in self._path_or_stream_iterator:
             if isinstance(obj, Path):
                 yield InputDocument(
-                    path_or_stream=obj, limits=self.limits, pdf_backend=pdf_backend
+                    path_or_stream=obj, limits=self.limits, backend=pdf_backend
                 )
             elif isinstance(obj, DocumentStream):
                 yield InputDocument(
                     path_or_stream=obj.stream,
                     filename=obj.filename,
                     limits=self.limits,
-                    pdf_backend=pdf_backend,
+                    backend=pdf_backend,
                 )
 
     @classmethod

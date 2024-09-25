@@ -22,6 +22,14 @@ class ConversionStatus(str, Enum):
     PARTIAL_SUCCESS = auto()
 
 
+class InputFormat(str, Enum):
+    DOCX = auto()
+    PPTX = auto()
+    HTML = auto()
+    IMAGE = auto()
+    PDF = auto()
+
+
 class DocInputType(str, Enum):
     PATH = auto()
     STREAM = auto()

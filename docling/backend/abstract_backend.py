@@ -10,6 +10,24 @@ if TYPE_CHECKING:
     from docling.datamodel.base_models import Cell
 
 
+class AbstractDocumentBackend(ABC):
+    @abstractmethod
+    def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
+        self.path_or_stream = path_or_stream
+        self.document_hash = document_hash
+
+    @abstractmethod
+    def is_valid(self) -> bool:
+        pass
+
+    @abstractmethod
+    def unload(self):
+        if isinstance(self.path_or_stream, BytesIO):
+            self.path_or_stream.close()
+
+        self.path_or_stream = None
+
+
 class PdfPageBackend(ABC):
 
     @abstractmethod
@@ -43,12 +61,7 @@ class PdfPageBackend(ABC):
         pass
 
 
-class PdfDocumentBackend(ABC):
-    @abstractmethod
-    def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
-        self.path_or_stream = path_or_stream
-        self.document_hash = document_hash
-
+class PdfDocumentBackend(AbstractDocumentBackend):
     @abstractmethod
     def load_page(self, page_no: int) -> PdfPageBackend:
         pass
@@ -56,14 +69,3 @@ class PdfDocumentBackend(ABC):
     @abstractmethod
     def page_count(self) -> int:
         pass
-
-    @abstractmethod
-    def is_valid(self) -> bool:
-        pass
-
-    @abstractmethod
-    def unload(self):
-        if isinstance(self.path_or_stream, BytesIO):
-            self.path_or_stream.close()
-
-        self.path_or_stream = None
