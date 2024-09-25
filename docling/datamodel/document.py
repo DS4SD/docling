@@ -62,7 +62,7 @@ _EMPTY_DOC = DsDocument(
 )
 
 _EMPTY_DOCLING_DOC = DoclingDocument(
-    description={}, file_info=FileInfo(document_hash="123xyz")
+    description={}, file_info=FileInfo(filename="dummy", document_hash="123xyz")
 )  # TODO: Stub
 
 

@@ -862,7 +862,7 @@ files = []
 develop = false
 
 [package.dependencies]
-docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "b50d53c05bf755ddb73c7d33ececdb542877662a"}
+docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "ce0b7ee64750944e530d03a1cf22a75636fa2775"}
 docutils = "!=0.21"
 matplotlib = "^3.7.1"
 networkx = "^3.1"
@@ -881,8 +881,8 @@ toolkit = ["deepsearch-toolkit (>=0.31.0)"]
 [package.source]
 type = "git"
 url = "ssh://git@github.com/DS4SD/deepsearch-glm.git"
-reference = "f45ad08c02a4bc69f611fef540a8f10df53870b6"
-resolved_reference = "f45ad08c02a4bc69f611fef540a8f10df53870b6"
+reference = "abab9eeb11dbb400c9f1c1c962baf350bbe6496f"
+resolved_reference = "abab9eeb11dbb400c9f1c1c962baf350bbe6496f"
 
 [[package]]
 name = "deprecated"
@@ -953,14 +953,13 @@ jsonref = "^1.1.0"
 jsonschema = "^4.16.0"
 pandas = "^2.2.2"
 pydantic = "^2.6.0"
-pydantic-extra-types = "^2.9.0"
 tabulate = "^0.9.0"
 
 [package.source]
 type = "git"
 url = "ssh://git@github.com/DS4SD/docling-core.git"
-reference = "b50d53c05bf755ddb73c7d33ececdb542877662a"
-resolved_reference = "b50d53c05bf755ddb73c7d33ececdb542877662a"
+reference = "ce0b7ee64750944e530d03a1cf22a75636fa2775"
+resolved_reference = "ce0b7ee64750944e530d03a1cf22a75636fa2775"
 
 [[package]]
 name = "docling-ibm-models"
@@ -4019,13 +4018,13 @@ virtualenv = ">=20.10.0"
 
 [[package]]
 name = "prompt-toolkit"
-version = "3.0.47"
+version = "3.0.48"
 description = "Library for building powerful interactive command lines in Python"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "prompt_toolkit-3.0.47-py3-none-any.whl", hash = "sha256:0d7bfa67001d5e39d02c224b663abc33687405033a8c422d0d675a5a13361d10"},
-    {file = "prompt_toolkit-3.0.47.tar.gz", hash = "sha256:1e1b29cb58080b1e69f207c893a1a7bf16d127a5c30c9d17a25a5d77792e5360"},
+    {file = "prompt_toolkit-3.0.48-py3-none-any.whl", hash = "sha256:f49a827f90062e411f1ce1f854f2aedb3c23353244f8108b89283587397ac10e"},
+    {file = "prompt_toolkit-3.0.48.tar.gz", hash = "sha256:d6623ab0477a80df74e646bdbc93621143f5caf104206aa29294d53de1a03d90"},
 ]
 
 [package.dependencies]
@@ -4353,28 +4352,6 @@ files = [
 typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
-name = "pydantic-extra-types"
-version = "2.9.0"
-description = "Extra Pydantic types."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pydantic_extra_types-2.9.0-py3-none-any.whl", hash = "sha256:f0bb975508572ba7bf3390b7337807588463b7248587e69f43b1ad7c797530d0"},
-    {file = "pydantic_extra_types-2.9.0.tar.gz", hash = "sha256:e061c01636188743bb69f368dcd391f327b8cfbfede2fe1cbb1211b06601ba3b"},
-]
-
-[package.dependencies]
-pydantic = ">=2.5.2"
-
-[package.extras]
-all = ["pendulum (>=3.0.0,<4.0.0)", "phonenumbers (>=8,<9)", "pycountry (>=23)", "python-ulid (>=1,<2)", "python-ulid (>=1,<3)", "pytz (>=2024.1)", "semver (>=3.0.2)", "tzdata (>=2024.1)"]
-pendulum = ["pendulum (>=3.0.0,<4.0.0)"]
-phonenumbers = ["phonenumbers (>=8,<9)"]
-pycountry = ["pycountry (>=23)"]
-python-ulid = ["python-ulid (>=1,<2)", "python-ulid (>=1,<3)"]
-semver = ["semver (>=3.0.2)"]
-
-[[package]]
 name = "pydantic-settings"
 version = "2.5.2"
 description = "Settings management using Pydantic"
@@ -4449,13 +4426,13 @@ testutils = ["gitpython (>3)"]
 
 [[package]]
 name = "pymilvus"
-version = "2.4.6"
+version = "2.4.7"
 description = "Python Sdk for Milvus"
 optional = true
 python-versions = ">=3.8"
 files = [
-    {file = "pymilvus-2.4.6-py3-none-any.whl", hash = "sha256:b4c43472edc313b845d313be50610e19054e6954b2c5c3b515565c596c2d3d97"},
-    {file = "pymilvus-2.4.6.tar.gz", hash = "sha256:6ac3eb91c92cc01bbe444fe83f895f02d7b2546d96ac67998630bf31ac074d66"},
+    {file = "pymilvus-2.4.7-py3-none-any.whl", hash = "sha256:1e5d377bd40fa7eb459d3958dbd96201758f5cf997d41eb3d2d169d0b7fa462e"},
+    {file = "pymilvus-2.4.7.tar.gz", hash = "sha256:9ef460b940782a42e1b7b8ae0da03d8cc02d9d80044d13f4b689a7c935ec7aa7"},
 ]
 
 [package.dependencies]
@@ -7285,4 +7262,4 @@ examples = ["langchain-huggingface", "langchain-milvus", "langchain-text-splitte
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "3760931d493042f67b037079400af3750ddeece0f0f5c2f9f3c93579f51c5d5c"
+content-hash = "4e1fc1b9ebcaba913340146a9ecd58da9c3a10c0843f5118dd66a061bb650e7e"

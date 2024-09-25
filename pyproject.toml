@@ -23,9 +23,9 @@ packages = [{include = "docling"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 pydantic = "^2.0.0"
-docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "b50d53c05bf755ddb73c7d33ececdb542877662a"}
+docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "ce0b7ee64750944e530d03a1cf22a75636fa2775"}
 docling-ibm-models = "^1.2.0"
-deepsearch-glm = {git = "ssh://git@github.com/DS4SD/deepsearch-glm.git", rev = "f45ad08c02a4bc69f611fef540a8f10df53870b6"}
+deepsearch-glm = {git = "ssh://git@github.com/DS4SD/deepsearch-glm.git", rev = "abab9eeb11dbb400c9f1c1c962baf350bbe6496f"}
 
 filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"
