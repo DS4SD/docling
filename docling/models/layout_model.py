@@ -5,7 +5,7 @@ import time
 from typing import Iterable, List
 
 from docling_core.types.experimental.base import CoordOrigin
-from docling_core.types.experimental.labels import PageLabel
+from docling_core.types.experimental.labels import DocItemLabel
 from docling_ibm_models.layoutmodel.layout_predictor import LayoutPredictor
 from PIL import ImageDraw
 
@@ -24,23 +24,23 @@ _log = logging.getLogger(__name__)
 class LayoutModel:
 
     TEXT_ELEM_LABELS = [
-        PageLabel.TEXT,
-        PageLabel.FOOTNOTE,
-        PageLabel.CAPTION,
-        PageLabel.CHECKBOX_UNSELECTED,
-        PageLabel.CHECKBOX_SELECTED,
-        PageLabel.SECTION_HEADER,
-        PageLabel.PAGE_HEADER,
-        PageLabel.PAGE_FOOTER,
-        PageLabel.CODE,
-        PageLabel.LIST_ITEM,
+        DocItemLabel.TEXT,
+        DocItemLabel.FOOTNOTE,
+        DocItemLabel.CAPTION,
+        DocItemLabel.CHECKBOX_UNSELECTED,
+        DocItemLabel.CHECKBOX_SELECTED,
+        DocItemLabel.SECTION_HEADER,
+        DocItemLabel.PAGE_HEADER,
+        DocItemLabel.PAGE_FOOTER,
+        DocItemLabel.CODE,
+        DocItemLabel.LIST_ITEM,
         # "Formula",
     ]
-    PAGE_HEADER_LABELS = [PageLabel.PAGE_HEADER, PageLabel.PAGE_FOOTER]
+    PAGE_HEADER_LABELS = [DocItemLabel.PAGE_HEADER, DocItemLabel.PAGE_FOOTER]
 
-    TABLE_LABEL = PageLabel.TABLE
-    FIGURE_LABEL = PageLabel.PICTURE
-    FORMULA_LABEL = PageLabel.FORMULA
+    TABLE_LABEL = DocItemLabel.TABLE
+    FIGURE_LABEL = DocItemLabel.PICTURE
+    FORMULA_LABEL = DocItemLabel.FORMULA
 
     def __init__(self, config):
         self.config = config
@@ -51,27 +51,27 @@ class LayoutModel:
     def postprocess(self, clusters: List[Cluster], cells: List[Cell], page_height):
         MIN_INTERSECTION = 0.2
         CLASS_THRESHOLDS = {
-            PageLabel.CAPTION: 0.35,
-            PageLabel.FOOTNOTE: 0.35,
-            PageLabel.FORMULA: 0.35,
-            PageLabel.LIST_ITEM: 0.35,
-            PageLabel.PAGE_FOOTER: 0.35,
-            PageLabel.PAGE_HEADER: 0.35,
-            PageLabel.PICTURE: 0.2,  # low threshold adjust to capture chemical structures for examples.
-            PageLabel.SECTION_HEADER: 0.45,
-            PageLabel.TABLE: 0.35,
-            PageLabel.TEXT: 0.45,
-            PageLabel.TITLE: 0.45,
-            PageLabel.DOCUMENT_INDEX: 0.45,
-            PageLabel.CODE: 0.45,
-            PageLabel.CHECKBOX_SELECTED: 0.45,
-            PageLabel.CHECKBOX_UNSELECTED: 0.45,
-            PageLabel.FORM: 0.45,
-            PageLabel.KEY_VALUE_REGION: 0.45,
+            DocItemLabel.CAPTION: 0.35,
+            DocItemLabel.FOOTNOTE: 0.35,
+            DocItemLabel.FORMULA: 0.35,
+            DocItemLabel.LIST_ITEM: 0.35,
+            DocItemLabel.PAGE_FOOTER: 0.35,
+            DocItemLabel.PAGE_HEADER: 0.35,
+            DocItemLabel.PICTURE: 0.2,  # low threshold adjust to capture chemical structures for examples.
+            DocItemLabel.SECTION_HEADER: 0.45,
+            DocItemLabel.TABLE: 0.35,
+            DocItemLabel.TEXT: 0.45,
+            DocItemLabel.TITLE: 0.45,
+            DocItemLabel.DOCUMENT_INDEX: 0.45,
+            DocItemLabel.CODE: 0.45,
+            DocItemLabel.CHECKBOX_SELECTED: 0.45,
+            DocItemLabel.CHECKBOX_UNSELECTED: 0.45,
+            DocItemLabel.FORM: 0.45,
+            DocItemLabel.KEY_VALUE_REGION: 0.45,
         }
 
         CLASS_REMAPPINGS = {
-            PageLabel.DOCUMENT_INDEX: PageLabel.TABLE,
+            DocItemLabel.DOCUMENT_INDEX: DocItemLabel.TABLE,
         }
 
         _log.debug("================= Start postprocess function ====================")
@@ -258,7 +258,7 @@ class LayoutModel:
                     coord=c["bbox"], origin=CoordOrigin.BOTTOMLEFT
                 ).to_top_left_origin(page_height),
                 confidence=c["confidence"],
-                label=PageLabel(c["type"]),
+                label=DocItemLabel(c["type"]),
                 cells=cluster_cells,
             )
             clusters_out_new.append(c_new)
@@ -271,7 +271,7 @@ class LayoutModel:
             for ix, pred_item in enumerate(
                 self.layout_predictor.predict(page.get_image(scale=1.0))
             ):
-                label = PageLabel(
+                label = DocItemLabel(
                     pred_item["label"].lower().replace(" ", "_").replace("-", "_")
                 )  # Temporary, until docling-ibm-model uses docling-core types
                 cluster = Cluster(
