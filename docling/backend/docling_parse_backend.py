@@ -5,12 +5,13 @@ from pathlib import Path
 from typing import Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
+from docling_core.types.experimental.base import BoundingBox, CoordOrigin, Size
 from docling_parse.docling_parse import pdf_parser
 from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage
 
 from docling.backend.abstract_backend import PdfDocumentBackend, PdfPageBackend
-from docling.datamodel.base_models import BoundingBox, Cell, CoordOrigin, PageSize
+from docling.datamodel.base_models import Cell
 
 _log = logging.getLogger(__name__)
 
@@ -177,8 +178,8 @@ class DoclingParsePageBackend(PdfPageBackend):
 
         return image
 
-    def get_size(self) -> PageSize:
-        return PageSize(width=self._ppage.get_width(), height=self._ppage.get_height())
+    def get_size(self) -> Size:
+        return Size(width=self._ppage.get_width(), height=self._ppage.get_height())
 
     def unload(self):
         self._ppage = None

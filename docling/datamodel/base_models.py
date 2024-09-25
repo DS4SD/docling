@@ -4,6 +4,9 @@ from enum import Enum, auto
 from io import BytesIO
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
 
+from docling_core.types.experimental.base import BoundingBox, Size
+from docling_core.types.experimental.document import BaseFigureData, TableCell
+from docling_core.types.experimental.labels import DocItemLabel
 from PIL.Image import Image
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing_extensions import Self
@@ -24,11 +27,6 @@ class DocInputType(str, Enum):
     STREAM = auto()
 
 
-class CoordOrigin(str, Enum):
-    TOPLEFT = auto()
-    BOTTOMLEFT = auto()
-
-
 class DoclingComponentType(str, Enum):
     PDF_BACKEND = auto()
     MODEL = auto()
@@ -39,115 +37,6 @@ class ErrorItem(BaseModel):
     component_type: DoclingComponentType
     module_name: str
     error_message: str
-
-
-class PageSize(BaseModel):
-    width: float = 0.0
-    height: float = 0.0
-
-
-class BoundingBox(BaseModel):
-    l: float  # left
-    t: float  # top
-    r: float  # right
-    b: float  # bottom
-
-    coord_origin: CoordOrigin = CoordOrigin.TOPLEFT
-
-    @property
-    def width(self):
-        return self.r - self.l
-
-    @property
-    def height(self):
-        return abs(self.t - self.b)
-
-    def scaled(self, scale: float) -> "BoundingBox":
-        out_bbox = copy.deepcopy(self)
-        out_bbox.l *= scale
-        out_bbox.r *= scale
-        out_bbox.t *= scale
-        out_bbox.b *= scale
-
-        return out_bbox
-
-    def normalized(self, page_size: PageSize) -> "BoundingBox":
-        out_bbox = copy.deepcopy(self)
-        out_bbox.l /= page_size.width
-        out_bbox.r /= page_size.width
-        out_bbox.t /= page_size.height
-        out_bbox.b /= page_size.height
-
-        return out_bbox
-
-    def as_tuple(self):
-        if self.coord_origin == CoordOrigin.TOPLEFT:
-            return (self.l, self.t, self.r, self.b)
-        elif self.coord_origin == CoordOrigin.BOTTOMLEFT:
-            return (self.l, self.b, self.r, self.t)
-
-    @classmethod
-    def from_tuple(cls, coord: Tuple[float, ...], origin: CoordOrigin):
-        if origin == CoordOrigin.TOPLEFT:
-            l, t, r, b = coord[0], coord[1], coord[2], coord[3]
-            if r < l:
-                l, r = r, l
-            if b < t:
-                b, t = t, b
-
-            return BoundingBox(l=l, t=t, r=r, b=b, coord_origin=origin)
-        elif origin == CoordOrigin.BOTTOMLEFT:
-            l, b, r, t = coord[0], coord[1], coord[2], coord[3]
-            if r < l:
-                l, r = r, l
-            if b > t:
-                b, t = t, b
-
-            return BoundingBox(l=l, t=t, r=r, b=b, coord_origin=origin)
-
-    def area(self) -> float:
-        return (self.r - self.l) * (self.b - self.t)
-
-    def intersection_area_with(self, other: "BoundingBox") -> float:
-        # Calculate intersection coordinates
-        left = max(self.l, other.l)
-        top = max(self.t, other.t)
-        right = min(self.r, other.r)
-        bottom = min(self.b, other.b)
-
-        # Calculate intersection dimensions
-        width = right - left
-        height = bottom - top
-
-        # If the bounding boxes do not overlap, width or height will be negative
-        if width <= 0 or height <= 0:
-            return 0.0
-
-        return width * height
-
-    def to_bottom_left_origin(self, page_height) -> "BoundingBox":
-        if self.coord_origin == CoordOrigin.BOTTOMLEFT:
-            return self
-        elif self.coord_origin == CoordOrigin.TOPLEFT:
-            return BoundingBox(
-                l=self.l,
-                r=self.r,
-                t=page_height - self.t,
-                b=page_height - self.b,
-                coord_origin=CoordOrigin.BOTTOMLEFT,
-            )
-
-    def to_top_left_origin(self, page_height):
-        if self.coord_origin == CoordOrigin.TOPLEFT:
-            return self
-        elif self.coord_origin == CoordOrigin.BOTTOMLEFT:
-            return BoundingBox(
-                l=self.l,
-                r=self.r,
-                t=page_height - self.t,  # self.b
-                b=page_height - self.b,  # self.t
-                coord_origin=CoordOrigin.TOPLEFT,
-            )
 
 
 class Cell(BaseModel):
@@ -162,14 +51,14 @@ class OcrCell(Cell):
 
 class Cluster(BaseModel):
     id: int
-    label: str
+    label: DocItemLabel
     bbox: BoundingBox
     confidence: float = 1.0
     cells: List[Cell] = []
 
 
 class BasePageElement(BaseModel):
-    label: str
+    label: DocItemLabel
     id: int
     page_no: int
     cluster: Cluster
@@ -180,37 +69,7 @@ class LayoutPrediction(BaseModel):
     clusters: List[Cluster] = []
 
 
-class TableCell(BaseModel):
-    bbox: BoundingBox
-    row_span: int
-    col_span: int
-    start_row_offset_idx: int
-    end_row_offset_idx: int
-    start_col_offset_idx: int
-    end_col_offset_idx: int
-    text: str
-    column_header: bool = False
-    row_header: bool = False
-    row_section: bool = False
-
-    @model_validator(mode="before")
-    @classmethod
-    def from_dict_format(cls, data: Any) -> Any:
-        if isinstance(data, Dict):
-            text = data["bbox"].get("token", "")
-            if not len(text):
-                text_cells = data.pop("text_cell_bboxes", None)
-                if text_cells:
-                    for el in text_cells:
-                        text += el["token"] + " "
-
-                text = text.strip()
-            data["text"] = text
-
-        return data
-
-
-class TableElement(BasePageElement):
+class Table(BasePageElement):
     otsl_seq: List[str]
     num_rows: int = 0
     num_cols: int = 0
@@ -218,18 +77,14 @@ class TableElement(BasePageElement):
 
 
 class TableStructurePrediction(BaseModel):
-    table_map: Dict[int, TableElement] = {}
+    table_map: Dict[int, Table] = {}
 
 
 class TextElement(BasePageElement): ...
 
 
-class FigureData(BaseModel):
-    pass
-
-
 class FigureElement(BasePageElement):
-    data: Optional[FigureData] = None
+    data: Optional[BaseFigureData] = None
     provenance: Optional[str] = None
     predicted_class: Optional[str] = None
     confidence: Optional[float] = None
@@ -252,7 +107,7 @@ class PagePredictions(BaseModel):
     equations_prediction: Optional[EquationPrediction] = None
 
 
-PageElement = Union[TextElement, TableElement, FigureElement]
+PageElement = Union[TextElement, Table, FigureElement]
 
 
 class AssembledUnit(BaseModel):
@@ -266,7 +121,7 @@ class Page(BaseModel):
 
     page_no: int
     page_hash: Optional[str] = None
-    size: Optional[PageSize] = None
+    size: Optional[Size] = None
     cells: List[Cell] = []
     predictions: PagePredictions = PagePredictions()
     assembled: Optional[AssembledUnit] = None

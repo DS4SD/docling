@@ -5,11 +5,12 @@ from typing import Iterable, List, Tuple
 
 import numpy
 import numpy as np
+from docling_core.types.experimental.base import BoundingBox, CoordOrigin
 from PIL import Image, ImageDraw
 from rtree import index
 from scipy.ndimage import find_objects, label
 
-from docling.datamodel.base_models import BoundingBox, CoordOrigin, OcrCell, Page
+from docling.datamodel.base_models import OcrCell, Page
 
 _log = logging.getLogger(__name__)
 

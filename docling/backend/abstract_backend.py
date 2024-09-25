@@ -3,10 +3,11 @@ from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Iterable, Optional, Union
 
+from docling_core.types.experimental.base import BoundingBox, Size
 from PIL import Image
 
 if TYPE_CHECKING:
-    from docling.datamodel.base_models import BoundingBox, Cell, PageSize
+    from docling.datamodel.base_models import Cell
 
 
 class PdfPageBackend(ABC):
@@ -30,7 +31,7 @@ class PdfPageBackend(ABC):
         pass
 
     @abstractmethod
-    def get_size(self) -> "PageSize":
+    def get_size(self) -> "Size":
         pass
 
     @abstractmethod

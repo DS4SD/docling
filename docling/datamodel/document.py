@@ -4,14 +4,15 @@ from pathlib import Path, PurePath
 from typing import ClassVar, Dict, Iterable, List, Optional, Tuple, Type, Union
 
 from docling_core.types import BaseCell, BaseText
-from docling_core.types import BoundingBox as DsBoundingBox
 from docling_core.types import Document as DsDocument
 from docling_core.types import DocumentDescription as DsDocumentDescription
 from docling_core.types import FileInfoObject as DsFileInfoObject
 from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
-from docling_core.types import TableCell
-from docling_core.types.doc.base import Figure
+from docling_core.types.doc.base import BoundingBox as DsBoundingBox
+from docling_core.types.doc.base import Figure, TableCell
+from docling_core.types.experimental.document import DoclingDocument, FileInfo
+from docling_core.types.experimental.labels import DocItemLabel
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
@@ -25,7 +26,7 @@ from docling.datamodel.base_models import (
     FigureElement,
     Page,
     PageElement,
-    TableElement,
+    Table,
     TextElement,
 )
 from docling.datamodel.settings import DocumentLimits
@@ -34,21 +35,21 @@ from docling.utils.utils import create_file_hash
 _log = logging.getLogger(__name__)
 
 layout_label_to_ds_type = {
-    "Title": "title",
-    "Document Index": "table-of-path_or_stream",
-    "Section-header": "subtitle-level-1",
-    "Checkbox-Selected": "checkbox-selected",
-    "Checkbox-Unselected": "checkbox-unselected",
-    "Caption": "caption",
-    "Page-header": "page-header",
-    "Page-footer": "page-footer",
-    "Footnote": "footnote",
-    "Table": "table",
-    "Formula": "equation",
-    "List-item": "paragraph",
-    "Code": "paragraph",
-    "Picture": "figure",
-    "Text": "paragraph",
+    DocItemLabel.TITLE: "title",
+    DocItemLabel.DOCUMENT_INDEX: "table-of-contents",
+    DocItemLabel.SECTION_HEADER: "subtitle-level-1",
+    DocItemLabel.CHECKBOX_SELECTED: "checkbox-selected",
+    DocItemLabel.CHECKBOX_UNSELECTED: "checkbox-unselected",
+    DocItemLabel.CAPTION: "caption",
+    DocItemLabel.PAGE_HEADER: "page-header",
+    DocItemLabel.PAGE_FOOTER: "page-footer",
+    DocItemLabel.FOOTNOTE: "footnote",
+    DocItemLabel.TABLE: "table",
+    DocItemLabel.FORMULA: "equation",
+    DocItemLabel.LIST_ITEM: "paragraph",
+    DocItemLabel.CODE: "paragraph",
+    DocItemLabel.PICTURE: "figure",
+    DocItemLabel.TEXT: "paragraph",
 }
 
 _EMPTY_DOC = DsDocument(
@@ -59,6 +60,10 @@ _EMPTY_DOC = DsDocument(
         document_hash="",
     ),
 )
+
+_EMPTY_DOCLING_DOC = DoclingDocument(
+    description={}, file_info=FileInfo(document_hash="123xyz")
+)  # TODO: Stub
 
 
 class InputDocument(BaseModel):
@@ -137,6 +142,7 @@ class ConvertedDocument(BaseModel):
     assembled: AssembledUnit = AssembledUnit()
 
     output: DsDocument = _EMPTY_DOC
+    experimental: DoclingDocument = _EMPTY_DOCLING_DOC
 
     def _to_ds_document(self) -> DsDocument:
         title = ""
@@ -183,7 +189,7 @@ class ConvertedDocument(BaseModel):
                         ],
                     )
                 )
-            elif isinstance(element, TableElement):
+            elif isinstance(element, Table):
                 index = len(tables)
                 ref_str = f"#/tables/{index}"
                 main_text.append(

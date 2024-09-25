@@ -1,15 +1,21 @@
 import copy
 import random
+from typing import Tuple
 
 from deepsearch_glm.nlp_utils import init_nlp_model
-from deepsearch_glm.utils.doc_utils import to_legacy_document_format
+from deepsearch_glm.utils.doc_utils import (
+    to_docling_document,
+    to_legacy_document_format,
+)
 from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_models
 from docling_core.types import BaseText
 from docling_core.types import Document as DsDocument
 from docling_core.types import Ref
+from docling_core.types.experimental.base import BoundingBox, CoordOrigin
+from docling_core.types.experimental.document import DoclingDocument
 from PIL import ImageDraw
 
-from docling.datamodel.base_models import BoundingBox, Cluster, CoordOrigin
+from docling.datamodel.base_models import Cluster
 from docling.datamodel.document import ConversionResult
 
 
@@ -24,7 +30,9 @@ class GlmModel:
         model = init_nlp_model(model_names=self.model_names)
         self.model = model
 
-    def __call__(self, conv_res: ConversionResult) -> DsDocument:
+    def __call__(
+        self, conv_res: ConversionResult
+    ) -> Tuple[DsDocument, DoclingDocument]:
         ds_doc = conv_res._to_ds_document()
         ds_doc_dict = ds_doc.model_dump(by_alias=True)
 
@@ -33,6 +41,7 @@ class GlmModel:
             glm_doc, ds_doc_dict, update_name_label=True
         )
 
+        docling_doc: DoclingDocument = to_docling_document(glm_doc)  # Experimental
         exported_doc = DsDocument.model_validate(ds_doc_dict)
 
         # DEBUG code:
@@ -83,4 +92,4 @@ class GlmModel:
         # draw_clusters_and_cells(ds_doc, 0)
         # draw_clusters_and_cells(exported_doc, 0)
 
-        return exported_doc
+        return (exported_doc, docling_doc)

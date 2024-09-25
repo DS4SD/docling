@@ -6,12 +6,13 @@ from typing import Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
 import pypdfium2.raw as pdfium_c
+from docling_core.types.experimental.base import BoundingBox, CoordOrigin, Size
 from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage, PdfTextPage
 from pypdfium2._helpers.misc import PdfiumError
 
 from docling.backend.abstract_backend import PdfDocumentBackend, PdfPageBackend
-from docling.datamodel.base_models import BoundingBox, Cell, CoordOrigin, PageSize
+from docling.datamodel.base_models import Cell
 
 _log = logging.getLogger(__name__)
 
@@ -222,8 +223,8 @@ class PyPdfiumPageBackend(PdfPageBackend):
 
         return image
 
-    def get_size(self) -> PageSize:
-        return PageSize(width=self._ppage.get_width(), height=self._ppage.get_height())
+    def get_size(self) -> Size:
+        return Size(width=self._ppage.get_width(), height=self._ppage.get_height())
 
     def unload(self):
         self._ppage = None

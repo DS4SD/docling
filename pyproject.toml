@@ -23,9 +23,10 @@ packages = [{include = "docling"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 pydantic = "^2.0.0"
-docling-core = "^1.6.2"
+docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "b50d53c05bf755ddb73c7d33ececdb542877662a"}
 docling-ibm-models = "^1.2.0"
-deepsearch-glm = "^0.21.1"
+deepsearch-glm = {git = "ssh://git@github.com/DS4SD/deepsearch-glm.git", rev = "f45ad08c02a4bc69f611fef540a8f10df53870b6"}
+
 filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"
 pydantic-settings = "^2.3.0"
@@ -61,6 +62,7 @@ torchvision = [
   {version = "~0.17.2", optional = true, markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'"}
 ]
 typer = "^0.12.5"
+python-docx = "^1.1.2"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}

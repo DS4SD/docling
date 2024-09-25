@@ -4,6 +4,8 @@ import random
 import time
 from typing import Iterable, List
 
+from docling_core.types.experimental.base import CoordOrigin
+from docling_core.types.experimental.labels import DocItemLabel
 from docling_ibm_models.layoutmodel.layout_predictor import LayoutPredictor
 from PIL import ImageDraw
 
@@ -11,7 +13,6 @@ from docling.datamodel.base_models import (
     BoundingBox,
     Cell,
     Cluster,
-    CoordOrigin,
     LayoutPrediction,
     Page,
 )
@@ -23,23 +24,23 @@ _log = logging.getLogger(__name__)
 class LayoutModel:
 
     TEXT_ELEM_LABELS = [
-        "Text",
-        "Footnote",
-        "Caption",
-        "Checkbox-Unselected",
-        "Checkbox-Selected",
-        "Section-header",
-        "Page-header",
-        "Page-footer",
-        "Code",
-        "List-item",
+        DocItemLabel.TEXT,
+        DocItemLabel.FOOTNOTE,
+        DocItemLabel.CAPTION,
+        DocItemLabel.CHECKBOX_UNSELECTED,
+        DocItemLabel.CHECKBOX_SELECTED,
+        DocItemLabel.SECTION_HEADER,
+        DocItemLabel.PAGE_HEADER,
+        DocItemLabel.PAGE_FOOTER,
+        DocItemLabel.CODE,
+        DocItemLabel.LIST_ITEM,
         # "Formula",
     ]
-    PAGE_HEADER_LABELS = ["Page-header", "Page-footer"]
+    PAGE_HEADER_LABELS = [DocItemLabel.PAGE_HEADER, DocItemLabel.PAGE_FOOTER]
 
-    TABLE_LABEL = "Table"
-    FIGURE_LABEL = "Picture"
-    FORMULA_LABEL = "Formula"
+    TABLE_LABEL = DocItemLabel.TABLE
+    FIGURE_LABEL = DocItemLabel.PICTURE
+    FORMULA_LABEL = DocItemLabel.FORMULA
 
     def __init__(self, config):
         self.config = config
@@ -50,27 +51,27 @@ class LayoutModel:
     def postprocess(self, clusters: List[Cluster], cells: List[Cell], page_height):
         MIN_INTERSECTION = 0.2
         CLASS_THRESHOLDS = {
-            "Caption": 0.35,
-            "Footnote": 0.35,
-            "Formula": 0.35,
-            "List-item": 0.35,
-            "Page-footer": 0.35,
-            "Page-header": 0.35,
-            "Picture": 0.2,  # low threshold adjust to capture chemical structures for examples.
-            "Section-header": 0.45,
-            "Table": 0.35,
-            "Text": 0.45,
-            "Title": 0.45,
-            "Document Index": 0.45,
-            "Code": 0.45,
-            "Checkbox-Selected": 0.45,
-            "Checkbox-Unselected": 0.45,
-            "Form": 0.45,
-            "Key-Value Region": 0.45,
+            DocItemLabel.CAPTION: 0.35,
+            DocItemLabel.FOOTNOTE: 0.35,
+            DocItemLabel.FORMULA: 0.35,
+            DocItemLabel.LIST_ITEM: 0.35,
+            DocItemLabel.PAGE_FOOTER: 0.35,
+            DocItemLabel.PAGE_HEADER: 0.35,
+            DocItemLabel.PICTURE: 0.2,  # low threshold adjust to capture chemical structures for examples.
+            DocItemLabel.SECTION_HEADER: 0.45,
+            DocItemLabel.TABLE: 0.35,
+            DocItemLabel.TEXT: 0.45,
+            DocItemLabel.TITLE: 0.45,
+            DocItemLabel.DOCUMENT_INDEX: 0.45,
+            DocItemLabel.CODE: 0.45,
+            DocItemLabel.CHECKBOX_SELECTED: 0.45,
+            DocItemLabel.CHECKBOX_UNSELECTED: 0.45,
+            DocItemLabel.FORM: 0.45,
+            DocItemLabel.KEY_VALUE_REGION: 0.45,
         }
 
         CLASS_REMAPPINGS = {
-            "Document Index": "Table",
+            DocItemLabel.DOCUMENT_INDEX: DocItemLabel.TABLE,
         }
 
         _log.debug("================= Start postprocess function ====================")
@@ -257,7 +258,7 @@ class LayoutModel:
                     coord=c["bbox"], origin=CoordOrigin.BOTTOMLEFT
                 ).to_top_left_origin(page_height),
                 confidence=c["confidence"],
-                label=c["type"],
+                label=DocItemLabel(c["type"]),
                 cells=cluster_cells,
             )
             clusters_out_new.append(c_new)
@@ -270,9 +271,12 @@ class LayoutModel:
             for ix, pred_item in enumerate(
                 self.layout_predictor.predict(page.get_image(scale=1.0))
             ):
+                label = DocItemLabel(
+                    pred_item["label"].lower().replace(" ", "_").replace("-", "_")
+                )  # Temporary, until docling-ibm-model uses docling-core types
                 cluster = Cluster(
                     id=ix,
-                    label=pred_item["label"],
+                    label=label,
                     confidence=pred_item["confidence"],
                     bbox=BoundingBox.model_validate(pred_item),
                     cells=[],
