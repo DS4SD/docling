@@ -9,6 +9,10 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing_extensions import Self
 
 from docling.backend.abstract_backend import PdfPageBackend
+from docling.datamodel.pipeline_options import (  # Must be imported here for backward compatibility.
+    PipelineOptions,
+    TableStructureOptions,
+)
 
 
 class ConversionStatus(str, Enum):
