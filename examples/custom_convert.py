@@ -82,7 +82,7 @@ def main():
     # PyPdfium with OCR
     # -----------------
     # pipeline_options = PipelineOptions()
-    # pipeline_options.do_ocr=False
+    # pipeline_options.do_ocr=True
     # pipeline_options.do_table_structure=True
     # pipeline_options.table_structure_options.do_cell_matching = True
 

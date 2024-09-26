@@ -1,7 +1,8 @@
 from pathlib import Path
 from typing import Callable, Iterable, List
 
-from docling.datamodel.base_models import Page, PipelineOptions
+from docling.datamodel.base_models import Page
+from docling.datamodel.pipeline_options import PipelineOptions
 
 
 class BaseModelPipeline:

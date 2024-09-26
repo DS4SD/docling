@@ -12,8 +12,9 @@ from docling_core.utils.file import resolve_file_source
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import ConversionStatus, PipelineOptions
+from docling.datamodel.base_models import ConversionStatus
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
+from docling.datamodel.pipeline_options import PipelineOptions
 from docling.document_converter import DocumentConverter
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")

@@ -159,8 +159,24 @@ This can improve output quality if you find that multiple columns in extracted t
 
 
 ```python
+from docling.datamodel.pipeline_options import PipelineOptions
+
 pipeline_options = PipelineOptions(do_table_structure=True)
 pipeline_options.table_structure_options.do_cell_matching = False  # uses text cells predicted from table structure model
+
+doc_converter = DocumentConverter(
+    artifacts_path=artifacts_path,
+    pipeline_options=pipeline_options,
+)
+```
+
+Since docling 1.16.0: You can control which TableFormer mode you want to use. Choose between `TableFormerMode.FAST` (default) and `TableFormerMode.ACCURATE` (better, but slower) to receive better quality with difficult table structures.
+
+```python
+from docling.datamodel.pipeline_options import PipelineOptions, TableFormerMode
+
+pipeline_options = PipelineOptions(do_table_structure=True)
+pipeline_options.table_structure_options.mode = TableFormerMode.ACCURATE  # use more accurate TableFormer model
 
 doc_converter = DocumentConverter(
     artifacts_path=artifacts_path,

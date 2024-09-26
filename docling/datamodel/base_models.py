@@ -9,6 +9,10 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing_extensions import Self
 
 from docling.backend.abstract_backend import PdfPageBackend
+from docling.datamodel.pipeline_options import (  # Must be imported here for backward compatibility.
+    PipelineOptions,
+    TableStructureOptions,
+)
 
 
 class ConversionStatus(str, Enum):
@@ -296,22 +300,6 @@ class DocumentStream(BaseModel):
 
     filename: str
     stream: BytesIO
-
-
-class TableStructureOptions(BaseModel):
-    do_cell_matching: bool = (
-        True
-        # True:  Matches predictions back to PDF cells. Can break table output if PDF cells
-        #        are merged across table columns.
-        # False: Let table structure model define the text cells, ignore PDF cells.
-    )
-
-
-class PipelineOptions(BaseModel):
-    do_table_structure: bool = True  # True: perform table structure extraction
-    do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
-
-    table_structure_options: TableStructureOptions = TableStructureOptions()
 
 
 class AssembleOptions(BaseModel):
