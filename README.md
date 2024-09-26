@@ -170,7 +170,7 @@ doc_converter = DocumentConverter(
 )
 ```
 
-Since docling 1.14.0: You can control which TableFormer mode you want to use. Choose between `TableFormerMode.FAST` (default) and `TableFormerMode.ACCURATE` (better, but slower) to receive better quality with difficult table structures.
+Since docling 1.16.0: You can control which TableFormer mode you want to use. Choose between `TableFormerMode.FAST` (default) and `TableFormerMode.ACCURATE` (better, but slower) to receive better quality with difficult table structures.
 
 ```python
 from docling.datamodel.pipeline_options import PipelineOptions, TableFormerMode
