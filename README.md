@@ -207,6 +207,28 @@ results = doc_converter.convert(conv_input)
 
 You can limit the CPU threads used by Docling by setting the environment variable `OMP_NUM_THREADS` accordingly. The default setting is using 4 CPU threads.
 
+### Chunking
+
+You can perform a hierarchy-aware chunking of a Docling document as follows:
+
+```python
+from docling.document_converter import DocumentConverter
+from docling_core.transforms.chunker import HierarchicalChunker
+
+doc = DocumentConverter().convert_single("https://arxiv.org/pdf/2206.01062").output
+chunks = list(HierarchicalChunker().chunk(doc))
+# > [
+# >     ChunkWithMetadata(
+# >         path='$.main-text[0]',
+# >         text='DocLayNet: A Large Human-Annotated Dataset [...]',
+# >         page=1,
+# >         bbox=[107.30, 672.38, 505.19, 709.08]
+# >     ),
+# >     [...]
+# > ]
+```
+
+
 ## Technical report
 
 For more details on Docling's inner workings, check out the [Docling Technical Report](https://arxiv.org/abs/2408.09869).
