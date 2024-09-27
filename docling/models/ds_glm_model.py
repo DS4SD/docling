@@ -57,7 +57,7 @@ class GlmModel:
                     if arr == "tables":
                         prov = ds_document.tables[index].prov[0]
                     elif arr == "figures":
-                        prov = ds_document.figures[index].prov[0]
+                        prov = ds_document.pictures[index].prov[0]
                     else:
                         prov = None
 

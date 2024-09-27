@@ -5,7 +5,7 @@ from io import BytesIO
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
 
 from docling_core.types.experimental import BoundingBox, Size
-from docling_core.types.experimental.document import BaseFigureData, TableCell
+from docling_core.types.experimental.document import BasePictureData, TableCell
 from docling_core.types.experimental.labels import DocItemLabel
 from PIL.Image import Image
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -84,7 +84,7 @@ class TextElement(BasePageElement): ...
 
 
 class FigureElement(BasePageElement):
-    data: Optional[BaseFigureData] = None
+    data: Optional[BasePictureData] = None
     provenance: Optional[str] = None
     predicted_class: Optional[str] = None
     confidence: Optional[float] = None
