@@ -1,3 +1,9 @@
+## [v1.16.0](https://github.com/DS4SD/docling/releases/tag/v1.16.0) - 2024-09-27
+
+### Feature
+
+* Support tableformer model choice ([#90](https://github.com/DS4SD/docling/issues/90)) ([`d6df76f`](https://github.com/DS4SD/docling/commit/d6df76f90b249bf48a509b63fa18f570be39482e))
+
 ## [v1.15.0](https://github.com/DS4SD/docling/releases/tag/v1.15.0) - 2024-09-24
 
 ### Feature
