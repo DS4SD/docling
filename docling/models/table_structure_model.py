@@ -2,7 +2,7 @@ import copy
 from typing import Iterable, List
 
 import numpy
-from docling_core.types.experimental.base import BoundingBox
+from docling_core.types.experimental import BoundingBox
 from docling_core.types.experimental.document import TableCell
 from docling_core.types.experimental.labels import DocItemLabel
 from docling_ibm_models.tableformer.data_management.tf_predictor import TFPredictor

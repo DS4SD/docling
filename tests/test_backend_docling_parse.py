@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from docling_core.types.experimental.base import BoundingBox
+from docling_core.types.experimental import BoundingBox
 
 from docling.backend.docling_parse_backend import (
     DoclingParseDocumentBackend,

@@ -11,8 +11,11 @@ from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
 from docling_core.types.doc.base import BoundingBox as DsBoundingBox
 from docling_core.types.doc.base import Figure, TableCell
-from docling_core.types.experimental.document import DoclingDocument, FileInfo
-from docling_core.types.experimental.labels import DocItemLabel
+from docling_core.types.experimental import (
+    DescriptionItem,
+    DocItemLabel,
+    DoclingDocument,
+)
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
@@ -62,7 +65,7 @@ _EMPTY_DOC = DsDocument(
 )
 
 _EMPTY_DOCLING_DOC = DoclingDocument(
-    description={}, file_info=FileInfo(filename="dummy", document_hash="123xyz")
+    description=DescriptionItem(), name="dummy"
 )  # TODO: Stub
 
 

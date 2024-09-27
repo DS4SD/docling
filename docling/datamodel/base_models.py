@@ -4,7 +4,7 @@ from enum import Enum, auto
 from io import BytesIO
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
 
-from docling_core.types.experimental.base import BoundingBox, Size
+from docling_core.types.experimental import BoundingBox, Size
 from docling_core.types.experimental.document import BaseFigureData, TableCell
 from docling_core.types.experimental.labels import DocItemLabel
 from PIL.Image import Image
