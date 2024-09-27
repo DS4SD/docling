@@ -1,3 +1,13 @@
+## [v1.16.1](https://github.com/DS4SD/docling/releases/tag/v1.16.1) - 2024-09-27
+
+### Fix
+
+* Allow usage of opencv 4.6.x ([#110](https://github.com/DS4SD/docling/issues/110)) ([`34bd887`](https://github.com/DS4SD/docling/commit/34bd887a7f9c11b2b051bdb4707dfdc5f43e6ad5))
+
+### Documentation
+
+* Document chunking ([#111](https://github.com/DS4SD/docling/issues/111)) ([`c05b692`](https://github.com/DS4SD/docling/commit/c05b692d69b6dae1ac5f518e84b17f32e7d94372))
+
 ## [v1.16.0](https://github.com/DS4SD/docling/releases/tag/v1.16.0) - 2024-09-27
 
 ### Feature
