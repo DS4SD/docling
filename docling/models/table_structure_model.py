@@ -2,8 +2,9 @@ import copy
 from typing import Iterable, List
 
 import numpy
-from docling_core.types.experimental.base import BoundingBox
+from docling_core.types.experimental import BoundingBox
 from docling_core.types.experimental.document import TableCell
+from docling_core.types.experimental.labels import DocItemLabel
 from docling_ibm_models.tableformer.data_management.tf_predictor import TFPredictor
 from PIL import ImageDraw
 
@@ -74,7 +75,7 @@ class TableStructureModel:
                     ],
                 )
                 for cluster in page.predictions.layout.clusters
-                if cluster.label == "Table"
+                if cluster.label == DocItemLabel.TABLE
             ]
             if not len(in_tables):
                 yield page
@@ -138,7 +139,7 @@ class TableStructureModel:
                         id=table_cluster.id,
                         page_no=page.page_no,
                         cluster=table_cluster,
-                        label="Table",
+                        label=DocItemLabel.TABLE,
                     )
 
                     page.predictions.tablestructure.table_map[table_cluster.id] = tbl

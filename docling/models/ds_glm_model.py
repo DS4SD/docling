@@ -11,7 +11,7 @@ from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_mode
 from docling_core.types import BaseText
 from docling_core.types import Document as DsDocument
 from docling_core.types import Ref
-from docling_core.types.experimental.base import BoundingBox, CoordOrigin
+from docling_core.types.experimental import BoundingBox, CoordOrigin
 from docling_core.types.experimental.document import DoclingDocument
 from PIL import ImageDraw
 
@@ -57,7 +57,7 @@ class GlmModel:
                     if arr == "tables":
                         prov = ds_document.tables[index].prov[0]
                     elif arr == "figures":
-                        prov = ds_document.figures[index].prov[0]
+                        prov = ds_document.pictures[index].prov[0]
                     else:
                         prov = None
 

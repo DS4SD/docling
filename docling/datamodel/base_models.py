@@ -4,9 +4,9 @@ from enum import Enum, auto
 from io import BytesIO
 from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
 
-from docling_core.types.experimental.base import BoundingBox, Size
-from docling_core.types.experimental.document import BaseFigureData, TableCell
-from docling_core.types.experimental.labels import PageLabel
+from docling_core.types.experimental import BoundingBox, Size
+from docling_core.types.experimental.document import BasePictureData, TableCell
+from docling_core.types.experimental.labels import DocItemLabel
 from PIL.Image import Image
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing_extensions import Self
@@ -59,14 +59,14 @@ class OcrCell(Cell):
 
 class Cluster(BaseModel):
     id: int
-    label: PageLabel
+    label: DocItemLabel
     bbox: BoundingBox
     confidence: float = 1.0
     cells: List[Cell] = []
 
 
 class BasePageElement(BaseModel):
-    label: PageLabel
+    label: DocItemLabel
     id: int
     page_no: int
     cluster: Cluster
@@ -92,7 +92,7 @@ class TextElement(BasePageElement): ...
 
 
 class FigureElement(BasePageElement):
-    data: Optional[BaseFigureData] = None
+    data: Optional[BasePictureData] = None
     provenance: Optional[str] = None
     predicted_class: Optional[str] = None
     confidence: Optional[float] = None

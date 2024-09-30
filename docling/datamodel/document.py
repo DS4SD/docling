@@ -11,8 +11,11 @@ from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
 from docling_core.types.doc.base import BoundingBox as DsBoundingBox
 from docling_core.types.doc.base import Figure, TableCell
-from docling_core.types.experimental.document import DoclingDocument, FileInfo
-from docling_core.types.experimental.labels import PageLabel
+from docling_core.types.experimental import (
+    DescriptionItem,
+    DocItemLabel,
+    DoclingDocument,
+)
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
@@ -36,21 +39,21 @@ from docling.utils.utils import create_file_hash
 _log = logging.getLogger(__name__)
 
 layout_label_to_ds_type = {
-    PageLabel.TITLE: "title",
-    PageLabel.DOCUMENT_INDEX: "table-of-contents",
-    PageLabel.SECTION_HEADER: "subtitle-level-1",
-    PageLabel.CHECKBOX_SELECTED: "checkbox-selected",
-    PageLabel.CHECKBOX_UNSELECTED: "checkbox-unselected",
-    PageLabel.CAPTION: "caption",
-    PageLabel.PAGE_HEADER: "page-header",
-    PageLabel.PAGE_FOOTER: "page-footer",
-    PageLabel.FOOTNOTE: "footnote",
-    PageLabel.TABLE: "table",
-    PageLabel.FORMULA: "equation",
-    PageLabel.LIST_ITEM: "paragraph",
-    PageLabel.CODE: "paragraph",
-    PageLabel.PICTURE: "figure",
-    PageLabel.TEXT: "paragraph",
+    DocItemLabel.TITLE: "title",
+    DocItemLabel.DOCUMENT_INDEX: "table-of-contents",
+    DocItemLabel.SECTION_HEADER: "subtitle-level-1",
+    DocItemLabel.CHECKBOX_SELECTED: "checkbox-selected",
+    DocItemLabel.CHECKBOX_UNSELECTED: "checkbox-unselected",
+    DocItemLabel.CAPTION: "caption",
+    DocItemLabel.PAGE_HEADER: "page-header",
+    DocItemLabel.PAGE_FOOTER: "page-footer",
+    DocItemLabel.FOOTNOTE: "footnote",
+    DocItemLabel.TABLE: "table",
+    DocItemLabel.FORMULA: "equation",
+    DocItemLabel.LIST_ITEM: "paragraph",
+    DocItemLabel.CODE: "paragraph",
+    DocItemLabel.PICTURE: "figure",
+    DocItemLabel.TEXT: "paragraph",
 }
 
 _EMPTY_DOC = DsDocument(
@@ -63,7 +66,7 @@ _EMPTY_DOC = DsDocument(
 )
 
 _EMPTY_DOCLING_DOC = DoclingDocument(
-    description={}, file_info=FileInfo(document_hash="123xyz")
+    description=DescriptionItem(), name="dummy"
 )  # TODO: Stub
 
 _input_format_default_backends: Dict[InputFormat, Type[AbstractDocumentBackend]] = {
@@ -341,8 +344,10 @@ class ConvertedDocument(BaseModel):
             "paragraph",
             "caption",
             "table",
+            "figure",
         ],
         strict_text: bool = False,
+        image_placeholder: str = "<!-- image -->",
     ):
         return self.output.export_to_markdown(
             delim=delim,
@@ -350,6 +355,7 @@ class ConvertedDocument(BaseModel):
             main_text_stop=main_text_stop,
             main_text_labels=main_text_labels,
             strict_text=strict_text,
+            image_placeholder=image_placeholder,
         )
 
     def render_as_text(
