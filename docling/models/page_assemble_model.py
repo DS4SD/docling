@@ -10,12 +10,13 @@ from docling.datamodel.base_models import (
     Table,
     TextElement,
 )
+from docling.models.abstract_model import AbstractPageModel
 from docling.models.layout_model import LayoutModel
 
 _log = logging.getLogger(__name__)
 
 
-class PageAssembleModel:
+class PageAssembleModel(AbstractPageModel):
     def __init__(self, config):
         self.config = config
 
@@ -144,5 +145,12 @@ class PageAssembleModel:
             page.assembled = AssembledUnit(
                 elements=elements, headers=headers, body=body
             )
+
+            # Remove page images (can be disabled)
+            if self.config["images_scale"] is None:
+                page._image_cache = {}
+
+            # Unload backend
+            page._backend.unload()
 
             yield page

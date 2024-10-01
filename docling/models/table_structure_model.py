@@ -9,9 +9,10 @@ from docling_ibm_models.tableformer.data_management.tf_predictor import TFPredic
 from PIL import ImageDraw
 
 from docling.datamodel.base_models import Page, Table, TableStructurePrediction
+from docling.models.abstract_model import AbstractPageModel
 
 
-class TableStructureModel:
+class TableStructureModel(AbstractPageModel):
     def __init__(self, config):
         self.config = config
         self.do_cell_matching = config["do_cell_matching"]

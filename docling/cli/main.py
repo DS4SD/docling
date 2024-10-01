@@ -12,9 +12,9 @@ from docling_core.utils.file import resolve_file_source
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import ConversionStatus, PipelineOptions
+from docling.datamodel.base_models import ConversionStatus, PdfPipelineOptions
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
-from docling.document_converter import DocumentConverter
+from docling.pdf_document_converter import PdfDocumentConverter
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
 warnings.filterwarnings(action="ignore", category=FutureWarning, module="easyocr")
@@ -190,12 +190,12 @@ def convert(
         case _:
             raise RuntimeError(f"Unexpected backend type {backend}")
 
-    pipeline_options = PipelineOptions(
+    pipeline_options = PdfPipelineOptions(
         do_ocr=ocr,
         do_table_structure=True,
     )
     pipeline_options.table_structure_options.do_cell_matching = do_cell_matching
-    doc_converter = DocumentConverter(
+    doc_converter = PdfDocumentConverter(
         pipeline_options=pipeline_options,
         pdf_backend=pdf_backend,
     )

@@ -7,7 +7,7 @@ import pandas as pd
 
 from docling.datamodel.base_models import ConversionStatus
 from docling.datamodel.document import DocumentConversionInput
-from docling.document_converter import DocumentConverter
+from docling.pdf_document_converter import PdfDocumentConverter
 
 _log = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ def main():
 
     input_files = DocumentConversionInput.from_paths(input_doc_paths)
 
-    doc_converter = DocumentConverter()
+    doc_converter = PdfDocumentConverter()
 
     start_time = time.time()
 

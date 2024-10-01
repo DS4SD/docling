@@ -6,9 +6,9 @@ from typing import Iterable
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import ConversionStatus, PipelineOptions
+from docling.datamodel.base_models import ConversionStatus, PdfPipelineOptions
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
-from docling.document_converter import DocumentConverter
+from docling.pdf_document_converter import PdfDocumentConverter
 
 _log = logging.getLogger(__name__)
 
@@ -93,12 +93,12 @@ def main():
 
     # Docling Parse without OCR
     # -------------------------
-    pipeline_options = PipelineOptions()
+    pipeline_options = PdfPipelineOptions()
     pipeline_options.do_ocr = False
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
 
-    doc_converter = DocumentConverter(
+    doc_converter = PdfDocumentConverter(
         pipeline_options=pipeline_options,
         pdf_backend=DoclingParseDocumentBackend,
     )

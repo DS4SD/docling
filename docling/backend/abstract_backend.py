@@ -1,13 +1,11 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Iterable, Optional, Union
+from typing import Set, Union
 
-from docling_core.types.experimental import BoundingBox, Size
-from PIL import Image
+from docling_core.types.experimental import DoclingDocument
 
-if TYPE_CHECKING:
-    from docling.datamodel.base_models import Cell
+from docling.datamodel.base_models import InputFormat
 
 
 class AbstractDocumentBackend(ABC):
@@ -20,6 +18,11 @@ class AbstractDocumentBackend(ABC):
     def is_valid(self) -> bool:
         pass
 
+    @classmethod
+    @abstractmethod
+    def is_paginated(cls) -> bool:
+        pass
+
     @abstractmethod
     def unload(self):
         if isinstance(self.path_or_stream, BytesIO):
@@ -27,45 +30,19 @@ class AbstractDocumentBackend(ABC):
 
         self.path_or_stream = None
 
-
-class PdfPageBackend(ABC):
-
+    @classmethod
     @abstractmethod
-    def get_text_in_rect(self, bbox: "BoundingBox") -> str:
-        pass
-
-    @abstractmethod
-    def get_text_cells(self) -> Iterable["Cell"]:
-        pass
-
-    @abstractmethod
-    def get_bitmap_rects(self, float: int = 1) -> Iterable["BoundingBox"]:
-        pass
-
-    @abstractmethod
-    def get_page_image(
-        self, scale: float = 1, cropbox: Optional["BoundingBox"] = None
-    ) -> Image.Image:
-        pass
-
-    @abstractmethod
-    def get_size(self) -> "Size":
-        pass
-
-    @abstractmethod
-    def is_valid(self) -> bool:
-        pass
-
-    @abstractmethod
-    def unload(self):
+    def supported_formats(cls) -> Set[InputFormat]:
         pass
 
 
-class PdfDocumentBackend(AbstractDocumentBackend):
-    @abstractmethod
-    def load_page(self, page_no: int) -> PdfPageBackend:
-        pass
+class DeclarativeDocumentBackend(AbstractDocumentBackend):
+    """DeclarativeDocumentBackend.
+
+    A declarative document backend is a backend that can transform to DoclingDocument
+    straight without a recognition pipeline.
+    """
 
     @abstractmethod
-    def page_count(self) -> int:
+    def convert(self) -> DoclingDocument:
         pass

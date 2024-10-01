@@ -67,11 +67,12 @@ pip install docling
 ### Convert a single document
 
 To convert invidual PDF documents, use `convert_single()`, for example:
+
 ```python
-from docling.document_converter import DocumentConverter
+from docling.pdf_document_converter import PdfDocumentConverter
 
 source = "https://arxiv.org/pdf/2408.09869"  # PDF path or URL
-converter = DocumentConverter()
+converter = PdfDocumentConverter()
 result = converter.convert_single(source)
 print(result.render_as_markdown())  # output: "## Docling Technical Report[...]"
 print(result.render_as_doctags())  # output: "<document><title><page_1><loc_20>..."

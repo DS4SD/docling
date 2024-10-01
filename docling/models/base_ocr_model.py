@@ -3,7 +3,6 @@ import logging
 from abc import abstractmethod
 from typing import Iterable, List, Tuple
 
-import numpy
 import numpy as np
 from docling_core.types.experimental import BoundingBox, CoordOrigin
 from PIL import Image, ImageDraw
@@ -11,11 +10,12 @@ from rtree import index
 from scipy.ndimage import find_objects, label
 
 from docling.datamodel.base_models import OcrCell, Page
+from docling.models.abstract_model import AbstractPageModel
 
 _log = logging.getLogger(__name__)
 
 
-class BaseOcrModel:
+class BaseOcrModel(AbstractPageModel):
     def __init__(self, config):
         self.config = config
         self.enabled = config["enabled"]

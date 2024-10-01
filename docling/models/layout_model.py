@@ -16,12 +16,13 @@ from docling.datamodel.base_models import (
     LayoutPrediction,
     Page,
 )
+from docling.models.abstract_model import AbstractPageModel
 from docling.utils import layout_utils as lu
 
 _log = logging.getLogger(__name__)
 
 
-class LayoutModel:
+class LayoutModel(AbstractPageModel):
 
     TEXT_ELEM_LABELS = [
         DocItemLabel.TEXT,

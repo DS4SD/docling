@@ -6,9 +6,9 @@ from typing import Iterable
 
 import yaml
 
-from docling.datamodel.base_models import ConversionStatus, PipelineOptions
+from docling.datamodel.base_models import ConversionStatus, PdfPipelineOptions
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
-from docling.document_converter import DocumentConverter
+from docling.pdf_document_converter import PdfDocumentConverter
 
 _log = logging.getLogger(__name__)
 
@@ -107,7 +107,11 @@ def main():
     # docs = [DocumentStream(filename="my_doc.pdf", stream=buf)]
     # input = DocumentConversionInput.from_streams(docs)
 
-    doc_converter = DocumentConverter()
+    doc_converter = PdfDocumentConverter(
+        pipeline_options=PdfPipelineOptions(),
+        pdf_backend=DocumentConversionInput.DEFAULT_BACKEND,
+        pipeline_cls=StandardModelPipeline,
+    )
 
     input = DocumentConversionInput.from_paths(input_doc_paths)
 

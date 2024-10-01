@@ -1,9 +1,10 @@
 import logging
 from io import BytesIO
 from pathlib import Path, PurePath
-from typing import ClassVar, Dict, Iterable, List, Optional, Tuple, Type, Union
+from typing import Dict, Iterable, List, Optional, Tuple, Type, Union
 
-from docling_core.types import BaseCell, BaseText
+import filetype
+from docling_core.types import BaseText
 from docling_core.types import Document as DsDocument
 from docling_core.types import DocumentDescription as DsDocumentDescription
 from docling_core.types import FileInfoObject as DsFileInfoObject
@@ -19,8 +20,11 @@ from docling_core.types.experimental import (
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
-from docling.backend.abstract_backend import AbstractDocumentBackend, PdfDocumentBackend
+from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
+from docling.backend.html_backend import HTMLDocumentBackend
+from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
+from docling.backend.msword_backend import MsWordDocumentBackend
 from docling.datamodel.base_models import (
     AssembledUnit,
     ConversionStatus,
@@ -28,13 +32,14 @@ from docling.datamodel.base_models import (
     ErrorItem,
     FigureElement,
     InputFormat,
+    MimeTypeToFormat,
     Page,
     PageElement,
     Table,
     TextElement,
 )
 from docling.datamodel.settings import DocumentLimits
-from docling.utils.utils import create_file_hash
+from docling.utils.utils import create_file_hash, create_hash
 
 _log = logging.getLogger(__name__)
 
@@ -71,8 +76,9 @@ _EMPTY_DOCLING_DOC = DoclingDocument(
 
 _input_format_default_backends: Dict[InputFormat, Type[AbstractDocumentBackend]] = {
     InputFormat.PDF: DoclingParseDocumentBackend,
-    InputFormat.DOCX: None,
-    InputFormat.PPTX: None,
+    InputFormat.HTML: HTMLDocumentBackend,
+    InputFormat.DOCX: MsWordDocumentBackend,
+    InputFormat.PPTX: MsPowerpointDocumentBackend,
     InputFormat.IMAGE: None,
 }
 
@@ -80,13 +86,14 @@ _input_format_default_backends: Dict[InputFormat, Type[AbstractDocumentBackend]]
 class InputDocument(BaseModel):
     file: PurePath = None
     document_hash: Optional[str] = None
-    valid: bool = False
+    valid: bool = True
     limits: DocumentLimits = DocumentLimits()
+    format: Optional[InputFormat] = None
 
     filesize: Optional[int] = None
-    page_count: Optional[int] = None
+    page_count: int = 0
 
-    _backend: PdfDocumentBackend = None  # Internal PDF backend used
+    _backend: AbstractDocumentBackend = None  # Internal PDF backend used
 
     def __init__(
         self,
@@ -94,27 +101,31 @@ class InputDocument(BaseModel):
         filename: Optional[str] = None,
         limits: Optional[DocumentLimits] = None,
         backend: Optional[Type[AbstractDocumentBackend]] = None,
+        format: Optional[InputFormat] = None,
     ):
         super().__init__()
-
-        if not backend:
-            backend = _input_format_default_backends[InputFormat.PDF]
 
         self.limits = limits or DocumentLimits()
 
         try:
             if isinstance(path_or_stream, Path):
+                mime = filetype.guess_mime(str(path_or_stream))
+                if mime is None:
+                    if path_or_stream.suffix == ".html":
+                        mime = "text/html"
+
                 self.file = path_or_stream
                 self.filesize = path_or_stream.stat().st_size
                 if self.filesize > self.limits.max_file_size:
                     self.valid = False
                 else:
                     self.document_hash = create_file_hash(path_or_stream)
-                    self._backend = backend(
-                        path_or_stream=path_or_stream, document_hash=self.document_hash
-                    )
+
+                    self._init_doc(backend, mime, path_or_stream)
 
             elif isinstance(path_or_stream, BytesIO):
+                mime = filetype.guess_mime(path_or_stream.read(8192))
+
                 self.file = PurePath(filename)
                 self.filesize = path_or_stream.getbuffer().nbytes
 
@@ -122,15 +133,15 @@ class InputDocument(BaseModel):
                     self.valid = False
                 else:
                     self.document_hash = create_file_hash(path_or_stream)
-                    self._backend = backend(
-                        path_or_stream=path_or_stream, document_hash=self.document_hash
-                    )
 
-            if self.document_hash and self._backend.page_count() > 0:
-                self.page_count = self._backend.page_count()
+                    self._init_doc(backend, mime, path_or_stream)
 
-                if self.page_count <= self.limits.max_num_pages:
-                    self.valid = True
+            # For paginated backends, check if the maximum page count is exceeded.
+            if self.valid and self._backend.is_valid():
+                if self._backend.is_paginated():
+                    self.page_count = self._backend.page_count()
+                    if not self.page_count <= self.limits.max_num_pages:
+                        self.valid = False
 
         except (FileNotFoundError, OSError) as e:
             _log.exception(
@@ -143,6 +154,27 @@ class InputDocument(BaseModel):
                 exc_info=e,
             )
             # raise
+
+    def _init_doc(
+        self,
+        backend: AbstractDocumentBackend,
+        mime: str,
+        path_or_stream: Union[BytesIO, Path],
+    ) -> None:
+        self.format = MimeTypeToFormat.get(mime)
+        if self.format is not None:
+            backend = backend or _input_format_default_backends.get(self.format)
+            if backend is None:
+                raise RuntimeError(
+                    f"Could not find suitable default backend for format: {self.format}"
+                )
+        if self.format is None or self.format not in backend.supported_formats():
+            # TODO decide if to raise exception here too.
+            self.valid = False
+        else:
+            self._backend = backend(
+                path_or_stream=path_or_stream, document_hash=self.document_hash
+            )
 
 
 @deprecated("Use `ConversionResult` instead.")
@@ -163,7 +195,11 @@ class ConvertedDocument(BaseModel):
         desc = DsDocumentDescription(logs=[])
 
         page_hashes = [
-            PageReference(hash=p.page_hash, page=p.page_no + 1, model="default")
+            PageReference(
+                hash=create_hash(self.input.document_hash + ":" + str(p.page_no)),
+                page=p.page_no + 1,
+                model="default",
+            )
             for p in self.pages
         ]
 
@@ -441,25 +477,21 @@ class DocumentConversionInput(BaseModel):
     _path_or_stream_iterator: Iterable[Union[Path, DocumentStream]] = None
     limits: Optional[DocumentLimits] = DocumentLimits()
 
-    DEFAULT_BACKEND: ClassVar = DoclingParseDocumentBackend
-
     def docs(
-        self, pdf_backend: Optional[Type[PdfDocumentBackend]] = None
+        self, backend: Optional[Type[AbstractDocumentBackend]] = None
     ) -> Iterable[InputDocument]:
-
-        pdf_backend = pdf_backend or DocumentConversionInput.DEFAULT_BACKEND
 
         for obj in self._path_or_stream_iterator:
             if isinstance(obj, Path):
                 yield InputDocument(
-                    path_or_stream=obj, limits=self.limits, backend=pdf_backend
+                    path_or_stream=obj, limits=self.limits, backend=backend
                 )
             elif isinstance(obj, DocumentStream):
                 yield InputDocument(
                     path_or_stream=obj.stream,
                     filename=obj.filename,
                     limits=self.limits,
-                    backend=pdf_backend,
+                    backend=backend,
                 )
 
     @classmethod

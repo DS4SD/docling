@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from docling.datamodel.base_models import AssembleOptions, ConversionStatus
+from docling.datamodel.base_models import ConversionStatus, PdfPipelineOptions
 from docling.datamodel.document import DocumentConversionInput
-from docling.document_converter import DocumentConverter
+from docling.pdf_document_converter import PdfDocumentConverter
 from docling.utils.export import generate_multimodal_pages
 
 _log = logging.getLogger(__name__)
@@ -27,12 +27,12 @@ def main():
 
     # Important: For operating with page images, we must keep them, otherwise the DocumentConverter
     # will destroy them for cleaning up memory.
-    # This is done by setting AssembleOptions.images_scale, which also defines the scale of images.
+    # This is done by setting PipelineOptions.images_scale, which also defines the scale of images.
     # scale=1 correspond of a standard 72 DPI image
-    assemble_options = AssembleOptions()
-    assemble_options.images_scale = IMAGE_RESOLUTION_SCALE
+    pipeline_options = PdfPipelineOptions()
+    pipeline_options.images_scale = IMAGE_RESOLUTION_SCALE
 
-    doc_converter = DocumentConverter(assemble_options=assemble_options)
+    doc_converter = PdfDocumentConverter(pipeline_options=pipeline_options)
 
     start_time = time.time()
 
