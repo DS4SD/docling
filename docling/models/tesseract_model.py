@@ -10,7 +10,6 @@ from docling.models.base_ocr_model import BaseOcrModel
 
 _log = logging.getLogger(__name__)
 
-
 class TesseractOcrModel(BaseOcrModel):
 
     def __init__(self, enabled: bool, options: TesseractOcrOptions):

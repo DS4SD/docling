@@ -30,7 +30,7 @@ class EasyOcrOptions(OcrOptions):
 
 class TesseractOcrOptions(OcrOptions):
     kind: Literal["tesseract"] = "tesseract"
-
+    lang: List[str] = ["fr", "de", "es", "en"]
 
 class TesserOcrOptions(OcrOptions):
     kind: Literal["tesseract"] = "tesserocr"

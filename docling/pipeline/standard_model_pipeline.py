@@ -8,6 +8,7 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.easyocr_model import EasyOcrModel
+from docling.models.tesseract_model import TesseractOCRModel
 from docling.models.layout_model import LayoutModel
 from docling.models.table_structure_model import TableStructureModel
 from docling.models.tesseract_model import TesseractOcrModel

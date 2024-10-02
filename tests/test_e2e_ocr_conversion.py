@@ -47,7 +47,28 @@ def get_pdf_paths():
     return pdf_files
 
 
-def get_converter():
+def get_easyocr_converter():
+
+    ocr_options = EasyOcrOptions(
+        
+    )
+    
+    pipeline_options = PipelineOptions()
+    # Debug
+    pipeline_options.do_ocr = True
+    pipeline_options.do_table_structure = True
+    pipeline_options.table_structure_options.do_cell_matching = True
+
+    
+    
+    converter = DocumentConverter(
+        pipeline_options=pipeline_options,
+        pdf_backend=DoclingParseDocumentBackend,
+    )
+
+    return converter
+
+def get_tesseract_converter():
 
     pipeline_options = PipelineOptions()
     # Debug
@@ -61,6 +82,7 @@ def get_converter():
     )
 
     return converter
+
 
 
 def test_e2e_conversions():
