@@ -32,11 +32,15 @@ class TesseractOcrOptions(OcrOptions):
     kind: Literal["tesseract"] = "tesseract"
 
 
+class TesserOcrOptions(OcrOptions):
+    kind: Literal["tesseract"] = "tesserocr"
+
+
 class PipelineOptions(BaseModel):
     do_table_structure: bool = True  # True: perform table structure extraction
     do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
-    ocr_options: Union[EasyOcrOptions, TesseractOcrOptions] = Field(
+    ocr_options: Union[EasyOcrOptions, TesseractOcrOptions, TesserOcrOptions] = Field(
         EasyOcrOptions(), discriminator="kind"
     )

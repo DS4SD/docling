@@ -12,8 +12,7 @@ GENERATE = False
 
 # Debug
 def save_output(pdf_path: Path, doc_result: ConversionResult):
-    r"""
-    """
+    r""" """
     import json
     import os
 
