@@ -127,7 +127,10 @@ def verify_dt(doc_pred_dt, doc_true_dt):
 
 
 def verify_conversion_result(
-    input_path: Path, doc_result: ConversionResult, generate=False
+    input_path: Path,
+    doc_result: ConversionResult,
+    generate=False,
+    ocr_engine=None,
 ):
     PageList = TypeAdapter(List[Page])
 
@@ -140,10 +143,16 @@ def verify_conversion_result(
     doc_pred_md = doc_result.render_as_markdown()
     doc_pred_dt = doc_result.render_as_doctags()
 
-    pages_path = input_path.with_suffix(".pages.json")
-    json_path = input_path.with_suffix(".json")
-    md_path = input_path.with_suffix(".md")
-    dt_path = input_path.with_suffix(".doctags.txt")
+    # pages_path = input_path.with_suffix(".pages.json")
+    # json_path = input_path.with_suffix(".json")
+    # md_path = input_path.with_suffix(".md")
+    # dt_path = input_path.with_suffix(".doctags.txt")
+
+    engine_suffix = "" if ocr_engine is None else f".{ocr_engine}"
+    pages_path = input_path.with_suffix(f"{engine_suffix}.pages.json")
+    json_path = input_path.with_suffix(f"{engine_suffix}.json")
+    md_path = input_path.with_suffix(f"{engine_suffix}.md")
+    dt_path = input_path.with_suffix(f"{engine_suffix}.doctags.txt")
 
     if generate:  # only used when re-generating truth
         with open(pages_path, "w") as fw:
