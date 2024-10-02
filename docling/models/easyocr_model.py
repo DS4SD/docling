@@ -4,21 +4,23 @@ from typing import Iterable
 import numpy
 
 from docling.datamodel.base_models import BoundingBox, CoordOrigin, OcrCell, Page
+from docling.datamodel.pipeline_options import EasyOcrOptions
 from docling.models.base_ocr_model import BaseOcrModel
 
 _log = logging.getLogger(__name__)
 
 
 class EasyOcrModel(BaseOcrModel):
-    def __init__(self, config):
-        super().__init__(config)
+    def __init__(self, enabled: bool, options: EasyOcrOptions):
+        super().__init__(enabled=enabled, options=options)
+        self.options: EasyOcrOptions
 
         self.scale = 3  # multiplier for 72 dpi == 216 dpi.
 
         if self.enabled:
             import easyocr
 
-            self.reader = easyocr.Reader(config["lang"])
+            self.reader = easyocr.Reader(lang_list=self.options.lang)
 
     def __call__(self, page_batch: Iterable[Page]) -> Iterable[Page]:
 
