@@ -33,7 +33,7 @@ class TesseractOcrOptions(OcrOptions):
     lang: List[str] = ["fr", "de", "es", "en"]
 
 class TesserOcrOptions(OcrOptions):
-    kind: Literal["tesseract"] = "tesserocr"
+    kind: Literal["tesserocr"] = "tesserocr"
 
 
 class PipelineOptions(BaseModel):
