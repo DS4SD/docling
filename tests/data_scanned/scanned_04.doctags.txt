@@ -1,0 +1,14 @@
+<document>
+<paragraph><location><page_1><loc_15><loc_87><loc_88><loc_92></location>Ihe parameters used for all theoretical graphs were, unless stated otherwise:</paragraph>
+<paragraph><location><page_1><loc_42><loc_83><loc_65><loc_85></location>(h) 9 0.1 mm Gap</paragraph>
+<paragraph><location><page_1><loc_31><loc_80><loc_67><loc_82></location>Wire Radius (R) 0.825 mm</paragraph>
+<paragraph><location><page_1><loc_23><loc_77><loc_69><loc_79></location>Wire Yield Stress (x) 245 MN/ 0<2</paragraph>
+<paragraph><location><page_1><loc_31><loc_74><loc_63><loc_76></location>Iube Iength (L) 60 mm</paragraph>
+<paragraph><location><page_1><loc_24><loc_71><loc_67><loc_74></location>50 Js/n2</paragraph>
+<paragraph><location><page_1><loc_23><loc_71><loc_51><loc_73></location>Polymer Viscosity (n)</paragraph>
+<paragraph><location><page_1><loc_19><loc_68><loc_75><loc_71></location>Critical Shear Stress (Ic) = 0.6 x N/a2 706</paragraph>
+<paragraph><location><page_1><loc_14><loc_55><loc_95><loc_66></location>Ihese values can be considered typical and were also used when estimating the experinental error (see Chapter 6.01) _ Io aid comparison between the effects of changing various parameters the sane graph axes were used throughout.</paragraph>
+<paragraph><location><page_1><loc_14><loc_46><loc_87><loc_54></location>Assumptions were mnade, further to those already des cribed in Chapter II, when calculating the theoretical results explained above.</paragraph>
+<paragraph><location><page_1><loc_14><loc_23><loc_89><loc_46></location>Firstly the viscosity was assuned to be constant when in fact it is reduçed by shear stress and increased by pressure. Ihe effect of shear stress on viscosity can be measured (see 8) and a mean value may be assumed . It is impossible, however, to neasure the combined effect of both high shear stress and high pressure although there is reason to believe they may, to some extent, cancel each other out. Ihis problem is discussed more fully later. Fig.</paragraph>
+<paragraph><location><page_1><loc_14><loc_6><loc_95><loc_22></location>It was also assuned that the transition from no slip to total takes place instantaneously at the velocity Vc when in practice it is more likely to take place over a small range of velocities. Ihis gives the theoretical graphs a sharp peak where as the effect of the slip taking place over a range of velocity would be to "round-off" this peak. slip</paragraph>
+</document>
