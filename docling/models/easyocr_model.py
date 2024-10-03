@@ -18,7 +18,12 @@ class EasyOcrModel(BaseOcrModel):
         self.scale = 3  # multiplier for 72 dpi == 216 dpi.
 
         if self.enabled:
-            import easyocr
+            try:
+                import easyocr
+            except ImportError:
+                raise ImportError(
+                    "EasyOCR is not installed. Please install it via `pip install easyocr` to use this OCR engine."
+                )
 
             self.reader = easyocr.Reader(lang_list=self.options.lang)
 
