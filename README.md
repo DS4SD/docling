@@ -33,8 +33,7 @@ To use Docling, simply install `docling` from your package manager, e.g. pip:
 pip install docling
 ```
 
-> [!NOTE]
-> Works on macOS and Linux environments. Windows platforms are currently not tested.
+Works on macOS, Linux and Windows environments. Both x86_64 and arm64 architectures.
 
 <details>
   <summary><b>Alternative PyTorch distributions</b></summary>
