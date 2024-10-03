@@ -1,6 +1,6 @@
 import io
 import logging
-import os
+import tempfile
 from subprocess import PIPE, Popen
 from typing import Iterable, Tuple
 
@@ -29,15 +29,19 @@ class TesseractOcrModel(BaseOcrModel):
                 self._get_name_and_version()
 
             except Exception as exc:
-                _log.error(f"Tesseract is not available, aborting: ", exc.what())
-                self.enabled = False
+                raise RuntimeError(
+                    f"Tesseract is not available, aborting: {exc} "
+                    "Install tesseract on your system and the tesseract binary is discoverable. "
+                    "The actual command for Tesseract can be specified in `pipeline_options.ocr_options.tesseract_cmd='tesseract'`. "
+                    "Alternatively, Docling has support for other OCR engines. See the documentation."
+                )
 
     def _get_name_and_version(self) -> Tuple[str, str]:
 
         if self._name != None and self._version != None:
             return self._name, self._version
 
-        cmd = ["tesseract", "--version"]
+        cmd = [self.options.tesseract_cmd, "--version"]
 
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
         stdout, stderr = proc.communicate()
@@ -65,7 +69,7 @@ class TesseractOcrModel(BaseOcrModel):
 
     def _run_tesseract(self, ifilename, languages=None):
 
-        cmd = ["tesseract"]
+        cmd = [self.options.tesseract_cmd]
 
         if languages:
             cmd += ["-l", "+".join(languages)]
@@ -108,17 +112,11 @@ class TesseractOcrModel(BaseOcrModel):
                     scale=self.scale, cropbox=ocr_rect
                 )
 
-                # FIXME: do we really need to save the image to a file
-                fname = "temporary-file.png"
-                high_res_image.save(fname)
+                with tempfile.NamedTemporaryFile(suffix=".png", mode="w") as image_file:
+                    fname = image_file.name
+                    high_res_image.save(fname)
 
-                df = None
-                if os.path.exists(fname):
                     df = self._run_tesseract(fname)
-                    os.remove(fname)
-                else:
-                    _log.error(f"no image file: {fname}")
-                    continue
 
                 # _log.info(df)
 

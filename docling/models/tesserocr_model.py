@@ -19,22 +19,30 @@ class TesserOcrModel(BaseOcrModel):
         self.reader = None
 
         if self.enabled:
+            setup_errmsg = (
+                "tesserocr is not correctly installed. "
+                "Please install it via `pip install tesserocr` to use this OCR engine. "
+                "Note that tesserocr might have to be manually compiled for working with"
+                "your Tesseract installation. The Docling documentation provides examples for it. "
+                "Alternatively, Docling has support for other OCR engines. See the documentation."
+            )
             try:
                 import tesserocr
             except ImportError:
-                msg = (
-                    "TesserOCR is not installed."
-                    "Please install it via `pip install easyocr` to use this OCR engine."
-                )
-                raise ImportError(msg)
+                raise ImportError(setup_errmsg)
+
+            try:
+                tesseract_version = tesserocr.tesseract_version()
+                _log.debug("Initializing TesserOCR: %s", tesseract_version)
+            except:
+                raise ImportError(setup_errmsg)
 
             # Initialize the tesseractAPI
             lang = "+".join(self.options.lang)
-            _log.debug("Initializing TesserOCR: %s", tesserocr.tesseract_version())
             self.reader = tesserocr.PyTessBaseAPI(
                 lang=lang, psm=tesserocr.PSM.AUTO, init=True, oem=tesserocr.OEM.DEFAULT
             )
-            self.reader_RIL = tesserocr.RIL.TEXTLINE
+            self.reader_RIL = tesserocr.RIL
 
     def __del__(self):
         if self.reader is not None:

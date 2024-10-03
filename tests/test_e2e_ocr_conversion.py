@@ -1,10 +1,15 @@
 from pathlib import Path
-
-from pydantic import Field
+from typing import List
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import PipelineOptions, TesseractOcrOptions
+from docling.datamodel.pipeline_options import (
+    EasyOcrOptions,
+    OcrOptions,
+    PipelineOptions,
+    TesseractOcrOptions,
+    TesserOcrOptions,
+)
 from docling.document_converter import DocumentConverter
 
 from .verify_utils import verify_conversion_result
@@ -50,13 +55,12 @@ def get_pdf_paths():
     return pdf_files
 
 
-def get_converter(engine: str):
+def get_converter(ocr_options: OcrOptions):
     pipeline_options = PipelineOptions()
     pipeline_options.do_ocr = True
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
-    if engine == "tesserocr":
-        pipeline_options.ocr_options = TesseractOcrOptions()
+    pipeline_options.ocr_options = ocr_options
 
     converter = DocumentConverter(
         pipeline_options=pipeline_options,
@@ -70,9 +74,15 @@ def test_e2e_conversions():
 
     pdf_paths = get_pdf_paths()
 
-    for engine in ["easyocr", "tesserocr", "tesseract"]:
-        print(f"Converting with ocr_engine: {engine}")
-        converter = get_converter(engine)
+    engines: List[OcrOptions] = [
+        EasyOcrOptions(),
+        TesserOcrOptions(),
+        TesseractOcrOptions(),
+    ]
+
+    for ocr_options in engines:
+        print(f"Converting with ocr_engine: {ocr_options.kind}")
+        converter = get_converter(ocr_options=ocr_options)
         for pdf_path in pdf_paths:
             print(f"converting {pdf_path}")
 
@@ -86,7 +96,7 @@ def test_e2e_conversions():
                 input_path=pdf_path,
                 doc_result=doc_result,
                 generate=GENERATE,
-                ocr_engine=engine,
+                ocr_engine=ocr_options.kind,
             )
 
 
