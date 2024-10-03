@@ -1,12 +1,13 @@
 <document>
-<paragraph><location><page_1><loc_6><loc_59><loc_35><loc_63></location>Implement roles and separation of duties</paragraph>
-<paragraph><location><page_1><loc_6><loc_52><loc_33><loc_56></location>Leverage row permissions on the database</paragraph>
-<paragraph><location><page_1><loc_6><loc_45><loc_32><loc_49></location>Protect columns by defining column masks</paragraph>
-<paragraph><location><page_1><loc_6><loc_3><loc_27><loc_5></location>ibm.com /redbooks</paragraph>
 <paragraph><location><page_1><loc_47><loc_94><loc_68><loc_96></location>Front cover</paragraph>
 <figure>
 <location><page_1><loc_84><loc_93><loc_96><loc_97></location>
 </figure>
+<subtitle-level-1><location><page_1><loc_6><loc_79><loc_96><loc_89></location>Row and Column Access Control Support in IBM DB2 for i</subtitle-level-1>
+<paragraph><location><page_1><loc_6><loc_59><loc_35><loc_63></location>Implement roles and separation of duties</paragraph>
+<paragraph><location><page_1><loc_6><loc_52><loc_33><loc_56></location>Leverage row permissions on the database</paragraph>
+<paragraph><location><page_1><loc_6><loc_45><loc_32><loc_49></location>Protect columns by defining column masks</paragraph>
+<paragraph><location><page_1><loc_6><loc_3><loc_27><loc_5></location>ibm.com /redbooks</paragraph>
 <paragraph><location><page_1><loc_81><loc_12><loc_95><loc_27></location>Jim Bainbridge Hernando Bedoya Rob Bestgen Mike Cain Dan Cruikshank Jim Denton Doug Mack Tom McKinley Kent Milligan</paragraph>
 <figure>
 <location><page_1><loc_51><loc_2><loc_95><loc_10></location>

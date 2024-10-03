@@ -991,7 +991,17 @@ torchvision = [
     {version = ">=0,<1", markers = "sys_platform != \"darwin\" or platform_machine != \"x86_64\""},
     {version = ">=0.17.2,<0.18.0", markers = "sys_platform == \"darwin\" and platform_machine == \"x86_64\""},
 ]
+<<<<<<< HEAD
 tqdm = ">=4.64.0,<5.0.0"
+=======
+tqdm = "^4.64.0"
+
+[package.source]
+type = "git"
+url = "https://github.com/DS4SD/docling-ibm-models.git"
+reference = "e92c3cef733d138da4d9e57f55750143b68c0f02"
+resolved_reference = "e92c3cef733d138da4d9e57f55750143b68c0f02"
+>>>>>>> 44dcf83 (Updated tests)
 
 [[package]]
 name = "docling-parse"

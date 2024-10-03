@@ -1,4 +1,9 @@
 <document>
+<paragraph><location><page_1><loc_47><loc_96><loc_68><loc_99></location>Front cover</paragraph>
+<figure>
+<location><page_1><loc_67><loc_90><loc_93><loc_96></location>
+</figure>
+<subtitle-level-1><location><page_1><loc_7><loc_75><loc_88><loc_86></location>IBM Cloud Pak for Data on IBM Z</subtitle-level-1>
 <paragraph><location><page_1><loc_7><loc_60><loc_20><loc_62></location>Jasmeet Bhatia</paragraph>
 <paragraph><location><page_1><loc_7><loc_57><loc_20><loc_59></location>Ravi Gummadi</paragraph>
 <paragraph><location><page_1><loc_7><loc_51><loc_21><loc_52></location>Srirama Sharma</paragraph>
@@ -13,10 +18,6 @@
 </figure>
 <figure>
 <location><page_1><loc_7><loc_3><loc_21><loc_8></location>
-</figure>
-<paragraph><location><page_1><loc_47><loc_96><loc_68><loc_99></location>Front cover</paragraph>
-<figure>
-<location><page_1><loc_67><loc_90><loc_93><loc_96></location>
 </figure>
 <figure>
 <location><page_1><loc_24><loc_13><loc_99><loc_62></location>

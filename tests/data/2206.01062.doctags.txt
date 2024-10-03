@@ -1,4 +1,5 @@
 <document>
+<subtitle-level-1><location><page_1><loc_17><loc_85><loc_83><loc_89></location>DocLayNet: A Large Human-Annotated Dataset for Document-Layout Analysis</subtitle-level-1>
 <paragraph><location><page_1><loc_15><loc_77><loc_32><loc_83></location>Birgit Pfitzmann IBM Research Rueschlikon, Switzerland bpf@zurich.ibm.com</paragraph>
 <paragraph><location><page_1><loc_42><loc_77><loc_58><loc_83></location>Christoph Auer IBM Research Rueschlikon, Switzerland cau@zurich.ibm.com</paragraph>
 <paragraph><location><page_1><loc_68><loc_77><loc_85><loc_83></location>Michele Dolfi IBM Research Rueschlikon, Switzerland dol@zurich.ibm.com</paragraph>

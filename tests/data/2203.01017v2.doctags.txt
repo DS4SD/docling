@@ -1,4 +1,5 @@
 <document>
+<subtitle-level-1><location><page_1><loc_16><loc_85><loc_82><loc_87></location>TableFormer: Table Structure Understanding with Transformers.</subtitle-level-1>
 <paragraph><location><page_1><loc_23><loc_78><loc_74><loc_82></location>Ahmed Nassar, Nikolaos Livathinos, Maksym Lysak, Peter Staar IBM Research</paragraph>
 <paragraph><location><page_1><loc_34><loc_77><loc_62><loc_78></location>{ ahn,nli,mly,taa } @zurich.ibm.com</paragraph>
 <subtitle-level-1><location><page_1><loc_24><loc_71><loc_31><loc_73></location>Abstract</subtitle-level-1>
