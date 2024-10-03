@@ -70,10 +70,7 @@ class LayoutModel:
             "Key-Value Region": 0.45,
         }
 
-        CLASS_REMAPPINGS = {
-            "Document Index": "Table",
-            "Title": "Section-header"
-        }
+        CLASS_REMAPPINGS = {"Document Index": "Table", "Title": "Section-header"}
 
         _log.debug("================= Start postprocess function ====================")
         start_time = time.time()
