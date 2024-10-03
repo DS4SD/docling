@@ -1,155 +1,20 @@
 <document>
-<paragraph><location><page_1><loc_6><loc_82><loc_19><loc_88></location>Campusiines is provided as a service to the TCU community. Announcements of events, public meetings and other general campus infor mation should be brought by the Skiff office, Moudy 291S or sent to TCU Box 32929 The Skiff reserves the right to edit for style and taste</paragraph>
-<paragraph><location><page_1><loc_6><loc_75><loc_19><loc_81></location>DEPARTMENT OF MUSIC MASTER CLASS SERIES AND JAZZ AND PERCUSSION DEPARTMENTS pr</paragraph>
-<subtitle-level-1><location><page_1><loc_7><loc_73><loc_19><loc_74></location>TCU INTE RNATIONAL</subtitle-level-1>
-<paragraph><location><page_1><loc_6><loc_71><loc_19><loc_73></location>ASSOCIATION</paragraph>
-<subtitle-level-1><location><page_1><loc_7><loc_67><loc_16><loc_68></location>WEATHER</subtitle-level-1>
-<subtitle-level-1><location><page_1><loc_6><loc_56><loc_18><loc_57></location>CORRECTION</subtitle-level-1>
-<figure>
-<location><page_1><loc_5><loc_47><loc_19><loc_50></location>
-</figure>
-<figure>
-<location><page_1><loc_5><loc_25><loc_34><loc_47></location>
-</figure>
-<figure>
-<location><page_1><loc_35><loc_25><loc_49><loc_47></location>
-</figure>
-<figure>
-<location><page_1><loc_5><loc_17><loc_48><loc_24></location>
-</figure>
-<subtitle-level-1><location><page_1><loc_6><loc_15><loc_15><loc_16></location>EMPLOYMENT</subtitle-level-1>
-<paragraph><location><page_1><loc_5><loc_10><loc_15><loc_14></location>10:00 to 5:00. Call The Mudpuppy 731-2581</paragraph>
-<paragraph><location><page_1><loc_5><loc_7><loc_15><loc_9></location>»</paragraph>
-<paragraph><location><page_1><loc_16><loc_12><loc_26><loc_17></location>Fort Worth Ladies Specialty Boutique located in the Stockyard Station needs experenced sales person Weekends, non-smoker 626-8900</paragraph>
-<paragraph><location><page_1><loc_16><loc_8><loc_26><loc_11></location>Great Money--Great Fun! Become a Flash photographer, must have 35mm camera, will train FLASH, 924-2626</paragraph>
-<paragraph><location><page_1><loc_27><loc_9><loc_37><loc_11></location>Letters, term papers, the$@5, oF anything else you may need typed, call 214-641-1023. 1021</paragraph>
-<subtitle-level-1><location><page_1><loc_27><loc_7><loc_37><loc_8></location>a</subtitle-level-1>
-<paragraph><location><page_1><loc_27><loc_12><loc_37><loc_17></location>TERM PAPERS TYPED FAST! Laser printed Rush orders and credit cards accepted. Across from TCU at 3023 South University Drive. ACCURACY +PLUS, 926-4969</paragraph>
-<paragraph><location><page_1><loc_38><loc_12><loc_48><loc_17></location>plus personal cash bonuses for yourself Call 1-800-932-0528, Ext. 65. from 3 different fundraisers lasting either 3 or 7 days. No investment Earn $$$ for your group</paragraph>
-<subtitle-level-1><location><page_1><loc_40><loc_9><loc_48><loc_11></location>-</subtitle-level-1>
-<paragraph><location><page_1><loc_38><loc_7><loc_48><loc_9></location>Southwest and rustic furfor information, 922-9563.</paragraph>
-<paragraph><location><page_1><loc_16><loc_9><loc_16><loc_9></location>|</paragraph>
-<subtitle-level-1><location><page_1><loc_20><loc_89><loc_33><loc_90></location>CAMPUSLINES</subtitle-level-1>
-<paragraph><location><page_1><loc_20><loc_85><loc_33><loc_88></location>ALCOHOL AND DRUG EDUCATION 1 pedehag en} SUPPORT GROUP at § Nednesdays in Ricke 3</paragraph>
-<paragraph><location><page_1><loc_20><loc_81><loc_33><loc_84></location>PSI CHI psyct are</paragraph>
-<paragraph><location><page_1><loc_20><loc_77><loc_33><loc_80></location>FRENCH CLUB w fay</paragraph>
-<subtitle-level-1><location><page_1><loc_20><loc_76><loc_33><loc_77></location>FELLOWSHIP OF owes te</subtitle-level-1>
-<paragraph><location><page_1><loc_20><loc_73><loc_33><loc_77></location>te AT HLETES © we</paragraph>
-<paragraph><location><page_1><loc_20><loc_71><loc_33><loc_72></location>BAPTIST STUDENT MINISTRY i tu</paragraph>
-<subtitle-level-1><location><page_1><loc_21><loc_66><loc_24><loc_66></location>Today</subtitle-level-1>
-<paragraph><location><page_1><loc_27><loc_9><loc_27><loc_10></location>|</paragraph>
-<paragraph><location><page_1><loc_27><loc_9><loc_27><loc_9></location>|</paragraph>
-<paragraph><location><page_1><loc_34><loc_85><loc_47><loc_88></location>dent Union Thursd dible st meets at 12:30 on ays for Noondays (a udy) in Student Center 216 and at 7 p.m. on Mondays for Jume start, a worship time, in Student Center 20 5-206</paragraph>
-<subtitle-level-1><location><page_1><loc_35><loc_83><loc_47><loc_84></location>TCU CATHOLIC COMMU-</subtitle-level-1>
-<paragraph><location><page_1><loc_34><loc_77><loc_47><loc_83></location>NITY p gran Supper pro fr every nthe Fa ulty Center 14. Al are rmanizator eat during Mid fr Break et. 13-1 format a</paragraph>
-<subtitle-level-1><location><page_1><loc_35><loc_76><loc_47><loc_77></location>RAPE/SEXUAL ASSAULT</subtitle-level-1>
-<paragraph><location><page_1><loc_34><loc_72><loc_47><loc_76></location>SURVIVORS GROUP meeting</paragraph>
-<figure>
-<location><page_1><loc_49><loc_80><loc_91><loc_89></location>
-</figure>
-<subtitle-level-1><location><page_1><loc_81><loc_79><loc_93><loc_80></location>by Bill Watterson</subtitle-level-1>
-<figure>
-<location><page_1><loc_49><loc_70><loc_60><loc_78></location>
-</figure>
-<paragraph><location><page_1><loc_50><loc_66><loc_50><loc_67></location>|</paragraph>
-<paragraph><location><page_1><loc_50><loc_58><loc_64><loc_59></location>SIRCULATION 4</paragraph>
-<paragraph><location><page_1><loc_50><loc_56><loc_64><loc_58></location>SUBSCRIPTIONS</paragraph>
-<paragraph><location><page_1><loc_50><loc_53><loc_64><loc_55></location>PHOTOGRAPHS if t '</paragraph>
-<paragraph><location><page_1><loc_50><loc_50><loc_64><loc_52></location>EDITORIAL POLICY edit t Oe t</paragraph>
-<figure>
-<location><page_1><loc_71><loc_64><loc_91><loc_78></location>
-</figure>
-<paragraph><location><page_1><loc_65><loc_60><loc_78><loc_62></location>LETTERS TO THE EDITOR e Skiff</paragraph>
-<paragraph><location><page_1><loc_65><loc_56><loc_78><loc_60></location>1 ] ! ef blication to the Skiff the ' ficat naior</paragraph>
-<paragraph><location><page_1><loc_65><loc_53><loc_78><loc_56></location>e ee wea coejte @ mai form and through the { . 4</paragraph>
-<paragraph><location><page_1><loc_65><loc_51><loc_78><loc_53></location>f kiff nember of the sted Pre</paragraph>
-<paragraph><location><page_1><loc_64><loc_50><loc_78><loc_51></location>MAILING ADDRESS Ff</paragraph>
-<figure>
-<location><page_1><loc_49><loc_34><loc_78><loc_47></location>
-</figure>
-<paragraph><location><page_1><loc_69><loc_32><loc_70><loc_33></location>S</paragraph>
-<paragraph><location><page_1><loc_66><loc_30><loc_70><loc_30></location>CANTINA</paragraph>
-<paragraph><location><page_1><loc_57><loc_28><loc_71><loc_29></location>* Full/Part-time positions</paragraph>
-<paragraph><location><page_1><loc_57><loc_27><loc_68><loc_28></location>* Training provided</paragraph>
-<paragraph><location><page_1><loc_57><loc_26><loc_72><loc_27></location>* No experience necessary</paragraph>
-<paragraph><location><page_1><loc_58><loc_25><loc_59><loc_26></location>IN</paragraph>
-<paragraph><location><page_1><loc_59><loc_25><loc_63><loc_26></location>PERSON</paragraph>
-<paragraph><location><page_1><loc_60><loc_24><loc_61><loc_25></location>3:00</paragraph>
-<paragraph><location><page_1><loc_62><loc_24><loc_64><loc_25></location>p.m.</paragraph>
-<paragraph><location><page_1><loc_64><loc_25><loc_67><loc_26></location>Tuesday</paragraph>
-<paragraph><location><page_1><loc_64><loc_24><loc_64><loc_24></location>-</paragraph>
-<paragraph><location><page_1><loc_65><loc_24><loc_67><loc_25></location>5:00</paragraph>
-<paragraph><location><page_1><loc_68><loc_25><loc_68><loc_26></location>&</paragraph>
-<paragraph><location><page_1><loc_67><loc_24><loc_69><loc_25></location>p.m.</paragraph>
-<paragraph><location><page_1><loc_53><loc_23><loc_71><loc_24></location>* 10433 Lompanoy Ln. (Now Open)</paragraph>
-<paragraph><location><page_1><loc_54><loc_23><loc_54><loc_23></location>*</paragraph>
-<paragraph><location><page_1><loc_54><loc_22><loc_56><loc_23></location>723</paragraph>
-<paragraph><location><page_1><loc_57><loc_22><loc_58><loc_23></location>S.</paragraph>
-<paragraph><location><page_1><loc_58><loc_22><loc_62><loc_23></location>Centrar</paragraph>
-<paragraph><location><page_1><loc_62><loc_22><loc_68><loc_23></location>Expressway</paragraph>
-<paragraph><location><page_1><loc_69><loc_22><loc_75><loc_23></location>(Richaroson)</paragraph>
-<paragraph><location><page_1><loc_59><loc_21><loc_70><loc_22></location>Equa/l Opportunity Employer</paragraph>
-<subtitle-level-1><location><page_1><loc_53><loc_16><loc_75><loc_20></location>PAPPADEALLY SEAFOOD KITCHEN</subtitle-level-1>
-<paragraph><location><page_1><loc_57><loc_16><loc_57><loc_16></location>*</paragraph>
-<paragraph><location><page_1><loc_57><loc_15><loc_57><loc_15></location>*</paragraph>
-<paragraph><location><page_1><loc_63><loc_15><loc_71><loc_16></location>positions provided</paragraph>
-<paragraph><location><page_1><loc_58><loc_16><loc_65><loc_16></location>Full/Part-time</paragraph>
-<paragraph><location><page_1><loc_58><loc_15><loc_63><loc_16></location>Training</paragraph>
-<paragraph><location><page_1><loc_57><loc_14><loc_72><loc_15></location>* No experience necessary</paragraph>
-<subtitle-level-1><location><page_1><loc_59><loc_13><loc_69><loc_14></location>Apply in person:</subtitle-level-1>
-<paragraph><location><page_1><loc_53><loc_12><loc_76><loc_13></location>Tuesday & Wednesday, 3:00 p.m. -5:00 p.m.</paragraph>
-<paragraph><location><page_1><loc_55><loc_8><loc_73><loc_12></location>Dallas: 3520 Oaklawn at Lemmon Irving: 10428 Lombardy Ln. (open soon!) Richardson: 725 S. Central Expressway Arlington: 1304 Copeland Rd. at Collins Equal Opportunity Employer</paragraph>
-<paragraph><location><page_1><loc_52><loc_6><loc_76><loc_7></location>Inquiring minds read the Skiff.</paragraph>
-<paragraph><location><page_1><loc_69><loc_25><loc_74><loc_26></location>Wednesday</paragraph>
-<figure>
-<location><page_1><loc_60><loc_69><loc_71><loc_78></location>
-</figure>
-<subtitle-level-1><location><page_1><loc_63><loc_65><loc_80><loc_67></location>TCU DAILY SKIFF Since 1902</subtitle-level-1>
-<paragraph><location><page_1><loc_79><loc_63><loc_92><loc_65></location>SKIFF phenyl en OMRSCTORY nm be reactwd by Giahrig</paragraph>
-<paragraph><location><page_1><loc_79><loc_58><loc_80><loc_58></location>After</paragraph>
-<paragraph><location><page_1><loc_81><loc_58><loc_81><loc_58></location>H</paragraph>
-<paragraph><location><page_1><loc_81><loc_55><loc_82><loc_56></location>sife</paragraph>
-<paragraph><location><page_1><loc_79><loc_55><loc_81><loc_55></location>Busine</paragraph>
-<paragraph><location><page_1><loc_82><loc_55><loc_85><loc_55></location>Manag</paragraph>
-<paragraph><location><page_1><loc_80><loc_54><loc_81><loc_54></location>'¢</paragraph>
-<paragraph><location><page_1><loc_80><loc_53><loc_82><loc_53></location>uM"airs:</paragraph>
-<paragraph><location><page_1><loc_79><loc_52><loc_81><loc_53></location>Image TCU</paragraph>
-<paragraph><location><page_1><loc_84><loc_54><loc_84><loc_54></location>at</paragraph>
-<paragraph><location><page_1><loc_83><loc_53><loc_84><loc_53></location>Jt</paragraph>
-<paragraph><location><page_1><loc_81><loc_53><loc_84><loc_53></location>Magazine</paragraph>
-<paragraph><location><page_1><loc_79><loc_51><loc_82><loc_52></location>Vax Product</paragraph>
-<paragraph><location><page_1><loc_83><loc_52><loc_85><loc_52></location>(address:</paragraph>
-<paragraph><location><page_1><loc_83><loc_51><loc_85><loc_52></location>Manager</paragraph>
-<paragraph><location><page_1><loc_82><loc_46><loc_86><loc_46></location>What's</paragraph>
-<paragraph><location><page_1><loc_86><loc_46><loc_90><loc_46></location>news?</paragraph>
-<paragraph><location><page_1><loc_82><loc_45><loc_84><loc_45></location>Find</paragraph>
-<paragraph><location><page_1><loc_85><loc_45><loc_86><loc_45></location>out</paragraph>
-<paragraph><location><page_1><loc_80><loc_43><loc_83><loc_44></location>TCU</paragraph>
-<paragraph><location><page_1><loc_87><loc_45><loc_88><loc_45></location>in</paragraph>
-<paragraph><location><page_1><loc_84><loc_43><loc_88><loc_44></location>Daily</paragraph>
-<paragraph><location><page_1><loc_88><loc_43><loc_92><loc_44></location>Skiff</paragraph>
-<paragraph><location><page_1><loc_80><loc_40><loc_85><loc_41></location>TRAFFIC</paragraph>
-<paragraph><location><page_1><loc_86><loc_40><loc_92><loc_41></location>TICKETS</paragraph>
-<paragraph><location><page_1><loc_80><loc_37><loc_92><loc_39></location>|iiigeaeme clsewher re in Tarrant County. ) promuses as to results Any fine and any court costs are not included fee for le zal repres entation</paragraph>
-<paragraph><location><page_1><loc_84><loc_36><loc_85><loc_37></location>R.</paragraph>
-<paragraph><location><page_1><loc_80><loc_36><loc_84><loc_37></location>James</paragraph>
-<paragraph><location><page_1><loc_83><loc_35><loc_86><loc_36></location>Atiorney</paragraph>
-<paragraph><location><page_1><loc_81><loc_33><loc_91><loc_35></location>24 Sandage Fort Worth, TX 76109-1793 2203236</paragraph>
-<paragraph><location><page_1><loc_86><loc_35><loc_92><loc_37></location>M. ALLORY at La i</paragraph>
-<paragraph><location><page_1><loc_80><loc_14><loc_92><loc_18></location>Stockholm $699" Los Angeles $250" Mexico City $198" See oc caret bor 0 Wort Ged on md wed bord toe Lyall wrortivante</paragraph>
-<figure>
-<location><page_1><loc_82><loc_10><loc_90><loc_14></location>
-</figure>
-<paragraph><location><page_1><loc_82><loc_9><loc_90><loc_10></location>6715 Hillcrest Dallas, TX 75205</paragraph>
-<paragraph><location><page_1><loc_80><loc_7><loc_92><loc_8></location>214-363-9941</paragraph>
-<paragraph><location><page_1><loc_82><loc_6><loc_90><loc_7></location>Eurailpasses</paragraph>
-<paragraph><location><page_1><loc_88><loc_45><loc_90><loc_45></location>the</paragraph>
-<paragraph><location><page_1><loc_82><loc_76><loc_93><loc_78></location>ios ][N © on TT ad or HE SHOULD | me</paragraph>
-<paragraph><location><page_1><loc_90><loc_76><loc_93><loc_76></location>ee</paragraph>
-<paragraph><location><page_1><loc_89><loc_73><loc_93><loc_75></location>WEY!</paragraph>
-<paragraph><location><page_1><loc_88><loc_69><loc_92><loc_71></location>win Po iS</paragraph>
-<paragraph><location><page_1><loc_54><loc_25><loc_57><loc_26></location>Appty</paragraph>
-<paragraph><location><page_1><loc_79><loc_95><loc_79><loc_96></location>:</paragraph>
-<paragraph><location><page_1><loc_86><loc_52><loc_86><loc_52></location>Sk</paragraph>
-<paragraph><location><page_1><loc_99><loc_92><loc_100><loc_93></location>g-/</paragraph>
+<subtitle-level-1><location><page_1><loc_22><loc_85><loc_76><loc_86></location>TableFormer: Table Structure Understanding with Transformers</subtitle-level-1>
+<paragraph><location><page_1><loc_36><loc_83><loc_61><loc_85></location>Supplementary Material</paragraph>
+<subtitle-level-1><location><page_1><loc_8><loc_79><loc_29><loc_80></location>1. Details on the datasets</subtitle-level-1>
+<subtitle-level-1><location><page_1><loc_8><loc_76><loc_25><loc_77></location>1.1. Data preparation</subtitle-level-1>
+<paragraph><location><page_1><loc_8><loc_51><loc_47><loc_75></location>As a first step of our data preparation process, we have calculated statistics over the datasets across the following dimensions: (1) table size measured in the number of rows and columns, (2) complexity of the table, (3) strictness of the provided HTML structure and (4) completeness (i.e. no omitted bounding boxes). A table is considered to be simple if it does not contain row spans or column spans. Additionally, a table has a strict HTML structure if every row has the same number of columns after taking into account any row or column spans. Therefore a strict HTML structure looks always rectangular. However, HTML is a lenient encoding format, i.e. tables with rows of different sizes might still be regarded as correct due to implicit display rules. These implicit rules leave room for ambiguity, which we want to avoid. As such, we prefer to have "strict" tables, i.e. tables where every row has exactly the same length.</paragraph>
+<paragraph><location><page_1><loc_8><loc_21><loc_47><loc_51></location>We have developed a technique that tries to derive a missing bounding box out of its neighbors. As a first step, we use the annotation data to generate the most fine-grained grid that covers the table structure. In case of strict HTML tables, all grid squares are associated with some table cell and in the presence of table spans a cell extends across multiple grid squares. When enough bounding boxes are known for a rectangular table, it is possible to compute the geometrical border lines between the grid rows and columns. Eventually this information is used to generate the missing bounding boxes. Additionally, the existence of unused grid squares indicates that the table rows have unequal number of columns and the overall structure is non-strict. The generation of missing bounding boxes for non-strict HTML tables is ambiguous and therefore quite challenging. Thus, we have decided to simply discard those tables. In case of PubTabNet we have computed missing bounding boxes for 48% of the simple and 69% of the complex tables. Regarding FinTabNet, 68% of the simple and 98% of the complex tables require the generation of bounding boxes.</paragraph>
+<paragraph><location><page_1><loc_8><loc_18><loc_47><loc_21></location>Figure 7 illustrates the distribution of the tables across different dimensions per dataset.</paragraph>
+<subtitle-level-1><location><page_1><loc_8><loc_15><loc_25><loc_16></location>1.2. Synthetic datasets</subtitle-level-1>
+<paragraph><location><page_1><loc_8><loc_10><loc_47><loc_14></location>Aiming to train and evaluate our models in a broader spectrum of table data we have synthesized four types of datasets. Each one contains tables with different appear-</paragraph>
+<paragraph><location><page_1><loc_50><loc_74><loc_89><loc_80></location>ances in regard to their size, structure, style and content. Every synthetic dataset contains 150k examples, summing up to 600k synthetic examples. All datasets are divided into Train, Test and Val splits (80%, 10%, 10%).</paragraph>
+<paragraph><location><page_1><loc_50><loc_71><loc_89><loc_73></location>The process of generating a synthetic dataset can be decomposed into the following steps:</paragraph>
+<paragraph><location><page_1><loc_50><loc_60><loc_89><loc_70></location>1. Prepare styling and content templates: The styling templates have been manually designed and organized into groups of scope specific appearances (e.g. financial data, marketing data, etc.) Additionally, we have prepared curated collections of content templates by extracting the most frequently used terms out of non-synthetic datasets (e.g. PubTabNet, FinTabNet, etc.).</paragraph>
+<paragraph><location><page_1><loc_50><loc_43><loc_89><loc_60></location>2. Generate table structures: The structure of each synthetic dataset assumes a horizontal table header which potentially spans over multiple rows and a table body that may contain a combination of row spans and column spans. However, spans are not allowed to cross the header -body boundary. The table structure is described by the parameters: Total number of table rows and columns, number of header rows, type of spans (header only spans, row only spans, column only spans, both row and column spans), maximum span size and the ratio of the table area covered by spans.</paragraph>
+<paragraph><location><page_1><loc_50><loc_37><loc_89><loc_43></location>3. Generate content: Based on the dataset theme, a set of suitable content templates is chosen first. Then, this content can be combined with purely random text to produce the synthetic content.</paragraph>
+<paragraph><location><page_1><loc_50><loc_31><loc_89><loc_37></location>4. Apply styling templates: Depending on the domain of the synthetic dataset, a set of styling templates is first manually selected. Then, a style is randomly selected to format the appearance of the synthesized table.</paragraph>
+<paragraph><location><page_1><loc_50><loc_23><loc_89><loc_31></location>5. Render the complete tables: The synthetic table is finally rendered by a web browser engine to generate the bounding boxes for each table cell. A batching technique is utilized to optimize the runtime overhead of the rendering process.</paragraph>
+<subtitle-level-1><location><page_1><loc_50><loc_19><loc_89><loc_22></location>2. Prediction post-processing for PDF documents</subtitle-level-1>
+<paragraph><location><page_1><loc_50><loc_10><loc_89><loc_17></location>Although TableFormer can predict the table structure and the bounding boxes for tables recognized inside PDF documents, this is not enough when a full reconstruction of the original table is required. This happens mainly due the following reasons:</paragraph>
 </document>

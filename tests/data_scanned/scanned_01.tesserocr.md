@@ -1,271 +1,35 @@
-Campusiines is provided as a service to the TCU community. Announcements of events, public meetings and other general campus infor mation should be brought by the Skiff office, Moudy 291S or sent to TCU Box 32929 The Skiff reserves the right to edit for style and taste
+## TableFormer: Table Structure Understanding with Transformers
 
-DEPARTMENT OF MUSIC MASTER CLASS SERIES AND JAZZ AND PERCUSSION DEPARTMENTS pr
+Supplementary Material
 
-## TCU INTE RNATIONAL
+## 1. Details on the datasets
 
-ASSOCIATION
+## 1.1. Data preparation
 
-## WEATHER
+As a first step of our data preparation process, we have calculated statistics over the datasets across the following dimensions: (1) table size measured in the number of rows and columns, (2) complexity of the table, (3) strictness of the provided HTML structure and (4) completeness (i.e. no omitted bounding boxes). A table is considered to be simple if it does not contain row spans or column spans. Additionally, a table has a strict HTML structure if every row has the same number of columns after taking into account any row or column spans. Therefore a strict HTML structure looks always rectangular. However, HTML is a lenient encoding format, i.e. tables with rows of different sizes might still be regarded as correct due to implicit display rules. These implicit rules leave room for ambiguity, which we want to avoid. As such, we prefer to have "strict" tables, i.e. tables where every row has exactly the same length.
 
-## CORRECTION
+We have developed a technique that tries to derive a missing bounding box out of its neighbors. As a first step, we use the annotation data to generate the most fine-grained grid that covers the table structure. In case of strict HTML tables, all grid squares are associated with some table cell and in the presence of table spans a cell extends across multiple grid squares. When enough bounding boxes are known for a rectangular table, it is possible to compute the geometrical border lines between the grid rows and columns. Eventually this information is used to generate the missing bounding boxes. Additionally, the existence of unused grid squares indicates that the table rows have unequal number of columns and the overall structure is non-strict. The generation of missing bounding boxes for non-strict HTML tables is ambiguous and therefore quite challenging. Thus, we have decided to simply discard those tables. In case of PubTabNet we have computed missing bounding boxes for 48% of the simple and 69% of the complex tables. Regarding FinTabNet, 68% of the simple and 98% of the complex tables require the generation of bounding boxes.
 
+Figure 7 illustrates the distribution of the tables across different dimensions per dataset.
 
-<!-- image -->
+## 1.2. Synthetic datasets
 
+Aiming to train and evaluate our models in a broader spectrum of table data we have synthesized four types of datasets. Each one contains tables with different appear-
 
-<!-- image -->
+ances in regard to their size, structure, style and content. Every synthetic dataset contains 150k examples, summing up to 600k synthetic examples. All datasets are divided into Train, Test and Val splits (80%, 10%, 10%).
 
+The process of generating a synthetic dataset can be decomposed into the following steps:
 
-<!-- image -->
+1. Prepare styling and content templates: The styling templates have been manually designed and organized into groups of scope specific appearances (e.g. financial data, marketing data, etc.) Additionally, we have prepared curated collections of content templates by extracting the most frequently used terms out of non-synthetic datasets (e.g. PubTabNet, FinTabNet, etc.).
 
+2. Generate table structures: The structure of each synthetic dataset assumes a horizontal table header which potentially spans over multiple rows and a table body that may contain a combination of row spans and column spans. However, spans are not allowed to cross the header -body boundary. The table structure is described by the parameters: Total number of table rows and columns, number of header rows, type of spans (header only spans, row only spans, column only spans, both row and column spans), maximum span size and the ratio of the table area covered by spans.
 
-<!-- image -->
+3. Generate content: Based on the dataset theme, a set of suitable content templates is chosen first. Then, this content can be combined with purely random text to produce the synthetic content.
 
-## EMPLOYMENT
+4. Apply styling templates: Depending on the domain of the synthetic dataset, a set of styling templates is first manually selected. Then, a style is randomly selected to format the appearance of the synthesized table.
 
-10:00 to 5:00. Call The Mudpuppy 731-2581
+5. Render the complete tables: The synthetic table is finally rendered by a web browser engine to generate the bounding boxes for each table cell. A batching technique is utilized to optimize the runtime overhead of the rendering process.
 
-»
+## 2. Prediction post-processing for PDF documents
 
-Fort Worth Ladies Specialty Boutique located in the Stockyard Station needs experenced sales person Weekends, non-smoker 626-8900
-
-Great Money--Great Fun! Become a Flash photographer, must have 35mm camera, will train FLASH, 924-2626
-
-Letters, term papers, the$@5, oF anything else you may need typed, call 214-641-1023. 1021
-
-## a
-
-TERM PAPERS TYPED FAST! Laser printed Rush orders and credit cards accepted. Across from TCU at 3023 South University Drive. ACCURACY +PLUS, 926-4969
-
-plus personal cash bonuses for yourself Call 1-800-932-0528, Ext. 65. from 3 different fundraisers lasting either 3 or 7 days. No investment Earn $$$ for your group
-
-## -
-
-Southwest and rustic furfor information, 922-9563.
-
-|
-
-## CAMPUSLINES
-
-ALCOHOL AND DRUG EDUCATION 1 pedehag en} SUPPORT GROUP at § Nednesdays in Ricke 3
-
-PSI CHI psyct are
-
-FRENCH CLUB w fay
-
-## FELLOWSHIP OF owes te
-
-te AT HLETES © we
-
-BAPTIST STUDENT MINISTRY i tu
-
-## Today
-
-|
-
-dent Union Thursd dible st meets at 12:30 on ays for Noondays (a udy) in Student Center 216 and at 7 p.m. on Mondays for Jume start, a worship time, in Student Center 20 5-206
-
-## TCU CATHOLIC COMMU-
-
-NITY p gran Supper pro fr every nthe Fa ulty Center 14. Al are rmanizator eat during Mid fr Break et. 13-1 format a
-
-## RAPE/SEXUAL ASSAULT
-
-SURVIVORS GROUP meeting
-
-
-<!-- image -->
-
-## by Bill Watterson
-
-
-<!-- image -->
-
-|
-
-SIRCULATION 4
-
-SUBSCRIPTIONS
-
-PHOTOGRAPHS if t '
-
-EDITORIAL POLICY edit t Oe t
-
-
-<!-- image -->
-
-LETTERS TO THE EDITOR e Skiff
-
-1 ] ! ef blication to the Skiff the ' ficat naior
-
-e ee wea coejte @ mai form and through the { . 4
-
-f kiff nember of the sted Pre
-
-MAILING ADDRESS Ff
-
-
-<!-- image -->
-
-S
-
-CANTINA
-
-* Full/Part-time positions
-
-* Training provided
-
-* No experience necessary
-
-IN
-
-PERSON
-
-3:00
-
-p.m.
-
-Tuesday
-
--
-
-5:00
-
-&
-
-p.m.
-
-* 10433 Lompanoy Ln. (Now Open)
-
-*
-
-723
-
-S.
-
-Centrar
-
-Expressway
-
-(Richaroson)
-
-Equa/l Opportunity Employer
-
-## PAPPADEALLY SEAFOOD KITCHEN
-
-*
-
-positions provided
-
-Full/Part-time
-
-Training
-
-* No experience necessary
-
-## Apply in person:
-
-Tuesday & Wednesday, 3:00 p.m. -5:00 p.m.
-
-Dallas: 3520 Oaklawn at Lemmon Irving: 10428 Lombardy Ln. (open soon!) Richardson: 725 S. Central Expressway Arlington: 1304 Copeland Rd. at Collins Equal Opportunity Employer
-
-Inquiring minds read the Skiff.
-
-Wednesday
-
-
-<!-- image -->
-
-## TCU DAILY SKIFF Since 1902
-
-SKIFF phenyl en OMRSCTORY nm be reactwd by Giahrig
-
-After
-
-H
-
-sife
-
-Busine
-
-Manag
-
-'¢
-
-uM"airs:
-
-Image TCU
-
-at
-
-Jt
-
-Magazine
-
-Vax Product
-
-(address:
-
-Manager
-
-What's
-
-news?
-
-Find
-
-out
-
-TCU
-
-in
-
-Daily
-
-Skiff
-
-TRAFFIC
-
-TICKETS
-
-|iiigeaeme clsewher re in Tarrant County. ) promuses as to results Any fine and any court costs are not included fee for le zal repres entation
-
-R.
-
-James
-
-Atiorney
-
-24 Sandage Fort Worth, TX 76109-1793 2203236
-
-M. ALLORY at La i
-
-Stockholm $699" Los Angeles $250" Mexico City $198" See oc caret bor 0 Wort Ged on md wed bord toe Lyall wrortivante
-
-
-<!-- image -->
-
-6715 Hillcrest Dallas, TX 75205
-
-214-363-9941
-
-Eurailpasses
-
-the
-
-ios ][N © on TT ad or HE SHOULD | me
-
-ee
-
-WEY!
-
-win Po iS
-
-Appty
-
-:
-
-Sk
-
-g-/
+Although TableFormer can predict the table structure and the bounding boxes for tables recognized inside PDF documents, this is not enough when a full reconstruction of the original table is required. This happens mainly due the following reasons:
