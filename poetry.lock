@@ -966,13 +966,13 @@ tabulate = ">=0.9.0,<0.10.0"
 
 [[package]]
 name = "docling-ibm-models"
-version = "1.4.0"
+version = "2.0.0"
 description = "This package contains the AI models used by the Docling PDF conversion package"
 optional = false
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "docling_ibm_models-1.4.0-py3-none-any.whl", hash = "sha256:4a39d17d3ba40e29944c361f8fa257481764819af2bd081d844ce9e3068ed93e"},
-    {file = "docling_ibm_models-1.4.0.tar.gz", hash = "sha256:75de2a50f3b450af3d81c5729768964d1eb6392c0a247c3a10ce096e964acce3"},
+    {file = "docling_ibm_models-2.0.0-py3-none-any.whl", hash = "sha256:ce40e70ef0dfd88bd80d4ee7c20b9d2f803b126f51ac171d9e38997942668dbc"},
+    {file = "docling_ibm_models-2.0.0.tar.gz", hash = "sha256:3db5e089ee138d2799acba21bfa8b6ac3e1cdbc2d50aeb608337934bdf24f69a"},
 ]
 
 [package.dependencies]
@@ -7124,4 +7124,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "cfe7eba754fee870d0ddcfcbcc0343419af8734af70719f8d0e2bd50a30876ea"
+content-hash = "7c5fb235944009b74193d045f36c1be2a8e168393012bf952541e6e7dea08072"
