@@ -2,8 +2,6 @@ import logging
 from typing import Iterable
 
 import numpy
-import tesserocr
-from tesserocr import OEM, PSM, RIL, PyTessBaseAPI
 
 from docling.datamodel.base_models import BoundingBox, CoordOrigin, OcrCell, Page
 from docling.datamodel.pipeline_options import TesseractOcrOptions
@@ -21,12 +19,22 @@ class TesserOcrModel(BaseOcrModel):
         self.reader = None
 
         if self.enabled:
+            try:
+                import tesserocr
+            except ImportError:
+                msg = (
+                    "TesserOCR is not installed."
+                    "Please install it via `pip install easyocr` to use this OCR engine."
+                )
+                raise ImportError(msg)
+
             # Initialize the tesseractAPI
             lang = "+".join(self.options.lang)
             _log.debug("Initializing TesserOCR: %s", tesserocr.tesseract_version())
-            self.reader = PyTessBaseAPI(
-                lang=lang, psm=PSM.AUTO, init=True, oem=OEM.DEFAULT
+            self.reader = tesserocr.PyTessBaseAPI(
+                lang=lang, psm=tesserocr.PSM.AUTO, init=True, oem=tesserocr.OEM.DEFAULT
             )
+            self.reader_RIL = tesserocr.RIL.TEXTLINE
 
     def __del__(self):
         if self.reader is not None:
@@ -51,7 +59,7 @@ class TesserOcrModel(BaseOcrModel):
 
                 # Retrieve text snippets with their bounding boxes
                 self.reader.SetImage(high_res_image)
-                boxes = self.reader.GetComponentImages(RIL.TEXTLINE, True)
+                boxes = self.reader.GetComponentImages(self.reader_RIL.TEXTLINE, True)
 
                 cells = []
                 for ix, (im, box, _, _) in enumerate(boxes):
