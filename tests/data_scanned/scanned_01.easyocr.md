@@ -14,9 +14,9 @@ Figure 7 illustrates the distribution of the tables across different dimensions 
 
 Aiming t0 train and evaluate our models in a broader spectrum of table data we have synthesized four types of datasets_ Each one contains tables with different appear -
 
-Supplementary Material
+## Supplementary Material
 
-ances in regard to their size; structure, and content. synthetic dataset contains 150k examples, summing up to 60Ok synthetic examples. All datasets are divided into Train; Test and Val splits (8O%, 1O% , 109) . style Every
+ances in regard to their size; structure, and content. synthetic dataset contains 150k examples, summing up to 60Ok synthetic examples. All datasets are divided into Train; Test and Val splits (8O%, 1O%o , 109) . style Every
 
 The process of generating a synthetic dataset can be decomposed into the following steps:
 

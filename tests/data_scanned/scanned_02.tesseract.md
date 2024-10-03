@@ -1,5 +1,6 @@
+## UNIVERSITYof HOUSTON CLASS
 
-<!-- image -->
+## Professional Development Award for Staff
 
 ## Purpose
 
@@ -13,28 +14,24 @@ All staff currently employed in CLASS are eligible.
 
 Costs associated with conference/workshop including:
 
-Airfare
+e Airfare
 
-Lodging
+e Lodging
 
-Meals
+e Meals
 
-Registration fees
+e Registration fees
 
-Ground Transportation
+e Ground Transportation
 
 ## What the Award Will Not Fund
 
-expenses incurred outside of the scope of the proposed development activity. Any
+Any expenses incurred outside of the scope of the proposed development activity.
 
 ## Granting Schedule
 
-Earliest Submission Date: August 1st
+Granting Schedule Earliest Submission Date: August 1° Applications Due: October 1° Notification of Awards: November 1°
 
-Applications Due: October 1s
+Please submit applications to CLASSGrt@uh.edu by the deadline. Please write "Professional DevelopmentStaff" in the subject line.
 
-Notification of Awards: November 1st
-
-Please submit applications to CLASSGrt@uh edu by the deadline. Please write "Professional Development-Staff" in the subject line.
-
-PLEASE NOTE: Please include a supporting letter from your Department Chair or Immediate Supervisor. Incomplete applications not be reviewed. Applications will be considered incomplete until all information has been received, at which time an email confirming receipt will be sent to you. will
+PLEASE NOTE: Please include a supporting letter from your Department Chair or Immediate Supervisor. Incomplete applications will not be reviewed. Applications will be considered incomplete until all information has been received, at which time an email confirming receipt will be sent to you.

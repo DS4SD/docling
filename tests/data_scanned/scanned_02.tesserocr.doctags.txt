@@ -1,27 +1,22 @@
 <document>
-<figure>
-<location><page_1><loc_17><loc_87><loc_82><loc_91></location>
-</figure>
-<subtitle-level-1><location><page_1><loc_12><loc_80><loc_20><loc_82></location>Purpose</subtitle-level-1>
-<paragraph><location><page_1><loc_12><loc_69><loc_88><loc_80></location>The Dean's Professional Development Award for Staff is to allow CLASS staff the opportunity to attend conferences and workshops in their field for the sole purpose of professional development. The intent is to defray costs associated with attendance. The maximum amount of the award is $2,000 per staff member. Up to four awards will be made per year, contingent upon the availability of funding. Staff members that are awarded must wait three years from the date of award notification before reapplying again.</paragraph>
-<subtitle-level-1><location><page_1><loc_12><loc_66><loc_20><loc_68></location>Eligibility</subtitle-level-1>
-<paragraph><location><page_1><loc_12><loc_64><loc_51><loc_65></location>All staff currently employed in CLASS are eligible.</paragraph>
-<subtitle-level-1><location><page_1><loc_12><loc_61><loc_37><loc_62></location>What the Award Will Fund</subtitle-level-1>
-<paragraph><location><page_1><loc_12><loc_59><loc_56><loc_60></location>Costs associated with conference/workshop including:</paragraph>
-<paragraph><location><page_1><loc_15><loc_57><loc_23><loc_58></location>e Airfare</paragraph>
-<paragraph><location><page_1><loc_15><loc_55><loc_24><loc_56></location>e Lodging</paragraph>
-<paragraph><location><page_1><loc_15><loc_53><loc_23><loc_54></location>e Meals</paragraph>
-<paragraph><location><page_1><loc_15><loc_51><loc_31><loc_52></location>e Registration fees</paragraph>
-<paragraph><location><page_1><loc_15><loc_49><loc_36><loc_50></location>e Ground Transportation</paragraph>
-<subtitle-level-1><location><page_1><loc_12><loc_46><loc_41><loc_47></location>What the Award Will Not Fund</subtitle-level-1>
-<paragraph><location><page_1><loc_12><loc_44><loc_77><loc_45></location>Any expenses incurred outside of the scope of the proposed development activity.</paragraph>
-<subtitle-level-1><location><page_1><loc_12><loc_40><loc_29><loc_42></location>Granting Schedule</subtitle-level-1>
-<paragraph><location><page_1><loc_12><loc_39><loc_32><loc_40></location>Earliest Submission Date:</paragraph>
-<paragraph><location><page_1><loc_33><loc_38><loc_41><loc_40></location>August 1°</paragraph>
-<paragraph><location><page_1><loc_12><loc_36><loc_26><loc_38></location>Applications Due:</paragraph>
-<paragraph><location><page_1><loc_27><loc_37><loc_35><loc_38></location>October 1°</paragraph>
-<paragraph><location><page_1><loc_12><loc_35><loc_31><loc_36></location>Notification of Awards:</paragraph>
-<paragraph><location><page_1><loc_31><loc_35><loc_42><loc_36></location>November 1°</paragraph>
-<paragraph><location><page_1><loc_12><loc_28><loc_85><loc_32></location>Please submit applications to CLASSGrt@uh.edu by the deadline. Please write "Professional DevelopmentStaff" in the subject line.</paragraph>
-<paragraph><location><page_1><loc_12><loc_19><loc_86><loc_27></location>PLEASE NOTE: Please include a supporting letter from your Department Chair or Immediate Supervisor. Incomplete applications will not be reviewed. Applications will be considered incomplete until all information has been received, at which time an email confirming receipt will be sent to you.</paragraph>
+<paragraph><location><page_1><loc_12><loc_68><loc_88><loc_81></location>Please submit applications to CLASSGrt@uh.edu by the deadline. Please write "Professional Development- Staff in the subject line. PLEASE NOTE: Please include a supporting letter from your Department Chair or Immediate Supervisor. Incomplete applications will not be reviewed. Applications will be considered incomplete until all information has been received, at which time an email confirming receipt will be sent to you.</paragraph>
+<paragraph><location><page_1><loc_12><loc_64><loc_51><loc_66></location>Notification of Awards: November 1°"</paragraph>
+<subtitle-level-1><location><page_1><loc_12><loc_61><loc_37><loc_64></location>Applications Due: October 1°</subtitle-level-1>
+<paragraph><location><page_1><loc_12><loc_58><loc_56><loc_60></location>Granting Schedule</paragraph>
+<paragraph><location><page_1><loc_12><loc_60><loc_41><loc_62></location>Earliest Submission Date: August 1°</paragraph>
+<paragraph><location><page_1><loc_12><loc_55><loc_77><loc_56></location>Any expenses incurred outside of the scope of the proposed development activity.</paragraph>
+<paragraph><location><page_1><loc_12><loc_53><loc_41><loc_55></location>What the Awara Will Not Fund</paragraph>
+<paragraph><location><page_1><loc_15><loc_49><loc_36><loc_51></location>e Ground Transportation</paragraph>
+<paragraph><location><page_1><loc_15><loc_48><loc_31><loc_49></location>e Registration fees</paragraph>
+<subtitle-level-1><location><page_1><loc_12><loc_46><loc_41><loc_48></location>Meals</subtitle-level-1>
+<paragraph><location><page_1><loc_12><loc_44><loc_78><loc_45></location>e Lodging</paragraph>
+<subtitle-level-1><location><page_1><loc_12><loc_40><loc_29><loc_43></location>e Aijirtare</subtitle-level-1>
+<paragraph><location><page_1><loc_12><loc_34><loc_51><loc_43></location>All staff currently employed in CLASS are eligible. What the Awara Will Fund e Aijirtare</paragraph>
+<paragraph><location><page_1><loc_12><loc_40><loc_56><loc_41></location>Costs associated with conference/workshop including:</paragraph>
+<paragraph><location><page_1><loc_12><loc_32><loc_20><loc_34></location>Eligibility</paragraph>
+<paragraph><location><page_1><loc_12><loc_28><loc_85><loc_32></location>members that are awarded must wait three years from the date of award notification before reapplying again.</paragraph>
+<paragraph><location><page_1><loc_12><loc_19><loc_88><loc_27></location>The Dean's Professional Development Award for Staff is to allow CLASS staff the opportunity to attend conferences and workshops in their field for the sole purpose of professional development. The intent is to defray costs associated with attendance. The maximum amount of the award is $2,000 per staff member. Up to four awards will be made per year, contingent upon the availability of funding. Staff</paragraph>
+<paragraph><location><page_1><loc_12><loc_18><loc_19><loc_20></location>Purpose</paragraph>
+<paragraph><location><page_1><loc_30><loc_15><loc_70><loc_16></location>Professional Development Award for Staff</paragraph>
+<paragraph><location><page_1><loc_17><loc_9><loc_81><loc_13></location>UNIVERSITYof 'CLASS</paragraph>
 </document>

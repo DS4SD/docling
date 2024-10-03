@@ -1,5 +1,6 @@
+## UNIVERSITYof HOUSTON | CLASS
 
-<!-- image -->
+## Professional Development Award for Staff
 
 ## Purpose
 
@@ -27,13 +28,9 @@ Ground Transportation
 
 expenses incurred outside of the scope of the proposed development activity. Any
 
-## Granting Schedule
+Granting Schedule
 
-Earliest Submission Date: August 1st
-
-Applications Due: October 1s
-
-Notification of Awards: November 1st
+Earliest Submission Date: August 1st Applications Due: October 1s Notification of Awards: November 1st
 
 Please submit applications to CLASSGrt@uh edu by the deadline. Please write "Professional Development-Staff" in the subject line.
 
