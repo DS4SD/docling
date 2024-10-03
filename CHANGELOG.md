@@ -1,3 +1,9 @@
+## [v1.17.0](https://github.com/DS4SD/docling/releases/tag/v1.17.0) - 2024-10-03
+
+### Feature
+
+* Windows support ([#122](https://github.com/DS4SD/docling/issues/122)) ([`d44c62d`](https://github.com/DS4SD/docling/commit/d44c62d7ce6990bbc78bf53315dd76d35d1f6c2e))
+
 ## [v1.16.1](https://github.com/DS4SD/docling/releases/tag/v1.16.1) - 2024-09-27
 
 ### Fix

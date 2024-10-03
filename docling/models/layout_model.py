@@ -33,6 +33,7 @@ class LayoutModel:
         "Page-footer",
         "Code",
         "List-item",
+        # "Title"
         # "Formula",
     ]
     PAGE_HEADER_LABELS = ["Page-header", "Page-footer"]
@@ -69,9 +70,7 @@ class LayoutModel:
             "Key-Value Region": 0.45,
         }
 
-        CLASS_REMAPPINGS = {
-            "Document Index": "Table",
-        }
+        CLASS_REMAPPINGS = {"Document Index": "Table", "Title": "Section-header"}
 
         _log.debug("================= Start postprocess function ====================")
         start_time = time.time()
@@ -277,6 +276,7 @@ class LayoutModel:
                     bbox=BoundingBox.model_validate(pred_item),
                     cells=[],
                 )
+
                 clusters.append(cluster)
 
             # Map cells to clusters

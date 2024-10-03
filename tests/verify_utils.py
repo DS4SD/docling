@@ -77,6 +77,8 @@ def verify_tables(doc_pred: DsDocument, doc_true: DsDocument):
 
     assert doc_pred.tables is not None, "no tables predicted, but expected in doc_true"
 
+    # print("Expected number of tables: {}, result: {}".format(len(doc_true.tables), len(doc_pred.tables)))
+
     assert len(doc_true.tables) == len(
         doc_pred.tables
     ), "document has different count of tables than expected."
@@ -96,8 +98,9 @@ def verify_tables(doc_pred: DsDocument, doc_true: DsDocument):
         for i, row in enumerate(true_item.data):
             for j, col in enumerate(true_item.data[i]):
 
-                # print("true: ", true_item.data[i][j])
-                # print("pred: ", pred_item.data[i][j])
+                # print("true: ", true_item.data[i][j].text)
+                # print("pred: ", pred_item.data[i][j].text)
+                # print("")
 
                 assert (
                     true_item.data[i][j].text == pred_item.data[i][j].text
