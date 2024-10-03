@@ -8,7 +8,7 @@ from docling.pipeline.base_model_pipeline import BaseModelPipeline
 
 
 class StandardModelPipeline(BaseModelPipeline):
-    _layout_model_path = "model_artifacts/layout/beehive_v0.0.5"
+    _layout_model_path = "model_artifacts/layout/beehive_v0.0.5_pt"
     _table_model_path = "model_artifacts/tableformer"
 
     def __init__(self, artifacts_path: Path, pipeline_options: PipelineOptions):

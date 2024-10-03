@@ -566,23 +566,6 @@ files = [
 ]
 
 [[package]]
-name = "coloredlogs"
-version = "15.0.1"
-description = "Colored terminal output for Python's logging module"
-optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-files = [
-    {file = "coloredlogs-15.0.1-py2.py3-none-any.whl", hash = "sha256:612ee75c546f53e92e70049c9dbfcc18c935a2b9a53b66085ce9ef6a6e5c0934"},
-    {file = "coloredlogs-15.0.1.tar.gz", hash = "sha256:7c991aa71a4577af2f82600d8f8f3a89f936baeaf9b50a9c197da014e5bf16b0"},
-]
-
-[package.dependencies]
-humanfriendly = ">=9.1"
-
-[package.extras]
-cron = ["capturer (>=2.4)"]
-
-[[package]]
 name = "comm"
 version = "0.2.2"
 description = "Jupyter Python Comm implementation, for usage in ipykernel, xeus-python etc."
@@ -983,13 +966,13 @@ tabulate = ">=0.9.0,<0.10.0"
 
 [[package]]
 name = "docling-ibm-models"
-version = "1.3.1"
+version = "2.0.0"
 description = "This package contains the AI models used by the Docling PDF conversion package"
 optional = false
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "docling_ibm_models-1.3.1-py3-none-any.whl", hash = "sha256:1d9e15f2e79333e74847d2cfec573c2c3a5ecb969feb8f75a78768d474e29c16"},
-    {file = "docling_ibm_models-1.3.1.tar.gz", hash = "sha256:e7bf7c6eceab498e8828790aabe0968c293f4c51c3326a19483da3fb7abd367b"},
+    {file = "docling_ibm_models-2.0.0-py3-none-any.whl", hash = "sha256:ce40e70ef0dfd88bd80d4ee7c20b9d2f803b126f51ac171d9e38997942668dbc"},
+    {file = "docling_ibm_models-2.0.0.tar.gz", hash = "sha256:3db5e089ee138d2799acba21bfa8b6ac3e1cdbc2d50aeb608337934bdf24f69a"},
 ]
 
 [package.dependencies]
@@ -998,7 +981,6 @@ jsonlines = ">=3.1.0,<4.0.0"
 lxml = ">=4.9.1,<5.0.0"
 mean_average_precision = ">=2021.4.26.0,<2022.0.0.0"
 numpy = ">=1.24.4,<2.0.0"
-onnxruntime = ">=1.16.2,<2.0.0"
 opencv-python-headless = ">=4.6.0.66,<5.0.0.0"
 Pillow = ">=10.0.0,<11.0.0"
 torch = [
@@ -1215,17 +1197,6 @@ TOMLi = {version = "*", markers = "python_version < \"3.11\""}
 
 [package.extras]
 dev = ["pyTest", "pyTest-cov"]
-
-[[package]]
-name = "flatbuffers"
-version = "24.3.25"
-description = "The FlatBuffers serialization format for Python"
-optional = false
-python-versions = "*"
-files = [
-    {file = "flatbuffers-24.3.25-py2.py3-none-any.whl", hash = "sha256:8dbdec58f935f3765e4f7f3cf635ac3a77f83568138d6a2311f524ec96364812"},
-    {file = "flatbuffers-24.3.25.tar.gz", hash = "sha256:de2ec5b203f21441716617f38443e0a8ebf3d25bf0d9c0bb0ce68fa00ad546a4"},
-]
 
 [[package]]
 name = "fonttools"
@@ -1691,20 +1662,6 @@ tensorflow-testing = ["keras (<3.0)", "tensorflow"]
 testing = ["InquirerPy (==0.3.4)", "Jinja2", "Pillow", "aiohttp", "fastapi", "gradio", "jedi", "minijinja (>=1.0)", "numpy", "pytest", "pytest-asyncio", "pytest-cov", "pytest-env", "pytest-rerunfailures", "pytest-vcr", "pytest-xdist", "soundfile", "urllib3 (<2.0)"]
 torch = ["safetensors", "torch"]
 typing = ["types-PyYAML", "types-requests", "types-simplejson", "types-toml", "types-tqdm", "types-urllib3", "typing-extensions (>=4.8.0)"]
-
-[[package]]
-name = "humanfriendly"
-version = "10.0"
-description = "Human friendly output for text interfaces using Python"
-optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-files = [
-    {file = "humanfriendly-10.0-py2.py3-none-any.whl", hash = "sha256:1697e1a8a8f550fd43c2865cd84542fc175a61dcb779b6fee18cf6b6ccba1477"},
-    {file = "humanfriendly-10.0.tar.gz", hash = "sha256:6b0b831ce8f15f7300721aa49829fc4e83921a9a301cc7f606be6686a2288ddc"},
-]
-
-[package.dependencies]
-pyreadline3 = {version = "*", markers = "sys_platform == \"win32\" and python_version >= \"3.8\""}
 
 [[package]]
 name = "identify"
@@ -3574,48 +3531,6 @@ files = [
 ]
 
 [[package]]
-name = "onnxruntime"
-version = "1.19.2"
-description = "ONNX Runtime is a runtime accelerator for Machine Learning models"
-optional = false
-python-versions = "*"
-files = [
-    {file = "onnxruntime-1.19.2-cp310-cp310-macosx_11_0_universal2.whl", hash = "sha256:84fa57369c06cadd3c2a538ae2a26d76d583e7c34bdecd5769d71ca5c0fc750e"},
-    {file = "onnxruntime-1.19.2-cp310-cp310-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:bdc471a66df0c1cdef774accef69e9f2ca168c851ab5e4f2f3341512c7ef4666"},
-    {file = "onnxruntime-1.19.2-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:e3a4ce906105d99ebbe817f536d50a91ed8a4d1592553f49b3c23c4be2560ae6"},
-    {file = "onnxruntime-1.19.2-cp310-cp310-win32.whl", hash = "sha256:4b3d723cc154c8ddeb9f6d0a8c0d6243774c6b5930847cc83170bfe4678fafb3"},
-    {file = "onnxruntime-1.19.2-cp310-cp310-win_amd64.whl", hash = "sha256:17ed7382d2c58d4b7354fb2b301ff30b9bf308a1c7eac9546449cd122d21cae5"},
-    {file = "onnxruntime-1.19.2-cp311-cp311-macosx_11_0_universal2.whl", hash = "sha256:d863e8acdc7232d705d49e41087e10b274c42f09e259016a46f32c34e06dc4fd"},
-    {file = "onnxruntime-1.19.2-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:c1dfe4f660a71b31caa81fc298a25f9612815215a47b286236e61d540350d7b6"},
-    {file = "onnxruntime-1.19.2-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:a36511dc07c5c964b916697e42e366fa43c48cdb3d3503578d78cef30417cb84"},
-    {file = "onnxruntime-1.19.2-cp311-cp311-win32.whl", hash = "sha256:50cbb8dc69d6befad4746a69760e5b00cc3ff0a59c6c3fb27f8afa20e2cab7e7"},
-    {file = "onnxruntime-1.19.2-cp311-cp311-win_amd64.whl", hash = "sha256:1c3e5d415b78337fa0b1b75291e9ea9fb2a4c1f148eb5811e7212fed02cfffa8"},
-    {file = "onnxruntime-1.19.2-cp312-cp312-macosx_11_0_universal2.whl", hash = "sha256:68e7051bef9cfefcbb858d2d2646536829894d72a4130c24019219442b1dd2ed"},
-    {file = "onnxruntime-1.19.2-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:d2d366fbcc205ce68a8a3bde2185fd15c604d9645888703785b61ef174265168"},
-    {file = "onnxruntime-1.19.2-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:477b93df4db467e9cbf34051662a4b27c18e131fa1836e05974eae0d6e4cf29b"},
-    {file = "onnxruntime-1.19.2-cp312-cp312-win32.whl", hash = "sha256:9a174073dc5608fad05f7cf7f320b52e8035e73d80b0a23c80f840e5a97c0147"},
-    {file = "onnxruntime-1.19.2-cp312-cp312-win_amd64.whl", hash = "sha256:190103273ea4507638ffc31d66a980594b237874b65379e273125150eb044857"},
-    {file = "onnxruntime-1.19.2-cp38-cp38-macosx_11_0_universal2.whl", hash = "sha256:636bc1d4cc051d40bc52e1f9da87fbb9c57d9d47164695dfb1c41646ea51ea66"},
-    {file = "onnxruntime-1.19.2-cp38-cp38-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:5bd8b875757ea941cbcfe01582970cc299893d1b65bd56731e326a8333f638a3"},
-    {file = "onnxruntime-1.19.2-cp38-cp38-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:b2046fc9560f97947bbc1acbe4c6d48585ef0f12742744307d3364b131ac5778"},
-    {file = "onnxruntime-1.19.2-cp38-cp38-win32.whl", hash = "sha256:31c12840b1cde4ac1f7d27d540c44e13e34f2345cf3642762d2a3333621abb6a"},
-    {file = "onnxruntime-1.19.2-cp38-cp38-win_amd64.whl", hash = "sha256:016229660adea180e9a32ce218b95f8f84860a200f0f13b50070d7d90e92956c"},
-    {file = "onnxruntime-1.19.2-cp39-cp39-macosx_11_0_universal2.whl", hash = "sha256:006c8d326835c017a9e9f74c9c77ebb570a71174a1e89fe078b29a557d9c3848"},
-    {file = "onnxruntime-1.19.2-cp39-cp39-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:df2a94179a42d530b936f154615b54748239c2908ee44f0d722cb4df10670f68"},
-    {file = "onnxruntime-1.19.2-cp39-cp39-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:fae4b4de45894b9ce7ae418c5484cbf0341db6813effec01bb2216091c52f7fb"},
-    {file = "onnxruntime-1.19.2-cp39-cp39-win32.whl", hash = "sha256:dc5430f473e8706fff837ae01323be9dcfddd3ea471c900a91fa7c9b807ec5d3"},
-    {file = "onnxruntime-1.19.2-cp39-cp39-win_amd64.whl", hash = "sha256:38475e29a95c5f6c62c2c603d69fc7d4c6ccbf4df602bd567b86ae1138881c49"},
-]
-
-[package.dependencies]
-coloredlogs = "*"
-flatbuffers = "*"
-numpy = ">=1.21.6"
-packaging = "*"
-protobuf = "*"
-sympy = "*"
-
-[[package]]
 name = "opencv-python-headless"
 version = "4.6.0.66"
 description = "Wrapper package for OpenCV python bindings."
@@ -4482,20 +4397,6 @@ files = [
 [package.dependencies]
 flake8 = "6.1.0"
 tomli = {version = "*", markers = "python_version < \"3.11\""}
-
-[[package]]
-name = "pyreadline3"
-version = "3.5.3"
-description = "A python implementation of GNU readline."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pyreadline3-3.5.3-py3-none-any.whl", hash = "sha256:ddede153a92e5aad9c1fe63d692efd6a3e478f686adcd4938a051ffb63ec4f52"},
-    {file = "pyreadline3-3.5.3.tar.gz", hash = "sha256:9234684ca75a00a702fda42b17cc26ca665bc9d7c2da06af450468253099ff61"},
-]
-
-[package.extras]
-dev = ["build", "flake8", "mypy", "pytest", "twine"]
 
 [[package]]
 name = "pytest"
@@ -6613,11 +6514,6 @@ files = [
     {file = "triton-3.0.0-1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:34e509deb77f1c067d8640725ef00c5cbfcb2052a1a3cb6a6d343841f92624eb"},
     {file = "triton-3.0.0-1-cp38-cp38-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:bcbf3b1c48af6a28011a5c40a5b3b9b5330530c3827716b5fbf6d7adcc1e53e9"},
     {file = "triton-3.0.0-1-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:6e5727202f7078c56f91ff13ad0c1abab14a0e7f2c87e91b12b6f64f3e8ae609"},
-    {file = "triton-3.0.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:39b052da883351fdf6be3d93cedae6db3b8e3988d3b09ed221bccecfa9612230"},
-    {file = "triton-3.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cd34f19a8582af96e6291d4afce25dac08cb2a5d218c599163761e8e0827208e"},
-    {file = "triton-3.0.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0d5e10de8c011adeb7c878c6ce0dd6073b14367749e34467f1cff2bde1b78253"},
-    {file = "triton-3.0.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e8903767951bf86ec960b4fe4e21bc970055afc65e9d57e916d79ae3c93665e3"},
-    {file = "triton-3.0.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:41004fb1ae9a53fcb3e970745feb87f0e3c94c6ce1ba86e95fa3b8537894bef7"},
 ]
 
 [package.dependencies]
@@ -7228,4 +7124,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "b469f14e5b97a95009b9d02c2762b36040e05c167dd4b0c2e0bcc1dcb7631507"
+content-hash = "7c5fb235944009b74193d045f36c1be2a8e168393012bf952541e6e7dea08072"
