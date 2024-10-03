@@ -70,7 +70,7 @@ def test_e2e_conversions():
 
     pdf_paths = get_pdf_paths()
 
-    for engine in ["easyocr", "tesserocr"]:
+    for engine in ["easyocr", "tesserocr", "tesseract"]:
         print(f"Converting with ocr_engine: {engine}")
         converter = get_converter(engine)
         for pdf_path in pdf_paths:
