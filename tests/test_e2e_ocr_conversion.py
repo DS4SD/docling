@@ -97,8 +97,5 @@ def test_e2e_conversions():
                 doc_result=doc_result,
                 generate=GENERATE,
                 ocr_engine=ocr_options.kind,
+                fuzzy=True,
             )
-
-
-# if __name__ == "__main__":
-#     test_e2e_conversions()
