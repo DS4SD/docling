@@ -77,9 +77,10 @@ python-dotenv = "^1.0.1"
 llama-index-embeddings-huggingface = "^0.3.1"
 llama-index-llms-huggingface-api = "^0.2.0"
 llama-index-vector-stores-milvus = "^0.2.1"
-langchain-huggingface = "^0.0.3"
-langchain-milvus = "^0.1.4"
-langchain-text-splitters = "^0.2.4"
+langchain = "^0.3.2"
+langchain-huggingface = "^0.1.0"
+langchain-milvus = "^0.1.5"
+langchain-text-splitters = "^0.3.0"
 
 [tool.poetry.scripts]
 docling = "docling.cli.main:app"
