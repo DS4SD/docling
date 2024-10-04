@@ -13,10 +13,11 @@ from docling.pipeline.simple_model_pipeline import SimpleModelPipeline
 from docling.pipeline.standard_pdf_model_pipeline import StandardPdfModelPipeline
 
 input_paths = [
-    Path("tests/data/wiki_duck.html"),
+    # Path("tests/data/wiki_duck.html"),
     Path("tests/data/word_sample.docx"),
-    Path("tests/data/powerpoint_sample.pptx"),
-    Path("tests/data/2206.01062.pdf"),
+    Path("tests/data/lorem_ipsum.docx"),
+    # Path("tests/data/powerpoint_sample.pptx"),
+    # Path("tests/data/2206.01062.pdf"),
 ]
 input = DocumentConversionInput.from_paths(input_paths)
 
