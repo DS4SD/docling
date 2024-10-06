@@ -199,9 +199,6 @@ class DocumentConverter:
                 end_pb_time = time.time() - start_pb_time
                 _log.info(f"Finished converting page batch time={end_pb_time:.3f}")
 
-            # Free up mem resources of PDF backend
-            in_doc._backend.unload()
-
             conv_res.pages = all_assembled_pages
             self._assemble_doc(conv_res)
 
@@ -226,6 +223,11 @@ class DocumentConverter:
                 f"Encountered an error during conversion of document {in_doc.document_hash}:\n"
                 f"{trace}"
             )
+
+        finally:
+            # Always unload the PDF backend, even in case of failure
+            if in_doc._backend:
+                in_doc._backend.unload()
 
         end_doc_time = time.time() - start_doc_time
         _log.info(
