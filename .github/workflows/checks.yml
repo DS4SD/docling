@@ -4,7 +4,7 @@ on:
 jobs:
   run-checks:
     env:
-      TESSDATA_PREFIX: /usr/local/share/tessdata/
+      TESSDATA_PREFIX: /usr/share/tesseract-ocr/5/tessdata
     runs-on: ubuntu-latest
     strategy:
       matrix:
