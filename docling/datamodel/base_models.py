@@ -110,7 +110,10 @@ class BoundingBox(BaseModel):
             return BoundingBox(l=l, t=t, r=r, b=b, coord_origin=origin)
 
     def area(self) -> float:
-        return (self.r - self.l) * (self.b - self.t)
+        area = (self.r - self.l) * (self.b - self.t)
+        if self.coord_origin == CoordOrigin.BOTTOMLEFT:
+            area = -area
+        return area
 
     def intersection_area_with(self, other: "BoundingBox") -> float:
         # Calculate intersection coordinates
