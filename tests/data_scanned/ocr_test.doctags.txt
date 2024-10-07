@@ -1,0 +1,5 @@
+<document>
+<subtitle-level-1><location><page_1><loc_12><loc_89><loc_21><loc_91></location>Docling</subtitle-level-1>
+<paragraph><location><page_1><loc_12><loc_84><loc_84><loc_87></location>Docling bundles PDF document conversion to JSON and Markdown in an easy, selfcontained package.</paragraph>
+<paragraph><location><page_1><loc_12><loc_58><loc_87><loc_80></location>Features Converts any PDF document to JSON or Markdown format, stable and lightning fast. Understands detailed page layout, reading order and recovers table structures. Extracts metadata from the document, such as title, authors, references and language. Includes OCR support for scanned PDFs. Integrates easily with LLM app / RAG frameworks like LlamaIndex and LangChain Provides a simple and convenient CLI.</paragraph>
+</document>

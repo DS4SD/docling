@@ -14,9 +14,6 @@ from docling.document_converter import DocumentConverter
 
 from .verify_utils import verify_conversion_result
 
-# from tests.verify_utils import verify_conversion_result
-
-
 GENERATE = False
 
 
@@ -27,21 +24,22 @@ def save_output(pdf_path: Path, doc_result: ConversionResult, engine: str):
     import os
 
     parent = pdf_path.parent
+    eng = "" if engine is None else ".{engine}"
 
-    dict_fn = os.path.join(parent, f"{pdf_path.stem}.{engine}.json")
+    dict_fn = os.path.join(parent, f"{pdf_path.stem}{eng}.json")
     with open(dict_fn, "w") as fd:
         json.dump(doc_result.render_as_dict(), fd)
 
-    pages_fn = os.path.join(parent, f"{pdf_path.stem}.{engine}.pages.json")
+    pages_fn = os.path.join(parent, f"{pdf_path.stem}{eng}.pages.json")
     pages = [p.model_dump() for p in doc_result.pages]
     with open(pages_fn, "w") as fd:
         json.dump(pages, fd)
 
-    doctags_fn = os.path.join(parent, f"{pdf_path.stem}.{engine}.doctags.txt")
+    doctags_fn = os.path.join(parent, f"{pdf_path.stem}{eng}.doctags.txt")
     with open(doctags_fn, "w") as fd:
         fd.write(doc_result.render_as_doctags())
 
-    md_fn = os.path.join(parent, f"{pdf_path.stem}.{engine}.md")
+    md_fn = os.path.join(parent, f"{pdf_path.stem}{eng}.md")
     with open(md_fn, "w") as fd:
         fd.write(doc_result.render_as_markdown())
 
@@ -88,14 +86,12 @@ def test_e2e_conversions():
 
             doc_result: ConversionResult = converter.convert_single(pdf_path)
 
-            # # Save conversions
-            # save_output(pdf_path, doc_result, engine)
+            # Save conversions
+            # save_output(pdf_path, doc_result, None)
 
             # Debug
             verify_conversion_result(
                 input_path=pdf_path,
                 doc_result=doc_result,
                 generate=GENERATE,
-                ocr_engine=ocr_options.kind,
-                fuzzy=True,
             )
