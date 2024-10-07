@@ -51,9 +51,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             "indents": [None],
         }
 
-    def warn(self, message):
-        _log.warn(message)
-
     def is_valid(self) -> bool:
         return True
 
@@ -96,6 +93,20 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def supported_formats(cls) -> Set[InputFormat]:
         return {InputFormat.DOCX}
 
+    def convert(self) -> DoclingDocument:
+        # Parses the DOCX into a structured document model.
+        doc = DoclingDocument(description=DescriptionItem(), name="dummy")
+        docx_obj = None
+        try:
+            docx_obj = docx.Document(self.path_or_stream)
+        except Exception:
+            _log.error("could not parse docx")
+            return doc
+
+        # self.initialise()
+        doc = self.walk_linear(docx_obj.element.body, docx_obj, doc)
+        return doc
+
     def walk_linear(self, body, docx_obj, doc) -> DoclingDocument:
         for element in body:
             tag_name = etree.QName(element).localname
@@ -110,7 +121,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             elif tag_name in ["p"]:
                 self.handle_text_elements(element, docx_obj, doc)
             else:
-                self.warn(f"Ignoring element in DOCX with tag: {tag_name}")
+                _log.warn(f"Ignoring element in DOCX with tag: {tag_name}")
         return doc
 
     def get_numId_and_ilvl(self, paragraph):
@@ -151,7 +162,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def handle_text_elements(self, element, docx_obj, doc):
         paragraph = docx.text.paragraph.Paragraph(element, docx_obj)
         if paragraph.text is None:
-            # self.warn(f"paragraph has text==None")
+            # _log.warn(f"paragraph has text==None")
             return
 
         text = paragraph.text.strip()
@@ -207,6 +218,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             )
 
         self.update_history(p_style_name, p_level, numid, ilevel)
+        return
 
     def add_header(self, element, docx_obj, doc, curr_name, curr_level, text: str):
         level = self.get_level()
@@ -247,6 +259,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             self.parents[self.level] = doc.add_heading(
                 parent=self.parents[self.level - 1], text=text
             )
+        return
 
     def add_listitem(
         self, element, docx_obj, doc, p_style_name, p_level, numid, ilevel, text: str
@@ -299,6 +312,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             doc.add_text(
                 label=DocItemLabel.LIST_ITEM, parent=self.parents[level - 1], text=text
             )
+        return
 
     def handle_tables(self, element, docx_obj, doc):
 
@@ -362,22 +376,10 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         level = self.get_level()
         doc.add_table(data=data, parent=self.parents[level - 1])
+        return
 
     def handle_pictures(self, element, docx_obj, doc):
         doc.add_picture(
             data=BasePictureData(), parent=self.parents[self.level], caption=None
         )
-
-    def convert(self) -> DoclingDocument:
-        # Parses the DOCX into a structured document model.
-        doc = DoclingDocument(description=DescriptionItem(), name="dummy")
-        docx_obj = None
-        try:
-            docx_obj = docx.Document(self.path_or_stream)
-        except Exception:
-            return doc
-
-        # self.initialise()
-        doc = self.walk_linear(docx_obj.element.body, docx_obj, doc)
-
-        return doc
+        return

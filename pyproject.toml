@@ -54,6 +54,7 @@ scipy = "^1.14.1"
 pyarrow = "^16.1.0"
 typer = "^0.12.5"
 python-docx = "^1.1.2"
+python-pptx = "^1.0.2"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
