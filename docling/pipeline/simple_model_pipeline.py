@@ -16,6 +16,11 @@ _log = logging.getLogger(__name__)
 
 
 class SimpleModelPipeline(BaseModelPipeline):
+    """SimpleModelPipeline.
+
+    This class is used at the moment for formats / backends
+    which produce straight DoclingDocument output.
+    """
 
     def __init__(self, pipeline_options: PdfPipelineOptions):
         super().__init__(pipeline_options)
@@ -32,6 +37,10 @@ class SimpleModelPipeline(BaseModelPipeline):
         if not isinstance(in_doc._backend, DeclarativeDocumentBackend):
             conv_res.status = ConversionStatus.FAILURE
             return conv_res
+
+        # Instead of running a page-level pipeline to build up the document structure,
+        # the backend is expected to be of type DeclarativeDocumentBackend, which can output
+        # a DoclingDocument straight.
 
         conv_res.experimental = in_doc._backend.convert()
 
