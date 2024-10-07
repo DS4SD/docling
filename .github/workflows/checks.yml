@@ -3,8 +3,6 @@ on:
 
 jobs:
   run-checks:
-    env:
-      TESSDATA_PREFIX: /usr/share/tesseract-ocr/5/tessdata
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -13,6 +11,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install tesseract
         run: sudo apt-get install -y tesseract-ocr tesseract-ocr-eng tesseract-ocr-fra tesseract-ocr-deu tesseract-ocr-spa libleptonica-dev libtesseract-dev pkg-config
+      - name: Set TESSDATA_PREFIX
+        run: |
+          echo "TESSDATA_PREFIX=$(dpkg -L tesseract-ocr-eng | grep tessdata$)" >> "$GITHUB_ENV"
       - uses: ./.github/actions/setup-poetry
         with:
           python-version: ${{ matrix.python-version }}
