@@ -3,6 +3,8 @@ on:
 
 jobs:
   run-checks:
+    env:
+      TESSDATA_PREFIX: /usr/local/share/tessdata/
     runs-on: ubuntu-latest
     strategy:
       matrix:
