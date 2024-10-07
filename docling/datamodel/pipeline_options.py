@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from typing import List, Literal, Union
+from typing import List, Literal, Optional, Union
 
 from pydantic import BaseModel, Field
 
@@ -26,6 +26,9 @@ class OcrOptions(BaseModel):
 class EasyOcrOptions(OcrOptions):
     kind: Literal["easyocr"] = "easyocr"
     lang: List[str] = ["fr", "de", "es", "en"]
+    use_gpu: bool = True  # same default as easyocr.Reader
+    model_storage_directory: Optional[str] = None
+    download_enabled: bool = True  # same default as easyocr.Reader
 
 
 class TesseractOcrOptions(OcrOptions):

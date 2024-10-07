@@ -26,7 +26,11 @@ class EasyOcrModel(BaseOcrModel):
                     "Alternatively, Docling has support for other OCR engines. See the documentation."
                 )
 
-            self.reader = easyocr.Reader(lang_list=self.options.lang)
+            self.reader = easyocr.Reader(
+                lang_list=self.options.lang,
+                model_storage_directory=self.options.model_storage_directory,
+                download_enabled=self.options.download_enabled,
+            )
 
     def __call__(self, page_batch: Iterable[Page]) -> Iterable[Page]:
 
