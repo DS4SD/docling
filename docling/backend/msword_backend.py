@@ -1,3 +1,4 @@
+import logging
 from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
@@ -21,6 +22,8 @@ from lxml import etree
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
 
+_log = logging.getLogger(__name__)
+
 
 class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
@@ -39,6 +42,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         for i in range(-1, self.max_levels):
             self.parents[i] = None
 
+        self.level = 0
+
         self.history = {
             "names": [None],
             "levels": [None],
@@ -47,7 +52,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         }
 
     def warn(self, message):
-        print(f"WARN: {message}")
+        _log.warn(message)
 
     def is_valid(self) -> bool:
         return True
@@ -94,17 +99,18 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def walk_linear(self, body, docx_obj, doc) -> DoclingDocument:
         for element in body:
             tag_name = etree.QName(element).localname
-            # Check for Text
-            if tag_name in ["p"]:
-                self.add_text(element, docx_obj, doc)
+
             # Check for Tables
-            elif element.tag.endswith("tbl"):
-                self.add_table(element, docx_obj, doc)
+            if element.tag.endswith("tbl"):
+                self.handle_tables(element, docx_obj, doc)
             # Check for Inline Images (drawings or blip elements)
-            elif element.tag.endswith("drawing") or element.tag.endswith("blip"):
-                self.add_figure(element, docx_obj, doc)
+            elif element.xpath(".//w:drawing") or element.xpath(".//w:pict"):
+                self.handle_pictures(element, docx_obj, doc)
+            # Check for Text
+            elif tag_name in ["p"]:
+                self.handle_text_elements(element, docx_obj, doc)
             else:
-                self.warn(f"ignoring element in DOCX with tag: {tag_name}")
+                self.warn(f"Ignoring element in DOCX with tag: {tag_name}")
         return doc
 
     def get_numId_and_ilvl(self, paragraph):
@@ -142,52 +148,43 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         else:
             return label, None
 
-    def add_text(self, element, docx_obj, doc):
+    def handle_text_elements(self, element, docx_obj, doc):
         paragraph = docx.text.paragraph.Paragraph(element, docx_obj)
-
         if paragraph.text is None:
             # self.warn(f"paragraph has text==None")
             return
 
         text = paragraph.text.strip()
+        # if len(text)==0 # keep empty paragraphs, they seperate adjacent lists!
 
-        # if len(text)==0: # keep empty paragraphs, they seperate adjacent lists!
-        #     self.warn(f"paragraph has len(text)==0")
-
-        pname, plevel = self.get_label_and_level(paragraph)
+        p_style_name, p_level = self.get_label_and_level(paragraph)
         numid, ilevel = self.get_numId_and_ilvl(paragraph)
 
-        # we detected a list
+        # Handle lists
         if numid is not None and ilevel is not None:
             self.add_listitem(
-                element, docx_obj, doc, pname, plevel, numid, ilevel, text
+                element, docx_obj, doc, p_style_name, p_level, numid, ilevel, text
             )
-            self.update_history(pname, plevel, numid, ilevel)
-
+            self.update_history(p_style_name, p_level, numid, ilevel)
             return
-
         elif numid is None and self.prev_numid() is not None:  # Close list
-
             for key, val in self.parents.items():
                 if key >= self.level_at_new_list:
                     self.parents[key] = None
-
             self.level = self.level_at_new_list - 1
             self.level_at_new_list = None
 
-        if pname in ["Title"]:
-
+        if p_style_name in ["Title"]:
             for key, val in self.parents.items():
                 self.parents[key] = None
-
             self.parents[0] = doc.add_text(
                 parent=None, label=DocItemLabel.TITLE, text=text
             )
 
-        elif "Heading" in pname:
-            self.add_header(element, docx_obj, doc, pname, plevel, text)
+        elif "Heading" in p_style_name:
+            self.add_header(element, docx_obj, doc, p_style_name, p_level, text)
 
-        elif pname in [
+        elif p_style_name in [
             "Paragraph",
             "Normal",
             "Subtitle",
@@ -203,15 +200,16 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             )
 
         else:
-            assert False, f"need to add a new paragraph: {pname}"
+            # Text style names can, and will have, not only default values but user values too
+            # hence we treat all other labels as pure text
+            doc.add_text(
+                label=DocItemLabel.PARAGRAPH, parent=self.parents[level - 1], text=text
+            )
 
-        self.update_history(pname, plevel, numid, ilevel)
+        self.update_history(p_style_name, p_level, numid, ilevel)
 
     def add_header(self, element, docx_obj, doc, curr_name, curr_level, text: str):
-
         level = self.get_level()
-        # print(f"level: {level} => add_header(self, element, docx_obj, doc, {curr_name}, {curr_level}): {text}")
-
         if isinstance(curr_level, int):
 
             if curr_level == level:
@@ -251,12 +249,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             )
 
     def add_listitem(
-        self, element, docx_obj, doc, pname, plevel, numid, ilevel, text: str
+        self, element, docx_obj, doc, p_style_name, p_level, numid, ilevel, text: str
     ):
-
         level = self.get_level()
-        # print(f"level: {level} => add_listitem(self, element, docx_obj, doc, {pname}, {plevel}, {numid}, {ilevel}): {text}")
-
         if self.prev_numid() is None:  # Open new list
 
             self.level_at_new_list = level
@@ -305,7 +300,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 label=DocItemLabel.LIST_ITEM, parent=self.parents[level - 1], text=text
             )
 
-    def add_table(self, element, docx_obj, doc):
+    def handle_tables(self, element, docx_obj, doc):
 
         # Function to check if a cell has a colspan (gridSpan)
         def get_colspan(cell):
@@ -331,8 +326,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # Calculate the max number of columns
             num_cols = max(num_cols, sum(get_colspan(cell) for cell in row.cells))
 
-        self.warn(f"table: [{num_rows}x{num_cols}]")
-
         # Initialize the table grid
         table_grid = [[None for _ in range(num_cols)] for _ in range(num_rows)]
 
@@ -347,8 +340,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 # Find the next available column in the grid
                 while table_grid[row_idx][col_idx] is not None:
                     col_idx += 1
-
-                print(f"{row_idx}, {col_idx}, {row_span}, {col_span}")
 
                 # Fill the grid with the cell value, considering rowspan and colspan
                 for i in range(row_span if row_span == "restart" else 1):
@@ -367,13 +358,12 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     row_header=False,  # ((not col_header) and html_cell.name=='th')
                 )
 
-                # print(row_idx, "\t", col_idx, "\t", row_span, "\t", col_span, "\t", text)
                 data.table_cells.append(cell)
 
         level = self.get_level()
         doc.add_table(data=data, parent=self.parents[level - 1])
 
-    def add_figure(self, element, docx_obj, doc):
+    def handle_pictures(self, element, docx_obj, doc):
         doc.add_picture(
             data=BasePictureData(), parent=self.parents[self.level], caption=None
         )
