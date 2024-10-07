@@ -108,6 +108,9 @@ class TesseractOcrModel(BaseOcrModel):
 
             all_ocr_cells = []
             for ocr_rect in ocr_rects:
+                # Skip zero area boxes
+                if ocr_rect.area() == 0:
+                    continue
                 high_res_image = page._backend.get_page_image(
                     scale=self.scale, cropbox=ocr_rect
                 )
