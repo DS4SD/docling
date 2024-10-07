@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install tesseract
-        run: sudo apt-get install -y tesseract-ocr libleptonica-dev libtesseract-dev pkg-config
+        run: sudo apt-get install -y tesseract-ocr tesseract-ocr-eng tesseract-ocr-fra tesseract-ocr-deu tesseract-ocr-spa libleptonica-dev libtesseract-dev pkg-config
       - uses: ./.github/actions/setup-poetry
         with:
           python-version: ${{ matrix.python-version }}
