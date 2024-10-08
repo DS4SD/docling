@@ -39,9 +39,21 @@ class TesserOcrModel(BaseOcrModel):
 
             # Initialize the tesseractAPI
             lang = "+".join(self.options.lang)
-            self.reader = tesserocr.PyTessBaseAPI(
-                lang=lang, psm=tesserocr.PSM.AUTO, init=True, oem=tesserocr.OEM.DEFAULT
-            )
+            if self.options.path is not None:
+                self.reader = tesserocr.PyTessBaseAPI(
+                    path=self.options.path,
+                    lang=lang,
+                    psm=tesserocr.PSM.AUTO,
+                    init=True,
+                    oem=tesserocr.OEM.DEFAULT,
+                )
+            else:
+                self.reader = tesserocr.PyTessBaseAPI(
+                    lang=lang,
+                    psm=tesserocr.PSM.AUTO,
+                    init=True,
+                    oem=tesserocr.OEM.DEFAULT,
+                )
             self.reader_RIL = tesserocr.RIL
 
     def __del__(self):

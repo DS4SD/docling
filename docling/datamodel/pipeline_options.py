@@ -40,6 +40,7 @@ class TesseractOcrOptions(OcrOptions):
     kind: Literal["tesseract"] = "tesseract"
     lang: List[str] = ["fra", "deu", "spa", "eng"]
     tesseract_cmd: str = "tesseract"
+    path: Optional[str] = None
 
     model_config = ConfigDict(
         extra="forbid",
@@ -49,6 +50,7 @@ class TesseractOcrOptions(OcrOptions):
 class TesserOcrOptions(OcrOptions):
     kind: Literal["tesserocr"] = "tesserocr"
     lang: List[str] = ["fra", "deu", "spa", "eng"]
+    path: Optional[str] = None
 
     model_config = ConfigDict(
         extra="forbid",

@@ -67,12 +67,16 @@ class TesseractOcrModel(BaseOcrModel):
 
         return name, version
 
-    def _run_tesseract(self, ifilename, languages=None):
+    def _run_tesseract(self, ifilename: str):
 
         cmd = [self.options.tesseract_cmd]
 
-        if languages:
-            cmd += ["-l", "+".join(languages)]
+        if self.options.lang is not None and len(self.options.lang) > 0:
+            cmd.append("-l")
+            cmd.append("+".join(self.options.lang))
+        if self.options.path is not None:
+            cmd.append("--tessdata-dir")
+            cmd.append(self.options.path)
 
         cmd += [ifilename, "stdout", "tsv"]
         _log.info("command: {}".format(" ".join(cmd)))
