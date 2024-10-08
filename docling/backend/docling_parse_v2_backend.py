@@ -204,6 +204,7 @@ class DoclingParseV2DocumentBackend(PdfDocumentBackend):
 
         self._pdoc = pdfium.PdfDocument(path_or_stream)
         self.parser = pdf_parser_v2()
+        self.parser.set_loglevel(0)
 
         success = False
         if isinstance(path_or_stream, BytesIO):
