@@ -125,19 +125,19 @@ def main():
 
     # Docling Parse with Tesseract
     # ----------------------
-    pipeline_options = PipelineOptions()
-    pipeline_options.do_ocr = True
-    pipeline_options.do_table_structure = True
-    pipeline_options.table_structure_options.do_cell_matching = True
-    pipeline_options.ocr_options = TesseractOcrOptions()
+    # pipeline_options = PipelineOptions()
+    # pipeline_options.do_ocr = True
+    # pipeline_options.do_table_structure = True
+    # pipeline_options.table_structure_options.do_cell_matching = True
+    # pipeline_options.ocr_options = TesseractOcrOptions()
 
     # Docling Parse with Tesseract CLI
     # ----------------------
-    pipeline_options = PipelineOptions()
-    pipeline_options.do_ocr = True
-    pipeline_options.do_table_structure = True
-    pipeline_options.table_structure_options.do_cell_matching = True
-    pipeline_options.ocr_options = TesseractCliOcrOptions()
+    # pipeline_options = PipelineOptions()
+    # pipeline_options.do_ocr = True
+    # pipeline_options.do_table_structure = True
+    # pipeline_options.table_structure_options.do_cell_matching = True
+    # pipeline_options.ocr_options = TesseractCliOcrOptions()
 
     doc_converter = DocumentConverter(
         pipeline_options=pipeline_options,
