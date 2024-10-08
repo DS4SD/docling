@@ -38,7 +38,7 @@ class LayoutModel:
     ]
     PAGE_HEADER_LABELS = ["Page-header", "Page-footer"]
 
-    TABLE_LABEL = "Table"
+    TABLE_LABELS = ["Table", "Document Index"]
     FIGURE_LABEL = "Picture"
     FORMULA_LABEL = "Formula"
 
@@ -70,7 +70,7 @@ class LayoutModel:
             "Key-Value Region": 0.45,
         }
 
-        CLASS_REMAPPINGS = {"Document Index": "Table", "Title": "Section-header"}
+        CLASS_REMAPPINGS = {"Title": "Section-header"}
 
         _log.debug("================= Start postprocess function ====================")
         start_time = time.time()

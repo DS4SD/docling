@@ -35,7 +35,7 @@ _log = logging.getLogger(__name__)
 
 layout_label_to_ds_type = {
     "Title": "title",
-    "Document Index": "table-of-path_or_stream",
+    "Document Index": "table-of-contents",
     "Section-header": "subtitle-level-1",
     "Checkbox-Selected": "checkbox-selected",
     "Checkbox-Unselected": "checkbox-unselected",
