@@ -23,11 +23,11 @@ _log = logging.getLogger(__name__)
 USE_EXPERIMENTAL = False
 
 input_paths = [
-    # Path("tests/data/wiki_duck.html"),
+    Path("tests/data/wiki_duck.html"),
     Path("tests/data/word_sample.docx"),
     Path("tests/data/lorem_ipsum.docx"),
     Path("tests/data/powerpoint_sample.pptx"),
-    # Path("tests/data/2206.01062.pdf"),
+    Path("tests/data/2206.01062.pdf"),
 ]
 input = DocumentConversionInput.from_paths(input_paths)
 

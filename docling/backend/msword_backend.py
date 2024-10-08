@@ -55,13 +55,31 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         return True
 
     def is_paginated(cls) -> bool:
-        False
+        return False
 
     def unload(self):
         if isinstance(self.path_or_stream, BytesIO):
             self.path_or_stream.close()
 
         self.path_or_stream = None
+
+    @classmethod
+    def supported_formats(cls) -> Set[InputFormat]:
+        return {InputFormat.DOCX}
+
+    def convert(self) -> DoclingDocument:
+        # Parses the DOCX into a structured document model.
+        doc = DoclingDocument(description=DescriptionItem(), name="dummy")
+        docx_obj = None
+        try:
+            docx_obj = docx.Document(self.path_or_stream)
+        except Exception:
+            _log.error("could not parse docx")
+            return doc
+
+        # self.initialise()
+        doc = self.walk_linear(docx_obj.element.body, docx_obj, doc)
+        return doc
 
     def update_history(self, name, level, numid, ilevel):
         self.history["names"].append(name)
@@ -88,24 +106,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             if k >= 0 and v == None:
                 return k
         return 0
-
-    @classmethod
-    def supported_formats(cls) -> Set[InputFormat]:
-        return {InputFormat.DOCX}
-
-    def convert(self) -> DoclingDocument:
-        # Parses the DOCX into a structured document model.
-        doc = DoclingDocument(description=DescriptionItem(), name="dummy")
-        docx_obj = None
-        try:
-            docx_obj = docx.Document(self.path_or_stream)
-        except Exception:
-            _log.error("could not parse docx")
-            return doc
-
-        # self.initialise()
-        doc = self.walk_linear(docx_obj.element.body, docx_obj, doc)
-        return doc
 
     def walk_linear(self, body, docx_obj, doc) -> DoclingDocument:
         for element in body:

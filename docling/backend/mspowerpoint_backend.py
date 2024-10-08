@@ -43,7 +43,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend):
         return True
 
     def is_paginated(cls) -> bool:
-        False
+        return False  # True? if so, how to handle pages...
 
     def unload(self):
         if isinstance(self.path_or_stream, BytesIO):
