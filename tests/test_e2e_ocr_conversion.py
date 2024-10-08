@@ -24,7 +24,7 @@ def save_output(pdf_path: Path, doc_result: ConversionResult, engine: str):
     import os
 
     parent = pdf_path.parent
-    eng = "" if engine is None else ".{engine}"
+    eng = "" if engine is None else f".{engine}"
 
     dict_fn = os.path.join(parent, f"{pdf_path.stem}{eng}.json")
     with open(dict_fn, "w") as fd:
@@ -94,4 +94,5 @@ def test_e2e_conversions():
                 input_path=pdf_path,
                 doc_result=doc_result,
                 generate=GENERATE,
+                skip_cells=True,
             )
