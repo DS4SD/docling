@@ -130,7 +130,11 @@ def verify_dt(doc_pred_dt, doc_true_dt):
 
 
 def verify_conversion_result(
-    input_path: Path, doc_result: ConversionResult, generate=False
+    input_path: Path,
+    doc_result: ConversionResult,
+    generate: bool = False,
+    ocr_engine: str = None,
+    skip_cells: bool = False,
 ):
     PageList = TypeAdapter(List[Page])
 
@@ -143,10 +147,11 @@ def verify_conversion_result(
     doc_pred_md = doc_result.render_as_markdown()
     doc_pred_dt = doc_result.render_as_doctags()
 
-    pages_path = input_path.with_suffix(".pages.json")
-    json_path = input_path.with_suffix(".json")
-    md_path = input_path.with_suffix(".md")
-    dt_path = input_path.with_suffix(".doctags.txt")
+    engine_suffix = "" if ocr_engine is None else f".{ocr_engine}"
+    pages_path = input_path.with_suffix(f"{engine_suffix}.pages.json")
+    json_path = input_path.with_suffix(f"{engine_suffix}.json")
+    md_path = input_path.with_suffix(f"{engine_suffix}.md")
+    dt_path = input_path.with_suffix(f"{engine_suffix}.doctags.txt")
 
     if generate:  # only used when re-generating truth
         with open(pages_path, "w") as fw:
@@ -173,9 +178,10 @@ def verify_conversion_result(
         with open(dt_path, "r") as fr:
             doc_true_dt = fr.read()
 
-        assert verify_cells(
-            doc_pred_pages, doc_true_pages
-        ), f"Mismatch in PDF cell prediction for {input_path}"
+        if not skip_cells:
+            assert verify_cells(
+                doc_pred_pages, doc_true_pages
+            ), f"Mismatch in PDF cell prediction for {input_path}"
 
         # assert verify_output(
         #    doc_pred, doc_true

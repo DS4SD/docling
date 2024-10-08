@@ -5930,6 +5930,41 @@ doc = ["reno", "sphinx"]
 test = ["pytest", "tornado (>=4.5)", "typeguard"]
 
 [[package]]
+name = "tesserocr"
+version = "2.7.1"
+description = "A simple, Pillow-friendly, Python wrapper around tesseract-ocr API using Cython"
+optional = true
+python-versions = "*"
+files = [
+    {file = "tesserocr-2.7.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:1b8c4828f970af7bcfca83a1fb228aa68a2587299387bc875d0dfad8b6baf8ed"},
+    {file = "tesserocr-2.7.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:3bb5d336ebf2cc47cd0d117cadc8b25b2e558f54fb9a2dedaa28a14cb5a6b437"},
+    {file = "tesserocr-2.7.1-cp310-cp310-manylinux_2_28_aarch64.whl", hash = "sha256:3ff7f6d6b5c12dd31b80842eb0892b661a41ca3edf0e6cc1e54ec2c14552ceef"},
+    {file = "tesserocr-2.7.1-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:ae794c5434373f4afa4c7f8b59f19fde810f8caf096d8bb701a4b2f3a6739460"},
+    {file = "tesserocr-2.7.1-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:0a0895a4d9ff6a34f5a6f203fe0c9899f31d6f2378ae99be80605637b622687b"},
+    {file = "tesserocr-2.7.1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:4c3187d14b95c866aa1d34cc374a53d583e2168742eefe33347e4790af70338e"},
+    {file = "tesserocr-2.7.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:ec52be3d82136430081427062ad0211a52fc38fa28fe58e216b89f840354f216"},
+    {file = "tesserocr-2.7.1-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:44e71b3e8da36b2567760309398689ea9785ee62db3ff21140a9ea6941a233c4"},
+    {file = "tesserocr-2.7.1-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:e31a49d7784e7e52fe656719145c3a872856d67daa9bfb340c2990db00e023e9"},
+    {file = "tesserocr-2.7.1-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:37abde15c1c940d691305fd87836e4cad25a1434799729c324bbcd2277bcae44"},
+    {file = "tesserocr-2.7.1-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:1b6349d35d333d420d24acf1953ad6f1d5613ffcde462c62126b68bdfca12753"},
+    {file = "tesserocr-2.7.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:42f009cde8479f3b339da12a8e419fd9559b64b13bc08a248bd0833c6ae94331"},
+    {file = "tesserocr-2.7.1-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:6e13204b3b92fac76ece6e33f55eba6335b30e379f4a7b75e285c2ad05762027"},
+    {file = "tesserocr-2.7.1-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:65afdec0c5dc09a4a23a62e65524989cd940af41be1603e251a64ac10de9babf"},
+    {file = "tesserocr-2.7.1-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:4c5f59fb072c90bff8aa6a365fc82b747c2668b7b48233901728b155860d1ff9"},
+    {file = "tesserocr-2.7.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:f62d662e3002868384e14e8cd620bdedf34ab9f9fc3ebbce527cfe032a7485ee"},
+    {file = "tesserocr-2.7.1-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:e80051812685bd521bc17cb70cf1480ffbb3e54ccc2883e90d5bcda15f8278ea"},
+    {file = "tesserocr-2.7.1-cp38-cp38-manylinux_2_28_aarch64.whl", hash = "sha256:2690cb2330fc9349d68ff027cbdac09693fdda36470836b196c04f16dcc99e9d"},
+    {file = "tesserocr-2.7.1-cp38-cp38-manylinux_2_28_x86_64.whl", hash = "sha256:d01ebd094103451ecb77b6510ade2f6bb064c51413ff35b135f649f3d6067a67"},
+    {file = "tesserocr-2.7.1-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:f8069ae6cd9ea3c056b6a596bc99f501ee9f95d6fd2928fcaffb9777071c210d"},
+    {file = "tesserocr-2.7.1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:b2d3d23223d0a448877fb91af83c46ce95ff0a497a82fa93e93068148c9712e5"},
+    {file = "tesserocr-2.7.1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:ef8a09a44c2e96bab0f40dbf0633767d063680d86b79365b43fc4e1234219694"},
+    {file = "tesserocr-2.7.1-cp39-cp39-manylinux_2_28_aarch64.whl", hash = "sha256:6e613213ea5b64db06f2cba0b93c3656b7e6aec2d9b2d2e929edf49da7143225"},
+    {file = "tesserocr-2.7.1-cp39-cp39-manylinux_2_28_x86_64.whl", hash = "sha256:4a8888b765e26680a6e34b8ec09b7bb85a17e08cea76f0661eafe2a84254562a"},
+    {file = "tesserocr-2.7.1-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:64f25763e56c4c29b808e59b485c930cac46b6a1ac8eadd994086dc40a29d3a1"},
+    {file = "tesserocr-2.7.1.tar.gz", hash = "sha256:3744c5c8bbabf18172849c7731be00dc2e5e44f8c556d37c850e788794ae0af4"},
+]
+
+[[package]]
 name = "threadpoolctl"
 version = "3.5.0"
 description = "threadpoolctl"
@@ -6514,6 +6549,11 @@ files = [
     {file = "triton-3.0.0-1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:34e509deb77f1c067d8640725ef00c5cbfcb2052a1a3cb6a6d343841f92624eb"},
     {file = "triton-3.0.0-1-cp38-cp38-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:bcbf3b1c48af6a28011a5c40a5b3b9b5330530c3827716b5fbf6d7adcc1e53e9"},
     {file = "triton-3.0.0-1-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:6e5727202f7078c56f91ff13ad0c1abab14a0e7f2c87e91b12b6f64f3e8ae609"},
+    {file = "triton-3.0.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:39b052da883351fdf6be3d93cedae6db3b8e3988d3b09ed221bccecfa9612230"},
+    {file = "triton-3.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cd34f19a8582af96e6291d4afce25dac08cb2a5d218c599163761e8e0827208e"},
+    {file = "triton-3.0.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0d5e10de8c011adeb7c878c6ce0dd6073b14367749e34467f1cff2bde1b78253"},
+    {file = "triton-3.0.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e8903767951bf86ec960b4fe4e21bc970055afc65e9d57e916d79ae3c93665e3"},
+    {file = "triton-3.0.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:41004fb1ae9a53fcb3e970745feb87f0e3c94c6ce1ba86e95fa3b8537894bef7"},
 ]
 
 [package.dependencies]
@@ -7121,7 +7161,10 @@ enabler = ["pytest-enabler (>=2.2)"]
 test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-itertools", "pytest (>=6,!=8.1.*)", "pytest-ignore-flaky"]
 type = ["pytest-mypy"]
 
+[extras]
+tesserocr = ["tesserocr"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7c5fb235944009b74193d045f36c1be2a8e168393012bf952541e6e7dea08072"
+content-hash = "a9bfb36209f3a9140b6923c51bae8c1e23af5be34e52d9622119a5683f125b2c"
