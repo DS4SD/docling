@@ -4,10 +4,11 @@ import time
 from pathlib import Path
 from typing import Iterable
 
-from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
-from docling.datamodel.base_models import ConversionStatus, PdfPipelineOptions
+from docling.datamodel.base_models import ConversionStatus, InputFormat
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
-from docling.pdf_document_converter import PdfDocumentConverter
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, FormatOption
+from docling.pipeline.standard_pdf_model_pipeline import StandardPdfModelPipeline
 
 _log = logging.getLogger(__name__)
 
@@ -101,9 +102,12 @@ def main():
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
 
-    doc_converter = PdfDocumentConverter(
-        pipeline_options=pipeline_options,
-        pdf_backend=DoclingParseDocumentBackend,
+    doc_converter = DocumentConverter(
+        format_options={
+            InputFormat.PDF: FormatOption(
+                pipeline_cls=StandardPdfModelPipeline, pipeline_options=pipeline_options
+            )
+        }
     )
 
     # Docling Parse with OCR

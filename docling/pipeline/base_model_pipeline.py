@@ -109,7 +109,7 @@ class PaginatedModelPipeline(BaseModelPipeline):  # TODO this is a bad name.
                 f"Encountered an error during conversion of document {in_doc.document_hash}:\n"
                 f"{trace}"
             )
-            raise e
+            raise e  # TODO Debug, should not be here.
         finally:
             # Always unload the PDF backend, even in case of failure
             if in_doc._backend:

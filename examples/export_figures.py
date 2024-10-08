@@ -5,11 +5,12 @@ from pathlib import Path
 from docling.datamodel.base_models import (
     ConversionStatus,
     FigureElement,
-    PdfPipelineOptions,
+    InputFormat,
     Table,
 )
 from docling.datamodel.document import DocumentConversionInput
-from docling.pdf_document_converter import PdfDocumentConverter
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
 
 _log = logging.getLogger(__name__)
 
@@ -28,12 +29,16 @@ def main():
 
     # Important: For operating with page images, we must keep them, otherwise the DocumentConverter
     # will destroy them for cleaning up memory.
-    # This is done by setting PipelineOptions.images_scale, which also defines the scale of images.
+    # This is done by setting AssembleOptions.images_scale, which also defines the scale of images.
     # scale=1 correspond of a standard 72 DPI image
     pipeline_options = PdfPipelineOptions()
     pipeline_options.images_scale = IMAGE_RESOLUTION_SCALE
 
-    doc_converter = PdfDocumentConverter(pipeline_options=pipeline_options)
+    doc_converter = DocumentConverter(
+        format_options={
+            InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+        }
+    )
 
     start_time = time.time()
 

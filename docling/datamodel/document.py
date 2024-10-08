@@ -98,21 +98,18 @@ class InputDocument(BaseModel):
     def __init__(
         self,
         path_or_stream: Union[BytesIO, Path],
+        format: InputFormat,
+        backend: AbstractDocumentBackend,
         filename: Optional[str] = None,
         limits: Optional[DocumentLimits] = None,
-        backend: Optional[Type[AbstractDocumentBackend]] = None,
-        format: Optional[InputFormat] = None,
     ):
         super().__init__()
 
         self.limits = limits or DocumentLimits()
+        self.format = format
 
         try:
             if isinstance(path_or_stream, Path):
-                mime = filetype.guess_mime(str(path_or_stream))
-                if mime is None:
-                    if path_or_stream.suffix == ".html":
-                        mime = "text/html"
 
                 self.file = path_or_stream
                 self.filesize = path_or_stream.stat().st_size
@@ -121,11 +118,9 @@ class InputDocument(BaseModel):
                 else:
                     self.document_hash = create_file_hash(path_or_stream)
 
-                    self._init_doc(backend, mime, path_or_stream)
+                    self._init_doc(backend, path_or_stream)
 
             elif isinstance(path_or_stream, BytesIO):
-                mime = filetype.guess_mime(path_or_stream.read(8192))
-
                 self.file = PurePath(filename)
                 self.filesize = path_or_stream.getbuffer().nbytes
 
@@ -134,7 +129,7 @@ class InputDocument(BaseModel):
                 else:
                     self.document_hash = create_file_hash(path_or_stream)
 
-                    self._init_doc(backend, mime, path_or_stream)
+                    self._init_doc(backend, path_or_stream)
 
             # For paginated backends, check if the maximum page count is exceeded.
             if self.valid and self._backend.is_valid():
@@ -158,23 +153,19 @@ class InputDocument(BaseModel):
     def _init_doc(
         self,
         backend: AbstractDocumentBackend,
-        mime: str,
         path_or_stream: Union[BytesIO, Path],
     ) -> None:
-        self.format = MimeTypeToFormat.get(mime)
-        if self.format is not None:
-            backend = backend or _input_format_default_backends.get(self.format)
+        if backend is None:
+            backend = _input_format_default_backends.get(self.format)
             if backend is None:
+                self.valid = False
                 raise RuntimeError(
-                    f"Could not find suitable default backend for format: {self.format}"
+                    f"Could not find suitable backend for file: {self.file}"
                 )
-        if self.format is None or self.format not in backend.supported_formats():
-            # TODO decide if to raise exception here too.
-            self.valid = False
-        else:
-            self._backend = backend(
-                path_or_stream=path_or_stream, document_hash=self.document_hash
-            )
+
+        self._backend = backend(
+            path_or_stream=path_or_stream, document_hash=self.document_hash
+        )
 
 
 @deprecated("Use `ConversionResult` instead.")
@@ -478,17 +469,46 @@ class DocumentConversionInput(BaseModel):
     limits: Optional[DocumentLimits] = DocumentLimits()
 
     def docs(
-        self, backend: Optional[Type[AbstractDocumentBackend]] = None
+        self, format_options: Dict[InputFormat, "FormatOption"]
     ) -> Iterable[InputDocument]:
 
         for obj in self._path_or_stream_iterator:
             if isinstance(obj, Path):
+
+                mime = filetype.guess_mime(str(obj))
+                if mime is None:
+                    if obj.suffix == ".html":
+                        mime = "text/html"
+
+                format = MimeTypeToFormat.get(mime)
+                if format not in format_options.keys():
+                    continue
+                else:
+                    backend = format_options.get(format).backend
+
                 yield InputDocument(
-                    path_or_stream=obj, limits=self.limits, backend=backend
+                    path_or_stream=obj,
+                    format=format,
+                    limits=self.limits,
+                    backend=backend,
                 )
             elif isinstance(obj, DocumentStream):
+                mime = filetype.guess_mime(obj.stream.read(8192))
+                obj.stream.seek(0)
+
+                if mime is None:
+                    if obj.suffix == ".html":
+                        mime = "text/html"
+
+                format = MimeTypeToFormat.get(mime)
+                if format not in format_options.keys():
+                    continue
+                else:
+                    backend = format_options.get(format).backend
+
                 yield InputDocument(
                     path_or_stream=obj.stream,
+                    format=format,
                     filename=obj.filename,
                     limits=self.limits,
                     backend=backend,
