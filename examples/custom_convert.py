@@ -8,7 +8,7 @@ from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, PipelineOptions
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
-from docling.datamodel.pipeline_options import TesseractOcrOptions, TesserOcrOptions
+from docling.datamodel.pipeline_options import TesseractCLIOptions, TesseractOptions
 from docling.document_converter import DocumentConverter
 
 _log = logging.getLogger(__name__)
@@ -126,7 +126,7 @@ def main():
     pipeline_options.do_ocr = True
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
-    pipeline_options.ocr_options = TesserOcrOptions()
+    pipeline_options.ocr_options = TesseractOptions()
 
     # Docling Parse with Tesseract CLI
     # ----------------------
@@ -134,7 +134,7 @@ def main():
     pipeline_options.do_ocr = True
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
-    pipeline_options.ocr_options = TesseractOcrOptions()
+    pipeline_options.ocr_options = TesseractCLIOptions()
 
     doc_converter = DocumentConverter(
         pipeline_options=pipeline_options,

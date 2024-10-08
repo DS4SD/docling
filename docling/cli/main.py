@@ -17,8 +17,8 @@ from docling.datamodel.document import ConversionResult, DocumentConversionInput
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     PipelineOptions,
-    TesseractOcrOptions,
-    TesserOcrOptions,
+    TesseractCLIOptions,
+    TesseractOptions,
 )
 from docling.document_converter import DocumentConverter
 
@@ -61,8 +61,8 @@ class Backend(str, Enum):
 # Define an enum for the ocr engines
 class OcrEngine(str, Enum):
     EASYOCR = "easyocr"
+    TESSERACT_CLI = "tesseract_cli"
     TESSERACT = "tesseract"
-    TESSEROCR = "tesserocr"
 
 
 def export_documents(
@@ -209,10 +209,10 @@ def convert(
     match ocr_engine:
         case OcrEngine.EASYOCR:
             ocr_options = EasyOcrOptions()
+        case OcrEngine.TESSERACT_CLI:
+            ocr_options = TesseractCLIOptions()
         case OcrEngine.TESSERACT:
-            ocr_options = TesseractOcrOptions()
-        case OcrEngine.TESSEROCR:
-            ocr_options = TesserOcrOptions()
+            ocr_options = TesseractOptions()
         case _:
             raise RuntimeError(f"Unexpected backend type {backend}")
 

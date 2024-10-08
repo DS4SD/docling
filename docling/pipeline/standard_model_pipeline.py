@@ -3,15 +3,15 @@ from pathlib import Path
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     PipelineOptions,
-    TesseractOcrOptions,
-    TesserOcrOptions,
+    TesseractCLIOptions,
+    TesseractOptions,
 )
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
 from docling.models.table_structure_model import TableStructureModel
-from docling.models.tesseract_model import TesseractOcrModel
-from docling.models.tesserocr_model import TesserOcrModel
+from docling.models.tesseract_cli_model import TesseractCLIModel
+from docling.models.tesseract_model import TesseractModel
 from docling.pipeline.base_model_pipeline import BaseModelPipeline
 
 
@@ -28,13 +28,13 @@ class StandardModelPipeline(BaseModelPipeline):
                 enabled=pipeline_options.do_ocr,
                 options=pipeline_options.ocr_options,
             )
-        elif isinstance(pipeline_options.ocr_options, TesseractOcrOptions):
-            ocr_model = TesseractOcrModel(
+        elif isinstance(pipeline_options.ocr_options, TesseractCLIOptions):
+            ocr_model = TesseractCLIModel(
                 enabled=pipeline_options.do_ocr,
                 options=pipeline_options.ocr_options,
             )
-        elif isinstance(pipeline_options.ocr_options, TesserOcrOptions):
-            ocr_model = TesserOcrModel(
+        elif isinstance(pipeline_options.ocr_options, TesseractOptions):
+            ocr_model = TesseractModel(
                 enabled=pipeline_options.do_ocr,
                 options=pipeline_options.ocr_options,
             )
