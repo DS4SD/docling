@@ -1,5 +1,6 @@
 import json
 import logging
+from io import BytesIO, TextIOWrapper
 from pathlib import Path
 from typing import Iterable
 
@@ -9,6 +10,7 @@ from docling.backend.msword_backend import MsWordDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import (
     ConversionStatus,
+    DocumentStream,
     InputFormat,
     PdfPipelineOptions,
     PipelineOptions,
@@ -29,6 +31,16 @@ input_paths = [
     Path("tests/data/powerpoint_sample.pptx"),
     Path("tests/data/2206.01062.pdf"),
 ]
+
+input_bytes = []
+for p in input_paths:
+    buf = BytesIO(p.open("rb").read())
+    # tstream = TextIOWrapper(buf, encoding='utf-8')
+    # input_bytes.append(tstream)
+    bstream = DocumentStream(filename=p.name, stream=buf)
+    input_bytes.append(bstream)
+
+# input = DocumentConversionInput.from_streams(input_bytes)
 input = DocumentConversionInput.from_paths(input_paths)
 
 # for defaults use:
