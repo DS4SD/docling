@@ -4,16 +4,16 @@ from typing import Iterable
 import numpy
 
 from docling.datamodel.base_models import BoundingBox, CoordOrigin, OcrCell, Page
-from docling.datamodel.pipeline_options import TesseractCLIOptions
+from docling.datamodel.pipeline_options import TesseractCliOcrOptions
 from docling.models.base_ocr_model import BaseOcrModel
 
 _log = logging.getLogger(__name__)
 
 
-class TesseractModel(BaseOcrModel):
-    def __init__(self, enabled: bool, options: TesseractCLIOptions):
+class TesseractOcrModel(BaseOcrModel):
+    def __init__(self, enabled: bool, options: TesseractCliOcrOptions):
         super().__init__(enabled=enabled, options=options)
-        self.options: TesseractCLIOptions
+        self.options: TesseractCliOcrOptions
 
         self.scale = 3  # multiplier for 72 dpi == 216 dpi.
         self.reader = None

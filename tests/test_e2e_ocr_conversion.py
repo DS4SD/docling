@@ -7,8 +7,8 @@ from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     OcrOptions,
     PipelineOptions,
-    TesseractCLIOptions,
-    TesseractOptions,
+    TesseractCliOcrOptions,
+    TesseractOcrOptions,
 )
 from docling.document_converter import DocumentConverter
 
@@ -74,8 +74,8 @@ def test_e2e_conversions():
 
     engines: List[OcrOptions] = [
         EasyOcrOptions(),
-        TesseractOptions(),
-        TesseractCLIOptions(),
+        TesseractOcrOptions(),
+        TesseractCliOcrOptions(),
     ]
 
     for ocr_options in engines:
