@@ -1,7 +1,7 @@
 from enum import Enum, auto
 from typing import List, Literal, Optional, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class TableFormerMode(str, Enum):
@@ -30,16 +30,29 @@ class EasyOcrOptions(OcrOptions):
     model_storage_directory: Optional[str] = None
     download_enabled: bool = True  # same default as easyocr.Reader
 
+    model_config = ConfigDict(
+        extra="forbid",
+        protected_namespaces=(),
+    )
+
 
 class TesseractOcrOptions(OcrOptions):
     kind: Literal["tesseract"] = "tesseract"
     lang: List[str] = ["fra", "deu", "spa", "eng"]
     tesseract_cmd: str = "tesseract"
 
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+
 
 class TesserOcrOptions(OcrOptions):
     kind: Literal["tesserocr"] = "tesserocr"
     lang: List[str] = ["fra", "deu", "spa", "eng"]
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )
 
 
 class PipelineOptions(BaseModel):
