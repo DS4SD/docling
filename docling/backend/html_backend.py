@@ -8,14 +8,8 @@ from docling_core.types.experimental import (
     BasePictureData,
     BaseTableData,
     DescriptionItem,
-    DocItemLabel,
     DoclingDocument,
-    DocumentOrigin,
-    ImageRef,
-    PictureItem,
-    SectionHeaderItem,
     TableCell,
-    TableItem,
 )
 from docling_core.types.experimental.labels import DocItemLabel, GroupLabel
 

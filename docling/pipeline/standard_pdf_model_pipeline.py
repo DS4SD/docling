@@ -4,8 +4,9 @@ from typing import Optional
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
-from docling.datamodel.base_models import AssembledUnit, Page, PdfPipelineOptions
+from docling.datamodel.base_models import AssembledUnit, Page
 from docling.datamodel.document import ConversionResult, InputDocument
+from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.models.ds_glm_model import GlmModel
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
@@ -18,7 +19,7 @@ _log = logging.getLogger(__name__)
 
 
 class StandardPdfModelPipeline(PaginatedModelPipeline):
-    _layout_model_path = "model_artifacts/layout/beehive_v0.0.5"
+    _layout_model_path = "model_artifacts/layout/beehive_v0.0.5_pt"
     _table_model_path = "model_artifacts/tableformer"
 
     def __init__(self, pipeline_options: PdfPipelineOptions):
@@ -52,6 +53,7 @@ class StandardPdfModelPipeline(PaginatedModelPipeline):
                     / StandardPdfModelPipeline._table_model_path,
                     "enabled": pipeline_options.do_table_structure,
                     "do_cell_matching": pipeline_options.table_structure_options.do_cell_matching,
+                    "mode": pipeline_options.table_structure_options.mode,
                 }
             ),
             PageAssembleModel(config={"images_scale": pipeline_options.images_scale}),
@@ -64,7 +66,10 @@ class StandardPdfModelPipeline(PaginatedModelPipeline):
         from huggingface_hub import snapshot_download
 
         download_path = snapshot_download(
-            repo_id="ds4sd/docling-models", force_download=force, local_dir=local_dir
+            repo_id="ds4sd/docling-models",
+            force_download=force,
+            local_dir=local_dir,
+            revision="v2.0.0",
         )
 
         return Path(download_path)

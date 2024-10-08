@@ -1,7 +1,6 @@
 import logging
 import time
 from pathlib import Path
-from typing import Tuple
 
 import pandas as pd
 

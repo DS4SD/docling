@@ -8,7 +8,6 @@ import yaml
 
 from docling.datamodel.base_models import ConversionStatus, PdfPipelineOptions
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
-from docling.pdf_document_converter import PdfDocumentConverter
 
 _log = logging.getLogger(__name__)
 
@@ -31,19 +30,23 @@ def export_documents(
             doc_filename = conv_res.input.file.stem
 
             # Export Deep Search document JSON format:
-            with (output_dir / f"{doc_filename}.json").open("w") as fp:
+            with (output_dir / f"{doc_filename}.json").open(
+                "w", encoding="utf-8"
+            ) as fp:
                 fp.write(json.dumps(conv_res.render_as_dict()))
 
             # Export Text format:
-            with (output_dir / f"{doc_filename}.txt").open("w") as fp:
+            with (output_dir / f"{doc_filename}.txt").open("w", encoding="utf-8") as fp:
                 fp.write(conv_res.render_as_text())
 
             # Export Markdown format:
-            with (output_dir / f"{doc_filename}.md").open("w") as fp:
+            with (output_dir / f"{doc_filename}.md").open("w", encoding="utf-8") as fp:
                 fp.write(conv_res.render_as_markdown())
 
             # Export Document Tags format:
-            with (output_dir / f"{doc_filename}.doctags").open("w") as fp:
+            with (output_dir / f"{doc_filename}.doctags").open(
+                "w", encoding="utf-8"
+            ) as fp:
                 fp.write(conv_res.render_as_doctags())
 
             if USE_EXPERIMENTAL:

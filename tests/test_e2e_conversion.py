@@ -1,10 +1,9 @@
 from pathlib import Path
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
-from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import PdfPipelineOptions
 from docling.datamodel.document import ConversionResult
-from docling.pdf_document_converter import PdfDocumentConverter
+from docling.datamodel.pipeline_options import PipelineOptions
+from docling.document_converter import DocumentConverter
 
 from .verify_utils import verify_conversion_result
 
@@ -23,12 +22,12 @@ def get_pdf_paths():
 
 def get_converter():
 
-    pipeline_options = PdfPipelineOptions()
+    pipeline_options = PipelineOptions()
     pipeline_options.do_ocr = False
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
 
-    converter = PdfDocumentConverter(
+    converter = DocumentConverter(
         pipeline_options=pipeline_options,
         pdf_backend=DoclingParseDocumentBackend,
     )

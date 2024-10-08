@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "docling"
-version = "1.15.0"  # DO NOT EDIT, updated automatically
+version = "2.0.0"  # DO NOT EDIT, updated automatically
 description = "Docling PDF conversion package"
 authors = ["Christoph Auer <cau@zurich.ibm.com>", "Michele Dolfi <dol@zurich.ibm.com>", "Maxim Lysak <mly@zurich.ibm.com>", "Nikos Livathinos <nli@zurich.ibm.com>", "Ahmed Nassar <ahn@zurich.ibm.com>", "Peter Staar <taa@zurich.ibm.com>"]
 license = "MIT"
@@ -38,7 +38,7 @@ torchvision = [
 python = "^3.10"
 pydantic = "^2.0.0"
 docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "089d692b95dd704a503e9d15c5072e2ff58a65e6"}
-docling-ibm-models = "^1.2.0"
+docling-ibm-models = "^2.0.0"
 deepsearch-glm = {git = "ssh://git@github.com/DS4SD/deepsearch-glm.git", rev = "13350bfe2df62d421cb65bd0fc63d1bb211c8ab9"}
 
 filetype = "^1.2.0"
@@ -47,7 +47,7 @@ pydantic-settings = "^2.3.0"
 huggingface_hub = ">=0.23,<1"
 requests = "^2.32.3"
 easyocr = "^1.7"
-docling-parse = "^1.2.0"
+docling-parse = "^1.4.1"
 certifi = ">=2024.7.4"
 rtree = "^1.3.0"
 scipy = "^1.14.1"

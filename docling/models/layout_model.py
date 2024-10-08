@@ -73,6 +73,7 @@ class LayoutModel(AbstractPageModel):
 
         CLASS_REMAPPINGS = {
             DocItemLabel.DOCUMENT_INDEX: DocItemLabel.TABLE,
+            DocItemLabel.TITLE: DocItemLabel.SECTION_HEADER,
         }
 
         _log.debug("================= Start postprocess function ====================")

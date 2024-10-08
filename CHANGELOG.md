@@ -1,3 +1,31 @@
+## [v1.18.0](https://github.com/DS4SD/docling/releases/tag/v1.18.0) - 2024-10-03
+
+### Feature
+
+* New torch-based docling models ([#120](https://github.com/DS4SD/docling/issues/120)) ([`2422f70`](https://github.com/DS4SD/docling/commit/2422f706a1b02a679bcbaaba097fef2f69aba0f4))
+
+## [v1.17.0](https://github.com/DS4SD/docling/releases/tag/v1.17.0) - 2024-10-03
+
+### Feature
+
+* Windows support ([#122](https://github.com/DS4SD/docling/issues/122)) ([`d44c62d`](https://github.com/DS4SD/docling/commit/d44c62d7ce6990bbc78bf53315dd76d35d1f6c2e))
+
+## [v1.16.1](https://github.com/DS4SD/docling/releases/tag/v1.16.1) - 2024-09-27
+
+### Fix
+
+* Allow usage of opencv 4.6.x ([#110](https://github.com/DS4SD/docling/issues/110)) ([`34bd887`](https://github.com/DS4SD/docling/commit/34bd887a7f9c11b2b051bdb4707dfdc5f43e6ad5))
+
+### Documentation
+
+* Document chunking ([#111](https://github.com/DS4SD/docling/issues/111)) ([`c05b692`](https://github.com/DS4SD/docling/commit/c05b692d69b6dae1ac5f518e84b17f32e7d94372))
+
+## [v1.16.0](https://github.com/DS4SD/docling/releases/tag/v1.16.0) - 2024-09-27
+
+### Feature
+
+* Support tableformer model choice ([#90](https://github.com/DS4SD/docling/issues/90)) ([`d6df76f`](https://github.com/DS4SD/docling/commit/d6df76f90b249bf48a509b63fa18f570be39482e))
+
 ## [v1.15.0](https://github.com/DS4SD/docling/releases/tag/v1.15.0) - 2024-09-24
 
 ### Feature

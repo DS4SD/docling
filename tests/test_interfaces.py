@@ -4,10 +4,10 @@ from pathlib import Path
 import pytest
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
-from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import DocumentStream, PdfPipelineOptions
+from docling.datamodel.base_models import DocumentStream
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
-from docling.pdf_document_converter import PdfDocumentConverter
+from docling.datamodel.pipeline_options import PipelineOptions
+from docling.document_converter import DocumentConverter
 
 from .verify_utils import verify_conversion_result
 
@@ -21,12 +21,12 @@ def get_pdf_path():
 @pytest.fixture
 def converter():
 
-    pipeline_options = PdfPipelineOptions()
+    pipeline_options = PipelineOptions()
     pipeline_options.do_ocr = False
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
 
-    converter = PdfDocumentConverter(
+    converter = DocumentConverter(
         pipeline_options=pipeline_options,
         pdf_backend=DoclingParseDocumentBackend,
     )
@@ -34,7 +34,7 @@ def converter():
     return converter
 
 
-def test_convert_single(converter: PdfDocumentConverter):
+def test_convert_single(converter: DocumentConverter):
 
     pdf_path = get_pdf_path()
     print(f"converting {pdf_path}")
@@ -43,7 +43,7 @@ def test_convert_single(converter: PdfDocumentConverter):
     verify_conversion_result(input_path=pdf_path, doc_result=doc_result)
 
 
-def test_batch_path(converter: PdfDocumentConverter):
+def test_batch_path(converter: DocumentConverter):
 
     pdf_path = get_pdf_path()
     print(f"converting {pdf_path}")
@@ -55,7 +55,7 @@ def test_batch_path(converter: PdfDocumentConverter):
         verify_conversion_result(input_path=pdf_path, doc_result=doc_result)
 
 
-def test_batch_bytes(converter: PdfDocumentConverter):
+def test_batch_bytes(converter: DocumentConverter):
 
     pdf_path = get_pdf_path()
     print(f"converting {pdf_path}")

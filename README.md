@@ -33,8 +33,7 @@ To use Docling, simply install `docling` from your package manager, e.g. pip:
 pip install docling
 ```
 
-> [!NOTE]
-> Works on macOS and Linux environments. Windows platforms are currently not tested.
+Works on macOS, Linux and Windows environments. Both x86_64 and arm64 architectures.
 
 <details>
   <summary><b>Alternative PyTorch distributions</b></summary>
@@ -160,8 +159,24 @@ This can improve output quality if you find that multiple columns in extracted t
 
 
 ```python
+from docling.datamodel.pipeline_options import PipelineOptions
+
 pipeline_options = PipelineOptions(do_table_structure=True)
 pipeline_options.table_structure_options.do_cell_matching = False  # uses text cells predicted from table structure model
+
+doc_converter = DocumentConverter(
+    artifacts_path=artifacts_path,
+    pipeline_options=pipeline_options,
+)
+```
+
+Since docling 1.16.0: You can control which TableFormer mode you want to use. Choose between `TableFormerMode.FAST` (default) and `TableFormerMode.ACCURATE` (better, but slower) to receive better quality with difficult table structures.
+
+```python
+from docling.datamodel.pipeline_options import PipelineOptions, TableFormerMode
+
+pipeline_options = PipelineOptions(do_table_structure=True)
+pipeline_options.table_structure_options.mode = TableFormerMode.ACCURATE  # use more accurate TableFormer model
 
 doc_converter = DocumentConverter(
     artifacts_path=artifacts_path,
@@ -191,6 +206,28 @@ results = doc_converter.convert(conv_input)
 ### Limit resource usage
 
 You can limit the CPU threads used by Docling by setting the environment variable `OMP_NUM_THREADS` accordingly. The default setting is using 4 CPU threads.
+
+### Chunking
+
+You can perform a hierarchy-aware chunking of a Docling document as follows:
+
+```python
+from docling.document_converter import DocumentConverter
+from docling_core.transforms.chunker import HierarchicalChunker
+
+doc = DocumentConverter().convert_single("https://arxiv.org/pdf/2206.01062").output
+chunks = list(HierarchicalChunker().chunk(doc))
+# > [
+# >     ChunkWithMetadata(
+# >         path='$.main-text[0]',
+# >         text='DocLayNet: A Large Human-Annotated Dataset [...]',
+# >         page=1,
+# >         bbox=[107.30, 672.38, 505.19, 709.08]
+# >     ),
+# >     [...]
+# > ]
+```
+
 
 ## Technical report
 

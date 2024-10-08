@@ -4,12 +4,9 @@ from docling.backend.abstract_backend import (
     AbstractDocumentBackend,
     DeclarativeDocumentBackend,
 )
-from docling.datamodel.base_models import (
-    ConversionStatus,
-    PdfPipelineOptions,
-    PipelineOptions,
-)
+from docling.datamodel.base_models import ConversionStatus
 from docling.datamodel.document import ConversionResult, InputDocument
+from docling.datamodel.pipeline_options import PdfPipelineOptions, PipelineOptions
 from docling.pipeline.base_model_pipeline import BaseModelPipeline
 
 _log = logging.getLogger(__name__)

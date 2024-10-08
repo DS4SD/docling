@@ -1,12 +1,10 @@
 import logging
 import time
 from pathlib import Path
-from typing import Tuple
 
 from docling.datamodel.base_models import (
     ConversionStatus,
     FigureElement,
-    PageElement,
     PdfPipelineOptions,
     Table,
 )

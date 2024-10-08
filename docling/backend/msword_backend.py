@@ -11,11 +11,7 @@ from docling_core.types.experimental import (
     DocItemLabel,
     DoclingDocument,
     GroupLabel,
-    ImageRef,
-    PictureItem,
-    SectionHeaderItem,
     TableCell,
-    TableItem,
 )
 from lxml import etree
 

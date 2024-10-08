@@ -1,22 +1,8 @@
-import json
 import logging
 from pathlib import Path
-from typing import Iterable
 
-import yaml
-
-from docling.backend.msword_backend import MsWordDocumentBackend
-from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import (
-    ConversionStatus,
-    InputFormat,
-    PdfPipelineOptions,
-    PipelineOptions,
-)
-from docling.datamodel.document import ConversionResult, DocumentConversionInput
-from docling.document_converter import DocumentConverter, FormatOption
-from docling.pipeline.simple_model_pipeline import SimpleModelPipeline
-from docling.pipeline.standard_pdf_model_pipeline import StandardPdfModelPipeline
+from docling.datamodel.document import DocumentConversionInput
+from docling.document_converter import DocumentConverter
 
 _log = logging.getLogger(__name__)
 

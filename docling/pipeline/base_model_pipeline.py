@@ -12,9 +12,9 @@ from docling.datamodel.base_models import (
     DoclingComponentType,
     ErrorItem,
     Page,
-    PipelineOptions,
 )
 from docling.datamodel.document import ConversionResult, InputDocument
+from docling.datamodel.pipeline_options import PipelineOptions
 from docling.datamodel.settings import settings
 from docling.utils.utils import chunkify
 
@@ -86,9 +86,6 @@ class PaginatedModelPipeline(BaseModelPipeline):  # TODO this is a bad name.
                 end_pb_time = time.time() - start_pb_time
                 _log.info(f"Finished converting page batch time={end_pb_time:.3f}")
 
-            # Free up mem resources of PDF backend
-            in_doc._backend.unload()
-
             conv_res = self.assemble_document(in_doc, conv_res)
 
             status = ConversionStatus.SUCCESS
@@ -113,6 +110,10 @@ class PaginatedModelPipeline(BaseModelPipeline):  # TODO this is a bad name.
                 f"{trace}"
             )
             raise e
+        finally:
+            # Always unload the PDF backend, even in case of failure
+            if in_doc._backend:
+                in_doc._backend.unload()
 
         return conv_res
 

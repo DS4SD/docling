@@ -11,22 +11,18 @@ from docling_core.types.experimental import (
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
-    ImageRef,
-    PictureItem,
     ProvenanceItem,
     TableCell,
-    TableItem,
 )
 from docling_core.types.experimental.base import BoundingBox, CoordOrigin, Size
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
-from pptx.util import Inches
 
 from docling.backend.abstract_backend import (
     DeclarativeDocumentBackend,
     PaginatedDocumentBackend,
 )
-from docling.datamodel.base_models import FormatToMimeType, InputFormat
+from docling.datamodel.base_models import InputFormat
 
 _log = logging.getLogger(__name__)
 

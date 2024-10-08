@@ -8,12 +8,13 @@ import requests
 from pydantic import AnyHttpUrl, BaseModel, ConfigDict, TypeAdapter, ValidationError
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
-from docling.datamodel.base_models import ConversionStatus, InputFormat, PipelineOptions
+from docling.datamodel.base_models import ConversionStatus, InputFormat
 from docling.datamodel.document import (
     ConversionResult,
     DocumentConversionInput,
     InputDocument,
 )
+from docling.datamodel.pipeline_options import PipelineOptions
 from docling.datamodel.settings import settings
 from docling.pipeline.base_model_pipeline import BaseModelPipeline
 from docling.pipeline.simple_model_pipeline import SimpleModelPipeline
