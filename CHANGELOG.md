@@ -1,3 +1,9 @@
+## [v1.18.0](https://github.com/DS4SD/docling/releases/tag/v1.18.0) - 2024-10-03
+
+### Feature
+
+* New torch-based docling models ([#120](https://github.com/DS4SD/docling/issues/120)) ([`2422f70`](https://github.com/DS4SD/docling/commit/2422f706a1b02a679bcbaaba097fef2f69aba0f4))
+
 ## [v1.17.0](https://github.com/DS4SD/docling/releases/tag/v1.17.0) - 2024-10-03
 
 ### Feature

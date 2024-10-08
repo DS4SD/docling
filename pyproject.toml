@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "docling"
-version = "1.17.0"  # DO NOT EDIT, updated automatically
+version = "1.18.0"  # DO NOT EDIT, updated automatically
 description = "Docling PDF conversion package"
 authors = ["Christoph Auer <cau@zurich.ibm.com>", "Michele Dolfi <dol@zurich.ibm.com>", "Maxim Lysak <mly@zurich.ibm.com>", "Nikos Livathinos <nli@zurich.ibm.com>", "Ahmed Nassar <ahn@zurich.ibm.com>", "Peter Staar <taa@zurich.ibm.com>"]
 license = "MIT"
