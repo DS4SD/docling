@@ -9,6 +9,7 @@ from docling_core.types.experimental import (
     DescriptionItem,
     DocItemLabel,
     DoclingDocument,
+    DocumentOrigin,
     GroupLabel,
     ImageRef,
     PictureItem,
@@ -21,13 +22,16 @@ from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
 from pptx.util import Inches
 
-from docling.backend.abstract_backend import DeclarativeDocumentBackend
-from docling.datamodel.base_models import InputFormat
+from docling.backend.abstract_backend import (
+    DeclarativeDocumentBackend,
+    PaginatedDocumentBackend,
+)
+from docling.datamodel.base_models import FormatToMimeType, InputFormat
 
 _log = logging.getLogger(__name__)
 
 
-class MsPowerpointDocumentBackend(DeclarativeDocumentBackend):
+class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBackend):
     def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
         super().__init__(path_or_stream, document_hash)
         self.namespaces = {
@@ -37,13 +41,28 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend):
         }
         # Powerpoint file:
         self.path_or_stream = path_or_stream
+
+        self.pptx_obj = None
+        self.valid = True
+        try:
+            self.pptx_obj = Presentation(self.path_or_stream)
+        except Exception:
+            _log.error("could not parse pptx")
+            self.valid = False
+
         return
 
+    def page_count(self) -> int:
+        if self.is_valid():
+            return len(self.pptx_obj.slides)
+        else:
+            return 0
+
     def is_valid(self) -> bool:
-        return True
+        return self.valid
 
     def is_paginated(cls) -> bool:
-        return False  # True? if so, how to handle pages...
+        return True  # True? if so, how to handle pages...
 
     def unload(self):
         if isinstance(self.path_or_stream, BytesIO):
@@ -57,14 +76,17 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend):
 
     def convert(self) -> DoclingDocument:
         # Parses the PPTX into a structured document model.
-        doc = DoclingDocument(description=DescriptionItem(), name="dummy")
-        pptx_obj = None
-        try:
-            pptx_obj = Presentation(self.path_or_stream)
-        except Exception:
-            _log.error("could not parse pptx")
-            return doc
-        doc = self.walk_linear(pptx_obj, doc)
+        # origin = DocumentOrigin(filename=self.path_or_stream.name, mimetype=next(iter(FormatToMimeType.get(InputFormat.PPTX))), binary_hash=self.document_hash)
+
+        origin = DocumentOrigin(
+            filename=self.path_or_stream.name,
+            mimetype="application/vnd.ms-powerpoint",
+            binary_hash=self.document_hash,
+        )
+        doc = DoclingDocument(
+            description=DescriptionItem(), name="name_without_extension", origin=origin
+        )  # TODO must add origin information
+        doc = self.walk_linear(self.pptx_obj, doc)
 
         return doc
 

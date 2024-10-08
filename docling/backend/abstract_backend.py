@@ -36,6 +36,18 @@ class AbstractDocumentBackend(ABC):
         pass
 
 
+class PaginatedDocumentBackend(AbstractDocumentBackend):
+    """DeclarativeDocumentBackend.
+
+    A declarative document backend is a backend that can transform to DoclingDocument
+    straight without a recognition pipeline.
+    """
+
+    @abstractmethod
+    def page_count(self) -> int:
+        pass
+
+
 class DeclarativeDocumentBackend(AbstractDocumentBackend):
     """DeclarativeDocumentBackend.
 
