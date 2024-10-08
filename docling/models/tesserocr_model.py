@@ -47,7 +47,6 @@ class TesserOcrModel(BaseOcrModel):
     def __del__(self):
         if self.reader is not None:
             # Finalize the tesseractAPI
-            _log.debug("Finalize TesserOCR")
             self.reader.End()
 
     def __call__(self, page_batch: Iterable[Page]) -> Iterable[Page]:
@@ -91,9 +90,8 @@ class TesserOcrModel(BaseOcrModel):
                             text=text,
                             confidence=confidence,
                             bbox=BoundingBox.from_tuple(
-                                # l, b, r, t = coord[0], coord[1], coord[2], coord[3]
-                                coord=(left, bottom, right, top),
-                                origin=CoordOrigin.BOTTOMLEFT,
+                                coord=(left, top, right, bottom),
+                                origin=CoordOrigin.TOPLEFT,
                             ),
                         )
                     )
