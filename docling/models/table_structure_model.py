@@ -85,7 +85,7 @@ class TableStructureModel:
                     ],
                 )
                 for cluster in page.predictions.layout.clusters
-                if cluster.label == "Table"
+                if cluster.label in ["Table", "Document Index"]
             ]
             if not len(in_tables):
                 yield page
@@ -149,7 +149,7 @@ class TableStructureModel:
                         id=table_cluster.id,
                         page_no=page.page_no,
                         cluster=table_cluster,
-                        label="Table",
+                        label=table_cluster.label,
                     )
 
                     page.predictions.tablestructure.table_map[table_cluster.id] = tbl
