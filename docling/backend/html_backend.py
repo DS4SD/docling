@@ -1,5 +1,5 @@
 import logging
-from io import BytesIO
+from io import BytesIO, TextIOWrapper
 from pathlib import Path
 from typing import Set, Union
 
@@ -21,6 +21,7 @@ _log = logging.getLogger(__name__)
 
 class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
+        print("About to init HTML backend...")
         super().__init__(path_or_stream, document_hash)
         self.soup = None
         # HTML file:
@@ -32,6 +33,19 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         for i in range(0, self.max_levels):
             self.parents[i] = None
         self.labels = {}
+
+        try:
+            if isinstance(self.path_or_stream, BytesIO):
+                text_stream = byte_stream.getvalue().decode("utf-8")
+                print(text_stream)
+                self.soup = BeautifulSoup(text_stream, "html.parser")
+            if isinstance(self.path_or_stream, Path):
+                with open(self.path_or_stream, "r", encoding="utf-8") as f:
+                    html_content = f.read()
+                    self.soup = BeautifulSoup(html_content, "html.parser")
+        except Exception as e:
+            _log.error("could not parse html: {}".format(e))
+            return doc
 
     def is_valid(self) -> bool:
         return True
@@ -52,15 +66,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def convert(self) -> DoclingDocument:
         # access self.path_or_stream to load stuff
         doc = DoclingDocument(description=DescriptionItem(), name="dummy")
-
-        try:
-            with open(self.path_or_stream, "r", encoding="utf-8") as f:
-                html_content = f.read()
-                self.soup = BeautifulSoup(html_content, "html.parser")
-        except Exception as e:
-            _log.error("could not parse html: {}".format(e))
-            return doc
-
+        print("Trying to convert HTML...")
         # Replace <br> tags with newline characters
         for br in self.soup.body.find_all("br"):
             br.replace_with("\n")
