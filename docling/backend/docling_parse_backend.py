@@ -14,6 +14,8 @@ from docling.datamodel.base_models import BoundingBox, Cell, CoordOrigin, PageSi
 
 _log = logging.getLogger(__name__)
 
+pdf_parser = pdf_parser()
+
 
 class DoclingParsePageBackend(PdfPageBackend):
     def __init__(
@@ -190,7 +192,7 @@ class DoclingParseDocumentBackend(PdfDocumentBackend):
         super().__init__(path_or_stream, document_hash)
 
         self._pdoc = pdfium.PdfDocument(path_or_stream)
-        self.parser = pdf_parser()
+        self.parser = pdf_parser
 
         success = False
         if isinstance(path_or_stream, BytesIO):
