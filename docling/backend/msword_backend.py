@@ -27,6 +27,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         self.XML_KEY = (
             "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val"
         )
+        self.xml_namespaces = {
+            "w": "http://schemas.microsoft.com/office/word/2003/wordml"
+        }
         super().__init__(path_or_stream, document_hash)
         # self.initialise(path_or_stream)
         # Word file:
@@ -107,11 +110,22 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         for element in body:
             tag_name = etree.QName(element).localname
 
+            found_drawing = etree.ElementBase.xpath(
+                element, ".//w:drawing", namespaces=self.xml_namespaces
+            )
+            found_pict = etree.ElementBase.xpath(
+                element, ".//w:pict", namespaces=self.xml_namespaces
+            )
+
             # Check for Tables
             if element.tag.endswith("tbl"):
-                self.handle_tables(element, docx_obj, doc)
+                try:
+                    self.handle_tables(element, docx_obj, doc)
+                except Exception:
+                    _log.error("could not parse a table, broken docx table")
             # Check for Inline Images (drawings or blip elements)
-            elif element.xpath(".//w:drawing") or element.xpath(".//w:pict"):
+            # elif element.xpath(".//w:drawing", namespaces = self.xml_namespaces) or element.xpath(".//w:pict", namespaces = self.xml_namespaces):
+            elif found_drawing or found_pict:
                 self.handle_pictures(element, docx_obj, doc)
             # Check for Text
             elif tag_name in ["p"]:
@@ -119,6 +133,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             else:
                 _log.warn(f"Ignoring element in DOCX with tag: {tag_name}")
         return doc
+
+    def str_to_int(self, s, default=0):
+        if s is None:
+            return None
+        try:
+            return int(s)
+        except ValueError:
+            return default
 
     def get_numId_and_ilvl(self, paragraph):
         # Access the XML element of the paragraph
@@ -134,7 +156,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             numId = numId_elem.get(self.XML_KEY) if numId_elem is not None else None
             ilvl = ilvl_elem.get(self.XML_KEY) if ilvl_elem is not None else None
 
-            return int(numId), int(ilvl)
+            return self.str_to_int(numId, default=None), self.str_to_int(
+                ilvl, default=None
+            )
 
         return None, None  # If the paragraph is not part of a list
 
@@ -142,6 +166,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         if paragraph.style is None:
             return "Normal", None
         label = paragraph.style.name
+        if label is None:
+            return "Normal", None
         if ":" in label:
             parts = label.split(":")
 
@@ -151,12 +177,23 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         parts = label.split(" ")
 
         if "Heading" in label and len(parts) == 2:
-            return parts[0], int(parts[1])
+            parts.sort()
+            label_str = ""
+            label_level = 0
+            if parts[0] == "Heading":
+                # print("{} - {}".format(parts[0], parts[1]))
+                label_str = parts[0]
+                label_level = self.str_to_int(parts[1], default=None)
+            if parts[1] == "Heading":
+                label_str = parts[1]
+                label_level = self.str_to_int(parts[0], default=None)
+            return label_str, label_level
         else:
             return label, None
 
     def handle_text_elements(self, element, docx_obj, doc):
         paragraph = docx.text.paragraph.Paragraph(element, docx_obj)
+
         if paragraph.text is None:
             # _log.warn(f"paragraph has text==None")
             return
@@ -166,6 +203,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         p_style_name, p_level = self.get_label_and_level(paragraph)
         numid, ilevel = self.get_numId_and_ilvl(paragraph)
+
+        # print("paragraph.text: {} | numid: {} | ilevel: {}".format(paragraph.text, numid, ilevel))
 
         # Handle lists
         if numid is not None and ilevel is not None:
@@ -209,6 +248,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         else:
             # Text style names can, and will have, not only default values but user values too
             # hence we treat all other labels as pure text
+            level = self.get_level()
             doc.add_text(
                 label=DocItemLabel.PARAGRAPH, parent=self.parents[level - 1], text=text
             )
@@ -262,7 +302,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     ):
         level = self.get_level()
         if self.prev_numid() is None:  # Open new list
-
             self.level_at_new_list = level
 
             self.parents[level] = doc.add_group(
@@ -276,7 +315,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         elif (
             self.prev_numid() == numid and self.prev_indent() < ilevel
         ):  # Open indented list
-
             for i in range(
                 self.level_at_new_list + self.prev_indent() + 1,
                 self.level_at_new_list + ilevel + 1,
@@ -292,7 +330,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             )
 
         elif self.prev_numid() == numid and ilevel < self.prev_indent():  # Close list
-
             for k, v in self.parents.items():
                 if k > self.level_at_new_list + ilevel:
                     self.parents[k] = None
@@ -304,7 +341,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             )
 
         elif self.prev_numid() == numid or self.prev_indent() == ilevel:
-
             doc.add_text(
                 label=DocItemLabel.LIST_ITEM, parent=self.parents[level - 1], text=text
             )
@@ -335,6 +371,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         for row in table.rows:
             # Calculate the max number of columns
             num_cols = max(num_cols, sum(get_colspan(cell) for cell in row.cells))
+            # if row.cells:
+            #     num_cols = max(num_cols, len(row.cells))
 
         # Initialize the table grid
         table_grid = [[None for _ in range(num_cols)] for _ in range(num_rows)]
