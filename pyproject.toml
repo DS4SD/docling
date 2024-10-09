@@ -37,7 +37,7 @@ torchvision = [
 ######################
 python = "^3.10"
 pydantic = "^2.0.0"
-docling-core = "^1.6.2"
+docling-core = "^1.7.1"
 docling-ibm-models = "^2.0.0"
 deepsearch-glm = "^0.22.0"
 filetype = "^1.2.0"
@@ -76,6 +76,9 @@ nbqa = "^1.9.0"
 [tool.poetry.group.examples.dependencies]
 datasets = "^2.21.0"
 python-dotenv = "^1.0.1"
+llama-index-readers-docling = "^0.1.0"
+llama-index-node-parser-docling = "^0.1.0"
+llama-index-readers-file = "^0.2.2"
 llama-index-embeddings-huggingface = "^0.3.1"
 llama-index-llms-huggingface-api = "^0.2.0"
 llama-index-vector-stores-milvus = "^0.2.1"

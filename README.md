@@ -289,15 +289,14 @@ from docling_core.transforms.chunker import HierarchicalChunker
 
 doc = DocumentConverter().convert_single("https://arxiv.org/pdf/2206.01062").output
 chunks = list(HierarchicalChunker().chunk(doc))
-# > [
-# >     ChunkWithMetadata(
-# >         path='$.main-text[0]',
-# >         text='DocLayNet: A Large Human-Annotated Dataset [...]',
-# >         page=1,
-# >         bbox=[107.30, 672.38, 505.19, 709.08]
-# >     ),
-# >     [...]
-# > ]
+print(chunks[0])
+# ChunkWithMetadata(
+#     path='#/main-text/1',
+#     text='DocLayNet: A Large Human-Annotated Dataset [...]',
+#     page=1,
+#     bbox=[107.30, 672.38, 505.19, 709.08],
+#     [...]
+# )
 ```
 
 
