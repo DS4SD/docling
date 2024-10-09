@@ -6,13 +6,21 @@ from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
 from docling.datamodel.base_models import AssembledUnit, Page
 from docling.datamodel.document import ConversionResult, InputDocument
-from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.datamodel.pipeline_options import (
+    EasyOcrOptions,
+    PdfPipelineOptions,
+    TesseractCliOcrOptions,
+    TesseractOcrOptions,
+)
+from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.ds_glm_model import GlmModel
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
 from docling.models.page_assemble_model import PageAssembleModel
 from docling.models.page_preprocessing_model import PagePreprocessingModel
 from docling.models.table_structure_model import TableStructureModel
+from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
+from docling.models.tesseract_ocr_model import TesseractOcrModel
 from docling.pipeline.base_model_pipeline import PaginatedModelPipeline
 
 _log = logging.getLogger(__name__)
@@ -31,16 +39,32 @@ class StandardPdfModelPipeline(PaginatedModelPipeline):
         self.artifacts_path = Path(artifacts_path)
         self.glm_model = GlmModel(config={})
 
+        ocr_model: BaseOcrModel
+        if isinstance(pipeline_options.ocr_options, EasyOcrOptions):
+            ocr_model = EasyOcrModel(
+                enabled=pipeline_options.do_ocr,
+                options=pipeline_options.ocr_options,
+            )
+        elif isinstance(pipeline_options.ocr_options, TesseractCliOcrOptions):
+            ocr_model = TesseractOcrCliModel(
+                enabled=pipeline_options.do_ocr,
+                options=pipeline_options.ocr_options,
+            )
+        elif isinstance(pipeline_options.ocr_options, TesseractOcrOptions):
+            ocr_model = TesseractOcrModel(
+                enabled=pipeline_options.do_ocr,
+                options=pipeline_options.ocr_options,
+            )
+        else:
+            raise RuntimeError(
+                f"The specified OCR kind is not supported: {pipeline_options.ocr_options.kind}."
+            )
+
         self.model_pipe = [
             PagePreprocessingModel(
                 config={"images_scale": pipeline_options.images_scale}
             ),
-            EasyOcrModel(
-                config={
-                    "lang": ["fr", "de", "es", "en"],
-                    "enabled": pipeline_options.do_ocr,
-                }
-            ),
+            ocr_model,
             LayoutModel(
                 config={
                     "artifacts_path": artifacts_path

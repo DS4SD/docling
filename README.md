@@ -53,6 +53,79 @@ Works on macOS, Linux and Windows environments. Both x86_64 and arm64 architectu
 </details>
 
 <details>
+  <summary><b>Alternative OCR engines</b></summary>
+
+  Docling supports multiple OCR engines for processing scanned documents. The current version provides
+  the following engines.
+
+  | Engine | Installation | Usage |
+  | ------ | ------------ | ----- |
+  | [EasyOCR](https://github.com/JaidedAI/EasyOCR) | Default in Docling or via `pip install easyocr`. | `EasyOcrOptions` |
+  | Tesseract | System dependency. See description for Tesseract and Tesserocr below.  | `TesseractOcrOptions` |
+  | Tesseract CLI | System dependency. See description below. | `TesseractCliOcrOptions` |
+
+  The Docling `DocumentConverter` allows to choose the OCR engine with the `ocr_options` settings. For example
+
+  ```python
+    from docling.datamodel.base_models import ConversionStatus, PipelineOptions
+    from docling.datamodel.pipeline_options import PipelineOptions, EasyOcrOptions, TesseractOcrOptions
+    from docling.document_converter import DocumentConverter
+
+    pipeline_options = PipelineOptions()
+    pipeline_options.do_ocr = True
+    pipeline_options.ocr_options = TesseractOcrOptions()  # Use Tesseract
+
+    doc_converter = DocumentConverter(
+        pipeline_options=pipeline_options,
+    )
+  ```
+
+  #### Tesseract installation
+
+  [Tesseract](https://github.com/tesseract-ocr/tesseract) is a popular OCR engine which is available
+  on most operating systems. For using this engine with Docling, Tesseract must be installed on your
+  system, using the packaging tool of your choice. Below we provide example commands.
+  After installing Tesseract you are expected to provide the path to its language files using the
+  `TESSDATA_PREFIX` environment variable (note that it must terminate with a slash `/`).
+
+  For macOS, we reccomend using [Homebrew](https://brew.sh/).
+
+  ```console
+  brew install tesseract leptonica pkg-config
+  TESSDATA_PREFIX=/opt/homebrew/share/tessdata/
+  echo "Set TESSDATA_PREFIX=${TESSDATA_PREFIX}"
+  ```
+
+  For Debian-based systems.
+
+  ```console
+  apt-get install tesseract-ocr tesseract-ocr-eng libtesseract-dev libleptonica-dev pkg-config
+  TESSDATA_PREFIX=$(dpkg -L tesseract-ocr-eng | grep tessdata$)
+  echo "Set TESSDATA_PREFIX=${TESSDATA_PREFIX}"
+  ```
+
+  For RHEL systems.
+
+  ```console
+  dnf install tesseract tesseract-devel tesseract-langpack-eng leptonica-devel
+  TESSDATA_PREFIX=/usr/share/tesseract/tessdata/
+  echo "Set TESSDATA_PREFIX=${TESSDATA_PREFIX}"
+  ```
+
+  #### Linking to Tesseract
+  The most efficient usage of the Tesseract library is via linking. Docling is using
+  the [Tesserocr](https://github.com/sirfz/tesserocr) package for this.
+
+  If you get into installation issues of Tesserocr, we suggest using the following
+  installation options:
+
+  ```console
+  pip uninstall tesserocr
+  pip install --no-binary :all: tesserocr
+  ```
+</details>
+
+<details>
   <summary><b>Docling development setup</b></summary>
 
   To develop for Docling (features, bugfixes etc.), install as follows from your local clone's root dir:

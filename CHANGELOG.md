@@ -1,3 +1,9 @@
+## [v1.19.0](https://github.com/DS4SD/docling/releases/tag/v1.19.0) - 2024-10-08
+
+### Feature
+
+* Add options for choosing OCR engines ([#118](https://github.com/DS4SD/docling/issues/118)) ([`f96ea86`](https://github.com/DS4SD/docling/commit/f96ea86a00fd1aafaa57025e46b5288b43958725))
+
 ## [v1.18.0](https://github.com/DS4SD/docling/releases/tag/v1.18.0) - 2024-10-03
 
 ### Feature

@@ -10,15 +10,15 @@ from rtree import index
 from scipy.ndimage import find_objects, label
 
 from docling.datamodel.base_models import OcrCell, Page
-from docling.models.abstract_model import AbstractPageModel
+from docling.datamodel.pipeline_options import OcrOptions
 
 _log = logging.getLogger(__name__)
 
 
-class BaseOcrModel(AbstractPageModel):
-    def __init__(self, config):
-        self.config = config
-        self.enabled = config["enabled"]
+class BaseOcrModel:
+    def __init__(self, enabled: bool, options: OcrOptions):
+        self.enabled = enabled
+        self.options = options
 
     # Computes the optimum amount and coordinates of rectangles to OCR on a given page
     def get_ocr_rects(self, page: Page) -> Tuple[bool, List[BoundingBox]]:
