@@ -279,6 +279,27 @@ docs = ["furo", "jaraco.packaging (>=9.3)", "rst.linker (>=1.9)", "sphinx (>=3.5
 testing = ["jaraco.test", "pytest (!=8.0.*)", "pytest (>=6,!=8.1.*)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)"]
 
 [[package]]
+name = "beautifulsoup4"
+version = "4.12.3"
+description = "Screen-scraping library"
+optional = false
+python-versions = ">=3.6.0"
+files = [
+    {file = "beautifulsoup4-4.12.3-py3-none-any.whl", hash = "sha256:b80878c9f40111313e55da8ba20bdba06d8fa3969fc68304167741bbf9e082ed"},
+    {file = "beautifulsoup4-4.12.3.tar.gz", hash = "sha256:74e3d1928edc070d21748185c46e3fb33490f22f52a3addee9aee0f4f7781051"},
+]
+
+[package.dependencies]
+soupsieve = ">1.2"
+
+[package.extras]
+cchardet = ["cchardet"]
+chardet = ["chardet"]
+charset-normalizer = ["charset-normalizer"]
+html5lib = ["html5lib"]
+lxml = ["lxml"]
+
+[[package]]
 name = "black"
 version = "24.8.0"
 description = "The uncompromising code formatter."
@@ -947,20 +968,20 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "1.6.2"
+version = "1.7.2"
 description = "A python library to define and validate data types in Docling."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "docling_core-1.6.2-py3-none-any.whl", hash = "sha256:1473ab13910d76552015c10fe351b90079a00c225f76ada3cd4fc7442183ffd0"},
-    {file = "docling_core-1.6.2.tar.gz", hash = "sha256:63f2b8a683dec56568ee1cd7d25cea419c0291211a88a11f74079ff2d62ccd5e"},
+    {file = "docling_core-1.7.2-py3-none-any.whl", hash = "sha256:29be527a30440e060a444ee8806788f045d1e899b2cf51d8c99a2cdebb6536fa"},
+    {file = "docling_core-1.7.2.tar.gz", hash = "sha256:3af1bb04a47c0cdf448e02c4390d2fad3793e8f75731d68059f137332638ac39"},
 ]
 
 [package.dependencies]
 json-schema-for-humans = ">=1.0.0,<2.0.0"
 jsonref = ">=1.1.0,<2.0.0"
 jsonschema = ">=4.16.0,<5.0.0"
-pandas = ">=2.2.2,<3.0.0"
+pandas = ">=2.1.4,<3.0.0"
 pydantic = ">=2.6.0,<3.0.0"
 tabulate = ">=0.9.0,<0.10.0"
 
@@ -2527,6 +2548,58 @@ files = [
 [package.dependencies]
 huggingface-hub = ">=0.23.0,<0.24.0"
 llama-index-core = ">=0.11.0,<0.12.0"
+
+[[package]]
+name = "llama-index-node-parser-docling"
+version = "0.1.0"
+description = "llama-index node_parser docling integration"
+optional = false
+python-versions = "<4.0,>=3.10"
+files = [
+    {file = "llama_index_node_parser_docling-0.1.0-py3-none-any.whl", hash = "sha256:b24bec1737b7fdb60ae81b5c92e07c65a0427c265e74f31be1f4716f9cc8bc57"},
+    {file = "llama_index_node_parser_docling-0.1.0.tar.gz", hash = "sha256:52b1b18e2980e2626e12629fd06b3c282193d2d53d69df5678e243fa978c8bcd"},
+]
+
+[package.dependencies]
+docling-core = ">=1.7.1,<2.0.0"
+llama-index-core = ">=0.11.0,<0.12.0"
+
+[[package]]
+name = "llama-index-readers-docling"
+version = "0.1.0"
+description = "llama-index readers docling integration"
+optional = false
+python-versions = "<4.0,>=3.10"
+files = [
+    {file = "llama_index_readers_docling-0.1.0-py3-none-any.whl", hash = "sha256:a33bc29b5ab5c8d2087268e13243c632f16b61c362133fcb5c32347d3b0ee88a"},
+    {file = "llama_index_readers_docling-0.1.0.tar.gz", hash = "sha256:164750d56bda3a251efd35f03126e53b5e387b6fdfbb2fd1b4a4e29917b52b9b"},
+]
+
+[package.dependencies]
+docling = ">=1.16.1,<2.0.0"
+docling-core = ">=1.7.1,<2.0.0"
+llama-index-core = ">=0.11.0,<0.12.0"
+
+[[package]]
+name = "llama-index-readers-file"
+version = "0.2.2"
+description = "llama-index readers file integration"
+optional = false
+python-versions = "<4.0,>=3.8.1"
+files = [
+    {file = "llama_index_readers_file-0.2.2-py3-none-any.whl", hash = "sha256:ffec878771c1e7575afb742887561059bcca77b97a81c1c1be310ebb73f10f46"},
+    {file = "llama_index_readers_file-0.2.2.tar.gz", hash = "sha256:48459f90960b863737147b66ed83afec9ce8984f8eda2561b6d2500214365db2"},
+]
+
+[package.dependencies]
+beautifulsoup4 = ">=4.12.3,<5.0.0"
+llama-index-core = ">=0.11.0,<0.12.0"
+pandas = "*"
+pypdf = ">=4.0.1,<5.0.0"
+striprtf = ">=0.0.26,<0.0.27"
+
+[package.extras]
+pymupdf = ["pymupdf (>=1.23.21,<2.0.0)"]
 
 [[package]]
 name = "llama-index-vector-stores-milvus"
@@ -4362,6 +4435,27 @@ files = [
 diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
+name = "pypdf"
+version = "4.3.1"
+description = "A pure-python PDF library capable of splitting, merging, cropping, and transforming PDF files"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pypdf-4.3.1-py3-none-any.whl", hash = "sha256:64b31da97eda0771ef22edb1bfecd5deee4b72c3d1736b7df2689805076d6418"},
+    {file = "pypdf-4.3.1.tar.gz", hash = "sha256:b2f37fe9a3030aa97ca86067a56ba3f9d3565f9a791b305c7355d8392c30d91b"},
+]
+
+[package.dependencies]
+typing_extensions = {version = ">=4.0", markers = "python_version < \"3.11\""}
+
+[package.extras]
+crypto = ["PyCryptodome", "cryptography"]
+dev = ["black", "flit", "pip-tools", "pre-commit (<2.18.0)", "pytest-cov", "pytest-socket", "pytest-timeout", "pytest-xdist", "wheel"]
+docs = ["myst_parser", "sphinx", "sphinx_rtd_theme"]
+full = ["Pillow (>=8.0.0)", "PyCryptodome", "cryptography"]
+image = ["Pillow (>=8.0.0)"]
+
+[[package]]
 name = "pypdfium2"
 version = "4.30.0"
 description = "Python bindings to PDFium"
@@ -5778,6 +5872,17 @@ files = [
 ]
 
 [[package]]
+name = "soupsieve"
+version = "2.6"
+description = "A modern CSS selector implementation for Beautiful Soup."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "soupsieve-2.6-py3-none-any.whl", hash = "sha256:e72c4ff06e4fb6e4b5a9f0f55fe6e81514581fca1515028625d0f299c602ccc9"},
+    {file = "soupsieve-2.6.tar.gz", hash = "sha256:e2e68417777af359ec65daac1057404a3c8a5455bb8abc36f1a9866ab1a51abb"},
+]
+
+[[package]]
 name = "sqlalchemy"
 version = "2.0.35"
 description = "Database Abstraction Library"
@@ -5882,6 +5987,17 @@ pure-eval = "*"
 
 [package.extras]
 tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
+
+[[package]]
+name = "striprtf"
+version = "0.0.26"
+description = "A simple library to convert rtf to text"
+optional = false
+python-versions = "*"
+files = [
+    {file = "striprtf-0.0.26-py3-none-any.whl", hash = "sha256:8c8f9d32083cdc2e8bfb149455aa1cc5a4e0a035893bedc75db8b73becb3a1bb"},
+    {file = "striprtf-0.0.26.tar.gz", hash = "sha256:fdb2bba7ac440072d1c41eab50d8d74ae88f60a8b6575c6e2c7805dc462093aa"},
+]
 
 [[package]]
 name = "sympy"
@@ -7162,4 +7278,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "167f6f29b025cdc166dc08b302aabada069786ecc6a68a187702b11a69da3d3e"
+content-hash = "e1a03e2789938c446af9648eec9bf3f8544d9c367ee3787644fa7d92179082f0"
