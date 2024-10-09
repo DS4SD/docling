@@ -5,10 +5,21 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Type
 
 import requests
-from pydantic import AnyHttpUrl, BaseModel, ConfigDict, TypeAdapter, ValidationError
+from pydantic import (
+    AnyHttpUrl,
+    BaseModel,
+    ConfigDict,
+    TypeAdapter,
+    ValidationError,
+    field_validator,
+    model_validator,
+)
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
+from docling.backend.html_backend import HTMLDocumentBackend
+from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
+from docling.backend.msword_backend import MsWordDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, InputFormat
 from docling.datamodel.document import (
     ConversionResult,
@@ -28,50 +39,53 @@ _log = logging.getLogger(__name__)
 class FormatOption(BaseModel):
     pipeline_cls: Type[BaseModelPipeline]
     pipeline_options: Optional[PipelineOptions] = None
-    backend: Optional[Type[AbstractDocumentBackend]] = None
+    backend: Type[AbstractDocumentBackend]
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    def __init__(
-        self,
-        pipeline_cls: Type[BaseModelPipeline],
-        pipeline_options: Optional[PipelineOptions] = None,
-        backend: Optional[Type[AbstractDocumentBackend]] = None,
-    ):
-        if pipeline_options is None:
-            pipeline_options = pipeline_cls.get_default_options()
+    @model_validator(mode="after")
+    def set_optional_field_default(self) -> "FormatOption":
+        if self.pipeline_options is None:
+            self.pipeline_options = self.pipeline_cls.get_default_options()
+        return self
 
-        super().__init__(
-            pipeline_cls=pipeline_cls,
-            pipeline_options=pipeline_options,
-            backend=backend,
-        )
+
+class WordFormatOption(FormatOption):
+    pipeline_cls: Type = SimpleModelPipeline
+    backend: Type[AbstractDocumentBackend] = MsWordDocumentBackend
+
+
+class PowerpointFormatOption(FormatOption):
+    pipeline_cls: Type = SimpleModelPipeline
+    backend: Type[AbstractDocumentBackend] = MsPowerpointDocumentBackend
+
+
+class HTMLFormatOption(FormatOption):
+    pipeline_cls: Type = SimpleModelPipeline
+    backend: Type[AbstractDocumentBackend] = HTMLDocumentBackend
 
 
 class PdfFormatOption(FormatOption):
-    def __init__(
-        self,
-        pipeline_cls: Optional[Type[BaseModelPipeline]] = None,
-        pipeline_options: Optional[PipelineOptions] = None,
-        backend: Optional[Type[AbstractDocumentBackend]] = None,
-    ):
-        if pipeline_cls is None:
-            pipeline_cls = StandardPdfModelPipeline
-        if backend is None:
-            backend = DoclingParseDocumentBackend
-        super().__init__(
-            pipeline_cls=pipeline_cls,
-            pipeline_options=pipeline_options,
-            backend=backend,
-        )
+    pipeline_cls: Type = StandardPdfModelPipeline
+    backend: Type[AbstractDocumentBackend] = DoclingParseDocumentBackend
 
 
 _format_to_default_options = {
-    InputFormat.DOCX: FormatOption(pipeline_cls=SimpleModelPipeline),
-    InputFormat.PPTX: FormatOption(pipeline_cls=SimpleModelPipeline),
-    InputFormat.HTML: FormatOption(pipeline_cls=SimpleModelPipeline),
-    InputFormat.IMAGE: FormatOption(pipeline_cls=StandardPdfModelPipeline),
-    InputFormat.PDF: FormatOption(pipeline_cls=StandardPdfModelPipeline),
+    InputFormat.DOCX: FormatOption(
+        pipeline_cls=SimpleModelPipeline, backend=MsWordDocumentBackend
+    ),
+    InputFormat.PPTX: FormatOption(
+        pipeline_cls=SimpleModelPipeline, backend=MsPowerpointDocumentBackend
+    ),
+    InputFormat.HTML: FormatOption(
+        pipeline_cls=SimpleModelPipeline, backend=HTMLDocumentBackend
+    ),
+    InputFormat.IMAGE: FormatOption(
+        pipeline_cls=StandardPdfModelPipeline, backend=DoclingParseDocumentBackend
+    ),
+    InputFormat.PDF: FormatOption(
+        pipeline_cls=StandardPdfModelPipeline, backend=DoclingParseDocumentBackend
+    ),
 }
 
 

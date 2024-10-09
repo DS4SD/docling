@@ -12,9 +12,10 @@ from docling_core.utils.file import resolve_file_source
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import ConversionStatus, PdfPipelineOptions
+from docling.datamodel.base_models import ConversionStatus, InputFormat
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
-from docling.pdf_document_converter import PdfDocumentConverter
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
 warnings.filterwarnings(action="ignore", category=FutureWarning, module="easyocr")
@@ -195,9 +196,13 @@ def convert(
         do_table_structure=True,
     )
     pipeline_options.table_structure_options.do_cell_matching = do_cell_matching
-    doc_converter = PdfDocumentConverter(
-        pipeline_options=pipeline_options,
-        pdf_backend=pdf_backend,
+
+    doc_converter = DocumentConverter(
+        format_options={
+            InputFormat.PDF: PdfFormatOption(
+                pipeline_options=pipeline_options, backend=pdf_backend
+            )
+        }
     )
 
     # Define input files

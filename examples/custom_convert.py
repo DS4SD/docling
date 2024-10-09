@@ -7,7 +7,7 @@ from typing import Iterable
 from docling.datamodel.base_models import ConversionStatus, InputFormat
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
 from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.document_converter import DocumentConverter, FormatOption
+from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
 from docling.pipeline.standard_pdf_model_pipeline import StandardPdfModelPipeline
 
 _log = logging.getLogger(__name__)
@@ -104,9 +104,7 @@ def main():
 
     doc_converter = DocumentConverter(
         format_options={
-            InputFormat.PDF: FormatOption(
-                pipeline_cls=StandardPdfModelPipeline, pipeline_options=pipeline_options
-            )
+            InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
         }
     )
 

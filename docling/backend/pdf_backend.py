@@ -4,7 +4,7 @@ from typing import Iterable, Optional, Set
 from docling_core.types.experimental import BoundingBox, Size
 from PIL import Image
 
-from docling.backend.abstract_backend import AbstractDocumentBackend
+from docling.backend.abstract_backend import PaginatedDocumentBackend
 from docling.datamodel.base_models import Cell, InputFormat
 
 
@@ -41,7 +41,7 @@ class PdfPageBackend(ABC):
         pass
 
 
-class PdfDocumentBackend(AbstractDocumentBackend):
+class PdfDocumentBackend(PaginatedDocumentBackend):
     @abstractmethod
     def load_page(self, page_no: int) -> PdfPageBackend:
         pass
@@ -55,5 +55,5 @@ class PdfDocumentBackend(AbstractDocumentBackend):
         return {InputFormat.PDF}
 
     @classmethod
-    def is_paginated(cls) -> bool:
+    def supports_pagination(cls) -> bool:
         return True

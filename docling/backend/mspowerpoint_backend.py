@@ -57,7 +57,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
     def is_valid(self) -> bool:
         return self.valid
 
-    def is_paginated(cls) -> bool:
+    def supports_pagination(cls) -> bool:
         return True  # True? if so, how to handle pages...
 
     def unload(self):

@@ -61,8 +61,13 @@ class PaginatedModelPipeline(BaseModelPipeline):  # TODO this is a bad name.
         _log.info(f"Processing document {in_doc.file.name}")
 
         if not isinstance(in_doc._backend, PdfDocumentBackend):
-            conv_res.status = ConversionStatus.FAILURE
-            return conv_res
+            raise RuntimeError(
+                f"The selected backend {type(in_doc._backend).__name__} for {in_doc.file} is not a PDF backend. "
+                f"Can not convert this with a PDF pipeline. "
+                f"Please check your format configuration on DocumentConverter."
+            )
+            # conv_res.status = ConversionStatus.FAILURE
+            # return conv_res
 
         for i in range(0, in_doc.page_count):
             conv_res.pages.append(Page(page_no=i))

@@ -74,14 +74,6 @@ _EMPTY_DOCLING_DOC = DoclingDocument(
     description=DescriptionItem(), name="dummy"
 )  # TODO: Stub
 
-_input_format_default_backends: Dict[InputFormat, Type[AbstractDocumentBackend]] = {
-    InputFormat.PDF: DoclingParseDocumentBackend,
-    InputFormat.HTML: HTMLDocumentBackend,
-    InputFormat.DOCX: MsWordDocumentBackend,
-    InputFormat.PPTX: MsPowerpointDocumentBackend,
-    InputFormat.IMAGE: None,
-}
-
 
 class InputDocument(BaseModel):
     file: PurePath = None
@@ -110,14 +102,12 @@ class InputDocument(BaseModel):
 
         try:
             if isinstance(path_or_stream, Path):
-
                 self.file = path_or_stream
                 self.filesize = path_or_stream.stat().st_size
                 if self.filesize > self.limits.max_file_size:
                     self.valid = False
                 else:
                     self.document_hash = create_file_hash(path_or_stream)
-
                     self._init_doc(backend, path_or_stream)
 
             elif isinstance(path_or_stream, BytesIO):
@@ -128,12 +118,11 @@ class InputDocument(BaseModel):
                     self.valid = False
                 else:
                     self.document_hash = create_file_hash(path_or_stream)
-
                     self._init_doc(backend, path_or_stream)
 
             # For paginated backends, check if the maximum page count is exceeded.
             if self.valid and self._backend.is_valid():
-                if self._backend.is_paginated():
+                if self._backend.supports_pagination():
                     self.page_count = self._backend.page_count()
                     if not self.page_count <= self.limits.max_num_pages:
                         self.valid = False
@@ -156,12 +145,10 @@ class InputDocument(BaseModel):
         path_or_stream: Union[BytesIO, Path],
     ) -> None:
         if backend is None:
-            backend = _input_format_default_backends.get(self.format)
-            if backend is None:
-                self.valid = False
-                raise RuntimeError(
-                    f"Could not find suitable backend for file: {self.file}"
-                )
+            raise RuntimeError(
+                f"No backend configuration provided for file {self.file} with format {self.format}. "
+                f"Please check your format configuration on DocumentConverter."
+            )
 
         self._backend = backend(
             path_or_stream=path_or_stream, document_hash=self.document_hash
@@ -473,46 +460,44 @@ class DocumentConversionInput(BaseModel):
     ) -> Iterable[InputDocument]:
 
         for obj in self._path_or_stream_iterator:
+            format = self._guess_format(obj)
+            if format not in format_options.keys():
+                _log.debug(
+                    f"Skipping input document {obj.name} because its format is not in the whitelist."
+                )
+                continue
+            else:
+                backend = format_options.get(format).backend
+
             if isinstance(obj, Path):
-
-                mime = filetype.guess_mime(str(obj))
-                if mime is None:
-                    if obj.suffix == ".html":
-                        mime = "text/html"
-
-                format = MimeTypeToFormat.get(mime)
-                if format not in format_options.keys():
-                    continue
-                else:
-                    backend = format_options.get(format).backend
-
                 yield InputDocument(
                     path_or_stream=obj,
                     format=format,
+                    filename=obj.name,
                     limits=self.limits,
                     backend=backend,
                 )
             elif isinstance(obj, DocumentStream):
-                mime = filetype.guess_mime(obj.stream.read(8192))
-                obj.stream.seek(0)
-
-                if mime is None:
-                    if obj.suffix == ".html":
-                        mime = "text/html"
-
-                format = MimeTypeToFormat.get(mime)
-                if format not in format_options.keys():
-                    continue
-                else:
-                    backend = format_options.get(format).backend
-
                 yield InputDocument(
                     path_or_stream=obj.stream,
                     format=format,
-                    filename=obj.filename,
+                    filename=obj.name,
                     limits=self.limits,
                     backend=backend,
                 )
+
+    def _guess_format(self, obj):
+        if isinstance(obj, Path):
+            mime = filetype.guess_mime(str(obj))
+        elif isinstance(obj, DocumentStream):
+            mime = filetype.guess_mime(obj.stream.read(8192))
+        else:
+            1 == 1  # alert!!
+        if mime is None:
+            if obj.suffix == ".html":
+                mime = "text/html"
+        format = MimeTypeToFormat.get(mime)
+        return format
 
     @classmethod
     def from_paths(cls, paths: Iterable[Path], limits: Optional[DocumentLimits] = None):

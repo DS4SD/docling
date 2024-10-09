@@ -50,7 +50,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def is_valid(self) -> bool:
         return True
 
-    def is_paginated(cls) -> bool:
+    def supports_pagination(cls) -> bool:
         return False
 
     def unload(self):

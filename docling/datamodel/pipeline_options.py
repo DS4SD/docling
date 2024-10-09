@@ -1,7 +1,7 @@
 import warnings
 from enum import Enum, auto
 from pathlib import Path
-from typing import Annotated, Optional, Self, Union
+from typing import Annotated, Optional, Union
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -40,7 +40,7 @@ class PdfPipelineOptions(PipelineOptions):
     images_scale: Optional[float] = None  # if set, the scale for generated images
 
     @model_validator(mode="after")
-    def set_page_images_from_deprecated(self) -> Self:
+    def set_page_images_from_deprecated(self) -> "PdfPipelineOptions":
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", DeprecationWarning)
             default_scale = 1.0

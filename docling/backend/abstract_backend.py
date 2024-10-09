@@ -20,7 +20,7 @@ class AbstractDocumentBackend(ABC):
 
     @classmethod
     @abstractmethod
-    def is_paginated(cls) -> bool:
+    def supports_pagination(cls) -> bool:
         pass
 
     @abstractmethod

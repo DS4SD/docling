@@ -32,8 +32,13 @@ class SimpleModelPipeline(BaseModelPipeline):
             return conv_res
 
         if not isinstance(in_doc._backend, DeclarativeDocumentBackend):
-            conv_res.status = ConversionStatus.FAILURE
-            return conv_res
+            raise RuntimeError(
+                f"The selected backend {type(in_doc._backend).__name__} for {in_doc.file} is not a declarative backend. "
+                f"Can not convert this with simple pipeline. "
+                f"Please check your format configuration on DocumentConverter."
+            )
+            # conv_res.status = ConversionStatus.FAILURE
+            # return conv_res
 
         # Instead of running a page-level pipeline to build up the document structure,
         # the backend is expected to be of type DeclarativeDocumentBackend, which can output

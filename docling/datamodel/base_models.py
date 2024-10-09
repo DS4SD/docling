@@ -168,5 +168,5 @@ class Page(BaseModel):
 class DocumentStream(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    filename: str
+    name: str
     stream: BytesIO

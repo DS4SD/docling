@@ -12,7 +12,7 @@ from docling.document_converter import DocumentConverter
 
 _log = logging.getLogger(__name__)
 
-USE_EXPERIMENTAL = False
+USE_EXPERIMENTAL = True
 
 
 def export_documents(

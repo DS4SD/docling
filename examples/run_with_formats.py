@@ -3,9 +3,15 @@ from pathlib import Path
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
+from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import DocumentConversionInput
-from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
+from docling.document_converter import (
+    DocumentConverter,
+    FormatOption,
+    PdfFormatOption,
+    WordFormatOption,
+)
 from docling.pipeline.simple_model_pipeline import SimpleModelPipeline
 from docling.pipeline.standard_pdf_model_pipeline import StandardPdfModelPipeline
 
@@ -22,23 +28,25 @@ input_paths = [
 ]
 input = DocumentConversionInput.from_paths(input_paths)
 
-# for defaults use:
-doc_converter = DocumentConverter()
+## for defaults use:
+# doc_converter = DocumentConverter()
 
-# to customize use:
-# doc_converter = DocumentConverter(  # all of the below is optional, has internal defaults.
-#     formats=[
-#         InputFormat.PDF,
-#         InputFormat.DOCX,
-#     ],  # whitelist formats, other files are ignored.
-#     format_options={
-#         InputFormat.PDF: PdfFormatOption(backend=DoclingParseDocumentBackend),
-#         InputFormat.DOCX: FormatOption(
-#             pipeline_cls=StandardPdfModelPipeline, backend=MsWordDocumentBackend
-#         ),
-#         # InputFormat.IMAGE: PdfFormatOption(),
-#     },
-# )
+## to customize use:
+doc_converter = DocumentConverter(  # all of the below is optional, has internal defaults.
+    formats=[
+        InputFormat.PDF,
+        InputFormat.DOCX,
+    ],  # whitelist formats, other files are ignored.
+    format_options={
+        InputFormat.PDF: PdfFormatOption(
+            pipeline_cls=StandardPdfModelPipeline, backend=PyPdfiumDocumentBackend
+        ),  # PdfFormatOption(backend=PyPdfiumDocumentBackend),
+        InputFormat.DOCX: WordFormatOption(
+            pipeline_cls=SimpleModelPipeline  # , backend=MsWordDocumentBackend
+        ),
+        # InputFormat.IMAGE: PdfFormatOption(),
+    },
+)
 
 conv_results = doc_converter.convert(input)
 
