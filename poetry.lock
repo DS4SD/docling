@@ -881,7 +881,7 @@ files = []
 develop = false
 
 [package.dependencies]
-docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "ba79b4a9168f0b7a948ba2862954b673179370a7"}
+docling-core = {git = "https://github.com/DS4SD/docling-core.git", rev = "e42a1ddf36e53134aef92f0447cc3352a4e82e70"}
 docutils = "!=0.21"
 matplotlib = "^3.7.1"
 networkx = "^3.1"
@@ -904,9 +904,9 @@ toolkit = ["deepsearch-toolkit (>=0.31.0)"]
 
 [package.source]
 type = "git"
-url = "ttps://github.com/DS4SD/deepsearch-glm.git"
-reference = "5a4e01b1b42f0a5d06aa37d9934ad0967fddfc5a"
-resolved_reference = "5a4e01b1b42f0a5d06aa37d9934ad0967fddfc5a"
+url = "https://github.com/DS4SD/deepsearch-glm.git"
+reference = "a5bcc9fd90d50cc1899da2f878ae8259269ab9bf"
+resolved_reference = "a5bcc9fd90d50cc1899da2f878ae8259269ab9bf"
 
 [[package]]
 name = "dill"
@@ -953,9 +953,9 @@ tabulate = "^0.9.0"
 
 [package.source]
 type = "git"
-url = "ssh://git@github.com/DS4SD/docling-core.git"
-reference = "ba79b4a9168f0b7a948ba2862954b673179370a7"
-resolved_reference = "ba79b4a9168f0b7a948ba2862954b673179370a7"
+url = "https://github.com/DS4SD/docling-core.git"
+reference = "e42a1ddf36e53134aef92f0447cc3352a4e82e70"
+resolved_reference = "e42a1ddf36e53134aef92f0447cc3352a4e82e70"
 
 [[package]]
 name = "docling-ibm-models"
@@ -7075,4 +7075,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "898ab0630c99ec1ab35884fe9fbd4232e26b685ba350a512b52df7901ec83bc5"
+content-hash = "c88df91dd66d0284f54558542dbb1f180a4edfb1b4b8d1417677457fae309f7b"
