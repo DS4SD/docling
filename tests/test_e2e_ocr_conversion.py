@@ -14,7 +14,7 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
-from .verify_utils import verify_conversion_result_v1
+from .verify_utils import verify_conversion_result_v1, verify_conversion_result_v2
 
 GENERATE = True
 
@@ -97,6 +97,13 @@ def test_e2e_conversions():
 
             # Debug
             verify_conversion_result_v1(
+                input_path=pdf_path,
+                doc_result=doc_result,
+                generate=GENERATE,
+                skip_cells=True,
+            )
+
+            verify_conversion_result_v2(
                 input_path=pdf_path,
                 doc_result=doc_result,
                 generate=GENERATE,

@@ -93,7 +93,7 @@ class StandardPdfModelPipeline(PaginatedModelPipeline):
             repo_id="ds4sd/docling-models",
             force_download=force,
             local_dir=local_dir,
-            revision="v2.0.0",
+            revision="v2.0.1",
         )
 
         return Path(download_path)
