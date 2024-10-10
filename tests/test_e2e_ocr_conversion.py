@@ -14,7 +14,7 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
-from .verify_utils import verify_conversion_result
+from .verify_utils import verify_conversion_result_v1
 
 GENERATE = True
 
@@ -39,11 +39,11 @@ def save_output(pdf_path: Path, doc_result: ConversionResult, engine: str):
 
     doctags_fn = os.path.join(parent, f"{pdf_path.stem}{eng}.doctags.txt")
     with open(doctags_fn, "w") as fd:
-        fd.write(doc_result.render_as_doctags())
+        fd.write(doc_result.render_as_doctags_v1())
 
     md_fn = os.path.join(parent, f"{pdf_path.stem}{eng}.md")
     with open(md_fn, "w") as fd:
-        fd.write(doc_result.render_as_markdown())
+        fd.write(doc_result.render_as_markdown_v1())
 
 
 def get_pdf_paths():
@@ -96,7 +96,7 @@ def test_e2e_conversions():
             # save_output(pdf_path, doc_result, None)
 
             # Debug
-            verify_conversion_result(
+            verify_conversion_result_v1(
                 input_path=pdf_path,
                 doc_result=doc_result,
                 generate=GENERATE,

@@ -39,17 +39,17 @@ def export_documents(
 
             # Export Text format:
             with (output_dir / f"{doc_filename}.txt").open("w", encoding="utf-8") as fp:
-                fp.write(conv_res.render_as_text())
+                fp.write(conv_res.render_as_text_v1())
 
             # Export Markdown format:
             with (output_dir / f"{doc_filename}.md").open("w", encoding="utf-8") as fp:
-                fp.write(conv_res.render_as_markdown())
+                fp.write(conv_res.render_as_markdown_v1())
 
             # Export Document Tags format:
             with (output_dir / f"{doc_filename}.doctags").open(
                 "w", encoding="utf-8"
             ) as fp:
-                fp.write(conv_res.render_as_doctags())
+                fp.write(conv_res.render_as_doctags_v1())
 
         else:
             _log.info(f"Document {conv_res.input.file} failed to convert.")

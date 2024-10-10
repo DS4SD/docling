@@ -69,7 +69,7 @@ def verify_maintext(doc_pred: DsDocument, doc_true: DsDocument):
     return True
 
 
-def verify_tables(doc_pred: DsDocument, doc_true: DsDocument):
+def verify_tables_v1(doc_pred: DsDocument, doc_true: DsDocument):
     if doc_true.tables is None:
         # No tables to check
         assert doc_pred.tables is None, "not expecting any table on this document"
@@ -113,12 +113,10 @@ def verify_tables(doc_pred: DsDocument, doc_true: DsDocument):
     return True
 
 
-def verify_output(doc_pred: DsDocument, doc_true: DsDocument):
-
-    assert verify_maintext(doc_pred, doc_true), "verify_maintext(doc_pred, doc_true)"
-    assert verify_tables(doc_pred, doc_true), "verify_tables(doc_pred, doc_true)"
-
-    return True
+# def verify_output(doc_pred: DsDocument, doc_true: DsDocument):
+#     #assert verify_maintext(doc_pred, doc_true), "verify_maintext(doc_pred, doc_true)"
+#     assert verify_tables_v1(doc_pred, doc_true), "verify_tables(doc_pred, doc_true)"
+#     return True
 
 
 def verify_md(doc_pred_md, doc_true_md):
@@ -129,7 +127,7 @@ def verify_dt(doc_pred_dt, doc_true_dt):
     return doc_pred_dt == doc_true_dt
 
 
-def verify_conversion_result(
+def verify_conversion_result_v1(
     input_path: Path,
     doc_result: ConversionResult,
     generate: bool = False,
@@ -143,15 +141,16 @@ def verify_conversion_result(
     ), f"Doc {input_path} did not convert successfully."
 
     doc_pred_pages: List[Page] = doc_result.pages
-    doc_pred: DsDocument = doc_result.output
-    doc_pred_md = doc_result.render_as_markdown()
-    doc_pred_dt = doc_result.render_as_doctags()
+    doc_pred: DsDocument = doc_result.legacy_output
+    doc_pred_md = doc_result.render_as_markdown_v1()
+    doc_pred_dt = doc_result.render_as_doctags_v1()
 
     engine_suffix = "" if ocr_engine is None else f".{ocr_engine}"
-    pages_path = input_path.with_suffix(f"{engine_suffix}.pages.json")
-    json_path = input_path.with_suffix(f"{engine_suffix}.json")
-    md_path = input_path.with_suffix(f"{engine_suffix}.md")
-    dt_path = input_path.with_suffix(f"{engine_suffix}.doctags.txt")
+    gt_subpath = input_path.parent / "groundtruth" / "docling_v1" / input_path.name
+    pages_path = gt_subpath.with_suffix(f"{engine_suffix}.pages.json")
+    json_path = gt_subpath.with_suffix(f"{engine_suffix}.json")
+    md_path = gt_subpath.with_suffix(f"{engine_suffix}.md")
+    dt_path = gt_subpath.with_suffix(f"{engine_suffix}.doctags.txt")
 
     if generate:  # only used when re-generating truth
         with open(pages_path, "w") as fw:
@@ -187,7 +186,7 @@ def verify_conversion_result(
         #    doc_pred, doc_true
         # ), f"Mismatch in JSON prediction for {input_path}"
 
-        assert verify_tables(
+        assert verify_tables_v1(
             doc_pred, doc_true
         ), f"verify_tables(doc_pred, doc_true) mismatch for {input_path}"
 

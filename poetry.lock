@@ -873,7 +873,7 @@ files = [
 
 [[package]]
 name = "deepsearch-glm"
-version = "0.21.1"
+version = "0.23.0"
 description = "Graph Language Models"
 optional = false
 python-versions = "^3.9"
@@ -881,7 +881,7 @@ files = []
 develop = false
 
 [package.dependencies]
-docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "089d692b95dd704a503e9d15c5072e2ff58a65e6"}
+docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "5aa67df483fb82e01ebb8b86433459f86286403f"}
 docutils = "!=0.21"
 matplotlib = "^3.7.1"
 networkx = "^3.1"
@@ -890,6 +890,8 @@ numerize = "^0.12"
 numpy = {version = "^1.26.4", markers = "python_version >= \"3.9\""}
 pandas = ">=1.5.1"
 python-dotenv = "^1.0.0"
+pywin32 = {version = "^306", markers = "sys_platform == \"win32\""}
+requests = "^2.32.3"
 rich = "^13.7.0"
 tabulate = ">=0.8.9"
 tqdm = "^4.64.0"
@@ -900,8 +902,8 @@ toolkit = ["deepsearch-toolkit (>=0.31.0)"]
 [package.source]
 type = "git"
 url = "ssh://git@github.com/DS4SD/deepsearch-glm.git"
-reference = "13350bfe2df62d421cb65bd0fc63d1bb211c8ab9"
-resolved_reference = "13350bfe2df62d421cb65bd0fc63d1bb211c8ab9"
+reference = "880c6eb50ecdc2c7ec5f3039b257b51cac6199ca"
+resolved_reference = "880c6eb50ecdc2c7ec5f3039b257b51cac6199ca"
 
 [[package]]
 name = "deprecated"
@@ -959,7 +961,7 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "1.6.3"
+version = "1.7.2"
 description = "A python library to define and validate data types in Docling."
 optional = false
 python-versions = "^3.9"
@@ -970,15 +972,15 @@ develop = false
 json-schema-for-humans = "^1.0.0"
 jsonref = "^1.1.0"
 jsonschema = "^4.16.0"
-pandas = "^2.2.2"
+pandas = "^2.1.4"
 pydantic = "^2.6.0"
 tabulate = "^0.9.0"
 
 [package.source]
 type = "git"
 url = "ssh://git@github.com/DS4SD/docling-core.git"
-reference = "089d692b95dd704a503e9d15c5072e2ff58a65e6"
-resolved_reference = "089d692b95dd704a503e9d15c5072e2ff58a65e6"
+reference = "5aa67df483fb82e01ebb8b86433459f86286403f"
+resolved_reference = "5aa67df483fb82e01ebb8b86433459f86286403f"
 
 [[package]]
 name = "docling-ibm-models"
@@ -3762,13 +3764,13 @@ xml = ["lxml (>=4.9.2)"]
 
 [[package]]
 name = "pandas-stubs"
-version = "2.2.2.240909"
+version = "2.2.3.241009"
 description = "Type annotations for pandas"
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "pandas_stubs-2.2.2.240909-py3-none-any.whl", hash = "sha256:e230f5fa4065f9417804f4d65cd98f86c002efcc07933e8abcd48c3fad9c30a2"},
-    {file = "pandas_stubs-2.2.2.240909.tar.gz", hash = "sha256:3c0951a2c3e45e3475aed9d80b7147ae82f176b9e42e9fb321cfdebf3d411b3d"},
+    {file = "pandas_stubs-2.2.3.241009-py3-none-any.whl", hash = "sha256:3a6f8f142105a42550be677ba741ba532621f4e0acad2155c0e7b2450f114cfa"},
+    {file = "pandas_stubs-2.2.3.241009.tar.gz", hash = "sha256:d4ab618253f0acf78a5d0d2bfd6dffdd92d91a56a69bdc8144e5a5c6d25be3b5"},
 ]
 
 [package.dependencies]
@@ -7386,4 +7388,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "71eec93c5fc347a7c0ae0d846d4c2c41ff96255aab218d7d2ba747d1ffed942e"
+content-hash = "24bcab2ca88de60d345409465bfa61b740b5168ccb60ad1a9027763c569c71d7"

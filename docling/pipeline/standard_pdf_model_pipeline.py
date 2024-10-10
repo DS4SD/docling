@@ -124,7 +124,7 @@ class StandardPdfModelPipeline(PaginatedModelPipeline):
             elements=all_elements, headers=all_headers, body=all_body
         )
 
-        conv_res.output, conv_res.experimental = self.glm_model(conv_res)
+        conv_res.legacy_output, conv_res.output = self.glm_model(conv_res)
 
         return conv_res
 

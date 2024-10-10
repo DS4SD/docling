@@ -44,7 +44,7 @@ class SimpleModelPipeline(BaseModelPipeline):
         # the backend is expected to be of type DeclarativeDocumentBackend, which can output
         # a DoclingDocument straight.
 
-        conv_res.experimental = in_doc._backend.convert()
+        conv_res.output = in_doc._backend.convert()
 
         # Do other stuff with conv_res.experimental
 

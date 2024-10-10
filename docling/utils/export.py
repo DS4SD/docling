@@ -41,7 +41,7 @@ def generate_multimodal_pages(
     end_ix = 0
     doc_items: List[Tuple[int, Union[BaseCell, BaseText]]] = []
 
-    doc = doc_result.output
+    doc = doc_result.legacy_output
 
     def _process_page_segments(doc_items: list[Tuple[int, BaseCell]], page: Page):
         segments = []

@@ -12,7 +12,8 @@ from docling.document_converter import DocumentConverter
 
 _log = logging.getLogger(__name__)
 
-USE_EXPERIMENTAL = True
+USE_V2 = True
+USE_LEGACY = True
 
 
 def export_documents(
@@ -30,52 +31,63 @@ def export_documents(
             success_count += 1
             doc_filename = conv_res.input.file.stem
 
-            # Export Deep Search document JSON format:
-            with (output_dir / f"{doc_filename}.json").open(
-                "w", encoding="utf-8"
-            ) as fp:
-                fp.write(json.dumps(conv_res.render_as_dict()))
+            if USE_LEGACY:
+                # Export Deep Search document JSON format:
+                with (output_dir / f"{doc_filename}.legacy.json").open(
+                    "w", encoding="utf-8"
+                ) as fp:
+                    fp.write(json.dumps(conv_res.render_as_dict_v1()))
 
-            # Export Text format:
-            with (output_dir / f"{doc_filename}.txt").open("w", encoding="utf-8") as fp:
-                fp.write(conv_res.render_as_text())
+                # Export Text format:
+                with (output_dir / f"{doc_filename}.legacy.txt").open(
+                    "w", encoding="utf-8"
+                ) as fp:
+                    fp.write(conv_res.render_as_text_v1())
 
-            # Export Markdown format:
-            with (output_dir / f"{doc_filename}.md").open("w", encoding="utf-8") as fp:
-                fp.write(conv_res.render_as_markdown())
+                # Export Markdown format:
+                with (output_dir / f"{doc_filename}.legacy.md").open(
+                    "w", encoding="utf-8"
+                ) as fp:
+                    fp.write(conv_res.render_as_markdown_v1())
 
-            # Export Document Tags format:
-            with (output_dir / f"{doc_filename}.doctags").open(
-                "w", encoding="utf-8"
-            ) as fp:
-                fp.write(conv_res.render_as_doctags())
+                # Export Document Tags format:
+                with (output_dir / f"{doc_filename}.legacy.doctags.txt").open(
+                    "w", encoding="utf-8"
+                ) as fp:
+                    fp.write(conv_res.render_as_doctags_v1())
 
-            if USE_EXPERIMENTAL:
+            if USE_V2:
                 # Export Docling document format to JSON (experimental):
-                with (output_dir / f"{doc_filename}.experimental.json").open("w") as fp:
+                with (output_dir / f"{doc_filename}.json").open("w") as fp:
                     fp.write(
                         json.dumps(
-                            conv_res.experimental.model_dump(mode="json", by_alias=True)
+                            conv_res.output.model_dump(
+                                mode="json", by_alias=True, exclude_none=True
+                            )
                         )
-                    )
+                    )  # TODO to be replaced with convenience method
 
                 # Export Docling document format to YAML (experimental):
-                with (output_dir / f"{doc_filename}.experimental.yaml").open("w") as fp:
+                with (output_dir / f"{doc_filename}.yaml").open("w") as fp:
                     fp.write(
                         yaml.safe_dump(
-                            conv_res.experimental.model_dump(mode="json", by_alias=True)
+                            conv_res.output.model_dump(
+                                mode="json", by_alias=True, exclude_none=True
+                            )
                         )
-                    )
+                    )  # TODO to be replaced with convenience method
 
                 # Export Docling document format to doctags (experimental):
-                with (output_dir / f"{doc_filename}.experimental.doctags").open(
-                    "w"
-                ) as fp:
-                    fp.write(conv_res.experimental.export_to_document_tokens())
+                with (output_dir / f"{doc_filename}.doctags.txt").open("w") as fp:
+                    fp.write(conv_res.output.export_to_document_tokens())
 
                 # Export Docling document format to markdown (experimental):
-                with (output_dir / f"{doc_filename}.experimental.md").open("w") as fp:
-                    fp.write(conv_res.experimental.export_to_markdown())
+                with (output_dir / f"{doc_filename}.md").open("w") as fp:
+                    fp.write(conv_res.output.export_to_markdown())
+
+                # Export Docling document format to text (experimental):
+                with (output_dir / f"{doc_filename}.txt").open("w") as fp:
+                    fp.write(conv_res.output.export_to_markdown(strict_text=True))
 
         elif conv_res.status == ConversionStatus.PARTIAL_SUCCESS:
             _log.info(

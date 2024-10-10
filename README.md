@@ -141,13 +141,13 @@ Works on macOS, Linux and Windows environments. Both x86_64 and arm64 architectu
 To convert invidual PDF documents, use `convert_single()`, for example:
 
 ```python
-from docling.pdf_document_converter import PdfDocumentConverter
+from docling.document_converter import DocumentConverter
 
 source = "https://arxiv.org/pdf/2408.09869"  # PDF path or URL
-converter = PdfDocumentConverter()
+converter = DocumentConverter()
 result = converter.convert_single(source)
-print(result.render_as_markdown())  # output: "## Docling Technical Report[...]"
-print(result.render_as_doctags())  # output: "<document><title><page_1><loc_20>..."
+print(result.render_as_markdown_v1())  # output: "## Docling Technical Report[...]"
+print(result.render_as_doctags_v1())  # output: "<document><title><page_1><loc_20>..."
 ```
 
 ### Convert a batch of documents
@@ -288,7 +288,7 @@ You can perform a hierarchy-aware chunking of a Docling document as follows:
 from docling.document_converter import DocumentConverter
 from docling_core.transforms.chunker import HierarchicalChunker
 
-doc = DocumentConverter().convert_single("https://arxiv.org/pdf/2206.01062").output
+doc = DocumentConverter().convert_single("https://arxiv.org/pdf/2206.01062").legacy_output
 chunks = list(HierarchicalChunker().chunk(doc))
 # > [
 # >     ChunkWithMetadata(

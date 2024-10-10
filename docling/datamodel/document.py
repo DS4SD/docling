@@ -1,4 +1,5 @@
 import logging
+from enum import Enum
 from io import BytesIO
 from pathlib import Path, PurePath
 from typing import Dict, Iterable, List, Optional, Tuple, Type, Union
@@ -61,7 +62,7 @@ layout_label_to_ds_type = {
     DocItemLabel.TEXT: "paragraph",
 }
 
-_EMPTY_DOC = DsDocument(
+_EMPTY_LEGACY_DOC = DsDocument(
     _name="",
     description=DsDocumentDescription(logs=[]),
     file_info=DsFileInfoObject(
@@ -155,6 +156,11 @@ class InputDocument(BaseModel):
         )
 
 
+class DocumentFormat(str, Enum):
+    V2 = "v2"
+    V1 = "v1"
+
+
 @deprecated("Use `ConversionResult` instead.")
 class ConvertedDocument(BaseModel):
     input: InputDocument
@@ -165,10 +171,10 @@ class ConvertedDocument(BaseModel):
     pages: List[Page] = []
     assembled: AssembledUnit = AssembledUnit()
 
-    output: DsDocument = _EMPTY_DOC
-    experimental: DoclingDocument = _EMPTY_DOCLING_DOC
+    legacy_output: DsDocument = _EMPTY_LEGACY_DOC
+    output: DoclingDocument = _EMPTY_DOCLING_DOC
 
-    def _to_ds_document(self) -> DsDocument:
+    def _to_legacy_document(self) -> DsDocument:
         title = ""
         desc = DsDocumentDescription(logs=[])
 
@@ -344,10 +350,12 @@ class ConvertedDocument(BaseModel):
 
         return ds_doc
 
-    def render_as_dict(self):
-        return self.output.model_dump(by_alias=True, exclude_none=True)
+    @deprecated("Use output.export_to_dict() instead.")
+    def render_as_dict_v1(self):
+        return self.legacy_output.model_dump(by_alias=True, exclude_none=True)
 
-    def render_as_markdown(
+    @deprecated("Use output.export_to_markdown() instead.")
+    def render_as_markdown_v1(
         self,
         delim: str = "\n\n",
         main_text_start: int = 0,
@@ -362,8 +370,8 @@ class ConvertedDocument(BaseModel):
         ],
         strict_text: bool = False,
         image_placeholder: str = "<!-- image -->",
-    ):
-        return self.output.export_to_markdown(
+    ) -> str:
+        return self.legacy_output.export_to_markdown(
             delim=delim,
             main_text_start=main_text_start,
             main_text_stop=main_text_stop,
@@ -372,7 +380,8 @@ class ConvertedDocument(BaseModel):
             image_placeholder=image_placeholder,
         )
 
-    def render_as_text(
+    @deprecated("Use output.export_to_text() instead.")
+    def render_as_text_v1(
         self,
         delim: str = "\n\n",
         main_text_start: int = 0,
@@ -383,8 +392,8 @@ class ConvertedDocument(BaseModel):
             "paragraph",
             "caption",
         ],
-    ):
-        return self.output.export_to_markdown(
+    ) -> str:
+        return self.legacy_output.export_to_markdown(
             delim=delim,
             main_text_start=main_text_start,
             main_text_stop=main_text_stop,
@@ -392,7 +401,8 @@ class ConvertedDocument(BaseModel):
             strict_text=True,
         )
 
-    def render_as_doctags(
+    @deprecated("Use output.export_to_document_tokens() instead.")
+    def render_as_doctags_v1(
         self,
         delim: str = "\n\n",
         main_text_start: int = 0,
@@ -415,7 +425,7 @@ class ConvertedDocument(BaseModel):
         add_table_cell_label: bool = True,
         add_table_cell_text: bool = True,
     ) -> str:
-        return self.output.export_to_document_tokens(
+        return self.legacy_output.export_to_document_tokens(
             delim=delim,
             main_text_start=main_text_start,
             main_text_stop=main_text_stop,

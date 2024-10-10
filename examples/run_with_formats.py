@@ -59,4 +59,4 @@ for res in conv_results:
     # print(res.experimental.export_to_markdown())
     # Export Docling document format to markdown (experimental):
     with out_path.open("w") as fp:
-        fp.write(res.experimental.export_to_markdown())
+        fp.write(res.output.export_to_markdown())

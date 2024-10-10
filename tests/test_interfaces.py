@@ -9,7 +9,7 @@ from docling.datamodel.document import ConversionResult, DocumentConversionInput
 from docling.datamodel.pipeline_options import PdfPipelineOptions, PipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
-from .verify_utils import verify_conversion_result
+from .verify_utils import verify_conversion_result_v1
 
 
 def get_pdf_path():
@@ -43,7 +43,7 @@ def test_convert_single(converter: DocumentConverter):
     print(f"converting {pdf_path}")
 
     doc_result: ConversionResult = converter.convert_single(pdf_path)
-    verify_conversion_result(input_path=pdf_path, doc_result=doc_result)
+    verify_conversion_result_v1(input_path=pdf_path, doc_result=doc_result)
 
 
 def test_batch_path(converter: DocumentConverter):
@@ -55,7 +55,7 @@ def test_batch_path(converter: DocumentConverter):
 
     results = converter.convert(conv_input)
     for doc_result in results:
-        verify_conversion_result(input_path=pdf_path, doc_result=doc_result)
+        verify_conversion_result_v1(input_path=pdf_path, doc_result=doc_result)
 
 
 def test_batch_bytes(converter: DocumentConverter):
@@ -69,4 +69,4 @@ def test_batch_bytes(converter: DocumentConverter):
 
     results = converter.convert(conv_input)
     for doc_result in results:
-        verify_conversion_result(input_path=pdf_path, doc_result=doc_result)
+        verify_conversion_result_v1(input_path=pdf_path, doc_result=doc_result)
