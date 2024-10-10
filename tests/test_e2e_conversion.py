@@ -6,9 +6,10 @@ from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import PdfPipelineOptions, PipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
-from .verify_utils import verify_conversion_result_v1
+from .verify_utils import verify_conversion_result_v1, verify_conversion_result_v2
 
-GENERATE = False
+GENERATE_V1 = False
+GENERATE_V2 = True
 
 
 def get_pdf_paths():
@@ -50,5 +51,9 @@ def test_e2e_conversions():
         doc_result: ConversionResult = converter.convert_single(pdf_path)
 
         verify_conversion_result_v1(
-            input_path=pdf_path, doc_result=doc_result, generate=GENERATE
+            input_path=pdf_path, doc_result=doc_result, generate=GENERATE_V1
+        )
+
+        verify_conversion_result_v2(
+            input_path=pdf_path, doc_result=doc_result, generate=GENERATE_V2
         )
