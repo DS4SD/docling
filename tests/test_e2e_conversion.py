@@ -1,14 +1,15 @@
 from pathlib import Path
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
-from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import PipelineOptions
+from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import ConversionResult
-from docling.document_converter import DocumentConverter
+from docling.datamodel.pipeline_options import PdfPipelineOptions, PipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
 
-from .verify_utils import verify_conversion_result
+from .verify_utils import verify_conversion_result_v1, verify_conversion_result_v2
 
-GENERATE = False
+GENERATE_V1 = False
+GENERATE_V2 = False
 
 
 def get_pdf_paths():
@@ -23,14 +24,17 @@ def get_pdf_paths():
 
 def get_converter():
 
-    pipeline_options = PipelineOptions()
+    pipeline_options = PdfPipelineOptions()
     pipeline_options.do_ocr = False
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
 
     converter = DocumentConverter(
-        pipeline_options=pipeline_options,
-        pdf_backend=DoclingParseDocumentBackend,
+        format_options={
+            InputFormat.PDF: PdfFormatOption(
+                pipeline_options=pipeline_options, backend=DoclingParseDocumentBackend
+            )
+        }
     )
 
     return converter
@@ -46,6 +50,10 @@ def test_e2e_conversions():
 
         doc_result: ConversionResult = converter.convert_single(pdf_path)
 
-        verify_conversion_result(
-            input_path=pdf_path, doc_result=doc_result, generate=GENERATE
+        verify_conversion_result_v1(
+            input_path=pdf_path, doc_result=doc_result, generate=GENERATE_V1
+        )
+
+        verify_conversion_result_v2(
+            input_path=pdf_path, doc_result=doc_result, generate=GENERATE_V2
         )

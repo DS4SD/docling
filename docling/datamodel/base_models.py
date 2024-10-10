@@ -1,17 +1,12 @@
-import copy
-import warnings
 from enum import Enum, auto
 from io import BytesIO
-from typing import Annotated, Any, Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Union
 
 from docling_core.types.experimental import BoundingBox, Size
 from docling_core.types.experimental.document import BasePictureData, TableCell
 from docling_core.types.experimental.labels import DocItemLabel
 from PIL.Image import Image
-from pydantic import BaseModel, ConfigDict, Field, model_validator
-from typing_extensions import Self
-
-from docling.backend.abstract_backend import PdfPageBackend
+from pydantic import BaseModel, ConfigDict
 
 
 class ConversionStatus(str, Enum):
@@ -22,13 +17,43 @@ class ConversionStatus(str, Enum):
     PARTIAL_SUCCESS = auto()
 
 
+class InputFormat(str, Enum):
+    DOCX = auto()
+    PPTX = auto()
+    HTML = auto()
+    IMAGE = auto()
+    PDF = auto()
+
+
+FormatToMimeType = {
+    InputFormat.DOCX: {
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    },
+    InputFormat.PPTX: {
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    },
+    InputFormat.HTML: {"text/html", "application/xhtml+xml"},
+    InputFormat.IMAGE: {
+        "image/png",
+        "image/jpeg",
+        "image/tiff",
+        "image/gif",
+        "image/bmp",
+    },
+    InputFormat.PDF: {"application/pdf"},
+}
+MimeTypeToFormat = {
+    mime: fmt for fmt, mimes in FormatToMimeType.items() for mime in mimes
+}
+
+
 class DocInputType(str, Enum):
     PATH = auto()
     STREAM = auto()
 
 
 class DoclingComponentType(str, Enum):
-    PDF_BACKEND = auto()
+    DOCUMENT_BACKEND = auto()
     MODEL = auto()
     DOC_ASSEMBLER = auto()
 
@@ -120,13 +145,13 @@ class Page(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     page_no: int
-    page_hash: Optional[str] = None
+    # page_hash: Optional[str] = None
     size: Optional[Size] = None
     cells: List[Cell] = []
     predictions: PagePredictions = PagePredictions()
     assembled: Optional[AssembledUnit] = None
 
-    _backend: Optional[PdfPageBackend] = (
+    _backend: Optional["PdfPageBackend"] = (
         None  # Internal PDF backend. By default it is cleared during assembling.
     )
     _default_image_scale: float = 1.0  # Default image scale for external usage.
@@ -149,40 +174,5 @@ class Page(BaseModel):
 class DocumentStream(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    filename: str
+    name: str
     stream: BytesIO
-
-
-class TableStructureOptions(BaseModel):
-    do_cell_matching: bool = (
-        True
-        # True:  Matches predictions back to PDF cells. Can break table output if PDF cells
-        #        are merged across table columns.
-        # False: Let table structure model define the text cells, ignore PDF cells.
-    )
-
-
-class PipelineOptions(BaseModel):
-    do_table_structure: bool = True  # True: perform table structure extraction
-    do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
-
-    table_structure_options: TableStructureOptions = TableStructureOptions()
-
-
-class AssembleOptions(BaseModel):
-    keep_page_images: Annotated[
-        bool,
-        Field(
-            deprecated="`keep_page_images` is depreacted, set the value of `images_scale` instead"
-        ),
-    ] = False  # False: page images are removed in the assemble step
-    images_scale: Optional[float] = None  # if set, the scale for generated images
-
-    @model_validator(mode="after")
-    def set_page_images_from_deprecated(self) -> Self:
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", DeprecationWarning)
-            default_scale = 1.0
-            if self.keep_page_images and self.images_scale is None:
-                self.images_scale = default_scale
-        return self

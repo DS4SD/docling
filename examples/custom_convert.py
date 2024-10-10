@@ -4,11 +4,15 @@ import time
 from pathlib import Path
 from typing import Iterable
 
-from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
-from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import ConversionStatus, PipelineOptions
+from docling.datamodel.base_models import ConversionStatus, InputFormat
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
-from docling.document_converter import DocumentConverter
+from docling.datamodel.pipeline_options import (
+    PdfPipelineOptions,
+    TesseractCliOcrOptions,
+    TesseractOcrOptions,
+)
+from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
+from docling.pipeline.standard_pdf_model_pipeline import StandardPdfModelPipeline
 
 _log = logging.getLogger(__name__)
 
@@ -28,20 +32,24 @@ def export_documents(
             doc_filename = conv_res.input.file.stem
 
             # Export Deep Search document JSON format:
-            with (output_dir / f"{doc_filename}.json").open("w") as fp:
+            with (output_dir / f"{doc_filename}.json").open(
+                "w", encoding="utf-8"
+            ) as fp:
                 fp.write(json.dumps(conv_res.render_as_dict()))
 
             # Export Text format:
-            with (output_dir / f"{doc_filename}.txt").open("w") as fp:
-                fp.write(conv_res.render_as_text())
+            with (output_dir / f"{doc_filename}.txt").open("w", encoding="utf-8") as fp:
+                fp.write(conv_res.render_as_text_v1())
 
             # Export Markdown format:
-            with (output_dir / f"{doc_filename}.md").open("w") as fp:
-                fp.write(conv_res.render_as_markdown())
+            with (output_dir / f"{doc_filename}.md").open("w", encoding="utf-8") as fp:
+                fp.write(conv_res.render_as_markdown_v1())
 
             # Export Document Tags format:
-            with (output_dir / f"{doc_filename}.doctags").open("w") as fp:
-                fp.write(conv_res.render_as_doctags())
+            with (output_dir / f"{doc_filename}.doctags").open(
+                "w", encoding="utf-8"
+            ) as fp:
+                fp.write(conv_res.render_as_doctags_v1())
 
         else:
             _log.info(f"Document {conv_res.input.file} failed to convert.")
@@ -67,7 +75,7 @@ def main():
     # and PDF Backends for various configurations.
     # Uncomment one section at the time to see the differences in the output.
 
-    # PyPdfium without OCR
+    # PyPdfium without EasyOCR
     # --------------------
     # pipeline_options = PipelineOptions()
     # pipeline_options.do_ocr=False
@@ -79,10 +87,10 @@ def main():
     #     pdf_backend=PyPdfiumDocumentBackend,
     # )
 
-    # PyPdfium with OCR
+    # PyPdfium with EasyOCR
     # -----------------
     # pipeline_options = PipelineOptions()
-    # pipeline_options.do_ocr=False
+    # pipeline_options.do_ocr=True
     # pipeline_options.do_table_structure=True
     # pipeline_options.table_structure_options.do_cell_matching = True
 
@@ -91,24 +99,51 @@ def main():
     #     pdf_backend=PyPdfiumDocumentBackend,
     # )
 
-    # Docling Parse without OCR
+    # Docling Parse without EasyOCR
     # -------------------------
-    pipeline_options = PipelineOptions()
+    pipeline_options = PdfPipelineOptions()
     pipeline_options.do_ocr = False
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
 
     doc_converter = DocumentConverter(
-        pipeline_options=pipeline_options,
-        pdf_backend=DoclingParseDocumentBackend,
+        format_options={
+            InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+        }
     )
 
-    # Docling Parse with OCR
+    # Docling Parse with EasyOCR
     # ----------------------
     # pipeline_options = PipelineOptions()
     # pipeline_options.do_ocr=True
     # pipeline_options.do_table_structure=True
     # pipeline_options.table_structure_options.do_cell_matching = True
+
+    # doc_converter = DocumentConverter(
+    #     pipeline_options=pipeline_options,
+    #     pdf_backend=DoclingParseDocumentBackend,
+    # )
+
+    # Docling Parse with Tesseract
+    # ----------------------
+    # pipeline_options = PipelineOptions()
+    # pipeline_options.do_ocr = True
+    # pipeline_options.do_table_structure = True
+    # pipeline_options.table_structure_options.do_cell_matching = True
+    # pipeline_options.ocr_options = TesseractOcrOptions()
+
+    # doc_converter = DocumentConverter(
+    #     pipeline_options=pipeline_options,
+    #     pdf_backend=DoclingParseDocumentBackend,
+    # )
+
+    # Docling Parse with Tesseract CLI
+    # ----------------------
+    # pipeline_options = PipelineOptions()
+    # pipeline_options.do_ocr = True
+    # pipeline_options.do_table_structure = True
+    # pipeline_options.table_structure_options.do_cell_matching = True
+    # pipeline_options.ocr_options = TesseractCliOcrOptions()
 
     # doc_converter = DocumentConverter(
     #     pipeline_options=pipeline_options,

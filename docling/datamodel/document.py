@@ -1,9 +1,11 @@
 import logging
+from enum import Enum
 from io import BytesIO
 from pathlib import Path, PurePath
-from typing import ClassVar, Dict, Iterable, List, Optional, Tuple, Type, Union
+from typing import Dict, Iterable, List, Optional, Tuple, Type, Union
 
-from docling_core.types import BaseCell, BaseText
+import filetype
+from docling_core.types import BaseText
 from docling_core.types import Document as DsDocument
 from docling_core.types import DocumentDescription as DsDocumentDescription
 from docling_core.types import FileInfoObject as DsFileInfoObject
@@ -19,21 +21,26 @@ from docling_core.types.experimental import (
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
-from docling.backend.abstract_backend import PdfDocumentBackend
+from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
+from docling.backend.html_backend import HTMLDocumentBackend
+from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
+from docling.backend.msword_backend import MsWordDocumentBackend
 from docling.datamodel.base_models import (
     AssembledUnit,
     ConversionStatus,
     DocumentStream,
     ErrorItem,
     FigureElement,
+    InputFormat,
+    MimeTypeToFormat,
     Page,
     PageElement,
     Table,
     TextElement,
 )
 from docling.datamodel.settings import DocumentLimits
-from docling.utils.utils import create_file_hash
+from docling.utils.utils import create_file_hash, create_hash
 
 _log = logging.getLogger(__name__)
 
@@ -55,7 +62,7 @@ layout_label_to_ds_type = {
     DocItemLabel.TEXT: "paragraph",
 }
 
-_EMPTY_DOC = DsDocument(
+_EMPTY_LEGACY_DOC = DsDocument(
     _name="",
     description=DsDocumentDescription(logs=[]),
     file_info=DsFileInfoObject(
@@ -72,24 +79,27 @@ _EMPTY_DOCLING_DOC = DoclingDocument(
 class InputDocument(BaseModel):
     file: PurePath = None
     document_hash: Optional[str] = None
-    valid: bool = False
+    valid: bool = True
     limits: DocumentLimits = DocumentLimits()
+    format: Optional[InputFormat] = None
 
     filesize: Optional[int] = None
-    page_count: Optional[int] = None
+    page_count: int = 0
 
-    _backend: PdfDocumentBackend = None  # Internal PDF backend used
+    _backend: AbstractDocumentBackend = None  # Internal PDF backend used
 
     def __init__(
         self,
         path_or_stream: Union[BytesIO, Path],
+        format: InputFormat,
+        backend: AbstractDocumentBackend,
         filename: Optional[str] = None,
         limits: Optional[DocumentLimits] = None,
-        pdf_backend=DoclingParseDocumentBackend,
     ):
         super().__init__()
 
         self.limits = limits or DocumentLimits()
+        self.format = format
 
         try:
             if isinstance(path_or_stream, Path):
@@ -99,9 +109,7 @@ class InputDocument(BaseModel):
                     self.valid = False
                 else:
                     self.document_hash = create_file_hash(path_or_stream)
-                    self._backend = pdf_backend(
-                        path_or_stream=path_or_stream, document_hash=self.document_hash
-                    )
+                    self._init_doc(backend, path_or_stream)
 
             elif isinstance(path_or_stream, BytesIO):
                 self.file = PurePath(filename)
@@ -111,15 +119,14 @@ class InputDocument(BaseModel):
                     self.valid = False
                 else:
                     self.document_hash = create_file_hash(path_or_stream)
-                    self._backend = pdf_backend(
-                        path_or_stream=path_or_stream, document_hash=self.document_hash
-                    )
+                    self._init_doc(backend, path_or_stream)
 
-            if self.document_hash and self._backend.page_count() > 0:
-                self.page_count = self._backend.page_count()
-
-                if self.page_count <= self.limits.max_num_pages:
-                    self.valid = True
+            # For paginated backends, check if the maximum page count is exceeded.
+            if self.valid and self._backend.is_valid():
+                if self._backend.supports_pagination():
+                    self.page_count = self._backend.page_count()
+                    if not self.page_count <= self.limits.max_num_pages:
+                        self.valid = False
 
         except (FileNotFoundError, OSError) as e:
             _log.exception(
@@ -133,6 +140,26 @@ class InputDocument(BaseModel):
             )
             # raise
 
+    def _init_doc(
+        self,
+        backend: AbstractDocumentBackend,
+        path_or_stream: Union[BytesIO, Path],
+    ) -> None:
+        if backend is None:
+            raise RuntimeError(
+                f"No backend configuration provided for file {self.file} with format {self.format}. "
+                f"Please check your format configuration on DocumentConverter."
+            )
+
+        self._backend = backend(
+            path_or_stream=path_or_stream, document_hash=self.document_hash
+        )
+
+
+class DocumentFormat(str, Enum):
+    V2 = "v2"
+    V1 = "v1"
+
 
 @deprecated("Use `ConversionResult` instead.")
 class ConvertedDocument(BaseModel):
@@ -144,15 +171,19 @@ class ConvertedDocument(BaseModel):
     pages: List[Page] = []
     assembled: AssembledUnit = AssembledUnit()
 
-    output: DsDocument = _EMPTY_DOC
-    experimental: DoclingDocument = _EMPTY_DOCLING_DOC
+    legacy_output: DsDocument = _EMPTY_LEGACY_DOC
+    output: DoclingDocument = _EMPTY_DOCLING_DOC
 
-    def _to_ds_document(self) -> DsDocument:
+    def _to_legacy_document(self) -> DsDocument:
         title = ""
         desc = DsDocumentDescription(logs=[])
 
         page_hashes = [
-            PageReference(hash=p.page_hash, page=p.page_no + 1, model="default")
+            PageReference(
+                hash=create_hash(self.input.document_hash + ":" + str(p.page_no)),
+                page=p.page_no + 1,
+                model="default",
+            )
             for p in self.pages
         ]
 
@@ -319,10 +350,12 @@ class ConvertedDocument(BaseModel):
 
         return ds_doc
 
-    def render_as_dict(self):
-        return self.output.model_dump(by_alias=True, exclude_none=True)
+    @deprecated("Use output.export_to_dict() instead.")
+    def render_as_dict_v1(self):
+        return self.legacy_output.model_dump(by_alias=True, exclude_none=True)
 
-    def render_as_markdown(
+    @deprecated("Use output.export_to_markdown() instead.")
+    def render_as_markdown_v1(
         self,
         delim: str = "\n\n",
         main_text_start: int = 0,
@@ -337,8 +370,8 @@ class ConvertedDocument(BaseModel):
         ],
         strict_text: bool = False,
         image_placeholder: str = "<!-- image -->",
-    ):
-        return self.output.export_to_markdown(
+    ) -> str:
+        return self.legacy_output.export_to_markdown(
             delim=delim,
             main_text_start=main_text_start,
             main_text_stop=main_text_stop,
@@ -347,7 +380,8 @@ class ConvertedDocument(BaseModel):
             image_placeholder=image_placeholder,
         )
 
-    def render_as_text(
+    @deprecated("Use output.export_to_text() instead.")
+    def render_as_text_v1(
         self,
         delim: str = "\n\n",
         main_text_start: int = 0,
@@ -358,8 +392,8 @@ class ConvertedDocument(BaseModel):
             "paragraph",
             "caption",
         ],
-    ):
-        return self.output.export_to_markdown(
+    ) -> str:
+        return self.legacy_output.export_to_markdown(
             delim=delim,
             main_text_start=main_text_start,
             main_text_stop=main_text_stop,
@@ -367,7 +401,8 @@ class ConvertedDocument(BaseModel):
             strict_text=True,
         )
 
-    def render_as_doctags(
+    @deprecated("Use output.export_to_document_tokens() instead.")
+    def render_as_doctags_v1(
         self,
         delim: str = "\n\n",
         main_text_start: int = 0,
@@ -390,7 +425,7 @@ class ConvertedDocument(BaseModel):
         add_table_cell_label: bool = True,
         add_table_cell_text: bool = True,
     ) -> str:
-        return self.output.export_to_document_tokens(
+        return self.legacy_output.export_to_document_tokens(
             delim=delim,
             main_text_start=main_text_start,
             main_text_stop=main_text_stop,
@@ -430,26 +465,49 @@ class DocumentConversionInput(BaseModel):
     _path_or_stream_iterator: Iterable[Union[Path, DocumentStream]] = None
     limits: Optional[DocumentLimits] = DocumentLimits()
 
-    DEFAULT_BACKEND: ClassVar = DoclingParseDocumentBackend
-
     def docs(
-        self, pdf_backend: Optional[Type[PdfDocumentBackend]] = None
+        self, format_options: Dict[InputFormat, "FormatOption"]
     ) -> Iterable[InputDocument]:
 
-        pdf_backend = pdf_backend or DocumentConversionInput.DEFAULT_BACKEND
-
         for obj in self._path_or_stream_iterator:
+            format = self._guess_format(obj)
+            if format not in format_options.keys():
+                _log.debug(
+                    f"Skipping input document {obj.name} because its format is not in the whitelist."
+                )
+                continue
+            else:
+                backend = format_options.get(format).backend
+
             if isinstance(obj, Path):
                 yield InputDocument(
-                    path_or_stream=obj, limits=self.limits, pdf_backend=pdf_backend
+                    path_or_stream=obj,
+                    format=format,
+                    filename=obj.name,
+                    limits=self.limits,
+                    backend=backend,
                 )
             elif isinstance(obj, DocumentStream):
                 yield InputDocument(
                     path_or_stream=obj.stream,
-                    filename=obj.filename,
+                    format=format,
+                    filename=obj.name,
                     limits=self.limits,
-                    pdf_backend=pdf_backend,
+                    backend=backend,
                 )
+
+    def _guess_format(self, obj):
+        if isinstance(obj, Path):
+            mime = filetype.guess_mime(str(obj))
+        elif isinstance(obj, DocumentStream):
+            mime = filetype.guess_mime(obj.stream.read(8192))
+        else:
+            1 == 1  # alert!!
+        if mime is None:
+            if obj.suffix == ".html":
+                mime = "text/html"
+        format = MimeTypeToFormat.get(mime)
+        return format
 
     @classmethod
     def from_paths(cls, paths: Iterable[Path], limits: Optional[DocumentLimits] = None):

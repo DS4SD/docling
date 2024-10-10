@@ -12,9 +12,15 @@ from docling_core.utils.file import resolve_file_source
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import ConversionStatus, PipelineOptions
+from docling.datamodel.base_models import ConversionStatus, InputFormat
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
-from docling.document_converter import DocumentConverter
+from docling.datamodel.pipeline_options import (
+    EasyOcrOptions,
+    PdfPipelineOptions,
+    TesseractCliOcrOptions,
+    TesseractOcrOptions,
+)
+from docling.document_converter import DocumentConverter, PdfFormatOption
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
 warnings.filterwarnings(action="ignore", category=FutureWarning, module="easyocr")
@@ -52,6 +58,13 @@ class Backend(str, Enum):
     DOCLING = "docling"
 
 
+# Define an enum for the ocr engines
+class OcrEngine(str, Enum):
+    EASYOCR = "easyocr"
+    TESSERACT_CLI = "tesseract_cli"
+    TESSERACT = "tesseract"
+
+
 def export_documents(
     conv_results: Iterable[ConversionResult],
     output_dir: Path,
@@ -81,21 +94,21 @@ def export_documents(
                 fname = output_dir / f"{doc_filename}.txt"
                 with fname.open("w") as fp:
                     _log.info(f"writing Text output to {fname}")
-                    fp.write(conv_res.render_as_text())
+                    fp.write(conv_res.render_as_text_v1())
 
             # Export Markdown format:
             if export_md:
                 fname = output_dir / f"{doc_filename}.md"
                 with fname.open("w") as fp:
                     _log.info(f"writing Markdown output to {fname}")
-                    fp.write(conv_res.render_as_markdown())
+                    fp.write(conv_res.render_as_markdown_v1())
 
             # Export Document Tags format:
             if export_doctags:
                 fname = output_dir / f"{doc_filename}.doctags"
                 with fname.open("w") as fp:
                     _log.info(f"writing Doc Tags output to {fname}")
-                    fp.write(conv_res.render_as_doctags())
+                    fp.write(conv_res.render_as_doctags_v1())
 
         else:
             _log.warning(f"Document {conv_res.input.file} failed to convert.")
@@ -151,6 +164,9 @@ def convert(
     backend: Annotated[
         Backend, typer.Option(..., help="The PDF backend to use.")
     ] = Backend.DOCLING,
+    ocr_engine: Annotated[
+        OcrEngine, typer.Option(..., help="The OCR engine to use.")
+    ] = OcrEngine.EASYOCR,
     output: Annotated[
         Path, typer.Option(..., help="Output directory where results are saved.")
     ] = Path("."),
@@ -190,14 +206,29 @@ def convert(
         case _:
             raise RuntimeError(f"Unexpected backend type {backend}")
 
-    pipeline_options = PipelineOptions(
+    match ocr_engine:
+        case OcrEngine.EASYOCR:
+            ocr_options = EasyOcrOptions()
+        case OcrEngine.TESSERACT_CLI:
+            ocr_options = TesseractCliOcrOptions()
+        case OcrEngine.TESSERACT:
+            ocr_options = TesseractOcrOptions()
+        case _:
+            raise RuntimeError(f"Unexpected backend type {backend}")
+
+    pipeline_options = PdfPipelineOptions(
         do_ocr=ocr,
+        ocr_options=ocr_options,
         do_table_structure=True,
     )
     pipeline_options.table_structure_options.do_cell_matching = do_cell_matching
+
     doc_converter = DocumentConverter(
-        pipeline_options=pipeline_options,
-        pdf_backend=pdf_backend,
+        format_options={
+            InputFormat.PDF: PdfFormatOption(
+                pipeline_options=pipeline_options, backend=pdf_backend
+            )
+        }
     )
 
     # Define input files

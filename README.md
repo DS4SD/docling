@@ -33,8 +33,7 @@ To use Docling, simply install `docling` from your package manager, e.g. pip:
 pip install docling
 ```
 
-> [!NOTE]
-> Works on macOS and Linux environments. Windows platforms are currently not tested.
+Works on macOS, Linux and Windows environments. Both x86_64 and arm64 architectures.
 
 <details>
   <summary><b>Alternative PyTorch distributions</b></summary>
@@ -54,6 +53,79 @@ pip install docling
 </details>
 
 <details>
+  <summary><b>Alternative OCR engines</b></summary>
+
+  Docling supports multiple OCR engines for processing scanned documents. The current version provides
+  the following engines.
+
+  | Engine | Installation | Usage |
+  | ------ | ------------ | ----- |
+  | [EasyOCR](https://github.com/JaidedAI/EasyOCR) | Default in Docling or via `pip install easyocr`. | `EasyOcrOptions` |
+  | Tesseract | System dependency. See description for Tesseract and Tesserocr below.  | `TesseractOcrOptions` |
+  | Tesseract CLI | System dependency. See description below. | `TesseractCliOcrOptions` |
+
+  The Docling `DocumentConverter` allows to choose the OCR engine with the `ocr_options` settings. For example
+
+  ```python
+    from docling.datamodel.base_models import ConversionStatus, PipelineOptions
+    from docling.datamodel.pipeline_options import PipelineOptions, EasyOcrOptions, TesseractOcrOptions
+    from docling.document_converter import DocumentConverter
+
+    pipeline_options = PipelineOptions()
+    pipeline_options.do_ocr = True
+    pipeline_options.ocr_options = TesseractOcrOptions()  # Use Tesseract
+
+    doc_converter = DocumentConverter(
+        pipeline_options=pipeline_options,
+    )
+  ```
+
+  #### Tesseract installation
+
+  [Tesseract](https://github.com/tesseract-ocr/tesseract) is a popular OCR engine which is available
+  on most operating systems. For using this engine with Docling, Tesseract must be installed on your
+  system, using the packaging tool of your choice. Below we provide example commands.
+  After installing Tesseract you are expected to provide the path to its language files using the
+  `TESSDATA_PREFIX` environment variable (note that it must terminate with a slash `/`).
+
+  For macOS, we reccomend using [Homebrew](https://brew.sh/).
+
+  ```console
+  brew install tesseract leptonica pkg-config
+  TESSDATA_PREFIX=/opt/homebrew/share/tessdata/
+  echo "Set TESSDATA_PREFIX=${TESSDATA_PREFIX}"
+  ```
+
+  For Debian-based systems.
+
+  ```console
+  apt-get install tesseract-ocr tesseract-ocr-eng libtesseract-dev libleptonica-dev pkg-config
+  TESSDATA_PREFIX=$(dpkg -L tesseract-ocr-eng | grep tessdata$)
+  echo "Set TESSDATA_PREFIX=${TESSDATA_PREFIX}"
+  ```
+
+  For RHEL systems.
+
+  ```console
+  dnf install tesseract tesseract-devel tesseract-langpack-eng leptonica-devel
+  TESSDATA_PREFIX=/usr/share/tesseract/tessdata/
+  echo "Set TESSDATA_PREFIX=${TESSDATA_PREFIX}"
+  ```
+
+  #### Linking to Tesseract
+  The most efficient usage of the Tesseract library is via linking. Docling is using
+  the [Tesserocr](https://github.com/sirfz/tesserocr) package for this.
+
+  If you get into installation issues of Tesserocr, we suggest using the following
+  installation options:
+
+  ```console
+  pip uninstall tesserocr
+  pip install --no-binary :all: tesserocr
+  ```
+</details>
+
+<details>
   <summary><b>Docling development setup</b></summary>
 
   To develop for Docling (features, bugfixes etc.), install as follows from your local clone's root dir:
@@ -67,14 +139,15 @@ pip install docling
 ### Convert a single document
 
 To convert invidual PDF documents, use `convert_single()`, for example:
+
 ```python
 from docling.document_converter import DocumentConverter
 
 source = "https://arxiv.org/pdf/2408.09869"  # PDF path or URL
 converter = DocumentConverter()
 result = converter.convert_single(source)
-print(result.render_as_markdown())  # output: "## Docling Technical Report[...]"
-print(result.render_as_doctags())  # output: "<document><title><page_1><loc_20>..."
+print(result.render_as_markdown_v1())  # output: "## Docling Technical Report[...]"
+print(result.render_as_doctags_v1())  # output: "<document><title><page_1><loc_20>..."
 ```
 
 ### Convert a batch of documents
@@ -159,8 +232,24 @@ This can improve output quality if you find that multiple columns in extracted t
 
 
 ```python
+from docling.datamodel.pipeline_options import PipelineOptions
+
 pipeline_options = PipelineOptions(do_table_structure=True)
 pipeline_options.table_structure_options.do_cell_matching = False  # uses text cells predicted from table structure model
+
+doc_converter = DocumentConverter(
+    artifacts_path=artifacts_path,
+    pipeline_options=pipeline_options,
+)
+```
+
+Since docling 1.16.0: You can control which TableFormer mode you want to use. Choose between `TableFormerMode.FAST` (default) and `TableFormerMode.ACCURATE` (better, but slower) to receive better quality with difficult table structures.
+
+```python
+from docling.datamodel.pipeline_options import PipelineOptions, TableFormerMode
+
+pipeline_options = PipelineOptions(do_table_structure=True)
+pipeline_options.table_structure_options.mode = TableFormerMode.ACCURATE  # use more accurate TableFormer model
 
 doc_converter = DocumentConverter(
     artifacts_path=artifacts_path,
@@ -190,6 +279,28 @@ results = doc_converter.convert(conv_input)
 ### Limit resource usage
 
 You can limit the CPU threads used by Docling by setting the environment variable `OMP_NUM_THREADS` accordingly. The default setting is using 4 CPU threads.
+
+### Chunking
+
+You can perform a hierarchy-aware chunking of a Docling document as follows:
+
+```python
+from docling.document_converter import DocumentConverter
+from docling_core.transforms.chunker import HierarchicalChunker
+
+doc = DocumentConverter().convert_single("https://arxiv.org/pdf/2206.01062").legacy_output
+chunks = list(HierarchicalChunker().chunk(doc))
+# > [
+# >     ChunkWithMetadata(
+# >         path='$.main-text[0]',
+# >         text='DocLayNet: A Large Human-Annotated Dataset [...]',
+# >         page=1,
+# >         bbox=[107.30, 672.38, 505.19, 709.08]
+# >     ),
+# >     [...]
+# > ]
+```
+
 
 ## Technical report
 

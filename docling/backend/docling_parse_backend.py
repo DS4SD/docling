@@ -10,7 +10,7 @@ from docling_parse.docling_parse import pdf_parser
 from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage
 
-from docling.backend.abstract_backend import PdfDocumentBackend, PdfPageBackend
+from docling.backend.pdf_backend import PdfDocumentBackend, PdfPageBackend
 from docling.datamodel.base_models import Cell
 
 _log = logging.getLogger(__name__)

@@ -9,7 +9,7 @@ from deepsearch_glm.utils.doc_utils import (
 )
 from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_models
 from docling_core.types import BaseText
-from docling_core.types import Document as DsDocument
+from docling_core.types import Document as DsLegacyDocument
 from docling_core.types import Ref
 from docling_core.types.experimental import BoundingBox, CoordOrigin
 from docling_core.types.experimental.document import DoclingDocument
@@ -32,8 +32,8 @@ class GlmModel:
 
     def __call__(
         self, conv_res: ConversionResult
-    ) -> Tuple[DsDocument, DoclingDocument]:
-        ds_doc = conv_res._to_ds_document()
+    ) -> Tuple[DsLegacyDocument, DoclingDocument]:
+        ds_doc = conv_res._to_legacy_document()
         ds_doc_dict = ds_doc.model_dump(by_alias=True)
 
         glm_doc = self.model.apply_on_doc(ds_doc_dict)
@@ -42,7 +42,7 @@ class GlmModel:
         )
 
         docling_doc: DoclingDocument = to_docling_document(glm_doc)  # Experimental
-        exported_doc = DsDocument.model_validate(ds_doc_dict)
+        legacy_doc = DsLegacyDocument.model_validate(ds_doc_dict)
 
         # DEBUG code:
         def draw_clusters_and_cells(ds_document, page_no):
@@ -92,4 +92,4 @@ class GlmModel:
         # draw_clusters_and_cells(ds_doc, 0)
         # draw_clusters_and_cells(exported_doc, 0)
 
-        return (exported_doc, docling_doc)
+        return (legacy_doc, docling_doc)

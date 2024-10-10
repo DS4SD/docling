@@ -1,7 +1,6 @@
 import logging
 import time
 from pathlib import Path
-from typing import Tuple
 
 import pandas as pd
 
@@ -40,7 +39,7 @@ def main():
         doc_filename = conv_res.input.file.stem
 
         # Export tables
-        for table_ix, table in enumerate(conv_res.output.tables):
+        for table_ix, table in enumerate(conv_res.legacy_output.tables):
             table_df: pd.DataFrame = table.export_to_dataframe()
             print(f"## Table {table_ix}")
             print(table_df.to_markdown())
