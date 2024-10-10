@@ -305,8 +305,6 @@
 <list_item><location><page_17><loc_22><loc_32><loc_41><loc_33></location>GLYPH<SM590000> Security fundamentals</list_item>
 <list_item><location><page_17><loc_22><loc_30><loc_46><loc_32></location>GLYPH<SM590000> Current state of IBM i security</list_item>
 <list_item><location><page_17><loc_22><loc_29><loc_43><loc_30></location>GLYPH<SM590000> DB2 for i security controls</list_item>
-<footnote><location><page_17><loc_22><loc_8><loc_42><loc_10></location>$^{1 }$http://www.idtheftcenter.org</footnote>
-<footnote><location><page_17><loc_22><loc_7><loc_38><loc_8></location>$^{2 }$http://www.ponemon.org /</footnote>
 <section_header><location><page_18><loc_11><loc_89><loc_44><loc_91></location>1.1 Security fundamentals</section_header>
 <text><location><page_18><loc_22><loc_84><loc_89><loc_87></location>Before reviewing database security techniques, there are two fundamental steps in securing information assets that must be described:</text>
 <list_item><location><page_18><loc_22><loc_77><loc_89><loc_83></location>GLYPH<SM590000> First, and most important, is the definition of a company's security policy . Without a security policy, there is no definition of what are acceptable practices for using, accessing, and storing information by who, what, when, where, and how. A security policy should minimally address three things: confidentiality, integrity, and availability.</list_item>

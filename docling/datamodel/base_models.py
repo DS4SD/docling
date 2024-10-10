@@ -33,7 +33,13 @@ FormatToMimeType = {
         "application/vnd.openxmlformats-officedocument.presentationml.presentation"
     },
     InputFormat.HTML: {"text/html", "application/xhtml+xml"},
-    InputFormat.IMAGE: {"image/png", "image/jpeg"},
+    InputFormat.IMAGE: {
+        "image/png",
+        "image/jpeg",
+        "image/tiff",
+        "image/gif",
+        "image/bmp",
+    },
     InputFormat.PDF: {"application/pdf"},
 }
 MimeTypeToFormat = {

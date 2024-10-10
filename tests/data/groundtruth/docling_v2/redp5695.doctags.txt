@@ -23,7 +23,6 @@
 <text><location><page_3><loc_22><loc_41><loc_89><loc_48></location>With IBM Cloud Pakfi for Data on IBM Z, enterprises can modernize their data infrastructure, develop, and deploy machine learning (ML) and AI models, and instantiate highly efficient analytics deployment on IBM LinuxONE. Enterprises can create cutting-edge, intelligent, and interactive applications with embedded AI, colocate data with commercial applications, and use AI to make inferences.</text>
 <text><location><page_3><loc_22><loc_32><loc_89><loc_39></location>This IBM Redguide publication presents a high-level overview of IBM Z. It describes IBM Cloud Pak for Data (CP4D) on IBM Z and IBM LinuxONE, the different features that are supported on the platform, and how the associated features can help enterprise customers in building AI and ML models by using core transactional data, which results in decreased latency and increased throughput.</text>
 <text><location><page_3><loc_22><loc_22><loc_89><loc_31></location>This publication highlights real-time CP4D on IBM Z use cases. Real-time Clearing and Settlement Transactions, Trustworthy AI and its Role in Day-To-Day Monitoring, and the Prevention of Retail Crimes are use cases that are described in this publication. Using CP4D on IBM Z and LinuxONE, this publication shows how businesses can implement a highly efficient analytics deployment that minimizes latency, cost inefficiencies, and potential security exposures that are connected with data transportation.</text>
-<footnote><location><page_3><loc_22><loc_7><loc_63><loc_8></location>$^{1 }$https://www.bcbsm.com/health-care-fraud/fraud-statistics.html</footnote>
 <section_header><location><page_4><loc_11><loc_89><loc_35><loc_91></location>IBM Z: An overview</section_header>
 <text><location><page_4><loc_22><loc_80><loc_88><loc_87></location>Ever wonder how many transactions a bank processes per day? What about the pace at which these transactions happen? According to an IBMfi report, 44 of 50 of the world's top banks use IBM Z mainframes for these daily transactions.$^{2}$ IBM Z is a platform that is designed for voluminous data, maximum security, real-time transaction analysis, and cost efficiency.</text>
 <text><location><page_4><loc_22><loc_75><loc_84><loc_78></location>The most recent platform for IBM Z is IBM z16™. The IBM z16 supports the following features:</text>
@@ -36,7 +35,6 @@
 <text><location><page_4><loc_22><loc_58><loc_85><loc_61></location>With these features, enterprises can upgrade applications while preserving secure and resilient data.</text>
 <text><location><page_4><loc_22><loc_55><loc_71><loc_57></location>To learn more about these features, see the IBM z16 product page.</text>
 <text><location><page_4><loc_22><loc_53><loc_68><loc_54></location>Figure 1 on page 3 shows a picture of the IBM z16 mainframe.</text>
-<footnote><location><page_4><loc_22><loc_7><loc_51><loc_8></location>$^{2 }$https://www.ibm.com/case-studies/bankwest/</footnote>
 <caption><location><page_5><loc_22><loc_42><loc_34><loc_43></location>Figure 1 IBM z16</caption>
 <figure>
 <location><page_5><loc_22><loc_44><loc_71><loc_90></location>
@@ -183,7 +181,6 @@
 <list_item><location><page_17><loc_22><loc_37><loc_86><loc_40></location>GLYPH<SM590000> Monitor the AI models with Watson OpenScale on CP4D on Red Hat OpenShift on a virtual machine on IBM Z.</list_item>
 <list_item><location><page_17><loc_22><loc_28><loc_89><loc_36></location>GLYPH<SM590000> Enterprises can develop AI models by creating and training models by using Watson Studio and development tools such as Jupyter Notebook or JupyterLab, and then deploying the model onto WML on CP4D on Red Hat OpenShift on a virtual machine on IBM Z. Then, these enterprises can achieve end-end AI governance by running AI Factsheets, IBM Watson OpenScale, and IBM Watson OpenPagesfi on CP4D on x86.</list_item>
 <text><location><page_17><loc_22><loc_26><loc_84><loc_27></location>Figure 9 on page 16 shows the end-to-end flow for a remote AI governance solution.</text>
-<footnote><location><page_17><loc_22><loc_7><loc_68><loc_8></location>$^{3 }$https://www.proofpoint.com/us/threat-reference/regulatory-compliance</footnote>
 <caption><location><page_18><loc_11><loc_62><loc_48><loc_63></location>Figure 9 Remote AI governance solution end-to-end flow</caption>
 <figure>
 <location><page_18><loc_11><loc_63><loc_89><loc_90></location>

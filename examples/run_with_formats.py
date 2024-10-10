@@ -25,6 +25,7 @@ input_paths = [
     Path("tests/data/lorem_ipsum.docx"),
     Path("tests/data/powerpoint_sample.pptx"),
     Path("tests/data/2206.01062.pdf"),
+    # Path("tests/data/2305.03393v1-pg9-img.png"),
 ]
 input = DocumentConversionInput.from_paths(input_paths)
 
@@ -35,6 +36,7 @@ input = DocumentConversionInput.from_paths(input_paths)
 doc_converter = DocumentConverter(  # all of the below is optional, has internal defaults.
     formats=[
         InputFormat.PDF,
+        # InputFormat.IMAGE,
         InputFormat.DOCX,
     ],  # whitelist formats, other files are ignored.
     format_options={

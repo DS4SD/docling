@@ -37,9 +37,10 @@ torchvision = [
 ######################
 python = "^3.10"
 pydantic = "^2.0.0"
-docling-core = {git = "ssh://git@github.com/DS4SD/docling-core.git", rev = "5aa67df483fb82e01ebb8b86433459f86286403f"}
-docling-ibm-models = "^2.0.0"
-deepsearch-glm = {git = "ssh://git@github.com/DS4SD/deepsearch-glm.git", rev = "880c6eb50ecdc2c7ec5f3039b257b51cac6199ca"}
+docling-core = {git = "https://github.com/DS4SD/docling-core.git", rev = "e42a1ddf36e53134aef92f0447cc3352a4e82e70"}
+docling-ibm-models = {git = "https://github.com/DS4SD/docling-ibm-models.git", rev = "1d2e2a2e6eb152c237f1383cdba20cf85db80b97"}
+deepsearch-glm = {git = "https://github.com/DS4SD/deepsearch-glm.git", rev = "a5bcc9fd90d50cc1899da2f878ae8259269ab9bf"}
+docling-parse = "^1.5.1"
 
 filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"
@@ -48,7 +49,6 @@ huggingface_hub = ">=0.23,<1"
 requests = "^2.32.3"
 easyocr = "^1.7"
 tesserocr = { version = "^2.7.1", optional = true }
-docling-parse = "^1.4.1"
 certifi = ">=2024.7.4"
 rtree = "^1.3.0"
 scipy = "^1.14.1"
@@ -80,9 +80,9 @@ nbqa = "^1.9.0"
 [tool.poetry.group.examples.dependencies]
 datasets = "^2.21.0"
 python-dotenv = "^1.0.1"
-llama-index-embeddings-huggingface = "^0.3.1"
-llama-index-llms-huggingface-api = "^0.2.0"
-llama-index-vector-stores-milvus = "^0.2.1"
+# llama-index-embeddings-huggingface = { version = "^0.3.1", markers = 'python_version < "3.13"' }
+# llama-index-llms-huggingface-api = { version = "^0.2.0", markers = 'python_version < "3.13"' }
+# llama-index-vector-stores-milvus = { version = "^0.2.1", markers = 'python_version < "3.13"' }
 langchain-huggingface = "^0.0.3"
 langchain-milvus = "^0.1.4"
 langchain-text-splitters = "^0.2.4"
