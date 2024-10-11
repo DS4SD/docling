@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Iterable
 
 from docling.datamodel.base_models import ConversionStatus, InputFormat
-from docling.datamodel.document import ConversionResult, DocumentConversionInput
+from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     PdfPipelineOptions,
     TesseractCliOcrOptions,
@@ -65,9 +65,7 @@ def export_documents(
 def main():
     logging.basicConfig(level=logging.INFO)
 
-    input_doc_paths = [
-        Path("./tests/data/2206.01062.pdf"),
-    ]
+    input_doc_path = Path("./tests/data/2206.01062.pdf")
 
     ###########################################################################
 
@@ -152,24 +150,13 @@ def main():
 
     ###########################################################################
 
-    # Define input files
-    input = DocumentConversionInput.from_paths(input_doc_paths)
-
     start_time = time.time()
 
-    conv_results = doc_converter.convert_batch(input)
-    success_count, failure_count = export_documents(
-        conv_results, output_dir=Path("./scratch")
-    )
+    conv_result = doc_converter.convert(input_doc_path)
 
     end_time = time.time() - start_time
 
-    _log.info(f"All documents were converted in {end_time:.2f} seconds.")
-
-    if failure_count > 0:
-        raise RuntimeError(
-            f"The example failed converting {failure_count} on {len(input_doc_paths)}."
-        )
+    _log.info(f"Document converted in {end_time:.2f} seconds.")
 
 
 if __name__ == "__main__":

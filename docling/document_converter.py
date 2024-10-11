@@ -1,34 +1,24 @@
 import logging
-import tempfile
+import sys
 import time
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Type
 
-import requests
-from pydantic import (
-    AnyHttpUrl,
-    BaseModel,
-    ConfigDict,
-    TypeAdapter,
-    ValidationError,
-    field_validator,
-    model_validator,
-)
-from typing_extensions import deprecated
+from pydantic import BaseModel, ConfigDict, model_validator, validate_call
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.html_backend import HTMLDocumentBackend
 from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
-from docling.datamodel.base_models import ConversionStatus, InputFormat
+from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
 from docling.datamodel.document import (
     ConversionResult,
-    DocumentConversionInput,
     InputDocument,
+    _DocumentConversionInput,
 )
 from docling.datamodel.pipeline_options import PipelineOptions
-from docling.datamodel.settings import settings
+from docling.datamodel.settings import DocumentLimits, settings
 from docling.pipeline.base_model_pipeline import AbstractModelPipeline
 from docling.pipeline.simple_model_pipeline import SimpleModelPipeline
 from docling.pipeline.standard_pdf_model_pipeline import StandardPdfModelPipeline
@@ -119,16 +109,56 @@ class DocumentConverter:
             Type[AbstractModelPipeline], AbstractModelPipeline
         ] = {}
 
-    @deprecated("Use convert_batch instead.")
-    def convert(self, input: DocumentConversionInput) -> Iterable[ConversionResult]:
-        yield from self.convert_batch(input=input)
+    @validate_call(config=ConfigDict(strict=True))
+    def convert(
+        self,
+        source: Path | str | DocumentStream,  # TODO review naming
+        raises_on_error: bool = True,
+        max_num_pages: int = sys.maxsize,
+        max_file_size: int = sys.maxsize,
+    ) -> ConversionResult:
 
-    def convert_batch(
-        self, input: DocumentConversionInput, raise_on_error: bool = False
+        all_res = self.convert_all(
+            source=[source],
+            raises_on_error=raises_on_error,
+            max_num_pages=max_num_pages,
+            max_file_size=max_file_size,
+        )
+        return next(all_res)
+
+    @validate_call(config=ConfigDict(strict=True))
+    def convert_all(
+        self,
+        source: Iterable[Path | str | DocumentStream],  # TODO review naming
+        raises_on_error: bool = True,  # True: raises on first conversion error; False: does not raise on conv error
+        max_num_pages: int = sys.maxsize,
+        max_file_size: int = sys.maxsize,
     ) -> Iterable[ConversionResult]:
+        limits = DocumentLimits(
+            max_num_pages=max_num_pages,
+            max_file_size=max_file_size,
+        )
+        conv_input = _DocumentConversionInput(
+            path_or_stream_iterator=source,
+            limit=limits,
+        )
+        conv_res_iter = self._convert(conv_input)
+        for conv_res in conv_res_iter:
+            if raises_on_error and conv_res.status not in {
+                ConversionStatus.SUCCESS,
+                ConversionStatus.PARTIAL_SUCCESS,
+            }:
+                raise RuntimeError(
+                    f"Conversion failed for: {conv_res.input.file} with status: {conv_res.status}"
+                )
+            else:
+                yield conv_res
 
+    def _convert(
+        self, conv_input: _DocumentConversionInput
+    ) -> Iterable[ConversionResult]:
         for input_batch in chunkify(
-            input.docs(self.format_to_options),
+            conv_input.docs(self.format_to_options),
             settings.perf.doc_batch_size,  # pass format_options
         ):
             _log.info(f"Going to convert document batch...")
@@ -142,58 +172,6 @@ class DocumentConverter:
             for item in map(self.process_document, input_batch):
                 if item is not None:
                     yield item
-
-    def convert_single(
-        self, source: Path | AnyHttpUrl | str, raise_on_error: bool = False
-    ) -> ConversionResult:
-        """Convert a single document.
-
-        Args:
-            source (Path | AnyHttpUrl | str): The PDF input source. Can be a path or URL.
-
-        Raises:
-            ValueError: If source is of unexpected type.
-            RuntimeError: If conversion fails.
-
-        Returns:
-            ConversionResult: The conversion result object.
-        """
-        with tempfile.TemporaryDirectory() as temp_dir:
-            try:
-                http_url: AnyHttpUrl = TypeAdapter(AnyHttpUrl).validate_python(source)
-                res = requests.get(http_url, stream=True)
-                res.raise_for_status()
-                fname = None
-                # try to get filename from response header
-                if cont_disp := res.headers.get("Content-Disposition"):
-                    for par in cont_disp.strip().split(";"):
-                        # currently only handling directive "filename" (not "*filename")
-                        if (split := par.split("=")) and split[0].strip() == "filename":
-                            fname = "=".join(split[1:]).strip().strip("'\"") or None
-                            break
-                # otherwise, use name from URL:
-                if fname is None:
-                    fname = Path(http_url.path).name or self._default_download_filename
-                local_path = Path(temp_dir) / fname
-                with open(local_path, "wb") as f:
-                    for chunk in res.iter_content(chunk_size=1024):  # using 1-KB chunks
-                        f.write(chunk)
-            except ValidationError:
-                try:
-                    local_path = TypeAdapter(Path).validate_python(source)
-                except ValidationError:
-                    raise ValueError(
-                        f"Unexpected file path type encountered: {type(source)}"
-                    )
-            conv_inp = DocumentConversionInput.from_paths(paths=[local_path])
-            conv_res_iter = self.convert_batch(conv_inp)
-            conv_res: ConversionResult = next(conv_res_iter)
-        if conv_res.status not in {
-            ConversionStatus.SUCCESS,
-            ConversionStatus.PARTIAL_SUCCESS,
-        }:
-            raise RuntimeError(f"Conversion failed with status: {conv_res.status}")
-        return conv_res
 
     def _get_pipeline(self, doc: InputDocument) -> Optional[AbstractModelPipeline]:
         fopt = self.format_to_options.get(doc.format)

@@ -13,7 +13,7 @@ from docling_core.utils.file import resolve_file_source
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, InputFormat
-from docling.datamodel.document import ConversionResult, DocumentConversionInput
+from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     PdfPipelineOptions,
@@ -231,12 +231,9 @@ def convert(
         }
     )
 
-    # Define input files
-    input = DocumentConversionInput.from_paths(input_doc_paths)
-
     start_time = time.time()
 
-    conv_results = doc_converter.convert_batch(input)
+    conv_results = doc_converter.convert_all(input_doc_paths)
 
     output.mkdir(parents=True, exist_ok=True)
     export_documents(
