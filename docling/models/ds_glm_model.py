@@ -14,13 +14,15 @@ from docling_core.types import Ref
 from docling_core.types.experimental import BoundingBox, CoordOrigin
 from docling_core.types.experimental.document import DoclingDocument
 from PIL import ImageDraw
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from docling.datamodel.base_models import Cluster
 from docling.datamodel.document import ConversionResult
 
 
 class GlmOptions(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     create_legacy_output: bool = True
     model_names: str = ""  # e.g. "language;term;reference"
 

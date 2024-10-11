@@ -8,7 +8,6 @@ from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     OcrOptions,
     PdfPipelineOptions,
-    PipelineOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
 )
@@ -90,7 +89,7 @@ def test_e2e_conversions():
         for pdf_path in pdf_paths:
             print(f"converting {pdf_path}")
 
-            doc_result: ConversionResult = converter.convert_single(pdf_path)
+            doc_result: ConversionResult = converter.convert(pdf_path)
 
             # Save conversions
             # save_output(pdf_path, doc_result, None)

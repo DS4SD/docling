@@ -19,6 +19,7 @@ from docling_core.types.experimental import (
     DocItemLabel,
     DoclingDocument,
 )
+from docling_core.utils.file import resolve_file_source
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
@@ -162,8 +163,7 @@ class DocumentFormat(str, Enum):
     V1 = "v1"
 
 
-@deprecated("Use `ConversionResult` instead.")
-class ConvertedDocument(BaseModel):
+class ConversionResult(BaseModel):
     input: InputDocument
 
     status: ConversionStatus = ConversionStatus.PENDING  # failure, success
@@ -457,20 +457,16 @@ class ConvertedDocument(BaseModel):
                 yield element, cropped_im
 
 
-class ConversionResult(ConvertedDocument):
-    pass
+class _DocumentConversionInput(BaseModel):
 
-
-class DocumentConversionInput(BaseModel):
-
-    _path_or_stream_iterator: Iterable[Union[Path, DocumentStream]] = None
+    path_or_stream_iterator: Iterable[Union[Path, str, DocumentStream]]
     limits: Optional[DocumentLimits] = DocumentLimits()
 
     def docs(
         self, format_options: Dict[InputFormat, "FormatOption"]
     ) -> Iterable[InputDocument]:
-
-        for obj in self._path_or_stream_iterator:
+        for item in self.path_or_stream_iterator:
+            obj = resolve_file_source(item) if isinstance(item, str) else item
             format = self._guess_format(obj)
             if format not in format_options.keys():
                 _log.debug(
@@ -496,6 +492,8 @@ class DocumentConversionInput(BaseModel):
                     limits=self.limits,
                     backend=backend,
                 )
+            else:
+                raise RuntimeError(f"Unexpected obj type in iterator: {type(obj)}")
 
     def _guess_format(self, obj):
         content = None
@@ -531,21 +529,3 @@ class DocumentConversionInput(BaseModel):
             return "text/html"
 
         return None
-
-    @classmethod
-    def from_paths(cls, paths: Iterable[Path], limits: Optional[DocumentLimits] = None):
-        paths = [Path(p) for p in paths]
-
-        doc_input = cls(limits=limits)
-        doc_input._path_or_stream_iterator = paths
-
-        return doc_input
-
-    @classmethod
-    def from_streams(
-        cls, streams: Iterable[DocumentStream], limits: Optional[DocumentLimits] = None
-    ):
-        doc_input = cls(limits=limits)
-        doc_input._path_or_stream_iterator = streams
-
-        return doc_input
