@@ -3,7 +3,7 @@ import re
 from enum import Enum
 from io import BytesIO
 from pathlib import Path, PurePath
-from typing import Dict, Iterable, List, Optional, Tuple, Type, Union
+from typing import Dict, Iterable, List, Optional, Tuple, Union
 
 import filetype
 from docling_core.types import BaseText
@@ -23,10 +23,6 @@ from pydantic import BaseModel
 from typing_extensions import deprecated
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
-from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
-from docling.backend.html_backend import HTMLDocumentBackend
-from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
-from docling.backend.msword_backend import MsWordDocumentBackend
 from docling.datamodel.base_models import (
     AssembledUnit,
     ConversionStatus,
@@ -372,14 +368,20 @@ class ConvertedDocument(BaseModel):
         strict_text: bool = False,
         image_placeholder: str = "<!-- image -->",
     ) -> str:
-        return self.legacy_output.export_to_markdown(
-            delim=delim,
-            main_text_start=main_text_start,
-            main_text_stop=main_text_stop,
-            main_text_labels=main_text_labels,
-            strict_text=strict_text,
-            image_placeholder=image_placeholder,
-        )
+        if self.legacy_output is None:
+            raise RuntimeError(
+                "No legacy output was produced, can not export as markdown. "
+                "Please use output.export_to_markdown() instead."
+            )
+        else:
+            return self.legacy_output.export_to_markdown(
+                delim=delim,
+                main_text_start=main_text_start,
+                main_text_stop=main_text_stop,
+                main_text_labels=main_text_labels,
+                strict_text=strict_text,
+                image_placeholder=image_placeholder,
+            )
 
     @deprecated("Use output.export_to_text() instead.")
     def render_as_text(
@@ -394,13 +396,19 @@ class ConvertedDocument(BaseModel):
             "caption",
         ],
     ) -> str:
-        return self.legacy_output.export_to_markdown(
-            delim=delim,
-            main_text_start=main_text_start,
-            main_text_stop=main_text_stop,
-            main_text_labels=main_text_labels,
-            strict_text=True,
-        )
+        if self.legacy_output is None:
+            raise RuntimeError(
+                "No legacy output was produced, can not export as text. "
+                "Please use output.export_to_markdown() instead."
+            )
+        else:
+            return self.legacy_output.export_to_markdown(
+                delim=delim,
+                main_text_start=main_text_start,
+                main_text_stop=main_text_stop,
+                main_text_labels=main_text_labels,
+                strict_text=True,
+            )
 
     @deprecated("Use output.export_to_document_tokens() instead.")
     def render_as_doctags(
@@ -426,21 +434,27 @@ class ConvertedDocument(BaseModel):
         add_table_cell_label: bool = True,
         add_table_cell_text: bool = True,
     ) -> str:
-        return self.legacy_output.export_to_document_tokens(
-            delim=delim,
-            main_text_start=main_text_start,
-            main_text_stop=main_text_stop,
-            main_text_labels=main_text_labels,
-            xsize=xsize,
-            ysize=ysize,
-            add_location=add_location,
-            add_content=add_content,
-            add_page_index=add_page_index,
-            # table specific flags
-            add_table_cell_location=add_table_cell_location,
-            add_table_cell_label=add_table_cell_label,
-            add_table_cell_text=add_table_cell_text,
-        )
+        if self.legacy_output is None:
+            raise RuntimeError(
+                "No legacy output was produced, can not export as doctags. "
+                "Please use output.export_to_markdown() instead."
+            )
+        else:
+            return self.legacy_output.export_to_document_tokens(
+                delim=delim,
+                main_text_start=main_text_start,
+                main_text_stop=main_text_stop,
+                main_text_labels=main_text_labels,
+                xsize=xsize,
+                ysize=ysize,
+                add_location=add_location,
+                add_content=add_content,
+                add_page_index=add_page_index,
+                # table specific flags
+                add_table_cell_location=add_table_cell_location,
+                add_table_cell_label=add_table_cell_label,
+                add_table_cell_text=add_table_cell_text,
+            )
 
     def render_element_images(
         self, element_types: Tuple[PageElement] = (FigureElement,)

@@ -43,7 +43,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         try:
             self.pptx_obj = Presentation(self.path_or_stream)
             self.valid = True
-        except Exception:
+        except Exception as e:
             raise RuntimeError(
                 f"MsPowerpointDocumentBackend could not load document with hash {document_hash}"
             ) from e
@@ -134,6 +134,8 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             prov = self.generate_prov(shape, slide_ind, shape.text.strip())
 
             if is_a_list:
+                # TODO: determine if this is an unordered list or an ordered list.
+                #  Set GroupLabel.ORDERED_LIST when it fits.
                 new_list = doc.add_group(
                     label=GroupLabel.LIST, name=f"list", parent=parent_slide
                 )
@@ -157,9 +159,10 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                         e_is_a_list_item = True
                     else:
                         e_is_a_list_item = False
+
                     if e_is_a_list_item:
-                        doc.add_text(
-                            label=DocItemLabel.LIST_ITEM,
+                        # TODO: Set marker and enumerated arguments if this is an enumeration element.
+                        doc.add_list_item(
                             parent=new_list,
                             text=e.text.strip(),
                             prov=prov,

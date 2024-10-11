@@ -8,7 +8,6 @@ from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     OcrOptions,
     PdfPipelineOptions,
-    PipelineOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
 )

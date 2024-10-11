@@ -11,7 +11,6 @@ from pydantic import (
     ConfigDict,
     TypeAdapter,
     ValidationError,
-    field_validator,
     model_validator,
 )
 from typing_extensions import deprecated

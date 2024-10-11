@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 from typing import List
 
-from docling_core.types import BaseText
 from docling_core.types import Document as DsDocument
 from docling_core.types.experimental import DoclingDocument
 from pydantic import TypeAdapter

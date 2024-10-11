@@ -1,7 +1,4 @@
 import logging
-from typing import Iterable
-
-from docling_core.types.experimental import NodeItem
 
 from docling.backend.abstract_backend import (
     AbstractDocumentBackend,
@@ -9,7 +6,7 @@ from docling.backend.abstract_backend import (
 )
 from docling.datamodel.base_models import ConversionStatus
 from docling.datamodel.document import ConversionResult, InputDocument
-from docling.datamodel.pipeline_options import PdfPipelineOptions, PipelineOptions
+from docling.datamodel.pipeline_options import PipelineOptions
 from docling.pipeline.base_model_pipeline import AbstractModelPipeline
 
 _log = logging.getLogger(__name__)

@@ -6,13 +6,8 @@ from typing import Iterable
 
 from docling.datamodel.base_models import ConversionStatus, InputFormat
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
-from docling.datamodel.pipeline_options import (
-    PdfPipelineOptions,
-    TesseractCliOcrOptions,
-    TesseractOcrOptions,
-)
-from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
-from docling.pipeline.standard_pdf_model_pipeline import StandardPdfModelPipeline
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
 
 _log = logging.getLogger(__name__)
 
