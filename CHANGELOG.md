@@ -1,3 +1,9 @@
+## [v1.20.0](https://github.com/DS4SD/docling/releases/tag/v1.20.0) - 2024-10-11
+
+### Feature
+
+* New experimental docling-parse v2 backend ([#131](https://github.com/DS4SD/docling/issues/131)) ([`5e4944f`](https://github.com/DS4SD/docling/commit/5e4944f15f0ac1faf3e6a532c3e3ab4da56517a3))
+
 ## [v1.19.1](https://github.com/DS4SD/docling/releases/tag/v1.19.1) - 2024-10-11
 
 ### Fix
