@@ -203,8 +203,7 @@ class DoclingParseV2DocumentBackend(PdfDocumentBackend):
         super().__init__(path_or_stream, document_hash)
 
         self._pdoc = pdfium.PdfDocument(path_or_stream)
-        self.parser = pdf_parser_v2()
-        self.parser.set_loglevel(0)
+        self.parser = pdf_parser_v2("fatal")
 
         success = False
         if isinstance(path_or_stream, BytesIO):
