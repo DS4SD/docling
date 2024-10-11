@@ -61,7 +61,7 @@ class AbstractModelPipeline(ABC):
     def _enrich_document(
         self, in_doc: InputDocument, conv_res: ConversionResult
     ) -> ConversionResult:
-        pass
+        return conv_res
 
     @abstractmethod
     def _determine_status(
