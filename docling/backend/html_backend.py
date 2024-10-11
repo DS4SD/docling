@@ -21,7 +21,7 @@ _log = logging.getLogger(__name__)
 
 class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
-        print("About to init HTML backend...")
+        _log.debug("About to init HTML backend...")
         super().__init__(path_or_stream, document_hash)
         self.soup = None
         # HTML file:
@@ -36,16 +36,16 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
-                text_stream = byte_stream.getvalue().decode("utf-8")
-                print(text_stream)
+                text_stream = self.path_or_stream.getvalue().decode("utf-8")
                 self.soup = BeautifulSoup(text_stream, "html.parser")
             if isinstance(self.path_or_stream, Path):
                 with open(self.path_or_stream, "r", encoding="utf-8") as f:
                     html_content = f.read()
                     self.soup = BeautifulSoup(html_content, "html.parser")
         except Exception as e:
-            _log.error("could not parse html: {}".format(e))
-            return doc
+            raise RuntimeError(
+                f"Could not initialize HTML backend for file with hash {document_hash}."
+            ) from e
 
     def is_valid(self) -> bool:
         return True
@@ -66,7 +66,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def convert(self) -> DoclingDocument:
         # access self.path_or_stream to load stuff
         doc = DoclingDocument(description=DescriptionItem(), name="dummy")
-        print("Trying to convert HTML...")
+        _log.debug("Trying to convert HTML...")
         # Replace <br> tags with newline characters
         for br in self.soup.body.find_all("br"):
             br.replace_with("\n")
@@ -93,7 +93,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def analyse_element(self, element, idx, doc):
         """
         if element.name!=None:
-            print("\t"*self.level, idx, "\t", f"{element.name} ({self.level})")
+            _log.debug("\t"*self.level, idx, "\t", f"{element.name} ({self.level})")
         """
 
         if element.name in self.labels:
@@ -323,7 +323,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         doc.add_table(data=data, parent=self.parents[self.level])
 
-    def get_list_text(list_element, level=0):
+    def get_list_text(self, list_element, level=0):
         """Recursively extract text from <ul> or <ol> with proper indentation."""
         result = []
         bullet_char = "*"  # Default bullet character for unordered lists
@@ -335,7 +335,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 # Handle nested lists
                 nested_list = li.find(["ul", "ol"])
                 if nested_list:
-                    result.extend(get_list_text(nested_list, level + 1))
+                    result.extend(self.get_list_text(nested_list, level + 1))
         elif list_element.name == "ul":  # For unordered lists, use bullet points
             for li in list_element.find_all("li", recursive=False):
                 # Add bullet points for unordered lists
@@ -345,7 +345,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 # Handle nested lists
                 nested_list = li.find(["ul", "ol"])
                 if nested_list:
-                    result.extend(get_list_text(nested_list, level + 1))
+                    result.extend(self.get_list_text(nested_list, level + 1))
 
         return result
 

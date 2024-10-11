@@ -22,6 +22,8 @@ from docling.datamodel.document import ConversionResult
 class GlmModel:
     def __init__(self, config):
         self.config = config
+        self.create_legacy_output = config.get("create_legacy_output", True)
+
         self.model_names = self.config.get(
             "model_names", ""
         )  # "language;term;reference"
@@ -42,7 +44,10 @@ class GlmModel:
         )
 
         docling_doc: DoclingDocument = to_docling_document(glm_doc)  # Experimental
-        legacy_doc = DsLegacyDocument.model_validate(ds_doc_dict)
+        legacy_doc: DsLegacyDocument = None
+
+        if self.create_legacy_output:
+            legacy_doc = DsLegacyDocument.model_validate(ds_doc_dict)
 
         # DEBUG code:
         def draw_clusters_and_cells(ds_document, page_no):
@@ -92,4 +97,4 @@ class GlmModel:
         # draw_clusters_and_cells(ds_doc, 0)
         # draw_clusters_and_cells(exported_doc, 0)
 
-        return (legacy_doc, docling_doc)
+        return (docling_doc, legacy_doc)

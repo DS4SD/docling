@@ -238,7 +238,7 @@ class PyPdfiumDocumentBackend(PdfDocumentBackend):
             self._pdoc = pdfium.PdfDocument(path_or_stream)
         except PdfiumError as e:
             raise RuntimeError(
-                f"pypdfium could not load document {document_hash}"
+                f"pypdfium could not load document with hash {document_hash}"
             ) from e
 
     def page_count(self) -> int:

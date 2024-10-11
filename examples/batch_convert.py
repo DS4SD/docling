@@ -120,7 +120,7 @@ def main():
     ]
 
     # buf = BytesIO(Path("./test/data/2206.01062.pdf").open("rb").read())
-    # docs = [DocumentStream(filename="my_doc.pdf", stream=buf)]
+    # docs = [DocumentStream(name="my_doc.pdf", stream=buf)]
     # input = DocumentConversionInput.from_streams(docs)
 
     doc_converter = DocumentConverter()

@@ -203,7 +203,7 @@ class DoclingParseDocumentBackend(PdfDocumentBackend):
 
         if not success:
             raise RuntimeError(
-                f"docling-parse could not load document {document_hash}."
+                f"docling-parse could not load document with hash {document_hash}."
             )
 
     def page_count(self) -> int:
