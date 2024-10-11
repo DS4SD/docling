@@ -13,7 +13,7 @@ from docling.datamodel.pipeline_options import (
     TesseractOcrOptions,
 )
 from docling.models.base_ocr_model import BaseOcrModel
-from docling.models.ds_glm_model import GlmModel
+from docling.models.ds_glm_model import GlmModel, GlmOptions
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
 from docling.models.page_assemble_model import PageAssembleModel, PageAssembleOptions
@@ -42,7 +42,9 @@ class StandardPdfModelPipeline(PaginatedModelPipeline):
 
         self.artifacts_path = Path(artifacts_path)
         self.glm_model = GlmModel(
-            config={"create_legacy_output": pipeline_options.create_legacy_output}
+            options=GlmOptions(
+                create_legacy_output=pipeline_options.create_legacy_output
+            )
         )
 
         if ocr_model := self.get_ocr_model() is None:

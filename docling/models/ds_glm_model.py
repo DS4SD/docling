@@ -14,23 +14,24 @@ from docling_core.types import Ref
 from docling_core.types.experimental import BoundingBox, CoordOrigin
 from docling_core.types.experimental.document import DoclingDocument
 from PIL import ImageDraw
+from pydantic import BaseModel
 
 from docling.datamodel.base_models import Cluster
 from docling.datamodel.document import ConversionResult
 
 
-class GlmModel:
-    def __init__(self, config):
-        self.config = config
-        self.create_legacy_output = config.get("create_legacy_output", True)
+class GlmOptions(BaseModel):
+    create_legacy_output: bool = True
+    model_names: str = ""  # e.g. "language;term;reference"
 
-        self.model_names = self.config.get(
-            "model_names", ""
-        )  # "language;term;reference"
+
+class GlmModel:
+    def __init__(self, options: GlmOptions):
+        self.options = options
+        self.create_legacy_output = self.options.create_legacy_output
+
         load_pretrained_nlp_models()
-        # model = init_nlp_model(model_names="language;term;reference")
-        model = init_nlp_model(model_names=self.model_names)
-        self.model = model
+        self.model = init_nlp_model(model_names=self.options.model_names)
 
     def __call__(
         self, conv_res: ConversionResult
