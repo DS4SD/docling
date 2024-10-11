@@ -38,6 +38,7 @@ doc_converter = DocumentConverter(  # all of the below is optional, has internal
         InputFormat.PDF,
         # InputFormat.IMAGE,
         InputFormat.DOCX,
+        InputFormat.HTML,
     ],  # whitelist formats, other files are ignored.
     format_options={
         InputFormat.PDF: PdfFormatOption(

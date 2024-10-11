@@ -34,6 +34,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         # self.initialise(path_or_stream)
         # Word file:
         self.path_or_stream = path_or_stream
+        self.valid = False
         # Initialise the parents for the hierarchy
         self.max_levels = 10
         self.level_at_new_list = None
@@ -49,6 +50,15 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             "numids": [None],
             "indents": [None],
         }
+
+        self.docx_obj = None
+        try:
+            self.docx_obj = docx.Document(self.path_or_stream)
+            self.valid = True
+        except Exception as e:
+            raise RuntimeError(
+                f"MsPowerpointDocumentBackend could not load document with hash {document_hash}"
+            ) from e
 
     def is_valid(self) -> bool:
         return True
@@ -69,15 +79,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def convert(self) -> DoclingDocument:
         # Parses the DOCX into a structured document model.
         doc = DoclingDocument(description=DescriptionItem(), name="dummy")
-        docx_obj = None
-        try:
-            docx_obj = docx.Document(self.path_or_stream)
-        except Exception:
-            _log.error("could not parse docx")
-            return doc
 
         # self.initialise()
-        doc = self.walk_linear(docx_obj.element.body, docx_obj, doc)
+        doc = self.walk_linear(self.docx_obj.element.body, self.docx_obj, doc)
         return doc
 
     def update_history(self, name, level, numid, ilevel):

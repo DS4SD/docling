@@ -1,4 +1,5 @@
 import logging
+import re
 from enum import Enum
 from io import BytesIO
 from pathlib import Path, PurePath
@@ -497,18 +498,39 @@ class DocumentConversionInput(BaseModel):
                 )
 
     def _guess_format(self, obj):
+        content = None
         if isinstance(obj, Path):
             mime = filetype.guess_mime(str(obj))
-        elif isinstance(obj, DocumentStream):
-            mime = filetype.guess_mime(obj.stream.read(8192))
-        if mime is None:
-            # TODO improve this.
+            if mime is None:
+                with obj.open("rb") as f:
+                    content = f.read(1024)  # Read first 1KB
 
-            if obj.suffix == ".html":
-                mime = "text/html"
+        elif isinstance(obj, DocumentStream):
+            obj.stream.seek(0)
+            content = obj.stream.read(8192)
+            obj.stream.seek(0)
+            mime = filetype.guess_mime(content)
+
+        if mime is None:
+            mime = self._detect_html_xhtml(content)
 
         format = MimeTypeToFormat.get(mime)
         return format
+
+    def _detect_html_xhtml(self, content):
+        content_str = content.decode("ascii", errors="ignore").lower()
+        # Remove XML comments
+        content_str = re.sub(r"<!--(.*?)-->", "", content_str, flags=re.DOTALL)
+        content_str = content_str.lstrip()
+
+        if re.match(r"<\?xml", content_str):
+            if "xhtml" in content_str[:1000]:
+                return "application/xhtml+xml"
+
+        if re.match(r"<!doctype\s+html|<html|<head|<body", content_str):
+            return "text/html"
+
+        return None
 
     @classmethod
     def from_paths(cls, paths: Iterable[Path], limits: Optional[DocumentLimits] = None):

@@ -39,12 +39,14 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         self.path_or_stream = path_or_stream
 
         self.pptx_obj = None
-        self.valid = True
+        self.valid = False
         try:
             self.pptx_obj = Presentation(self.path_or_stream)
+            self.valid = True
         except Exception:
-            _log.error("could not parse pptx")
-            self.valid = False
+            raise RuntimeError(
+                f"MsPowerpointDocumentBackend could not load document with hash {document_hash}"
+            ) from e
 
         return
 
