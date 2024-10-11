@@ -21,56 +21,34 @@ input_paths = [
     Path("tests/data/word_sample.docx"),
     Path("tests/data/lorem_ipsum.docx"),
     Path("tests/data/powerpoint_sample.pptx"),
+    Path("tests/data/2305.03393v1-pg9-img.png"),
     Path("tests/data/2206.01062.pdf"),
-    # Path("tests/data/2305.03393v1-pg9-img.png"),
 ]
 
 ## for defaults use:
 # doc_converter = DocumentConverter()
 
 ## to customize use:
-doc_converter = DocumentConverter(  # all of the below is optional, has internal defaults.
-    allowed_formats=[
-        InputFormat.PDF,
-        # InputFormat.IMAGE,
-        InputFormat.DOCX,
-        InputFormat.HTML,
-        InputFormat.PPTX,
-    ],  # whitelist formats, other files are ignored.
-    format_options={
-        InputFormat.PDF: PdfFormatOption(
-            pipeline_cls=StandardPdfPipeline, backend=PyPdfiumDocumentBackend
-        ),  # PdfFormatOption(backend=PyPdfiumDocumentBackend),
-        InputFormat.DOCX: WordFormatOption(
-            pipeline_cls=SimplePipeline  # , backend=MsWordDocumentBackend
-        ),
-        # InputFormat.IMAGE: PdfFormatOption(),
-    },
-)
 
-doc_converter = DocumentConverter(  # all of the below is optional, has internal defaults.
-    pdf=None,
-    docx=WordFormatOption(
-        pipeline_cls=SimplePipeline  # , backend=MsWordDocumentBackend
-    ),
-    allowed_formats=[
-        InputFormat.PDF,
-        # InputFormat.IMAGE,
-        InputFormat.DOCX,
-        InputFormat.HTML,
-        InputFormat.PPTX,
-    ],  # whitelist formats, other files are ignored.
-    format_options={
-        InputFormat.PDF: PdfFormatOption(
-            pipeline_cls=StandardPdfPipeline, backend=PyPdfiumDocumentBackend
-        ),  # PdfFormatOption(backend=PyPdfiumDocumentBackend),
-        InputFormat.DOCX: WordFormatOption(
-            pipeline_cls=SimplePipeline  # , backend=MsWordDocumentBackend
-        ),
-        # InputFormat.IMAGE: PdfFormatOption(),
-    },
+doc_converter = (
+    DocumentConverter(  # all of the below is optional, has internal defaults.
+        allowed_formats=[
+            InputFormat.PDF,
+            InputFormat.IMAGE,
+            InputFormat.DOCX,
+            InputFormat.HTML,
+            InputFormat.PPTX,
+        ],  # whitelist formats, non-matching files are ignored.
+        format_options={
+            InputFormat.PDF: PdfFormatOption(
+                pipeline_cls=StandardPdfPipeline, backend=PyPdfiumDocumentBackend
+            ),
+            InputFormat.DOCX: WordFormatOption(
+                pipeline_cls=SimplePipeline  # , backend=MsWordDocumentBackend
+            ),
+        },
+    )
 )
-
 
 conv_results = doc_converter.convert_all(input_paths)
 

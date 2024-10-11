@@ -3,6 +3,7 @@ from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
 
+# from docling.datamodel.document import InputDocument
 from docling_core.types.experimental import DoclingDocument
 
 from docling.datamodel.base_models import InputFormat
@@ -10,9 +11,10 @@ from docling.datamodel.base_models import InputFormat
 
 class AbstractDocumentBackend(ABC):
     @abstractmethod
-    def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
+    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         self.path_or_stream = path_or_stream
-        self.document_hash = document_hash
+        self.document_hash = in_doc.document_hash
+        self.input_format = in_doc.format
 
     @abstractmethod
     def is_valid(self) -> bool:

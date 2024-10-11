@@ -1,11 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import Iterable, Optional, Set
+from io import BytesIO
+from typing import Iterable, Optional, Set, Union
 
+from docling_core.types.doc.doc_ocr import Path
 from docling_core.types.experimental import BoundingBox, Size
 from PIL import Image
 
 from docling.backend.abstract_backend import PaginatedDocumentBackend
 from docling.datamodel.base_models import Cell, InputFormat
+from docling.datamodel.document import InputDocument
 
 
 class PdfPageBackend(ABC):
@@ -42,6 +45,22 @@ class PdfPageBackend(ABC):
 
 
 class PdfDocumentBackend(PaginatedDocumentBackend):
+
+    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+        super().__init__(in_doc, path_or_stream)
+
+        if self.input_format is not InputFormat.PDF:
+            if self.input_format is InputFormat.IMAGE:
+                buf = BytesIO()
+                img = Image.open(self.path_or_stream)
+                img.save(buf, "PDF")
+                buf.seek(0)
+                self.path_or_stream = buf
+            else:
+                raise RuntimeError(
+                    f"Incompatible file format {self.input_format} was passed to a PdfDocumentBackend."
+                )
+
     @abstractmethod
     def load_page(self, page_no: int) -> PdfPageBackend:
         pass
