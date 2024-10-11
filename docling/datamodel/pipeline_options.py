@@ -72,19 +72,4 @@ class PdfPipelineOptions(PipelineOptions):
         Field(EasyOcrOptions(), discriminator="kind")
     )
 
-    keep_page_images: Annotated[
-        bool,
-        Field(
-            deprecated="`keep_page_images` is depreacted, set the value of `images_scale` instead"
-        ),
-    ] = False  # False: page images are removed in the assemble step
     images_scale: Optional[float] = None  # if set, the scale for generated images
-
-    @model_validator(mode="after")
-    def set_page_images_from_deprecated(self) -> "PdfPipelineOptions":
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", DeprecationWarning)
-            default_scale = 1.0
-            if self.keep_page_images and self.images_scale is None:
-                self.images_scale = default_scale
-        return self

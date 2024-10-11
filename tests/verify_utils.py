@@ -1,4 +1,5 @@
 import json
+import warnings
 from pathlib import Path
 from typing import List
 
@@ -235,8 +236,10 @@ def verify_conversion_result_v1(
 
     doc_pred_pages: List[Page] = doc_result.pages
     doc_pred: DsDocument = doc_result.legacy_output
-    doc_pred_md = doc_result.render_as_markdown()
-    doc_pred_dt = doc_result.render_as_doctags()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", DeprecationWarning)
+        doc_pred_md = doc_result.render_as_markdown()
+        doc_pred_dt = doc_result.render_as_doctags()
 
     engine_suffix = "" if ocr_engine is None else f".{ocr_engine}"
     gt_subpath = input_path.parent / "groundtruth" / "docling_v1" / input_path.name
