@@ -149,9 +149,7 @@ class InputDocument(BaseModel):
                 f"Please check your format configuration on DocumentConverter."
             )
 
-        self._backend = backend(
-            path_or_stream=path_or_stream, document_hash=self.document_hash
-        )
+        self._backend = backend(self, path_or_stream=path_or_stream)
 
 
 class DocumentFormat(str, Enum):

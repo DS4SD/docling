@@ -61,6 +61,11 @@ class PdfFormatOption(FormatOption):
     backend: Type[AbstractDocumentBackend] = DoclingParseDocumentBackend
 
 
+class ImageFormatOption(FormatOption):
+    pipeline_cls: Type = StandardPdfModelPipeline
+    backend: Type[AbstractDocumentBackend] = DoclingParseDocumentBackend
+
+
 _format_to_default_options = {
     InputFormat.DOCX: FormatOption(
         pipeline_cls=SimpleModelPipeline, backend=MsWordDocumentBackend

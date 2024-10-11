@@ -12,6 +12,7 @@ from pypdfium2 import PdfPage
 
 from docling.backend.pdf_backend import PdfDocumentBackend, PdfPageBackend
 from docling.datamodel.base_models import Cell
+from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
 
@@ -187,23 +188,25 @@ class DoclingParsePageBackend(PdfPageBackend):
 
 
 class DoclingParseDocumentBackend(PdfDocumentBackend):
-    def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
-        super().__init__(path_or_stream, document_hash)
+    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+        super().__init__(in_doc, path_or_stream)
 
-        self._pdoc = pdfium.PdfDocument(path_or_stream)
+        self._pdoc = pdfium.PdfDocument(self.path_or_stream)
         self.parser = pdf_parser()
 
         success = False
-        if isinstance(path_or_stream, BytesIO):
+        if isinstance(self.path_or_stream, BytesIO):
             success = self.parser.load_document_from_bytesio(
-                document_hash, path_or_stream
+                self.document_hash, self.path_or_stream
             )
-        elif isinstance(path_or_stream, Path):
-            success = self.parser.load_document(document_hash, str(path_or_stream))
+        elif isinstance(self.path_or_stream, Path):
+            success = self.parser.load_document(
+                self.document_hash, str(self.path_or_stream)
+            )
 
         if not success:
             raise RuntimeError(
-                f"docling-parse could not load document with hash {document_hash}."
+                f"docling-parse could not load document with hash {self.document_hash}."
             )
 
     def page_count(self) -> int:

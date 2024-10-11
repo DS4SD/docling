@@ -23,13 +23,14 @@ from docling.backend.abstract_backend import (
     PaginatedDocumentBackend,
 )
 from docling.datamodel.base_models import InputFormat
+from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
 
 
 class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBackend):
-    def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
-        super().__init__(path_or_stream, document_hash)
+    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+        super().__init__(in_doc, path_or_stream)
         self.namespaces = {
             "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
             "c": "http://schemas.openxmlformats.org/drawingml/2006/chart",
@@ -45,7 +46,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             self.valid = True
         except Exception as e:
             raise RuntimeError(
-                f"MsPowerpointDocumentBackend could not load document with hash {document_hash}"
+                f"MsPowerpointDocumentBackend could not load document with hash {self.document_hash}"
             ) from e
 
         return

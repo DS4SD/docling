@@ -232,13 +232,14 @@ class PyPdfiumPageBackend(PdfPageBackend):
 
 
 class PyPdfiumDocumentBackend(PdfDocumentBackend):
-    def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
-        super().__init__(path_or_stream, document_hash)
+    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+        super().__init__(in_doc, path_or_stream)
+
         try:
-            self._pdoc = pdfium.PdfDocument(path_or_stream)
+            self._pdoc = pdfium.PdfDocument(self.path_or_stream)
         except PdfiumError as e:
             raise RuntimeError(
-                f"pypdfium could not load document with hash {document_hash}"
+                f"pypdfium could not load document with hash {self.document_hash}"
             ) from e
 
     def page_count(self) -> int:

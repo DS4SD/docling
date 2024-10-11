@@ -17,20 +17,21 @@ from lxml import etree
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
+from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
 
 
 class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
-    def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
+    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+        super().__init__(in_doc, path_or_stream)
         self.XML_KEY = (
             "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val"
         )
         self.xml_namespaces = {
             "w": "http://schemas.microsoft.com/office/word/2003/wordml"
         }
-        super().__init__(path_or_stream, document_hash)
         # self.initialise(path_or_stream)
         # Word file:
         self.path_or_stream = path_or_stream

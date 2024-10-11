@@ -15,14 +15,15 @@ from docling_core.types.experimental.labels import DocItemLabel, GroupLabel
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
+from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
 
 
 class HTMLDocumentBackend(DeclarativeDocumentBackend):
-    def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
+    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+        super().__init__(in_doc, path_or_stream)
         _log.debug("About to init HTML backend...")
-        super().__init__(path_or_stream, document_hash)
         self.soup = None
         # HTML file:
         self.path_or_stream = path_or_stream
@@ -44,7 +45,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     self.soup = BeautifulSoup(html_content, "html.parser")
         except Exception as e:
             raise RuntimeError(
-                f"Could not initialize HTML backend for file with hash {document_hash}."
+                f"Could not initialize HTML backend for file with hash {self.document_hash}."
             ) from e
 
     def is_valid(self) -> bool:
