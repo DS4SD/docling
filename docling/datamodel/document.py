@@ -172,7 +172,7 @@ class ConvertedDocument(BaseModel):
     pages: List[Page] = []
     assembled: AssembledUnit = AssembledUnit()
 
-    legacy_output: DsDocument = _EMPTY_LEGACY_DOC
+    legacy_output: Optional[DsDocument] = None  # _EMPTY_LEGACY_DOC
     output: DoclingDocument = _EMPTY_DOCLING_DOC
 
     def _to_legacy_document(self) -> DsDocument:

@@ -37,7 +37,9 @@ class StandardPdfModelPipeline(PaginatedModelPipeline):
             artifacts_path = self.download_models_hf()
 
         self.artifacts_path = Path(artifacts_path)
-        self.glm_model = GlmModel(config={})
+        self.glm_model = GlmModel(
+            config={"create_legacy_output": pipeline_options.create_legacy_output}
+        )
 
         ocr_model: BaseOcrModel
         if isinstance(pipeline_options.ocr_options, EasyOcrOptions):
@@ -128,7 +130,7 @@ class StandardPdfModelPipeline(PaginatedModelPipeline):
             elements=all_elements, headers=all_headers, body=all_body
         )
 
-        conv_res.legacy_output, conv_res.output = self.glm_model(conv_res)
+        conv_res.output, conv_res.legacy_output = self.glm_model(conv_res)
 
         return conv_res
 

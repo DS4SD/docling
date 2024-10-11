@@ -1,3 +1,4 @@
+import json
 import logging
 from pathlib import Path
 
@@ -54,12 +55,15 @@ doc_converter = DocumentConverter(  # all of the below is optional, has internal
 conv_results = doc_converter.convert_batch(input)
 
 for res in conv_results:
-    out_path = Path("./scratch") / f"{res.input.file.name}.experimental.md"
+    out_path = Path("./scratch")
     print(
         f"Document {res.input.file.name} converted with status {res.status}."
         f"\nSaved markdown output to: {str(out_path)}"
     )
     # print(res.experimental.export_to_markdown())
     # Export Docling document format to markdown (experimental):
-    with out_path.open("w") as fp:
+    with (out_path / f"{res.input.file.name}.md").open("w") as fp:
         fp.write(res.output.export_to_markdown())
+
+    with (out_path / f"{res.input.file.name}.json").open("w") as fp:
+        fp.write(json.dumps(res.output.export_to_dict()))

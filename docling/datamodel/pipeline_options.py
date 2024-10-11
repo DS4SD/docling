@@ -59,7 +59,10 @@ class TesseractOcrOptions(OcrOptions):
     )
 
 
-class PipelineOptions(BaseModel): ...
+class PipelineOptions(BaseModel):
+    create_legacy_output: bool = (
+        True  # This defautl will be set to False on a future version of docling
+    )
 
 
 class PdfPipelineOptions(PipelineOptions):
