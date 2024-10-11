@@ -22,14 +22,9 @@ class SimpleModelPipeline(AbstractModelPipeline):
     def __init__(self, pipeline_options: PipelineOptions):
         super().__init__(pipeline_options)
 
-    def execute(self, in_doc: InputDocument) -> ConversionResult:
-        conv_res = ConversionResult(input=in_doc)
-
-        _log.info(f"Processing document {in_doc.file.name}")
-
-        if not in_doc.valid:
-            conv_res.status = ConversionStatus.FAILURE
-            return conv_res
+    def _build_document(
+        self, in_doc: InputDocument, conv_res: ConversionResult
+    ) -> ConversionResult:
 
         if not isinstance(in_doc._backend, DeclarativeDocumentBackend):
             raise RuntimeError(
@@ -45,24 +40,15 @@ class SimpleModelPipeline(AbstractModelPipeline):
         # a DoclingDocument straight.
 
         conv_res.output = in_doc._backend.convert()
-        # Do other stuff with conv_res.experimental
-
-        conv_res = self._assemble_document(in_doc, conv_res)
-
-        conv_res.status = ConversionStatus.SUCCESS
-
         return conv_res
 
-    # def _apply_on_elements(self, element_batch: Iterable[NodeItem]) -> Iterable[Any]:
-    #    for model in self.model_pipe:
-    #        element_batch = model(element_batch)
-    #
-    #    yield from element_batch
-
-    def _assemble_document(
+    def _determine_status(
         self, in_doc: InputDocument, conv_res: ConversionResult
-    ) -> ConversionResult:
-        return conv_res
+    ) -> ConversionStatus:
+        # This is called only if the previous steps didn't raise.
+        # Since we don't have anything else to evaluate, we can
+        # safely return SUCCESS.
+        return ConversionStatus.SUCCESS
 
     @classmethod
     def get_default_options(cls) -> PipelineOptions:
