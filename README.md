@@ -270,11 +270,12 @@ conv_input = DocumentConversionInput.from_paths(
 ### Convert from binary PDF streams
 
 You can convert PDFs from a binary stream instead of from the filesystem as follows:
+
 ```python
 buf = BytesIO(your_binary_stream)
 docs = [DocumentStream(filename="my_doc.pdf", stream=buf)]
 conv_input = DocumentConversionInput.from_streams(docs)
-results = doc_converter.convert(conv_input)
+results = doc_converter.convert_batch(conv_input)
 ```
 ### Limit resource usage
 

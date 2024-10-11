@@ -83,6 +83,10 @@ class StandardPdfModelPipeline(PaginatedModelPipeline):
             PageAssembleModel(config={"images_scale": pipeline_options.images_scale}),
         ]
 
+        self.enrichment_pipe = [
+            # Other models working on `NodeItem` elements in the DoclingDocument
+        ]
+
     @staticmethod
     def download_models_hf(
         local_dir: Optional[Path] = None, force: bool = False
@@ -104,7 +108,7 @@ class StandardPdfModelPipeline(PaginatedModelPipeline):
 
         return page
 
-    def assemble_document(
+    def _assemble_document(
         self, in_doc: InputDocument, conv_res: ConversionResult
     ) -> ConversionResult:
         all_elements = []

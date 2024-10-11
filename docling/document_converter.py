@@ -14,6 +14,7 @@ from pydantic import (
     field_validator,
     model_validator,
 )
+from typing_extensions import deprecated
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
@@ -28,7 +29,7 @@ from docling.datamodel.document import (
 )
 from docling.datamodel.pipeline_options import PipelineOptions
 from docling.datamodel.settings import settings
-from docling.pipeline.base_model_pipeline import BaseModelPipeline
+from docling.pipeline.base_model_pipeline import AbstractModelPipeline
 from docling.pipeline.simple_model_pipeline import SimpleModelPipeline
 from docling.pipeline.standard_pdf_model_pipeline import StandardPdfModelPipeline
 from docling.utils.utils import chunkify
@@ -37,7 +38,7 @@ _log = logging.getLogger(__name__)
 
 
 class FormatOption(BaseModel):
-    pipeline_cls: Type[BaseModelPipeline]
+    pipeline_cls: Type[AbstractModelPipeline]
     pipeline_options: Optional[PipelineOptions] = None
     backend: Type[AbstractDocumentBackend]
 
@@ -114,11 +115,17 @@ class DocumentConverter:
                 _log.info(f"Requested format {f} will use default options.")
                 self.format_to_options[f] = _format_to_default_options[f]
 
-        self.initialized_pipelines: Dict[Type[BaseModelPipeline], BaseModelPipeline] = (
-            {}
-        )
+        self.initialized_pipelines: Dict[
+            Type[AbstractModelPipeline], AbstractModelPipeline
+        ] = {}
 
+    @deprecated("Use convert_batch instead.")
     def convert(self, input: DocumentConversionInput) -> Iterable[ConversionResult]:
+        yield from self.convert_batch(input=input)
+
+    def convert_batch(
+        self, input: DocumentConversionInput, raise_on_error: bool = False
+    ) -> Iterable[ConversionResult]:
 
         for input_batch in chunkify(
             input.docs(self.format_to_options),
@@ -136,7 +143,9 @@ class DocumentConverter:
                 if item is not None:
                     yield item
 
-    def convert_single(self, source: Path | AnyHttpUrl | str) -> ConversionResult:
+    def convert_single(
+        self, source: Path | AnyHttpUrl | str, raise_on_error: bool = False
+    ) -> ConversionResult:
         """Convert a single document.
 
         Args:
@@ -177,7 +186,7 @@ class DocumentConverter:
                         f"Unexpected file path type encountered: {type(source)}"
                     )
             conv_inp = DocumentConversionInput.from_paths(paths=[local_path])
-            conv_res_iter = self.convert(conv_inp)
+            conv_res_iter = self.convert_batch(conv_inp)
             conv_res: ConversionResult = next(conv_res_iter)
         if conv_res.status not in {
             ConversionStatus.SUCCESS,
@@ -186,7 +195,7 @@ class DocumentConverter:
             raise RuntimeError(f"Conversion failed with status: {conv_res.status}")
         return conv_res
 
-    def _get_pipeline(self, doc: InputDocument) -> Optional[BaseModelPipeline]:
+    def _get_pipeline(self, doc: InputDocument) -> Optional[AbstractModelPipeline]:
         fopt = self.format_to_options.get(doc.format)
 
         if fopt is None:

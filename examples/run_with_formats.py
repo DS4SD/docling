@@ -50,7 +50,7 @@ doc_converter = DocumentConverter(  # all of the below is optional, has internal
     },
 )
 
-conv_results = doc_converter.convert(input)
+conv_results = doc_converter.convert_batch(input)
 
 for res in conv_results:
     out_path = Path("./scratch") / f"{res.input.file.name}.experimental.md"

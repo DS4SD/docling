@@ -39,17 +39,17 @@ def export_documents(
 
             # Export Text format:
             with (output_dir / f"{doc_filename}.txt").open("w", encoding="utf-8") as fp:
-                fp.write(conv_res.render_as_text_v1())
+                fp.write(conv_res.render_as_text())
 
             # Export Markdown format:
             with (output_dir / f"{doc_filename}.md").open("w", encoding="utf-8") as fp:
-                fp.write(conv_res.render_as_markdown_v1())
+                fp.write(conv_res.render_as_markdown())
 
             # Export Document Tags format:
             with (output_dir / f"{doc_filename}.doctags").open(
                 "w", encoding="utf-8"
             ) as fp:
-                fp.write(conv_res.render_as_doctags_v1())
+                fp.write(conv_res.render_as_doctags())
 
         else:
             _log.info(f"Document {conv_res.input.file} failed to convert.")
@@ -157,7 +157,7 @@ def main():
 
     start_time = time.time()
 
-    conv_results = doc_converter.convert(input)
+    conv_results = doc_converter.convert_batch(input)
     success_count, failure_count = export_documents(
         conv_results, output_dir=Path("./scratch")
     )

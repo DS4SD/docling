@@ -54,7 +54,7 @@ def test_batch_path(converter: DocumentConverter):
 
     conv_input = DocumentConversionInput.from_paths([pdf_path])
 
-    results = converter.convert(conv_input)
+    results = converter.convert_batch(conv_input)
     for doc_result in results:
         verify_conversion_result_v1(input_path=pdf_path, doc_result=doc_result)
         verify_conversion_result_v2(input_path=pdf_path, doc_result=doc_result)
@@ -69,7 +69,7 @@ def test_batch_bytes(converter: DocumentConverter):
     docs = [DocumentStream(name=pdf_path.name, stream=buf)]
     conv_input = DocumentConversionInput.from_streams(docs)
 
-    results = converter.convert(conv_input)
+    results = converter.convert_batch(conv_input)
     for doc_result in results:
         verify_conversion_result_v1(input_path=pdf_path, doc_result=doc_result)
         verify_conversion_result_v2(input_path=pdf_path, doc_result=doc_result)

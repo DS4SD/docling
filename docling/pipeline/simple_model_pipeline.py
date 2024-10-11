@@ -1,4 +1,7 @@
 import logging
+from typing import Iterable
+
+from docling_core.types.experimental import NodeItem
 
 from docling.backend.abstract_backend import (
     AbstractDocumentBackend,
@@ -7,19 +10,19 @@ from docling.backend.abstract_backend import (
 from docling.datamodel.base_models import ConversionStatus
 from docling.datamodel.document import ConversionResult, InputDocument
 from docling.datamodel.pipeline_options import PdfPipelineOptions, PipelineOptions
-from docling.pipeline.base_model_pipeline import BaseModelPipeline
+from docling.pipeline.base_model_pipeline import AbstractModelPipeline
 
 _log = logging.getLogger(__name__)
 
 
-class SimpleModelPipeline(BaseModelPipeline):
+class SimpleModelPipeline(AbstractModelPipeline):
     """SimpleModelPipeline.
 
     This class is used at the moment for formats / backends
     which produce straight DoclingDocument output.
     """
 
-    def __init__(self, pipeline_options: PdfPipelineOptions):
+    def __init__(self, pipeline_options: PipelineOptions):
         super().__init__(pipeline_options)
 
     def execute(self, in_doc: InputDocument) -> ConversionResult:
@@ -45,16 +48,21 @@ class SimpleModelPipeline(BaseModelPipeline):
         # a DoclingDocument straight.
 
         conv_res.output = in_doc._backend.convert()
-
         # Do other stuff with conv_res.experimental
 
-        conv_res = self.assemble_document(in_doc, conv_res)
+        conv_res = self._assemble_document(in_doc, conv_res)
 
         conv_res.status = ConversionStatus.SUCCESS
 
         return conv_res
 
-    def assemble_document(
+    # def _apply_on_elements(self, element_batch: Iterable[NodeItem]) -> Iterable[Any]:
+    #    for model in self.model_pipe:
+    #        element_batch = model(element_batch)
+    #
+    #    yield from element_batch
+
+    def _assemble_document(
         self, in_doc: InputDocument, conv_res: ConversionResult
     ) -> ConversionResult:
         return conv_res

@@ -94,21 +94,21 @@ def export_documents(
                 fname = output_dir / f"{doc_filename}.txt"
                 with fname.open("w") as fp:
                     _log.info(f"writing Text output to {fname}")
-                    fp.write(conv_res.render_as_text_v1())
+                    fp.write(conv_res.render_as_text())
 
             # Export Markdown format:
             if export_md:
                 fname = output_dir / f"{doc_filename}.md"
                 with fname.open("w") as fp:
                     _log.info(f"writing Markdown output to {fname}")
-                    fp.write(conv_res.render_as_markdown_v1())
+                    fp.write(conv_res.render_as_markdown())
 
             # Export Document Tags format:
             if export_doctags:
                 fname = output_dir / f"{doc_filename}.doctags"
                 with fname.open("w") as fp:
                     _log.info(f"writing Doc Tags output to {fname}")
-                    fp.write(conv_res.render_as_doctags_v1())
+                    fp.write(conv_res.render_as_doctags())
 
         else:
             _log.warning(f"Document {conv_res.input.file} failed to convert.")
@@ -236,7 +236,7 @@ def convert(
 
     start_time = time.time()
 
-    conv_results = doc_converter.convert(input)
+    conv_results = doc_converter.convert_batch(input)
 
     output.mkdir(parents=True, exist_ok=True)
     export_documents(

@@ -351,11 +351,11 @@ class ConvertedDocument(BaseModel):
         return ds_doc
 
     @deprecated("Use output.export_to_dict() instead.")
-    def render_as_dict_v1(self):
+    def render_as_dict(self):
         return self.legacy_output.model_dump(by_alias=True, exclude_none=True)
 
     @deprecated("Use output.export_to_markdown() instead.")
-    def render_as_markdown_v1(
+    def render_as_markdown(
         self,
         delim: str = "\n\n",
         main_text_start: int = 0,
@@ -381,7 +381,7 @@ class ConvertedDocument(BaseModel):
         )
 
     @deprecated("Use output.export_to_text() instead.")
-    def render_as_text_v1(
+    def render_as_text(
         self,
         delim: str = "\n\n",
         main_text_start: int = 0,
@@ -402,7 +402,7 @@ class ConvertedDocument(BaseModel):
         )
 
     @deprecated("Use output.export_to_document_tokens() instead.")
-    def render_as_doctags_v1(
+    def render_as_doctags(
         self,
         delim: str = "\n\n",
         main_text_start: int = 0,
@@ -501,11 +501,12 @@ class DocumentConversionInput(BaseModel):
             mime = filetype.guess_mime(str(obj))
         elif isinstance(obj, DocumentStream):
             mime = filetype.guess_mime(obj.stream.read(8192))
-        else:
-            1 == 1  # alert!!
         if mime is None:
+            # TODO improve this.
+
             if obj.suffix == ".html":
                 mime = "text/html"
+
         format = MimeTypeToFormat.get(mime)
         return format
 

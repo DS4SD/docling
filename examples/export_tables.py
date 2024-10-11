@@ -25,7 +25,7 @@ def main():
 
     start_time = time.time()
 
-    conv_results = doc_converter.convert(input_files)
+    conv_results = doc_converter.convert_batch(input_files)
 
     success_count = 0
     failure_count = 0

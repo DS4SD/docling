@@ -36,25 +36,25 @@ def export_documents(
                 with (output_dir / f"{doc_filename}.legacy.json").open(
                     "w", encoding="utf-8"
                 ) as fp:
-                    fp.write(json.dumps(conv_res.render_as_dict_v1()))
+                    fp.write(json.dumps(conv_res.render_as_dict()))
 
                 # Export Text format:
                 with (output_dir / f"{doc_filename}.legacy.txt").open(
                     "w", encoding="utf-8"
                 ) as fp:
-                    fp.write(conv_res.render_as_text_v1())
+                    fp.write(conv_res.render_as_text())
 
                 # Export Markdown format:
                 with (output_dir / f"{doc_filename}.legacy.md").open(
                     "w", encoding="utf-8"
                 ) as fp:
-                    fp.write(conv_res.render_as_markdown_v1())
+                    fp.write(conv_res.render_as_markdown())
 
                 # Export Document Tags format:
                 with (output_dir / f"{doc_filename}.legacy.doctags.txt").open(
                     "w", encoding="utf-8"
                 ) as fp:
-                    fp.write(conv_res.render_as_doctags_v1())
+                    fp.write(conv_res.render_as_doctags())
 
             if USE_V2:
                 # Export Docling document format to JSON (experimental):
@@ -129,7 +129,7 @@ def main():
 
     start_time = time.time()
 
-    conv_results = doc_converter.convert(input)
+    conv_results = doc_converter.convert_batch(input)
     success_count, partial_success_count, failure_count = export_documents(
         conv_results, output_dir=Path("./scratch")
     )

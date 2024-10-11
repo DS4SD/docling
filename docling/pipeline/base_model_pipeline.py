@@ -21,7 +21,7 @@ from docling.utils.utils import chunkify
 _log = logging.getLogger(__name__)
 
 
-class BaseModelPipeline(ABC):
+class AbstractModelPipeline(ABC):
     def __init__(self, pipeline_options: PipelineOptions):
         self.pipeline_options = pipeline_options
         self.model_pipe: List[Callable] = []
@@ -31,7 +31,7 @@ class BaseModelPipeline(ABC):
         pass
 
     @abstractmethod
-    def assemble_document(
+    def _assemble_document(
         self, in_doc: InputDocument, conv_res: ConversionResult
     ) -> ConversionResult:
         pass
@@ -47,9 +47,9 @@ class BaseModelPipeline(ABC):
         pass
 
 
-class PaginatedModelPipeline(BaseModelPipeline):  # TODO this is a bad name.
+class PaginatedModelPipeline(AbstractModelPipeline):  # TODO this is a bad name.
 
-    def apply_on_pages(self, page_batch: Iterable[Page]) -> Iterable[Page]:
+    def _apply_on_pages(self, page_batch: Iterable[Page]) -> Iterable[Page]:
         for model in self.model_pipe:
             page_batch = model(page_batch)
 
@@ -83,7 +83,7 @@ class PaginatedModelPipeline(BaseModelPipeline):  # TODO this is a bad name.
                 )
 
                 # 2. Run pipeline stages
-                pipeline_pages = self.apply_on_pages(init_pages)
+                pipeline_pages = self._apply_on_pages(init_pages)
 
                 for p in pipeline_pages:  # Must exhaust!
                     pass
@@ -91,7 +91,7 @@ class PaginatedModelPipeline(BaseModelPipeline):  # TODO this is a bad name.
                 end_pb_time = time.time() - start_pb_time
                 _log.info(f"Finished converting page batch time={end_pb_time:.3f}")
 
-            conv_res = self.assemble_document(in_doc, conv_res)
+            conv_res = self._assemble_document(in_doc, conv_res)
 
             status = ConversionStatus.SUCCESS
             for page in conv_res.pages:
