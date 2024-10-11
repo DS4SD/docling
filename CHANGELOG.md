@@ -1,3 +1,13 @@
+## [v1.19.1](https://github.com/DS4SD/docling/releases/tag/v1.19.1) - 2024-10-11
+
+### Fix
+
+* Remove stderr from tesseract cli and introduce fuzziness in the text validation of OCR tests ([#138](https://github.com/DS4SD/docling/issues/138)) ([`dae2a3b`](https://github.com/DS4SD/docling/commit/dae2a3b66732e1e135b00cce24226c7d9f2eb2e4))
+
+### Documentation
+
+* Simplify LlamaIndex example using Docling extension ([#135](https://github.com/DS4SD/docling/issues/135)) ([`5f1bd9e`](https://github.com/DS4SD/docling/commit/5f1bd9e9c8a19c667d1d587a557c3c36df494762))
+
 ## [v1.19.0](https://github.com/DS4SD/docling/releases/tag/v1.19.0) - 2024-10-08
 
 ### Feature

@@ -16,7 +16,7 @@ from docling.document_converter import DocumentConverter, PdfFormatOption
 
 from .verify_utils import verify_conversion_result_v1, verify_conversion_result_v2
 
-GENERATE = True
+GENERATE = False
 
 
 # Debug
@@ -107,5 +107,5 @@ def test_e2e_conversions():
                 input_path=pdf_path,
                 doc_result=doc_result,
                 generate=GENERATE,
-                skip_cells=True,
+                fuzzy=True,
             )
