@@ -100,7 +100,7 @@ def test_e2e_conversions():
                 input_path=pdf_path,
                 doc_result=doc_result,
                 generate=GENERATE,
-                skip_cells=True,
+                fuzzy=True,
             )
 
             verify_conversion_result_v2(
