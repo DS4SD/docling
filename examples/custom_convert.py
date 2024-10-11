@@ -12,7 +12,7 @@ from docling.datamodel.pipeline_options import (
     TesseractOcrOptions,
 )
 from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
-from docling.pipeline.standard_pdf_model_pipeline import StandardPdfModelPipeline
+from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
 
 _log = logging.getLogger(__name__)
 

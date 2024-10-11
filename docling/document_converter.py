@@ -19,16 +19,16 @@ from docling.datamodel.document import (
 )
 from docling.datamodel.pipeline_options import PipelineOptions
 from docling.datamodel.settings import DocumentLimits, settings
-from docling.pipeline.base_model_pipeline import AbstractModelPipeline
-from docling.pipeline.simple_model_pipeline import SimpleModelPipeline
-from docling.pipeline.standard_pdf_model_pipeline import StandardPdfModelPipeline
+from docling.pipeline.base_pipeline import AbstractPipeline
+from docling.pipeline.simple_pipeline import SimplePipeline
+from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
 from docling.utils.utils import chunkify
 
 _log = logging.getLogger(__name__)
 
 
 class FormatOption(BaseModel):
-    pipeline_cls: Type[AbstractModelPipeline]
+    pipeline_cls: Type[AbstractPipeline]
     pipeline_options: Optional[PipelineOptions] = None
     backend: Type[AbstractDocumentBackend]
 
@@ -42,40 +42,40 @@ class FormatOption(BaseModel):
 
 
 class WordFormatOption(FormatOption):
-    pipeline_cls: Type = SimpleModelPipeline
+    pipeline_cls: Type = SimplePipeline
     backend: Type[AbstractDocumentBackend] = MsWordDocumentBackend
 
 
 class PowerpointFormatOption(FormatOption):
-    pipeline_cls: Type = SimpleModelPipeline
+    pipeline_cls: Type = SimplePipeline
     backend: Type[AbstractDocumentBackend] = MsPowerpointDocumentBackend
 
 
 class HTMLFormatOption(FormatOption):
-    pipeline_cls: Type = SimpleModelPipeline
+    pipeline_cls: Type = SimplePipeline
     backend: Type[AbstractDocumentBackend] = HTMLDocumentBackend
 
 
 class PdfFormatOption(FormatOption):
-    pipeline_cls: Type = StandardPdfModelPipeline
+    pipeline_cls: Type = StandardPdfPipeline
     backend: Type[AbstractDocumentBackend] = DoclingParseDocumentBackend
 
 
 _format_to_default_options = {
     InputFormat.DOCX: FormatOption(
-        pipeline_cls=SimpleModelPipeline, backend=MsWordDocumentBackend
+        pipeline_cls=SimplePipeline, backend=MsWordDocumentBackend
     ),
     InputFormat.PPTX: FormatOption(
-        pipeline_cls=SimpleModelPipeline, backend=MsPowerpointDocumentBackend
+        pipeline_cls=SimplePipeline, backend=MsPowerpointDocumentBackend
     ),
     InputFormat.HTML: FormatOption(
-        pipeline_cls=SimpleModelPipeline, backend=HTMLDocumentBackend
+        pipeline_cls=SimplePipeline, backend=HTMLDocumentBackend
     ),
     InputFormat.IMAGE: FormatOption(
-        pipeline_cls=StandardPdfModelPipeline, backend=DoclingParseDocumentBackend
+        pipeline_cls=StandardPdfPipeline, backend=DoclingParseDocumentBackend
     ),
     InputFormat.PDF: FormatOption(
-        pipeline_cls=StandardPdfModelPipeline, backend=DoclingParseDocumentBackend
+        pipeline_cls=StandardPdfPipeline, backend=DoclingParseDocumentBackend
     ),
 }
 
@@ -85,29 +85,27 @@ class DocumentConverter:
 
     def __init__(
         self,
-        formats: Optional[List[InputFormat]] = None,
+        allowed_formats: Optional[List[InputFormat]] = None,
         format_options: Optional[Dict[InputFormat, FormatOption]] = None,
     ):
-        self.formats = formats
+        self.allowed_formats = allowed_formats
         self.format_to_options = format_options
 
-        if self.formats is None:
+        if self.allowed_formats is None:
             if self.format_to_options is not None:
-                self.formats = self.format_to_options.keys()
+                self.allowed_formats = self.format_to_options.keys()
             else:
-                self.formats = [e for e in InputFormat]  # all formats
+                self.allowed_formats = [e for e in InputFormat]  # all formats
 
         if self.format_to_options is None:
             self.format_to_options = _format_to_default_options
 
-        for f in self.formats:
+        for f in self.allowed_formats:
             if f not in self.format_to_options.keys():
                 _log.info(f"Requested format {f} will use default options.")
                 self.format_to_options[f] = _format_to_default_options[f]
 
-        self.initialized_pipelines: Dict[
-            Type[AbstractModelPipeline], AbstractModelPipeline
-        ] = {}
+        self.initialized_pipelines: Dict[Type[AbstractPipeline], AbstractPipeline] = {}
 
     @validate_call(config=ConfigDict(strict=True))
     def convert(
@@ -173,7 +171,7 @@ class DocumentConverter:
                 if item is not None:
                     yield item
 
-    def _get_pipeline(self, doc: InputDocument) -> Optional[AbstractModelPipeline]:
+    def _get_pipeline(self, doc: InputDocument) -> Optional[AbstractPipeline]:
         fopt = self.format_to_options.get(doc.format)
 
         if fopt is None:
@@ -194,7 +192,7 @@ class DocumentConverter:
         return self.initialized_pipelines[pipeline_class]
 
     def process_document(self, in_doc: InputDocument) -> ConversionResult:
-        if in_doc.format not in self.formats:
+        if in_doc.format not in self.allowed_formats:
             return None
         else:
             start_doc_time = time.time()

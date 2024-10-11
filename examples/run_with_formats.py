@@ -9,8 +9,8 @@ from docling.document_converter import (
     PdfFormatOption,
     WordFormatOption,
 )
-from docling.pipeline.simple_model_pipeline import SimpleModelPipeline
-from docling.pipeline.standard_pdf_model_pipeline import StandardPdfModelPipeline
+from docling.pipeline.simple_pipeline import SimplePipeline
+from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
 
 _log = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ input_paths = [
 
 ## to customize use:
 doc_converter = DocumentConverter(  # all of the below is optional, has internal defaults.
-    formats=[
+    allowed_formats=[
         InputFormat.PDF,
         # InputFormat.IMAGE,
         InputFormat.DOCX,
@@ -39,10 +39,10 @@ doc_converter = DocumentConverter(  # all of the below is optional, has internal
     ],  # whitelist formats, other files are ignored.
     format_options={
         InputFormat.PDF: PdfFormatOption(
-            pipeline_cls=StandardPdfModelPipeline, backend=PyPdfiumDocumentBackend
+            pipeline_cls=StandardPdfPipeline, backend=PyPdfiumDocumentBackend
         ),  # PdfFormatOption(backend=PyPdfiumDocumentBackend),
         InputFormat.DOCX: WordFormatOption(
-            pipeline_cls=SimpleModelPipeline  # , backend=MsWordDocumentBackend
+            pipeline_cls=SimplePipeline  # , backend=MsWordDocumentBackend
         ),
         # InputFormat.IMAGE: PdfFormatOption(),
     },
@@ -51,9 +51,9 @@ doc_converter = DocumentConverter(  # all of the below is optional, has internal
 doc_converter = DocumentConverter(  # all of the below is optional, has internal defaults.
     pdf=None,
     docx=WordFormatOption(
-        pipeline_cls=SimpleModelPipeline  # , backend=MsWordDocumentBackend
+        pipeline_cls=SimplePipeline  # , backend=MsWordDocumentBackend
     ),
-    formats=[
+    allowed_formats=[
         InputFormat.PDF,
         # InputFormat.IMAGE,
         InputFormat.DOCX,
@@ -62,10 +62,10 @@ doc_converter = DocumentConverter(  # all of the below is optional, has internal
     ],  # whitelist formats, other files are ignored.
     format_options={
         InputFormat.PDF: PdfFormatOption(
-            pipeline_cls=StandardPdfModelPipeline, backend=PyPdfiumDocumentBackend
+            pipeline_cls=StandardPdfPipeline, backend=PyPdfiumDocumentBackend
         ),  # PdfFormatOption(backend=PyPdfiumDocumentBackend),
         InputFormat.DOCX: WordFormatOption(
-            pipeline_cls=SimpleModelPipeline  # , backend=MsWordDocumentBackend
+            pipeline_cls=SimplePipeline  # , backend=MsWordDocumentBackend
         ),
         # InputFormat.IMAGE: PdfFormatOption(),
     },
