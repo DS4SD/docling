@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Optional
 
 from PIL import ImageDraw
 from pydantic import BaseModel
@@ -8,7 +8,7 @@ from docling.models.abstract_model import AbstractPageModel
 
 
 class PagePreprocessingOptions(BaseModel):
-    images_scale: float
+    images_scale: Optional[float]
 
 
 class PagePreprocessingModel(AbstractPageModel):

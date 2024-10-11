@@ -47,7 +47,7 @@ class StandardPdfModelPipeline(PaginatedModelPipeline):
             )
         )
 
-        if ocr_model := self.get_ocr_model() is None:
+        if (ocr_model := self.get_ocr_model()) is None:
             raise RuntimeError(
                 f"The specified OCR kind is not supported: {pipeline_options.ocr_options.kind}."
             )
