@@ -12,6 +12,42 @@ from docling.datamodel.base_models import ConversionStatus, Page
 from docling.datamodel.document import ConversionResult
 
 
+def levenshtein(str1: str, str2: str) -> int:
+
+    # Ensure str1 is the shorter string to optimize memory usage
+    if len(str1) > len(str2):
+        str1, str2 = str2, str1
+
+    # Previous and current row buffers
+    previous_row = list(range(len(str2) + 1))
+    current_row = [0] * (len(str2) + 1)
+
+    # Compute the Levenshtein distance row by row
+    for i, c1 in enumerate(str1, start=1):
+        current_row[0] = i
+        for j, c2 in enumerate(str2, start=1):
+            insertions = previous_row[j] + 1
+            deletions = current_row[j - 1] + 1
+            substitutions = previous_row[j - 1] + (c1 != c2)
+            current_row[j] = min(insertions, deletions, substitutions)
+        # Swap rows for the next iteration
+        previous_row, current_row = current_row, previous_row
+
+    # The result is in the last element of the previous row
+    return previous_row[-1]
+
+
+def verify_text(gt: str, pred: str, fuzzy: bool, fuzzy_threshold: float = 0.4):
+
+    if len(gt) == 0 or not fuzzy:
+        assert gt == pred, f"{gt}!={pred}"
+    else:
+        dist = levenshtein(gt, pred)
+        diff = dist / len(gt)
+        assert diff < fuzzy_threshold, f"{gt}!~{pred}"
+    return True
+
+
 def verify_cells(doc_pred_pages: List[Page], doc_true_pages: List[Page]):
 
     assert len(doc_pred_pages) == len(
@@ -33,7 +69,6 @@ def verify_cells(doc_pred_pages: List[Page], doc_true_pages: List[Page]):
 
             true_text = cell_true_item.text
             pred_text = cell_pred_item.text
-
             assert true_text == pred_text, f"{true_text}!={pred_text}"
 
             true_bbox = cell_true_item.bbox.as_tuple()
@@ -70,7 +105,7 @@ def verify_cells(doc_pred_pages: List[Page], doc_true_pages: List[Page]):
 #     return True
 
 
-def verify_tables_v1(doc_pred: DsDocument, doc_true: DsDocument):
+def verify_tables_v1(doc_pred: DsDocument, doc_true: DsDocument, fuzzy: bool):
     if doc_true.tables is None:
         # No tables to check
         assert doc_pred.tables is None, "not expecting any table on this document"
@@ -103,9 +138,9 @@ def verify_tables_v1(doc_pred: DsDocument, doc_true: DsDocument):
                 # print("pred: ", pred_item.data[i][j].text)
                 # print("")
 
-                assert (
-                    true_item.data[i][j].text == pred_item.data[i][j].text
-                ), "table-cell does not have the same text"
+                verify_text(
+                    true_item.data[i][j].text, pred_item.data[i][j].text, fuzzy=fuzzy
+                )
 
                 assert (
                     true_item.data[i][j].obj_type == pred_item.data[i][j].obj_type
@@ -114,7 +149,7 @@ def verify_tables_v1(doc_pred: DsDocument, doc_true: DsDocument):
     return True
 
 
-def verify_tables_v2(doc_pred: DoclingDocument, doc_true: DoclingDocument):
+def verify_tables_v2(doc_pred: DoclingDocument, doc_true: DoclingDocument, fuzzy: bool):
     if not len(doc_true.tables) > 0:
         # No tables to check
         assert len(doc_pred.tables) == 0, "not expecting any table on this document"
@@ -147,9 +182,11 @@ def verify_tables_v2(doc_pred: DoclingDocument, doc_true: DoclingDocument):
                 # print("pred: ", pred_item.data[i][j].text)
                 # print("")
 
-                assert (
-                    true_item.data.grid[i][j].text == pred_item.data.grid[i][j].text
-                ), "table-cell does not have the same text"
+                verify_text(
+                    true_item.data.grid[i][j].text,
+                    pred_item.data.grid[i][j].text,
+                    fuzzy=fuzzy,
+                )
 
                 assert (
                     true_item.data.grid[i][j].column_header
@@ -175,12 +212,12 @@ def verify_tables_v2(doc_pred: DoclingDocument, doc_true: DoclingDocument):
 #     return True
 
 
-def verify_md(doc_pred_md, doc_true_md):
-    return doc_pred_md == doc_true_md
+def verify_md(doc_pred_md: str, doc_true_md: str, fuzzy: bool):
+    return verify_text(doc_true_md, doc_pred_md, fuzzy)
 
 
-def verify_dt(doc_pred_dt, doc_true_dt):
-    return doc_pred_dt == doc_true_dt
+def verify_dt(doc_pred_dt: str, doc_true_dt: str, fuzzy: bool):
+    return verify_text(doc_true_dt, doc_pred_dt, fuzzy)
 
 
 def verify_conversion_result_v1(
@@ -188,7 +225,7 @@ def verify_conversion_result_v1(
     doc_result: ConversionResult,
     generate: bool = False,
     ocr_engine: str = None,
-    skip_cells: bool = False,
+    fuzzy: bool = False,
 ):
     PageList = TypeAdapter(List[Page])
 
@@ -233,7 +270,7 @@ def verify_conversion_result_v1(
         with open(dt_path, "r") as fr:
             doc_true_dt = fr.read()
 
-        if not skip_cells:
+        if not fuzzy:
             assert verify_cells(
                 doc_pred_pages, doc_true_pages
             ), f"Mismatch in PDF cell prediction for {input_path}"
@@ -243,15 +280,15 @@ def verify_conversion_result_v1(
         # ), f"Mismatch in JSON prediction for {input_path}"
 
         assert verify_tables_v1(
-            doc_pred, doc_true
+            doc_pred, doc_true, fuzzy=fuzzy
         ), f"verify_tables(doc_pred, doc_true) mismatch for {input_path}"
 
         assert verify_md(
-            doc_pred_md, doc_true_md
+            doc_pred_md, doc_true_md, fuzzy=fuzzy
         ), f"Mismatch in Markdown prediction for {input_path}"
 
         assert verify_dt(
-            doc_pred_dt, doc_true_dt
+            doc_pred_dt, doc_true_dt, fuzzy=fuzzy
         ), f"Mismatch in DocTags prediction for {input_path}"
 
 
@@ -260,7 +297,7 @@ def verify_conversion_result_v2(
     doc_result: ConversionResult,
     generate: bool = False,
     ocr_engine: str = None,
-    skip_cells: bool = False,
+    fuzzy: bool = False,
 ):
     PageList = TypeAdapter(List[Page])
 
@@ -305,7 +342,7 @@ def verify_conversion_result_v2(
         with open(dt_path, "r") as fr:
             doc_true_dt = fr.read()
 
-        if not skip_cells:
+        if not fuzzy:
             assert verify_cells(
                 doc_pred_pages, doc_true_pages
             ), f"Mismatch in PDF cell prediction for {input_path}"
@@ -315,13 +352,13 @@ def verify_conversion_result_v2(
         # ), f"Mismatch in JSON prediction for {input_path}"
 
         assert verify_tables_v2(
-            doc_pred, doc_true
+            doc_pred, doc_true, fuzzy=fuzzy
         ), f"verify_tables(doc_pred, doc_true) mismatch for {input_path}"
 
         assert verify_md(
-            doc_pred_md, doc_true_md
+            doc_pred_md, doc_true_md, fuzzy=fuzzy
         ), f"Mismatch in Markdown prediction for {input_path}"
 
         assert verify_dt(
-            doc_pred_dt, doc_true_dt
+            doc_pred_dt, doc_true_dt, fuzzy=fuzzy
         ), f"Mismatch in DocTags prediction for {input_path}"
