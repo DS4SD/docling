@@ -995,7 +995,7 @@ tqdm = ">=4.64.0,<5.0.0"
 
 [[package]]
 name = "docling-parse"
-version = "1.4.1"
+version = "1.5.1"
 description = "Simple package to extract text with coordinates from programmatic PDFs"
 optional = false
 python-versions = "^3.9"
@@ -1003,14 +1003,14 @@ files = []
 develop = false
 
 [package.dependencies]
-pywin32 = {version = "^306", markers = "sys_platform == \"win32\""}
+pywin32 = {version = ">=305", markers = "sys_platform == \"win32\""}
 tabulate = ">=0.9.0,<1.0.0"
 
 [package.source]
 type = "git"
 url = "ssh://git@github.com/DS4SD/docling-parse.git"
-reference = "82059f95f7bfc22043af8c25d43f47c92bc270df"
-resolved_reference = "82059f95f7bfc22043af8c25d43f47c92bc270df"
+reference = "5cbb4e48e6ff2a8596036a86096584156fdd4254"
+resolved_reference = "5cbb4e48e6ff2a8596036a86096584156fdd4254"
 
 [[package]]
 name = "docutils"
@@ -7153,4 +7153,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "a48554d524cdd47b36761d8cbeadc4770c208708e9f5aaa96b381e97ac564f92"
+content-hash = "3880a03a3165bc4a483aee5b2d6e7a120426b6339717643216dd8276937566b2"
