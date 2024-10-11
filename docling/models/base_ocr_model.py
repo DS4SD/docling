@@ -3,21 +3,21 @@ import logging
 from abc import abstractmethod
 from typing import Iterable, List, Tuple
 
-import numpy
 import numpy as np
 from PIL import Image, ImageDraw
 from rtree import index
 from scipy.ndimage import find_objects, label
 
 from docling.datamodel.base_models import BoundingBox, CoordOrigin, OcrCell, Page
+from docling.datamodel.pipeline_options import OcrOptions
 
 _log = logging.getLogger(__name__)
 
 
 class BaseOcrModel:
-    def __init__(self, config):
-        self.config = config
-        self.enabled = config["enabled"]
+    def __init__(self, enabled: bool, options: OcrOptions):
+        self.enabled = enabled
+        self.options = options
 
     # Computes the optimum amount and coordinates of rectangles to OCR on a given page
     def get_ocr_rects(self, page: Page) -> Tuple[bool, List[BoundingBox]]:

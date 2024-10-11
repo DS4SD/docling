@@ -14,7 +14,12 @@ from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import ConversionStatus
 from docling.datamodel.document import ConversionResult, DocumentConversionInput
-from docling.datamodel.pipeline_options import PipelineOptions
+from docling.datamodel.pipeline_options import (
+    EasyOcrOptions,
+    PipelineOptions,
+    TesseractCliOcrOptions,
+    TesseractOcrOptions,
+)
 from docling.document_converter import DocumentConverter
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
@@ -51,6 +56,13 @@ def version_callback(value: bool):
 class Backend(str, Enum):
     PYPDFIUM2 = "pypdfium2"
     DOCLING = "docling"
+
+
+# Define an enum for the ocr engines
+class OcrEngine(str, Enum):
+    EASYOCR = "easyocr"
+    TESSERACT_CLI = "tesseract_cli"
+    TESSERACT = "tesseract"
 
 
 def export_documents(
@@ -152,6 +164,9 @@ def convert(
     backend: Annotated[
         Backend, typer.Option(..., help="The PDF backend to use.")
     ] = Backend.DOCLING,
+    ocr_engine: Annotated[
+        OcrEngine, typer.Option(..., help="The OCR engine to use.")
+    ] = OcrEngine.EASYOCR,
     output: Annotated[
         Path, typer.Option(..., help="Output directory where results are saved.")
     ] = Path("."),
@@ -191,8 +206,19 @@ def convert(
         case _:
             raise RuntimeError(f"Unexpected backend type {backend}")
 
+    match ocr_engine:
+        case OcrEngine.EASYOCR:
+            ocr_options = EasyOcrOptions()
+        case OcrEngine.TESSERACT_CLI:
+            ocr_options = TesseractCliOcrOptions()
+        case OcrEngine.TESSERACT:
+            ocr_options = TesseractOcrOptions()
+        case _:
+            raise RuntimeError(f"Unexpected backend type {backend}")
+
     pipeline_options = PipelineOptions(
         do_ocr=ocr,
+        ocr_options=ocr_options,
         do_table_structure=True,
     )
     pipeline_options.table_structure_options.do_cell_matching = do_cell_matching

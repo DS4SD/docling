@@ -1,9 +1,17 @@
 from pathlib import Path
 
-from docling.datamodel.pipeline_options import PipelineOptions
+from docling.datamodel.pipeline_options import (
+    EasyOcrOptions,
+    PipelineOptions,
+    TesseractCliOcrOptions,
+    TesseractOcrOptions,
+)
+from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
 from docling.models.table_structure_model import TableStructureModel
+from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
+from docling.models.tesseract_ocr_model import TesseractOcrModel
 from docling.pipeline.base_model_pipeline import BaseModelPipeline
 
 
@@ -14,19 +22,38 @@ class StandardModelPipeline(BaseModelPipeline):
     def __init__(self, artifacts_path: Path, pipeline_options: PipelineOptions):
         super().__init__(artifacts_path, pipeline_options)
 
+        ocr_model: BaseOcrModel
+        if isinstance(pipeline_options.ocr_options, EasyOcrOptions):
+            ocr_model = EasyOcrModel(
+                enabled=pipeline_options.do_ocr,
+                options=pipeline_options.ocr_options,
+            )
+        elif isinstance(pipeline_options.ocr_options, TesseractCliOcrOptions):
+            ocr_model = TesseractOcrCliModel(
+                enabled=pipeline_options.do_ocr,
+                options=pipeline_options.ocr_options,
+            )
+        elif isinstance(pipeline_options.ocr_options, TesseractOcrOptions):
+            ocr_model = TesseractOcrModel(
+                enabled=pipeline_options.do_ocr,
+                options=pipeline_options.ocr_options,
+            )
+        else:
+            raise RuntimeError(
+                f"The specified OCR kind is not supported: {pipeline_options.ocr_options.kind}."
+            )
+
         self.model_pipe = [
-            EasyOcrModel(
-                config={
-                    "lang": ["fr", "de", "es", "en"],
-                    "enabled": pipeline_options.do_ocr,
-                }
-            ),
+            # OCR
+            ocr_model,
+            # Layout
             LayoutModel(
                 config={
                     "artifacts_path": artifacts_path
                     / StandardModelPipeline._layout_model_path
                 }
             ),
+            # Table structure
             TableStructureModel(
                 config={
                     "artifacts_path": artifacts_path
