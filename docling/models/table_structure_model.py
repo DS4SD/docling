@@ -10,19 +10,21 @@ from docling_ibm_models.tableformer.data_management.tf_predictor import TFPredic
 from PIL import ImageDraw
 
 from docling.datamodel.base_models import Page, Table, TableStructurePrediction
-from docling.datamodel.pipeline_options import TableFormerMode
+from docling.datamodel.pipeline_options import TableFormerMode, TableStructureOptions
 from docling.models.abstract_model import AbstractPageModel
 
 
 class TableStructureModel(AbstractPageModel):
-    def __init__(self, config):
-        self.config = config
-        self.do_cell_matching = config["do_cell_matching"]
-        self.mode = config["mode"]
+    def __init__(
+        self, enabled: bool, artifacts_path: Path, options: TableStructureOptions
+    ):
+        self.options = options
+        self.do_cell_matching = self.options.do_cell_matching
+        self.mode = self.options.mode
 
-        self.enabled = config["enabled"]
+        self.enabled = enabled
         if self.enabled:
-            artifacts_path: Path = config["artifacts_path"]
+            artifacts_path: Path = artifacts_path
 
             if self.mode == TableFormerMode.ACCURATE:
                 artifacts_path = artifacts_path / "fat"

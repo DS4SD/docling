@@ -13,11 +13,14 @@ from docling.datamodel.pipeline_options import (
     TesseractOcrOptions,
 )
 from docling.models.base_ocr_model import BaseOcrModel
-from docling.models.ds_glm_model import GlmModel
+from docling.models.ds_glm_model import GlmModel, GlmOptions
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
-from docling.models.page_assemble_model import PageAssembleModel
-from docling.models.page_preprocessing_model import PagePreprocessingModel
+from docling.models.page_assemble_model import PageAssembleModel, PageAssembleOptions
+from docling.models.page_preprocessing_model import (
+    PagePreprocessingModel,
+    PagePreprocessingOptions,
+)
 from docling.models.table_structure_model import TableStructureModel
 from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
 from docling.models.tesseract_ocr_model import TesseractOcrModel
@@ -32,57 +35,50 @@ class StandardPdfModelPipeline(PaginatedModelPipeline):
 
     def __init__(self, pipeline_options: PdfPipelineOptions):
         super().__init__(pipeline_options)
+        self.pipeline_options: PdfPipelineOptions
 
         if not pipeline_options.artifacts_path:
             artifacts_path = self.download_models_hf()
 
         self.artifacts_path = Path(artifacts_path)
         self.glm_model = GlmModel(
-            config={"create_legacy_output": pipeline_options.create_legacy_output}
+            options=GlmOptions(
+                create_legacy_output=pipeline_options.create_legacy_output
+            )
         )
 
-        ocr_model: BaseOcrModel
-        if isinstance(pipeline_options.ocr_options, EasyOcrOptions):
-            ocr_model = EasyOcrModel(
-                enabled=pipeline_options.do_ocr,
-                options=pipeline_options.ocr_options,
-            )
-        elif isinstance(pipeline_options.ocr_options, TesseractCliOcrOptions):
-            ocr_model = TesseractOcrCliModel(
-                enabled=pipeline_options.do_ocr,
-                options=pipeline_options.ocr_options,
-            )
-        elif isinstance(pipeline_options.ocr_options, TesseractOcrOptions):
-            ocr_model = TesseractOcrModel(
-                enabled=pipeline_options.do_ocr,
-                options=pipeline_options.ocr_options,
-            )
-        else:
+        if (ocr_model := self.get_ocr_model()) is None:
             raise RuntimeError(
                 f"The specified OCR kind is not supported: {pipeline_options.ocr_options.kind}."
             )
 
         self.model_pipe = [
+            # Pre-processing
             PagePreprocessingModel(
-                config={"images_scale": pipeline_options.images_scale}
+                options=PagePreprocessingOptions(
+                    images_scale=pipeline_options.images_scale
+                )
             ),
+            # OCR
             ocr_model,
+            # Layout model
             LayoutModel(
-                config={
-                    "artifacts_path": artifacts_path
-                    / StandardPdfModelPipeline._layout_model_path
-                }
+                artifacts_path=artifacts_path
+                / StandardPdfModelPipeline._layout_model_path
             ),
+            # Table structure model
             TableStructureModel(
-                config={
-                    "artifacts_path": artifacts_path
-                    / StandardPdfModelPipeline._table_model_path,
-                    "enabled": pipeline_options.do_table_structure,
-                    "do_cell_matching": pipeline_options.table_structure_options.do_cell_matching,
-                    "mode": pipeline_options.table_structure_options.mode,
-                }
+                enabled=pipeline_options.do_table_structure,
+                artifacts_path=artifacts_path
+                / StandardPdfModelPipeline._table_model_path,
+                options=pipeline_options.table_structure_options,
             ),
-            PageAssembleModel(config={"images_scale": pipeline_options.images_scale}),
+            # Page assemble
+            PageAssembleModel(
+                options=PageAssembleOptions(
+                    keep_images=pipeline_options.images_scale is not None
+                )
+            ),
         ]
 
         self.enrichment_pipe = [
@@ -103,6 +99,24 @@ class StandardPdfModelPipeline(PaginatedModelPipeline):
         )
 
         return Path(download_path)
+
+    def get_ocr_model(self) -> Optional[BaseOcrModel]:
+        if isinstance(self.pipeline_options.ocr_options, EasyOcrOptions):
+            return EasyOcrModel(
+                enabled=self.pipeline_options.do_ocr,
+                options=self.pipeline_options.ocr_options,
+            )
+        elif isinstance(self.pipeline_options.ocr_options, TesseractCliOcrOptions):
+            return TesseractOcrCliModel(
+                enabled=self.pipeline_options.do_ocr,
+                options=self.pipeline_options.ocr_options,
+            )
+        elif isinstance(self.pipeline_options.ocr_options, TesseractOcrOptions):
+            return TesseractOcrModel(
+                enabled=self.pipeline_options.do_ocr,
+                options=self.pipeline_options.ocr_options,
+            )
+        return None
 
     def initialize_page(self, doc: InputDocument, page: Page) -> Page:
         page._backend = doc._backend.load_page(page.page_no)

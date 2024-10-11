@@ -2,6 +2,7 @@ import copy
 import logging
 import random
 import time
+from pathlib import Path
 from typing import Iterable, List
 
 from docling_core.types.experimental import CoordOrigin
@@ -43,11 +44,8 @@ class LayoutModel(AbstractPageModel):
     FIGURE_LABEL = DocItemLabel.PICTURE
     FORMULA_LABEL = DocItemLabel.FORMULA
 
-    def __init__(self, config):
-        self.config = config
-        self.layout_predictor = LayoutPredictor(
-            config["artifacts_path"]
-        )  # TODO temporary
+    def __init__(self, artifacts_path: Path):
+        self.layout_predictor = LayoutPredictor(artifacts_path)  # TODO temporary
 
     def postprocess(self, clusters: List[Cluster], cells: List[Cell], page_height):
         MIN_INTERSECTION = 0.2

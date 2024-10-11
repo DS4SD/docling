@@ -48,7 +48,7 @@ def test_e2e_conversions():
     for pdf_path in pdf_paths:
         print(f"converting {pdf_path}")
 
-        doc_result: ConversionResult = converter.convert_single(pdf_path)
+        doc_result: ConversionResult = converter.convert(pdf_path)
 
         verify_conversion_result_v1(
             input_path=pdf_path, doc_result=doc_result, generate=GENERATE_V1

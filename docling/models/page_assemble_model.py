@@ -2,6 +2,8 @@ import logging
 import re
 from typing import Iterable, List
 
+from pydantic import BaseModel
+
 from docling.datamodel.base_models import (
     AssembledUnit,
     FigureElement,
@@ -16,9 +18,13 @@ from docling.models.layout_model import LayoutModel
 _log = logging.getLogger(__name__)
 
 
+class PageAssembleOptions(BaseModel):
+    keep_images: bool = False
+
+
 class PageAssembleModel(AbstractPageModel):
-    def __init__(self, config):
-        self.config = config
+    def __init__(self, options: PageAssembleOptions):
+        self.options = options
 
     def sanitize_text(self, lines):
         if len(lines) <= 1:
@@ -147,7 +153,7 @@ class PageAssembleModel(AbstractPageModel):
             )
 
             # Remove page images (can be disabled)
-            if self.config["images_scale"] is None:
+            if not self.options.keep_images:
                 page._image_cache = {}
 
             # Unload backend

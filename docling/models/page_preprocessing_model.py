@@ -1,14 +1,19 @@
-from typing import Iterable
+from typing import Iterable, Optional
 
 from PIL import ImageDraw
+from pydantic import BaseModel
 
 from docling.datamodel.base_models import Page
 from docling.models.abstract_model import AbstractPageModel
 
 
+class PagePreprocessingOptions(BaseModel):
+    images_scale: Optional[float]
+
+
 class PagePreprocessingModel(AbstractPageModel):
-    def __init__(self, config):
-        self.config = config
+    def __init__(self, options: PagePreprocessingOptions):
+        self.options = options
 
     def __call__(self, page_batch: Iterable[Page]) -> Iterable[Page]:
         for page in page_batch:
@@ -23,7 +28,7 @@ class PagePreprocessingModel(AbstractPageModel):
             scale=1.0
         )  # puts the page image on the image cache at default scale
 
-        images_scale = self.config["images_scale"]
+        images_scale = self.options.images_scale
         # user requested scales
         if images_scale is not None:
             page._default_image_scale = images_scale

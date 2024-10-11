@@ -4,7 +4,6 @@ from pathlib import Path
 
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import DocumentConversionInput
 from docling.document_converter import (
     DocumentConverter,
     PdfFormatOption,
@@ -25,7 +24,6 @@ input_paths = [
     Path("tests/data/2206.01062.pdf"),
     # Path("tests/data/2305.03393v1-pg9-img.png"),
 ]
-input = DocumentConversionInput.from_paths(input_paths)
 
 ## for defaults use:
 # doc_converter = DocumentConverter()
@@ -50,12 +48,36 @@ doc_converter = DocumentConverter(  # all of the below is optional, has internal
     },
 )
 
-conv_results = doc_converter.convert_batch(input)
+doc_converter = DocumentConverter(  # all of the below is optional, has internal defaults.
+    pdf=None,
+    docx=WordFormatOption(
+        pipeline_cls=SimpleModelPipeline  # , backend=MsWordDocumentBackend
+    ),
+    formats=[
+        InputFormat.PDF,
+        # InputFormat.IMAGE,
+        InputFormat.DOCX,
+        InputFormat.HTML,
+        InputFormat.PPTX,
+    ],  # whitelist formats, other files are ignored.
+    format_options={
+        InputFormat.PDF: PdfFormatOption(
+            pipeline_cls=StandardPdfModelPipeline, backend=PyPdfiumDocumentBackend
+        ),  # PdfFormatOption(backend=PyPdfiumDocumentBackend),
+        InputFormat.DOCX: WordFormatOption(
+            pipeline_cls=SimpleModelPipeline  # , backend=MsWordDocumentBackend
+        ),
+        # InputFormat.IMAGE: PdfFormatOption(),
+    },
+)
+
+
+conv_results = doc_converter.convert_all(input_paths)
 
 for res in conv_results:
     out_path = Path("./scratch")
     print(
-        f"Document {res.input.file.name} converted with status {res.status}."
+        f"Document {res.input.file.name} converted."
         f"\nSaved markdown output to: {str(out_path)}"
     )
     # print(res.experimental.export_to_markdown())

@@ -39,6 +39,6 @@ def test_e2e_conversions(test_doc_path):
     for converter in get_converters_with_table_options():
         print(f"converting {test_doc_path}")
 
-        doc_result: ConversionResult = converter.convert_single(test_doc_path)
+        doc_result: ConversionResult = converter.convert(test_doc_path)
 
         assert doc_result.status == ConversionStatus.SUCCESS
