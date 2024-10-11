@@ -1,7 +1,7 @@
 import io
 import logging
 import tempfile
-from subprocess import PIPE, Popen
+from subprocess import DEVNULL, PIPE, Popen
 from typing import Iterable, Tuple
 
 import pandas as pd
@@ -81,7 +81,7 @@ class TesseractOcrCliModel(BaseOcrModel):
         cmd += [ifilename, "stdout", "tsv"]
         _log.info("command: {}".format(" ".join(cmd)))
 
-        proc = Popen(cmd, stdout=PIPE)
+        proc = Popen(cmd, stdout=PIPE, stderr=DEVNULL)
         output, _ = proc.communicate()
 
         # _log.info(output)
