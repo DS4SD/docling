@@ -146,8 +146,8 @@ from docling.document_converter import DocumentConverter
 source = "https://arxiv.org/pdf/2408.09869"  # PDF path or URL
 converter = DocumentConverter()
 result = converter.convert_single(source)
-print(result.render_as_markdown_v1())  # output: "## Docling Technical Report[...]"
-print(result.render_as_doctags_v1())  # output: "<document><title><page_1><loc_20>..."
+print(result.output.export_to_markdown())  # output: "## Docling Technical Report[...]"
+print(result.output.export_to_document_tokens())  # output: "<document><title><page_1><loc_20>..."
 ```
 
 ### Convert a batch of documents
