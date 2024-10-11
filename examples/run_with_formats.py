@@ -2,13 +2,10 @@ import json
 import logging
 from pathlib import Path
 
-from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
-from docling.backend.msword_backend import MsWordDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.document_converter import (
     DocumentConverter,
-    FormatOption,
     PdfFormatOption,
     WordFormatOption,
 )
@@ -38,6 +35,7 @@ doc_converter = DocumentConverter(  # all of the below is optional, has internal
         # InputFormat.IMAGE,
         InputFormat.DOCX,
         InputFormat.HTML,
+        InputFormat.PPTX,
     ],  # whitelist formats, other files are ignored.
     format_options={
         InputFormat.PDF: PdfFormatOption(
@@ -49,6 +47,30 @@ doc_converter = DocumentConverter(  # all of the below is optional, has internal
         # InputFormat.IMAGE: PdfFormatOption(),
     },
 )
+
+doc_converter = DocumentConverter(  # all of the below is optional, has internal defaults.
+    pdf=None,
+    docx=WordFormatOption(
+        pipeline_cls=SimpleModelPipeline  # , backend=MsWordDocumentBackend
+    ),
+    formats=[
+        InputFormat.PDF,
+        # InputFormat.IMAGE,
+        InputFormat.DOCX,
+        InputFormat.HTML,
+        InputFormat.PPTX,
+    ],  # whitelist formats, other files are ignored.
+    format_options={
+        InputFormat.PDF: PdfFormatOption(
+            pipeline_cls=StandardPdfModelPipeline, backend=PyPdfiumDocumentBackend
+        ),  # PdfFormatOption(backend=PyPdfiumDocumentBackend),
+        InputFormat.DOCX: WordFormatOption(
+            pipeline_cls=SimpleModelPipeline  # , backend=MsWordDocumentBackend
+        ),
+        # InputFormat.IMAGE: PdfFormatOption(),
+    },
+)
+
 
 conv_results = doc_converter.convert_all(input_paths)
 

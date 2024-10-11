@@ -1,5 +1,5 @@
 import logging
-from io import BytesIO, TextIOWrapper
+from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
 
@@ -81,9 +81,10 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 try:
                     self.analyse_element(element, idx, doc)
                 except Exception as exc_child:
+
                     _log.error(" -> error treating child: ", exc_child)
                     _log.error(" => element: ", element, "\n")
-                    pass
+                    raise exc_child
 
         except Exception as exc:
             pass
@@ -212,10 +213,18 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def handle_list(self, element, idx, doc):
         """Handles list tags (ul, ol) and their list items."""
 
-        # create a list group
-        self.parents[self.level + 1] = doc.add_group(
-            parent=self.parents[self.level], name="list", label=GroupLabel.LIST
-        )
+        if element.name == "ul":
+            # create a list group
+            self.parents[self.level + 1] = doc.add_group(
+                parent=self.parents[self.level], name="list", label=GroupLabel.LIST
+            )
+        elif element.name == "ol":
+            # create a list group
+            self.parents[self.level + 1] = doc.add_group(
+                parent=self.parents[self.level],
+                name="ordered list",
+                label=GroupLabel.ORDERED_LIST,
+            )
         self.level += 1
 
         self.walk(element, doc)
@@ -226,13 +235,26 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def handle_listitem(self, element, idx, doc):
         """Handles listitem tags (li)."""
         nested_lists = element.find(["ul", "ol"])
+
+        parent_list_label = self.parents[self.level].label
+        index_in_list = len(self.parents[self.level].children) + 1
+
         if nested_lists:
             name = element.name
             text = self.get_direct_text(element)
 
+            marker = ""
+            enumerated = False
+            if parent_list_label == GroupLabel.ORDERED_LIST:
+                marker = str(index_in_list)
+                enumerated = True
+
             # create a list-item
-            self.parents[self.level + 1] = doc.add_text(
-                label=DocItemLabel.LIST_ITEM, text=text, parent=self.parents[self.level]
+            self.parents[self.level + 1] = doc.add_list_item(
+                text=text,
+                enumerated=enumerated,
+                marker=marker,
+                parent=self.parents[self.level],
             )
             self.level += 1
 
@@ -244,8 +266,16 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         elif isinstance(element.text, str):
             text = element.text.strip()
 
-            doc.add_text(
-                label=DocItemLabel.LIST_ITEM, text=text, parent=self.parents[self.level]
+            marker = ""
+            enumerated = False
+            if parent_list_label == GroupLabel.ORDERED_LIST:
+                marker = f"{str(index_in_list)}."
+                enumerated = True
+            doc.add_list_item(
+                text=text,
+                enumerated=enumerated,
+                marker=marker,
+                parent=self.parents[self.level],
             )
         else:
             _log.warn("list-item has no text: ", element)

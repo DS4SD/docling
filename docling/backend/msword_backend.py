@@ -312,9 +312,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 label=GroupLabel.LIST, name="list", parent=self.parents[level - 1]
             )
 
-            doc.add_text(
-                label=DocItemLabel.LIST_ITEM, parent=self.parents[level], text=text
-            )
+            # TODO: Set marker and enumerated arguments if this is an enumeration element.
+            doc.add_list_item(parent=self.parents[level], text=text)
 
         elif (
             self.prev_numid() == numid and self.prev_indent() < ilevel
@@ -323,12 +322,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 self.level_at_new_list + self.prev_indent() + 1,
                 self.level_at_new_list + ilevel + 1,
             ):
+                # TODO: determine if this is an unordered list or an ordered list.
+                #  Set GroupLabel.ORDERED_LIST when it fits.
                 self.parents[i] = doc.add_group(
                     label=GroupLabel.LIST, name="list", parent=self.parents[i - 1]
                 )
 
-            doc.add_text(
-                label=DocItemLabel.LIST_ITEM,
+            # TODO: Set marker and enumerated arguments if this is an enumeration element.
+            doc.add_list_item(
                 parent=self.parents[self.level_at_new_list + ilevel],
                 text=text,
             )
@@ -338,16 +339,15 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 if k > self.level_at_new_list + ilevel:
                     self.parents[k] = None
 
-            doc.add_text(
-                label=DocItemLabel.LIST_ITEM,
+            # TODO: Set marker and enumerated arguments if this is an enumeration element.
+            doc.add_list_item(
                 parent=self.parents[self.level_at_new_list + ilevel],
                 text=text,
             )
 
         elif self.prev_numid() == numid or self.prev_indent() == ilevel:
-            doc.add_text(
-                label=DocItemLabel.LIST_ITEM, parent=self.parents[level - 1], text=text
-            )
+            # TODO: Set marker and enumerated arguments if this is an enumeration element.
+            doc.add_list_item(parent=self.parents[level - 1], text=text)
         return
 
     def handle_tables(self, element, docx_obj, doc):
