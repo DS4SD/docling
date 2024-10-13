@@ -84,7 +84,10 @@ class StandardPdfPipeline(PaginatedPipeline):
 
         self.enrichment_pipe = [
             # Other models working on `NodeItem` elements in the DoclingDocument
-            # DummyPictureClassifierEnrichmentModel()
+            # TODO Question: should we use the enabled flag or simply not add the model in the list?
+            DummyPictureClassifierEnrichmentModel(
+                enabled=pipeline_options.do_dummy_picture_classifer
+            )
         ]
 
     @staticmethod

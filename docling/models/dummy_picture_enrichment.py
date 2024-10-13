@@ -10,12 +10,19 @@ from docling.models.base_model import BaseEnrichmentModel
 
 
 class DummyPictureClassifierEnrichmentModel(BaseEnrichmentModel):
+
+    def __init__(self, enabled: bool):
+        self.enabled = enabled
+
     def is_processable(self, doc: DoclingDocument, element: NodeItem) -> bool:
-        return isinstance(element, PictureItem)
+        return self.enabled and isinstance(element, PictureItem)
 
     def __call__(
         self, doc: DoclingDocument, element_batch: Iterable[NodeItem]
     ) -> Iterable[Any]:
+        if not self.enabled:
+            return
+
         for element in element_batch:
             assert isinstance(element, PictureItem)
             element.data.classification = PictureClassificationData(

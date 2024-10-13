@@ -64,6 +64,8 @@ class PipelineOptions(BaseModel):
         True  # This defautl will be set to False on a future version of docling
     )
 
+    do_dummy_picture_classifer: bool = False
+
 
 class PdfPipelineOptions(PipelineOptions):
     artifacts_path: Optional[Union[Path, str]] = None

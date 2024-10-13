@@ -58,6 +58,7 @@ def main():
     pipeline_options.do_ocr = False
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
+    pipeline_options.do_dummy_picture_classifer = True
 
     doc_converter = DocumentConverter(
         format_options={
