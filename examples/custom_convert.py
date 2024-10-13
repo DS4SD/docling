@@ -17,51 +17,6 @@ from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
 _log = logging.getLogger(__name__)
 
 
-def export_documents(
-    conv_results: Iterable[ConversionResult],
-    output_dir: Path,
-):
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    success_count = 0
-    failure_count = 0
-
-    for conv_res in conv_results:
-        if conv_res.status == ConversionStatus.SUCCESS:
-            success_count += 1
-            doc_filename = conv_res.input.file.stem
-
-            # Export Deep Search document JSON format:
-            with (output_dir / f"{doc_filename}.json").open(
-                "w", encoding="utf-8"
-            ) as fp:
-                fp.write(json.dumps(conv_res.render_as_dict()))
-
-            # Export Text format:
-            with (output_dir / f"{doc_filename}.txt").open("w", encoding="utf-8") as fp:
-                fp.write(conv_res.render_as_text())
-
-            # Export Markdown format:
-            with (output_dir / f"{doc_filename}.md").open("w", encoding="utf-8") as fp:
-                fp.write(conv_res.render_as_markdown())
-
-            # Export Document Tags format:
-            with (output_dir / f"{doc_filename}.doctags").open(
-                "w", encoding="utf-8"
-            ) as fp:
-                fp.write(conv_res.render_as_doctags())
-
-        else:
-            _log.info(f"Document {conv_res.input.file} failed to convert.")
-            failure_count += 1
-
-    _log.info(
-        f"Processed {success_count + failure_count} docs, of which {failure_count} failed"
-    )
-
-    return success_count, failure_count
-
-
 def main():
     logging.basicConfig(level=logging.INFO)
 
@@ -151,12 +106,31 @@ def main():
     ###########################################################################
 
     start_time = time.time()
-
     conv_result = doc_converter.convert(input_doc_path)
-
     end_time = time.time() - start_time
 
     _log.info(f"Document converted in {end_time:.2f} seconds.")
+
+    ## Export results
+    output_dir = Path("./scratch")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    doc_filename = conv_result.input.file.stem
+
+    # Export Deep Search document JSON format:
+    with (output_dir / f"{doc_filename}.json").open("w", encoding="utf-8") as fp:
+        fp.write(json.dumps(conv_result.output.export_to_dict()))
+
+    # Export Text format:
+    with (output_dir / f"{doc_filename}.txt").open("w", encoding="utf-8") as fp:
+        fp.write(conv_result.output.export_to_text())
+
+    # Export Markdown format:
+    with (output_dir / f"{doc_filename}.md").open("w", encoding="utf-8") as fp:
+        fp.write(conv_result.output.export_to_markdown())
+
+    # Export Document Tags format:
+    with (output_dir / f"{doc_filename}.doctags").open("w", encoding="utf-8") as fp:
+        fp.write(conv_result.output.export_to_document_tokens())
 
 
 if __name__ == "__main__":

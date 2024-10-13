@@ -5,6 +5,8 @@ import traceback
 from abc import ABC, abstractmethod
 from typing import Callable, Iterable, List
 
+from docling_core.types.experimental import DoclingDocument, NodeItem
+
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
 from docling.datamodel.base_models import (
@@ -16,18 +18,19 @@ from docling.datamodel.base_models import (
 from docling.datamodel.document import ConversionResult, InputDocument
 from docling.datamodel.pipeline_options import PipelineOptions
 from docling.datamodel.settings import settings
+from docling.models.base_model import BaseEnrichmentModel
 from docling.utils.utils import chunkify
 
 _log = logging.getLogger(__name__)
 
 
-class AbstractPipeline(ABC):
+class BasePipeline(ABC):
     def __init__(self, pipeline_options: PipelineOptions):
         self.pipeline_options = pipeline_options
         self.build_pipe: List[Callable] = []
-        self.enrichment_pipe: List[Callable] = []
+        self.enrichment_pipe: List[BaseEnrichmentModel] = []
 
-    def execute(self, in_doc: InputDocument) -> ConversionResult:
+    def execute(self, in_doc: InputDocument, raises_on_error: bool) -> ConversionResult:
         conv_res = ConversionResult(input=in_doc)
 
         _log.info(f"Processing document {in_doc.file.name}")
@@ -47,6 +50,8 @@ class AbstractPipeline(ABC):
             conv_res.status = self._determine_status(in_doc, conv_res)
         except Exception as e:
             conv_res.status = ConversionStatus.FAILURE
+            if raises_on_error:
+                raise e
 
         return conv_res
 
@@ -64,6 +69,26 @@ class AbstractPipeline(ABC):
     def _enrich_document(
         self, in_doc: InputDocument, conv_res: ConversionResult
     ) -> ConversionResult:
+
+        def _filter_elements(
+            doc: DoclingDocument, model: BaseEnrichmentModel
+        ) -> Iterable[NodeItem]:
+            for element, _level in doc.iterate_items():
+                if model.is_processable(doc=doc, element=element):
+                    yield element
+
+        for model in self.enrichment_pipe:
+            for element_batch in chunkify(
+                _filter_elements(conv_res.output, model),
+                settings.perf.elements_batch_size,
+            ):
+                # TODO: currently we assume the element itself is modified, because
+                # we don't have an interface to save the element back to the document
+                for element in model(
+                    doc=conv_res.output, element_batch=element_batch
+                ):  # Must exhaust!
+                    pass
+
         return conv_res
 
     @abstractmethod
@@ -89,7 +114,7 @@ class AbstractPipeline(ABC):
     #    yield from element_batch
 
 
-class PaginatedPipeline(AbstractPipeline):  # TODO this is a bad name.
+class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
 
     def _apply_on_pages(self, page_batch: Iterable[Page]) -> Iterable[Page]:
         for model in self.build_pipe:
@@ -139,7 +164,8 @@ class PaginatedPipeline(AbstractPipeline):  # TODO this is a bad name.
                 f"Encountered an error during conversion of document {in_doc.document_hash}:\n"
                 f"{trace}"
             )
-            # raise e  # TODO Debug, should not be here.
+            raise e
+
         finally:
             # Always unload the PDF backend, even in case of failure
             if in_doc._backend:

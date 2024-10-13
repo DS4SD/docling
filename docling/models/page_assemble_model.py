@@ -12,7 +12,7 @@ from docling.datamodel.base_models import (
     Table,
     TextElement,
 )
-from docling.models.abstract_model import AbstractPageModel
+from docling.models.base_model import BasePageModel
 from docling.models.layout_model import LayoutModel
 
 _log = logging.getLogger(__name__)
@@ -22,7 +22,7 @@ class PageAssembleOptions(BaseModel):
     keep_images: bool = False
 
 
-class PageAssembleModel(AbstractPageModel):
+class PageAssembleModel(BasePageModel):
     def __init__(self, options: PageAssembleOptions):
         self.options = options
 

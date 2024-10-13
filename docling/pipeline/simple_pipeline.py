@@ -7,12 +7,12 @@ from docling.backend.abstract_backend import (
 from docling.datamodel.base_models import ConversionStatus
 from docling.datamodel.document import ConversionResult, InputDocument
 from docling.datamodel.pipeline_options import PipelineOptions
-from docling.pipeline.base_pipeline import AbstractPipeline
+from docling.pipeline.base_pipeline import BasePipeline
 
 _log = logging.getLogger(__name__)
 
 
-class SimplePipeline(AbstractPipeline):
+class SimplePipeline(BasePipeline):
     """SimpleModelPipeline.
 
     This class is used at the moment for formats / backends

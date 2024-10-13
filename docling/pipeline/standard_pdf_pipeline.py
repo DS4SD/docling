@@ -14,6 +14,9 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.ds_glm_model import GlmModel, GlmOptions
+from docling.models.dummy_picture_enrichment import (
+    DummyPictureClassifierEnrichmentModel,
+)
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
 from docling.models.page_assemble_model import PageAssembleModel, PageAssembleOptions
@@ -81,6 +84,7 @@ class StandardPdfPipeline(PaginatedPipeline):
 
         self.enrichment_pipe = [
             # Other models working on `NodeItem` elements in the DoclingDocument
+            # DummyPictureClassifierEnrichmentModel()
         ]
 
     @staticmethod

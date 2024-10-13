@@ -4,14 +4,14 @@ from PIL import ImageDraw
 from pydantic import BaseModel
 
 from docling.datamodel.base_models import Page
-from docling.models.abstract_model import AbstractPageModel
+from docling.models.base_model import BasePageModel
 
 
 class PagePreprocessingOptions(BaseModel):
     images_scale: Optional[float]
 
 
-class PagePreprocessingModel(AbstractPageModel):
+class PagePreprocessingModel(BasePageModel):
     def __init__(self, options: PagePreprocessingOptions):
         self.options = options
 

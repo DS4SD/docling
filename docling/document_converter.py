@@ -1,6 +1,7 @@
 import logging
 import sys
 import time
+from functools import partial
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Type
 
@@ -19,7 +20,7 @@ from docling.datamodel.document import (
 )
 from docling.datamodel.pipeline_options import PipelineOptions
 from docling.datamodel.settings import DocumentLimits, settings
-from docling.pipeline.base_pipeline import AbstractPipeline
+from docling.pipeline.base_pipeline import BasePipeline
 from docling.pipeline.simple_pipeline import SimplePipeline
 from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
 from docling.utils.utils import chunkify
@@ -28,7 +29,7 @@ _log = logging.getLogger(__name__)
 
 
 class FormatOption(BaseModel):
-    pipeline_cls: Type[AbstractPipeline]
+    pipeline_cls: Type[BasePipeline]
     pipeline_options: Optional[PipelineOptions] = None
     backend: Type[AbstractDocumentBackend]
 
@@ -110,7 +111,7 @@ class DocumentConverter:
                 _log.info(f"Requested format {f} will use default options.")
                 self.format_to_options[f] = _format_to_default_options[f]
 
-        self.initialized_pipelines: Dict[Type[AbstractPipeline], AbstractPipeline] = {}
+        self.initialized_pipelines: Dict[Type[BasePipeline], BasePipeline] = {}
 
     @validate_call(config=ConfigDict(strict=True))
     def convert(
@@ -145,7 +146,7 @@ class DocumentConverter:
             path_or_stream_iterator=source,
             limit=limits,
         )
-        conv_res_iter = self._convert(conv_input)
+        conv_res_iter = self._convert(conv_input, raises_on_error=raises_on_error)
         for conv_res in conv_res_iter:
             if raises_on_error and conv_res.status not in {
                 ConversionStatus.SUCCESS,
@@ -158,7 +159,7 @@ class DocumentConverter:
                 yield conv_res
 
     def _convert(
-        self, conv_input: _DocumentConversionInput
+        self, conv_input: _DocumentConversionInput, raises_on_error: bool
     ) -> Iterable[ConversionResult]:
         for input_batch in chunkify(
             conv_input.docs(self.format_to_options),
@@ -172,11 +173,14 @@ class DocumentConverter:
             #   yield from pool.map(self.process_document, input_batch)
 
             # Note: PDF backends are not thread-safe, thread pool usage was disabled.
-            for item in map(self.process_document, input_batch):
+            for item in map(
+                partial(self.process_document, raises_on_error=raises_on_error),
+                input_batch,
+            ):
                 if item is not None:
                     yield item
 
-    def _get_pipeline(self, doc: InputDocument) -> Optional[AbstractPipeline]:
+    def _get_pipeline(self, doc: InputDocument) -> Optional[BasePipeline]:
         fopt = self.format_to_options.get(doc.format)
 
         if fopt is None:
@@ -196,20 +200,24 @@ class DocumentConverter:
             )
         return self.initialized_pipelines[pipeline_class]
 
-    def process_document(self, in_doc: InputDocument) -> ConversionResult:
+    def process_document(
+        self, in_doc: InputDocument, raises_on_error: bool
+    ) -> ConversionResult:
         if in_doc.format not in self.allowed_formats:
             return None
         else:
             start_doc_time = time.time()
 
-            conv_res = self._execute_pipeline(in_doc)
+            conv_res = self._execute_pipeline(in_doc, raises_on_error=raises_on_error)
 
             end_doc_time = time.time() - start_doc_time
             _log.info(f"Finished converting document in {end_doc_time:.2f} seconds.")
 
             return conv_res
 
-    def _execute_pipeline(self, in_doc: InputDocument) -> Optional[ConversionResult]:
+    def _execute_pipeline(
+        self, in_doc: InputDocument, raises_on_error: bool
+    ) -> Optional[ConversionResult]:
         if in_doc.valid:
             pipeline = self._get_pipeline(in_doc)
             if pipeline is None:  # Can't find a default pipeline. Should this raise?
@@ -217,7 +225,7 @@ class DocumentConverter:
                 conv_res.status = ConversionStatus.FAILURE
                 return conv_res
 
-            conv_res = pipeline.execute(in_doc)
+            conv_res = pipeline.execute(in_doc, raises_on_error=raises_on_error)
 
         else:
             # invalid doc or not of desired format

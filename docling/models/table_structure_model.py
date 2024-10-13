@@ -11,10 +11,10 @@ from PIL import ImageDraw
 
 from docling.datamodel.base_models import Page, Table, TableStructurePrediction
 from docling.datamodel.pipeline_options import TableFormerMode, TableStructureOptions
-from docling.models.abstract_model import AbstractPageModel
+from docling.models.base_model import BasePageModel
 
 
-class TableStructureModel(AbstractPageModel):
+class TableStructureModel(BasePageModel):
     def __init__(
         self, enabled: bool, artifacts_path: Path, options: TableStructureOptions
     ):
