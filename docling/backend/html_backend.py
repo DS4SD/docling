@@ -5,10 +5,10 @@ from typing import Set, Union
 
 from bs4 import BeautifulSoup
 from docling_core.types.experimental import (
-    BasePictureData,
     BaseTableData,
     DescriptionItem,
     DoclingDocument,
+    PictureData,
     TableCell,
 )
 from docling_core.types.experimental.labels import DocItemLabel, GroupLabel
@@ -400,7 +400,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         contains_captions = element.find(["figcaption"])
         if contains_captions is None:
             doc.add_picture(
-                data=BasePictureData(), parent=self.parents[self.level], caption=None
+                data=PictureData(), parent=self.parents[self.level], caption=None
             )
 
         else:
@@ -412,7 +412,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 label=DocItemLabel.CAPTION, text=("".join(texts)).strip()
             )
             doc.add_picture(
-                data=BasePictureData(),
+                data=PictureData(),
                 parent=self.parents[self.level],
                 caption=fig_caption,
             )
@@ -420,5 +420,5 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def handle_image(self, element, idx, doc):
         """Handles image tags (img)."""
         doc.add_picture(
-            data=BasePictureData(), parent=self.parents[self.level], caption=None
+            data=PictureData(), parent=self.parents[self.level], caption=None
         )

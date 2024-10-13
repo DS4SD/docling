@@ -1,13 +1,12 @@
 from typing import Any, Iterable
 
 from docling_core.types.experimental import DoclingDocument, NodeItem
-from docling_core.types.experimental.document import BasePictureData, PictureItem
+from docling_core.types.experimental.document import (
+    PictureClassificationData,
+    PictureItem,
+)
 
 from docling.models.base_model import BaseEnrichmentModel
-
-
-class DummyPictureData(BasePictureData):
-    hello: str
 
 
 class DummyPictureClassifierEnrichmentModel(BaseEnrichmentModel):
@@ -19,6 +18,10 @@ class DummyPictureClassifierEnrichmentModel(BaseEnrichmentModel):
     ) -> Iterable[Any]:
         for element in element_batch:
             assert isinstance(element, PictureItem)
-            element.data = DummyPictureData(hello="world")
+            element.data.classification = PictureClassificationData(
+                provenance="dummy_classifier-0.0.1",
+                predicted_class="dummy",
+                confidence=0.42,
+            )
 
             yield element

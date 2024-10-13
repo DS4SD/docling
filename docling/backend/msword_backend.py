@@ -5,12 +5,12 @@ from typing import Set, Union
 
 import docx
 from docling_core.types.experimental import (
-    BasePictureData,
     BaseTableData,
     DescriptionItem,
     DocItemLabel,
     DoclingDocument,
     GroupLabel,
+    PictureData,
     TableCell,
 )
 from lxml import etree
@@ -419,6 +419,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
     def handle_pictures(self, element, docx_obj, doc):
         doc.add_picture(
-            data=BasePictureData(), parent=self.parents[self.level], caption=None
+            data=PictureData(), parent=self.parents[self.level], caption=None
         )
         return

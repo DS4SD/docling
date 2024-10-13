@@ -4,13 +4,13 @@ from pathlib import Path
 from typing import Set, Union
 
 from docling_core.types.experimental import (
-    BasePictureData,
     BaseTableData,
     DescriptionItem,
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
+    PictureData,
     ProvenanceItem,
     TableCell,
 )
@@ -204,7 +204,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         # shape has picture
         prov = self.generate_prov(shape, slide_ind, "")
         doc.add_picture(
-            data=BasePictureData(), parent=parent_slide, caption=None, prov=prov
+            data=PictureData(), parent=parent_slide, caption=None, prov=prov
         )
         return
 

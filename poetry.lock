@@ -885,7 +885,7 @@ files = []
 develop = false
 
 [package.dependencies]
-docling-core = {git = "https://github.com/DS4SD/docling-core.git", rev = "baceeaeaa690a12f717918d17336fcbfe414cbb8"}
+docling-core = {git = "https://github.com/DS4SD/docling-core.git", rev = "8223654d87631ec61b9ec3570728e878d85d2ecf"}
 docutils = "!=0.21"
 matplotlib = "^3.7.1"
 networkx = "^3.1"
@@ -909,8 +909,8 @@ toolkit = ["deepsearch-toolkit (>=0.31.0)"]
 [package.source]
 type = "git"
 url = "https://github.com/DS4SD/deepsearch-glm.git"
-reference = "af4557df1500d15f82a0e0c9d2a3b64afc3e6ac1"
-resolved_reference = "af4557df1500d15f82a0e0c9d2a3b64afc3e6ac1"
+reference = "53874bd5c39bb3fe389663992b3efd3fedaf5697"
+resolved_reference = "53874bd5c39bb3fe389663992b3efd3fedaf5697"
 
 [[package]]
 name = "dill"
@@ -958,8 +958,8 @@ tabulate = "^0.9.0"
 [package.source]
 type = "git"
 url = "https://github.com/DS4SD/docling-core.git"
-reference = "baceeaeaa690a12f717918d17336fcbfe414cbb8"
-resolved_reference = "baceeaeaa690a12f717918d17336fcbfe414cbb8"
+reference = "8223654d87631ec61b9ec3570728e878d85d2ecf"
+resolved_reference = "8223654d87631ec61b9ec3570728e878d85d2ecf"
 
 [[package]]
 name = "docling-ibm-models"
@@ -3440,9 +3440,9 @@ files = [
 [package.dependencies]
 numpy = [
     {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
-    {version = ">=1.23.5", markers = "python_version >= \"3.11\" and python_version < \"3.12\""},
     {version = ">=1.21.4", markers = "python_version >= \"3.10\" and platform_system == \"Darwin\" and python_version < \"3.11\""},
     {version = ">=1.21.2", markers = "platform_system != \"Darwin\" and python_version >= \"3.10\" and python_version < \"3.11\""},
+    {version = ">=1.23.5", markers = "python_version >= \"3.11\" and python_version < \"3.12\""},
 ]
 
 [[package]]
@@ -3576,8 +3576,8 @@ files = [
 [package.dependencies]
 numpy = [
     {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
-    {version = ">=1.23.2", markers = "python_version == \"3.11\""},
     {version = ">=1.22.4", markers = "python_version < \"3.11\""},
+    {version = ">=1.23.2", markers = "python_version == \"3.11\""},
 ]
 python-dateutil = ">=2.8.2"
 pytz = ">=2020.1"
@@ -7107,4 +7107,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "76695cfbcb87589dc2d8bc05b42969d558962122a9375e62ce68eed39cb0e634"
+content-hash = "d09e865ced8e4de077898f499cfd6e487b655e25ac2fe34b2159d91cb85b5238"
