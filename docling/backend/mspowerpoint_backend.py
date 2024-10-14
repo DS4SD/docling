@@ -109,7 +109,9 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
 
     def handle_text_elements(self, shape, parent_slide, slide_ind, doc):
         is_a_list = False
+        enum_list_item_value = 0
         for paragraph in shape.text_frame.paragraphs:
+            enum_list_item_value += 1
             bullet_type = "None"
             # Check if paragraph is a bullet point using the `element` XML
             p = paragraph._element
@@ -157,7 +159,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             for e in p.iterfind(".//a:r", namespaces={"a": self.namespaces["a"]}):
                 if len(e.text.strip()) > 0:
                     e_is_a_list_item = False
-
+                    is_numbered = False
                     if (
                         p.find(".//a:buChar", namespaces={"a": self.namespaces["a"]})
                         is not None
@@ -169,13 +171,17 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                         is not None
                     ):
                         bullet_type = "Numbered"
+                        is_numbered = True
                         e_is_a_list_item = True
                     else:
                         e_is_a_list_item = False
 
                     if e_is_a_list_item:
                         # TODO: Set marker and enumerated arguments if this is an enumeration element.
+                        enum_marker = str(enum_list_item_value) + "."
                         doc.add_list_item(
+                            marker=enum_marker,
+                            enumerated=is_numbered,
                             parent=new_list,
                             text=list_text,
                             prov=prov,
@@ -194,6 +200,8 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                                 doc_label = DocItemLabel.TITLE
                             elif placeholder_type == PP_PLACEHOLDER.SUBTITLE:
                                 DocItemLabel.SECTION_HEADER
+
+                        enum_list_item_value = 1
 
                         doc.add_text(
                             label=doc_label,
