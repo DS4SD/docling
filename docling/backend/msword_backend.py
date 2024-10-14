@@ -5,13 +5,13 @@ from typing import Set, Union
 
 import docx
 from docling_core.types.experimental import (
-    BaseTableData,
     DescriptionItem,
     DocItemLabel,
     DoclingDocument,
     GroupLabel,
     PictureData,
     TableCell,
+    TableData,
 )
 from lxml import etree
 
@@ -382,7 +382,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         # Initialize the table grid
         table_grid = [[None for _ in range(num_cols)] for _ in range(num_rows)]
 
-        data = BaseTableData(num_rows=num_rows, num_cols=num_cols, table_cells=[])
+        data = TableData(num_rows=num_rows, num_cols=num_cols, table_cells=[])
 
         for row_idx, row in enumerate(table.rows):
             col_idx = 0

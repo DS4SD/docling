@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import Set, Union
 
 from docling_core.types.experimental import (
-    BaseTableData,
     DescriptionItem,
     DocItemLabel,
     DoclingDocument,
@@ -13,6 +12,7 @@ from docling_core.types.experimental import (
     PictureData,
     ProvenanceItem,
     TableCell,
+    TableData,
 )
 from docling_core.types.experimental.base import BoundingBox, CoordOrigin, Size
 from pptx import Presentation
@@ -295,8 +295,8 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                     )
                     if len(cell.text.strip()) > 0:
                         tcells.append(icell)
-            # Initialize Docling BaseTableData
-            data = BaseTableData(num_rows=num_rows, num_cols=num_cols, table_cells=[])
+            # Initialize Docling TableData
+            data = TableData(num_rows=num_rows, num_cols=num_cols, table_cells=[])
             # Populate
             for tcell in tcells:
                 data.table_cells.append(tcell)

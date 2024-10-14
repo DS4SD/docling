@@ -5,11 +5,11 @@ from typing import Set, Union
 
 from bs4 import BeautifulSoup
 from docling_core.types.experimental import (
-    BaseTableData,
     DescriptionItem,
     DoclingDocument,
     PictureData,
     TableCell,
+    TableData,
 )
 from docling_core.types.experimental.labels import DocItemLabel, GroupLabel
 
@@ -303,7 +303,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         grid = [[None for _ in range(num_cols)] for _ in range(num_rows)]
 
-        data = BaseTableData(num_rows=num_rows, num_cols=num_cols, table_cells=[])
+        data = TableData(num_rows=num_rows, num_cols=num_cols, table_cells=[])
 
         # Iterate over the rows in the table
         for row_idx, row in enumerate(element.find_all("tr")):
