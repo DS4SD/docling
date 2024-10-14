@@ -1,0 +1,97 @@
+site_name: Docling
+site_url: https://ds4sd.github.io/docling/
+repo_name: DS4SD/docling
+repo_url: https://github.com/DS4SD/docling
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  palette:
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      scheme: default
+      primary: black
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+  logo: assets/logo.png
+  favicon: assets/logo.png
+  features:
+    - content.tabs.link
+    - content.code.annotate
+    - content.code.copy
+    - announce.dismiss
+    - navigation.tabs
+    # - navigation.indexes  # <= if set, each "section" can have its own page, if index.md is used
+    - navigation.instant
+    - navigation.instant.prefetch
+    # - navigation.instant.preview
+    - navigation.instant.progress
+    - navigation.path
+    - navigation.sections  # <=
+    - navigation.top
+    - navigation.tracking
+    - search.suggest
+    - toc.follow
+nav:
+  - Get started:
+    - Home: index.md
+    - Installation: installation.md
+  #   - Docling v2: v2.md
+  # - Concepts:
+  #   - Docling Document: concepts/document.md
+  #   - Chunking: concepts/chunking.md
+  - Examples:
+    - Conversion:
+      - "Simple conversion": examples/minimal.py
+      - "Custom conversion": examples/custom_convert.py
+      - "Batch conversion": examples/batch_convert.py
+      - "Figure export": examples/export_figures.py
+      - "Table export": examples/export_tables.py
+      - "Multimodal export": examples/export_multimodal.py
+    - RAG / QA:
+      - "RAG with LlamaIndex 🦙": examples/rag_llamaindex.ipynb
+      - "RAG with LangChain 🦜🔗": examples/rag_langchain.ipynb
+    # - Chunking:
+    #   - Chunking: examples/chunking.md
+    # - CLI:
+    #   - CLI: examples/cli.md
+  - Integrations:
+    - "LlamaIndex 🦙 extension": integrations/llamaindex.md
+    # - "LangChain 🦜🔗 extension": integrations/langchain.md
+  # - API reference:
+  #   - API reference: api_reference/index.md
+
+markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - admonition
+  - pymdownx.details
+  - attr_list
+plugins:
+  - search
+  - mkdocs-jupyter
+
+extra_css:
+  - stylesheets/extra.css
