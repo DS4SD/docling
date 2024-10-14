@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/ds4sd/docling">
-    <img loading="lazy" alt="Docling" src="https://github.com/DS4SD/docling/raw/main/logo.png" width="150" />
+    <img loading="lazy" alt="Docling" src="https://github.com/DS4SD/docling/raw/main/docs/assets/logo.png" width="150" />
   </a>
 </p>
 
@@ -200,8 +200,8 @@ To see all available options (export formats etc.) run `docling --help`.
 
 ### RAG
 Check out the following examples showcasing RAG using Docling with standard LLM application frameworks:
-- [Basic RAG pipeline with 🦙 LlamaIndex](https://github.com/DS4SD/docling/tree/main/examples/rag_llamaindex.ipynb)
-- [Basic RAG pipeline with 🦜🔗 LangChain](https://github.com/DS4SD/docling/tree/main/examples/rag_langchain.ipynb)
+- [Basic RAG pipeline with LlamaIndex 🦙](https://github.com/DS4SD/docling/tree/main/docs/examples/rag_llamaindex.ipynb)
+- [Basic RAG pipeline with LangChain 🦜🔗](https://github.com/DS4SD/docling/tree/main/docs/examples/rag_langchain.ipynb)
 
 ## Advanced features
 
