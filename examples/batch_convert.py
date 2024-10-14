@@ -31,37 +31,12 @@ def export_documents(
             success_count += 1
             doc_filename = conv_res.input.file.stem
 
-            if USE_LEGACY:
-                # Export Deep Search document JSON format:
-                with (output_dir / f"{doc_filename}.legacy.json").open(
-                    "w", encoding="utf-8"
-                ) as fp:
-                    fp.write(json.dumps(conv_res.render_as_dict()))
-
-                # Export Text format:
-                with (output_dir / f"{doc_filename}.legacy.txt").open(
-                    "w", encoding="utf-8"
-                ) as fp:
-                    fp.write(conv_res.render_as_text())
-
-                # Export Markdown format:
-                with (output_dir / f"{doc_filename}.legacy.md").open(
-                    "w", encoding="utf-8"
-                ) as fp:
-                    fp.write(conv_res.render_as_markdown())
-
-                # Export Document Tags format:
-                with (output_dir / f"{doc_filename}.legacy.doctags.txt").open(
-                    "w", encoding="utf-8"
-                ) as fp:
-                    fp.write(conv_res.render_as_doctags())
-
             if USE_V2:
                 # Export Docling document format to JSON (experimental):
                 with (output_dir / f"{doc_filename}.json").open("w") as fp:
                     fp.write(
                         json.dumps(
-                            conv_res.output.model_dump(
+                            conv_res.document.model_dump(
                                 mode="json", by_alias=True, exclude_none=True
                             )
                         )
@@ -71,7 +46,7 @@ def export_documents(
                 with (output_dir / f"{doc_filename}.yaml").open("w") as fp:
                     fp.write(
                         yaml.safe_dump(
-                            conv_res.output.model_dump(
+                            conv_res.document.model_dump(
                                 mode="json", by_alias=True, exclude_none=True
                             )
                         )
@@ -79,15 +54,42 @@ def export_documents(
 
                 # Export Docling document format to doctags (experimental):
                 with (output_dir / f"{doc_filename}.doctags.txt").open("w") as fp:
-                    fp.write(conv_res.output.export_to_document_tokens())
+                    fp.write(conv_res.document.export_to_document_tokens())
 
                 # Export Docling document format to markdown (experimental):
                 with (output_dir / f"{doc_filename}.md").open("w") as fp:
-                    fp.write(conv_res.output.export_to_markdown())
+                    fp.write(conv_res.document.export_to_markdown())
 
                 # Export Docling document format to text (experimental):
                 with (output_dir / f"{doc_filename}.txt").open("w") as fp:
-                    fp.write(conv_res.output.export_to_markdown(strict_text=True))
+                    fp.write(conv_res.document.export_to_markdown(strict_text=True))
+
+            if USE_LEGACY:
+                # Export Deep Search document JSON format:
+                with (output_dir / f"{doc_filename}.legacy.json").open(
+                    "w", encoding="utf-8"
+                ) as fp:
+                    fp.write(json.dumps(conv_res.legacy_document.export_to_dict()))
+
+                # Export Text format:
+                with (output_dir / f"{doc_filename}.legacy.txt").open(
+                    "w", encoding="utf-8"
+                ) as fp:
+                    fp.write(
+                        conv_res.legacy_document.export_to_markdown(strict_text=True)
+                    )
+
+                # Export Markdown format:
+                with (output_dir / f"{doc_filename}.legacy.md").open(
+                    "w", encoding="utf-8"
+                ) as fp:
+                    fp.write(conv_res.legacy_document.export_to_markdown())
+
+                # Export Document Tags format:
+                with (output_dir / f"{doc_filename}.legacy.doctags.txt").open(
+                    "w", encoding="utf-8"
+                ) as fp:
+                    fp.write(conv_res.legacy_document.export_to_doctags())
 
         elif conv_res.status == ConversionStatus.PARTIAL_SUCCESS:
             _log.info(

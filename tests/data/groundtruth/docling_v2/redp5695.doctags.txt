@@ -38,6 +38,7 @@
 <caption><location><page_5><loc_22><loc_42><loc_34><loc_43></location>Figure 1 IBM z16</caption>
 <figure>
 <location><page_5><loc_22><loc_44><loc_71><loc_90></location>
+<caption>Figure 1 IBM z16</caption>
 </figure>
 <section_header><location><page_5><loc_11><loc_38><loc_58><loc_40></location>IBM z16 and IBM LinuxONE Emperor 4 features</section_header>
 <text><location><page_5><loc_22><loc_29><loc_89><loc_36></location>IBM Z are based on enterprise mainframe technology. Starting with transaction-based workloads and databases, IBM Z has undergone tremendous transformations in its system design for many generations to build servers that cater to Linux-based workloads and security with a cyberresilient system, and support quantum computing and modernization by using a hybrid cloud with a focus on data and AI.</text>
@@ -45,12 +46,14 @@
 <caption><location><page_6><loc_11><loc_51><loc_35><loc_52></location>Figure 2 IBM Z: Processor roadmap</caption>
 <figure>
 <location><page_6><loc_10><loc_53><loc_89><loc_86></location>
+<caption>Figure 2 IBM Z: Processor roadmap</caption>
 </figure>
 <text><location><page_6><loc_22><loc_38><loc_89><loc_49></location>The IBM z16 and IBM LinuxONE Emperor 4 are the latest of the IBM Z, and they are developed with a 'built to build' focus to provide a powerful, cyberresilient, open, and secure platform for business with an extra focus on sustainability to help build sustainable data centers. Although the z16 server can host both IBM z/OSfi and Linux workloads, LinuxONE Emperor 4 is built to host Linux only workloads with a focus on consolidation and resiliency. Depending on the workload, consolidation from numerous x86 servers into a LinuxONE Emperor 4 can help reduce energy consumption by 75% and data center floor space by 50%, which helps to achieve the sustainability goals of the organization.</text>
 <text><location><page_6><loc_22><loc_29><loc_89><loc_36></location>Figure 3 on page 5 shows a summary of the system design of IBM LinuxONE Emperor 4 with the IBM Telum™ processor. The IBM Telum processor chip is designed to run enterprise applications efficiently where their data resides to embed AI with super low latency. The support for higher bandwidth and I/O rates is supported through FCP Express cards with an endpoint security solution. The memory subsystem supports up to 40 TB of memory.</text>
 <caption><location><page_7><loc_11><loc_54><loc_49><loc_56></location>Figure 3 System design of IBM z16 LinuxONE Emperor 4</caption>
 <figure>
 <location><page_7><loc_11><loc_56><loc_89><loc_90></location>
+<caption>Figure 3 System design of IBM z16 LinuxONE Emperor 4</caption>
 </figure>
 <text><location><page_7><loc_22><loc_45><loc_89><loc_53></location>The IBM z16 and IBM LinuxONE Emperor 4 servers are built with 7-nm technology at a 5.2 GHz speed. They consist of four dual-chip modules (DCMs) per central processor complex (CPC) drawer, each of which is built with two 8-core Telum processor chips that has "first in the industry" on-chip acceleration for mid-transaction, real-time AI inferencing, which supports many different use cases, including fraud detection.</text>
 <text><location><page_7><loc_22><loc_35><loc_89><loc_44></location>Each core has access to a huge private 32 MB L2 cache where up to 16 MB of the L2 cache of an inactive core can be used as virtual cache (L3 / L4) by neighboring active cores on the chip. This cache helps address translation and access checking by prefetching the same virtual cache into the L2 cache. The virtual cache also includes Neural Network Processing Assist instructions and direct memory access with protection, and per chip GZIP compression.</text>
@@ -58,12 +61,14 @@
 <caption><location><page_8><loc_10><loc_53><loc_63><loc_54></location>Figure 4 IBM z16 on-chip AI Accelerator integration with IBM Z processor cores</caption>
 <figure>
 <location><page_8><loc_11><loc_54><loc_90><loc_86></location>
+<caption>Figure 4 IBM z16 on-chip AI Accelerator integration with IBM Z processor cores</caption>
 </figure>
 <text><location><page_8><loc_22><loc_41><loc_89><loc_51></location>The IBM z16 and IBM LinuxONE Emperor 4 server platforms are built with the hardware features that are shown in Figure 4 with addressing data and AI workloads in mind. Regardless of where the ML and deep learning (DL) frameworks are used to build and train data and AI models, the inferencing on existing enterprise application data can happen along currently running enterprise business applications. CP4D 4.6 supports Tensorflow and IBM Snap ML frameworks, which are optimized to use the on-chip AI Accelerator during inferencing. Support for various other frameworks is planned for future releases.</text>
 <text><location><page_8><loc_22><loc_37><loc_89><loc_39></location>Figure 5 on page 7 shows the seamless integration of AI into existing enterprises workloads on the IBM z16 while leveraging the underlying hardware capabilities.</text>
 <caption><location><page_9><loc_11><loc_61><loc_31><loc_62></location>Figure 5 Seamless integration</caption>
 <figure>
 <location><page_9><loc_10><loc_62><loc_89><loc_90></location>
+<caption>Figure 5 Seamless integration</caption>
 </figure>
 <section_header><location><page_9><loc_11><loc_55><loc_56><loc_57></location>What is Cloud Pak for Data on IBM Z</section_header>
 <text><location><page_9><loc_22><loc_47><loc_89><loc_53></location>IBM Cloud Pak for Data allows enterprises to simplify, unify, and automate the delivery of data and AI. It categorizes the activities within the journey to AI as four rungs of the AI Ladder: Collect, Organize, Analyze, and Infuse. For more information about each of the AI Ladder rungs, see Become Data Driven with IBM Z Infused Data Fabric , REDP-5680.</text>
@@ -72,6 +77,7 @@
 <caption><location><page_10><loc_11><loc_38><loc_43><loc_39></location>Figure 6 Solution overview of Cloud Pak for Data</caption>
 <figure>
 <location><page_10><loc_10><loc_39><loc_89><loc_77></location>
+<caption>Figure 6 Solution overview of Cloud Pak for Data</caption>
 </figure>
 <text><location><page_10><loc_22><loc_35><loc_85><loc_36></location>We highlight the four main pillars that make IBM Z the correct infrastructure for CP4D:</text>
 <list_item><location><page_10><loc_22><loc_33><loc_42><loc_34></location>GLYPH<SM590000> Performance and Scale</list_item>
@@ -105,6 +111,7 @@
 <caption><location><page_13><loc_10><loc_54><loc_83><loc_55></location>Figure 7 Developing, training, and deploying an AI model on Cloud Pak for Data on IBM Z and IBM LinuxONE</caption>
 <figure>
 <location><page_13><loc_10><loc_56><loc_89><loc_90></location>
+<caption>Figure 7 Developing, training, and deploying an AI model on Cloud Pak for Data on IBM Z and IBM LinuxONE</caption>
 </figure>
 <text><location><page_13><loc_22><loc_51><loc_81><loc_53></location>In summary, here are some of the reasons why you should choose AI on IBM Z:</text>
 <list_item><location><page_13><loc_22><loc_49><loc_68><loc_50></location>GLYPH<SM590000> World-class AI inference platform for enterprise workloads:</list_item>
@@ -155,6 +162,7 @@
 <caption><location><page_16><loc_10><loc_57><loc_34><loc_58></location>Figure 8 Typical AI model lifecycle</caption>
 <figure>
 <location><page_16><loc_10><loc_58><loc_89><loc_83></location>
+<caption>Figure 8 Typical AI model lifecycle</caption>
 </figure>
 <text><location><page_16><loc_22><loc_46><loc_88><loc_55></location>Due to regulations, more stakeholders adopt the typical AI model lifecycle to protect their brand from new end-to-end risks. To ensure various aspects of both regulatory compliance and security, the personas that must be involved include the chief financial officer (CFO), chief marketing officer (CMO), chief data officer (CDO), HR, and chief regulatory officer (CRO), along with the data engineers, data scientists, and business analysts, who build AI workflows.</text>
 <section_header><location><page_16><loc_11><loc_42><loc_46><loc_44></location>IBM governance solution for IBM Z</section_header>
@@ -184,52 +192,62 @@
 <caption><location><page_18><loc_11><loc_62><loc_48><loc_63></location>Figure 9 Remote AI governance solution end-to-end flow</caption>
 <figure>
 <location><page_18><loc_11><loc_63><loc_89><loc_90></location>
+<caption>Figure 9 Remote AI governance solution end-to-end flow</caption>
 </figure>
 <text><location><page_18><loc_22><loc_59><loc_72><loc_60></location>To achieve end-to-end AI governance, complete the following steps:</text>
 <list_item><location><page_18><loc_22><loc_55><loc_89><loc_58></location>1. Create a model entry in IBM OpenPages by using CP4D on a x86 platform, as shown in Figure 10.</list_item>
 <caption><location><page_18><loc_10><loc_14><loc_46><loc_16></location>Figure 10 Creating a model entry in IBM OpenPages</caption>
 <figure>
 <location><page_18><loc_10><loc_16><loc_89><loc_53></location>
+<caption>Figure 10 Creating a model entry in IBM OpenPages</caption>
 </figure>
 <list_item><location><page_19><loc_22><loc_87><loc_89><loc_91></location>2. Train a model by using Watson Studio and by using development tools such as Jupyter Notebook or JupyterLab on CP4D on Red Hat OpenShift on a virtual machine on IBM Z, as shown in Figure 11.</list_item>
 <caption><location><page_19><loc_11><loc_46><loc_47><loc_47></location>Figure 11 Training an AI model by using Watson Studio</caption>
 <figure>
 <location><page_19><loc_10><loc_48><loc_89><loc_85></location>
+<caption>Figure 11 Training an AI model by using Watson Studio</caption>
 </figure>
 <list_item><location><page_19><loc_22><loc_42><loc_89><loc_45></location>3. Deploy the model by using WML on CP4D on Red Hat OpenShift on a virtual machine on IBM Z, as shown in Figure 12.</list_item>
 <caption><location><page_19><loc_11><loc_7><loc_57><loc_8></location>Figure 12 Deploying an AI model by using WML on Cloud Pak for Data</caption>
 <figure>
 <location><page_19><loc_11><loc_9><loc_90><loc_40></location>
+<caption>Figure 12 Deploying an AI model by using WML on Cloud Pak for Data</caption>
 </figure>
 <list_item><location><page_20><loc_22><loc_85><loc_89><loc_91></location>4. Track the external model lifecycle by browsing through the Catalogs/Platform assets catalog by using AI Factsheets and OpenPages while using CP4D on an x86 platform, as shown in Figure 13. The external model (deployed on CP4D on Red Hat OpenShift on a virtual machine on IBM Z) is saved as a platform asset catalog on the x86 platform.</list_item>
 <caption><location><page_20><loc_22><loc_50><loc_40><loc_51></location>Figure 13 External model</caption>
 <figure>
 <location><page_20><loc_22><loc_51><loc_87><loc_83></location>
+<caption>Figure 13 External model</caption>
 </figure>
 <text><location><page_20><loc_25><loc_45><loc_89><loc_48></location>You can track the model through each stage of the model lifecycle, as shown in Figure 14, by using AI Factsheets and OpenPages.</text>
 <caption><location><page_20><loc_11><loc_9><loc_31><loc_10></location>Figure 14 Tracking the model</caption>
 <figure>
 <location><page_20><loc_10><loc_11><loc_90><loc_44></location>
+<caption>Figure 14 Tracking the model</caption>
 </figure>
 <text><location><page_21><loc_25><loc_88><loc_89><loc_91></location>You can see that the model facts are tracked and synchronized to IBM OpenPages for risk management, as shown in Figure 15.</text>
 <caption><location><page_21><loc_10><loc_46><loc_74><loc_48></location>Figure 15 Model facts that are tracked and synchronized to IBM OpenPages on an x86 platform</caption>
 <figure>
 <location><page_21><loc_10><loc_48><loc_89><loc_86></location>
+<caption>Figure 15 Model facts that are tracked and synchronized to IBM OpenPages on an x86 platform</caption>
 </figure>
 <list_item><location><page_22><loc_22><loc_88><loc_86><loc_91></location>5. Create an external model by using IBM OpenScale on the x86 platform, as shown in Figure 16.</list_item>
 <caption><location><page_22><loc_11><loc_50><loc_48><loc_52></location>Figure 16 Creating an external model on an x86 platform</caption>
 <figure>
 <location><page_22><loc_10><loc_52><loc_89><loc_86></location>
+<caption>Figure 16 Creating an external model on an x86 platform</caption>
 </figure>
 <text><location><page_22><loc_22><loc_43><loc_89><loc_49></location>IBM OpenScale provides a comprehensive dashboard that tracks fairness, quality monitoring, drift, and explainability of a model. Fairness determines whether your model produces biased outcomes. Quality determines how well your model predicts outcomes. Drift is the degradation of predictive performance over time. A sample is shown in Figure 17 on page 21.</text>
 <caption><location><page_23><loc_11><loc_54><loc_63><loc_55></location>Figure 17 IBM OpenScale dashboard that is used to monitor the external model</caption>
 <figure>
 <location><page_23><loc_10><loc_56><loc_89><loc_90></location>
+<caption>Figure 17 IBM OpenScale dashboard that is used to monitor the external model</caption>
 </figure>
 <text><location><page_23><loc_22><loc_45><loc_89><loc_53></location>You developed and deployed the AI model by using Watson Studio, WML on CP4D on Red Hat OpenShift on a virtual machine on IBM Z, and end-to-end AI model governance by leveraging AI Factsheets, OpenScale, and OpenPages on CP4D on a x86 platform. Figure 18 shows end-to-end AI governance when using IBM OpenPages, AI Factsheets, and OpenScale.</text>
 <caption><location><page_23><loc_11><loc_7><loc_83><loc_8></location>Figure 18 Final result: End-to-end AI governance when using IBM OpenPages, AI Factsheets, and OpenScale</caption>
 <figure>
 <location><page_23><loc_10><loc_9><loc_90><loc_44></location>
+<caption>Figure 18 Final result: End-to-end AI governance when using IBM OpenPages, AI Factsheets, and OpenScale</caption>
 </figure>
 <section_header><location><page_24><loc_11><loc_89><loc_64><loc_91></location>Use case 2: Credit default risk assessment</section_header>
 <text><location><page_24><loc_22><loc_83><loc_89><loc_87></location>In today's world, many individuals or businesses seeking loans to meet their growing business needs often look to financial institutions. Financial institutions can offer loans to individuals or businesses and charge interest based on the current market situations.</text>
@@ -242,6 +260,7 @@
 <caption><location><page_25><loc_10><loc_55><loc_65><loc_57></location>Figure 19 Architecture for credit risk prediction by using an ML AI model on IBM Z</caption>
 <figure>
 <location><page_25><loc_11><loc_57><loc_89><loc_90></location>
+<caption>Figure 19 Architecture for credit risk prediction by using an ML AI model on IBM Z</caption>
 </figure>
 <text><location><page_25><loc_22><loc_48><loc_89><loc_54></location>A data scientist can leverage Watson Studio to develop and train an AI model and WML to deploy and score the model. In this sample architecture, the WML Python run time leverages the ML framework, IBM Snap Machine Learning (Snap ML), for scoring, can leverage an integrated AI accelerator at the time of model import.</text>
 <text><location><page_25><loc_22><loc_39><loc_89><loc_47></location>Then, the banking loan approval team can send a loan applicant request to the IBM WebSphere Application Server, which can make a request to the AI inference endpoint. The AI inference engine scores the transaction and sends the result back to the loan approval team. Based on the results, the approval team can decide on whether to approve a loan or not, and also decide how much they can lend, timelines, and other factors.</text>
@@ -252,6 +271,7 @@
 <caption><location><page_26><loc_11><loc_53><loc_56><loc_54></location>Figure 20 Architecture for credit risk prediction by using DL on IBM Z</caption>
 <figure>
 <location><page_26><loc_11><loc_55><loc_89><loc_88></location>
+<caption>Figure 20 Architecture for credit risk prediction by using DL on IBM Z</caption>
 </figure>
 <text><location><page_26><loc_22><loc_46><loc_87><loc_52></location>Data scientists can start creating and training a DL AI model by using a Jupyter Notebook instance and Watson Studio. Then, they can deploy the model by using WML on CP4D running on IBM Z, which provides an endpoint. Other applications, including the IBM WebSphere server, can produce credit risk results by using the model's endpoint.</text>
 <text><location><page_26><loc_22><loc_42><loc_89><loc_44></location>In summary, here are some considerations for developing real-time AI models, such as credit risk assessment:</text>
@@ -273,6 +293,7 @@
 <caption><location><page_28><loc_10><loc_59><loc_75><loc_60></location>Figure 21 Clearing and settlement use case for financial transactions by using Cloud Pak for Data</caption>
 <figure>
 <location><page_28><loc_10><loc_61><loc_89><loc_86></location>
+<caption>Figure 21 Clearing and settlement use case for financial transactions by using Cloud Pak for Data</caption>
 </figure>
 <text><location><page_28><loc_22><loc_56><loc_58><loc_57></location>Here are the steps of the high-level process flow:</text>
 <list_item><location><page_28><loc_22><loc_53><loc_86><loc_55></location>1. Create a connection to a database (for example, an IBM Db2fi database) where the historical data will be used for ML model building.</list_item>
@@ -304,6 +325,7 @@
 <caption><location><page_29><loc_11><loc_20><loc_40><loc_22></location>Figure 22 Inferencing architecture on IBM Z</caption>
 <figure>
 <location><page_29><loc_10><loc_22><loc_88><loc_52></location>
+<caption>Figure 22 Inferencing architecture on IBM Z</caption>
 </figure>
 <text><location><page_29><loc_22><loc_8><loc_89><loc_19></location>Because we are looking into data-driven model development, the data set of our target is the run-to-failure data of the engine. We are looking into a supervised learning problem, and we use regression techniques to learn from the data. DL techniques such as Long Short-Term Memory (LSTM) or Gated Recurrent Units (GRU) are our choice because we are looking into a time series data set. TensorFlow or PyTorch frameworks are leveraged to create models. AI governance monitors the data and model drift to maintain the model quality throughout the model's life.</text>
 <text><location><page_30><loc_22><loc_78><loc_89><loc_91></location>Open-source data from NASA was used to build the AI model, which then was deployed on CP4D. CP4D enables the data-scientist's journey from modeling to deployment in a seamless process. Data engineers leverage Db2 to host the data set, which includes the training, testing, and validation of a data set. Since data is hosted on Db2, you can expect low latency while retrieving the data and serve data security needs because Db2 is hosted on the IBM Z platform. Data is fetched by the data refinery to do the necessary pre-processing and data imputations. You can use the programming languages Golang or C++ for real-time predictions, depending on customer needs. For more information about this topic, see "Use case 3: Clearing and settlement" on page 25.</text>
@@ -317,6 +339,7 @@
 <caption><location><page_31><loc_11><loc_43><loc_35><loc_44></location>Figure 23 In-depth architectural view</caption>
 <figure>
 <location><page_31><loc_10><loc_45><loc_90><loc_90></location>
+<caption>Figure 23 In-depth architectural view</caption>
 </figure>
 <text><location><page_31><loc_22><loc_39><loc_82><loc_41></location>In summary, consider the following points while developing an AI-based predictive maintenance application:</text>
 <list_item><location><page_31><loc_22><loc_33><loc_89><loc_38></location>GLYPH<SM590000> CP4D offers a Python run time to build a custom solution stack, but also supports different components like Watson Studio, WML, Db2, Data Refinery, OpenScale, AI Factsheets, and OpenPages.</list_item>
@@ -341,6 +364,7 @@
 <caption><location><page_33><loc_11><loc_47><loc_46><loc_48></location>Figure 24 Architecture for AI-powered video analytics</caption>
 <figure>
 <location><page_33><loc_10><loc_48><loc_89><loc_79></location>
+<caption>Figure 24 Architecture for AI-powered video analytics</caption>
 </figure>
 <text><location><page_33><loc_22><loc_35><loc_89><loc_45></location>Live camera feeds or recorded videos of an infant's movement are the inputs for a pose detection model. This video streaming data was stored in IBM Cloudfi Object Storage for image processing. Video data must be transformed into frames so that the infant's body poses can be detected. These post-estimation components of the pipeline predict the location of all 17-person key points with 3 degrees of freedom each (x, y location and visibility) plus two virtual alignment key points. This approach also embraces a compute-intensive heat map prediction of infant body posture.</text>
 <text><location><page_33><loc_22><loc_24><loc_88><loc_33></location>When changes in body posture or movement happen, analytics can be performed, and a threshold can be set for the angle of the body and posture movements. An analysis can be performed on movement that is based on that threshold to help to predict an infant's health index in the output video stream by leveraging the IBM z16 on-chip AI acceleration, which provides an execution speed in real time on an edge device, which cannot be achieved by other means.</text>

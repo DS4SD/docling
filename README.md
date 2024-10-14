@@ -146,8 +146,8 @@ from docling.document_converter import DocumentConverter
 source = "https://arxiv.org/pdf/2408.09869"  # PDF path or URL
 converter = DocumentConverter()
 result = converter.convert_single(source)
-print(result.output.export_to_markdown())  # output: "## Docling Technical Report[...]"
-print(result.output.export_to_document_tokens())  # output: "<document><title><page_1><loc_20>..."
+print(result.document.export_to_markdown())  # output: "## Docling Technical Report[...]"
+print(result.document.export_to_document_tokens())  # output: "<document><title><page_1><loc_20>..."
 ```
 
 ### Convert a batch of documents
@@ -289,7 +289,7 @@ You can perform a hierarchy-aware chunking of a Docling document as follows:
 from docling.document_converter import DocumentConverter
 from docling_core.transforms.chunker import HierarchicalChunker
 
-doc = DocumentConverter().convert_single("https://arxiv.org/pdf/2206.01062").legacy_output
+doc = DocumentConverter().convert_single("https://arxiv.org/pdf/2206.01062").legacy_document
 chunks = list(HierarchicalChunker().chunk(doc))
 print(chunks[0])
 # ChunkWithMetadata(

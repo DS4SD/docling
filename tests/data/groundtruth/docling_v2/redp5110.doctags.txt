@@ -68,53 +68,53 @@
 </table>
 <table>
 <location><page_6><loc_22><loc_7><loc_89><loc_91></location>
-<row_0><col_0><body>Chapter 4. Implementing Row and Column Access Control: Banking example . . . . .</col_0><col_1><body>37</col_1></row_0>
-<row_1><col_0><body>4.1 Business requirements for the RCAC banking scenario . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>38</col_1></row_1>
-<row_2><col_0><body>4.2 Description of the users roles and responsibilities</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . . . . . . 39</col_1></row_2>
-<row_3><col_0><body>4.3 Implementation of RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>42</col_1></row_3>
-<row_4><col_0><body>4.3.1 Reviewing the tables that are used in this example</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . 42</col_1></row_4>
-<row_5><col_0><body>4.3.2 Assigning function ID QIBM_DB_SECADM to the Database Engineers group</col_0><col_1><body>. . 47</col_1></row_5>
-<row_6><col_0><body>4.3.3 Creating group profiles for the users and their roles . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>50</col_1></row_6>
-<row_7><col_0><body>4.3.4 Creating the CUSTOMER_LOGIN_ID global variable</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . 52</col_1></row_7>
-<row_8><col_0><body>4.3.5 Defining and creating row permissions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>54</col_1></row_8>
-<row_9><col_0><body>4.3.6 Defining and creating column masks</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 58</col_1></row_9>
-<row_10><col_0><body>4.3.7 Restricting the inserting and updating of masked data . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>60</col_1></row_10>
-<row_11><col_0><body>4.3.9 Reviewing row permissions. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>64</col_1></row_11>
-<row_12><col_0><body>4.3.10 Demonstrating data access with RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>66</col_1></row_12>
-<row_13><col_0><body>4.3.11 Query implementation with RCAC activated . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>75</col_1></row_13>
-<row_14><col_0><body>Chapter 5. RCAC and non-SQL interfaces  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>79</col_1></row_14>
+<row_0><col_0><row_header>Chapter 4. Implementing Row and Column Access Control: Banking example . . . . .</col_0><col_1><body>37</col_1></row_0>
+<row_1><col_0><row_header>4.1 Business requirements for the RCAC banking scenario . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>38</col_1></row_1>
+<row_2><col_0><row_header>4.2 Description of the users roles and responsibilities</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . . . . . . 39</col_1></row_2>
+<row_3><col_0><row_header>4.3 Implementation of RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>42</col_1></row_3>
+<row_4><col_0><row_header>4.3.1 Reviewing the tables that are used in this example</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . 42</col_1></row_4>
+<row_5><col_0><row_header>4.3.2 Assigning function ID QIBM_DB_SECADM to the Database Engineers group</col_0><col_1><body>. . 47</col_1></row_5>
+<row_6><col_0><row_header>4.3.3 Creating group profiles for the users and their roles . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>50</col_1></row_6>
+<row_7><col_0><row_header>4.3.4 Creating the CUSTOMER_LOGIN_ID global variable</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . 52</col_1></row_7>
+<row_8><col_0><row_header>4.3.5 Defining and creating row permissions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>54</col_1></row_8>
+<row_9><col_0><row_header>4.3.6 Defining and creating column masks</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 58</col_1></row_9>
+<row_10><col_0><row_header>4.3.7 Restricting the inserting and updating of masked data . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>60</col_1></row_10>
+<row_11><col_0><row_header>4.3.9 Reviewing row permissions. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>64</col_1></row_11>
+<row_12><col_0><row_header>4.3.10 Demonstrating data access with RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>66</col_1></row_12>
+<row_13><col_0><row_header>4.3.11 Query implementation with RCAC activated . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>75</col_1></row_13>
+<row_14><col_0><row_header>Chapter 5. RCAC and non-SQL interfaces  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>79</col_1></row_14>
 <row_15><col_0><body></col_0><col_1><body>Unsupported interfaces . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 80</col_1></row_15>
-<row_16><col_0><body>5.3 Accidental updates with masked values . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>81</col_1></row_16>
-<row_17><col_0><body>5.4 System CL commands considerations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>82</col_1></row_17>
-<row_18><col_0><body>5.4.1 Create Duplicate Object (CRTDUPOBJ) command . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>82</col_1></row_18>
+<row_16><col_0><row_header>5.3 Accidental updates with masked values . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>81</col_1></row_16>
+<row_17><col_0><row_header>5.4 System CL commands considerations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>82</col_1></row_17>
+<row_18><col_0><row_header>5.4.1 Create Duplicate Object (CRTDUPOBJ) command . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>82</col_1></row_18>
 <row_19><col_0><body></col_0><col_1><body>82</col_1></row_19>
-<row_20><col_0><body>5.4.2 Copy File (CPYF) command . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5.4.3 Copy Library (CPYLIB) command. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>100</col_1></row_20>
+<row_20><col_0><row_header>5.4.2 Copy File (CPYF) command . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5.4.3 Copy Library (CPYLIB) command. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>100</col_1></row_20>
 <row_21><col_0><body></col_0><col_1><body>83</col_1></row_21>
-<row_22><col_0><body>Chapter 6. Additional considerations  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . . 89 90</col_1></row_22>
-<row_23><col_0><body>6.2 RCAC effects on data movement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>6.2 RCAC effects on data movement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_1></row_23>
-<row_24><col_0><body>6.2.1 Effects when RCAC is defined on the source table</col_0><col_1><body>6.2.1 Effects when RCAC is defined on the source table</col_1></row_24>
+<row_22><col_0><row_header>Chapter 6. Additional considerations  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . . 89 90</col_1></row_22>
+<row_23><col_0><row_header>6.2 RCAC effects on data movement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><row_header>6.2 RCAC effects on data movement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_1></row_23>
+<row_24><col_0><row_header>6.2.1 Effects when RCAC is defined on the source table</col_0><col_1><row_header>6.2.1 Effects when RCAC is defined on the source table</col_1></row_24>
 <row_25><col_0><body></col_0><col_1><body>88</col_1></row_25>
-<row_26><col_0><body>6.2.3 Effects when RCAC is defined on both source and target tables . . . . . . . . . . . . . 6.3 RCAC effects on joins . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>91</col_1></row_26>
-<row_27><col_0><body>6.3.1 Inner joins . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 92</col_0><col_1><body>6.3.1 Inner joins . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 92</col_1></row_27>
-<row_28><col_0><body>6.3.2 Outer joins. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 94</col_0><col_1><body>6.3.2 Outer joins. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 94</col_1></row_28>
-<row_29><col_0><body>6.3.3 Exception joins . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>96</col_1></row_29>
-<row_30><col_0><body>6.4 Monitoring, analyzing, and debugging with RCAC</col_0><col_1><body>97</col_1></row_30>
-<row_31><col_0><body>. . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>Query monitoring and analysis tools . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 97</col_1></row_31>
-<row_32><col_0><body>6.4.2 Index advisor. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>99</col_1></row_32>
-<row_33><col_0><body>6.4.3 Metadata using catalogs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>6.4.3 Metadata using catalogs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_1></row_33>
-<row_34><col_0><body>6.5 Views, materialized query tables, and query rewrite with RCAC . . . . . . . . . . . . . . . .</col_0><col_1><body>102</col_1></row_34>
-<row_35><col_0><body>6.5.2 Materialized query tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>103</col_1></row_35>
+<row_26><col_0><row_header>6.2.3 Effects when RCAC is defined on both source and target tables . . . . . . . . . . . . . 6.3 RCAC effects on joins . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>91</col_1></row_26>
+<row_27><col_0><row_header>6.3.1 Inner joins . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 92</col_0><col_1><row_header>6.3.1 Inner joins . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 92</col_1></row_27>
+<row_28><col_0><row_header>6.3.2 Outer joins. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 94</col_0><col_1><row_header>6.3.2 Outer joins. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 94</col_1></row_28>
+<row_29><col_0><row_header>6.3.3 Exception joins . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>96</col_1></row_29>
+<row_30><col_0><row_header>6.4 Monitoring, analyzing, and debugging with RCAC</col_0><col_1><body>97</col_1></row_30>
+<row_31><col_0><row_header>. . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>Query monitoring and analysis tools . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 97</col_1></row_31>
+<row_32><col_0><row_header>6.4.2 Index advisor. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>99</col_1></row_32>
+<row_33><col_0><row_header>6.4.3 Metadata using catalogs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><row_header>6.4.3 Metadata using catalogs . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_1></row_33>
+<row_34><col_0><row_header>6.5 Views, materialized query tables, and query rewrite with RCAC . . . . . . . . . . . . . . . .</col_0><col_1><body>102</col_1></row_34>
+<row_35><col_0><row_header>6.5.2 Materialized query tables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>103</col_1></row_35>
 <row_36><col_0><body></col_0><col_1><body>105</col_1></row_36>
-<row_37><col_0><body>6.5.3 Query rewrite . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . RCAC effects on performance and scalability. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>6.5.3 Query rewrite . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . RCAC effects on performance and scalability. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_1></row_37>
-<row_38><col_0><body>6.6</col_0><col_1><body>105</col_1></row_38>
+<row_37><col_0><row_header>6.5.3 Query rewrite . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . RCAC effects on performance and scalability. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><row_header>6.5.3 Query rewrite . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . RCAC effects on performance and scalability. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_1></row_37>
+<row_38><col_0><row_header>6.6</col_0><col_1><body>105</col_1></row_38>
 <row_39><col_0><body></col_0><col_1><body>107</col_1></row_39>
-<row_40><col_0><body>6.7 Exclusive lock to implement RCAC (availability issues) . . . . . . . . . . . . . . . . . . . . . . . 6.8 Avoiding propagation of masked data . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>108</col_1></row_40>
+<row_40><col_0><row_header>6.7 Exclusive lock to implement RCAC (availability issues) . . . . . . . . . . . . . . . . . . . . . . . 6.8 Avoiding propagation of masked data . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>108</col_1></row_40>
 <row_41><col_0><body></col_0><col_1><body>108</col_1></row_41>
 <row_42><col_0><body></col_0><col_1><body>109</col_1></row_42>
 <row_43><col_0><body></col_0><col_1><body>109</col_1></row_43>
 <row_44><col_0><body></col_0><col_1><body>113</col_1></row_44>
 <row_45><col_0><body></col_0><col_1><body>111</col_1></row_45>
-<row_46><col_0><body>Chapter 7. Row and Column Access Control management  . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>Chapter 7. Row and Column Access Control management  . . . . . . . . . . . . . . . . . . . .</col_1></row_46>
+<row_46><col_0><row_header>Chapter 7. Row and Column Access Control management  . . . . . . . . . . . . . . . . . . . .</col_0><col_1><row_header>Chapter 7. Row and Column Access Control management  . . . . . . . . . . . . . . . . . . . .</col_1></row_46>
 </table>
 <table>
 <location><page_7><loc_22><loc_61><loc_90><loc_91></location>
@@ -325,6 +325,7 @@
 <caption><location><page_19><loc_22><loc_10><loc_58><loc_11></location>Figure 1-1 All-or-nothing access to the rows of a table</caption>
 <figure>
 <location><page_19><loc_22><loc_12><loc_80><loc_37></location>
+<caption>Figure 1-1 All-or-nothing access to the rows of a table</caption>
 </figure>
 <text><location><page_20><loc_22><loc_81><loc_89><loc_91></location>Many businesses are trying to limit data access to a need-to-know basis. This security goal means that users should be given access only to the minimum set of data that is required to perform their job. Often, users with object-level access are given access to row and column values that are beyond what their business task requires because that object-level security provides an all-or-nothing solution. For example, object-level controls allow a manager to access data about all employees. Most security policies limit a manager to accessing data only for the employees that they manage.</text>
 <section_header><location><page_20><loc_11><loc_77><loc_49><loc_78></location>1.3.1 Existing row and column control</section_header>
@@ -334,6 +335,7 @@
 <caption><location><page_20><loc_22><loc_12><loc_52><loc_13></location>Figure 1-2 Existing row and column controls</caption>
 <figure>
 <location><page_20><loc_22><loc_13><loc_89><loc_53></location>
+<caption>Figure 1-2 Existing row and column controls</caption>
 </figure>
 <section_header><location><page_21><loc_11><loc_89><loc_64><loc_91></location>1.3.2 New controls: Row and Column Access Control</section_header>
 <text><location><page_21><loc_22><loc_82><loc_88><loc_88></location>Based on the challenges that are associated with the existing technology available for controlling row and column access at a more granular level, IBM delivered new security support in the IBM i 7.2 release; this support is known as Row and Column Access Control (RCAC).</text>
@@ -390,10 +392,11 @@
 <text><location><page_26><loc_22><loc_75><loc_72><loc_76></location>CHGFCNUSG FCNID(QIBM_DB_SECADM) USER(HBEDOYA) USAGE(*ALLOWED)</text>
 <section_header><location><page_26><loc_10><loc_71><loc_89><loc_72></location>2.1.7 Verifying function usage IDs for RCAC with the FUNCTION_USAGE view</section_header>
 <text><location><page_26><loc_22><loc_66><loc_85><loc_69></location>The FUNCTION_USAGE view contains function usage configuration details. Table 2-1 describes the columns in the FUNCTION_USAGE view.</text>
-<caption><location><page_26><loc_22><loc_44><loc_89><loc_63></location>Table 2-1 FUNCTION_USAGE view</caption>
+<caption><location><page_26><loc_22><loc_64><loc_47><loc_65></location>Table 2-1 FUNCTION_USAGE view</caption>
 <table>
 <location><page_26><loc_22><loc_44><loc_89><loc_63></location>
-<row_0><col_0><body>Column name</col_0><col_1><body>Data type</col_1><col_2><body>Description</col_2></row_0>
+<caption>Table 2-1 FUNCTION_USAGE view</caption>
+<row_0><col_0><col_header>Column name</col_0><col_1><col_header>Data type</col_1><col_2><col_header>Description</col_2></row_0>
 <row_1><col_0><body>FUNCTION_ID</col_0><col_1><body>VARCHAR(30)</col_1><col_2><body>ID of the function.</col_2></row_1>
 <row_2><col_0><body>USER_NAME</col_0><col_1><body>VARCHAR(10)</col_1><col_2><body>Name of the user profile that has a usage setting for this  function.</col_2></row_2>
 <row_3><col_0><body>USAGE</col_0><col_1><body>VARCHAR(7)</col_1><col_2><body>Usage setting: GLYPH<SM590000> ALLOWED: The user profile is allowed to use the function. GLYPH<SM590000> DENIED: The user profile is not allowed to use the function.</col_2></row_3>
@@ -410,47 +413,48 @@
 <text><location><page_27><loc_22><loc_65><loc_89><loc_69></location>QIBM_DB_SECADM also is responsible for administering RCAC, which restricts which rows a user is allowed to access in a table and whether a user is allowed to see information in certain columns of a table.</text>
 <text><location><page_27><loc_22><loc_57><loc_88><loc_63></location>A preferred practice is that the RCAC administrator has the QIBM_DB_SECADM function usage ID, but absolutely no other data privileges. The result is that the RCAC administrator can deploy and maintain the RCAC constructs, but cannot grant themselves unauthorized access to data itself.</text>
 <text><location><page_27><loc_22><loc_53><loc_89><loc_56></location>Table 2-2 shows a comparison of the different function usage IDs and *JOBCTL authority to the different CL commands and DB2 for i tools.</text>
-<caption><location><page_27><loc_11><loc_9><loc_89><loc_50></location>Table 2-2 Comparison of the different function usage IDs and *JOBCTL authority</caption>
+<caption><location><page_27><loc_11><loc_50><loc_64><loc_52></location>Table 2-2 Comparison of the different function usage IDs and *JOBCTL authority</caption>
 <table>
 <location><page_27><loc_11><loc_9><loc_89><loc_50></location>
-<row_0><col_0><body>User action</col_0><col_1><body>*JOBCTL</col_1><col_2><body>QIBM_DB_SECADM</col_2><col_3><body>QIBM_DB_SQLADM</col_3><col_4><body>QIBM_DB_SYSMON</col_4><col_5><body>No Authority</col_5></row_0>
-<row_1><col_0><body>SET CURRENT DEGREE  (SQL statement)</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_1>
-<row_2><col_0><body>CHGQRYA  command targeting a different user's job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_2>
-<row_3><col_0><body>STRDBMON  or  ENDDBMON  commands targeting a different user's job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_3>
-<row_4><col_0><body>STRDBMON  or  ENDDBMON  commands targeting a job that matches the current user</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body>X</col_4><col_5><body>X</col_5></row_4>
-<row_5><col_0><body>QUSRJOBI() API format 900 or System i Navigator's SQL Details for Job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body>X</col_4><col_5><body></col_5></row_5>
-<row_6><col_0><body>Visual Explain within Run SQL scripts</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body>X</col_4><col_5><body>X</col_5></row_6>
-<row_7><col_0><body>Visual Explain outside of Run SQL scripts</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_7>
-<row_8><col_0><body>ANALYZE PLAN CACHE procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_8>
-<row_9><col_0><body>DUMP PLAN CACHE procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_9>
-<row_10><col_0><body>MODIFY PLAN CACHE procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_10>
-<row_11><col_0><body>MODIFY PLAN CACHE PROPERTIES procedure (currently does not check authority)</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_11>
-<row_12><col_0><body>CHANGE PLAN CACHE SIZE procedure (currently does not check authority)</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_12>
+<caption>Table 2-2 Comparison of the different function usage IDs and *JOBCTL authority</caption>
+<row_0><col_0><row_header>User action</col_0><col_1><body>*JOBCTL</col_1><col_2><body>QIBM_DB_SECADM</col_2><col_3><body>QIBM_DB_SQLADM</col_3><col_4><body>QIBM_DB_SYSMON</col_4><col_5><body>No Authority</col_5></row_0>
+<row_1><col_0><row_header>SET CURRENT DEGREE  (SQL statement)</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_1>
+<row_2><col_0><row_header>CHGQRYA  command targeting a different user's job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_2>
+<row_3><col_0><row_header>STRDBMON  or  ENDDBMON  commands targeting a different user's job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_3>
+<row_4><col_0><row_header>STRDBMON  or  ENDDBMON  commands targeting a job that matches the current user</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body>X</col_4><col_5><body>X</col_5></row_4>
+<row_5><col_0><row_header>QUSRJOBI() API format 900 or System i Navigator's SQL Details for Job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body>X</col_4><col_5><body></col_5></row_5>
+<row_6><col_0><row_header>Visual Explain within Run SQL scripts</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body>X</col_4><col_5><body>X</col_5></row_6>
+<row_7><col_0><row_header>Visual Explain outside of Run SQL scripts</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_7>
+<row_8><col_0><row_header>ANALYZE PLAN CACHE procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_8>
+<row_9><col_0><row_header>DUMP PLAN CACHE procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_9>
+<row_10><col_0><row_header>MODIFY PLAN CACHE procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_10>
+<row_11><col_0><row_header>MODIFY PLAN CACHE PROPERTIES procedure (currently does not check authority)</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_11>
+<row_12><col_0><row_header>CHANGE PLAN CACHE SIZE procedure (currently does not check authority)</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_12>
 </table>
 <table>
 <location><page_28><loc_10><loc_28><loc_89><loc_91></location>
-<row_0><col_0><body>User action</col_0><col_1><body>*JOBCTL</col_1><col_2><body>QIBM_DB_SECADM</col_2><col_3><body>QIBM_DB_SQLADM</col_3><col_4><body>QIBM_DB_SYSMON</col_4><col_5><body>No Authority</col_5></row_0>
-<row_1><col_0><body>START PLAN CACHE EVENT MONITOR procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_1>
-<row_2><col_0><body>END PLAN CACHE EVENT MONITOR procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_2>
-<row_3><col_0><body>END ALL PLAN CACHE EVENT MONITORS procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_3>
-<row_4><col_0><body>Work with RCAC row permissions (Create, modify, or delete)</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_4>
-<row_5><col_0><body>Work with RCAC column masks (Create, modify, or delete)</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_5>
-<row_6><col_0><body>Change Object Owner ( CHGOBJOWN ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_6>
-<row_7><col_0><body>Change Object Primary Group ( CHGOBJPGP ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_7>
-<row_8><col_0><body>Grant Object Authority ( GRTOBJAUT ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_8>
-<row_9><col_0><body>Revoke Object Authority ( RVKOBJAUT ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_9>
-<row_10><col_0><body>Edit Object Authority ( EDTOBJAUT ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_10>
-<row_11><col_0><body>Display Object Authority ( DSPOBJAUT ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_11>
-<row_12><col_0><body>Work with Objects ( WRKOBJ ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_12>
-<row_13><col_0><body>Work with Libraries ( WRKLIB ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_13>
-<row_14><col_0><body>Add Authorization List Entry ( ADDAUTLE ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_14>
-<row_15><col_0><body>Change Authorization List Entry ( CHGAUTLE ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_15>
-<row_16><col_0><body>Remove Authorization List Entry ( RMVAUTLE ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_16>
-<row_17><col_0><body>Retrieve Authorization List Entry ( RTVAUTLE ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_17>
-<row_18><col_0><body>Display Authorization List ( DSPAUTL ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_18>
-<row_19><col_0><body>Display Authorization List Objects ( DSPAUTLOBJ ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_19>
-<row_20><col_0><body>Edit Authorization List ( EDTAUTL ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_20>
-<row_21><col_0><body>Work with Authorization Lists ( WRKAUTL ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_21>
+<row_0><col_0><body>User action</col_0><col_1><col_header>*JOBCTL</col_1><col_2><col_header>QIBM_DB_SECADM</col_2><col_3><col_header>QIBM_DB_SQLADM</col_3><col_4><col_header>QIBM_DB_SYSMON</col_4><col_5><col_header>No Authority</col_5></row_0>
+<row_1><col_0><row_header>START PLAN CACHE EVENT MONITOR procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_1>
+<row_2><col_0><row_header>END PLAN CACHE EVENT MONITOR procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_2>
+<row_3><col_0><row_header>END ALL PLAN CACHE EVENT MONITORS procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_3>
+<row_4><col_0><row_header>Work with RCAC row permissions (Create, modify, or delete)</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_4>
+<row_5><col_0><row_header>Work with RCAC column masks (Create, modify, or delete)</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_5>
+<row_6><col_0><row_header>Change Object Owner ( CHGOBJOWN ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_6>
+<row_7><col_0><row_header>Change Object Primary Group ( CHGOBJPGP ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_7>
+<row_8><col_0><row_header>Grant Object Authority ( GRTOBJAUT ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_8>
+<row_9><col_0><row_header>Revoke Object Authority ( RVKOBJAUT ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_9>
+<row_10><col_0><row_header>Edit Object Authority ( EDTOBJAUT ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_10>
+<row_11><col_0><row_header>Display Object Authority ( DSPOBJAUT ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_11>
+<row_12><col_0><row_header>Work with Objects ( WRKOBJ ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_12>
+<row_13><col_0><row_header>Work with Libraries ( WRKLIB ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_13>
+<row_14><col_0><row_header>Add Authorization List Entry ( ADDAUTLE ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_14>
+<row_15><col_0><row_header>Change Authorization List Entry ( CHGAUTLE ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_15>
+<row_16><col_0><row_header>Remove Authorization List Entry ( RMVAUTLE ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_16>
+<row_17><col_0><row_header>Retrieve Authorization List Entry ( RTVAUTLE ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_17>
+<row_18><col_0><row_header>Display Authorization List ( DSPAUTL ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_18>
+<row_19><col_0><row_header>Display Authorization List Objects ( DSPAUTLOBJ ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_19>
+<row_20><col_0><row_header>Edit Authorization List ( EDTAUTL ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_20>
+<row_21><col_0><row_header>Work with Authorization Lists ( WRKAUTL ) CL command</col_0><col_1><body></col_1><col_2><body>X</col_2><col_3><body></col_3><col_4><body></col_4><col_5><body></col_5></row_21>
 </table>
 <figure>
 <location><page_29><loc_5><loc_70><loc_39><loc_91></location>
@@ -483,6 +487,7 @@
 <caption><location><page_31><loc_22><loc_47><loc_56><loc_48></location>Figure 3-1 CREATE PERMISSION SQL statement</caption>
 <figure>
 <location><page_31><loc_22><loc_48><loc_89><loc_86></location>
+<caption>The SQL CREATE PERMISSION statement that is shown in Figure 3-1 is used to define and initially enable or disable the row access rules.Figure 3-1 CREATE PERMISSION SQL statement</caption>
 </figure>
 <section_header><location><page_31><loc_22><loc_43><loc_35><loc_45></location>Column mask</section_header>
 <text><location><page_31><loc_22><loc_37><loc_89><loc_43></location>A column mask is a database object that manifests a column value access control rule for a specific column in a specific table. It uses a CASE expression that describes what you see when you access the column. For example, a teller can see only the last four digits of a tax identification number.</text>
@@ -490,6 +495,7 @@
 <caption><location><page_32><loc_22><loc_46><loc_51><loc_47></location>Figure 3-2 CREATE MASK SQL statement</caption>
 <figure>
 <location><page_32><loc_22><loc_48><loc_89><loc_85></location>
+<caption>Figure 3-2 CREATE MASK SQL statement</caption>
 </figure>
 <section_header><location><page_32><loc_10><loc_42><loc_47><loc_44></location>3.1.2 Enabling and activating RCAC</section_header>
 <text><location><page_32><loc_22><loc_36><loc_89><loc_40></location>You can enable, disable, or regenerate row permissions and column masks by using the SQL ALTER PERMISSION statement and the SQL ALTER MASK statement, as shown in Figure 3-3 on page 17.</text>
@@ -498,12 +504,14 @@
 <caption><location><page_33><loc_22><loc_55><loc_68><loc_56></location>Figure 3-3 ALTER PERMISSION and ALTER MASK SQL statements</caption>
 <figure>
 <location><page_33><loc_22><loc_56><loc_83><loc_90></location>
+<caption>Figure 3-3 ALTER PERMISSION and ALTER MASK SQL statements</caption>
 </figure>
 <text><location><page_33><loc_22><loc_45><loc_89><loc_53></location>You can activate and deactivate RCAC for new or existing tables by using the SQL ALTER TABLE statement (Figure 3-4). The ACTIVATE or DEACTIVATE clause must be the option that is specified in the statement. No other alterations are permitted at the same time. The activating and deactivating effectively turns on or off all RCAC processing for the table. Only enabled row permissions and column masks take effect when activating RCAC.</text>
 <text><location><page_33><loc_23><loc_40><loc_87><loc_43></location>Note: An exclusive lock is required on the table object to perform the alter operation. All open cursors must be closed.</text>
 <caption><location><page_33><loc_22><loc_7><loc_50><loc_9></location>Figure 3-4 ALTER TABLE SQL statement</caption>
 <figure>
 <location><page_33><loc_22><loc_9><loc_84><loc_37></location>
+<caption>Figure 3-4 ALTER TABLE SQL statement</caption>
 </figure>
 <text><location><page_34><loc_22><loc_81><loc_89><loc_91></location>When row access control is activated on a table, a default permission is established for that table. The name of this permission is QIBM_DEFAULT_ <table-name>_<schema-name>. This default permission contains a simple piece of logic (0=1) which is never true. The default permission effectively denies access to every user unless there is a permission defined that allows access explicitly. If row access control is activated on a table, and there is no permission that is defined, no one has permission to any rows. All queries against the table produce an empty set.</text>
 <text><location><page_34><loc_22><loc_73><loc_89><loc_79></location>It is possible to define, create, and enable multiple permissions on a table. Logically, all of the permissions are ORed together to form a comprehensive test of the user's ability to access the data. A column can have only one mask that is defined over it. From an implementation standpoint, it does not matter if you create the column masks first or the row permissions first.</text>
@@ -519,10 +527,11 @@
 <list_item><location><page_34><loc_22><loc_12><loc_89><loc_19></location>GLYPH<SM590000> SYSTEM_USER is the user profile that initiates the connection to the server. It is not used by RCAC, but is included here for completeness. Many jobs, including the QZDASOINIT prestarted jobs, initially connect to the server with a default user profile and then change to use some other user profile. SYSTEM_USER reports this value, typically QUSER for a QZDASOINIT job. It has a data type of VARCHAR(128).</list_item>
 <text><location><page_34><loc_22><loc_7><loc_89><loc_10></location>In addition to these four special registers, any of the DB2 special registers can be referenced as part of the rule text.</text>
 <paragraph><location><page_35><loc_22><loc_90><loc_67><loc_91></location>Table 3-1 summarizes these special registers and their values.</paragraph>
-<caption><location><page_35><loc_22><loc_74><loc_89><loc_87></location>Table 3-1 Special registers and their corresponding values</caption>
+<caption><location><page_35><loc_22><loc_87><loc_61><loc_88></location>Table 3-1 Special registers and their corresponding values</caption>
 <table>
 <location><page_35><loc_22><loc_74><loc_89><loc_87></location>
-<row_0><col_0><body>Special register</col_0><col_1><body>Corresponding value</col_1></row_0>
+<caption>Table 3-1 Special registers and their corresponding values</caption>
+<row_0><col_0><col_header>Special register</col_0><col_1><col_header>Corresponding value</col_1></row_0>
 <row_1><col_0><body>USER or SESSION_USER</col_0><col_1><body>The effective user of the thread excluding adopted authority.</col_1></row_1>
 <row_2><col_0><body>CURRENT_USER</col_0><col_1><body>The effective user of the thread including adopted authority. When no adopted  authority is present, this has the same value as USER.</col_1></row_2>
 <row_3><col_0><body>SYSTEM_USER</col_0><col_1><body>The authorization ID that initiated the connection.</col_1></row_3>
@@ -536,15 +545,17 @@
 <caption><location><page_35><loc_22><loc_24><loc_56><loc_25></location>Figure 3-5 Special registers and adopted authority</caption>
 <figure>
 <location><page_35><loc_22><loc_25><loc_49><loc_51></location>
+<caption>Figure 3-5 Special registers and adopted authority</caption>
 </figure>
 <section_header><location><page_35><loc_10><loc_19><loc_40><loc_21></location>3.2.2 Built-in global variables</section_header>
 <text><location><page_35><loc_22><loc_15><loc_85><loc_18></location>Built-in global variables are provided with the database manager and are used in SQL statements to retrieve scalar values that are associated with the variables.</text>
 <text><location><page_35><loc_22><loc_9><loc_87><loc_14></location>IBM DB2 for i supports nine different built-in global variables that are read only and maintained by the system. These global variables can be used to identify attributes of the database connection and used as part of the RCAC logic.</text>
 <text><location><page_36><loc_22><loc_90><loc_56><loc_91></location>Table 3-2 lists the nine built-in global variables.</text>
-<caption><location><page_36><loc_10><loc_63><loc_90><loc_87></location>Table 3-2 Built-in global variables</caption>
+<caption><location><page_36><loc_11><loc_87><loc_33><loc_88></location>Table 3-2 Built-in global variables</caption>
 <table>
 <location><page_36><loc_10><loc_63><loc_90><loc_87></location>
-<row_0><col_0><body>Global variable</col_0><col_1><body>Type</col_1><col_2><body>Description</col_2></row_0>
+<caption>Table 3-2 Built-in global variables</caption>
+<row_0><col_0><col_header>Global variable</col_0><col_1><col_header>Type</col_1><col_2><col_header>Description</col_2></row_0>
 <row_1><col_0><body>CLIENT_HOST</col_0><col_1><body>VARCHAR(255)</col_1><col_2><body>Host name of the current client as returned by the system</col_2></row_1>
 <row_2><col_0><body>CLIENT_IPADDR</col_0><col_1><body>VARCHAR(128)</col_1><col_2><body>IP address of the current client as returned by the system</col_2></row_2>
 <row_3><col_0><body>CLIENT_PORT</col_0><col_1><body>INTEGER</col_1><col_2><body>Port used by the current client to communicate with the server</col_2></row_3>
@@ -624,6 +635,7 @@
 <caption><location><page_40><loc_22><loc_51><loc_45><loc_53></location>Figure 3-7 Number of employees</caption>
 <figure>
 <location><page_40><loc_22><loc_53><loc_37><loc_57></location>
+<caption>Figure 3-7 Number of employees</caption>
 </figure>
 <list_item><location><page_40><loc_22><loc_46><loc_89><loc_49></location>2. Run a second SQL statement (shown in Example 3-6) that lists the employees. If you have read access to the table, you see all the rows no matter who you are.</list_item>
 <paragraph><location><page_40><loc_22><loc_44><loc_60><loc_45></location>Example 3-6 Displaying the information of the Employees</paragraph>
@@ -644,6 +656,7 @@
 <caption><location><page_42><loc_11><loc_37><loc_54><loc_38></location>Figure 3-9 Row permissions that are shown in System i Navigator</caption>
 <figure>
 <location><page_42><loc_10><loc_38><loc_89><loc_62></location>
+<caption>Figure 3-9 Row permissions that are shown in System i Navigator</caption>
 </figure>
 <section_header><location><page_42><loc_10><loc_33><loc_53><loc_34></location>3.6.5 Defining and creating column masks</section_header>
 <text><location><page_42><loc_22><loc_28><loc_86><loc_31></location>Define the different masks for the columns that are sensitive by completing the following steps:</text>
@@ -668,6 +681,7 @@
 <caption><location><page_44><loc_10><loc_77><loc_48><loc_78></location>Figure 3-10 Column masks shown in System i Navigator</caption>
 <figure>
 <location><page_44><loc_10><loc_79><loc_89><loc_88></location>
+<caption>Figure 3-10 Column masks shown in System i Navigator</caption>
 </figure>
 <section_header><location><page_44><loc_11><loc_73><loc_33><loc_75></location>3.6.6 Activating RCAC</section_header>
 <text><location><page_44><loc_22><loc_67><loc_89><loc_71></location>Now that you have created the row permission and the two column masks, RCAC must be activated. The row permission and the two column masks are enabled (last clause in the scripts), but now you must activate RCAC on the table. To do so, complete the following steps:</text>
@@ -680,11 +694,13 @@
 <caption><location><page_44><loc_11><loc_17><loc_57><loc_18></location>Figure 3-11 Selecting the EMPLOYEES table from System i Navigator</caption>
 <figure>
 <location><page_44><loc_10><loc_18><loc_87><loc_46></location>
+<caption>Figure 3-11 Selecting the EMPLOYEES table from System i Navigator</caption>
 </figure>
 <list_item><location><page_45><loc_22><loc_88><loc_87><loc_91></location>3. The EMPLOYEES table definition is displayed, as shown in Figure 3-12. Note that the Row access control and Column access control options are checked.</list_item>
 <caption><location><page_45><loc_22><loc_56><loc_58><loc_57></location>Figure 3-12 RCAC enabled on the EMPLOYEES table</caption>
 <figure>
 <location><page_45><loc_22><loc_57><loc_89><loc_87></location>
+<caption>Figure 3-12 RCAC enabled on the EMPLOYEES table</caption>
 </figure>
 <section_header><location><page_45><loc_10><loc_52><loc_56><loc_53></location>3.6.7 Demonstrating data access with RCAC</section_header>
 <text><location><page_45><loc_22><loc_47><loc_89><loc_50></location>You are now ready to start testing RCAC with the four different users. Complete the following steps:</text>
@@ -695,21 +711,25 @@
 <caption><location><page_45><loc_22><loc_25><loc_51><loc_26></location>Figure 3-13 Count of EMPLOYEES by HR</caption>
 <figure>
 <location><page_45><loc_22><loc_26><loc_37><loc_31></location>
+<caption>Figure 3-13 Count of EMPLOYEES by HR</caption>
 </figure>
 <list_item><location><page_45><loc_22><loc_18><loc_88><loc_23></location>3. The result of the same query for a user who is logged on as TQSPENSER (Manager) is shown in Figure 3-14. TQSPENSER has five employees in his department and he can also see his own row, which is why the count is 6.</list_item>
 <caption><location><page_45><loc_22><loc_11><loc_56><loc_12></location>Figure 3-14 Count of EMPLOYEES by a manager</caption>
 <figure>
 <location><page_45><loc_22><loc_12><loc_36><loc_16></location>
+<caption>Figure 3-14 Count of EMPLOYEES by a manager</caption>
 </figure>
 <list_item><location><page_46><loc_22><loc_88><loc_89><loc_91></location>4. The result of the same query that is run by an employee (DSSMITH) gives the result that is shown in Figure 3-15. Each employee can see only his or her own data (row).</list_item>
 <caption><location><page_46><loc_22><loc_81><loc_57><loc_82></location>Figure 3-15 Count of EMPLOYEES by an employee</caption>
 <figure>
 <location><page_46><loc_22><loc_82><loc_37><loc_86></location>
+<caption>Figure 3-15 Count of EMPLOYEES by an employee</caption>
 </figure>
 <list_item><location><page_46><loc_22><loc_74><loc_89><loc_78></location>5. The result of the same query that is run by the Consultant/DBE gives the result that is shown in Figure 3-16. The consultants/DBE can manage and implement RCAC, but they do not see any rows at all.</list_item>
 <caption><location><page_46><loc_22><loc_66><loc_56><loc_68></location>Figure 3-16 Count of EMPLOYEES by a consultant</caption>
 <figure>
 <location><page_46><loc_22><loc_68><loc_37><loc_72></location>
+<caption>Figure 3-16 Count of EMPLOYEES by a consultant</caption>
 </figure>
 <text><location><page_46><loc_25><loc_63><loc_75><loc_64></location>Does the result make sense? Yes, it does because RCAC is enabled.</text>
 <list_item><location><page_46><loc_22><loc_58><loc_89><loc_62></location>6. Run queries against the EMPLOYEES table. The query that is used in this example runs and tests with the four different user profiles and is the same query that was run in 3.6.3, "Demonstrating data access without RCAC" on page 24. It is shown in Example 3-12.</list_item>
@@ -777,6 +797,7 @@
 <caption><location><page_55><loc_22><loc_37><loc_47><loc_38></location>Figure 4-1 Internet banking example</caption>
 <figure>
 <location><page_55><loc_22><loc_38><loc_81><loc_71></location>
+<caption>Figure 4-1 Internet banking example</caption>
 </figure>
 <section_header><location><page_55><loc_11><loc_32><loc_78><loc_34></location>4.2 Description of the users roles and responsibilities</section_header>
 <text><location><page_55><loc_22><loc_27><loc_87><loc_30></location>During the requirements gathering phase, the following groups of users are identified and codified:</text>
@@ -790,12 +811,14 @@
 <caption><location><page_56><loc_22><loc_47><loc_52><loc_48></location>Figure 4-2 Rules for row and column access</caption>
 <figure>
 <location><page_56><loc_22><loc_49><loc_86><loc_85></location>
+<caption>Figure 4-2 Rules for row and column access</caption>
 </figure>
 <text><location><page_57><loc_22><loc_88><loc_89><loc_91></location>The chart that is shown in Figure 4-3 shows the column access that is allowed by group and lists the column masks by table.</text>
-<caption><location><page_57><loc_22><loc_50><loc_86><loc_86></location>Figure 4-3 Column masks</caption>
+<caption><location><page_57><loc_22><loc_48><loc_40><loc_49></location>Figure 4-3 Column masks</caption>
 <table>
 <location><page_57><loc_22><loc_50><loc_86><loc_86></location>
-<row_0><col_0><body></col_0><col_1><body></col_1><col_2><body>CUSTOMERS</col_2><col_3><body>ACCOUNTS</col_3></row_0>
+<caption>Figure 4-3 Column masks</caption>
+<row_0><col_0><body></col_0><col_1><body></col_1><col_2><col_header>CUSTOMERS</col_2><col_3><col_header>ACCOUNTS</col_3></row_0>
 <row_1><col_0><body>SECURITY</col_0><col_1><body>No Rows</col_1><col_2><body>CUSTOMER_DRIVERS_LICENSE_NUMBER CUSTOMER_EMAIL CUSTOMER_LOGIN_ID CUSTOMER_SECURITY_QUESTION CUSTOMER_SECURITY_QUESTION_ANSWER CUSTOMER_TAX_ID</col_2><col_3><body>ACCOUNT_NUMBER</col_3></row_1>
 <row_2><col_0><body>DBE</col_0><col_1><body>All Rows</col_1><col_2><body>CUSTOMER_DRIVERS_LICENSE_NUMBER CUSTOMER_EMAIL CUSTOMER_LOGIN_ID CUSTOMER_SECURITY_QUESTION CUSTOMER_SECURITY_QUESTION_ANSWER CUSTOMER_TAX_ID</col_2><col_3><body>ACCOUNT NUMBER ACCOUNT_NUMBER</col_3></row_2>
 <row_3><col_0><body>ADMIN</col_0><col_1><body>All Rows</col_1><col_2><body>None</col_2><col_3><body>None</col_3></row_3>
@@ -816,6 +839,7 @@
 <caption><location><page_58><loc_22><loc_60><loc_53><loc_62></location>Figure 4-4 Data model of the banking scenario</caption>
 <figure>
 <location><page_58><loc_22><loc_62><loc_74><loc_84></location>
+<caption>Figure 4-4 Data model of the banking scenario</caption>
 </figure>
 <text><location><page_58><loc_22><loc_57><loc_51><loc_58></location>This section covers the following steps:</text>
 <list_item><location><page_58><loc_22><loc_55><loc_61><loc_56></location>GLYPH<SM590000> Reviewing the tables that are used in this example</list_item>
@@ -834,6 +858,7 @@
 <caption><location><page_58><loc_22><loc_19><loc_59><loc_20></location>Figure 4-5 Tables that are used in the banking example</caption>
 <figure>
 <location><page_58><loc_22><loc_21><loc_68><loc_28></location>
+<caption>Figure 4-5 Tables that are used in the banking example</caption>
 </figure>
 <text><location><page_58><loc_23><loc_11><loc_86><loc_16></location>Note: Appendix A, "Database definitions for the RCAC banking example" on page 121 provides a script that you can use to create all the database definitions or DDLs to re-create this RCAC example.</text>
 <text><location><page_59><loc_22><loc_88><loc_86><loc_91></location>To review the attributes of each table that is used in this banking example, complete the following steps:</text>
@@ -842,6 +867,7 @@
 <caption><location><page_59><loc_22><loc_53><loc_50><loc_54></location>Figure 4-6 CUSTOMERS table attributes</caption>
 <figure>
 <location><page_59><loc_22><loc_54><loc_68><loc_78></location>
+<caption>Figure 4-6 CUSTOMERS table attributes</caption>
 </figure>
 <list_item><location><page_59><loc_22><loc_48><loc_85><loc_51></location>3. Click the Columns tab to see the columns of the CUSTOMERS table, as shown in Figure 4-7.</list_item>
 <paragraph><location><page_59><loc_11><loc_21><loc_48><loc_23></location>Figure 4-7 Column definitions of the CUSTOMERS table</paragraph>
@@ -849,11 +875,13 @@
 <caption><location><page_60><loc_22><loc_60><loc_65><loc_61></location>Figure 4-8 Reviewing the constraints on the CUSTOMERS table</caption>
 <figure>
 <location><page_60><loc_22><loc_61><loc_87><loc_83></location>
+<caption>Figure 4-8 Reviewing the constraints on the CUSTOMERS table</caption>
 </figure>
 <list_item><location><page_60><loc_22><loc_55><loc_89><loc_58></location>5. Review the definition of the ACCOUNTS table. The definition of the ACCOUNTS table is shown in Figure 4-9. RCAC has not been defined for this table yet.</list_item>
 <caption><location><page_60><loc_22><loc_28><loc_49><loc_29></location>Figure 4-9 ACCOUNTS table attributes</caption>
 <figure>
 <location><page_60><loc_22><loc_29><loc_75><loc_53></location>
+<caption>Figure 4-9 ACCOUNTS table attributes</caption>
 </figure>
 <list_item><location><page_61><loc_22><loc_88><loc_83><loc_91></location>6. Click the Columns tab to see the columns of the ACCOUNTS table, as shown in Figure 4-10.</list_item>
 <paragraph><location><page_61><loc_10><loc_69><loc_48><loc_70></location>Figure 4-10 Column definitions of the ACCOUNTS table</paragraph>
@@ -861,11 +889,13 @@
 <caption><location><page_61><loc_11><loc_37><loc_53><loc_38></location>Figure 4-11 Reviewing the constraints on the ACCOUNTS table</caption>
 <figure>
 <location><page_61><loc_10><loc_39><loc_89><loc_59></location>
+<caption>Figure 4-11 Reviewing the constraints on the ACCOUNTS table</caption>
 </figure>
 <list_item><location><page_62><loc_22><loc_88><loc_89><loc_91></location>8. Review the definition of the TRANSACTIONS table. The definition of the TRANSACTIONS table is shown in Figure 4-12. RCAC is not defined for this table yet.</list_item>
 <caption><location><page_62><loc_22><loc_61><loc_53><loc_62></location>Figure 4-12 TRANSACTIONS table attributes</caption>
 <figure>
 <location><page_62><loc_22><loc_63><loc_74><loc_86></location>
+<caption>Figure 4-12 TRANSACTIONS table attributes</caption>
 </figure>
 <list_item><location><page_62><loc_22><loc_56><loc_87><loc_59></location>9. Click the Columns tab to see the columns of the TRANSACTIONS table, as shown in Figure 4-13.</list_item>
 <paragraph><location><page_62><loc_22><loc_38><loc_63><loc_39></location>Figure 4-13 Column definitions of the TRANSACTIONS table</paragraph>
@@ -873,6 +903,7 @@
 <caption><location><page_62><loc_11><loc_7><loc_56><loc_9></location>Figure 4-14 Reviewing the constraints on the TRANSACTIONS table</caption>
 <figure>
 <location><page_62><loc_10><loc_9><loc_89><loc_28></location>
+<caption>Figure 4-14 Reviewing the constraints on the TRANSACTIONS table</caption>
 </figure>
 <text><location><page_63><loc_22><loc_88><loc_86><loc_91></location>Now that you have reviewed the database model for this example, the following sections describe the steps that are required to implement RCAC in this banking scenario.</text>
 <section_header><location><page_63><loc_10><loc_82><loc_87><loc_86></location>4.3.2 Assigning function ID QIBM_DB_SECADM to the Database Engineers group</section_header>
@@ -882,31 +913,37 @@
 <caption><location><page_63><loc_22><loc_37><loc_48><loc_38></location>Figure 4-15 Application administration</caption>
 <figure>
 <location><page_63><loc_22><loc_38><loc_56><loc_68></location>
+<caption>Figure 4-15 Application administration</caption>
 </figure>
 <list_item><location><page_64><loc_22><loc_88><loc_87><loc_91></location>2. The Application Administration window opens, as shown in Figure 4-16. Click IBM i  Database and select the function usage ID of Database Security Administrator .</list_item>
 <caption><location><page_64><loc_22><loc_49><loc_54><loc_51></location>Figure 4-16 Application administration for IBM i</caption>
 <figure>
 <location><page_64><loc_22><loc_51><loc_86><loc_86></location>
+<caption>Figure 4-16 Application administration for IBM i</caption>
 </figure>
 <list_item><location><page_64><loc_22><loc_44><loc_89><loc_47></location>3. Click Customize for the function usage ID of Database Security Administrator, as shown in Figure 4-17.</list_item>
 <caption><location><page_64><loc_22><loc_21><loc_75><loc_23></location>Figure 4-17 Customizing the Database Security Administrator function usage ID</caption>
 <figure>
 <location><page_64><loc_22><loc_23><loc_86><loc_43></location>
+<caption>Figure 4-17 Customizing the Database Security Administrator function usage ID</caption>
 </figure>
 <list_item><location><page_65><loc_22><loc_87><loc_89><loc_91></location>4. The Customize Access window opens, as shown in Figure 4-18. Click the users that need to implement RCAC. For this example, HBEDOYA and MCAIN are selected. Click Add and then click OK .</list_item>
 <caption><location><page_65><loc_22><loc_48><loc_49><loc_49></location>Figure 4-18 Customize Access window</caption>
 <figure>
 <location><page_65><loc_22><loc_49><loc_79><loc_85></location>
+<caption>Figure 4-18 Customize Access window</caption>
 </figure>
 <list_item><location><page_65><loc_22><loc_41><loc_88><loc_46></location>5. The Application Administrator window opens again. The function usage ID of Database Security Administrator now has an X in the Customized Access column, as shown in Figure 4-19.</list_item>
 <caption><location><page_65><loc_22><loc_25><loc_73><loc_26></location>Figure 4-19 Function usage ID Database Security Administrator customized</caption>
 <figure>
 <location><page_65><loc_22><loc_26><loc_79><loc_41></location>
+<caption>Figure 4-19 Function usage ID Database Security Administrator customized</caption>
 </figure>
 <list_item><location><page_66><loc_22><loc_88><loc_89><loc_91></location>6. Run an SQL query that shows which user profiles are enabled to define RCAC. The SQL query is shown in Figure 4-20.</list_item>
 <caption><location><page_66><loc_22><loc_64><loc_72><loc_65></location>Figure 4-20 Query to display user profiles with function usage ID for RCAC</caption>
 <figure>
 <location><page_66><loc_22><loc_66><loc_73><loc_86></location>
+<caption>Figure 4-20 Query to display user profiles with function usage ID for RCAC</caption>
 </figure>
 <section_header><location><page_66><loc_10><loc_60><loc_68><loc_62></location>4.3.3 Creating group profiles for the users and their roles</section_header>
 <text><location><page_66><loc_22><loc_52><loc_89><loc_58></location>The next step is to create the different group profiles (ADMIN, CUSTOMER, TELLER, and DBE) and assign the different user profiles to the different group profiles. For a description of the different groups and users for this example, see 4.2, "Description of the users roles and responsibilities" on page 39.</text>
@@ -915,17 +952,20 @@
 <caption><location><page_66><loc_22><loc_24><loc_46><loc_25></location>Figure 4-21 Creating group profiles</caption>
 <figure>
 <location><page_66><loc_22><loc_26><loc_59><loc_44></location>
+<caption>Figure 4-21 Creating group profiles</caption>
 </figure>
 <list_item><location><page_67><loc_22><loc_87><loc_89><loc_91></location>2. The New Group window opens, as shown in Figure 4-22. For each new group, enter the Group name (ADMIN, CUSTOMER, TELLER, and DBE) and add the user profiles that are associated to this group by selecting the user profile and clicking Add .</list_item>
 <text><location><page_67><loc_25><loc_85><loc_79><loc_86></location>Figure 4-22 shows adding user TQSPENCER to the TELLER group profile.</text>
 <caption><location><page_67><loc_22><loc_53><loc_58><loc_54></location>Figure 4-22 Creating group profiles and adding users</caption>
 <figure>
 <location><page_67><loc_22><loc_54><loc_77><loc_83></location>
+<caption>Figure 4-22 Creating group profiles and adding users</caption>
 </figure>
 <list_item><location><page_67><loc_22><loc_48><loc_88><loc_51></location>3. After you create all the group profiles, you should see them listed in System i Navigator under Users and Groups  Groups , as shown in Figure 4-23.</list_item>
 <caption><location><page_67><loc_22><loc_29><loc_50><loc_30></location>Figure 4-23 Newly created group profiles</caption>
 <figure>
 <location><page_67><loc_22><loc_31><loc_44><loc_46></location>
+<caption>Figure 4-23 Newly created group profiles</caption>
 </figure>
 <section_header><location><page_68><loc_10><loc_89><loc_69><loc_91></location>4.3.4 Creating the CUSTOMER_LOGIN_ID global variable</section_header>
 <text><location><page_68><loc_22><loc_83><loc_89><loc_88></location>In this step, you create a global variable that is used to capture the Customer_Login_ID information, which is required to validate the permissions. For more information about global variables, see 3.2.2, "Built-in global variables" on page 19.</text>
@@ -934,21 +974,25 @@
 <caption><location><page_68><loc_22><loc_47><loc_48><loc_49></location>Figure 4-24 Creating a global variable</caption>
 <figure>
 <location><page_68><loc_22><loc_49><loc_74><loc_75></location>
+<caption>Figure 4-24 Creating a global variable</caption>
 </figure>
 <list_item><location><page_68><loc_22><loc_39><loc_88><loc_45></location>2. The New Global Variable window opens, as shown in Figure 4-25. Enter the global variable name of CUSTOMER_LOGIN_ID, select the data type of VARCHAR, and leave the default value of NULL. This default value ensures that users that do not use the web interface do not have permission to access the data. Click OK .</list_item>
 <caption><location><page_68><loc_11><loc_9><loc_57><loc_10></location>Figure 4-25 Creating a global variable called CUSTOMER_LOGIN_ID</caption>
 <figure>
 <location><page_68><loc_10><loc_11><loc_89><loc_38></location>
+<caption>Figure 4-25 Creating a global variable called CUSTOMER_LOGIN_ID</caption>
 </figure>
 <list_item><location><page_69><loc_22><loc_87><loc_89><loc_91></location>3. Now that the global variable is created, assign permissions to the variable so that it can be set by the program. Right-click the CUSTOMER_LOGIN_ID global variable and select Permissions , as shown in Figure 4-26.</list_item>
 <caption><location><page_69><loc_22><loc_68><loc_75><loc_69></location>Figure 4-26 Setting permissions on the CUSTOMER_LOGIN_ID global variable</caption>
 <figure>
 <location><page_69><loc_22><loc_70><loc_57><loc_85></location>
+<caption>Figure 4-26 Setting permissions on the CUSTOMER_LOGIN_ID global variable</caption>
 </figure>
 <list_item><location><page_69><loc_22><loc_63><loc_87><loc_66></location>4. The Permissions window opens, as shown in Figure 4-27. Select Change authority for Webuser so that the application can set this global variable.</list_item>
 <caption><location><page_69><loc_22><loc_26><loc_88><loc_27></location>Figure 4-27 Setting change permissions for Webuser on the CUSTOMER_LOGIN_ID global variable</caption>
 <figure>
 <location><page_69><loc_22><loc_27><loc_89><loc_62></location>
+<caption>Figure 4-27 Setting change permissions for Webuser on the CUSTOMER_LOGIN_ID global variable</caption>
 </figure>
 <section_header><location><page_70><loc_10><loc_89><loc_56><loc_91></location>4.3.5 Defining and creating row permissions</section_header>
 <text><location><page_70><loc_22><loc_86><loc_86><loc_88></location>You now ready to define the row permissions of the tables. Complete the following steps:</text>
@@ -956,6 +1000,7 @@
 <caption><location><page_70><loc_22><loc_45><loc_51><loc_47></location>Figure 4-28 Selecting new row permissions</caption>
 <figure>
 <location><page_70><loc_22><loc_47><loc_76><loc_80></location>
+<caption>Figure 4-28 Selecting new row permissions</caption>
 </figure>
 <list_item><location><page_71><loc_22><loc_87><loc_89><loc_91></location>2. The New Row Permission window opens, as shown in Figure 4-29. Enter the information regarding the row permissions on the CUSTOMERS table. This row permission defines what is established in the following policy:</list_item>
 <list_item><location><page_71><loc_25><loc_83><loc_89><loc_86></location>-User profiles that belong to DBE, ADMIN, and TELLER group profiles can see all the rows.</list_item>
@@ -965,6 +1010,7 @@
 <caption><location><page_71><loc_22><loc_32><loc_63><loc_33></location>Figure 4-29 New row permissions on the CUSTOMERS table</caption>
 <figure>
 <location><page_71><loc_22><loc_34><loc_83><loc_67></location>
+<caption>Figure 4-29 New row permissions on the CUSTOMERS table</caption>
 </figure>
 <list_item><location><page_72><loc_22><loc_85><loc_89><loc_91></location>3. Define the row permissions for the ACCOUNTS table. The New Row Permission window opens, as shown in Figure 4-30. Enter the information regarding the row permissions on the ACCOUNTS table. This row permission defines what is established in the following policy:</list_item>
 <list_item><location><page_72><loc_25><loc_82><loc_88><loc_84></location>-User profiles that belong to DBE, ADMIN and TELLER group profiles can see all the rows.</list_item>
@@ -974,6 +1020,7 @@
 <caption><location><page_72><loc_11><loc_25><loc_50><loc_26></location>Figure 4-30 New row permissions on the ACCOUNTS table</caption>
 <figure>
 <location><page_72><loc_10><loc_26><loc_88><loc_66></location>
+<caption>Figure 4-30 New row permissions on the ACCOUNTS table</caption>
 </figure>
 <list_item><location><page_73><loc_22><loc_85><loc_87><loc_91></location>4. Define the row permissions on the TRANSACTIONS table. The New Row Permission window opens, as shown in Figure 4-31. Enter the information regarding the row permissions on the TRANSACTIONS table. This row permission defines what is established in the following policy:</list_item>
 <list_item><location><page_73><loc_25><loc_82><loc_89><loc_84></location>-User profiles that belong to DBE, ADMIN, and TELLER group profiles can see all of the rows.</list_item>
@@ -984,11 +1031,13 @@
 <caption><location><page_73><loc_10><loc_9><loc_53><loc_10></location>Figure 4-31 New row permissions on the TRANSACTIONS table</caption>
 <figure>
 <location><page_73><loc_10><loc_10><loc_88><loc_56></location>
+<caption>Figure 4-31 New row permissions on the TRANSACTIONS table</caption>
 </figure>
 <list_item><location><page_74><loc_22><loc_87><loc_85><loc_91></location>5. To verify that the row permissions are enabled, from System i Navigator, click Row Permissions , as shown in Figure 4-32. The three row permissions are created and enabled.</list_item>
 <caption><location><page_74><loc_11><loc_64><loc_48><loc_65></location>Figure 4-32 List of row permissions on BANK_SCHEMA</caption>
 <figure>
 <location><page_74><loc_10><loc_66><loc_89><loc_85></location>
+<caption>Figure 4-32 List of row permissions on BANK_SCHEMA</caption>
 </figure>
 <section_header><location><page_74><loc_10><loc_60><loc_53><loc_62></location>4.3.6 Defining and creating column masks</section_header>
 <text><location><page_74><loc_22><loc_57><loc_78><loc_58></location>This section defines the masks on the columns. Complete the following steps:</text>
@@ -996,6 +1045,7 @@
 <caption><location><page_74><loc_22><loc_27><loc_47><loc_28></location>Figure 4-33 Creating a column mask</caption>
 <figure>
 <location><page_74><loc_22><loc_28><loc_75><loc_50></location>
+<caption>Figure 4-33 Creating a column mask</caption>
 </figure>
 <list_item><location><page_75><loc_22><loc_88><loc_86><loc_91></location>2. In the New Column Mask window, which is shown in Figure 4-34, enter the following information:</list_item>
 <list_item><location><page_75><loc_25><loc_86><loc_76><loc_87></location>-Select the CUSTOMERS table on which to create the column mask.</list_item>
@@ -1005,6 +1055,7 @@
 <caption><location><page_75><loc_22><loc_22><loc_65><loc_24></location>Figure 4-34 Defining a column mask on the CUSTOMERS table</caption>
 <figure>
 <location><page_75><loc_22><loc_24><loc_87><loc_76></location>
+<caption>Figure 4-34 Defining a column mask on the CUSTOMERS table</caption>
 </figure>
 <list_item><location><page_75><loc_22><loc_19><loc_85><loc_20></location>3. Repeat steps 1 on page 58 and 2 to create column masks for the following columns:</list_item>
 <list_item><location><page_75><loc_25><loc_17><loc_62><loc_18></location>-MASK_DRIVERS_LICENSE_ON_CUSTOMERS</list_item>
@@ -1017,6 +1068,7 @@
 <caption><location><page_76><loc_10><loc_76><loc_47><loc_77></location>Figure 4-35 List of column masks on BANK_SCHEMA</caption>
 <figure>
 <location><page_76><loc_10><loc_77><loc_89><loc_86></location>
+<caption>Figure 4-35 List of column masks on BANK_SCHEMA</caption>
 </figure>
 <section_header><location><page_76><loc_10><loc_72><loc_71><loc_73></location>4.3.7 Restricting the inserting and updating of masked data</section_header>
 <text><location><page_76><loc_22><loc_64><loc_89><loc_70></location>This step defines the check constraints that support the column masks to make sure that on INSERTS or UPDATES, data is not written with a masked value. For more information about the propagation of masked data, see 6.8, "Avoiding propagation of masked data" on page 108.</text>
@@ -1025,11 +1077,13 @@
 <caption><location><page_76><loc_22><loc_39><loc_55><loc_40></location>Figure 4-36 Definition of the CUSTOMERS table</caption>
 <figure>
 <location><page_76><loc_22><loc_41><loc_89><loc_54></location>
+<caption>Figure 4-36 Definition of the CUSTOMERS table</caption>
 </figure>
 <list_item><location><page_76><loc_22><loc_34><loc_89><loc_37></location>2. From the CUSTOMERS definition window, click the Check Constraints tab and click Add , as shown in Figure 4-37.</list_item>
 <caption><location><page_76><loc_10><loc_23><loc_36><loc_24></location>Figure 4-37 Adding a check constraint</caption>
 <figure>
 <location><page_76><loc_10><loc_24><loc_89><loc_33></location>
+<caption>Figure 4-37 Adding a check constraint</caption>
 </figure>
 <list_item><location><page_77><loc_22><loc_88><loc_84><loc_91></location>3. The New Check Constraint window opens, as shown in Figure 4-38. Complete the following steps:</list_item>
 <list_item><location><page_77><loc_25><loc_86><loc_56><loc_87></location>a. Select the CUSTOMER_EMAIL column.</list_item>
@@ -1038,16 +1092,19 @@
 <caption><location><page_77><loc_11><loc_16><loc_59><loc_18></location>Figure 4-38 Specifying a new check constraint on the CUSTOMERS table</caption>
 <figure>
 <location><page_77><loc_10><loc_18><loc_89><loc_79></location>
+<caption>Figure 4-38 Specifying a new check constraint on the CUSTOMERS table</caption>
 </figure>
 <list_item><location><page_78><loc_22><loc_88><loc_88><loc_91></location>4. Figure 4-39 shows that there is now a check constraint on the CUSTOMERS table that prevents any masked data from being updated to the CUSTOMER_EMAIL column.</list_item>
 <caption><location><page_78><loc_10><loc_50><loc_48><loc_51></location>Figure 4-39 Check constraint on the CUSTOMERS table</caption>
 <figure>
 <location><page_78><loc_10><loc_52><loc_89><loc_86></location>
+<caption>Figure 4-39 Check constraint on the CUSTOMERS table</caption>
 </figure>
 <list_item><location><page_78><loc_22><loc_44><loc_89><loc_48></location>5. Create all the other check constraints that are associated to each of the masks on the CUSTOMERS table. After this is done, these constraints should look like the ones that are shown in Figure 4-40.</list_item>
 <caption><location><page_78><loc_10><loc_23><loc_53><loc_24></location>Figure 4-40 List of check constraints on the CUSTOMERS table</caption>
 <figure>
 <location><page_78><loc_10><loc_24><loc_89><loc_42></location>
+<caption>Figure 4-40 List of check constraints on the CUSTOMERS table</caption>
 </figure>
 <section_header><location><page_79><loc_10><loc_89><loc_59><loc_91></location>4.3.8 Activating row and column access control</section_header>
 <text><location><page_79><loc_22><loc_85><loc_84><loc_88></location>You are now ready to activate RCAC on all three tables in this example. Complete the following steps:</text>
@@ -1055,16 +1112,19 @@
 <caption><location><page_79><loc_22><loc_56><loc_59><loc_58></location>Figure 4-41 Enabling RCAC on the CUSTOMERS table</caption>
 <figure>
 <location><page_79><loc_22><loc_58><loc_89><loc_78></location>
+<caption>Figure 4-41 Enabling RCAC on the CUSTOMERS table</caption>
 </figure>
 <list_item><location><page_79><loc_22><loc_50><loc_88><loc_54></location>2. Enable RCAC on the ACCOUNTS table. Right-click the ACCOUNTS table and select Definition . As shown Figure 4-42, make sure that you select Row access control and Column access control . Click OK .</list_item>
 <caption><location><page_79><loc_22><loc_26><loc_52><loc_27></location>Figure 4-42 Enabling RCAC on ACCOUNTS</caption>
 <figure>
 <location><page_79><loc_22><loc_28><loc_87><loc_48></location>
+<caption>Figure 4-42 Enabling RCAC on ACCOUNTS</caption>
 </figure>
 <list_item><location><page_80><loc_22><loc_87><loc_89><loc_91></location>3. Enable RCAC on the TRANSACTIONS table. Right-click the TRANSACTIONS table and select Definition . As shown in Figure 4-43, make sure that you select Row access control . Click OK .</list_item>
 <caption><location><page_80><loc_22><loc_63><loc_55><loc_65></location>Figure 4-43 Enabling RCAC on TRANSACTIONS</caption>
 <figure>
 <location><page_80><loc_22><loc_65><loc_89><loc_85></location>
+<caption>Figure 4-43 Enabling RCAC on TRANSACTIONS</caption>
 </figure>
 <section_header><location><page_80><loc_10><loc_59><loc_44><loc_61></location>4.3.9 Reviewing row permissions</section_header>
 <text><location><page_80><loc_22><loc_55><loc_88><loc_58></location>This section displays all the row permissions after enabling RCAC. Complete the following steps:</text>
@@ -1072,16 +1132,19 @@
 <caption><location><page_80><loc_11><loc_25><loc_44><loc_26></location>Figure 4-44 Row permissions after enabling RCAC</caption>
 <figure>
 <location><page_80><loc_10><loc_27><loc_89><loc_48></location>
+<caption>Figure 4-44 Row permissions after enabling RCAC</caption>
 </figure>
 <list_item><location><page_81><loc_22><loc_88><loc_89><loc_91></location>2. Look at one of the row permission definitions by right-clicking it and selecting Definition , as shown in Figure 4-45.</list_item>
 <caption><location><page_81><loc_22><loc_68><loc_54><loc_70></location>Figure 4-45 Selecting row permission definition</caption>
 <figure>
 <location><page_81><loc_22><loc_70><loc_76><loc_86></location>
+<caption>Figure 4-45 Selecting row permission definition</caption>
 </figure>
 <list_item><location><page_81><loc_22><loc_60><loc_89><loc_66></location>3. A window opens, as shown in Figure 4-46. Take note of the nonsensical search condition (0=1) of the QIBM_DEFAULT row permission. This permission is ORed with all of the others and it ensures that if someone does not meet any of the criteria from the row permission then this condition is tested, and because it is false the access is denied.</list_item>
 <caption><location><page_81><loc_11><loc_23><loc_56><loc_24></location>Figure 4-46 Search condition of the QIBM_DEFAULT row permission</caption>
 <figure>
 <location><page_81><loc_10><loc_25><loc_82><loc_59></location>
+<caption>Figure 4-46 Search condition of the QIBM_DEFAULT row permission</caption>
 </figure>
 <section_header><location><page_82><loc_10><loc_89><loc_57><loc_91></location>4.3.10 Demonstrating data access with RCAC</section_header>
 <text><location><page_82><loc_22><loc_85><loc_89><loc_88></location>You are now ready to test the RCAC definitions. Run the following SQL statements with each type of user (DBE, SECURITY, TELLER, ADMIN, and WEBUSER):</text>
@@ -1099,11 +1162,13 @@
 <caption><location><page_82><loc_22><loc_43><loc_43><loc_44></location>Figure 4-47 DBE session user</caption>
 <figure>
 <location><page_82><loc_22><loc_45><loc_59><loc_57></location>
+<caption>Figure 4-47 DBE session user</caption>
 </figure>
 <list_item><location><page_82><loc_22><loc_40><loc_82><loc_41></location>2. The number of rows that the DBE user MCAIN can see is shown in Figure 4-48.</list_item>
 <caption><location><page_82><loc_22><loc_20><loc_74><loc_21></location>Figure 4-48 Number of rows that DBE user can see in the CUSTOMERS table</caption>
 <figure>
 <location><page_82><loc_22><loc_21><loc_64><loc_38></location>
+<caption>Figure 4-48 Number of rows that DBE user can see in the CUSTOMERS table</caption>
 </figure>
 <list_item><location><page_83><loc_22><loc_87><loc_89><loc_91></location>3. The result of the third SQL statement is shown in Figure 4-49. Note the masked columns. User MCAIN can see all the rows in the CUSTOMERS table, but there are some columns where the result is masked.</list_item>
 <paragraph><location><page_83><loc_11><loc_39><loc_62><loc_41></location>Figure 4-49 SQL statement that is run by the DBE user with masked columns</paragraph>
@@ -1113,16 +1178,19 @@
 <caption><location><page_83><loc_22><loc_12><loc_47><loc_13></location>Figure 4-50 SECURITY session user</caption>
 <figure>
 <location><page_83><loc_22><loc_13><loc_58><loc_29></location>
+<caption>Figure 4-50 SECURITY session user</caption>
 </figure>
 <list_item><location><page_84><loc_22><loc_88><loc_89><loc_91></location>2. The number of rows in the CUSTOMERS table that the security officer can see is shown in Figure 4-51. The security officer cannot see any data at all.</list_item>
 <caption><location><page_84><loc_22><loc_70><loc_80><loc_71></location>Figure 4-51 Number of rows that the security officer can see in the CUSTOMERS table</caption>
 <figure>
 <location><page_84><loc_22><loc_72><loc_63><loc_86></location>
+<caption>Figure 4-51 Number of rows that the security officer can see in the CUSTOMERS table</caption>
 </figure>
 <list_item><location><page_84><loc_22><loc_65><loc_89><loc_68></location>3. The result of the third SQL statement is shown in Figure 4-52. Note the empty set that is returned to the security officer.</list_item>
 <caption><location><page_84><loc_10><loc_43><loc_59><loc_44></location>Figure 4-52 SQL statement that is run by the SECURITY user - no results</caption>
 <figure>
 <location><page_84><loc_10><loc_45><loc_89><loc_63></location>
+<caption>Figure 4-52 SQL statement that is run by the SECURITY user - no results</caption>
 </figure>
 <section_header><location><page_84><loc_22><loc_40><loc_60><loc_41></location>Data access for TELLER user with RCAC</section_header>
 <text><location><page_84><loc_22><loc_38><loc_70><loc_39></location>To test a Teller (TQSPENCER) user, complete the following steps:</text>
@@ -1130,16 +1198,19 @@
 <caption><location><page_84><loc_22><loc_14><loc_45><loc_15></location>Figure 4-53 TELLER session user</caption>
 <figure>
 <location><page_84><loc_22><loc_15><loc_59><loc_32></location>
+<caption>Figure 4-53 TELLER session user</caption>
 </figure>
 <list_item><location><page_85><loc_22><loc_88><loc_89><loc_91></location>2. The number of rows in the CUSTOMERS table that the TELLER user can see is shown in Figure 4-54. The TELLER user can see all the rows.</list_item>
 <caption><location><page_85><loc_22><loc_71><loc_79><loc_72></location>Figure 4-54 Number of rows that the TELLER user can see in the CUSTOMERS table</caption>
 <figure>
 <location><page_85><loc_22><loc_72><loc_64><loc_86></location>
+<caption>Figure 4-54 Number of rows that the TELLER user can see in the CUSTOMERS table</caption>
 </figure>
 <list_item><location><page_85><loc_22><loc_64><loc_89><loc_69></location>3. The result of the third SQL statement is shown in Figure 4-55. Note the masked columns. The TELLER user, TQSPENSER, can see all the rows, but there are some columns where the result is masked.</list_item>
 <caption><location><page_85><loc_10><loc_14><loc_64><loc_15></location>Figure 4-55 SQL statement that is run by the TELLER user with masked columns</caption>
 <figure>
 <location><page_85><loc_11><loc_15><loc_90><loc_63></location>
+<caption>Figure 4-55 SQL statement that is run by the TELLER user with masked columns</caption>
 </figure>
 <section_header><location><page_86><loc_22><loc_90><loc_59><loc_91></location>Data access for ADMIN user with RCAC</section_header>
 <text><location><page_86><loc_22><loc_88><loc_73><loc_89></location>To test an ADMIN (VGLUCCHESS) user, complete the following steps:</text>
@@ -1147,11 +1218,13 @@
 <caption><location><page_86><loc_22><loc_70><loc_45><loc_72></location>Figure 4-56 ADMIN session user</caption>
 <figure>
 <location><page_86><loc_22><loc_72><loc_58><loc_82></location>
+<caption>Figure 4-56 ADMIN session user</caption>
 </figure>
 <list_item><location><page_86><loc_22><loc_66><loc_88><loc_68></location>2. The number of rows that the ADMIN user can see is shown in Figure 4-57. The ADMIN user can see all the rows.</list_item>
 <caption><location><page_86><loc_22><loc_52><loc_75><loc_53></location>Figure 4-57 Number of rows that the ADMIN can see in the CUSTOMERS table</caption>
 <figure>
 <location><page_86><loc_22><loc_53><loc_63><loc_64></location>
+<caption>Figure 4-57 Number of rows that the ADMIN can see in the CUSTOMERS table</caption>
 </figure>
 <list_item><location><page_87><loc_22><loc_88><loc_86><loc_91></location>3. The result of the third SQL statement is shown in Figure 4-58. There are no masked columns.</list_item>
 <paragraph><location><page_87><loc_11><loc_38><loc_63><loc_40></location>Figure 4-58 SQL statement that is run by the ADMIN user - no masked columns</paragraph>
@@ -1161,26 +1234,31 @@
 <caption><location><page_87><loc_22><loc_13><loc_47><loc_15></location>Figure 4-59 WEBUSER session user</caption>
 <figure>
 <location><page_87><loc_22><loc_15><loc_58><loc_26></location>
+<caption>Figure 4-59 WEBUSER session user</caption>
 </figure>
 <list_item><location><page_88><loc_22><loc_87><loc_89><loc_91></location>2. A global variable (CUSTOMER_LOGIN_ID) is set by the web application and then is used to check the row permissions. Figure 4-60 shows setting the global variable by using the customer login ID.</list_item>
 <caption><location><page_88><loc_22><loc_71><loc_64><loc_72></location>Figure 4-60 Setting the global variable CUSTOMER_LOGIN_ID</caption>
 <figure>
 <location><page_88><loc_22><loc_72><loc_89><loc_85></location>
+<caption>Figure 4-60 Setting the global variable CUSTOMER_LOGIN_ID</caption>
 </figure>
 <list_item><location><page_88><loc_22><loc_66><loc_84><loc_69></location>3. Verify that the global variable was set with the correct value by clicking the Global Variable tab, as shown in Figure 4-61.</list_item>
 <caption><location><page_88><loc_22><loc_33><loc_52><loc_34></location>Figure 4-61 Viewing the global variable value</caption>
 <figure>
 <location><page_88><loc_22><loc_34><loc_65><loc_64></location>
+<caption>Figure 4-61 Viewing the global variable value</caption>
 </figure>
 <list_item><location><page_88><loc_22><loc_28><loc_88><loc_31></location>4. The number of rows that the WEBUSER can see is shown in Figure 4-62. This user can see only the one row that belongs to his web-based user ID.</list_item>
 <caption><location><page_88><loc_22><loc_12><loc_77><loc_13></location>Figure 4-62 Number of rows that the WEBUSER can see in the CUSTOMERS table</caption>
 <figure>
 <location><page_88><loc_22><loc_14><loc_62><loc_26></location>
+<caption>Figure 4-62 Number of rows that the WEBUSER can see in the CUSTOMERS table</caption>
 </figure>
 <list_item><location><page_89><loc_22><loc_88><loc_86><loc_91></location>5. The result of the third SQL statement is shown in Figure 4-63. There are no masked columns, and the user can see only one row, which is the user's own row.</list_item>
 <caption><location><page_89><loc_10><loc_67><loc_60><loc_68></location>Figure 4-63 SQL statement that is run by WEBUSER - no masked columns</caption>
 <figure>
 <location><page_89><loc_10><loc_68><loc_89><loc_86></location>
+<caption>Figure 4-63 SQL statement that is run by WEBUSER - no masked columns</caption>
 </figure>
 <section_header><location><page_89><loc_22><loc_63><loc_62><loc_65></location>Other examples of data access with RCAC</section_header>
 <text><location><page_89><loc_22><loc_60><loc_84><loc_63></location>To run an SQL statement that lists all the accounts and current balance by customer, complete the following steps:</text>
@@ -1197,21 +1275,25 @@
 <caption><location><page_92><loc_22><loc_36><loc_56><loc_37></location>Figure 4-67 Visual Explain with no RCAC enabled</caption>
 <figure>
 <location><page_92><loc_22><loc_37><loc_65><loc_83></location>
+<caption>Figure 4-67 Visual Explain with no RCAC enabled</caption>
 </figure>
 <list_item><location><page_93><loc_22><loc_87><loc_84><loc_91></location>2. Figure 4-68 shows the Visual Explain of the same SQL statement, but with RCAC enabled. It is clear that the implementation of the SQL statement is more complex because the row permission rule becomes part of the WHERE clause.</list_item>
 <caption><location><page_93><loc_22><loc_38><loc_54><loc_39></location>Figure 4-68 Visual Explain with RCAC enabled</caption>
 <figure>
 <location><page_93><loc_22><loc_40><loc_89><loc_85></location>
+<caption>Figure 4-68 Visual Explain with RCAC enabled</caption>
 </figure>
 <list_item><location><page_93><loc_22><loc_32><loc_89><loc_36></location>3. Compare the advised indexes that are provided by the Optimizer without RCAC and with RCAC enabled. Figure 4-69 shows the index advice for the SQL statement without RCAC enabled. The index being advised is for the ORDER BY clause.</list_item>
 <caption><location><page_93><loc_11><loc_15><loc_37><loc_16></location>Figure 4-69 Index advice with no RCAC</caption>
 <figure>
 <location><page_93><loc_11><loc_16><loc_83><loc_30></location>
+<caption>Figure 4-69 Index advice with no RCAC</caption>
 </figure>
 <list_item><location><page_94><loc_22><loc_87><loc_89><loc_91></location>4. Now, look at the advised indexes with RCAC enabled. As shown in Figure 4-70, there is an additional index being advised, which is basically for the row permission rule. For more information, see 6.4.2, "Index advisor" on page 99.</list_item>
 <caption><location><page_94><loc_10><loc_69><loc_41><loc_70></location>Figure 4-70 Index advice with RCAC enabled</caption>
 <figure>
 <location><page_94><loc_10><loc_70><loc_83><loc_85></location>
+<caption>Figure 4-70 Index advice with RCAC enabled</caption>
 </figure>
 <figure>
 <location><page_95><loc_5><loc_70><loc_39><loc_91></location>
@@ -1261,6 +1343,7 @@
 <caption><location><page_97><loc_22><loc_8><loc_61><loc_9></location>Figure 5-1 Accidental update with masked values scenario</caption>
 <figure>
 <location><page_97><loc_22><loc_9><loc_86><loc_45></location>
+<caption>Figure 5-1 Accidental update with masked values scenario</caption>
 </figure>
 <text><location><page_98><loc_22><loc_88><loc_89><loc_91></location>Obviously, careful planning and testing should be exercised to avoid accidental updates with masked values.</text>
 <text><location><page_98><loc_22><loc_81><loc_89><loc_87></location>DB2 for i also enhanced its check constraint support in the IBM i 7.2 release with a new ON UPDATE clause that allows the existing value to be preserved when a masked value is detected by a check constraint. Details about how to employ this new check constraint support can be found in 6.8.1, "Check constraint solution" on page 108.</text>
@@ -1316,7 +1399,7 @@
 <section_header><location><page_102><loc_56><loc_61><loc_73><loc_62></location>With RCAC Masking</section_header>
 <table>
 <location><page_102><loc_23><loc_41><loc_49><loc_60></location>
-<row_0><col_0><body>CREDIT CARD NUMBER _ _</col_0><col_1><body>TOTAL</col_1></row_0>
+<row_0><col_0><col_header>CREDIT CARD NUMBER _ _</col_0><col_1><col_header>TOTAL</col_1></row_0>
 <row_1><col_0><body>3785 0000 0000 1234</col_0><col_1><body>233.50</col_1></row_1>
 <row_2><col_0><body>3785 1111 1111 1234</col_0><col_1><body>105.10</col_1></row_2>
 <row_3><col_0><body>3785 2222 2222 1234</col_0><col_1><body>300 00 300.00</col_1></row_3>
@@ -1328,10 +1411,11 @@
 <row_9><col_0><body>6011 8888 8888 1234</col_0><col_1><body>750.33</col_1></row_9>
 <row_10><col_0><body>6011 9999 9999 0001</col_0><col_1><body>10.00</col_1></row_10>
 </table>
-<caption><location><page_102><loc_51><loc_41><loc_77><loc_61></location>Figure 6-1 Timing of column masking</caption>
+<caption><location><page_102><loc_22><loc_39><loc_47><loc_40></location>Figure 6-1 Timing of column masking</caption>
 <table>
 <location><page_102><loc_51><loc_41><loc_77><loc_61></location>
-<row_0><col_0><body>CREDIT CARD NUMBER _ _</col_0><col_1><body>TOTAL</col_1></row_0>
+<caption>Figure 6-1 Timing of column masking</caption>
+<row_0><col_0><col_header>CREDIT CARD NUMBER _ _</col_0><col_1><col_header>TOTAL</col_1></row_0>
 <row_1><col_0><body>**** **** **** 1234</col_0><col_1><body>233.50</col_1></row_1>
 <row_2><col_0><body>**** **** **** 1234</col_0><col_1><body>105.10</col_1></row_2>
 <row_3><col_0><body>**** **** **** 1234</col_0><col_1><body>300 00 300.00</col_1></row_3>
@@ -1349,12 +1433,14 @@
 <caption><location><page_103><loc_22><loc_32><loc_63><loc_33></location>Figure 6-2 Masking differences between Fieldproc and RCAC</caption>
 <figure>
 <location><page_103><loc_22><loc_33><loc_67><loc_68></location>
+<caption>Figure 6-2 Masking differences between Fieldproc and RCAC</caption>
 </figure>
 <section_header><location><page_104><loc_11><loc_89><loc_56><loc_91></location>6.2 RCAC effects on data movement</section_header>
 <text><location><page_104><loc_22><loc_80><loc_89><loc_87></location>As described earlier and shown in Figure 6-3, RCAC is applied pervasively regardless of the data access programming interface, SQL statement, or IBM i command. The effects of RCAC on data movement scenarios can be profound and possibly problematic. It is important to understand these effects and make the appropriate adjustments to avoid incorrect results or data loss.</text>
 <caption><location><page_104><loc_22><loc_62><loc_48><loc_63></location>Figure 6-3 RCAC and data movement</caption>
 <figure>
 <location><page_104><loc_22><loc_63><loc_81><loc_78></location>
+<caption>Figure 6-3 RCAC and data movement</caption>
 </figure>
 <text><location><page_104><loc_22><loc_50><loc_89><loc_60></location>The "user" that is running the data movement application or process, whether it be a high availability (HA) scenario, an extract, transform, load (ETL) scenario, or just copying data from one file or table to another one, must have permission to all the source rows without masking, and not be restricted from putting rows into the target. Allowing the data movement application or process to bypass the RCAC rules must be based on a clear and concise understanding of the organization's object security and data access policy. Proper design, implementation, and testing are critical success factors when applying RCAC.</text>
 <text><location><page_104><loc_23><loc_40><loc_88><loc_47></location>Important: RCAC is applied to the table or physical file access. It is not applied to the journal receiver access. Any and all database transactions are represented in the journal regardless of RCAC row permissions and column masks. This makes it essential that IBM i security is used to ensure that only authorized personnel have access to the journaled data.</text>
@@ -1370,6 +1456,7 @@
 <caption><location><page_105><loc_22><loc_47><loc_62><loc_49></location>Figure 6-4 RCAC effects on data movement from SOURCE</caption>
 <figure>
 <location><page_105><loc_22><loc_49><loc_80><loc_80></location>
+<caption>Figure 6-4 RCAC effects on data movement from SOURCE</caption>
 </figure>
 <section_header><location><page_105><loc_10><loc_43><loc_66><loc_45></location>6.2.2 Effects when RCAC is defined on the target table</section_header>
 <text><location><page_105><loc_22><loc_39><loc_88><loc_42></location>Example 6-2 shows a simple example that illustrates the effect of RCAC as defined on the target table.</text>
@@ -1379,6 +1466,7 @@
 <caption><location><page_106><loc_22><loc_47><loc_60><loc_48></location>Figure 6-5 RCAC effects on data movement on TARGET</caption>
 <figure>
 <location><page_106><loc_22><loc_48><loc_82><loc_80></location>
+<caption>Figure 6-5 RCAC effects on data movement on TARGET</caption>
 </figure>
 <section_header><location><page_106><loc_10><loc_42><loc_80><loc_44></location>6.2.3 Effects when RCAC is defined on both source and target tables</section_header>
 <text><location><page_106><loc_22><loc_38><loc_89><loc_41></location>Example 6-3 shows a simple example that illustrates the effect of RCAC as defined on both the source and the target tables.</text>
@@ -1389,6 +1477,7 @@
 <caption><location><page_107><loc_22><loc_50><loc_70><loc_51></location>Figure 6-6 RCAC effects on data movement on SOURCE and TARGET</caption>
 <figure>
 <location><page_107><loc_22><loc_51><loc_82><loc_83></location>
+<caption>Figure 6-6 RCAC effects on data movement on SOURCE and TARGET</caption>
 </figure>
 <section_header><location><page_107><loc_11><loc_44><loc_43><loc_46></location>6.3 RCAC effects on joins</section_header>
 <text><location><page_107><loc_22><loc_38><loc_89><loc_42></location>As mentioned previously, a fundamental concept of row permission is that it defines a logical subset of rows that a user or group of users is permitted to access and use. This subset becomes the new basis of any query against the table that has RCAC enabled.</text>
@@ -1397,41 +1486,48 @@
 <caption><location><page_108><loc_22><loc_58><loc_55><loc_60></location>Figure 6-7 Set A and set B with row permissions</caption>
 <figure>
 <location><page_108><loc_22><loc_60><loc_82><loc_86></location>
+<caption>Figure 6-7 Set A and set B with row permissions</caption>
 </figure>
 <section_header><location><page_108><loc_10><loc_54><loc_27><loc_56></location>6.3.1 Inner joins</section_header>
 <text><location><page_108><loc_22><loc_50><loc_89><loc_53></location>Inner join defines the intersection of two data sets. For a row to be returned from the inner join query, it must appear in both sets, as shown in Figure 6-8.</text>
 <caption><location><page_108><loc_22><loc_20><loc_53><loc_21></location>Figure 6-8 Inner join without RCAC permission</caption>
 <figure>
 <location><page_108><loc_22><loc_21><loc_76><loc_48></location>
+<caption>Figure 6-8 Inner join without RCAC permission</caption>
 </figure>
 <text><location><page_109><loc_22><loc_85><loc_89><loc_91></location>Given that row permission serves to eliminate logically rows from one or more sets, the result set from an inner join (and a subquery) can be different when RCAC is applied. RCAC can reduce the number of rows that are permitted to be accessed by the join, as shown in Figure 6-9.</text>
 <text><location><page_109><loc_23><loc_79><loc_88><loc_83></location>Effect of column masks on inner joins: Because column masks are applied after the query final results are determined, the masked value has no effect on the join processing and corresponding query result set.</text>
 <caption><location><page_109><loc_22><loc_45><loc_51><loc_47></location>Figure 6-9 Inner join with RCAC permission</caption>
 <figure>
 <location><page_109><loc_22><loc_47><loc_77><loc_76></location>
+<caption>Figure 6-9 Inner join with RCAC permission</caption>
 </figure>
 <section_header><location><page_110><loc_10><loc_89><loc_28><loc_91></location>6.3.2 Outer joins</section_header>
 <text><location><page_110><loc_22><loc_82><loc_89><loc_88></location>Outer joins preserve one or both sides of two data sets. A row can be returned from the outer join query if it appears in the primary set (LEFT, RIGHT, or both in the case of FULL), as shown in Figure 6-10. Column values from the secondary set are returned if the row has a match in the primary set. Otherwise, NULL is returned for the column value by default.</text>
 <caption><location><page_110><loc_22><loc_51><loc_55><loc_53></location>Figure 6-10 Outer join without RCAC permission</caption>
 <figure>
 <location><page_110><loc_22><loc_53><loc_78><loc_80></location>
+<caption>Figure 6-10 Outer join without RCAC permission</caption>
 </figure>
 <text><location><page_111><loc_22><loc_87><loc_87><loc_91></location>Given that row permission serves to eliminate logically rows from one or more sets, more column values that are returned from the secondary table in outer join can be NULL when RCAC is applied, as shown in Figure 6-11.</text>
 <text><location><page_111><loc_23><loc_80><loc_88><loc_85></location>Effect of column masks on inner joins: Because column masks are applied after the query final results are determined, the masked value has no effect on the join processing and corresponding query result set.</text>
 <caption><location><page_111><loc_22><loc_45><loc_53><loc_46></location>Figure 6-11 Outer join with RCAC permission</caption>
 <figure>
 <location><page_111><loc_22><loc_47><loc_79><loc_77></location>
+<caption>Figure 6-11 Outer join with RCAC permission</caption>
 </figure>
 <section_header><location><page_112><loc_11><loc_89><loc_32><loc_91></location>6.3.3 Exception joins</section_header>
 <text><location><page_112><loc_22><loc_82><loc_89><loc_88></location>Exception joins preserve one side of two data sets. A row can be returned from the exception join query if it appears in the primary set (LEFT or RIGHT) and the row does not appear in the secondary set, as shown in Figure 6-12. Column values from the secondary set are returned as NULL by default.</text>
 <caption><location><page_112><loc_22><loc_49><loc_57><loc_50></location>Figure 6-12 Exception join without RCAC permission</caption>
 <figure>
 <location><page_112><loc_22><loc_50><loc_79><loc_80></location>
+<caption>Figure 6-12 Exception join without RCAC permission</caption>
 </figure>
 <text><location><page_112><loc_22><loc_41><loc_89><loc_47></location>Given that row permission serves to eliminate logically rows from one or more sets, more rows can appear to be exceptions when RCAC is applied, as shown in Figure 6-13. Also, because column masks are applied after the query final results are determined, the masked value has no effect on the join processing and corresponding query result set.</text>
 <caption><location><page_112><loc_22><loc_8><loc_55><loc_9></location>Figure 6-13 Exception join with RCAC permission</caption>
 <figure>
 <location><page_112><loc_22><loc_9><loc_79><loc_39></location>
+<caption>Figure 6-13 Exception join with RCAC permission</caption>
 </figure>
 <section_header><location><page_113><loc_11><loc_89><loc_77><loc_91></location>6.4 Monitoring, analyzing, and debugging with RCAC</section_header>
 <text><location><page_113><loc_22><loc_83><loc_89><loc_87></location>It is assumed (and it is a critical success factor) that the database engineer or application developer has a thorough understanding of the DB2 for i Query Optimizer, Database Engine, and all the associated tools and techniques.</text>
@@ -1450,21 +1546,25 @@
 <caption><location><page_114><loc_10><loc_54><loc_49><loc_56></location>Figure 6-14 Visual Explain indicating that RCAC is applied</caption>
 <figure>
 <location><page_114><loc_10><loc_56><loc_89><loc_88></location>
+<caption>Figure 6-14 Visual Explain indicating that RCAC is applied</caption>
 </figure>
 <text><location><page_114><loc_22><loc_51><loc_87><loc_52></location>Figure 6-15 shows the main dashboard of an SQL Performance Monitor. Click Summary .</text>
 <caption><location><page_114><loc_10><loc_30><loc_36><loc_31></location>Figure 6-15 SQL Performance Monitor</caption>
 <figure>
 <location><page_114><loc_10><loc_32><loc_89><loc_49></location>
+<caption>Figure 6-15 SQL Performance Monitor</caption>
 </figure>
 <text><location><page_114><loc_22><loc_25><loc_86><loc_28></location>Figure 6-16 shows the summary of an SQL Performance Monitor with an indication that RCAC is applied.</text>
 <caption><location><page_114><loc_11><loc_12><loc_57><loc_13></location>Figure 6-16 SQL Performance Monitor indicating that RCAC is applied</caption>
 <figure>
 <location><page_114><loc_10><loc_13><loc_89><loc_23></location>
+<caption>Figure 6-16 SQL Performance Monitor indicating that RCAC is applied</caption>
 </figure>
 <text><location><page_115><loc_22><loc_88><loc_84><loc_91></location>Figure 6-17 shows the statements of an SQL Performance Monitor and how RCAC is externalized.</text>
 <caption><location><page_115><loc_11><loc_71><loc_57><loc_72></location>Figure 6-17 SQL Performance Monitor showing statements and RCAC</caption>
 <figure>
 <location><page_115><loc_10><loc_73><loc_89><loc_86></location>
+<caption>Figure 6-17 SQL Performance Monitor showing statements and RCAC</caption>
 </figure>
 <text><location><page_115><loc_22><loc_59><loc_89><loc_69></location>When implementing RCAC as part of a comprehensive and pervasive data access control initiative, consider that the database monitoring and analysis tools can collect literal values that are passed as part of SQL statements. These literal values can be viewed as part of the information collected. If any of the literals are based on or are used with masked columns, it is important to review the database engineer's policy for viewing these data elements. For example, supposed that column CUSTOMER_TAX_ID is deemed masked for the database engineer and the CUSTOMER_TAX_ID column is used in a predicate as follows:</text>
 <text><location><page_115><loc_22><loc_56><loc_53><loc_58></location>WHERE CUSTOMER_TAX_ID = '123-45-7890'</text>
@@ -1477,11 +1577,13 @@
 <caption><location><page_116><loc_22><loc_51><loc_47><loc_52></location>Figure 6-18 Index advice and RCAC</caption>
 <figure>
 <location><page_116><loc_22><loc_52><loc_89><loc_86></location>
+<caption>Figure 6-18 Index advice and RCAC</caption>
 </figure>
 <text><location><page_116><loc_22><loc_46><loc_87><loc_49></location>In Figure 6-19, index advisor is showing an index for the ACCOUNTS and CUSTOMERS tables based on the RCAC rule text.</text>
 <caption><location><page_116><loc_11><loc_28><loc_44><loc_30></location>Figure 6-19 Index advisor based on the RCAC rule</caption>
 <figure>
 <location><page_116><loc_10><loc_30><loc_83><loc_44></location>
+<caption>Figure 6-19 Index advisor based on the RCAC rule</caption>
 </figure>
 <text><location><page_116><loc_22><loc_24><loc_89><loc_26></location>For more information about creating and using indexes, see IBM DB2 for i indexing methods and strategies , found at:</text>
 <text><location><page_116><loc_22><loc_20><loc_89><loc_23></location>http://www.ibm.com/partnerworld/wps/servlet/ContentHandler/stg_ast_sys_wp_db2_i_in dexing_methods_strategies</text>
@@ -1531,11 +1633,13 @@
 <caption><location><page_118><loc_22><loc_32><loc_51><loc_33></location>Figure 6-21 View definition and user query</caption>
 <figure>
 <location><page_118><loc_22><loc_33><loc_80><loc_67></location>
+<caption>Figure 6-21 View definition and user query</caption>
 </figure>
 <text><location><page_119><loc_22><loc_88><loc_85><loc_91></location>What the query optimizer plans for and what the database engine runs is shown in the Figure 6-22.</text>
 <caption><location><page_119><loc_22><loc_50><loc_48><loc_51></location>Figure 6-22 Query rewrite with RCAC</caption>
 <figure>
 <location><page_119><loc_22><loc_51><loc_83><loc_87></location>
+<caption>Figure 6-22 Query rewrite with RCAC</caption>
 </figure>
 <section_header><location><page_119><loc_10><loc_46><loc_42><loc_47></location>6.5.2 Materialized query tables</section_header>
 <text><location><page_119><loc_22><loc_40><loc_89><loc_44></location>When the query to populate a materialized query table (MQT) is run by the system on either the create table or a refresh table, and one or more source tables have RCAC defined, the row permissions and column masks are ignored. This means that the MQT has all of the data.</text>
@@ -1574,11 +1678,13 @@
 <caption><location><page_122><loc_22><loc_48><loc_54><loc_49></location>Figure 6-23 Native record access with no RCAC</caption>
 <figure>
 <location><page_122><loc_22><loc_49><loc_83><loc_83></location>
+<caption>Figure 6-23 Native record access with no RCAC</caption>
 </figure>
 <text><location><page_123><loc_22><loc_85><loc_89><loc_91></location>Before the record, as identified by the key, is considered available, the RCAC logic must be run. If the record is rejected by RCAC, the next record in sequence that is permissible must be identified. This spinning through the records can take a long time and uses many resources, as shown in Figure 6-24.</text>
 <caption><location><page_123><loc_22><loc_47><loc_56><loc_48></location>Figure 6-24 Native record level access with RCAC</caption>
 <figure>
 <location><page_123><loc_22><loc_49><loc_84><loc_83></location>
+<caption>Figure 6-24 Native record level access with RCAC</caption>
 </figure>
 <text><location><page_123><loc_22><loc_42><loc_86><loc_45></location>After the row permissions and column masks are designed and implemented, adequate performance and scalability testing are recommended.</text>
 <section_header><location><page_123><loc_11><loc_37><loc_83><loc_39></location>6.7 Exclusive lock to implement RCAC (availability issues)</section_header>
@@ -1635,6 +1741,7 @@
 <caption><location><page_127><loc_22><loc_28><loc_60><loc_29></location>Figure 6-25 Object-level security and RCAC permissions</caption>
 <figure>
 <location><page_127><loc_22><loc_29><loc_83><loc_65></location>
+<caption>Figure 6-25 Object-level security and RCAC permissions</caption>
 </figure>
 <text><location><page_127><loc_22><loc_23><loc_89><loc_25></location>To get access to the table and the rows, the user must pass the object level authority test and the RCAC permission test.</text>
 <text><location><page_127><loc_22><loc_17><loc_89><loc_21></location>The IBM i journal captures the transactional data and places an image of the row in the journal receiver. If the user has access to the journal receiver, the row image can be viewed if the user has authority to the journal receiver.</text>
@@ -1675,6 +1782,7 @@
 <caption><location><page_132><loc_22><loc_41><loc_55><loc_42></location>Figure 7-1 Restoring tables to different schemas</caption>
 <figure>
 <location><page_132><loc_22><loc_43><loc_85><loc_73></location>
+<caption>Figure 7-1 Restoring tables to different schemas</caption>
 </figure>
 <text><location><page_132><loc_22><loc_30><loc_89><loc_39></location>The only way to fix this issue is to re-create the row permission or column mask after the restore operation. Re-creation of the row permission or column mask is required only for definitions that reference other DB2 objects, but it is simpler to re-create all of the RCAC definitions instead of a subset. For example, generate the SQL using System i Navigator, clear the "Schema qualify names for objects" and select the "OR REPLACE clause", and then run the generated script.</text>
 <section_header><location><page_132><loc_10><loc_26><loc_32><loc_28></location>7.2.2 Table migration</section_header>

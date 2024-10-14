@@ -1,12 +1,15 @@
 from enum import Enum, auto
 from io import BytesIO
-from typing import Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from docling_core.types.experimental import BoundingBox, Size
 from docling_core.types.experimental.document import PictureData, TableCell
 from docling_core.types.experimental.labels import DocItemLabel
 from PIL.Image import Image
 from pydantic import BaseModel, ConfigDict
+
+if TYPE_CHECKING:
+    from docling.backend.pdf_backend import PdfPageBackend
 
 
 class ConversionStatus(str, Enum):
@@ -27,10 +30,13 @@ class InputFormat(str, Enum):
 
 FormatToMimeType = {
     InputFormat.DOCX: {
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
     },
     InputFormat.PPTX: {
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        "application/vnd.openxmlformats-officedocument.presentationml.template",
+        "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     },
     InputFormat.HTML: {"text/html", "application/xhtml+xml"},
     InputFormat.IMAGE: {

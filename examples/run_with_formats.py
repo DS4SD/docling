@@ -61,7 +61,7 @@ for res in conv_results:
     # print(res.experimental.export_to_markdown())
     # Export Docling document format to markdown (experimental):
     with (out_path / f"{res.input.file.name}.md").open("w") as fp:
-        fp.write(res.output.export_to_markdown())
+        fp.write(res.document.export_to_markdown())
 
     with (out_path / f"{res.input.file.name}.json").open("w") as fp:
-        fp.write(json.dumps(res.output.export_to_dict()))
+        fp.write(json.dumps(res.document.export_to_dict()))

@@ -119,19 +119,19 @@ def main():
 
     # Export Deep Search document JSON format:
     with (output_dir / f"{doc_filename}.json").open("w", encoding="utf-8") as fp:
-        fp.write(json.dumps(conv_result.output.export_to_dict()))
+        fp.write(json.dumps(conv_result.document.export_to_dict()))
 
     # Export Text format:
     with (output_dir / f"{doc_filename}.txt").open("w", encoding="utf-8") as fp:
-        fp.write(conv_result.output.export_to_text())
+        fp.write(conv_result.document.export_to_text())
 
     # Export Markdown format:
     with (output_dir / f"{doc_filename}.md").open("w", encoding="utf-8") as fp:
-        fp.write(conv_result.output.export_to_markdown())
+        fp.write(conv_result.document.export_to_markdown())
 
     # Export Document Tags format:
     with (output_dir / f"{doc_filename}.doctags").open("w", encoding="utf-8") as fp:
-        fp.write(conv_result.output.export_to_document_tokens())
+        fp.write(conv_result.document.export_to_document_tokens())
 
 
 if __name__ == "__main__":

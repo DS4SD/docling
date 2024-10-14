@@ -487,7 +487,7 @@
 <caption><location><page_31><loc_22><loc_47><loc_56><loc_48></location>Figure 3-1 CREATE PERMISSION SQL statement</caption>
 <figure>
 <location><page_31><loc_22><loc_48><loc_89><loc_86></location>
-<caption>Figure 3-1 CREATE PERMISSION SQL statement</caption>
+<caption>The SQL CREATE PERMISSION statement that is shown in Figure 3-1 is used to define and initially enable or disable the row access rules.Figure 3-1 CREATE PERMISSION SQL statement</caption>
 </figure>
 <subtitle-level-1><location><page_31><loc_22><loc_43><loc_35><loc_45></location>Column mask</subtitle-level-1>
 <paragraph><location><page_31><loc_22><loc_37><loc_89><loc_43></location>A column mask is a database object that manifests a column value access control rule for a specific column in a specific table. It uses a CASE expression that describes what you see when you access the column. For example, a teller can see only the last four digits of a tax identification number.</paragraph>

@@ -79,13 +79,13 @@ class BasePipeline(ABC):
 
         for model in self.enrichment_pipe:
             for element_batch in chunkify(
-                _filter_elements(conv_res.output, model),
+                _filter_elements(conv_res.document, model),
                 settings.perf.elements_batch_size,
             ):
                 # TODO: currently we assume the element itself is modified, because
                 # we don't have an interface to save the element back to the document
                 for element in model(
-                    doc=conv_res.output, element_batch=element_batch
+                    doc=conv_res.document, element_batch=element_batch
                 ):  # Must exhaust!
                     pass
 

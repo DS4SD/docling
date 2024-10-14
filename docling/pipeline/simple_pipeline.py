@@ -39,7 +39,7 @@ class SimplePipeline(BasePipeline):
         # the backend is expected to be of type DeclarativeDocumentBackend, which can output
         # a DoclingDocument straight.
 
-        conv_res.output = in_doc._backend.convert()
+        conv_res.document = in_doc._backend.convert()
         return conv_res
 
     def _determine_status(

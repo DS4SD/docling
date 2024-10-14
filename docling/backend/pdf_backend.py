@@ -14,25 +14,25 @@ from docling.datamodel.document import InputDocument
 class PdfPageBackend(ABC):
 
     @abstractmethod
-    def get_text_in_rect(self, bbox: "BoundingBox") -> str:
+    def get_text_in_rect(self, bbox: BoundingBox) -> str:
         pass
 
     @abstractmethod
-    def get_text_cells(self) -> Iterable["Cell"]:
+    def get_text_cells(self) -> Iterable[Cell]:
         pass
 
     @abstractmethod
-    def get_bitmap_rects(self, float: int = 1) -> Iterable["BoundingBox"]:
+    def get_bitmap_rects(self, float: int = 1) -> Iterable[BoundingBox]:
         pass
 
     @abstractmethod
     def get_page_image(
-        self, scale: float = 1, cropbox: Optional["BoundingBox"] = None
+        self, scale: float = 1, cropbox: Optional[BoundingBox] = None
     ) -> Image.Image:
         pass
 
     @abstractmethod
-    def get_size(self) -> "Size":
+    def get_size(self) -> Size:
         pass
 
     @abstractmethod
@@ -46,7 +46,7 @@ class PdfPageBackend(ABC):
 
 class PdfDocumentBackend(PaginatedDocumentBackend):
 
-    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+    def __init__(self, in_doc: InputDocument, path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
 
         if self.input_format is not InputFormat.PDF:

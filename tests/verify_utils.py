@@ -131,6 +131,10 @@ def verify_tables_v1(doc_pred: DsDocument, doc_true: DsDocument, fuzzy: bool):
 
         assert true_item.data is not None, "documents are expected to have table data"
         assert pred_item.data is not None, "documents are expected to have table data"
+
+        print("True: \n", true_item.export_to_dataframe().to_markdown())
+        print("Pred: \n", true_item.export_to_dataframe().to_markdown())
+
         for i, row in enumerate(true_item.data):
             for j, col in enumerate(true_item.data[i]):
 
@@ -175,6 +179,10 @@ def verify_tables_v2(doc_pred: DoclingDocument, doc_true: DoclingDocument, fuzzy
 
         assert true_item.data is not None, "documents are expected to have table data"
         assert pred_item.data is not None, "documents are expected to have table data"
+
+        print("True: \n", true_item.export_to_dataframe().to_markdown())
+        print("Pred: \n", true_item.export_to_dataframe().to_markdown())
+
         for i, row in enumerate(true_item.data.grid):
             for j, col in enumerate(true_item.data.grid[i]):
 
@@ -234,11 +242,11 @@ def verify_conversion_result_v1(
     ), f"Doc {input_path} did not convert successfully."
 
     doc_pred_pages: List[Page] = doc_result.pages
-    doc_pred: DsDocument = doc_result.legacy_output
+    doc_pred: DsDocument = doc_result.legacy_document
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", DeprecationWarning)
-        doc_pred_md = doc_result.render_as_markdown()
-        doc_pred_dt = doc_result.render_as_doctags()
+        doc_pred_md = doc_result.legacy_document.export_to_markdown()
+        doc_pred_dt = doc_result.legacy_document.export_to_document_tokens()
 
     engine_suffix = "" if ocr_engine is None else f".{ocr_engine}"
     gt_subpath = input_path.parent / "groundtruth" / "docling_v1" / input_path.name
@@ -308,9 +316,9 @@ def verify_conversion_result_v2(
     ), f"Doc {input_path} did not convert successfully."
 
     doc_pred_pages: List[Page] = doc_result.pages
-    doc_pred: DoclingDocument = doc_result.output
-    doc_pred_md = doc_result.output.export_to_markdown()
-    doc_pred_dt = doc_result.output.export_to_document_tokens()
+    doc_pred: DoclingDocument = doc_result.document
+    doc_pred_md = doc_result.document.export_to_markdown()
+    doc_pred_dt = doc_result.document.export_to_document_tokens()
 
     engine_suffix = "" if ocr_engine is None else f".{ocr_engine}"
     gt_subpath = input_path.parent / "groundtruth" / "docling_v2" / input_path.name

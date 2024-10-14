@@ -98,18 +98,18 @@ class DocumentConverter:
         self.format_to_options = format_options
 
         if self.allowed_formats is None:
-            if self.format_to_options is not None:
-                self.allowed_formats = self.format_to_options.keys()
-            else:
-                self.allowed_formats = [e for e in InputFormat]  # all formats
+            # if self.format_to_options is not None:
+            #    self.allowed_formats = self.format_to_options.keys()
+            # else:
+            self.allowed_formats = [e for e in InputFormat]  # all formats
 
         if self.format_to_options is None:
             self.format_to_options = _format_to_default_options
-
-        for f in self.allowed_formats:
-            if f not in self.format_to_options.keys():
-                _log.info(f"Requested format {f} will use default options.")
-                self.format_to_options[f] = _format_to_default_options[f]
+        else:
+            for f in self.allowed_formats:
+                if f not in self.format_to_options.keys():
+                    _log.info(f"Requested format {f} will use default options.")
+                    self.format_to_options[f] = _format_to_default_options[f]
 
         self.initialized_pipelines: Dict[Type[BasePipeline], BasePipeline] = {}
 

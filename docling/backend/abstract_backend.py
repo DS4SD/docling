@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
 from pathlib import Path
-from typing import Set, Union
+from typing import TYPE_CHECKING, Set, Union
 
-# from docling.datamodel.document import InputDocument
 from docling_core.types.experimental import DoclingDocument
 
-from docling.datamodel.base_models import InputFormat
+if TYPE_CHECKING:
+    from docling.datamodel.base_models import InputFormat
+    from docling.datamodel.document import InputDocument
 
 
 class AbstractDocumentBackend(ABC):
@@ -34,7 +35,7 @@ class AbstractDocumentBackend(ABC):
 
     @classmethod
     @abstractmethod
-    def supported_formats(cls) -> Set[InputFormat]:
+    def supported_formats(cls) -> Set["InputFormat"]:
         pass
 
 

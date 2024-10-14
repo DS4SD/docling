@@ -3,7 +3,7 @@ import re
 from enum import Enum
 from io import BytesIO
 from pathlib import Path, PurePath
-from typing import Dict, Iterable, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Tuple, Union
 
 import filetype
 from docling_core.types import BaseText
@@ -13,12 +13,18 @@ from docling_core.types import FileInfoObject as DsFileInfoObject
 from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
 from docling_core.types.doc.base import BoundingBox as DsBoundingBox
-from docling_core.types.doc.base import Figure, TableCell
+from docling_core.types.doc.base import Figure, GlmTableCell, TableCell
 from docling_core.types.experimental import (
     DescriptionItem,
+    DocItem,
     DocItemLabel,
     DoclingDocument,
+    PictureItem,
+    SectionHeaderItem,
+    TableItem,
+    TextItem,
 )
+from docling_core.types.experimental.document import ListItem
 from docling_core.utils.file import resolve_file_source
 from pydantic import BaseModel
 from typing_extensions import deprecated
@@ -40,6 +46,9 @@ from docling.datamodel.base_models import (
 from docling.datamodel.settings import DocumentLimits
 from docling.utils.utils import create_file_hash, create_hash
 
+if TYPE_CHECKING:
+    from docling.document_converter import FormatOption
+
 _log = logging.getLogger(__name__)
 
 layout_label_to_ds_type = {
@@ -58,6 +67,7 @@ layout_label_to_ds_type = {
     DocItemLabel.CODE: "paragraph",
     DocItemLabel.PICTURE: "figure",
     DocItemLabel.TEXT: "paragraph",
+    DocItemLabel.PARAGRAPH: "paragraph",
 }
 
 _EMPTY_LEGACY_DOC = DsDocument(
@@ -166,20 +176,42 @@ class ConversionResult(BaseModel):
     pages: List[Page] = []
     assembled: AssembledUnit = AssembledUnit()
 
-    legacy_output: Optional[DsDocument] = None  # _EMPTY_LEGACY_DOC
-    output: DoclingDocument = _EMPTY_DOCLING_DOC
+    document: DoclingDocument = _EMPTY_DOCLING_DOC
 
-    def _to_legacy_document(self) -> DsDocument:
+    @property
+    @deprecated("Use document instead.")
+    def legacy_document(self):
+        reverse_label_mapping = {
+            DocItemLabel.CAPTION.value: "Caption",
+            DocItemLabel.FOOTNOTE.value: "Footnote",
+            DocItemLabel.FORMULA.value: "Formula",
+            DocItemLabel.LIST_ITEM.value: "List-item",
+            DocItemLabel.PAGE_FOOTER.value: "Page-footer",
+            DocItemLabel.PAGE_HEADER.value: "Page-header",
+            DocItemLabel.PICTURE.value: "Picture",  # low threshold adjust to capture chemical structures for examples.
+            DocItemLabel.SECTION_HEADER.value: "Section-header",
+            DocItemLabel.TABLE.value: "Table",
+            DocItemLabel.TEXT.value: "Text",
+            DocItemLabel.TITLE.value: "Title",
+            DocItemLabel.DOCUMENT_INDEX.value: "Document Index",
+            DocItemLabel.CODE.value: "Code",
+            DocItemLabel.CHECKBOX_SELECTED.value: "Checkbox-Selected",
+            DocItemLabel.CHECKBOX_UNSELECTED.value: "Checkbox-Unselected",
+            DocItemLabel.FORM.value: "Form",
+            DocItemLabel.KEY_VALUE_REGION.value: "Key-Value Region",
+            DocItemLabel.PARAGRAPH.value: "paragraph",
+        }
+
         title = ""
         desc = DsDocumentDescription(logs=[])
 
         page_hashes = [
             PageReference(
-                hash=create_hash(self.input.document_hash + ":" + str(p.page_no)),
-                page=p.page_no + 1,
+                hash=create_hash(self.input.document_hash + ":" + str(p.page_no - 1)),
+                page=p.page_no,
                 model="default",
             )
-            for p in self.pages
+            for p in self.document.pages.values()
         ]
 
         file_info = DsFileInfoObject(
@@ -192,145 +224,199 @@ class ConversionResult(BaseModel):
         main_text = []
         tables = []
         figures = []
+        equations = []
+        footnotes = []
+        page_headers = []
+        page_footers = []
 
-        page_no_to_page = {p.page_no: p for p in self.pages}
+        embedded_captions = set()
+        for ix, (item, level) in enumerate(
+            self.document.iterate_items(self.document.body)
+        ):
 
-        for element in self.assembled.elements:
-            # Convert bboxes to lower-left origin.
-            target_bbox = DsBoundingBox(
-                element.cluster.bbox.to_bottom_left_origin(
-                    page_no_to_page[element.page_no].size.height
-                ).as_tuple()
-            )
+            if isinstance(item, (TableItem, PictureItem)) and len(item.captions) > 0:
+                caption = item.caption_text(self.document)
+                if caption:
+                    embedded_captions.add(caption)
 
-            if isinstance(element, TextElement):
-                main_text.append(
-                    BaseText(
-                        text=element.text,
-                        obj_type=layout_label_to_ds_type.get(element.label),
-                        name=element.label,
-                        prov=[
-                            Prov(
-                                bbox=target_bbox,
-                                page=element.page_no + 1,
-                                span=[0, len(element.text)],
-                            )
-                        ],
-                    )
-                )
-            elif isinstance(element, Table):
-                index = len(tables)
-                ref_str = f"#/tables/{index}"
-                main_text.append(
-                    Ref(
-                        name=element.label,
-                        obj_type=layout_label_to_ds_type.get(element.label),
-                        ref=ref_str,
-                    ),
-                )
+        for item, level in self.document.iterate_items():
+            if isinstance(item, DocItem):
+                item_type = item.label
 
-                # Initialise empty table data grid (only empty cells)
-                table_data = [
-                    [
-                        TableCell(
-                            text="",
-                            # bbox=[0,0,0,0],
-                            spans=[[i, j]],
-                            obj_type="body",
+                if isinstance(item, (TextItem, ListItem, SectionHeaderItem)):
+
+                    if isinstance(item, ListItem) and item.marker:
+                        text = f"{item.marker} {item.text}"
+                    else:
+                        text = item.text
+
+                    # Can be empty.
+                    prov = [
+                        Prov(
+                            bbox=p.bbox.as_tuple(),
+                            page=p.page_no,
+                            span=[0, len(item.text)],
                         )
-                        for j in range(element.num_cols)
+                        for p in item.prov
                     ]
-                    for i in range(element.num_rows)
-                ]
+                    main_text.append(
+                        BaseText(
+                            text=text,
+                            obj_type=layout_label_to_ds_type.get(item.label),
+                            name=reverse_label_mapping[item.label],
+                            prov=prov,
+                        )
+                    )
 
-                # Overwrite cells in table data for which there is actual cell content.
-                for cell in element.table_cells:
-                    for i in range(
-                        min(cell.start_row_offset_idx, element.num_rows),
-                        min(cell.end_row_offset_idx, element.num_rows),
-                    ):
-                        for j in range(
-                            min(cell.start_col_offset_idx, element.num_cols),
-                            min(cell.end_col_offset_idx, element.num_cols),
+                    # skip captions of they are embedded in the actual
+                    # floating object
+                    if item_type == DocItemLabel.CAPTION and text in embedded_captions:
+                        continue
+
+                elif isinstance(item, TableItem) and item.data:
+                    index = len(tables)
+                    ref_str = f"#/tables/{index}"
+                    main_text.append(
+                        Ref(
+                            name=reverse_label_mapping[item.label],
+                            obj_type=layout_label_to_ds_type.get(item.label),
+                            ref=ref_str,
+                        ),
+                    )
+
+                    # Initialise empty table data grid (only empty cells)
+                    table_data = [
+                        [
+                            TableCell(
+                                text="",
+                                # bbox=[0,0,0,0],
+                                spans=[[i, j]],
+                                obj_type="body",
+                            )
+                            for j in range(item.data.num_cols)
+                        ]
+                        for i in range(item.data.num_rows)
+                    ]
+
+                    # Overwrite cells in table data for which there is actual cell content.
+                    for cell in item.data.table_cells:
+                        for i in range(
+                            min(cell.start_row_offset_idx, item.data.num_rows),
+                            min(cell.end_row_offset_idx, item.data.num_rows),
                         ):
-                            celltype = "body"
-                            if cell.column_header:
-                                celltype = "col_header"
-                            elif cell.row_header:
-                                celltype = "row_header"
-                            elif cell.row_section:
-                                celltype = "row_section"
+                            for j in range(
+                                min(cell.start_col_offset_idx, item.data.num_cols),
+                                min(cell.end_col_offset_idx, item.data.num_cols),
+                            ):
+                                celltype = "body"
+                                if cell.column_header:
+                                    celltype = "col_header"
+                                elif cell.row_header:
+                                    celltype = "row_header"
+                                elif cell.row_section:
+                                    celltype = "row_section"
 
-                            def make_spans(cell):
-                                for rspan in range(
-                                    min(cell.start_row_offset_idx, element.num_rows),
-                                    min(cell.end_row_offset_idx, element.num_rows),
-                                ):
-                                    for cspan in range(
+                                def make_spans(cell):
+                                    for rspan in range(
                                         min(
-                                            cell.start_col_offset_idx, element.num_cols
+                                            cell.start_row_offset_idx,
+                                            item.data.num_rows,
                                         ),
-                                        min(cell.end_col_offset_idx, element.num_cols),
+                                        min(
+                                            cell.end_row_offset_idx, item.data.num_rows
+                                        ),
                                     ):
-                                        yield [rspan, cspan]
+                                        for cspan in range(
+                                            min(
+                                                cell.start_col_offset_idx,
+                                                item.data.num_cols,
+                                            ),
+                                            min(
+                                                cell.end_col_offset_idx,
+                                                item.data.num_cols,
+                                            ),
+                                        ):
+                                            yield [rspan, cspan]
 
-                            spans = list(make_spans(cell))
-                            table_data[i][j] = TableCell(
-                                text=cell.text,
-                                bbox=cell.bbox.to_bottom_left_origin(
-                                    page_no_to_page[element.page_no].size.height
-                                ).as_tuple(),
-                                # col=j,
-                                # row=i,
-                                spans=spans,
-                                obj_type=celltype,
-                                # col_span=[cell.start_col_offset_idx, cell.end_col_offset_idx],
-                                # row_span=[cell.start_row_offset_idx, cell.end_row_offset_idx]
-                            )
+                                spans = list(make_spans(cell))
+                                table_data[i][j] = GlmTableCell(
+                                    text=cell.text,
+                                    bbox=(
+                                        cell.bbox.as_tuple()
+                                        if cell.bbox is not None
+                                        else None
+                                    ),  # check if this is bottom-left
+                                    spans=spans,
+                                    obj_type=celltype,
+                                    col=j,
+                                    row=i,
+                                    row_header=cell.row_header,
+                                    row_section=cell.row_section,
+                                    col_header=cell.column_header,
+                                    row_span=[
+                                        cell.start_row_offset_idx,
+                                        cell.end_row_offset_idx,
+                                    ],
+                                    col_span=[
+                                        cell.start_col_offset_idx,
+                                        cell.end_col_offset_idx,
+                                    ],
+                                )
 
-                tables.append(
-                    DsSchemaTable(
-                        num_cols=element.num_cols,
-                        num_rows=element.num_rows,
-                        obj_type=layout_label_to_ds_type.get(element.label),
-                        data=table_data,
-                        prov=[
-                            Prov(
-                                bbox=target_bbox,
-                                page=element.page_no + 1,
-                                span=[0, 0],
-                            )
-                        ],
+                    # Compute the caption
+                    caption = item.caption_text(self.document)
+
+                    tables.append(
+                        DsSchemaTable(
+                            text=caption,
+                            num_cols=item.data.num_cols,
+                            num_rows=item.data.num_rows,
+                            obj_type=layout_label_to_ds_type.get(item.label),
+                            data=table_data,
+                            prov=[
+                                Prov(
+                                    bbox=p.bbox.as_tuple(),
+                                    page=p.page_no,
+                                    span=[0, 0],
+                                )
+                                for p in item.prov
+                            ],
+                        )
                     )
-                )
 
-            elif isinstance(element, FigureElement):
-                index = len(figures)
-                ref_str = f"#/figures/{index}"
-                main_text.append(
-                    Ref(
-                        name=element.label,
-                        obj_type=layout_label_to_ds_type.get(element.label),
-                        ref=ref_str,
-                    ),
-                )
-                figures.append(
-                    Figure(
-                        prov=[
-                            Prov(
-                                bbox=target_bbox,
-                                page=element.page_no + 1,
-                                span=[0, 0],
-                            )
-                        ],
-                        obj_type=layout_label_to_ds_type.get(element.label),
-                        # data=[[]],
+                elif isinstance(item, PictureItem):
+                    index = len(figures)
+                    ref_str = f"#/figures/{index}"
+                    main_text.append(
+                        Ref(
+                            name=reverse_label_mapping[item.label],
+                            obj_type=layout_label_to_ds_type.get(item.label),
+                            ref=ref_str,
+                        ),
                     )
-                )
+
+                    # Compute the caption
+                    caption = item.caption_text(self.document)
+
+                    figures.append(
+                        Figure(
+                            prov=[
+                                Prov(
+                                    bbox=p.bbox.as_tuple(),
+                                    page=p.page_no,
+                                    span=[0, len(caption)],
+                                )
+                                for p in item.prov
+                            ],
+                            obj_type=layout_label_to_ds_type.get(item.label),
+                            text=caption,
+                            # data=[[]],
+                        )
+                    )
 
         page_dimensions = [
-            PageDimensions(page=p.page_no + 1, height=p.size.height, width=p.size.width)
-            for p in self.pages
+            PageDimensions(page=p.page_no, height=p.size.height, width=p.size.width)
+            for p in self.document.pages.values()
         ]
 
         ds_doc = DsDocument(
@@ -338,121 +424,16 @@ class ConversionResult(BaseModel):
             description=desc,
             file_info=file_info,
             main_text=main_text,
+            equations=equations,
+            footnotes=footnotes,
+            page_headers=page_headers,
+            page_footers=page_footers,
             tables=tables,
             figures=figures,
             page_dimensions=page_dimensions,
         )
 
         return ds_doc
-
-    @deprecated("Use output.export_to_dict() instead.")
-    def render_as_dict(self):
-        return self.legacy_output.model_dump(by_alias=True, exclude_none=True)
-
-    @deprecated("Use output.export_to_markdown() instead.")
-    def render_as_markdown(
-        self,
-        delim: str = "\n\n",
-        main_text_start: int = 0,
-        main_text_stop: Optional[int] = None,
-        main_text_labels: list[str] = [
-            "title",
-            "subtitle-level-1",
-            "paragraph",
-            "caption",
-            "table",
-            "figure",
-        ],
-        strict_text: bool = False,
-        image_placeholder: str = "<!-- image -->",
-    ) -> str:
-        if self.legacy_output is None:
-            raise RuntimeError(
-                "No legacy output was produced, can not export as markdown. "
-                "Please use output.export_to_markdown() instead."
-            )
-        else:
-            return self.legacy_output.export_to_markdown(
-                delim=delim,
-                main_text_start=main_text_start,
-                main_text_stop=main_text_stop,
-                main_text_labels=main_text_labels,
-                strict_text=strict_text,
-                image_placeholder=image_placeholder,
-            )
-
-    @deprecated("Use output.export_to_text() instead.")
-    def render_as_text(
-        self,
-        delim: str = "\n\n",
-        main_text_start: int = 0,
-        main_text_stop: Optional[int] = None,
-        main_text_labels: list[str] = [
-            "title",
-            "subtitle-level-1",
-            "paragraph",
-            "caption",
-        ],
-    ) -> str:
-        if self.legacy_output is None:
-            raise RuntimeError(
-                "No legacy output was produced, can not export as text. "
-                "Please use output.export_to_markdown() instead."
-            )
-        else:
-            return self.legacy_output.export_to_markdown(
-                delim=delim,
-                main_text_start=main_text_start,
-                main_text_stop=main_text_stop,
-                main_text_labels=main_text_labels,
-                strict_text=True,
-            )
-
-    @deprecated("Use output.export_to_document_tokens() instead.")
-    def render_as_doctags(
-        self,
-        delim: str = "\n\n",
-        main_text_start: int = 0,
-        main_text_stop: Optional[int] = None,
-        main_text_labels: list[str] = [
-            "title",
-            "subtitle-level-1",
-            "paragraph",
-            "caption",
-            "table",
-            "figure",
-        ],
-        xsize: int = 100,
-        ysize: int = 100,
-        add_location: bool = True,
-        add_content: bool = True,
-        add_page_index: bool = True,
-        # table specific flags
-        add_table_cell_location: bool = False,
-        add_table_cell_label: bool = True,
-        add_table_cell_text: bool = True,
-    ) -> str:
-        if self.legacy_output is None:
-            raise RuntimeError(
-                "No legacy output was produced, can not export as doctags. "
-                "Please use output.export_to_markdown() instead."
-            )
-        else:
-            return self.legacy_output.export_to_document_tokens(
-                delim=delim,
-                main_text_start=main_text_start,
-                main_text_stop=main_text_stop,
-                main_text_labels=main_text_labels,
-                xsize=xsize,
-                ysize=ysize,
-                add_location=add_location,
-                add_content=add_content,
-                add_page_index=add_page_index,
-                # table specific flags
-                add_table_cell_location=add_table_cell_location,
-                add_table_cell_label=add_table_cell_label,
-                add_table_cell_text=add_table_cell_text,
-            )
 
     def render_element_images(
         self, element_types: Tuple[PageElement] = (FigureElement,)

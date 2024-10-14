@@ -45,11 +45,7 @@ class StandardPdfPipeline(PaginatedPipeline):
         else:
             self.artifacts_path = Path(pipeline_options.artifacts_path)
 
-        self.glm_model = GlmModel(
-            options=GlmOptions(
-                create_legacy_output=pipeline_options.create_legacy_output
-            )
-        )
+        self.glm_model = GlmModel(options=GlmOptions())
 
         if (ocr_model := self.get_ocr_model()) is None:
             raise RuntimeError(
@@ -152,7 +148,7 @@ class StandardPdfPipeline(PaginatedPipeline):
             elements=all_elements, headers=all_headers, body=all_body
         )
 
-        conv_res.output, conv_res.legacy_output = self.glm_model(conv_res)
+        conv_res.document = self.glm_model(conv_res)
 
         return conv_res
 

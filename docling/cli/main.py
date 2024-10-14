@@ -87,28 +87,28 @@ def export_documents(
                 fname = output_dir / f"{doc_filename}.json"
                 with fname.open("w") as fp:
                     _log.info(f"writing JSON output to {fname}")
-                    fp.write(json.dumps(conv_res.render_as_dict()))
+                    fp.write(json.dumps(conv_res.document.export_to_dict()))
 
             # Export Text format:
             if export_txt:
                 fname = output_dir / f"{doc_filename}.txt"
                 with fname.open("w") as fp:
                     _log.info(f"writing Text output to {fname}")
-                    fp.write(conv_res.render_as_text())
+                    fp.write(conv_res.document.export_to_markdown(strict_text=True))
 
             # Export Markdown format:
             if export_md:
                 fname = output_dir / f"{doc_filename}.md"
                 with fname.open("w") as fp:
                     _log.info(f"writing Markdown output to {fname}")
-                    fp.write(conv_res.render_as_markdown())
+                    fp.write(conv_res.document.export_to_markdown())
 
             # Export Document Tags format:
             if export_doctags:
                 fname = output_dir / f"{doc_filename}.doctags"
                 with fname.open("w") as fp:
                     _log.info(f"writing Doc Tags output to {fname}")
-                    fp.write(conv_res.render_as_doctags())
+                    fp.write(conv_res.document.export_to_doctags())
 
         else:
             _log.warning(f"Document {conv_res.input.file} failed to convert.")

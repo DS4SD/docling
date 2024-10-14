@@ -102,7 +102,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         shape_bbox = BoundingBox.from_tuple(shape_bbox, origin=CoordOrigin.BOTTOMLEFT)
         # prov = [{"bbox": shape_bbox, "page": parent_slide, "span": [0, len(text)]}]
         prov = ProvenanceItem(
-            page_no=slide_ind, charspan=[0, len(text)], bbox=shape_bbox
+            page_no=slide_ind + 1, charspan=[0, len(text)], bbox=shape_bbox
         )
 
         return prov
@@ -292,7 +292,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             )
 
             size = Size(width=slide_width, height=slide_height)
-            parent_page = doc.add_page(page_no=slide_ind, size=size)
+            parent_page = doc.add_page(page_no=slide_ind + 1, size=size)
             # parent_page = doc.add_page(page_no=slide_ind, size=size, hash=hash)
 
             # Loop through each shape in the slide
