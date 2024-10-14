@@ -67,12 +67,14 @@ class StandardPdfPipeline(PaginatedPipeline):
             ocr_model,
             # Layout model
             LayoutModel(
-                artifacts_path=artifacts_path / StandardPdfPipeline._layout_model_path
+                artifacts_path=self.artifacts_path
+                / StandardPdfPipeline._layout_model_path
             ),
             # Table structure model
             TableStructureModel(
                 enabled=pipeline_options.do_table_structure,
-                artifacts_path=artifacts_path / StandardPdfPipeline._table_model_path,
+                artifacts_path=self.artifacts_path
+                / StandardPdfPipeline._table_model_path,
                 options=pipeline_options.table_structure_options,
             ),
             # Page assemble
