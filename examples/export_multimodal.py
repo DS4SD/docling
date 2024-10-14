@@ -9,6 +9,7 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.utils.export import generate_multimodal_pages
+from docling.utils.utils import create_hash
 
 _log = logging.getLogger(__name__)
 
@@ -56,7 +57,9 @@ def main():
             {
                 "document": conv_res.input.file.name,
                 "hash": conv_res.input.document_hash,
-                "page_hash": page.page_hash,
+                "page_hash": create_hash(
+                    conv_res.input.document_hash + ":" + str(page.page_no - 1)
+                ),
                 "image": {
                     "width": page.image.width,
                     "height": page.image.height,

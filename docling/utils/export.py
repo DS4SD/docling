@@ -1,8 +1,8 @@
 import logging
 from typing import Any, Dict, Iterable, List, Tuple, Union
 
-from docling_core.types.doc.base import BaseCell, BaseText, BoundingBox, Ref, Table
-from docling_core.types.experimental import CoordOrigin
+from docling_core.types.doc.base import BaseCell, BaseText, Ref, Table
+from docling_core.types.experimental import BoundingBox, CoordOrigin
 
 from docling.datamodel.base_models import OcrCell
 from docling.datamodel.document import ConversionResult, Page
