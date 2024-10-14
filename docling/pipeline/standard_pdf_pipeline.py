@@ -40,10 +40,11 @@ class StandardPdfPipeline(PaginatedPipeline):
         super().__init__(pipeline_options)
         self.pipeline_options: PdfPipelineOptions
 
-        if not pipeline_options.artifacts_path:
-            artifacts_path = self.download_models_hf()
+        if pipeline_options.artifacts_path is None:
+            self.artifacts_path = self.download_models_hf()
+        else:
+            self.artifacts_path = Path(pipeline_options.artifacts_path)
 
-        self.artifacts_path = Path(artifacts_path)
         self.glm_model = GlmModel(
             options=GlmOptions(
                 create_legacy_output=pipeline_options.create_legacy_output
