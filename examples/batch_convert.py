@@ -13,7 +13,7 @@ from docling.document_converter import DocumentConverter
 _log = logging.getLogger(__name__)
 
 USE_V2 = True
-USE_LEGACY = True
+USE_LEGACY = False
 
 
 def export_documents(
@@ -34,23 +34,11 @@ def export_documents(
             if USE_V2:
                 # Export Docling document format to JSON (experimental):
                 with (output_dir / f"{doc_filename}.json").open("w") as fp:
-                    fp.write(
-                        json.dumps(
-                            conv_res.document.model_dump(
-                                mode="json", by_alias=True, exclude_none=True
-                            )
-                        )
-                    )  # TODO to be replaced with convenience method
+                    fp.write(json.dumps(conv_res.document.export_to_dict()))
 
                 # Export Docling document format to YAML (experimental):
                 with (output_dir / f"{doc_filename}.yaml").open("w") as fp:
-                    fp.write(
-                        yaml.safe_dump(
-                            conv_res.document.model_dump(
-                                mode="json", by_alias=True, exclude_none=True
-                            )
-                        )
-                    )  # TODO to be replaced with convenience method
+                    fp.write(yaml.safe_dump(conv_res.document.export_to_dict()))
 
                 # Export Docling document format to doctags (experimental):
                 with (output_dir / f"{doc_filename}.doctags.txt").open("w") as fp:
