@@ -127,6 +127,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                 is_a_list = True
             else:
                 is_a_list = False
+
             if paragraph.level > 0:
                 # Most likely a sub-list
                 is_a_list = True
@@ -135,17 +136,28 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             prov = self.generate_prov(shape, slide_ind, shape.text.strip())
 
             if is_a_list:
-                # TODO: determine if this is an unordered list or an ordered list.
-                #  Set GroupLabel.ORDERED_LIST when it fits.
+                # Determine if this is an unordered list or an ordered list.
+                # Set GroupLabel.ORDERED_LIST when it fits.
+                list_label = GroupLabel.LIST
+                if bullet_type == "Numbered":
+                    list_label = GroupLabel.ORDERED_LIST
+
                 new_list = doc.add_group(
-                    label=GroupLabel.LIST, name=f"list", parent=parent_slide
+                    label=list_label, name=f"list", parent=parent_slide
                 )
             else:
                 new_list = None
 
-            # for element in p.iter():
+            if is_a_list:
+                _log.info("LIST DETECTED!")
+            else:
+                _log.info("No List")
+
+            # for e in p.iter():
             for e in p.iterfind(".//a:r", namespaces={"a": self.namespaces["a"]}):
                 if len(e.text.strip()) > 0:
+                    e_is_a_list_item = False
+
                     if (
                         p.find(".//a:buChar", namespaces={"a": self.namespaces["a"]})
                         is not None
@@ -165,14 +177,28 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                         # TODO: Set marker and enumerated arguments if this is an enumeration element.
                         doc.add_list_item(
                             parent=new_list,
-                            text=e.text.strip(),
+                            text=list_text,
                             prov=prov,
                         )
                     else:
+                        # Assign proper label to the text, depending if it's a Title or Section Header
+                        # For other types of text, assign - PARAGRAPH
+                        doc_label = DocItemLabel.PARAGRAPH
+                        if shape.is_placeholder:
+                            placeholder_type = shape.placeholder_format.type
+                            if placeholder_type in [
+                                PP_PLACEHOLDER.CENTER_TITLE,
+                                PP_PLACEHOLDER.TITLE,
+                            ]:
+                                # It's a title
+                                doc_label = DocItemLabel.TITLE
+                            elif placeholder_type == PP_PLACEHOLDER.SUBTITLE:
+                                DocItemLabel.SECTION_HEADER
+
                         doc.add_text(
-                            label=DocItemLabel.PARAGRAPH,
+                            label=doc_label,
                             parent=parent_slide,
-                            text=e.text.strip(),
+                            text=list_text,
                             prov=prov,
                         )
         return
@@ -317,13 +343,16 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                     _log.warn("Warning: shape has text but not text_frame")
                     continue
 
-                if shape.is_placeholder:
-                    # Handle Titles (Headers) and Subtitles
-                    # Check if the shape is a placeholder (titles are placeholders)
-                    self.handle_title(shape, parent_slide, slide_ind, doc)
-                else:
-                    # Handle other text elements, including lists (bullet lists, numbered lists)
-                    self.handle_text_elements(shape, parent_slide, slide_ind, doc)
+                # if shape.is_placeholder:
+                # Handle Titles (Headers) and Subtitles
+                # Check if the shape is a placeholder (titles are placeholders)
+                # self.handle_title(shape, parent_slide, slide_ind, doc)
+                # self.handle_text_elements(shape, parent_slide, slide_ind, doc)
+                # else:
+
+                # Handle other text elements, including lists (bullet lists, numbered lists)
+                self.handle_text_elements(shape, parent_slide, slide_ind, doc)
+
                 # figures...
                 # doc.add_figure(data=BaseFigureData(), parent=self.parents[self.level], caption=None)
 
