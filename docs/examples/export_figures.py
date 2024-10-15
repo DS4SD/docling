@@ -15,7 +15,7 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     input_doc_path = Path("./tests/data/2206.01062.pdf")
-    output_dir = Path("./scratch")
+    output_dir = Path("../../examples/scratch")
 
     # Important: For operating with page images, we must keep them, otherwise the DocumentConverter
     # will destroy them for cleaning up memory.

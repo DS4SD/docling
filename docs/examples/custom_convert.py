@@ -113,7 +113,7 @@ def main():
     _log.info(f"Document converted in {end_time:.2f} seconds.")
 
     ## Export results
-    output_dir = Path("./scratch")
+    output_dir = Path("../../examples/scratch")
     output_dir.mkdir(parents=True, exist_ok=True)
     doc_filename = conv_result.input.file.stem
 
