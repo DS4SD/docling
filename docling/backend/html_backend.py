@@ -393,7 +393,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         if contains_lists is None:
             return cell.text
         else:
-            _log.warn(
+            _log.debug(
                 "should extract the content correctly for table-cells with lists ..."
             )
             return cell.text

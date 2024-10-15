@@ -160,7 +160,7 @@ class InputDocument(BaseModel):
     ) -> None:
         if backend is None:
             raise RuntimeError(
-                f"No backend configuration provided for file {self.file} with format {self.format}. "
+                f"No backend configuration provided for file {self.file.name} with format {self.format}. "
                 f"Please check your format configuration on DocumentConverter."
             )
 
@@ -472,8 +472,8 @@ class _DocumentConversionInput(BaseModel):
             obj = resolve_file_source(item) if isinstance(item, str) else item
             format = self._guess_format(obj)
             if format not in format_options.keys():
-                _log.debug(
-                    f"Skipping input document {obj.name} because its format is not in the whitelist."
+                _log.info(
+                    f"Skipping input document {obj.name} because it isn't matching any of the allowed formats."
                 )
                 continue
             else:

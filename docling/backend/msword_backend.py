@@ -138,7 +138,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 try:
                     self.handle_tables(element, docx_obj, doc)
                 except Exception:
-                    _log.error("could not parse a table, broken docx table")
+                    _log.debug("could not parse a table, broken docx table")
 
             elif found_drawing or found_pict:
                 self.handle_pictures(element, docx_obj, doc)
@@ -146,7 +146,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             elif tag_name in ["p"]:
                 self.handle_text_elements(element, docx_obj, doc)
             else:
-                _log.warn(f"Ignoring element in DOCX with tag: {tag_name}")
+                _log.debug(f"Ignoring element in DOCX with tag: {tag_name}")
         return doc
 
     def str_to_int(self, s, default=0):

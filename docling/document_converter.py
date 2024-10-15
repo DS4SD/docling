@@ -111,6 +111,14 @@ class DocumentConverter:
                     _log.debug(f"Requested format {f} will use default options.")
                     self.format_to_options[f] = _format_to_default_options[f]
 
+            remove_keys = []
+            for f in self.format_to_options.keys():
+                if f not in self.allowed_formats:
+                    remove_keys.append(f)
+
+            for f in remove_keys:
+                self.format_to_options.pop(f)
+
         self.initialized_pipelines: Dict[Type[BasePipeline], BasePipeline] = {}
 
     @validate_call(config=ConfigDict(strict=True))
@@ -176,7 +184,7 @@ class DocumentConverter:
 
             # Note: PDF backends are not thread-safe, thread pool usage was disabled.
             for item in map(
-                partial(self.process_document, raises_on_error=raises_on_error),
+                partial(self._process_document, raises_on_error=raises_on_error),
                 input_batch,
             ):
                 if item is not None:
@@ -205,22 +213,22 @@ class DocumentConverter:
             )
         return self.initialized_pipelines[pipeline_class]
 
-    def process_document(
+    def _process_document(
         self, in_doc: InputDocument, raises_on_error: bool
     ) -> Optional[ConversionResult]:
         assert self.allowed_formats is not None
+        assert in_doc.format in self.allowed_formats
 
-        if in_doc.format not in self.allowed_formats:
-            return None
-        else:
-            start_doc_time = time.time()
+        start_doc_time = time.time()
 
-            conv_res = self._execute_pipeline(in_doc, raises_on_error=raises_on_error)
+        conv_res = self._execute_pipeline(in_doc, raises_on_error=raises_on_error)
 
-            end_doc_time = time.time() - start_doc_time
-            _log.info(f"Finished converting document in {end_doc_time:.2f} seconds.")
+        end_doc_time = time.time() - start_doc_time
+        _log.info(
+            f"Finished converting document {in_doc.file.name} in {end_doc_time:.2f} seconds."
+        )
 
-            return conv_res
+        return conv_res
 
     def _execute_pipeline(
         self, in_doc: InputDocument, raises_on_error: bool
@@ -228,16 +236,25 @@ class DocumentConverter:
         if in_doc.valid:
             pipeline = self._get_pipeline(in_doc)
             if pipeline is None:  # Can't find a default pipeline. Should this raise?
-                conv_res = ConversionResult(input=in_doc)
-                conv_res.status = ConversionStatus.FAILURE
-                return conv_res
+                if raises_on_error:
+                    raise RuntimeError(
+                        f"No pipeline could be initialized for {in_doc.file}."
+                    )
+                else:
+                    conv_res = ConversionResult(input=in_doc)
+                    conv_res.status = ConversionStatus.FAILURE
+                    return conv_res
 
             conv_res = pipeline.execute(in_doc, raises_on_error=raises_on_error)
 
         else:
-            # invalid doc or not of desired format
-            conv_res = ConversionResult(input=in_doc)
-            conv_res.status = ConversionStatus.FAILURE
-            # TODO add error log why it failed.
+            if raises_on_error:
+                raise RuntimeError(f"Input document {in_doc.file} is not valid.")
+
+            else:
+                # invalid doc or not of desired format
+                conv_res = ConversionResult(input=in_doc)
+                conv_res.status = ConversionStatus.FAILURE
+                # TODO add error log why it failed.
 
         return conv_res

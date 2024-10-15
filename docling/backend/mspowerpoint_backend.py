@@ -157,9 +157,9 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                 new_list = None
 
             if is_a_list:
-                _log.info("LIST DETECTED!")
+                _log.debug("LIST DETECTED!")
             else:
-                _log.info("No List")
+                _log.debug("No List")
 
             # for e in p.iter():
             for e in p.iterfind(".//a:r", namespaces={"a": self.namespaces["a"]}):
