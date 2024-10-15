@@ -201,7 +201,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                             elif placeholder_type == PP_PLACEHOLDER.SUBTITLE:
                                 DocItemLabel.SECTION_HEADER
 
-                        enum_list_item_value = 1
+                        enum_list_item_value = 0
 
                         doc.add_text(
                             label=doc_label,
