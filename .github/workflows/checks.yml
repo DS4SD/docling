@@ -26,7 +26,7 @@ jobs:
           poetry run pytest -v tests
       - name: Run examples
         run: |
-          for file in examples/*.py; do
+          for file in docs/examples/*.py; do
             # Skip batch_convert.py
             if [[ "$(basename "$file")" == "batch_convert.py" ]]; then
                 echo "Skipping $file"
