@@ -2,6 +2,8 @@ import logging
 from pathlib import Path
 from typing import Optional
 
+from docling_core.types.doc.document import DocItem, ImageRef, PictureItem, TableItem
+
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
 from docling.datamodel.base_models import AssembledUnit, Page
@@ -14,9 +16,6 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.ds_glm_model import GlmModel, GlmOptions
-from docling.models.dummy_picture_enrichment import (
-    DummyPictureClassifierEnrichmentModel,
-)
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
 from docling.models.page_assemble_model import PageAssembleModel, PageAssembleOptions
@@ -44,6 +43,12 @@ class StandardPdfPipeline(PaginatedPipeline):
             self.artifacts_path = self.download_models_hf()
         else:
             self.artifacts_path = Path(pipeline_options.artifacts_path)
+
+        keep_images = (
+            self.pipeline_options.generate_page_images
+            or self.pipeline_options.generate_picture_images
+            or self.pipeline_options.generate_table_images
+        )
 
         self.glm_model = GlmModel(options=GlmOptions())
 
@@ -74,19 +79,11 @@ class StandardPdfPipeline(PaginatedPipeline):
                 options=pipeline_options.table_structure_options,
             ),
             # Page assemble
-            PageAssembleModel(
-                options=PageAssembleOptions(
-                    keep_images=pipeline_options.images_scale is not None
-                )
-            ),
+            PageAssembleModel(options=PageAssembleOptions(keep_images=keep_images)),
         ]
 
         self.enrichment_pipe = [
             # Other models working on `NodeItem` elements in the DoclingDocument
-            # TODO Question: should we use the enabled flag or simply not add the model in the list?
-            DummyPictureClassifierEnrichmentModel(
-                enabled=pipeline_options.do_dummy_picture_classifer
-            )
         ]
 
     @staticmethod
@@ -149,6 +146,45 @@ class StandardPdfPipeline(PaginatedPipeline):
         )
 
         conv_res.document = self.glm_model(conv_res)
+
+        # Generate page images in the output
+        if self.pipeline_options.generate_page_images:
+            for page in conv_res.pages:
+                assert page.image is not None
+                page_ix = page.page_no - 1
+                conv_res.document.pages[page_ix].image = ImageRef.from_pil(
+                    page.image, dpi=int(72 * self.pipeline_options.images_scale)
+                )
+
+        # Generate images of the requested element types
+        if (
+            self.pipeline_options.generate_picture_images
+            or self.pipeline_options.generate_table_images
+        ):
+            scale = self.pipeline_options.images_scale
+            for element, _level in conv_res.document.iterate_items():
+                if not isinstance(element, DocItem) or len(element.prov) == 0:
+                    continue
+                if (
+                    isinstance(element, PictureItem)
+                    and self.pipeline_options.generate_picture_images
+                ) or (
+                    isinstance(element, TableItem)
+                    and self.pipeline_options.generate_table_images
+                ):
+                    page_ix = element.prov[0].page_no - 1
+                    crop_bbox = (
+                        element.prov[0]
+                        .bbox.scaled(scale=scale)
+                        .to_top_left_origin(
+                            page_height=conv_res.pages[page_ix].size.height * scale
+                        )
+                    )
+
+                    cropped_im = conv_res.pages[page_ix].image.crop(
+                        crop_bbox.as_tuple()
+                    )
+                    element.image = ImageRef.from_pil(cropped_im, dpi=int(72 * scale))
 
         return conv_res
 

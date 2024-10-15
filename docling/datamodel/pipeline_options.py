@@ -64,8 +64,6 @@ class PipelineOptions(BaseModel):
         True  # This defautl will be set to False on a future version of docling
     )
 
-    do_dummy_picture_classifer: bool = False
-
 
 class PdfPipelineOptions(PipelineOptions):
     artifacts_path: Optional[Union[Path, str]] = None
@@ -77,4 +75,7 @@ class PdfPipelineOptions(PipelineOptions):
         Field(EasyOcrOptions(), discriminator="kind")
     )
 
-    images_scale: Optional[float] = None  # if set, the scale for generated images
+    images_scale: float = 1.0
+    generate_page_images: bool = False
+    generate_picture_images: bool = False
+    generate_table_images: bool = False
