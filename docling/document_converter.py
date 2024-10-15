@@ -3,7 +3,7 @@ import sys
 import time
 from functools import partial
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Type
+from typing import Dict, Iterable, Iterator, List, Optional, Type
 
 from pydantic import BaseModel, ConfigDict, model_validator, validate_call
 
@@ -137,7 +137,7 @@ class DocumentConverter:
         raises_on_error: bool = True,  # True: raises on first conversion error; False: does not raise on conv error
         max_num_pages: int = sys.maxsize,
         max_file_size: int = sys.maxsize,
-    ) -> Iterable[ConversionResult]:
+    ) -> Iterator[ConversionResult]:
         limits = DocumentLimits(
             max_num_pages=max_num_pages,
             max_file_size=max_file_size,
@@ -160,7 +160,7 @@ class DocumentConverter:
 
     def _convert(
         self, conv_input: _DocumentConversionInput, raises_on_error: bool
-    ) -> Iterable[ConversionResult]:
+    ) -> Iterator[ConversionResult]:
         for input_batch in chunkify(
             conv_input.docs(self.format_to_options),
             settings.perf.doc_batch_size,  # pass format_options
