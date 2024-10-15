@@ -1,16 +1,12 @@
 import copy
 import random
-from typing import Tuple
+from typing import List, Union
 
 from deepsearch_glm.nlp_utils import init_nlp_model
-from deepsearch_glm.utils.doc_utils import (
-    to_docling_document,
-    to_legacy_document_format,
-)
+from deepsearch_glm.utils.doc_utils import to_docling_document
 from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_models
 from docling_core.types import BaseText
 from docling_core.types import Document as DsDocument
-from docling_core.types import Document as DsLegacyDocument
 from docling_core.types import DocumentDescription as DsDocumentDescription
 from docling_core.types import FileInfoObject as DsFileInfoObject
 from docling_core.types import PageDimensions, PageReference, Prov, Ref
@@ -42,7 +38,7 @@ class GlmModel:
 
     def _to_legacy_document(self, conv_res) -> DsDocument:
         title = ""
-        desc = DsDocumentDescription(logs=[])
+        desc: DsDocumentDescription = DsDocumentDescription(logs=[])
 
         page_hashes = [
             PageReference(
@@ -60,9 +56,9 @@ class GlmModel:
             page_hashes=page_hashes,
         )
 
-        main_text = []
-        tables = []
-        figures = []
+        main_text: List[Union[Ref, BaseText]] = []
+        tables: List[DsSchemaTable] = []
+        figures: List[Figure] = []
 
         page_no_to_page = {p.page_no: p for p in conv_res.pages}
 
@@ -146,11 +142,16 @@ class GlmModel:
                                         yield [rspan, cspan]
 
                             spans = list(make_spans(cell))
+                            if cell.bbox is not None:
+                                bbox = cell.bbox.to_bottom_left_origin(
+                                    page_no_to_page[element.page_no].size.height
+                                ).as_tuple()
+                            else:
+                                bbox = None
+
                             table_data[i][j] = TableCell(
                                 text=cell.text,
-                                bbox=cell.bbox.to_bottom_left_origin(
-                                    page_no_to_page[element.page_no].size.height
-                                ).as_tuple(),
+                                bbox=bbox,
                                 # col=j,
                                 # row=i,
                                 spans=spans,
@@ -204,7 +205,7 @@ class GlmModel:
             for p in conv_res.pages
         ]
 
-        ds_doc = DsDocument(
+        ds_doc: DsDocument = DsDocument(
             name=title,
             description=desc,
             file_info=file_info,
@@ -216,9 +217,7 @@ class GlmModel:
 
         return ds_doc
 
-    def __call__(
-        self, conv_res: ConversionResult
-    ) -> Tuple[DsLegacyDocument, DoclingDocument]:
+    def __call__(self, conv_res: ConversionResult) -> DoclingDocument:
         ds_doc = self._to_legacy_document(conv_res)
         ds_doc_dict = ds_doc.model_dump(by_alias=True)
 

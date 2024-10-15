@@ -1,9 +1,8 @@
-import warnings
 from enum import Enum, auto
 from pathlib import Path
-from typing import Annotated, List, Literal, Optional, Union
+from typing import List, Literal, Optional, Union
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class TableFormerMode(str, Enum):

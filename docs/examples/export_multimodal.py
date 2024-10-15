@@ -1,9 +1,9 @@
 import datetime
 import logging
-import time
 from pathlib import Path
 
 import pandas as pd
+import time
 
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
@@ -20,7 +20,7 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     input_doc_path = Path("./tests/data/2206.01062.pdf")
-    output_dir = Path("../../examples/scratch")
+    output_dir = Path("scratch")
 
     # Important: For operating with page images, we must keep them, otherwise the DocumentConverter
     # will destroy them for cleaning up memory.

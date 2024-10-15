@@ -53,6 +53,8 @@ class PageAssembleModel(BasePageModel):
 
     def __call__(self, page_batch: Iterable[Page]) -> Iterable[Page]:
         for page in page_batch:
+            assert page._backend is not None
+            assert page.predictions.layout is not None
             # assembles some JSON output page by page.
 
             elements: List[PageElement] = []

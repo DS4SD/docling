@@ -53,7 +53,7 @@ doc_converter = (
 conv_results = doc_converter.convert_all(input_paths)
 
 for res in conv_results:
-    out_path = Path("../../examples/scratch")
+    out_path = Path("scratch")
     print(
         f"Document {res.input.file.name} converted."
         f"\nSaved markdown output to: {str(out_path)}"

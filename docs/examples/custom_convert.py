@@ -1,18 +1,14 @@
 import json
 import logging
-import time
 from pathlib import Path
-from typing import Iterable
 
-from docling.datamodel.base_models import ConversionStatus, InputFormat
-from docling.datamodel.document import ConversionResult
+import time
+
+from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import (
     PdfPipelineOptions,
-    TesseractCliOcrOptions,
-    TesseractOcrOptions,
 )
-from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
-from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
+from docling.document_converter import DocumentConverter, PdfFormatOption
 
 _log = logging.getLogger(__name__)
 
@@ -112,7 +108,7 @@ def main():
     _log.info(f"Document converted in {end_time:.2f} seconds.")
 
     ## Export results
-    output_dir = Path("../../examples/scratch")
+    output_dir = Path("scratch")
     output_dir.mkdir(parents=True, exist_ok=True)
     doc_filename = conv_result.input.file.stem
 

@@ -20,12 +20,12 @@ repos:
 #        pass_filenames: false
 #        language: system
 #        files: '\.py$'
-#      - id: mypy
-#        name: MyPy
-#        entry: poetry run mypy docling
-#        pass_filenames: false
-#        language: system
-#        files: '\.py$'
+      - id: mypy
+        name: MyPy
+        entry: poetry run mypy docling
+        pass_filenames: false
+        language: system
+        files: '\.py$'
       - id: nbqa_black
         name: nbQA Black
         entry: poetry run nbqa black examples

@@ -5,13 +5,12 @@ import time
 import warnings
 from enum import Enum
 from pathlib import Path
-from typing import Annotated, Iterable, List, Optional
+from typing import Annotated, Dict, Iterable, List, Optional
 
 import typer
 from docling_core.utils.file import resolve_file_source
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
-from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import (
     ConversionStatus,
     FormatToExtensions,
@@ -21,11 +20,12 @@ from docling.datamodel.base_models import (
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
+    OcrOptions,
     PdfPipelineOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
 )
-from docling.document_converter import DocumentConverter, PdfFormatOption
+from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
 warnings.filterwarnings(action="ignore", category=FutureWarning, module="easyocr")
@@ -151,6 +151,14 @@ def convert(
     ocr_engine: Annotated[
         OcrEngine, typer.Option(..., help="The OCR engine to use.")
     ] = OcrEngine.EASYOCR,
+    abort_on_error: Annotated[
+        bool,
+        typer.Option(
+            ...,
+            "--abort-on-error/--no-abort-on-error",
+            help="If enabled, the bitmap content will be processed using OCR.",
+        ),
+    ] = False,
     output: Annotated[
         Path, typer.Option(..., help="Output directory where results are saved.")
     ] = Path("."),
@@ -179,7 +187,7 @@ def convert(
             raise typer.Abort()
         elif source.is_dir():
             for fmt in from_formats:
-                for ext in FormatToExtensions.get(fmt):
+                for ext in FormatToExtensions[fmt]:
                     input_doc_paths.extend(list(source.glob(f"**/*.{ext}")))
                     input_doc_paths.extend(list(source.glob(f"**/*.{ext.upper()}")))
         else:
@@ -195,7 +203,7 @@ def convert(
 
     match ocr_engine:
         case OcrEngine.EASYOCR:
-            ocr_options = EasyOcrOptions()
+            ocr_options: OcrOptions = EasyOcrOptions()
         case OcrEngine.TESSERACT_CLI:
             ocr_options = TesseractCliOcrOptions()
         case OcrEngine.TESSERACT:
@@ -210,18 +218,22 @@ def convert(
     )
     pipeline_options.table_structure_options.do_cell_matching = True  # do_cell_matching
 
+    format_options: Dict[InputFormat, FormatOption] = {
+        InputFormat.PDF: PdfFormatOption(
+            pipeline_options=pipeline_options,
+            backend=DoclingParseDocumentBackend,  # pdf_backend
+        )
+    }
     doc_converter = DocumentConverter(
-        format_options={
-            InputFormat.PDF: PdfFormatOption(
-                pipeline_options=pipeline_options,
-                backend=DoclingParseDocumentBackend,  # pdf_backend
-            )
-        }
+        allowed_formats=from_formats,
+        format_options=format_options,
     )
 
     start_time = time.time()
 
-    conv_results = doc_converter.convert_all(input_doc_paths)
+    conv_results = doc_converter.convert_all(
+        input_doc_paths, raises_on_error=abort_on_error
+    )
 
     output.mkdir(parents=True, exist_ok=True)
     export_documents(

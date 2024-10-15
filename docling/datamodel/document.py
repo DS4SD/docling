@@ -3,7 +3,7 @@ import re
 from enum import Enum
 from io import BytesIO
 from pathlib import Path, PurePath
-from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Tuple, Type, Union
 
 import filetype
 from docling_core.types import BaseText
@@ -23,13 +23,15 @@ from docling_core.types.doc import (
     TextItem,
 )
 from docling_core.types.doc.document import ListItem
-from docling_core.types.legacy_doc.base import BoundingBox as DsBoundingBox
 from docling_core.types.legacy_doc.base import Figure, GlmTableCell, TableCell
 from docling_core.utils.file import resolve_file_source
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
-from docling.backend.abstract_backend import AbstractDocumentBackend
+from docling.backend.abstract_backend import (
+    AbstractDocumentBackend,
+    PaginatedDocumentBackend,
+)
 from docling.datamodel.base_models import (
     AssembledUnit,
     ConversionStatus,
@@ -40,8 +42,6 @@ from docling.datamodel.base_models import (
     MimeTypeToFormat,
     Page,
     PageElement,
-    Table,
-    TextElement,
 )
 from docling.datamodel.settings import DocumentLimits
 from docling.utils.utils import create_file_hash, create_hash
@@ -70,41 +70,34 @@ layout_label_to_ds_type = {
     DocItemLabel.PARAGRAPH: "paragraph",
 }
 
-_EMPTY_LEGACY_DOC = DsDocument(
-    _name="",
-    description=DsDocumentDescription(logs=[]),
-    file_info=DsFileInfoObject(
-        filename="",
-        document_hash="",
-    ),
-)
-
 _EMPTY_DOCLING_DOC = DoclingDocument(
     description=DescriptionItem(), name="dummy"
 )  # TODO: Stub
 
 
 class InputDocument(BaseModel):
-    file: PurePath = None
-    document_hash: Optional[str] = None
+    file: PurePath
+    document_hash: str  # = None
     valid: bool = True
     limits: DocumentLimits = DocumentLimits()
-    format: Optional[InputFormat] = None
+    format: InputFormat  # = None
 
     filesize: Optional[int] = None
     page_count: int = 0
 
-    _backend: AbstractDocumentBackend = None  # Internal PDF backend used
+    _backend: AbstractDocumentBackend  # Internal PDF backend used
 
     def __init__(
         self,
         path_or_stream: Union[BytesIO, Path],
         format: InputFormat,
-        backend: AbstractDocumentBackend,
+        backend: Type[AbstractDocumentBackend],
         filename: Optional[str] = None,
         limits: Optional[DocumentLimits] = None,
     ):
-        super().__init__()
+        super().__init__(
+            file="", document_hash="", format=InputFormat.PDF
+        )  # initialize with dummy values
 
         self.limits = limits or DocumentLimits()
         self.format = format
@@ -120,6 +113,9 @@ class InputDocument(BaseModel):
                     self._init_doc(backend, path_or_stream)
 
             elif isinstance(path_or_stream, BytesIO):
+                assert (
+                    filename is not None
+                ), "Can't construct InputDocument from stream without providing filename arg."
                 self.file = PurePath(filename)
                 self.filesize = path_or_stream.getbuffer().nbytes
 
@@ -128,10 +124,16 @@ class InputDocument(BaseModel):
                 else:
                     self.document_hash = create_file_hash(path_or_stream)
                     self._init_doc(backend, path_or_stream)
+            else:
+                raise RuntimeError(
+                    f"Unexpected type path_or_stream: {type(path_or_stream)}"
+                )
 
             # For paginated backends, check if the maximum page count is exceeded.
             if self.valid and self._backend.is_valid():
-                if self._backend.supports_pagination():
+                if self._backend.supports_pagination() and isinstance(
+                    self._backend, PaginatedDocumentBackend
+                ):
                     self.page_count = self._backend.page_count()
                     if not self.page_count <= self.limits.max_num_pages:
                         self.valid = False
@@ -150,12 +152,12 @@ class InputDocument(BaseModel):
 
     def _init_doc(
         self,
-        backend: AbstractDocumentBackend,
+        backend: Type[AbstractDocumentBackend],
         path_or_stream: Union[BytesIO, Path],
     ) -> None:
         if backend is None:
             raise RuntimeError(
-                f"No backend configuration provided for file {self.file} with format {self.format}. "
+                f"No backend configuration provided for file {self.file.name} with format {self.format}. "
                 f"Please check your format configuration on DocumentConverter."
             )
 
@@ -436,18 +438,23 @@ class ConversionResult(BaseModel):
         return ds_doc
 
     def render_element_images(
-        self, element_types: Tuple[PageElement] = (FigureElement,)
+        self, element_types: Tuple[Type[PageElement]] = (FigureElement,)
     ):
         for element in self.assembled.elements:
             if isinstance(element, element_types):
                 page_ix = element.page_no
-                scale = self.pages[page_ix]._default_image_scale
-                crop_bbox = element.cluster.bbox.scaled(scale=scale).to_top_left_origin(
-                    page_height=self.pages[page_ix].size.height * scale
-                )
+                page = self.pages[page_ix]
 
-                cropped_im = self.pages[page_ix].image.crop(crop_bbox.as_tuple())
-                yield element, cropped_im
+                assert page.size is not None
+
+                scale = page._default_image_scale
+                crop_bbox = element.cluster.bbox.scaled(scale=scale).to_top_left_origin(
+                    page_height=page.size.height * scale
+                )
+                page_img = page.image
+                if page_img is not None:
+                    cropped_im = page_img.crop(crop_bbox.as_tuple())
+                    yield element, cropped_im
 
 
 class _DocumentConversionInput(BaseModel):
@@ -462,12 +469,12 @@ class _DocumentConversionInput(BaseModel):
             obj = resolve_file_source(item) if isinstance(item, str) else item
             format = self._guess_format(obj)
             if format not in format_options.keys():
-                _log.debug(
-                    f"Skipping input document {obj.name} because its format is not in the whitelist."
+                _log.info(
+                    f"Skipping input document {obj.name} because it isn't matching any of the allowed formats."
                 )
                 continue
             else:
-                backend = format_options.get(format).backend
+                backend = format_options[format].backend
 
             if isinstance(obj, Path):
                 yield InputDocument(

@@ -2,7 +2,7 @@ import logging
 import random
 from io import BytesIO
 from pathlib import Path
-from typing import Iterable, List, Optional, Union
+from typing import TYPE_CHECKING, Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
 from docling_core.types.doc import BoundingBox, CoordOrigin
@@ -12,6 +12,9 @@ from pypdfium2 import PdfPage
 
 from docling.backend.pdf_backend import PdfDocumentBackend, PdfPageBackend
 from docling.datamodel.base_models import Cell, Size
+
+if TYPE_CHECKING:
+    from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
 

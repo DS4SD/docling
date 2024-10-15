@@ -54,7 +54,7 @@ nav:
   - Get started:
     - Home: index.md
     - Installation: installation.md
-  #   - Docling v2: v2.md
+    - Docling v2: v2.md
   # - Concepts:
   #   - Docling Document: concepts/document.md
   #   - Chunking: concepts/chunking.md

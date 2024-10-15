@@ -126,7 +126,8 @@ class TableStructurePrediction(BaseModel):
     table_map: Dict[int, Table] = {}
 
 
-class TextElement(BasePageElement): ...
+class TextElement(BasePageElement):
+    text: str
 
 
 class FigureElement(BasePageElement):

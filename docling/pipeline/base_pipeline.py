@@ -34,12 +34,6 @@ class BasePipeline(ABC):
         conv_res = ConversionResult(input=in_doc)
 
         _log.info(f"Processing document {in_doc.file.name}")
-
-        if not in_doc.valid:
-            conv_res.status = ConversionStatus.FAILURE
-            return conv_res
-
-        # TODO: propagate option for raises_on_error?
         try:
             # These steps are building and assembling the structure of the
             # output DoclingDocument
@@ -155,7 +149,7 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
                     pass
 
                 end_pb_time = time.time() - start_pb_time
-                _log.info(f"Finished converting page batch time={end_pb_time:.3f}")
+                _log.debug(f"Finished converting page batch time={end_pb_time:.3f}")
 
         except Exception as e:
             conv_res.status = ConversionStatus.FAILURE
@@ -178,7 +172,7 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
     ) -> ConversionStatus:
         status = ConversionStatus.SUCCESS
         for page in conv_res.pages:
-            if not page._backend.is_valid():
+            if page._backend is None or not page._backend.is_valid():
                 conv_res.errors.append(
                     ErrorItem(
                         component_type=DoclingComponentType.DOCUMENT_BACKEND,

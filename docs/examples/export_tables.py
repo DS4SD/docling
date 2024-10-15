@@ -1,8 +1,8 @@
 import logging
-import time
 from pathlib import Path
 
 import pandas as pd
+import time
 
 from docling.document_converter import DocumentConverter
 
@@ -13,7 +13,7 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     input_doc_path = Path("./tests/data/2206.01062.pdf")
-    output_dir = Path("../../examples/scratch")
+    output_dir = Path("scratch")
 
     doc_converter = DocumentConverter()
 

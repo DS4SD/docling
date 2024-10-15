@@ -40,6 +40,8 @@ class EasyOcrModel(BaseOcrModel):
             return
 
         for page in page_batch:
+            assert page._backend is not None
+
             ocr_rects = self.get_ocr_rects(page)
 
             all_ocr_cells = []

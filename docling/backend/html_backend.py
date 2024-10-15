@@ -30,10 +30,10 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         # Initialise the parents for the hierarchy
         self.max_levels = 10
         self.level = 0
-        self.parents = {}
+        self.parents = {}  # type: ignore
         for i in range(0, self.max_levels):
             self.parents[i] = None
-        self.labels = {}
+        self.labels = {}  # type: ignore
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
@@ -49,8 +49,9 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             ) from e
 
     def is_valid(self) -> bool:
-        return True
+        return self.soup is not None
 
+    @classmethod
     def supports_pagination(cls) -> bool:
         return False
 
@@ -68,11 +69,17 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         # access self.path_or_stream to load stuff
         doc = DoclingDocument(description=DescriptionItem(), name="dummy")
         _log.debug("Trying to convert HTML...")
-        # Replace <br> tags with newline characters
-        for br in self.soup.body.find_all("br"):
-            br.replace_with("\n")
-        doc = self.walk(self.soup.body, doc)
 
+        if self.is_valid():
+            assert self.soup is not None
+            # Replace <br> tags with newline characters
+            for br in self.soup.body.find_all("br"):
+                br.replace_with("\n")
+            doc = self.walk(self.soup.body, doc)
+        else:
+            raise RuntimeError(
+                f"Cannot convert doc with {self.document_hash} because the backend failed to init."
+            )
         return doc
 
     def walk(self, element, doc):
@@ -386,7 +393,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         if contains_lists is None:
             return cell.text
         else:
-            _log.warn(
+            _log.debug(
                 "should extract the content correctly for table-cells with lists ..."
             )
             return cell.text
