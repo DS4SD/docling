@@ -1,7 +1,8 @@
 import logging
+import time
 from pathlib import Path
 
-import time
+from docling_core.types.doc.document import PictureItem, TableItem
 
 from docling.datamodel.base_models import FigureElement, InputFormat, Table
 from docling.datamodel.pipeline_options import PdfPipelineOptions
@@ -20,10 +21,15 @@ def main():
 
     # Important: For operating with page images, we must keep them, otherwise the DocumentConverter
     # will destroy them for cleaning up memory.
-    # This is done by setting AssembleOptions.images_scale, which also defines the scale of images.
+    # This is done by setting PdfPipelineOptions.images_scale, which also defines the scale of images.
     # scale=1 correspond of a standard 72 DPI image
+    # The PdfPipelineOptions.generate_* are the selectors for the document elements which will be enriched
+    # with the image field
     pipeline_options = PdfPipelineOptions()
     pipeline_options.images_scale = IMAGE_RESOLUTION_SCALE
+    pipeline_options.generate_page_images = True
+    pipeline_options.generate_table_images = True
+    pipeline_options.generate_picture_images = True
 
     doc_converter = DocumentConverter(
         format_options={
@@ -38,20 +44,32 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     doc_filename = conv_res.input.file.stem
 
-    # Export page images
-    for page in conv_res.pages:
-        page_no = page.page_no + 1
+    # Save page images
+    for page_no, page in conv_res.document.pages.items():
+        page_no = page.page_no
         page_image_filename = output_dir / f"{doc_filename}-{page_no}.png"
         with page_image_filename.open("wb") as fp:
-            page.image.save(fp, format="PNG")
+            page.image.pil_image.save(fp, format="PNG")
 
-    # Export figures and tables
-    for element, image in conv_res.render_element_images(
-        element_types=(FigureElement, Table)
-    ):
-        element_image_filename = output_dir / f"{doc_filename}-element-{element.id}.png"
-        with element_image_filename.open("wb") as fp:
-            image.save(fp, "PNG")
+    # Save images of figures and tables
+    table_counter = 0
+    picture_counter = 0
+    for element, _level in conv_res.document.iterate_items():
+        if isinstance(element, TableItem):
+            table_counter += 1
+            element_image_filename = (
+                output_dir / f"{doc_filename}-table-{table_counter}.png"
+            )
+            with element_image_filename.open("wb") as fp:
+                element.image.pil_image.save(fp, "PNG")
+
+        if isinstance(element, PictureItem):
+            picture_counter += 1
+            element_image_filename = (
+                output_dir / f"{doc_filename}-picture-{picture_counter}.png"
+            )
+            with element_image_filename.open("wb") as fp:
+                element.image.pil_image.save(fp, "PNG")
 
     end_time = time.time() - start_time
 

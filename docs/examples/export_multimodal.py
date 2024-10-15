@@ -28,6 +28,7 @@ def main():
     # scale=1 correspond of a standard 72 DPI image
     pipeline_options = PdfPipelineOptions()
     pipeline_options.images_scale = IMAGE_RESOLUTION_SCALE
+    pipeline_options.generate_page_images = True
 
     doc_converter = DocumentConverter(
         format_options={

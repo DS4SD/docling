@@ -437,25 +437,6 @@ class ConversionResult(BaseModel):
 
         return ds_doc
 
-    def render_element_images(
-        self, element_types: Tuple[Type[PageElement]] = (FigureElement,)
-    ):
-        for element in self.assembled.elements:
-            if isinstance(element, element_types):
-                page_ix = element.page_no
-                page = self.pages[page_ix]
-
-                assert page.size is not None
-
-                scale = page._default_image_scale
-                crop_bbox = element.cluster.bbox.scaled(scale=scale).to_top_left_origin(
-                    page_height=page.size.height * scale
-                )
-                page_img = page.image
-                if page_img is not None:
-                    cropped_im = page_img.crop(crop_bbox.as_tuple())
-                    yield element, cropped_im
-
 
 class _DocumentConversionInput(BaseModel):
 
