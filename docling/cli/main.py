@@ -12,7 +12,12 @@ from docling_core.utils.file import resolve_file_source
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import ConversionStatus, InputFormat
+from docling.datamodel.base_models import (
+    ConversionStatus,
+    FormatToExtensions,
+    InputFormat,
+    OutputFormat,
+)
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
@@ -108,7 +113,7 @@ def export_documents(
                 fname = output_dir / f"{doc_filename}.doctags"
                 with fname.open("w") as fp:
                     _log.info(f"writing Doc Tags output to {fname}")
-                    fp.write(conv_res.document.export_to_doctags())
+                    fp.write(conv_res.document.export_to_document_tokens())
 
         else:
             _log.warning(f"Document {conv_res.input.file} failed to convert.")
@@ -129,41 +134,23 @@ def convert(
             help="PDF files to convert. Can be local file / directory paths or URL.",
         ),
     ],
-    export_json: Annotated[
-        bool,
-        typer.Option(
-            ..., "--json/--no-json", help="If enabled the document is exported as JSON."
-        ),
-    ] = False,
-    export_md: Annotated[
-        bool,
-        typer.Option(
-            ..., "--md/--no-md", help="If enabled the document is exported as Markdown."
-        ),
-    ] = True,
-    export_txt: Annotated[
-        bool,
-        typer.Option(
-            ..., "--txt/--no-txt", help="If enabled the document is exported as Text."
-        ),
-    ] = False,
-    export_doctags: Annotated[
-        bool,
-        typer.Option(
-            ...,
-            "--doctags/--no-doctags",
-            help="If enabled the document is exported as Doc Tags.",
-        ),
-    ] = False,
+    from_formats: List[InputFormat] = typer.Option(
+        None,
+        "--from",
+        help="Specify input formats " "to convert from. Defaults to all formats.",
+    ),
+    to_formats: List[OutputFormat] = typer.Option(
+        None, "--to", help="Specify output formats. " "Defaults to Markdown."
+    ),
     ocr: Annotated[
         bool,
         typer.Option(
             ..., help="If enabled, the bitmap content will be processed using OCR."
         ),
     ] = True,
-    backend: Annotated[
-        Backend, typer.Option(..., help="The PDF backend to use.")
-    ] = Backend.DOCLING,
+    # backend: Annotated[
+    #    Backend, typer.Option(..., help="The PDF backend to use.")
+    # ] = Backend.DOCLING,
     ocr_engine: Annotated[
         OcrEngine, typer.Option(..., help="The OCR engine to use.")
     ] = OcrEngine.EASYOCR,
@@ -182,6 +169,9 @@ def convert(
 ):
     logging.basicConfig(level=logging.INFO)
 
+    if from_formats is None:
+        from_formats = [e for e in InputFormat]
+
     input_doc_paths: List[Path] = []
     for src in input_sources:
         source = resolve_file_source(source=src)
@@ -191,20 +181,30 @@ def convert(
             )
             raise typer.Abort()
         elif source.is_dir():
-            input_doc_paths.extend(list(source.glob("**/*.pdf")))
-            input_doc_paths.extend(list(source.glob("**/*.PDF")))
+            for fmt in from_formats:
+                for ext in FormatToExtensions.get(fmt):
+                    input_doc_paths.extend(list(source.glob(f"**/*.{ext}")))
+                    input_doc_paths.extend(list(source.glob(f"**/*.{ext.upper()}")))
         else:
             input_doc_paths.append(source)
 
-    match backend:
-        case Backend.PYPDFIUM2:
-            do_cell_matching = ocr  # only do cell matching when OCR enabled
-            pdf_backend = PyPdfiumDocumentBackend
-        case Backend.DOCLING:
-            do_cell_matching = True
-            pdf_backend = DoclingParseDocumentBackend
-        case _:
-            raise RuntimeError(f"Unexpected backend type {backend}")
+    if to_formats is None:
+        to_formats = [OutputFormat.MARKDOWN]
+
+    export_json = OutputFormat.JSON in to_formats
+    export_md = OutputFormat.MARKDOWN in to_formats
+    export_txt = OutputFormat.TEXT in to_formats
+    export_doctags = OutputFormat.DOCTAGS in to_formats
+
+    # match backend:
+    #     case Backend.PYPDFIUM2:
+    #         do_cell_matching = ocr  # only do cell matching when OCR enabled
+    #         pdf_backend = PyPdfiumDocumentBackend
+    #     case Backend.DOCLING:
+    #         do_cell_matching = True
+    #         pdf_backend = DoclingParseDocumentBackend
+    #     case _:
+    #         raise RuntimeError(f"Unexpected backend type {backend}")
 
     match ocr_engine:
         case OcrEngine.EASYOCR:
@@ -214,19 +214,20 @@ def convert(
         case OcrEngine.TESSERACT:
             ocr_options = TesseractOcrOptions()
         case _:
-            raise RuntimeError(f"Unexpected backend type {backend}")
+            raise RuntimeError(f"Unexpected OCR engine type {ocr_engine}")
 
     pipeline_options = PdfPipelineOptions(
         do_ocr=ocr,
         ocr_options=ocr_options,
         do_table_structure=True,
     )
-    pipeline_options.table_structure_options.do_cell_matching = do_cell_matching
+    pipeline_options.table_structure_options.do_cell_matching = True  # do_cell_matching
 
     doc_converter = DocumentConverter(
         format_options={
             InputFormat.PDF: PdfFormatOption(
-                pipeline_options=pipeline_options, backend=pdf_backend
+                pipeline_options=pipeline_options,
+                backend=DoclingParseDocumentBackend,  # pdf_backend
             )
         }
     )

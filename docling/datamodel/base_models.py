@@ -1,6 +1,6 @@
 from enum import Enum, auto
 from io import BytesIO
-from typing import TYPE_CHECKING, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Dict, List, Optional, Set, Union
 
 from docling_core.types.experimental import BoundingBox, Size
 from docling_core.types.experimental.document import PictureData, TableCell
@@ -21,14 +21,29 @@ class ConversionStatus(str, Enum):
 
 
 class InputFormat(str, Enum):
-    DOCX = auto()
-    PPTX = auto()
-    HTML = auto()
-    IMAGE = auto()
-    PDF = auto()
+    DOCX = "docx"
+    PPTX = "pptx"
+    HTML = "html"
+    IMAGE = "image"
+    PDF = "pdf"
 
 
-FormatToMimeType = {
+class OutputFormat(str, Enum):
+    MARKDOWN = "md"
+    JSON = "json"
+    TEXT = "text"
+    DOCTAGS = "doctags"
+
+
+FormatToExtensions: Dict[InputFormat, List[str]] = {
+    InputFormat.DOCX: ["docx", "dotx", "docm", "dotm"],
+    InputFormat.PPTX: ["pptx", "potx", "ppsx", "pptm", "potm", "ppsm"],
+    InputFormat.PDF: ["pdf"],
+    InputFormat.HTML: ["html", "htm", "xhtml"],
+    InputFormat.IMAGE: ["jpg", "jpeg", "png", "tif", "tiff", "bmp"],
+}
+
+FormatToMimeType: Dict[InputFormat, Set[str]] = {
     InputFormat.DOCX: {
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.template",

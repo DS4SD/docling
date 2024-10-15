@@ -108,7 +108,7 @@ class DocumentConverter:
         else:
             for f in self.allowed_formats:
                 if f not in self.format_to_options.keys():
-                    _log.info(f"Requested format {f} will use default options.")
+                    _log.debug(f"Requested format {f} will use default options.")
                     self.format_to_options[f] = _format_to_default_options[f]
 
         self.initialized_pipelines: Dict[Type[BasePipeline], BasePipeline] = {}
