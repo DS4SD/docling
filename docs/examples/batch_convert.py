@@ -122,7 +122,7 @@ def main():
         raises_on_error=False,  # to let conversion run through all and examine results at the end
     )
     success_count, partial_success_count, failure_count = export_documents(
-        conv_results, output_dir=Path("../../examples/scratch")
+        conv_results, output_dir=Path("scratch")
     )
 
     end_time = time.time() - start_time
