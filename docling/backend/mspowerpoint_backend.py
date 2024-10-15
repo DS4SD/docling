@@ -94,7 +94,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         )
         doc = DoclingDocument(
             description=DescriptionItem(), name="name_without_extension", origin=origin
-        )  # TODO must add origin information
+        )  # must add origin information
         doc = self.walk_linear(self.pptx_obj, doc)
 
         return doc
@@ -183,7 +183,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                         e_is_a_list_item = False
 
                     if e_is_a_list_item:
-                        # TODO: Set marker and enumerated arguments if this is an enumeration element.
+                        # Set marker and enumerated arguments if this is an enumeration element.
                         enum_marker = str(enum_list_item_value) + "."
                         doc.add_list_item(
                             marker=enum_marker,

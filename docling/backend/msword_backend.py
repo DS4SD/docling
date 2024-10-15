@@ -44,6 +44,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             self.parents[i] = None
 
         self.level = 0
+        self.listIter = 0
 
         self.history = {
             "names": [None],
@@ -124,6 +125,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         for element in body:
             tag_name = etree.QName(element).localname
 
+            # Check for Inline Images (drawings or blip elements)
             found_drawing = etree.ElementBase.xpath(
                 element, ".//w:drawing", namespaces=self.xml_namespaces
             )
@@ -137,8 +139,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     self.handle_tables(element, docx_obj, doc)
                 except Exception:
                     _log.error("could not parse a table, broken docx table")
-            # Check for Inline Images (drawings or blip elements)
-            # elif element.xpath(".//w:drawing", namespaces = self.xml_namespaces) or element.xpath(".//w:pict", namespaces = self.xml_namespaces):
+
             elif found_drawing or found_pict:
                 self.handle_pictures(element, docx_obj, doc)
             # Check for Text
@@ -166,7 +167,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # Get the numId element and extract the value
             numId_elem = numPr.find("w:numId", namespaces=paragraph._element.nsmap)
             ilvl_elem = numPr.find("w:ilvl", namespaces=paragraph._element.nsmap)
-
             numId = numId_elem.get(self.XML_KEY) if numId_elem is not None else None
             ilvl = ilvl_elem.get(self.XML_KEY) if ilvl_elem is not None else None
 
@@ -215,15 +215,31 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         text = paragraph.text.strip()
         # if len(text)==0 # keep empty paragraphs, they seperate adjacent lists!
 
+        # Common styles for bullet and numbered lists.
+        # "List Bullet", "List Number", "List Paragraph"
+        # TODO: reliably identify wether list is a numbered list or not
+        # is_numbered = "List Bullet" not in paragraph.style.name
+        is_numbered = False
+
         p_style_name, p_level = self.get_label_and_level(paragraph)
         numid, ilevel = self.get_numId_and_ilvl(paragraph)
+        # print("numid: {}, ilevel: {}, text: {}".format(numid, ilevel, text))
 
-        # print("paragraph.text: {} | numid: {} | ilevel: {}".format(paragraph.text, numid, ilevel))
+        if numid == 0:
+            numid = None
 
         # Handle lists
         if numid is not None and ilevel is not None:
             self.add_listitem(
-                element, docx_obj, doc, p_style_name, p_level, numid, ilevel, text
+                element,
+                docx_obj,
+                doc,
+                p_style_name,
+                p_level,
+                numid,
+                ilevel,
+                text,
+                is_numbered,
             )
             self.update_history(p_style_name, p_level, numid, ilevel)
             return
@@ -233,14 +249,12 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     self.parents[key] = None
             self.level = self.level_at_new_list - 1
             self.level_at_new_list = None
-
         if p_style_name in ["Title"]:
             for key, val in self.parents.items():
                 self.parents[key] = None
             self.parents[0] = doc.add_text(
                 parent=None, label=DocItemLabel.TITLE, text=text
             )
-
         elif "Heading" in p_style_name:
             self.add_header(element, docx_obj, doc, p_style_name, p_level, text)
 
@@ -312,8 +326,20 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         return
 
     def add_listitem(
-        self, element, docx_obj, doc, p_style_name, p_level, numid, ilevel, text: str
+        self,
+        element,
+        docx_obj,
+        doc,
+        p_style_name,
+        p_level,
+        numid,
+        ilevel,
+        text: str,
+        is_numbered=False,
     ):
+        # is_numbered = is_numbered
+        enum_marker = ""
+
         level = self.get_level()
         if self.prev_numid() is None:  # Open new list
             self.level_at_new_list = level  # type: ignore
@@ -323,7 +349,16 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             )
 
             # TODO: Set marker and enumerated arguments if this is an enumeration element.
-            doc.add_list_item(parent=self.parents[level], text=text)
+            self.listIter += 1
+            if is_numbered:
+                enum_marker = str(self.listIter) + "."
+                is_numbered = True
+            doc.add_list_item(
+                marker=enum_marker,
+                enumerated=is_numbered,
+                parent=self.parents[level],
+                text=text,
+            )
 
         elif (
             self.prev_numid() == numid and self.prev_indent() < ilevel
@@ -334,12 +369,26 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             ):
                 # TODO: determine if this is an unordered list or an ordered list.
                 #  Set GroupLabel.ORDERED_LIST when it fits.
-                self.parents[i] = doc.add_group(
-                    label=GroupLabel.LIST, name="list", parent=self.parents[i - 1]
-                )
+                self.listIter = 0
+                if is_numbered:
+                    self.parents[i] = doc.add_group(
+                        label=GroupLabel.ORDERED_LIST,
+                        name="list",
+                        parent=self.parents[i - 1],
+                    )
+                else:
+                    self.parents[i] = doc.add_group(
+                        label=GroupLabel.LIST, name="list", parent=self.parents[i - 1]
+                    )
 
             # TODO: Set marker and enumerated arguments if this is an enumeration element.
+            self.listIter += 1
+            if is_numbered:
+                enum_marker = str(self.listIter) + "."
+                is_numbered = True
             doc.add_list_item(
+                marker=enum_marker,
+                enumerated=is_numbered,
                 parent=self.parents[self.level_at_new_list + ilevel],
                 text=text,
             )
@@ -350,14 +399,30 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     self.parents[k] = None
 
             # TODO: Set marker and enumerated arguments if this is an enumeration element.
+            self.listIter += 1
+            if is_numbered:
+                enum_marker = str(self.listIter) + "."
+                is_numbered = True
             doc.add_list_item(
+                marker=enum_marker,
+                enumerated=is_numbered,
                 parent=self.parents[self.level_at_new_list + ilevel],
                 text=text,
             )
+            self.listIter = 0
 
         elif self.prev_numid() == numid or self.prev_indent() == ilevel:
             # TODO: Set marker and enumerated arguments if this is an enumeration element.
-            doc.add_list_item(parent=self.parents[level - 1], text=text)
+            self.listIter += 1
+            if is_numbered:
+                enum_marker = str(self.listIter) + "."
+                is_numbered = True
+            doc.add_list_item(
+                marker=enum_marker,
+                enumerated=is_numbered,
+                parent=self.parents[level - 1],
+                text=text,
+            )
         return
 
     def handle_tables(self, element, docx_obj, doc):
