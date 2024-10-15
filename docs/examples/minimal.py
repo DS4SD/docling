@@ -7,4 +7,4 @@ print(
     result.document.export_to_markdown()
 )  # output: ## Docling Technical Report [...]"
 # if the legacy output is needed, use this version
-# print(result.legacy_output.export_to_markdown())  # output: ## Docling Technical Report [...]"
+# print(result.legacy_document.export_to_markdown())  # output: ## Docling Technical Report [...]"
