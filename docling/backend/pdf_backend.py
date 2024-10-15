@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from io import BytesIO
 from typing import Iterable, Optional, Set, Union
 
-from docling_core.types.doc.doc_ocr import Path
-from docling_core.types.experimental import BoundingBox, Size
+from docling_core.types.doc import BoundingBox, Size
+from docling_core.types.legacy_doc.doc_ocr import Path
 from PIL import Image
 
 from docling.backend.abstract_backend import PaginatedDocumentBackend

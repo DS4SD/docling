@@ -15,10 +15,10 @@ from docling_core.types import DocumentDescription as DsDocumentDescription
 from docling_core.types import FileInfoObject as DsFileInfoObject
 from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
-from docling_core.types.doc.base import BoundingBox as DsBoundingBox
-from docling_core.types.doc.base import Figure, TableCell
-from docling_core.types.experimental import BoundingBox, CoordOrigin
-from docling_core.types.experimental.document import DoclingDocument
+from docling_core.types.doc import BoundingBox, CoordOrigin
+from docling_core.types.doc.document import DoclingDocument
+from docling_core.types.legacy_doc.base import BoundingBox as DsBoundingBox
+from docling_core.types.legacy_doc.base import Figure, TableCell
 from PIL import ImageDraw
 from pydantic import BaseModel, ConfigDict
 

@@ -2,7 +2,7 @@ import logging
 from typing import Iterable
 
 import numpy
-from docling_core.types.experimental import BoundingBox, CoordOrigin
+from docling_core.types.doc import BoundingBox, CoordOrigin
 
 from docling.datamodel.base_models import OcrCell, Page
 from docling.datamodel.pipeline_options import EasyOcrOptions

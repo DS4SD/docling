@@ -4,7 +4,7 @@ from abc import abstractmethod
 from typing import Iterable, List, Tuple
 
 import numpy as np
-from docling_core.types.experimental import BoundingBox, CoordOrigin
+from docling_core.types.doc import BoundingBox, CoordOrigin
 from PIL import Image, ImageDraw
 from rtree import index
 from scipy.ndimage import find_objects, label

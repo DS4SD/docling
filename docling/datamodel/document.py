@@ -12,9 +12,7 @@ from docling_core.types import DocumentDescription as DsDocumentDescription
 from docling_core.types import FileInfoObject as DsFileInfoObject
 from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
-from docling_core.types.doc.base import BoundingBox as DsBoundingBox
-from docling_core.types.doc.base import Figure, GlmTableCell, TableCell
-from docling_core.types.experimental import (
+from docling_core.types.doc import (
     DescriptionItem,
     DocItem,
     DocItemLabel,
@@ -24,7 +22,9 @@ from docling_core.types.experimental import (
     TableItem,
     TextItem,
 )
-from docling_core.types.experimental.document import ListItem
+from docling_core.types.doc.document import ListItem
+from docling_core.types.legacy_doc.base import BoundingBox as DsBoundingBox
+from docling_core.types.legacy_doc.base import Figure, GlmTableCell, TableCell
 from docling_core.utils.file import resolve_file_source
 from pydantic import BaseModel
 from typing_extensions import deprecated

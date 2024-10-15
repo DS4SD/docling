@@ -3,7 +3,7 @@ from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING, Set, Union
 
-from docling_core.types.experimental import DoclingDocument
+from docling_core.types.doc import DoclingDocument
 
 if TYPE_CHECKING:
     from docling.datamodel.base_models import InputFormat

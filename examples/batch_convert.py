@@ -32,23 +32,23 @@ def export_documents(
             doc_filename = conv_res.input.file.stem
 
             if USE_V2:
-                # Export Docling document format to JSON (experimental):
+                # Export Docling document format to JSON:
                 with (output_dir / f"{doc_filename}.json").open("w") as fp:
                     fp.write(json.dumps(conv_res.document.export_to_dict()))
 
-                # Export Docling document format to YAML (experimental):
+                # Export Docling document format to YAML:
                 with (output_dir / f"{doc_filename}.yaml").open("w") as fp:
                     fp.write(yaml.safe_dump(conv_res.document.export_to_dict()))
 
-                # Export Docling document format to doctags (experimental):
+                # Export Docling document format to doctags:
                 with (output_dir / f"{doc_filename}.doctags.txt").open("w") as fp:
                     fp.write(conv_res.document.export_to_document_tokens())
 
-                # Export Docling document format to markdown (experimental):
+                # Export Docling document format to markdown:
                 with (output_dir / f"{doc_filename}.md").open("w") as fp:
                     fp.write(conv_res.document.export_to_markdown())
 
-                # Export Docling document format to text (experimental):
+                # Export Docling document format to text:
                 with (output_dir / f"{doc_filename}.txt").open("w") as fp:
                     fp.write(conv_res.document.export_to_markdown(strict_text=True))
 

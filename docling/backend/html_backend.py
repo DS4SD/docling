@@ -4,14 +4,14 @@ from pathlib import Path
 from typing import Set, Union
 
 from bs4 import BeautifulSoup
-from docling_core.types.experimental import (
+from docling_core.types.doc import (
     DescriptionItem,
     DoclingDocument,
     PictureData,
     TableCell,
     TableData,
 )
-from docling_core.types.experimental.labels import DocItemLabel, GroupLabel
+from docling_core.types.doc.labels import DocItemLabel, GroupLabel
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat

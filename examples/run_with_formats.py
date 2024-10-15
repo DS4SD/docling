@@ -58,8 +58,8 @@ for res in conv_results:
         f"Document {res.input.file.name} converted."
         f"\nSaved markdown output to: {str(out_path)}"
     )
-    # print(res.experimental.export_to_markdown())
-    # Export Docling document format to markdown (experimental):
+    # print(res.docdocument.export_to_markdown())
+    # Export Docling document format to markdowndoc:
     with (out_path / f"{res.input.file.name}.md").open("w") as fp:
         fp.write(res.document.export_to_markdown())
 

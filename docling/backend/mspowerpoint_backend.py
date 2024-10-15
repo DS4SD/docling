@@ -3,7 +3,7 @@ from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
 
-from docling_core.types.experimental import (
+from docling_core.types.doc import (
     DescriptionItem,
     DocItemLabel,
     DoclingDocument,
@@ -14,7 +14,7 @@ from docling_core.types.experimental import (
     TableCell,
     TableData,
 )
-from docling_core.types.experimental.base import BoundingBox, CoordOrigin, Size
+from docling_core.types.doc.base import BoundingBox, CoordOrigin, Size
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
 

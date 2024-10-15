@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Set, Union
 
 import docx
-from docling_core.types.experimental import (
+from docling_core.types.doc import (
     DescriptionItem,
     DocItemLabel,
     DoclingDocument,

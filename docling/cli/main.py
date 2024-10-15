@@ -137,10 +137,10 @@ def convert(
     from_formats: List[InputFormat] = typer.Option(
         None,
         "--from",
-        help="Specify input formats " "to convert from. Defaults to all formats.",
+        help="Specify input formats to convert from. Defaults to all formats.",
     ),
     to_formats: List[OutputFormat] = typer.Option(
-        None, "--to", help="Specify output formats. " "Defaults to Markdown."
+        None, "--to", help="Specify output formats. Defaults to Markdown."
     ),
     ocr: Annotated[
         bool,
@@ -148,9 +148,6 @@ def convert(
             ..., help="If enabled, the bitmap content will be processed using OCR."
         ),
     ] = True,
-    # backend: Annotated[
-    #    Backend, typer.Option(..., help="The PDF backend to use.")
-    # ] = Backend.DOCLING,
     ocr_engine: Annotated[
         OcrEngine, typer.Option(..., help="The OCR engine to use.")
     ] = OcrEngine.EASYOCR,
@@ -195,16 +192,6 @@ def convert(
     export_md = OutputFormat.MARKDOWN in to_formats
     export_txt = OutputFormat.TEXT in to_formats
     export_doctags = OutputFormat.DOCTAGS in to_formats
-
-    # match backend:
-    #     case Backend.PYPDFIUM2:
-    #         do_cell_matching = ocr  # only do cell matching when OCR enabled
-    #         pdf_backend = PyPdfiumDocumentBackend
-    #     case Backend.DOCLING:
-    #         do_cell_matching = True
-    #         pdf_backend = DoclingParseDocumentBackend
-    #     case _:
-    #         raise RuntimeError(f"Unexpected backend type {backend}")
 
     match ocr_engine:
         case OcrEngine.EASYOCR:

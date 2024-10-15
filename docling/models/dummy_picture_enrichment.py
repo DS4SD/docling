@@ -1,10 +1,7 @@
 from typing import Any, Iterable
 
-from docling_core.types.experimental import DoclingDocument, NodeItem
-from docling_core.types.experimental.document import (
-    PictureClassificationData,
-    PictureItem,
-)
+from docling_core.types.doc import DoclingDocument, NodeItem
+from docling_core.types.doc.document import PictureClassificationData, PictureItem
 
 from docling.models.base_model import BaseEnrichmentModel
 

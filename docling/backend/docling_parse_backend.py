@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
-from docling_core.types.experimental import BoundingBox, CoordOrigin, Size
+from docling_core.types.doc import BoundingBox, CoordOrigin, Size
 from docling_parse.docling_parse import pdf_parser
 from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage

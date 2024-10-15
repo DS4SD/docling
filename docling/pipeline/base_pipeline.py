@@ -5,7 +5,7 @@ import traceback
 from abc import ABC, abstractmethod
 from typing import Callable, Iterable, List
 
-from docling_core.types.experimental import DoclingDocument, NodeItem
+from docling_core.types.doc import DoclingDocument, NodeItem
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
