@@ -11,7 +11,6 @@ import typer
 from docling_core.utils.file import resolve_file_source
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
-from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import (
     ConversionStatus,
     FormatToExtensions,

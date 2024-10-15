@@ -1,16 +1,12 @@
 import copy
 import random
-from typing import List, Tuple, Union
+from typing import List, Union
 
 from deepsearch_glm.nlp_utils import init_nlp_model
-from deepsearch_glm.utils.doc_utils import (
-    to_docling_document,
-    to_legacy_document_format,
-)
+from deepsearch_glm.utils.doc_utils import to_docling_document
 from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_models
 from docling_core.types import BaseText
 from docling_core.types import Document as DsDocument
-from docling_core.types import Document as DsLegacyDocument
 from docling_core.types import DocumentDescription as DsDocumentDescription
 from docling_core.types import FileInfoObject as DsFileInfoObject
 from docling_core.types import PageDimensions, PageReference, Prov, Ref

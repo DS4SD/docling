@@ -23,7 +23,6 @@ from docling_core.types.doc import (
     TextItem,
 )
 from docling_core.types.doc.document import ListItem
-from docling_core.types.legacy_doc.base import BoundingBox as DsBoundingBox
 from docling_core.types.legacy_doc.base import Figure, GlmTableCell, TableCell
 from docling_core.utils.file import resolve_file_source
 from pydantic import BaseModel
@@ -43,8 +42,6 @@ from docling.datamodel.base_models import (
     MimeTypeToFormat,
     Page,
     PageElement,
-    Table,
-    TextElement,
 )
 from docling.datamodel.settings import DocumentLimits
 from docling.utils.utils import create_file_hash, create_hash

@@ -1,7 +1,7 @@
 import copy
 import logging
 from abc import abstractmethod
-from typing import Iterable, List, Tuple
+from typing import Iterable, List
 
 import numpy as np
 from docling_core.types.doc import BoundingBox, CoordOrigin
