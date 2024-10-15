@@ -114,6 +114,7 @@ py_version=311
 pretty = true
 # strict = true
 no_implicit_optional = true
+plugins = "pydantic.mypy"
 python_version = "3.10"
 
 [[tool.mypy.overrides]]
@@ -121,6 +122,15 @@ module = [
     "docling_parse.*",
     "pypdfium2.*",
     "networkx.*",
+    "scipy.*",
+    "filetype.*",
+    "tesserocr.*",
+    "docling_ibm_models.*",
+    "easyocr.*",
+    "deepsearch_glm.*",
+    "lxml.*",
+    "bs4.*",
+    "huggingface_hub.*"
 ]
 ignore_missing_imports = true
 

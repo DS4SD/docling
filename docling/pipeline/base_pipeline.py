@@ -178,7 +178,7 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
     ) -> ConversionStatus:
         status = ConversionStatus.SUCCESS
         for page in conv_res.pages:
-            if not page._backend.is_valid():
+            if page._backend is None or not page._backend.is_valid():
                 conv_res.errors.append(
                     ErrorItem(
                         component_type=DoclingComponentType.DOCUMENT_BACKEND,

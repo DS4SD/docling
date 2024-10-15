@@ -40,7 +40,9 @@ class PagePreprocessingModel(BasePageModel):
 
     # Extract and populate the page cells and store it in the page object
     def _parse_page_cells(self, page: Page) -> Page:
-        page.cells = page._backend.get_text_cells()
+        assert page._backend is not None
+
+        page.cells = list(page._backend.get_text_cells())
 
         # DEBUG code:
         def draw_text_boxes(image, cells):

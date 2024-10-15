@@ -2,7 +2,7 @@ import logging
 import random
 from io import BytesIO
 from pathlib import Path
-from typing import Iterable, List, Optional, Union
+from typing import TYPE_CHECKING, Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
 import pypdfium2.raw as pdfium_c
@@ -13,6 +13,9 @@ from pypdfium2._helpers.misc import PdfiumError
 
 from docling.backend.pdf_backend import PdfDocumentBackend, PdfPageBackend
 from docling.datamodel.base_models import Cell
+
+if TYPE_CHECKING:
+    from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
 

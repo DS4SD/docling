@@ -26,7 +26,6 @@ def _get_backend(pdf_doc):
     return doc_backend
 
 
-@pytest.mark.skip
 def test_text_cell_counts():
     pdf_doc = Path("./tests/data/redp5695.pdf")
 

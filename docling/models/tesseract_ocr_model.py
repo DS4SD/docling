@@ -69,6 +69,9 @@ class TesseractOcrModel(BaseOcrModel):
             return
 
         for page in page_batch:
+            assert page._backend is not None
+            assert self.reader is not None
+
             ocr_rects = self.get_ocr_rects(page)
 
             all_ocr_cells = []

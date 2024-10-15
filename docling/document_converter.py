@@ -161,6 +161,8 @@ class DocumentConverter:
     def _convert(
         self, conv_input: _DocumentConversionInput, raises_on_error: bool
     ) -> Iterator[ConversionResult]:
+        assert self.format_to_options is not None
+
         for input_batch in chunkify(
             conv_input.docs(self.format_to_options),
             settings.perf.doc_batch_size,  # pass format_options
@@ -181,6 +183,8 @@ class DocumentConverter:
                     yield item
 
     def _get_pipeline(self, doc: InputDocument) -> Optional[BasePipeline]:
+        assert self.format_to_options is not None
+
         fopt = self.format_to_options.get(doc.format)
 
         if fopt is None:
@@ -189,6 +193,7 @@ class DocumentConverter:
             pipeline_class = fopt.pipeline_cls
             pipeline_options = fopt.pipeline_options
 
+        assert pipeline_options is not None
         # TODO this will ignore if different options have been defined for the same pipeline class.
         if (
             pipeline_class not in self.initialized_pipelines
@@ -202,7 +207,9 @@ class DocumentConverter:
 
     def process_document(
         self, in_doc: InputDocument, raises_on_error: bool
-    ) -> ConversionResult:
+    ) -> Optional[ConversionResult]:
+        assert self.allowed_formats is not None
+
         if in_doc.format not in self.allowed_formats:
             return None
         else:
@@ -217,7 +224,7 @@ class DocumentConverter:
 
     def _execute_pipeline(
         self, in_doc: InputDocument, raises_on_error: bool
-    ) -> Optional[ConversionResult]:
+    ) -> ConversionResult:
         if in_doc.valid:
             pipeline = self._get_pipeline(in_doc)
             if pipeline is None:  # Can't find a default pipeline. Should this raise?

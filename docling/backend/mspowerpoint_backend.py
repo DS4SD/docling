@@ -42,7 +42,11 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         self.pptx_obj = None
         self.valid = False
         try:
-            self.pptx_obj = Presentation(self.path_or_stream)
+            if isinstance(self.path_or_stream, BytesIO):
+                self.pptx_obj = Presentation(self.path_or_stream)
+            elif isinstance(self.path_or_stream, Path):
+                self.pptx_obj = Presentation(str(self.path_or_stream))
+
             self.valid = True
         except Exception as e:
             raise RuntimeError(
@@ -53,6 +57,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
 
     def page_count(self) -> int:
         if self.is_valid():
+            assert self.pptx_obj is not None
             return len(self.pptx_obj.slides)
         else:
             return 0
@@ -60,6 +65,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
     def is_valid(self) -> bool:
         return self.valid
 
+    @classmethod
     def supports_pagination(cls) -> bool:
         return True  # True? if so, how to handle pages...
 
@@ -311,10 +317,10 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         slide_width = pptx_obj.slide_width
         slide_height = pptx_obj.slide_height
 
-        text_content = []
+        text_content = []  # type: ignore
 
         max_levels = 10
-        parents = {}
+        parents = {}  # type: ignore
         for i in range(0, max_levels):
             parents[i] = None
 

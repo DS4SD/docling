@@ -47,7 +47,7 @@ class LayoutModel(BasePageModel):
     def __init__(self, artifacts_path: Path):
         self.layout_predictor = LayoutPredictor(artifacts_path)  # TODO temporary
 
-    def postprocess(self, clusters: List[Cluster], cells: List[Cell], page_height):
+    def postprocess(self, clusters_in: List[Cluster], cells: List[Cell], page_height):
         MIN_INTERSECTION = 0.2
         CLASS_THRESHOLDS = {
             DocItemLabel.CAPTION: 0.35,
@@ -78,9 +78,9 @@ class LayoutModel(BasePageModel):
         start_time = time.time()
         # Apply Confidence Threshold to cluster predictions
         # confidence = self.conf_threshold
-        clusters_out = []
+        clusters_mod = []
 
-        for cluster in clusters:
+        for cluster in clusters_in:
             confidence = CLASS_THRESHOLDS[cluster.label]
             if cluster.confidence >= confidence:
                 # annotation["created_by"] = "high_conf_pred"
@@ -88,10 +88,10 @@ class LayoutModel(BasePageModel):
                 # Remap class labels where needed.
                 if cluster.label in CLASS_REMAPPINGS.keys():
                     cluster.label = CLASS_REMAPPINGS[cluster.label]
-                clusters_out.append(cluster)
+                clusters_mod.append(cluster)
 
         # map to dictionary clusters and cells, with bottom left origin
-        clusters = [
+        clusters_orig = [
             {
                 "id": c.id,
                 "bbox": list(
@@ -101,7 +101,7 @@ class LayoutModel(BasePageModel):
                 "cell_ids": [],
                 "type": c.label,
             }
-            for c in clusters
+            for c in clusters_in
         ]
 
         clusters_out = [
@@ -115,8 +115,10 @@ class LayoutModel(BasePageModel):
                 "cell_ids": [],
                 "type": c.label,
             }
-            for c in clusters_out
+            for c in clusters_mod
         ]
+
+        del clusters_mod
 
         raw_cells = [
             {
@@ -151,7 +153,7 @@ class LayoutModel(BasePageModel):
 
         # Assign orphan cells with lower confidence predictions
         clusters_out, orphan_cell_indices = lu.assign_orphans_with_low_conf_pred(
-            clusters_out, clusters, raw_cells, orphan_cell_indices
+            clusters_out, clusters_orig, raw_cells, orphan_cell_indices
         )
 
         # Refresh the cell_ids assignment, after creating new clusters using low conf predictions
@@ -180,7 +182,7 @@ class LayoutModel(BasePageModel):
         ) = lu.cell_id_state_map(clusters_out, cell_count)
 
         clusters_out, orphan_cell_indices = lu.set_orphan_as_text(
-            clusters_out, clusters, raw_cells, orphan_cell_indices
+            clusters_out, clusters_orig, raw_cells, orphan_cell_indices
         )
 
         _log.debug("---- 5. Merge Cells & and adapt the bounding boxes")
@@ -239,34 +241,41 @@ class LayoutModel(BasePageModel):
         end_time = time.time() - start_time
         _log.debug(f"Finished post processing in seconds={end_time:.3f}")
 
-        cells_out = [
+        cells_out_new = [
             Cell(
-                id=c["id"],
+                id=c["id"],  # type: ignore
                 bbox=BoundingBox.from_tuple(
-                    coord=c["bbox"], origin=CoordOrigin.BOTTOMLEFT
+                    coord=c["bbox"], origin=CoordOrigin.BOTTOMLEFT  # type: ignore
                 ).to_top_left_origin(page_height),
-                text=c["text"],
+                text=c["text"],  # type: ignore
             )
             for c in cells_out
         ]
+
+        del cells_out
+
         clusters_out_new = []
         for c in clusters_out:
-            cluster_cells = [ccell for ccell in cells_out if ccell.id in c["cell_ids"]]
+            cluster_cells = [
+                ccell for ccell in cells_out_new if ccell.id in c["cell_ids"]  # type: ignore
+            ]
             c_new = Cluster(
-                id=c["id"],
+                id=c["id"],  # type: ignore
                 bbox=BoundingBox.from_tuple(
-                    coord=c["bbox"], origin=CoordOrigin.BOTTOMLEFT
+                    coord=c["bbox"], origin=CoordOrigin.BOTTOMLEFT  # type: ignore
                 ).to_top_left_origin(page_height),
-                confidence=c["confidence"],
+                confidence=c["confidence"],  # type: ignore
                 label=DocItemLabel(c["type"]),
                 cells=cluster_cells,
             )
             clusters_out_new.append(c_new)
 
-        return clusters_out_new, cells_out
+        return clusters_out_new, cells_out_new
 
     def __call__(self, page_batch: Iterable[Page]) -> Iterable[Page]:
         for page in page_batch:
+            assert page.size is not None
+
             clusters = []
             for ix, pred_item in enumerate(
                 self.layout_predictor.predict(page.get_image(scale=1.0))

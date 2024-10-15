@@ -123,8 +123,9 @@ class StandardPdfPipeline(PaginatedPipeline):
         return None
 
     def initialize_page(self, doc: InputDocument, page: Page) -> Page:
-        page._backend = doc._backend.load_page(page.page_no)
-        page.size = page._backend.get_size()
+        page._backend = doc._backend.load_page(page.page_no)  # type: ignore
+        if page._backend is not None and page._backend.is_valid():
+            page.size = page._backend.get_size()
 
         return page
 
@@ -136,7 +137,7 @@ class StandardPdfPipeline(PaginatedPipeline):
         all_body = []
 
         for p in conv_res.pages:
-
+            assert p.assembled is not None
             for el in p.assembled.body:
                 all_body.append(el)
             for el in p.assembled.headers:

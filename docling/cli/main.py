@@ -21,6 +21,7 @@ from docling.datamodel.base_models import (
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
+    OcrOptions,
     PdfPipelineOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
@@ -179,7 +180,7 @@ def convert(
             raise typer.Abort()
         elif source.is_dir():
             for fmt in from_formats:
-                for ext in FormatToExtensions.get(fmt):
+                for ext in FormatToExtensions[fmt]:
                     input_doc_paths.extend(list(source.glob(f"**/*.{ext}")))
                     input_doc_paths.extend(list(source.glob(f"**/*.{ext.upper()}")))
         else:
@@ -195,7 +196,7 @@ def convert(
 
     match ocr_engine:
         case OcrEngine.EASYOCR:
-            ocr_options = EasyOcrOptions()
+            ocr_options: OcrOptions = EasyOcrOptions()
         case OcrEngine.TESSERACT_CLI:
             ocr_options = TesseractCliOcrOptions()
         case OcrEngine.TESSERACT:

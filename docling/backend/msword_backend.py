@@ -39,7 +39,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         # Initialise the parents for the hierarchy
         self.max_levels = 10
         self.level_at_new_list = None
-        self.parents = {}
+        self.parents = {}  # type: ignore
         for i in range(-1, self.max_levels):
             self.parents[i] = None
 
@@ -54,16 +54,21 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         self.docx_obj = None
         try:
-            self.docx_obj = docx.Document(self.path_or_stream)
+            if isinstance(self.path_or_stream, BytesIO):
+                self.docx_obj = docx.Document(self.path_or_stream)
+            elif isinstance(self.path_or_stream, Path):
+                self.docx_obj = docx.Document(str(self.path_or_stream))
+
             self.valid = True
         except Exception as e:
             raise RuntimeError(
-                f"MsPowerpointDocumentBackend could not load document with hash {document_hash}"
+                f"MsPowerpointDocumentBackend could not load document with hash {self.document_hash}"
             ) from e
 
     def is_valid(self) -> bool:
-        return True
+        return self.valid
 
+    @classmethod
     def supports_pagination(cls) -> bool:
         return False
 
@@ -80,10 +85,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def convert(self) -> DoclingDocument:
         # Parses the DOCX into a structured document model.
         doc = DoclingDocument(description=DescriptionItem(), name="dummy")
-
-        # self.initialise()
-        doc = self.walk_linear(self.docx_obj.element.body, self.docx_obj, doc)
-        return doc
+        if self.is_valid():
+            assert self.docx_obj is not None
+            doc = self.walk_linear(self.docx_obj.element.body, self.docx_obj, doc)
+            return doc
+        else:
+            raise RuntimeError(
+                f"Cannot convert doc with {self.document_hash} because the backend failed to init."
+            )
 
     def update_history(self, name, level, numid, ilevel):
         self.history["names"].append(name)
@@ -307,7 +316,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     ):
         level = self.get_level()
         if self.prev_numid() is None:  # Open new list
-            self.level_at_new_list = level
+            self.level_at_new_list = level  # type: ignore
 
             self.parents[level] = doc.add_group(
                 label=GroupLabel.LIST, name="list", parent=self.parents[level - 1]
