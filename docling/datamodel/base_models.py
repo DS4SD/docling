@@ -2,9 +2,13 @@ from enum import Enum, auto
 from io import BytesIO
 from typing import TYPE_CHECKING, Dict, List, Optional, Set, Union
 
-from docling_core.types.doc import BoundingBox, Size
-from docling_core.types.doc.document import PictureDataType, TableCell
-from docling_core.types.doc.labels import DocItemLabel
+from docling_core.types.doc import (
+    BoundingBox,
+    DocItemLabel,
+    PictureDataType,
+    Size,
+    TableCell,
+)
 from PIL.Image import Image
 from pydantic import BaseModel, ConfigDict
 

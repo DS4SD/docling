@@ -2,7 +2,7 @@ import copy
 import logging
 
 import networkx as nx
-from docling_core.types.doc.labels import DocItemLabel
+from docling_core.types.doc import DocItemLabel
 
 logger = logging.getLogger("layout_utils")
 

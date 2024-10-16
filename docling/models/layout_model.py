@@ -5,8 +5,7 @@ import time
 from pathlib import Path
 from typing import Iterable, List
 
-from docling_core.types.doc import CoordOrigin
-from docling_core.types.doc.labels import DocItemLabel
+from docling_core.types.doc import CoordOrigin, DocItemLabel
 from docling_ibm_models.layoutmodel.layout_predictor import LayoutPredictor
 from PIL import ImageDraw
 

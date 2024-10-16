@@ -13,7 +13,6 @@ from docling_core.types import FileInfoObject as DsFileInfoObject
 from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
 from docling_core.types.doc import (
-    DescriptionItem,
     DocItem,
     DocItemLabel,
     DoclingDocument,
@@ -37,11 +36,9 @@ from docling.datamodel.base_models import (
     ConversionStatus,
     DocumentStream,
     ErrorItem,
-    FigureElement,
     InputFormat,
     MimeTypeToFormat,
     Page,
-    PageElement,
 )
 from docling.datamodel.settings import DocumentLimits
 from docling.utils.utils import create_file_hash, create_hash
@@ -70,9 +67,7 @@ layout_label_to_ds_type = {
     DocItemLabel.PARAGRAPH: "paragraph",
 }
 
-_EMPTY_DOCLING_DOC = DoclingDocument(
-    description=DescriptionItem(), name="dummy"
-)  # TODO: Stub
+_EMPTY_DOCLING_DOC = DoclingDocument(name="dummy")
 
 
 class InputDocument(BaseModel):

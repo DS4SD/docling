@@ -4,16 +4,17 @@ from pathlib import Path
 from typing import Set, Union
 
 from docling_core.types.doc import (
-    DescriptionItem,
+    BoundingBox,
+    CoordOrigin,
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
     ProvenanceItem,
+    Size,
     TableCell,
     TableData,
 )
-from docling_core.types.doc.base import BoundingBox, CoordOrigin, Size
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
 
@@ -96,7 +97,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         else:
             docname = "stream"
         doc = DoclingDocument(
-            description=DescriptionItem(), name=docname, origin=origin
+            name=docname, origin=origin
         )  # must add origin information
         doc = self.walk_linear(self.pptx_obj, doc)
 

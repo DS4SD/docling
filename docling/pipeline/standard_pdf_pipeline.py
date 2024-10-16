@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-from docling_core.types.doc.document import DocItem, ImageRef, PictureItem, TableItem
+from docling_core.types.doc import DocItem, ImageRef, PictureItem, TableItem
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend

@@ -5,12 +5,12 @@ from typing import Set, Union
 
 from bs4 import BeautifulSoup
 from docling_core.types.doc import (
-    DescriptionItem,
+    DocItemLabel,
     DoclingDocument,
+    GroupLabel,
     TableCell,
     TableData,
 )
-from docling_core.types.doc.labels import DocItemLabel, GroupLabel
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
@@ -66,7 +66,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
     def convert(self) -> DoclingDocument:
         # access self.path_or_stream to load stuff
-        doc = DoclingDocument(description=DescriptionItem(), name="dummy")
+        doc = DoclingDocument(name="dummy")
         _log.debug("Trying to convert HTML...")
 
         if self.is_valid():

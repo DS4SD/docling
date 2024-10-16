@@ -3,9 +3,7 @@ from pathlib import Path
 from typing import Iterable, List
 
 import numpy
-from docling_core.types.doc import BoundingBox
-from docling_core.types.doc.document import TableCell
-from docling_core.types.doc.labels import DocItemLabel
+from docling_core.types.doc import BoundingBox, DocItemLabel, TableCell
 from docling_ibm_models.tableformer.data_management.tf_predictor import TFPredictor
 from PIL import ImageDraw
 

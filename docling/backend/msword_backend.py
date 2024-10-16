@@ -5,7 +5,6 @@ from typing import Set, Union
 
 import docx
 from docling_core.types.doc import (
-    DescriptionItem,
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
@@ -99,9 +98,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             docname = Path(fname).stem
         else:
             docname = "stream"
-        doc = DoclingDocument(
-            description=DescriptionItem(), name=docname, origin=origin
-        )
+        doc = DoclingDocument(name=docname, origin=origin)
         if self.is_valid():
             assert self.docx_obj is not None
             doc = self.walk_linear(self.docx_obj.element.body, self.docx_obj, doc)

@@ -11,8 +11,7 @@ from docling_core.types import DocumentDescription as DsDocumentDescription
 from docling_core.types import FileInfoObject as DsFileInfoObject
 from docling_core.types import PageDimensions, PageReference, Prov, Ref
 from docling_core.types import Table as DsSchemaTable
-from docling_core.types.doc import BoundingBox, CoordOrigin
-from docling_core.types.doc.document import DoclingDocument
+from docling_core.types.doc import BoundingBox, CoordOrigin, DoclingDocument
 from docling_core.types.legacy_doc.base import BoundingBox as DsBoundingBox
 from docling_core.types.legacy_doc.base import Figure, TableCell
 from PIL import ImageDraw
@@ -222,15 +221,8 @@ class GlmModel:
         ds_doc_dict = ds_doc.model_dump(by_alias=True)
 
         glm_doc = self.model.apply_on_doc(ds_doc_dict)
-        # ds_doc_dict = to_legacy_document_format(
-        #    glm_doc, ds_doc_dict, update_name_label=True
-        # )
 
         docling_doc: DoclingDocument = to_docling_document(glm_doc)  # Experimental
-        # legacy_doc: DsLegacyDocument = None
-
-        # if self.create_legacy_output:
-        #    legacy_doc = DsLegacyDocument.model_validate(ds_doc_dict)
 
         # DEBUG code:
         def draw_clusters_and_cells(ds_document, page_no):

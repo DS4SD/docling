@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from docling_core.types.doc import DoclingDocument, NodeItem
-from docling_core.types.doc.document import PictureClassificationData, PictureItem, PictureClassificationClass
+from docling_core.types.doc import PictureClassificationData, PictureItem, PictureClassificationClass
 
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
