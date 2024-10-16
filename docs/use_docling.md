@@ -1,0 +1,152 @@
+## Convert a single document
+
+To convert invidual PDF documents, use `convert()`, for example:
+
+```python
+from docling.document_converter import DocumentConverter
+
+source = "https://arxiv.org/pdf/2408.09869"  # PDF path or URL
+converter = DocumentConverter()
+result = converter.convert(source)
+print(result.document.export_to_markdown())  # output: "## Docling Technical Report[...]"
+print(result.document.export_to_document_tokens())  # output: "<document><title><page_1><loc_20>..."
+```
+
+## CLI
+
+You can also use Docling directly from your command line to convert individual files —be it local or by URL— or whole directories.
+
+A simple example would look like this:
+```console
+docling https://arxiv.org/pdf/2206.01062
+```
+
+To see all available options (export formats etc.) run `docling --help`.
+
+<details>
+  <summary><b>CLI reference</b></summary>
+
+  Here are the available options as of this writing (for an up-to-date listing, run `docling --help`):
+
+  ```console
+  $ docling --help
+
+  Usage: docling [OPTIONS] source
+
+  ╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+  │ *    input_sources      source  PDF files to convert. Can be local file / directory paths or URL. [default: None] [required] │
+  ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+  ╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+  │ --json       --no-json                            If enabled the document is exported as JSON. [default: no-json]            │
+  │ --md         --no-md                              If enabled the document is exported as Markdown. [default: md]             │
+  │ --txt        --no-txt                             If enabled the document is exported as Text. [default: no-txt]             │
+  │ --doctags    --no-doctags                         If enabled the document is exported as Doc Tags. [default: no-doctags]     │
+  │ --ocr        --no-ocr                             If enabled, the bitmap content will be processed using OCR. [default: ocr] │
+  │ --backend                    [pypdfium2|docling]  The PDF backend to use. [default: docling]                                 │
+  │ --output                     PATH                 Output directory where results are saved. [default: .]                     │
+  │ --version                                         Show version information.                                                  │
+  │ --help                                            Show this message and exit.                                                │
+  ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+  ```
+</details>
+
+
+
+## Advanced options
+
+### Adjust pipeline features
+
+The example file [custom_convert.py](./examples/custom_convert.py) contains multiple ways
+one can adjust the conversion pipeline and features.
+
+
+#### Control PDF table extraction options
+
+You can control if table structure recognition should map the recognized structure back to PDF cells (default) or use text cells from the structure prediction itself.
+This can improve output quality if you find that multiple columns in extracted tables are erroneously merged into one.
+
+
+```python
+from docling.datamodel.base_models import InputFormat
+from docling.document_converter import DocumentConverter, PdfFormatOption
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+
+pipeline_options = PdfPipelineOptions(do_table_structure=True)
+pipeline_options.table_structure_options.do_cell_matching = False  # uses text cells predicted from table structure model
+
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+    }
+)
+```
+
+Since docling 1.16.0: You can control which TableFormer mode you want to use. Choose between `TableFormerMode.FAST` (default) and `TableFormerMode.ACCURATE` (better, but slower) to receive better quality with difficult table structures.
+
+```python
+from docling.datamodel.base_models import InputFormat
+from docling.document_converter import DocumentConverter, PdfFormatOption
+from docling.datamodel.pipeline_options import PdfPipelineOptions, TableFormerMode
+
+pipeline_options = PdfPipelineOptions(do_table_structure=True)
+pipeline_options.table_structure_options.mode = TableFormerMode.ACCURATE  # use more accurate TableFormer model
+
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+    }
+)
+```
+
+### Impose limits on the document size
+
+You can limit the file size and number of pages which should be allowed to process per document:
+
+```python
+from pathlib import Path
+from docling.document_converter import DocumentConverter
+
+source = "https://arxiv.org/pdf/2408.09869"
+converter = DocumentConverter()
+result = converter.convert(source, max_num_pages=100, max_file_size=20971520)
+```
+
+### Convert from binary PDF streams
+
+You can convert PDFs from a binary stream instead of from the filesystem as follows:
+
+```python
+from io import BytesIO
+from docling.datamodel.base_models import DocumentStream
+from docling.document_converter import DocumentConverter
+
+buf = BytesIO(your_binary_stream)
+source = DocumentStream(filename="my_doc.pdf", stream=buf)
+converter = DocumentConverter()
+result = converter.convert(source)
+```
+
+### Limit resource usage
+
+You can limit the CPU threads used by Docling by setting the environment variable `OMP_NUM_THREADS` accordingly. The default setting is using 4 CPU threads.
+
+
+### Chunking
+
+You can perform a hierarchy-aware chunking of a Docling document as follows:
+
+```python
+from docling.document_converter import DocumentConverter
+from docling_core.transforms.chunker import HierarchicalChunker
+
+doc = DocumentConverter().convert("https://arxiv.org/pdf/2206.01062").legacy_document
+chunks = list(HierarchicalChunker().chunk(doc))
+print(chunks[0])
+# ChunkWithMetadata(
+#     path='#/main-text/1',
+#     text='DocLayNet: A Large Human-Annotated Dataset [...]',
+#     page=1,
+#     bbox=[107.30, 672.38, 505.19, 709.08],
+#     [...]
+# )
+```
