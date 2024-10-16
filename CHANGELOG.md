@@ -1,3 +1,17 @@
+## [v2.0.0](https://github.com/DS4SD/docling/releases/tag/v2.0.0) - 2024-10-16
+
+### Feature
+
+* Docling v2 ([#117](https://github.com/DS4SD/docling/issues/117)) ([`7d3be0e`](https://github.com/DS4SD/docling/commit/7d3be0edebb420f5840499aa04e4ab928d33cda2))
+
+### Breaking
+
+* Docling v2 ([#117](https://github.com/DS4SD/docling/issues/117)) ([`7d3be0e`](https://github.com/DS4SD/docling/commit/7d3be0edebb420f5840499aa04e4ab928d33cda2))
+
+### Documentation
+
+* Introduce docs site ([#141](https://github.com/DS4SD/docling/issues/141)) ([`d504432`](https://github.com/DS4SD/docling/commit/d504432c1ee250ea417e8239ff5c16c5bec5a2c7))
+
 ## [v1.20.0](https://github.com/DS4SD/docling/releases/tag/v1.20.0) - 2024-10-11
 
 ### Feature
