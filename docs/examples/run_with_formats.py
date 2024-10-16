@@ -2,6 +2,8 @@ import json
 import logging
 from pathlib import Path
 
+import yaml
+
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.document_converter import (
@@ -65,3 +67,6 @@ for res in conv_results:
 
     with (out_path / f"{res.input.file.name}.json").open("w") as fp:
         fp.write(json.dumps(res.document.export_to_dict()))
+
+    with (out_path / f"{res.input.file.name}.yaml").open("w") as fp:
+        fp.write(yaml.safe_dump(res.document.export_to_dict()))
