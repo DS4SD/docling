@@ -4,6 +4,10 @@ Docling is available as an official LlamaIndex extension!
 
 To get started, check out the [step-by-step guide in LlamaIndex \[↗\]](https://docs.llamaindex.ai/en/stable/examples/data_connectors/DoclingReaderDemo/)<!--{target="_blank"}-->.
 
+!!! info "Docling v2"
+
+    The LlamaIndex Docling extension update to Docling v2 is ongoing.
+
 ## Components
 
 ### Docling Reader
