@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from docling_core.types.doc import DoclingDocument, NodeItem
-from docling_core.types.doc.document import PictureClassificationData, PictureItem
+from docling_core.types.doc.document import PictureClassificationData, PictureItem, PictureClassificationClass
 
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
@@ -38,8 +38,7 @@ class ExamplePictureClassifierEnrichmentModel(BaseEnrichmentModel):
 
             element.data.classification = PictureClassificationData(
                 provenance="example_classifier-0.0.1",
-                predicted_class="dummy",
-                confidence=0.42,
+                predicted_classes=[PictureClassificationClass(class_name="dummy", confidence=0.42)]
             )
 
             yield element

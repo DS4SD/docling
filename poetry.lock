@@ -987,24 +987,26 @@ resolved_reference = "5fb2f34da63881a7e94418f8bb0d1af38222cc15"
 
 [[package]]
 name = "docling-ibm-models"
-version = "2.0.0"
+version = "2.0.1"
 description = "This package contains the AI models used by the Docling PDF conversion package"
 optional = false
-python-versions = "^3.10"
-files = []
-develop = false
+python-versions = "<4.0,>=3.10"
+files = [
+    {file = "docling_ibm_models-2.0.1-py3-none-any.whl", hash = "sha256:f81c6002b7e102aa79afb8287fce48872f27d1cffb088ea4d1fbebe490364a1d"},
+    {file = "docling_ibm_models-2.0.1.tar.gz", hash = "sha256:4fb0300022cfa0d0ac1fcbcb296c144e71ee9816654407f8a4d3a7b934f3065f"},
+]
 
 [package.dependencies]
 huggingface_hub = ">=0.23,<1"
-jsonlines = "^3.1.0"
-lxml = "^4.9.1"
-mean_average_precision = "^2021.4.26.0"
+jsonlines = ">=3.1.0,<4.0.0"
+lxml = ">=4.9.1,<5.0.0"
+mean_average_precision = ">=2021.4.26.0,<2022.0.0.0"
 numpy = [
     {version = ">=2.1.0,<3.0.0", markers = "python_version >= \"3.13\""},
     {version = ">=1.24.4,<2.0.0", markers = "python_version < \"3.13\""},
 ]
-opencv-python-headless = "^4.6.0.66"
-Pillow = "^10.0.0"
+opencv-python-headless = ">=4.6.0.66,<5.0.0.0"
+Pillow = ">=10.0.0,<11.0.0"
 torch = [
     {version = ">=2.2.2,<3.0.0", markers = "sys_platform != \"darwin\" or platform_machine != \"x86_64\""},
     {version = ">=2.2.2,<2.3.0", markers = "sys_platform == \"darwin\" and platform_machine == \"x86_64\""},
@@ -1013,13 +1015,7 @@ torchvision = [
     {version = ">=0,<1", markers = "sys_platform != \"darwin\" or platform_machine != \"x86_64\""},
     {version = ">=0.17.2,<0.18.0", markers = "sys_platform == \"darwin\" and platform_machine == \"x86_64\""},
 ]
-tqdm = "^4.64.0"
-
-[package.source]
-type = "git"
-url = "https://github.com/DS4SD/docling-ibm-models.git"
-reference = "1d2e2a2e6eb152c237f1383cdba20cf85db80b97"
-resolved_reference = "1d2e2a2e6eb152c237f1383cdba20cf85db80b97"
+tqdm = ">=4.64.0,<5.0.0"
 
 [[package]]
 name = "docling-parse"
@@ -7489,4 +7485,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "db457ead3faea75b26fb9d8e9c00375a0e59bad1c118d20af30ea5224a1808b9"
+content-hash = "38fa09c8db187d27cdcd0fe632e9843b51d7ee082cf3f6618c7daad82eb40e50"
