@@ -890,40 +890,72 @@ files = [
 
 [[package]]
 name = "deepsearch-glm"
-version = "0.24.0"
+version = "0.25.0"
 description = "Graph Language Models"
 optional = false
-python-versions = "^3.9"
-files = []
-develop = false
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "deepsearch_glm-0.25.0-cp310-cp310-macosx_13_0_arm64.whl", hash = "sha256:a3f17ab59fed479136df81ff5bcfa6e66bfe62cad0009bf893959f2bfd08716f"},
+    {file = "deepsearch_glm-0.25.0-cp310-cp310-macosx_13_0_x86_64.whl", hash = "sha256:4a3cd8eee2e0b8aaef09fffd15bf5593e1879a54d7f6c2298cf20b48f828d48a"},
+    {file = "deepsearch_glm-0.25.0-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:72662b48e46a70d4bf9cc9c9aacdb9f0d78e30d69d719fffb64c5d9c9ff40d1d"},
+    {file = "deepsearch_glm-0.25.0-cp310-cp310-macosx_14_0_x86_64.whl", hash = "sha256:41102b78fdf4efdafa02afa1b681cf556958d34a1c34cd9c6e495917838d6143"},
+    {file = "deepsearch_glm-0.25.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3dcd5f2ab31cd3c1fdfcb7ce03a295454e12758f157366da333d40f96493df67"},
+    {file = "deepsearch_glm-0.25.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ab6d794b9164232e693fac93e742f05d66aa47d919f9b688445a46d63bd0956e"},
+    {file = "deepsearch_glm-0.25.0-cp310-cp310-win_amd64.whl", hash = "sha256:53168b67cd910daecd60bc194f301b49bf5385c7e0437e496ac9db10210d06b0"},
+    {file = "deepsearch_glm-0.25.0-cp311-cp311-macosx_13_0_arm64.whl", hash = "sha256:be66b7adb314da8853af56bcd3471be54c5d8179f3e0b103fe4f3c35fcf25fab"},
+    {file = "deepsearch_glm-0.25.0-cp311-cp311-macosx_13_0_x86_64.whl", hash = "sha256:d721d3d58d99f6aea943e62e8b97528f498823e8be89dbde107bb3fc55df819d"},
+    {file = "deepsearch_glm-0.25.0-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:b67f3c723478482b3f2fa823dc117fdc0aa776f44842f1ed3dd310f786ab7263"},
+    {file = "deepsearch_glm-0.25.0-cp311-cp311-macosx_14_0_x86_64.whl", hash = "sha256:12d6caae64e15f013c04b45cc049a920604b7fb2186668334886c0d07683158d"},
+    {file = "deepsearch_glm-0.25.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:2642fa0f14a5498ecb79082e687be0e71f225aab8133cf33a7d187dd66382597"},
+    {file = "deepsearch_glm-0.25.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c53200fbb04c221c097fdef0683e882f32b23b3badc677012518dd5e8569a7b1"},
+    {file = "deepsearch_glm-0.25.0-cp311-cp311-win_amd64.whl", hash = "sha256:0803b46c7619c3d76e781c0327b7755a7e0147ff77d6f43da9cdff8d86e07df9"},
+    {file = "deepsearch_glm-0.25.0-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:8db148a4f494ce21cae80df954a8c26bce318e185286ba64203e92f154355935"},
+    {file = "deepsearch_glm-0.25.0-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:2f3d9ab7d6fc1ea54436ffe1dcfec0819e04164e965c03a07c408ddc5b43b81f"},
+    {file = "deepsearch_glm-0.25.0-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:a45a5f6690c60044da3a19fad219cbebb026f65d02e2febfeeb9327776316c94"},
+    {file = "deepsearch_glm-0.25.0-cp312-cp312-macosx_14_0_x86_64.whl", hash = "sha256:e3471cd094e01e9c6e92683badf1ec61f1d0f4d911ee7682ac3f7ee1f0182894"},
+    {file = "deepsearch_glm-0.25.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:19f5719072f3cf2a0611bd7fab6137a67b445fbea29f9f6fed70a17e3357ea2e"},
+    {file = "deepsearch_glm-0.25.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fb15af0732e68a544f958c99e2f3d6f3baad57d805065cf842171b9d45e45ccf"},
+    {file = "deepsearch_glm-0.25.0-cp312-cp312-win_amd64.whl", hash = "sha256:240dd290779d74a1e5c09ace6a88f67db79ece96246abecb1d0b911915af2062"},
+    {file = "deepsearch_glm-0.25.0-cp313-cp313-macosx_13_0_arm64.whl", hash = "sha256:732812897856a943992221271b30584835bfe98a796b9d9fe46d0efcaba295cb"},
+    {file = "deepsearch_glm-0.25.0-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:ab63ea328fbb8bb3c904a7b2ac3848f2a306f08640dfe1f3727e3cb374a54e66"},
+    {file = "deepsearch_glm-0.25.0-cp313-cp313-macosx_14_0_arm64.whl", hash = "sha256:e1f3ddf79f018575a2d0047b3c174c3a8db764019523a4c5b528814e671b8091"},
+    {file = "deepsearch_glm-0.25.0-cp313-cp313-macosx_14_0_x86_64.whl", hash = "sha256:7f24bd1de6f4da704873890c4a7e04e8ca84cb79bb4be99aac2ee36b96f6d1ea"},
+    {file = "deepsearch_glm-0.25.0-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a4c3fab2fa9b845538d6b72bf71c16d4f04c0b22f28339eda204a3f98c797967"},
+    {file = "deepsearch_glm-0.25.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7fbc9b9d6edc0d548dd9258ad6887dc4fd07ff77c675a6a74ef89cbe5c24aafb"},
+    {file = "deepsearch_glm-0.25.0-cp313-cp313-win_amd64.whl", hash = "sha256:9350a5f425b55b0af4f42c7f6bde7badeee51e798493792b9d9a5683ff367aa0"},
+    {file = "deepsearch_glm-0.25.0-cp39-cp39-macosx_13_0_arm64.whl", hash = "sha256:a4b1783ceebada39127ea8fee97e9d50af4bec38631602b1864ef5373171e025"},
+    {file = "deepsearch_glm-0.25.0-cp39-cp39-macosx_13_0_x86_64.whl", hash = "sha256:81f79fda3d94bddf70c07db063b9cd1ca7649a399b06a67e3c19e3b22b96ef03"},
+    {file = "deepsearch_glm-0.25.0-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:602b575f4dd9311bbb0bbcbeee75909ceb268f971c7db256c8d889a5d1745772"},
+    {file = "deepsearch_glm-0.25.0-cp39-cp39-macosx_14_0_x86_64.whl", hash = "sha256:8dbf16defeff190a05f0d9633d4792e60dd160bd00acf63f605a550b2fc645da"},
+    {file = "deepsearch_glm-0.25.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1139ef7baa8b202ed568ec9fc103acb1c361c466c5b2e861f4a7c7c5d5624b18"},
+    {file = "deepsearch_glm-0.25.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:045ab4ef6bf210f0f2f957db3498fcc013aa82c54ebfa7a75cdc7b735317fbf1"},
+    {file = "deepsearch_glm-0.25.0-cp39-cp39-win_amd64.whl", hash = "sha256:0616cabde3c0486f6ad8d96c35790186f22d6cf7199853afcfa4d4fd610340d8"},
+    {file = "deepsearch_glm-0.25.0-pp310-pypy310_pp73-win_amd64.whl", hash = "sha256:043a95ecb6a19c2709a0026ebc357c40d6c92d70834a309420b27afaf778ddee"},
+    {file = "deepsearch_glm-0.25.0-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:7b24157c9e1390d9556a4b8eb4dd2a687dc9a37c28aa60e200787f2a5d12634e"},
+    {file = "deepsearch_glm-0.25.0.tar.gz", hash = "sha256:6302c4f3db9ae5bb6b22595371812d55391a3c3115f4c4a1820272f530d16bcb"},
+]
 
 [package.dependencies]
-docling-core = {git = "https://github.com/DS4SD/docling-core.git", rev = "002f784745bf2e2bcf9def81d070c59f2e7c61c2"}
+docling-core = ">=2.0,<3.0"
 docutils = "!=0.21"
-matplotlib = "^3.7.1"
-networkx = "^3.1"
-netwulf = "^0.1.5"
-numerize = "^0.12"
+matplotlib = ">=3.7.1,<4.0.0"
+networkx = ">=3.1,<4.0"
+netwulf = ">=0.1.5,<0.2.0"
+numerize = ">=0.12,<0.13"
 numpy = [
     {version = ">=2.0.2,<3.0.0", markers = "python_version >= \"3.13\""},
     {version = ">=1.26.4,<2.0.0", markers = "python_version >= \"3.9\" and python_version < \"3.13\""},
 ]
-pandas = {version = "^2.1.4", markers = "python_version >= \"3.9\""}
-python-dotenv = "^1.0.0"
-pywin32 = {version = "^307", markers = "sys_platform == \"win32\""}
-requests = "^2.32.3"
-rich = "^13.7.0"
+pandas = {version = ">=2.1.4,<3.0.0", markers = "python_version >= \"3.9\""}
+python-dotenv = ">=1.0.0,<2.0.0"
+pywin32 = {version = ">=307,<308", markers = "sys_platform == \"win32\""}
+requests = ">=2.32.3,<3.0.0"
+rich = ">=13.7.0,<14.0.0"
 tabulate = ">=0.8.9"
-tqdm = "^4.64.0"
+tqdm = ">=4.64.0,<5.0.0"
 
 [package.extras]
-toolkit = ["deepsearch-toolkit (>=0.31.0)"]
-
-[package.source]
-type = "git"
-url = "https://github.com/DS4SD/deepsearch-glm.git"
-reference = "f219bbfb8065e787b481d6b12ca22db8e31e865e"
-resolved_reference = "f219bbfb8065e787b481d6b12ca22db8e31e865e"
+toolkit = ["deepsearch-toolkit (>=1.1.0,<2.0.0)"]
 
 [[package]]
 name = "defusedxml"
@@ -964,26 +996,22 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "1.7.2"
+version = "2.0.0"
 description = "A python library to define and validate data types in Docling."
 optional = false
-python-versions = "^3.9"
-files = []
-develop = false
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "docling_core-2.0.0-py3-none-any.whl", hash = "sha256:81b1f74258ae02afee3519e12a72cf89c3a6e2acb2ff159414eae8b1332c083e"},
+    {file = "docling_core-2.0.0.tar.gz", hash = "sha256:086b2f539b055f1ba3920fa0d609db55ca92633e95abd0578d4f2375647b3d64"},
+]
 
 [package.dependencies]
-jsonref = "^1.1.0"
-jsonschema = "^4.16.0"
-pandas = "^2.1.4"
-pillow = "^10.3.0"
-pydantic = "^2.6.0"
-tabulate = "^0.9.0"
-
-[package.source]
-type = "git"
-url = "https://github.com/DS4SD/docling-core.git"
-reference = "002f784745bf2e2bcf9def81d070c59f2e7c61c2"
-resolved_reference = "002f784745bf2e2bcf9def81d070c59f2e7c61c2"
+jsonref = ">=1.1.0,<2.0.0"
+jsonschema = ">=4.16.0,<5.0.0"
+pandas = ">=2.1.4,<3.0.0"
+pillow = ">=10.3.0,<11.0.0"
+pydantic = ">=2.6.0,<3.0.0"
+tabulate = ">=0.9.0,<0.10.0"
 
 [[package]]
 name = "docling-ibm-models"
@@ -3710,9 +3738,9 @@ files = [
 [package.dependencies]
 numpy = [
     {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
-    {version = ">=1.23.5", markers = "python_version >= \"3.11\" and python_version < \"3.12\""},
     {version = ">=1.21.4", markers = "python_version >= \"3.10\" and platform_system == \"Darwin\" and python_version < \"3.11\""},
     {version = ">=1.21.2", markers = "platform_system != \"Darwin\" and python_version >= \"3.10\" and python_version < \"3.11\""},
+    {version = ">=1.23.5", markers = "python_version >= \"3.11\" and python_version < \"3.12\""},
 ]
 
 [[package]]
@@ -3861,8 +3889,8 @@ files = [
 [package.dependencies]
 numpy = [
     {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
-    {version = ">=1.23.2", markers = "python_version == \"3.11\""},
     {version = ">=1.22.4", markers = "python_version < \"3.11\""},
+    {version = ">=1.23.2", markers = "python_version == \"3.11\""},
 ]
 python-dateutil = ">=2.8.2"
 pytz = ">=2020.1"
@@ -7485,4 +7513,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "3994b9c2200bb9827c76d84128fd7bbe1c1cc6f8e6cf1e34f9923c5511bc324a"
+content-hash = "8eb8024c32b37b2367c8d83e2833c3d118b3cfdd2f53966712c95dec8d830199"
