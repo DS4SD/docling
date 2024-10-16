@@ -1,8 +1,8 @@
 import logging
+import time
 from pathlib import Path
 
 import pandas as pd
-import time
 
 from docling.document_converter import DocumentConverter
 

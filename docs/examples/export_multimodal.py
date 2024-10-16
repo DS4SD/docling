@@ -1,9 +1,9 @@
 import datetime
 import logging
+import time
 from pathlib import Path
 
 import pandas as pd
-import time
 
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions

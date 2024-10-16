@@ -2,8 +2,13 @@ import logging
 from pathlib import Path
 from typing import Any, Iterable
 
-from docling_core.types.doc import DoclingDocument, NodeItem
-from docling_core.types.doc import PictureClassificationData, PictureItem, PictureClassificationClass
+from docling_core.types.doc import (
+    DoclingDocument,
+    NodeItem,
+    PictureClassificationClass,
+    PictureClassificationData,
+    PictureItem,
+)
 
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
@@ -36,10 +41,14 @@ class ExamplePictureClassifierEnrichmentModel(BaseEnrichmentModel):
             # uncomment this to interactively visualize the image
             # element.image.pil_image.show()
 
-            element.annotations.append(PictureClassificationData(
-                provenance="example_classifier-0.0.1",
-                predicted_classes=[PictureClassificationClass(class_name="dummy", confidence=0.42)]
-            ))
+            element.annotations.append(
+                PictureClassificationData(
+                    provenance="example_classifier-0.0.1",
+                    predicted_classes=[
+                        PictureClassificationClass(class_name="dummy", confidence=0.42)
+                    ],
+                )
+            )
 
             yield element
 

@@ -16,6 +16,7 @@ from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
 
 _log = logging.getLogger(__name__)
 
+
 def main():
     input_paths = [
         Path("tests/data/wiki_duck.html"),
@@ -69,5 +70,7 @@ def main():
 
         with (out_path / f"{res.input.file.name}.yaml").open("w") as fp:
             fp.write(yaml.safe_dump(res.document.export_to_dict()))
+
+
 if __name__ == "__main__":
     main()

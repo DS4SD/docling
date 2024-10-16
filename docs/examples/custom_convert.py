@@ -1,13 +1,10 @@
 import json
 import logging
+import time
 from pathlib import Path
 
-import time
-
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import (
-    PdfPipelineOptions,
-)
+from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
 _log = logging.getLogger(__name__)

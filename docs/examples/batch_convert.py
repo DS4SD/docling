@@ -1,9 +1,9 @@
 import json
 import logging
+import time
 from pathlib import Path
 from typing import Iterable
 
-import time
 import yaml
 
 from docling.datamodel.base_models import ConversionStatus
