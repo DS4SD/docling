@@ -3,7 +3,7 @@ from io import BytesIO
 from typing import TYPE_CHECKING, Dict, List, Optional, Set, Union
 
 from docling_core.types.doc import BoundingBox, Size
-from docling_core.types.doc.document import PictureData, TableCell
+from docling_core.types.doc.document import PictureDataType, TableCell
 from docling_core.types.doc.labels import DocItemLabel
 from PIL.Image import Image
 from pydantic import BaseModel, ConfigDict
@@ -131,7 +131,7 @@ class TextElement(BasePageElement):
 
 
 class FigureElement(BasePageElement):
-    data: Optional[PictureData] = None
+    annotations: List[PictureDataType] = []
     provenance: Optional[str] = None
     predicted_class: Optional[str] = None
     confidence: Optional[float] = None

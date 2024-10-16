@@ -898,7 +898,7 @@ files = []
 develop = false
 
 [package.dependencies]
-docling-core = {git = "https://github.com/DS4SD/docling-core.git", rev = "5fb2f34da63881a7e94418f8bb0d1af38222cc15"}
+docling-core = {git = "https://github.com/DS4SD/docling-core.git", rev = "002f784745bf2e2bcf9def81d070c59f2e7c61c2"}
 docutils = "!=0.21"
 matplotlib = "^3.7.1"
 networkx = "^3.1"
@@ -922,8 +922,8 @@ toolkit = ["deepsearch-toolkit (>=0.31.0)"]
 [package.source]
 type = "git"
 url = "https://github.com/DS4SD/deepsearch-glm.git"
-reference = "ab96c114b71ed99d0736a4fd9d8945b115d7f1b0"
-resolved_reference = "ab96c114b71ed99d0736a4fd9d8945b115d7f1b0"
+reference = "f219bbfb8065e787b481d6b12ca22db8e31e865e"
+resolved_reference = "f219bbfb8065e787b481d6b12ca22db8e31e865e"
 
 [[package]]
 name = "defusedxml"
@@ -982,8 +982,8 @@ tabulate = "^0.9.0"
 [package.source]
 type = "git"
 url = "https://github.com/DS4SD/docling-core.git"
-reference = "5fb2f34da63881a7e94418f8bb0d1af38222cc15"
-resolved_reference = "5fb2f34da63881a7e94418f8bb0d1af38222cc15"
+reference = "002f784745bf2e2bcf9def81d070c59f2e7c61c2"
+resolved_reference = "002f784745bf2e2bcf9def81d070c59f2e7c61c2"
 
 [[package]]
 name = "docling-ibm-models"
@@ -5925,13 +5925,13 @@ train = ["accelerate (>=0.20.3)", "datasets"]
 
 [[package]]
 name = "setuptools"
-version = "75.1.0"
+version = "75.2.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "setuptools-75.1.0-py3-none-any.whl", hash = "sha256:35ab7fd3bcd95e6b7fd704e4a1539513edad446c097797f2985e0e4b960772f2"},
-    {file = "setuptools-75.1.0.tar.gz", hash = "sha256:d59a21b17a275fb872a9c3dae73963160ae079f1049ed956880cd7c09b120538"},
+    {file = "setuptools-75.2.0-py3-none-any.whl", hash = "sha256:a7fcb66f68b4d9e8e66b42f9876150a3371558f98fa32222ffaa5bced76406f8"},
+    {file = "setuptools-75.2.0.tar.gz", hash = "sha256:753bb6ebf1f465a1912e19ed1d41f403a79173a9acf66a42e7e6aec45c3c16ec"},
 ]
 
 [package.extras]
@@ -7485,4 +7485,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "38fa09c8db187d27cdcd0fe632e9843b51d7ee082cf3f6618c7daad82eb40e50"
+content-hash = "3994b9c2200bb9827c76d84128fd7bbe1c1cc6f8e6cf1e34f9923c5511bc324a"

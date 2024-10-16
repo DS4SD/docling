@@ -9,7 +9,6 @@ from docling_core.types.doc import (
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
-    PictureData,
     ProvenanceItem,
     TableCell,
     TableData,
@@ -243,9 +242,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
     def handle_pictures(self, shape, parent_slide, slide_ind, doc):
         # shape has picture
         prov = self.generate_prov(shape, slide_ind, "")
-        doc.add_picture(
-            data=PictureData(), parent=parent_slide, caption=None, prov=prov
-        )
+        doc.add_picture(parent=parent_slide, caption=None, prov=prov)
         return
 
     def handle_tables(self, shape, parent_slide, slide_ind, doc):

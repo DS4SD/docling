@@ -7,7 +7,6 @@ from bs4 import BeautifulSoup
 from docling_core.types.doc import (
     DescriptionItem,
     DoclingDocument,
-    PictureData,
     TableCell,
     TableData,
 )
@@ -406,9 +405,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         contains_captions = element.find(["figcaption"])
         if contains_captions is None:
-            doc.add_picture(
-                data=PictureData(), parent=self.parents[self.level], caption=None
-            )
+            doc.add_picture(parent=self.parents[self.level], caption=None)
 
         else:
             texts = []
@@ -419,13 +416,10 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 label=DocItemLabel.CAPTION, text=("".join(texts)).strip()
             )
             doc.add_picture(
-                data=PictureData(),
                 parent=self.parents[self.level],
                 caption=fig_caption,
             )
 
     def handle_image(self, element, idx, doc):
         """Handles image tags (img)."""
-        doc.add_picture(
-            data=PictureData(), parent=self.parents[self.level], caption=None
-        )
+        doc.add_picture(parent=self.parents[self.level], caption=None)

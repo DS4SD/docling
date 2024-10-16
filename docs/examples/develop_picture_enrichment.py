@@ -36,10 +36,10 @@ class ExamplePictureClassifierEnrichmentModel(BaseEnrichmentModel):
             # uncomment this to interactively visualize the image
             # element.image.pil_image.show()
 
-            element.data.classification = PictureClassificationData(
+            element.annotations.append(PictureClassificationData(
                 provenance="example_classifier-0.0.1",
                 predicted_classes=[PictureClassificationClass(class_name="dummy", confidence=0.42)]
-            )
+            ))
 
             yield element
 
@@ -83,7 +83,7 @@ def main():
     for element, _level in result.document.iterate_items():
         if isinstance(element, PictureItem):
             print(
-                f"The model populated the `data` portion of picture {element.self_ref}:\n{element.data}"
+                f"The model populated the `data` portion of picture {element.self_ref}:\n{element.annotations}"
             )
 
 

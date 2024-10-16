@@ -9,7 +9,6 @@ from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
     GroupLabel,
-    PictureData,
     TableCell,
     TableData,
 )
@@ -492,7 +491,5 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         return
 
     def handle_pictures(self, element, docx_obj, doc):
-        doc.add_picture(
-            data=PictureData(), parent=self.parents[self.level], caption=None
-        )
+        doc.add_picture(parent=self.parents[self.level], caption=None)
         return
