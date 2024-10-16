@@ -139,14 +139,23 @@ You can perform a hierarchy-aware chunking of a Docling document as follows:
 from docling.document_converter import DocumentConverter
 from docling_core.transforms.chunker import HierarchicalChunker
 
-doc = DocumentConverter().convert("https://arxiv.org/pdf/2206.01062").legacy_document
+conv_res = DocumentConverter().convert("https://arxiv.org/pdf/2206.01062")
+doc = conv_res.document
 chunks = list(HierarchicalChunker().chunk(doc))
-print(chunks[0])
-# ChunkWithMetadata(
-#     path='#/main-text/1',
-#     text='DocLayNet: A Large Human-Annotated Dataset [...]',
-#     page=1,
-#     bbox=[107.30, 672.38, 505.19, 709.08],
-#     [...]
-# )
+
+print(chunks[30])
+# {
+#   "text": "Lately, new types of ML models for document-layout analysis have emerged [...]",
+#   "meta": {
+#     "doc_items": [{
+#       "self_ref": "#/texts/40",
+#       "label": "text",
+#       "prov": [{
+#         "page_no": 2,
+#         "bbox": {"l": 317.06, "t": 325.81, "r": 559.18, "b": 239.97, ...},
+#       }]
+#     }],
+#     "headings": ["2 RELATED WORK"],
+#   }
+# }
 ```
