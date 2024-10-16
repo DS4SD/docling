@@ -37,9 +37,9 @@ torchvision = [
 ######################
 python = "^3.10"
 pydantic = "^2.0.0"
-docling-core = {git = "https://github.com/DS4SD/docling-core.git", rev = "7c104d61aa5d003dd8d9711c37e23ce04799f4c9"}
-docling-ibm-models = {git = "https://github.com/DS4SD/docling-ibm-models.git", rev = "1d2e2a2e6eb152c237f1383cdba20cf85db80b97"}
-deepsearch-glm = {git = "https://github.com/DS4SD/deepsearch-glm.git", rev = "c185c4f985ccd29a470a1cddd3bec43880b739ee"}
+docling-core = {git = "https://github.com/DS4SD/docling-core.git", rev = "33aa21408400c9c475db0f8c6be681b888388284"}
+docling-ibm-models = "^2.0.1"
+deepsearch-glm = {git = "https://github.com/DS4SD/deepsearch-glm.git", rev = "8ab1b4372122c820a28badd3c6095c2ce2feaf61"}
 filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"
 pydantic-settings = "^2.3.0"
