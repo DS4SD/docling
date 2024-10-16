@@ -1,14 +1,15 @@
 import copy
 import logging
 from abc import abstractmethod
-from typing import Iterable, List, Tuple
+from typing import Iterable, List
 
 import numpy as np
+from docling_core.types.doc import BoundingBox, CoordOrigin
 from PIL import Image, ImageDraw
 from rtree import index
 from scipy.ndimage import find_objects, label
 
-from docling.datamodel.base_models import BoundingBox, CoordOrigin, OcrCell, Page
+from docling.datamodel.base_models import OcrCell, Page
 from docling.datamodel.pipeline_options import OcrOptions
 
 _log = logging.getLogger(__name__)
@@ -20,8 +21,9 @@ class BaseOcrModel:
         self.options = options
 
     # Computes the optimum amount and coordinates of rectangles to OCR on a given page
-    def get_ocr_rects(self, page: Page) -> Tuple[bool, List[BoundingBox]]:
+    def get_ocr_rects(self, page: Page) -> List[BoundingBox]:
         BITMAP_COVERAGE_TRESHOLD = 0.75
+        assert page.size is not None
 
         def find_ocr_rects(size, bitmap_rects):
             image = Image.new(
@@ -60,7 +62,10 @@ class BaseOcrModel:
 
             return (area_frac, bounding_boxes)  # fraction covered  # boxes
 
-        bitmap_rects = page._backend.get_bitmap_rects()
+        if page._backend is not None:
+            bitmap_rects = page._backend.get_bitmap_rects()
+        else:
+            bitmap_rects = []
         coverage, ocr_rects = find_ocr_rects(page.size, bitmap_rects)
 
         # return full-page rectangle if sufficiently covered with bitmaps
@@ -75,7 +80,7 @@ class BaseOcrModel:
                 )
             ]
         # return individual rectangles if the bitmap coverage is smaller
-        elif coverage < BITMAP_COVERAGE_TRESHOLD:
+        else:  # coverage <= BITMAP_COVERAGE_TRESHOLD:
             return ocr_rects
 
     # Filters OCR cells by dropping any OCR cell that intersects with an existing programmatic cell.

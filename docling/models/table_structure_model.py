@@ -3,29 +3,25 @@ from pathlib import Path
 from typing import Iterable, List
 
 import numpy
+from docling_core.types.doc import BoundingBox, DocItemLabel, TableCell
 from docling_ibm_models.tableformer.data_management.tf_predictor import TFPredictor
 from PIL import ImageDraw
 
-from docling.datamodel.base_models import (
-    BoundingBox,
-    Page,
-    TableCell,
-    TableElement,
-    TableStructurePrediction,
-)
-from docling.datamodel.pipeline_options import TableFormerMode
+from docling.datamodel.base_models import Page, Table, TableStructurePrediction
+from docling.datamodel.pipeline_options import TableFormerMode, TableStructureOptions
+from docling.models.base_model import BasePageModel
 
 
-class TableStructureModel:
-    def __init__(self, config):
-        self.config = config
-        self.do_cell_matching = config["do_cell_matching"]
-        self.mode = config["mode"]
+class TableStructureModel(BasePageModel):
+    def __init__(
+        self, enabled: bool, artifacts_path: Path, options: TableStructureOptions
+    ):
+        self.options = options
+        self.do_cell_matching = self.options.do_cell_matching
+        self.mode = self.options.mode
 
-        self.enabled = config["enabled"]
+        self.enabled = enabled
         if self.enabled:
-            artifacts_path: Path = config["artifacts_path"]
-
             if self.mode == TableFormerMode.ACCURATE:
                 artifacts_path = artifacts_path / "fat"
 
@@ -39,7 +35,9 @@ class TableStructureModel:
             self.tf_predictor = TFPredictor(self.tm_config)
             self.scale = 2.0  # Scale up table input images to 144 dpi
 
-    def draw_table_and_cells(self, page: Page, tbl_list: List[TableElement]):
+    def draw_table_and_cells(self, page: Page, tbl_list: List[Table]):
+        assert page._backend is not None
+
         image = (
             page._backend.get_page_image()
         )  # make new image to avoid drawing on the saved ones
@@ -50,17 +48,18 @@ class TableStructureModel:
             draw.rectangle([(x0, y0), (x1, y1)], outline="red")
 
             for tc in table_element.table_cells:
-                x0, y0, x1, y1 = tc.bbox.as_tuple()
-                if tc.column_header:
-                    width = 3
-                else:
-                    width = 1
-                draw.rectangle([(x0, y0), (x1, y1)], outline="blue", width=width)
-                draw.text(
-                    (x0 + 3, y0 + 3),
-                    text=f"{tc.start_row_offset_idx}, {tc.start_col_offset_idx}",
-                    fill="black",
-                )
+                if tc.bbox is not None:
+                    x0, y0, x1, y1 = tc.bbox.as_tuple()
+                    if tc.column_header:
+                        width = 3
+                    else:
+                        width = 1
+                    draw.rectangle([(x0, y0), (x1, y1)], outline="blue", width=width)
+                    draw.text(
+                        (x0 + 3, y0 + 3),
+                        text=f"{tc.start_row_offset_idx}, {tc.start_col_offset_idx}",
+                        fill="black",
+                    )
 
         image.show()
 
@@ -71,6 +70,9 @@ class TableStructureModel:
             return
 
         for page in page_batch:
+            assert page._backend is not None
+            assert page.predictions.layout is not None
+            assert page.size is not None
 
             page.predictions.tablestructure = TableStructurePrediction()  # dummy
 
@@ -85,7 +87,7 @@ class TableStructureModel:
                     ],
                 )
                 for cluster in page.predictions.layout.clusters
-                if cluster.label == "Table"
+                if cluster.label == DocItemLabel.TABLE
             ]
             if not len(in_tables):
                 yield page
@@ -132,7 +134,7 @@ class TableStructureModel:
                             element["bbox"]["token"] = text_piece
 
                         tc = TableCell.model_validate(element)
-                        if self.do_cell_matching:
+                        if self.do_cell_matching and tc.bbox is not None:
                             tc.bbox = tc.bbox.scaled(1 / self.scale)
                         table_cells.append(tc)
 
@@ -141,7 +143,7 @@ class TableStructureModel:
                     num_cols = table_out["predict_details"]["num_cols"]
                     otsl_seq = table_out["predict_details"]["prediction"]["rs_seq"]
 
-                    tbl = TableElement(
+                    tbl = Table(
                         otsl_seq=otsl_seq,
                         table_cells=table_cells,
                         num_rows=num_rows,
@@ -149,7 +151,7 @@ class TableStructureModel:
                         id=table_cluster.id,
                         page_no=page.page_no,
                         cluster=table_cluster,
-                        label="Table",
+                        label=DocItemLabel.TABLE,
                     )
 
                     page.predictions.tablestructure.table_map[table_cluster.id] = tbl

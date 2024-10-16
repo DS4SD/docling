@@ -4,11 +4,16 @@ import time
 from pathlib import Path
 from typing import Iterable
 
+import yaml
+
 from docling.datamodel.base_models import ConversionStatus
-from docling.datamodel.document import ConversionResult, DocumentConversionInput
+from docling.datamodel.document import ConversionResult
 from docling.document_converter import DocumentConverter
 
 _log = logging.getLogger(__name__)
+
+USE_V2 = True
+USE_LEGACY = False
 
 
 def export_documents(
@@ -26,25 +31,53 @@ def export_documents(
             success_count += 1
             doc_filename = conv_res.input.file.stem
 
-            # Export Deep Search document JSON format:
-            with (output_dir / f"{doc_filename}.json").open(
-                "w", encoding="utf-8"
-            ) as fp:
-                fp.write(json.dumps(conv_res.render_as_dict()))
+            if USE_V2:
+                # Export Docling document format to JSON:
+                with (output_dir / f"{doc_filename}.json").open("w") as fp:
+                    fp.write(json.dumps(conv_res.document.export_to_dict()))
 
-            # Export Text format:
-            with (output_dir / f"{doc_filename}.txt").open("w", encoding="utf-8") as fp:
-                fp.write(conv_res.render_as_text())
+                # Export Docling document format to YAML:
+                with (output_dir / f"{doc_filename}.yaml").open("w") as fp:
+                    fp.write(yaml.safe_dump(conv_res.document.export_to_dict()))
 
-            # Export Markdown format:
-            with (output_dir / f"{doc_filename}.md").open("w", encoding="utf-8") as fp:
-                fp.write(conv_res.render_as_markdown())
+                # Export Docling document format to doctags:
+                with (output_dir / f"{doc_filename}.doctags.txt").open("w") as fp:
+                    fp.write(conv_res.document.export_to_document_tokens())
 
-            # Export Document Tags format:
-            with (output_dir / f"{doc_filename}.doctags").open(
-                "w", encoding="utf-8"
-            ) as fp:
-                fp.write(conv_res.render_as_doctags())
+                # Export Docling document format to markdown:
+                with (output_dir / f"{doc_filename}.md").open("w") as fp:
+                    fp.write(conv_res.document.export_to_markdown())
+
+                # Export Docling document format to text:
+                with (output_dir / f"{doc_filename}.txt").open("w") as fp:
+                    fp.write(conv_res.document.export_to_markdown(strict_text=True))
+
+            if USE_LEGACY:
+                # Export Deep Search document JSON format:
+                with (output_dir / f"{doc_filename}.legacy.json").open(
+                    "w", encoding="utf-8"
+                ) as fp:
+                    fp.write(json.dumps(conv_res.legacy_document.export_to_dict()))
+
+                # Export Text format:
+                with (output_dir / f"{doc_filename}.legacy.txt").open(
+                    "w", encoding="utf-8"
+                ) as fp:
+                    fp.write(
+                        conv_res.legacy_document.export_to_markdown(strict_text=True)
+                    )
+
+                # Export Markdown format:
+                with (output_dir / f"{doc_filename}.legacy.md").open(
+                    "w", encoding="utf-8"
+                ) as fp:
+                    fp.write(conv_res.legacy_document.export_to_markdown())
+
+                # Export Document Tags format:
+                with (output_dir / f"{doc_filename}.legacy.doctags.txt").open(
+                    "w", encoding="utf-8"
+                ) as fp:
+                    fp.write(conv_res.legacy_document.export_to_doctags())
 
         elif conv_res.status == ConversionStatus.PARTIAL_SUCCESS:
             _log.info(
@@ -77,23 +110,24 @@ def main():
     ]
 
     # buf = BytesIO(Path("./test/data/2206.01062.pdf").open("rb").read())
-    # docs = [DocumentStream(filename="my_doc.pdf", stream=buf)]
+    # docs = [DocumentStream(name="my_doc.pdf", stream=buf)]
     # input = DocumentConversionInput.from_streams(docs)
 
     doc_converter = DocumentConverter()
 
-    input = DocumentConversionInput.from_paths(input_doc_paths)
-
     start_time = time.time()
 
-    conv_results = doc_converter.convert(input)
+    conv_results = doc_converter.convert_all(
+        input_doc_paths,
+        raises_on_error=False,  # to let conversion run through all and examine results at the end
+    )
     success_count, partial_success_count, failure_count = export_documents(
-        conv_results, output_dir=Path("./scratch")
+        conv_results, output_dir=Path("scratch")
     )
 
     end_time = time.time() - start_time
 
-    _log.info(f"All documents were converted in {end_time:.2f} seconds.")
+    _log.info(f"Document conversion complete in {end_time:.2f} seconds.")
 
     if failure_count > 0:
         raise RuntimeError(

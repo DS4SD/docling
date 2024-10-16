@@ -2,11 +2,12 @@ import io
 import logging
 import tempfile
 from subprocess import DEVNULL, PIPE, Popen
-from typing import Iterable, Tuple
+from typing import Iterable, Optional, Tuple
 
 import pandas as pd
+from docling_core.types.doc import BoundingBox, CoordOrigin
 
-from docling.datamodel.base_models import BoundingBox, CoordOrigin, OcrCell, Page
+from docling.datamodel.base_models import OcrCell, Page
 from docling.datamodel.pipeline_options import TesseractCliOcrOptions
 from docling.models.base_ocr_model import BaseOcrModel
 
@@ -21,8 +22,8 @@ class TesseractOcrCliModel(BaseOcrModel):
 
         self.scale = 3  # multiplier for 72 dpi == 216 dpi.
 
-        self._name = None
-        self._version = None
+        self._name: Optional[str] = None
+        self._version: Optional[str] = None
 
         if self.enabled:
             try:
@@ -39,7 +40,7 @@ class TesseractOcrCliModel(BaseOcrModel):
     def _get_name_and_version(self) -> Tuple[str, str]:
 
         if self._name != None and self._version != None:
-            return self._name, self._version
+            return self._name, self._version  # type: ignore
 
         cmd = [self.options.tesseract_cmd, "--version"]
 
@@ -108,6 +109,8 @@ class TesseractOcrCliModel(BaseOcrModel):
             return
 
         for page in page_batch:
+            assert page._backend is not None
+
             ocr_rects = self.get_ocr_rects(page)
 
             all_ocr_cells = []

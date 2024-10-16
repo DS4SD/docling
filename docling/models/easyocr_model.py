@@ -2,8 +2,9 @@ import logging
 from typing import Iterable
 
 import numpy
+from docling_core.types.doc import BoundingBox, CoordOrigin
 
-from docling.datamodel.base_models import BoundingBox, CoordOrigin, OcrCell, Page
+from docling.datamodel.base_models import OcrCell, Page
 from docling.datamodel.pipeline_options import EasyOcrOptions
 from docling.models.base_ocr_model import BaseOcrModel
 
@@ -39,6 +40,8 @@ class EasyOcrModel(BaseOcrModel):
             return
 
         for page in page_batch:
+            assert page._backend is not None
+
             ocr_rects = self.get_ocr_rects(page)
 
             all_ocr_cells = []

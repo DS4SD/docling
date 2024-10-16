@@ -2,16 +2,20 @@ import logging
 import random
 from io import BytesIO
 from pathlib import Path
-from typing import Iterable, List, Optional, Union
+from typing import TYPE_CHECKING, Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
 import pypdfium2.raw as pdfium_c
+from docling_core.types.doc import BoundingBox, CoordOrigin, Size
 from PIL import Image, ImageDraw
-from pypdfium2 import PdfPage, PdfTextPage
+from pypdfium2 import PdfTextPage
 from pypdfium2._helpers.misc import PdfiumError
 
-from docling.backend.abstract_backend import PdfDocumentBackend, PdfPageBackend
-from docling.datamodel.base_models import BoundingBox, Cell, CoordOrigin, PageSize
+from docling.backend.pdf_backend import PdfDocumentBackend, PdfPageBackend
+from docling.datamodel.base_models import Cell
+
+if TYPE_CHECKING:
+    from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
 
@@ -222,8 +226,8 @@ class PyPdfiumPageBackend(PdfPageBackend):
 
         return image
 
-    def get_size(self) -> PageSize:
-        return PageSize(width=self._ppage.get_width(), height=self._ppage.get_height())
+    def get_size(self) -> Size:
+        return Size(width=self._ppage.get_width(), height=self._ppage.get_height())
 
     def unload(self):
         self._ppage = None
@@ -231,13 +235,14 @@ class PyPdfiumPageBackend(PdfPageBackend):
 
 
 class PyPdfiumDocumentBackend(PdfDocumentBackend):
-    def __init__(self, path_or_stream: Union[BytesIO, Path], document_hash: str):
-        super().__init__(path_or_stream, document_hash)
+    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+        super().__init__(in_doc, path_or_stream)
+
         try:
-            self._pdoc = pdfium.PdfDocument(path_or_stream)
+            self._pdoc = pdfium.PdfDocument(self.path_or_stream)
         except PdfiumError as e:
             raise RuntimeError(
-                f"pypdfium could not load document {document_hash}"
+                f"pypdfium could not load document with hash {self.document_hash}"
             ) from e
 
     def page_count(self) -> int:

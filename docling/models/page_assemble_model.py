@@ -2,22 +2,29 @@ import logging
 import re
 from typing import Iterable, List
 
+from pydantic import BaseModel
+
 from docling.datamodel.base_models import (
     AssembledUnit,
     FigureElement,
     Page,
     PageElement,
-    TableElement,
+    Table,
     TextElement,
 )
+from docling.models.base_model import BasePageModel
 from docling.models.layout_model import LayoutModel
 
 _log = logging.getLogger(__name__)
 
 
-class PageAssembleModel:
-    def __init__(self, config):
-        self.config = config
+class PageAssembleOptions(BaseModel):
+    keep_images: bool = False
+
+
+class PageAssembleModel(BasePageModel):
+    def __init__(self, options: PageAssembleOptions):
+        self.options = options
 
     def sanitize_text(self, lines):
         if len(lines) <= 1:
@@ -46,6 +53,8 @@ class PageAssembleModel:
 
     def __call__(self, page_batch: Iterable[Page]) -> Iterable[Page]:
         for page in page_batch:
+            assert page._backend is not None
+            assert page.predictions.layout is not None
             # assembles some JSON output page by page.
 
             elements: List[PageElement] = []
@@ -84,7 +93,7 @@ class PageAssembleModel:
                     if (
                         not tbl
                     ):  # fallback: add table without structure, if it isn't present
-                        tbl = TableElement(
+                        tbl = Table(
                             label=cluster.label,
                             id=cluster.id,
                             text="",
@@ -144,5 +153,12 @@ class PageAssembleModel:
             page.assembled = AssembledUnit(
                 elements=elements, headers=headers, body=body
             )
+
+            # Remove page images (can be disabled)
+            if not self.options.keep_images:
+                page._image_cache = {}
+
+            # Unload backend
+            page._backend.unload()
 
             yield page

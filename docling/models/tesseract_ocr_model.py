@@ -1,9 +1,9 @@
 import logging
 from typing import Iterable
 
-import numpy
+from docling_core.types.doc import BoundingBox, CoordOrigin
 
-from docling.datamodel.base_models import BoundingBox, CoordOrigin, OcrCell, Page
+from docling.datamodel.base_models import OcrCell, Page
 from docling.datamodel.pipeline_options import TesseractOcrOptions
 from docling.models.base_ocr_model import BaseOcrModel
 
@@ -68,6 +68,9 @@ class TesseractOcrModel(BaseOcrModel):
             return
 
         for page in page_batch:
+            assert page._backend is not None
+            assert self.reader is not None
+
             ocr_rects = self.get_ocr_rects(page)
 
             all_ocr_cells = []

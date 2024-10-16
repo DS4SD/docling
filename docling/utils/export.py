@@ -1,9 +1,10 @@
 import logging
 from typing import Any, Dict, Iterable, List, Tuple, Union
 
-from docling_core.types.doc.base import BaseCell, BaseText, Ref, Table, TableCell
+from docling_core.types.doc import BoundingBox, CoordOrigin
+from docling_core.types.legacy_doc.base import BaseCell, BaseText, Ref, Table
 
-from docling.datamodel.base_models import BoundingBox, CoordOrigin, OcrCell
+from docling.datamodel.base_models import OcrCell
 from docling.datamodel.document import ConversionResult, Page
 
 _log = logging.getLogger(__name__)
@@ -40,7 +41,7 @@ def generate_multimodal_pages(
     end_ix = 0
     doc_items: List[Tuple[int, Union[BaseCell, BaseText]]] = []
 
-    doc = doc_result.output
+    doc = doc_result.legacy_document
 
     def _process_page_segments(doc_items: list[Tuple[int, BaseCell]], page: Page):
         segments = []

@@ -1,1 +1,0 @@
-../docs/examples/minimal.py

@@ -6,7 +6,8 @@ from docling.backend.docling_parse_v2_backend import (
     DoclingParseV2DocumentBackend,
     DoclingParseV2PageBackend,
 )
-from docling.datamodel.base_models import BoundingBox
+from docling.datamodel.base_models import BoundingBox, InputFormat
+from docling.datamodel.document import InputDocument
 
 
 @pytest.fixture
@@ -14,11 +15,21 @@ def test_doc_path():
     return Path("./tests/data/2206.01062.pdf")
 
 
-@pytest.mark.skip
+def _get_backend(pdf_doc):
+    in_doc = InputDocument(
+        path_or_stream=pdf_doc,
+        format=InputFormat.PDF,
+        backend=DoclingParseV2DocumentBackend,
+    )
+
+    doc_backend = in_doc._backend
+    return doc_backend
+
+
 def test_text_cell_counts():
     pdf_doc = Path("./tests/data/redp5695.pdf")
 
-    doc_backend = DoclingParseV2DocumentBackend(pdf_doc, "123456xyz")
+    doc_backend = _get_backend(pdf_doc)
 
     for page_index in range(0, doc_backend.page_count()):
         last_cell_count = None
@@ -37,7 +48,7 @@ def test_text_cell_counts():
 
 
 def test_get_text_from_rect(test_doc_path):
-    doc_backend = DoclingParseV2DocumentBackend(test_doc_path, "123456xyz")
+    doc_backend = _get_backend(test_doc_path)
     page_backend: DoclingParseV2PageBackend = doc_backend.load_page(0)
 
     # Get the title text of the DocLayNet paper
@@ -50,7 +61,7 @@ def test_get_text_from_rect(test_doc_path):
 
 
 def test_crop_page_image(test_doc_path):
-    doc_backend = DoclingParseV2DocumentBackend(test_doc_path, "123456xyz")
+    doc_backend = _get_backend(test_doc_path)
     page_backend: DoclingParseV2PageBackend = doc_backend.load_page(0)
 
     # Crop out "Figure 1" from the DocLayNet paper
@@ -61,5 +72,5 @@ def test_crop_page_image(test_doc_path):
 
 
 def test_num_pages(test_doc_path):
-    doc_backend = DoclingParseV2DocumentBackend(test_doc_path, "123456xyz")
+    doc_backend = _get_backend(test_doc_path)
     doc_backend.page_count() == 9

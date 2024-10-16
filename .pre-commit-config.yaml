@@ -4,13 +4,13 @@ repos:
     hooks:
       - id: black
         name: Black
-        entry: poetry run black docling examples tests
+        entry: poetry run black docling docs/examples tests
         pass_filenames: false
         language: system
         files: '\.py$'
       - id: isort
         name: isort
-        entry: poetry run isort docling examples tests
+        entry: poetry run isort docling docs/examples tests
         pass_filenames: false
         language: system
         files: '\.py$'
@@ -20,21 +20,21 @@ repos:
 #        pass_filenames: false
 #        language: system
 #        files: '\.py$'
-#     - id: mypy
-#       name: MyPy
-#       entry: poetry run mypy docling
-#       pass_filenames: false
-#       language: system
-#       files: '\.py$'
+      - id: mypy
+        name: MyPy
+        entry: poetry run mypy docling
+        pass_filenames: false
+        language: system
+        files: '\.py$'
       - id: nbqa_black
         name: nbQA Black
-        entry: poetry run nbqa black examples
+        entry: poetry run nbqa black docs/examples
         pass_filenames: false
         language: system
         files: '\.ipynb$'
       - id: nbqa_isort
         name: nbQA isort
-        entry: poetry run nbqa isort examples
+        entry: poetry run nbqa isort docs/examples
         pass_filenames: false
         language: system
         files: '\.ipynb$'

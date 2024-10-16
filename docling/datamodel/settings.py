@@ -14,6 +14,7 @@ class BatchConcurrencySettings(BaseModel):
     doc_batch_concurrency: int = 2
     page_batch_size: int = 4
     page_batch_concurrency: int = 2
+    elements_batch_size: int = 16
 
     # doc_batch_size: int = 1
     # doc_batch_concurrency: int = 1

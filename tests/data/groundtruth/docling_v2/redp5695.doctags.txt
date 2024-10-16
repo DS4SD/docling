@@ -1,0 +1,460 @@
+<document>
+<text><location><page_1><loc_47><loc_96><loc_68><loc_99></location>Front cover</text>
+<figure>
+<location><page_1><loc_67><loc_90><loc_93><loc_96></location>
+</figure>
+<section_header><location><page_1><loc_7><loc_75><loc_88><loc_86></location>IBM Cloud Pak for Data on IBM Z</section_header>
+<text><location><page_1><loc_7><loc_60><loc_20><loc_62></location>Jasmeet Bhatia</text>
+<text><location><page_1><loc_7><loc_57><loc_20><loc_59></location>Ravi Gummadi</text>
+<text><location><page_1><loc_7><loc_54><loc_33><loc_56></location>Chandra Shekhar Reddy Potula</text>
+<text><location><page_1><loc_7><loc_51><loc_21><loc_52></location>Srirama Sharma</text>
+<text><location><page_1><loc_7><loc_18><loc_23><loc_21></location>Data and AI</text>
+<figure>
+<location><page_1><loc_8><loc_3><loc_21><loc_8></location>
+</figure>
+<figure>
+<location><page_1><loc_76><loc_3><loc_93><loc_7></location>
+</figure>
+<figure>
+<location><page_3><loc_5><loc_70><loc_39><loc_91></location>
+</figure>
+<section_header><location><page_3><loc_11><loc_65><loc_48><loc_68></location>Executive overview</section_header>
+<text><location><page_3><loc_22><loc_50><loc_89><loc_60></location>Most industries are susceptible to fraud, which poses a risk to both businesses and consumers. According to The National Health Care Anti-Fraud Association, health care fraud alone causes the nation around $68 billion annually.$^{1}$ This statistic does not include the numerous other industries where fraudulent activities occur daily. In addition, the growing amount of data that enterprises own makes it difficult for them to detect fraud. Businesses can benefit by using an analytical platform to fully integrate their data with artificial intelligence (AI) technology.</text>
+<text><location><page_3><loc_22><loc_41><loc_89><loc_48></location>With IBM Cloud Pakfi for Data on IBM Z, enterprises can modernize their data infrastructure, develop, and deploy machine learning (ML) and AI models, and instantiate highly efficient analytics deployment on IBM LinuxONE. Enterprises can create cutting-edge, intelligent, and interactive applications with embedded AI, colocate data with commercial applications, and use AI to make inferences.</text>
+<text><location><page_3><loc_22><loc_32><loc_89><loc_39></location>This IBM Redguide publication presents a high-level overview of IBM Z. It describes IBM Cloud Pak for Data (CP4D) on IBM Z and IBM LinuxONE, the different features that are supported on the platform, and how the associated features can help enterprise customers in building AI and ML models by using core transactional data, which results in decreased latency and increased throughput.</text>
+<text><location><page_3><loc_22><loc_22><loc_89><loc_31></location>This publication highlights real-time CP4D on IBM Z use cases. Real-time Clearing and Settlement Transactions, Trustworthy AI and its Role in Day-To-Day Monitoring, and the Prevention of Retail Crimes are use cases that are described in this publication. Using CP4D on IBM Z and LinuxONE, this publication shows how businesses can implement a highly efficient analytics deployment that minimizes latency, cost inefficiencies, and potential security exposures that are connected with data transportation.</text>
+<section_header><location><page_4><loc_11><loc_89><loc_35><loc_91></location>IBM Z: An overview</section_header>
+<text><location><page_4><loc_22><loc_80><loc_88><loc_87></location>Ever wonder how many transactions a bank processes per day? What about the pace at which these transactions happen? According to an IBMfi report, 44 of 50 of the world's top banks use IBM Z mainframes for these daily transactions.$^{2}$ IBM Z is a platform that is designed for voluminous data, maximum security, real-time transaction analysis, and cost efficiency.</text>
+<text><location><page_4><loc_22><loc_75><loc_84><loc_78></location>The most recent platform for IBM Z is IBM z16™. The IBM z16 supports the following features:</text>
+<list_item><location><page_4><loc_22><loc_73><loc_42><loc_75></location>GLYPH<SM590000> On-chip AI acceleration</list_item>
+<list_item><location><page_4><loc_22><loc_71><loc_47><loc_72></location>GLYPH<SM590000> Quantum-safe crypto discovery</list_item>
+<list_item><location><page_4><loc_22><loc_69><loc_41><loc_70></location>GLYPH<SM590000> Simplified compliance</list_item>
+<list_item><location><page_4><loc_22><loc_67><loc_37><loc_68></location>GLYPH<SM590000> Flexible capacity</list_item>
+<list_item><location><page_4><loc_22><loc_65><loc_46><loc_66></location>GLYPH<SM590000> Modernization of applications</list_item>
+<list_item><location><page_4><loc_22><loc_62><loc_34><loc_64></location>GLYPH<SM590000> Sustainability</list_item>
+<text><location><page_4><loc_22><loc_58><loc_85><loc_61></location>With these features, enterprises can upgrade applications while preserving secure and resilient data.</text>
+<text><location><page_4><loc_22><loc_55><loc_71><loc_57></location>To learn more about these features, see the IBM z16 product page.</text>
+<text><location><page_4><loc_22><loc_53><loc_68><loc_54></location>Figure 1 on page 3 shows a picture of the IBM z16 mainframe.</text>
+<caption><location><page_5><loc_22><loc_42><loc_34><loc_43></location>Figure 1 IBM z16</caption>
+<figure>
+<location><page_5><loc_22><loc_44><loc_71><loc_90></location>
+<caption>Figure 1 IBM z16</caption>
+</figure>
+<section_header><location><page_5><loc_11><loc_38><loc_58><loc_40></location>IBM z16 and IBM LinuxONE Emperor 4 features</section_header>
+<text><location><page_5><loc_22><loc_29><loc_89><loc_36></location>IBM Z are based on enterprise mainframe technology. Starting with transaction-based workloads and databases, IBM Z has undergone tremendous transformations in its system design for many generations to build servers that cater to Linux-based workloads and security with a cyberresilient system, and support quantum computing and modernization by using a hybrid cloud with a focus on data and AI.</text>
+<text><location><page_6><loc_22><loc_88><loc_89><loc_91></location>Figure 2 provides a snapshot of the IBM Z processor roadmap, which depicts the journey of transformation and improvement.</text>
+<caption><location><page_6><loc_11><loc_51><loc_35><loc_52></location>Figure 2 IBM Z: Processor roadmap</caption>
+<figure>
+<location><page_6><loc_10><loc_53><loc_89><loc_86></location>
+<caption>Figure 2 IBM Z: Processor roadmap</caption>
+</figure>
+<text><location><page_6><loc_22><loc_38><loc_89><loc_49></location>The IBM z16 and IBM LinuxONE Emperor 4 are the latest of the IBM Z, and they are developed with a 'built to build' focus to provide a powerful, cyberresilient, open, and secure platform for business with an extra focus on sustainability to help build sustainable data centers. Although the z16 server can host both IBM z/OSfi and Linux workloads, LinuxONE Emperor 4 is built to host Linux only workloads with a focus on consolidation and resiliency. Depending on the workload, consolidation from numerous x86 servers into a LinuxONE Emperor 4 can help reduce energy consumption by 75% and data center floor space by 50%, which helps to achieve the sustainability goals of the organization.</text>
+<text><location><page_6><loc_22><loc_29><loc_89><loc_36></location>Figure 3 on page 5 shows a summary of the system design of IBM LinuxONE Emperor 4 with the IBM Telum™ processor. The IBM Telum processor chip is designed to run enterprise applications efficiently where their data resides to embed AI with super low latency. The support for higher bandwidth and I/O rates is supported through FCP Express cards with an endpoint security solution. The memory subsystem supports up to 40 TB of memory.</text>
+<caption><location><page_7><loc_11><loc_54><loc_49><loc_56></location>Figure 3 System design of IBM z16 LinuxONE Emperor 4</caption>
+<figure>
+<location><page_7><loc_11><loc_56><loc_89><loc_90></location>
+<caption>Figure 3 System design of IBM z16 LinuxONE Emperor 4</caption>
+</figure>
+<text><location><page_7><loc_22><loc_45><loc_89><loc_53></location>The IBM z16 and IBM LinuxONE Emperor 4 servers are built with 7-nm technology at a 5.2 GHz speed. They consist of four dual-chip modules (DCMs) per central processor complex (CPC) drawer, each of which is built with two 8-core Telum processor chips that has "first in the industry" on-chip acceleration for mid-transaction, real-time AI inferencing, which supports many different use cases, including fraud detection.</text>
+<text><location><page_7><loc_22><loc_35><loc_89><loc_44></location>Each core has access to a huge private 32 MB L2 cache where up to 16 MB of the L2 cache of an inactive core can be used as virtual cache (L3 / L4) by neighboring active cores on the chip. This cache helps address translation and access checking by prefetching the same virtual cache into the L2 cache. The virtual cache also includes Neural Network Processing Assist instructions and direct memory access with protection, and per chip GZIP compression.</text>
+<text><location><page_8><loc_22><loc_88><loc_88><loc_91></location>Figure 4 provides more information about the features of AI Accelerator integration with the IBM Z processor cores.</text>
+<caption><location><page_8><loc_10><loc_53><loc_63><loc_54></location>Figure 4 IBM z16 on-chip AI Accelerator integration with IBM Z processor cores</caption>
+<figure>
+<location><page_8><loc_11><loc_54><loc_90><loc_86></location>
+<caption>Figure 4 IBM z16 on-chip AI Accelerator integration with IBM Z processor cores</caption>
+</figure>
+<text><location><page_8><loc_22><loc_41><loc_89><loc_51></location>The IBM z16 and IBM LinuxONE Emperor 4 server platforms are built with the hardware features that are shown in Figure 4 with addressing data and AI workloads in mind. Regardless of where the ML and deep learning (DL) frameworks are used to build and train data and AI models, the inferencing on existing enterprise application data can happen along currently running enterprise business applications. CP4D 4.6 supports Tensorflow and IBM Snap ML frameworks, which are optimized to use the on-chip AI Accelerator during inferencing. Support for various other frameworks is planned for future releases.</text>
+<text><location><page_8><loc_22><loc_37><loc_89><loc_39></location>Figure 5 on page 7 shows the seamless integration of AI into existing enterprises workloads on the IBM z16 while leveraging the underlying hardware capabilities.</text>
+<caption><location><page_9><loc_11><loc_61><loc_31><loc_62></location>Figure 5 Seamless integration</caption>
+<figure>
+<location><page_9><loc_10><loc_62><loc_89><loc_90></location>
+<caption>Figure 5 Seamless integration</caption>
+</figure>
+<section_header><location><page_9><loc_11><loc_55><loc_56><loc_57></location>What is Cloud Pak for Data on IBM Z</section_header>
+<text><location><page_9><loc_22><loc_47><loc_89><loc_53></location>IBM Cloud Pak for Data allows enterprises to simplify, unify, and automate the delivery of data and AI. It categorizes the activities within the journey to AI as four rungs of the AI Ladder: Collect, Organize, Analyze, and Infuse. For more information about each of the AI Ladder rungs, see Become Data Driven with IBM Z Infused Data Fabric , REDP-5680.</text>
+<text><location><page_9><loc_22><loc_31><loc_89><loc_46></location>CP4D on IBM Z provides enterprises with a resilient and secure private cloud platform. You can use it to create ML and AI models that may be included into modern intelligent applications. You also can use it to use and construct applications for mission-critical data. With CP4D on IBM Z, enterprises can lower data movement latency, cost inefficiencies, and potential security exposures. Enterprises can safely store and access their most important company data, and leverage their current infrastructure by using cutting-edge hybrid cloud applications. Enterprises can combine their current database applications without any rewrites, which results in reduced cost and complexity. Lastly, by using CP4D on IBM Z, enterprises can update their database infrastructure to benefit from easier management, a quicker time to value, and lower operating expenses.</text>
+<text><location><page_10><loc_22><loc_79><loc_89><loc_91></location>Figure 6 shows a solution overview of CP4D. The infrastructure alternatives are shown at the bottom, and they include IBM Z and LinuxONE. They all leverage Red Hat OpenShift. Common Foundational Services come next, which offer clarity throughout the data and AI lifecycle, that is, from user access management to monitoring and service provisioning. A high-level view of the services is shown in the middle section. The services have several different capabilities that span the AI hierarchy. The platform can be expanded, and it offers a seamless user experience for all distinct personas across the AI lifecycle, from data gathering through AI infusion.</text>
+<caption><location><page_10><loc_11><loc_38><loc_43><loc_39></location>Figure 6 Solution overview of Cloud Pak for Data</caption>
+<figure>
+<location><page_10><loc_10><loc_39><loc_89><loc_77></location>
+<caption>Figure 6 Solution overview of Cloud Pak for Data</caption>
+</figure>
+<text><location><page_10><loc_22><loc_35><loc_85><loc_36></location>We highlight the four main pillars that make IBM Z the correct infrastructure for CP4D:</text>
+<list_item><location><page_10><loc_22><loc_33><loc_42><loc_34></location>GLYPH<SM590000> Performance and Scale</list_item>
+<list_item><location><page_10><loc_22><loc_31><loc_42><loc_32></location>GLYPH<SM590000> Embedded Accelerators</list_item>
+<list_item><location><page_10><loc_22><loc_28><loc_43><loc_30></location>GLYPH<SM590000> Reliability and Availability</list_item>
+<list_item><location><page_10><loc_22><loc_26><loc_44><loc_28></location>GLYPH<SM590000> Security and Governance.</list_item>
+<text><location><page_10><loc_22><loc_13><loc_89><loc_25></location>From a performance perspective, CP4D on IBM Z provides your data and AI with high transaction processing and a powerful infrastructure. From the embedded accelerators perspective, CP4D on IBM Z can investigate each transaction thanks to a cutting-edge DL inference technology even in the most demanding, sensitive, and latency-prone real-time workloads. From a reliability perspective, CP4D on IBM Z provides high availability and resiliency. Lastly from the security perspective, CP4D on IBM Z is suitable for protecting sensitive data and AI models for enterprises in highly regulated industries or those industries that are worried about security.</text>
+<section_header><location><page_11><loc_11><loc_89><loc_85><loc_91></location>Cloud Pak for Data capabilities on IBM Z and IBM LinuxONE</section_header>
+<text><location><page_11><loc_22><loc_81><loc_89><loc_87></location>With CP4D on IBM Z and IBM LinuxONE, users can develop, train, and deploy AI and ML models. Users can accomplish this task by using the CP4D IBM Watsonfi Studio and IBM Watson Machine Learning (WLM) services. By using these two fundamental services, users can accomplish the following tasks:</text>
+<list_item><location><page_11><loc_22><loc_79><loc_56><loc_80></location>GLYPH<SM590000> Provision various containerized databases.</list_item>
+<list_item><location><page_11><loc_22><loc_77><loc_69><loc_78></location>GLYPH<SM590000> Explore, clean, shape, and alter data by using Data Refinery.</list_item>
+<list_item><location><page_11><loc_22><loc_75><loc_74><loc_76></location>GLYPH<SM590000> Use project-specific data that is uploaded, or connect to distant data.</list_item>
+<list_item><location><page_11><loc_22><loc_73><loc_54><loc_74></location>GLYPH<SM590000> Create Spark run times and applications.</list_item>
+<list_item><location><page_11><loc_22><loc_70><loc_89><loc_72></location>GLYPH<SM590000> Create, build, evaluate, and deploy analytics and ML models with trust and transparency.</list_item>
+<list_item><location><page_11><loc_22><loc_68><loc_82><loc_70></location>GLYPH<SM590000> Leverage the AI Integrated Accelerator for TensorFlow 2.7.2 and Snap ML 1.9.</list_item>
+<text><location><page_11><loc_22><loc_64><loc_88><loc_67></location>For more information about the specifics of these capabilities, see Capabilities on Linux on IBM Z and IBM LinuxONE.</text>
+<section_header><location><page_11><loc_11><loc_59><loc_41><loc_61></location>Open-source ecosystem</section_header>
+<text><location><page_11><loc_22><loc_48><loc_89><loc_56></location>These days, innovation and product development are not limited to closed doors within an organization. In any industry sector, the solutions include a mix of proprietary code addressing the core business solution that is supported or integrated into other software components from open source. In some cases, enterprises business solutions also are built from open-source community offerings. Thus, open-source software becomes an important ingredient in modern-day solution building.</text>
+<text><location><page_11><loc_22><loc_34><loc_89><loc_46></location>IBM actively participates in various open-source communities as part of steering boards defining the roadmap of the community, and also in contributing code to make the community a better place for everyone to participate. Red Hat also actively participates in various open-source communities and makes extensive contributions. In open-source communities, although most open-source development happens on x86 / amd64 or the Intel architecture, the same open-source software is used by other architectures, such as IBM Power (ppc64le), IBM Z and IBM LInuxONE (s390x), ARM, and Sparc. So, the availability of an open-source ecosystem on any architecture is key and critical to business.</text>
+<text><location><page_11><loc_22><loc_27><loc_88><loc_33></location>On IBM Z and IBM LinuxONE (s390x) architecture, there is a huge open-source support ecosystem that ranges from operating systems such as Linux; application run times; cloud and container services; DevOps and automation; big data; observability; analytics; databases; and storage. The ecosystem on IBM Z and IBM LinuxONE is growing.</text>
+<text><location><page_11><loc_22><loc_21><loc_88><loc_25></location>IBM Z and IBM LinuxONE include much open-source software in their ecosystem. You can see the growing list of open-source software for IBM Z and LinuxONE at The Growing Ecosystem of Open-Source Software for IBM Z and LinuxONE.</text>
+<text><location><page_11><loc_22><loc_14><loc_89><loc_20></location>IBM Z and IBM LinuxONE are available to various communities to include support for s390x builds as part of their community's continuous integration and continuous delivery (CI/CD). Also, for open-source community developers, infrastructure resources are available on a no-charge basis through the IBM LinuxONE community cloud.</text>
+<text><location><page_12><loc_22><loc_82><loc_89><loc_91></location>CP4D includes a mix of open-source and proprietary data and AI runtime databases; open-source run times like Python; open-source data platforms like Anaconda; ML and DL frameworks like Pytorch and Tensorflow; and thousands of reusable Python packages. All of them are available and supported on s390x architecture to provide seamless parity with x86 architecture and a seamless experience for enterprise data scientists, architects, and data and AI solution developers on IBM Z and IBM LinuxONE platforms.</text>
+<text><location><page_12><loc_22><loc_73><loc_89><loc_81></location>Anaconda is one of the open-source data platforms that provide Python and R based data science ML frameworks; analytics and data visualization tools; and open-source data science tools and libraries like Conda, XGBoost, and SciKit-Learn. Anaconda runs natively on Linux on IBM Z and IBM LinuxONE, and on IBM z/OS Container Extensions (zcX) on z/OS. For more information, see Announcing Anaconda for Linux on IBM Z and LinuxONE.</text>
+<text><location><page_12><loc_22><loc_63><loc_89><loc_72></location>In addition to strong, open-source ecosystem support for application development on Linux and enterprise operating systems, a new generation of IBM Z and IBM LinuxONE servers (IBM z16™) also have strong platform support, and AI acceleration capabilities that can be leveraged by open-source software to perform better on the server infrastructure. For example, the recently released CP4D 4.6 has Tensorflow and IBM SnapML frameworks that leverage the AI accelerators when running on an IBM z16 server.</text>
+<text><location><page_12><loc_22><loc_59><loc_85><loc_62></location>So, to summarize, there is a huge, growing data and AI open source ecosystem that is supported and optimized on IBM Z and IBM LinuxONE servers.</text>
+<section_header><location><page_12><loc_10><loc_53><loc_31><loc_55></location>Why AI on IBM Z</section_header>
+<text><location><page_12><loc_22><loc_42><loc_89><loc_51></location>Data and AI playing a major role in the modernization story to enable the digital transformation journey of every organization. Many organizations recognize the business value of infusing AI into their infrastructure. CP4D provides the cloud-native solution to put your data to work. With CP4D, all your data users can collaborate from a single, unified interface that supports many services that work together, including collecting data, organizing the data, analyzing the data, and infusing AI.</text>
+<text><location><page_12><loc_22><loc_30><loc_89><loc_41></location>Traditional ML models' power most of today's ML applications in business and among AI practitioners. CP4D supports traditional ML frameworks for training and inferencing, such as Scikit-learn, Snap ML, and XGBoost. Snap ML is a library that provides high-speed training and inferencing of ML models that leverage the AI accelerator while running on an IBM z16 (Linux on IBM Z). CP4D supports DL frameworks such as TensorFlow and PyTorch. TensorFlow is a DL framework that leverages the AI accelerator while running on an IBM z16 (Linux on IBM Z).</text>
+<text><location><page_12><loc_22><loc_23><loc_89><loc_29></location>Figure 7 on page 11 provides an overview of the components that are supported on CP4D on IBM Z. You can leverage Watson Studio for model building, training, and validation, and WML for deployment of the model. Eventually, applications can use the AI inference endpoint to score the model.</text>
+<caption><location><page_13><loc_10><loc_54><loc_83><loc_55></location>Figure 7 Developing, training, and deploying an AI model on Cloud Pak for Data on IBM Z and IBM LinuxONE</caption>
+<figure>
+<location><page_13><loc_10><loc_56><loc_89><loc_90></location>
+<caption>Figure 7 Developing, training, and deploying an AI model on Cloud Pak for Data on IBM Z and IBM LinuxONE</caption>
+</figure>
+<text><location><page_13><loc_22><loc_51><loc_81><loc_53></location>In summary, here are some of the reasons why you should choose AI on IBM Z:</text>
+<list_item><location><page_13><loc_22><loc_49><loc_68><loc_50></location>GLYPH<SM590000> World-class AI inference platform for enterprise workloads:</list_item>
+<list_item><location><page_13><loc_25><loc_46><loc_86><loc_48></location>-Embedded accelerators: A centralized on-chip AI accelerator that is shared by all cores.</list_item>
+<list_item><location><page_13><loc_25><loc_42><loc_89><loc_45></location>-Industry standard AI ecosystem: Many industry open-source data science frameworks are available on the platform.</list_item>
+<list_item><location><page_13><loc_25><loc_38><loc_89><loc_41></location>-Seamlessly integrate AI into existing enterprise workload stacks: Train anywhere, and then deploy on IBM Z.</list_item>
+<list_item><location><page_13><loc_22><loc_36><loc_80><loc_37></location>GLYPH<SM590000> Security: Encrypted memory, and improved trusted execution environments.</list_item>
+<list_item><location><page_13><loc_22><loc_32><loc_89><loc_35></location>GLYPH<SM590000> Sustainability: Reduce your energy consumption with real-time monitoring tools about the energy consumption of the system.</list_item>
+<section_header><location><page_13><loc_11><loc_27><loc_26><loc_29></location>AI use cases</section_header>
+<text><location><page_13><loc_22><loc_21><loc_87><loc_25></location>With billions of transactions per day in many of today's industries, it is key to get real-time insights about what is happening in your data. AI on the IBM Z stack understands these situations, and it delivers in-transaction inference in real time and at scale.</text>
+<text><location><page_13><loc_22><loc_13><loc_89><loc_19></location>Core banking solutions running on IBM Z that are involved in processing inbound transactions need real-time fraud detection to prevent fraud. Other types of possible use cases might be credit risk analysis, anti-money laundering, loan approval, fraud detection in payments, and instant payments.</text>
+<text><location><page_13><loc_22><loc_9><loc_89><loc_12></location>For insurance companies, a pressing use case would be claims processing. For markets and trading, clearing and settlement use cases are paramount.</text>
+<text><location><page_14><loc_22><loc_87><loc_86><loc_91></location>For the health care industry, medical image processing (such as MRIs and x-rays), skin cancer detection, and patient monitoring activities such as infant motion analysis, is important.</text>
+<text><location><page_14><loc_22><loc_81><loc_89><loc_85></location>For the airline industry, processes such as air traffic management, flight management systems, and flight maintenance predictions are use cases that are ideal candidates for using AI on IBM Z.</text>
+<text><location><page_14><loc_22><loc_78><loc_68><loc_79></location>In the following sections, we describe the following use cases:</text>
+<list_item><location><page_14><loc_22><loc_71><loc_89><loc_77></location>GLYPH<SM590000> "Use case 1: Responsible AI augmented with risk and regulatory compliance" on page 12 AI model lifecycle governance, risk management, and regulatory compliance are key to the success of the enterprises. It is imperative to adopt a typical AI model lifecycle to protect new end-to-end risks.</list_item>
+<list_item><location><page_14><loc_22><loc_69><loc_66><loc_70></location>GLYPH<SM590000> "Use case 2: Credit default risk assessment" on page 22</list_item>
+<list_item><location><page_14><loc_25><loc_62><loc_89><loc_68></location>Core banking solutions running on IBM Z that are involved in processing inbound transactions need real-time fraud detection to prevent fraud. Other types of possible use cases might be credit risk analysis, anti-money laundering, loan approval, fraud detection in payments, and instant payments.</list_item>
+<list_item><location><page_14><loc_22><loc_60><loc_61><loc_61></location>GLYPH<SM590000> "Use case 3: Clearing and settlement" on page 25</list_item>
+<list_item><location><page_14><loc_25><loc_56><loc_88><loc_59></location>The use of AI can help to predict which trades or transactions have high risk exposures, and propose solutions for a more efficient settlement process.</list_item>
+<list_item><location><page_14><loc_22><loc_54><loc_74><loc_55></location>GLYPH<SM590000> "Use case 4: Remaining Useful Life of an aircraft engine" on page 27</list_item>
+<list_item><location><page_14><loc_25><loc_50><loc_87><loc_53></location>We describe how AI can help to avoid unplanned aircraft downtime by determining the remaining time or cycles that an aircraft engine is likely to operate before failure.</list_item>
+<list_item><location><page_14><loc_22><loc_47><loc_88><loc_50></location>GLYPH<SM590000> "Use case 5: AI-powered video analytics on an infant's motions for health prediction" on page 30</list_item>
+<list_item><location><page_14><loc_25><loc_43><loc_89><loc_46></location>In this section, we describe how AI can predict an infant's health conditions by monitoring real-time body movements.</list_item>
+<section_header><location><page_14><loc_11><loc_35><loc_89><loc_40></location>Use case 1: Responsible AI augmented with risk and regulatory compliance</section_header>
+<text><location><page_14><loc_22><loc_27><loc_89><loc_33></location>Advancement in AI is changing the world, and organizations must adopt AI to embrace new challenges daily. Many enterprises see tremendous value in adopting AI and ML technologies while establishing organization trust in the models, underlying data, and the process to be followed. An AI model lifecycle can be a daunting task.</text>
+<text><location><page_14><loc_22><loc_23><loc_89><loc_26></location>How mature is your AI governance? In this section, we provide a use case demonstrating the trustworthiness of AI and its importance in daily monitoring.</text>
+<section_header><location><page_14><loc_11><loc_19><loc_31><loc_21></location>Industry challenges</section_header>
+<text><location><page_14><loc_22><loc_16><loc_83><loc_17></location>Here are the three main reasons why organizations struggle with the adoption of AI:</text>
+<list_item><location><page_14><loc_22><loc_14><loc_48><loc_15></location>GLYPH<SM590000> Scaling with growing regulations</list_item>
+<list_item><location><page_14><loc_22><loc_12><loc_71><loc_13></location>GLYPH<SM590000> Lack of confidence in operationalized AI (making responsible AI)</list_item>
+<list_item><location><page_14><loc_22><loc_9><loc_76><loc_11></location>GLYPH<SM590000> Challenges around managing the risk throughout the entire AI workflow</list_item>
+<section_header><location><page_15><loc_22><loc_90><loc_53><loc_91></location>Scaling with growing regulations</section_header>
+<text><location><page_15><loc_22><loc_80><loc_88><loc_89></location>Laws and regulations in the data and AI space are accelerating, and many countries are proposing strict AI policies. Countries are monitoring adherence of these policies by the enterprises and imposing fines for any violations. Responding to these regulations are challenging global organizations where multiple regulations apply. For enterprises, it is important to adopt AI policies when there is change, and to validate explainable models to protect against discrimination.</text>
+<section_header><location><page_15><loc_22><loc_77><loc_37><loc_78></location>Responsible AI</section_header>
+<text><location><page_15><loc_22><loc_71><loc_89><loc_76></location>Responsible AI protects against loss of data privacy, and reduced customer loyalty and trust. A data scientist cannot maximize accuracy and model performance above all other concerns. Practicing responsible AI is a best practice, and you must establish protection and validation to ensure that any models that are placed into production are fair and explainable.</text>
+<section_header><location><page_15><loc_22><loc_67><loc_59><loc_69></location>Risks throughout the entire AI workflow</section_header>
+<text><location><page_15><loc_22><loc_65><loc_64><loc_67></location>Organizations need to mitigate risk of the following items:</text>
+<list_item><location><page_15><loc_22><loc_63><loc_63><loc_65></location>GLYPH<SM590000> Deciding not to use certain technologies or practices</list_item>
+<list_item><location><page_15><loc_22><loc_61><loc_74><loc_62></location>GLYPH<SM590000> Using personal information when needed and with a user's consent</list_item>
+<list_item><location><page_15><loc_22><loc_59><loc_60><loc_60></location>GLYPH<SM590000> Ensuring automated decisions are free from bias</list_item>
+<list_item><location><page_15><loc_22><loc_57><loc_76><loc_58></location>GLYPH<SM590000> Customer confidence by providing explanations for business decisions</list_item>
+<list_item><location><page_15><loc_22><loc_55><loc_63><loc_56></location>GLYPH<SM590000> Fraud to the organization and to customer's accounts</list_item>
+<list_item><location><page_15><loc_22><loc_52><loc_54><loc_54></location>GLYPH<SM590000> Delays in putting models into production</list_item>
+<text><location><page_15><loc_22><loc_47><loc_89><loc_51></location>In fact, in a recent survey, these concerns were echoed by real AI adopters when asked what aspects of trust are most important to them. Although explaining how AI decides is the primary concern, all of these concerns are important.</text>
+<text><location><page_15><loc_22><loc_38><loc_89><loc_45></location>The key point here is that risk exists throughout the entire AI lifecycle starting with the underlying data and the business justification behind the "why" of the project and continuing into production. Without a formalized process, there is no way to mitigate these risks to unlock the scale that is required to make automated decisions profitable. With these decisions, the business can operate proactively instead of reactively.</text>
+<text><location><page_16><loc_22><loc_85><loc_89><loc_91></location>For example, a business can start testing a model before production for fairness metrics. For this task, enterprises need an end-to-end workflow with approvals to mitigate these risks and increase the scale of AI investments, as shown in Figure 8, which presents a typical AI model lifecycle in an enterprise.</text>
+<caption><location><page_16><loc_10><loc_57><loc_34><loc_58></location>Figure 8 Typical AI model lifecycle</caption>
+<figure>
+<location><page_16><loc_10><loc_58><loc_89><loc_83></location>
+<caption>Figure 8 Typical AI model lifecycle</caption>
+</figure>
+<text><location><page_16><loc_22><loc_46><loc_88><loc_55></location>Due to regulations, more stakeholders adopt the typical AI model lifecycle to protect their brand from new end-to-end risks. To ensure various aspects of both regulatory compliance and security, the personas that must be involved include the chief financial officer (CFO), chief marketing officer (CMO), chief data officer (CDO), HR, and chief regulatory officer (CRO), along with the data engineers, data scientists, and business analysts, who build AI workflows.</text>
+<section_header><location><page_16><loc_11><loc_42><loc_46><loc_44></location>IBM governance solution for IBM Z</section_header>
+<text><location><page_16><loc_22><loc_38><loc_88><loc_41></location>AI model lifecycle governance, risk management, and regulatory compliance are key to the success of enterprises.</text>
+<text><location><page_16><loc_22><loc_23><loc_89><loc_36></location>AI governance is a comprehensive framework that uses a set of automated processes, methodologies, and tools to manage an organization's use of AI. Consistent principles guiding the design, development, deployment, and monitoring of models are critical in driving responsible and trustworthy AI. AI governance includes processes that trace and record the origin of data, models (including associated metadata), and pipelines for audits. The details of entry should include the techniques that trained each model, the hyperparameters that were used, and the metrics from testing phases. These details provide increased transparency into the model's behavior throughout the lifecycle, the data that was influential in its development, and the possible risks.</text>
+<text><location><page_16><loc_22><loc_16><loc_89><loc_21></location>In a world where trust, transparency and explainable AI matters, every organization wants compliance along with the comfort of understanding how analytic insights and decisions are made. The following sections describe some of the principles and organizational requirements for AI governance.</text>
+<section_header><location><page_17><loc_22><loc_90><loc_41><loc_91></location>Lifecycle governance</section_header>
+<text><location><page_17><loc_22><loc_85><loc_89><loc_89></location>Lifecycle governance helps you manage your business information throughout its lifecycle, that is, from creation to deletion. IBM AI governance addresses the problems that challenge records managements:</text>
+<list_item><location><page_17><loc_22><loc_83><loc_85><loc_84></location>GLYPH<SM590000> Monitor, catalog, and govern AI models from anywhere throughout the AI lifecycle.</list_item>
+<list_item><location><page_17><loc_22><loc_81><loc_70><loc_82></location>GLYPH<SM590000> Automate the capture of model metadata for report generation.</list_item>
+<list_item><location><page_17><loc_22><loc_78><loc_58><loc_80></location>GLYPH<SM590000> Drive transparent and explainable AI at scale.</list_item>
+<list_item><location><page_17><loc_22><loc_76><loc_87><loc_78></location>GLYPH<SM590000> Increase accuracy of predictions by identifying how AI is used and where it is lagging.</list_item>
+<section_header><location><page_17><loc_22><loc_73><loc_38><loc_75></location>Risk management</section_header>
+<text><location><page_17><loc_22><loc_70><loc_89><loc_73></location>Risk management is used in IBM AI governance to identify, manage, monitor, and report on risk and compliance initiatives at scale:</text>
+<list_item><location><page_17><loc_22><loc_68><loc_81><loc_69></location>GLYPH<SM590000> Automate facts and workflow management to comply with business standards.</list_item>
+<list_item><location><page_17><loc_22><loc_66><loc_74><loc_67></location>GLYPH<SM590000> Use dynamic dashboards for clear and concise customizable results.</list_item>
+<list_item><location><page_17><loc_22><loc_64><loc_72><loc_65></location>GLYPH<SM590000> Enhanced collaboration across multiple regions and geographies.</list_item>
+<section_header><location><page_17><loc_22><loc_61><loc_42><loc_62></location>Regulatory compliance</section_header>
+<text><location><page_17><loc_22><loc_54><loc_89><loc_60></location>Regulatory compliance is a set of rules that organizations must follow to protect sensitive information and ensure human safety. Any business that works with digital assets, consumer data, health regulations, employee safety, and private communications is subject to regulatory compliance.$^{3}$ The IBM AI governance solution for IBM Z includes the following tasks:</text>
+<list_item><location><page_17><loc_22><loc_52><loc_71><loc_53></location>GLYPH<SM590000> Help adhere to external AI regulations for audit and compliance.</list_item>
+<list_item><location><page_17><loc_22><loc_50><loc_76><loc_51></location>GLYPH<SM590000> Convert external AI regulations into policies for automatic enforcement.</list_item>
+<list_item><location><page_17><loc_22><loc_48><loc_82><loc_49></location>GLYPH<SM590000> Use dynamic dashboards for compliance status across policies and regulations.</list_item>
+<text><location><page_17><loc_22><loc_40><loc_89><loc_46></location>Enterprises can develop AI models and deploy them by using IBM Watson Studio or WML on CP4D on Red Hat OpenShift on a virtual machine that is based on IBM z/VM or Red Hat Enterprise Linux KVM on IBM Z. AI governance on IBM LinuxONE is supported in the following two ways:</text>
+<list_item><location><page_17><loc_22><loc_37><loc_86><loc_40></location>GLYPH<SM590000> Monitor the AI models with Watson OpenScale on CP4D on Red Hat OpenShift on a virtual machine on IBM Z.</list_item>
+<list_item><location><page_17><loc_22><loc_28><loc_89><loc_36></location>GLYPH<SM590000> Enterprises can develop AI models by creating and training models by using Watson Studio and development tools such as Jupyter Notebook or JupyterLab, and then deploying the model onto WML on CP4D on Red Hat OpenShift on a virtual machine on IBM Z. Then, these enterprises can achieve end-end AI governance by running AI Factsheets, IBM Watson OpenScale, and IBM Watson OpenPagesfi on CP4D on x86.</list_item>
+<text><location><page_17><loc_22><loc_26><loc_84><loc_27></location>Figure 9 on page 16 shows the end-to-end flow for a remote AI governance solution.</text>
+<caption><location><page_18><loc_11><loc_62><loc_48><loc_63></location>Figure 9 Remote AI governance solution end-to-end flow</caption>
+<figure>
+<location><page_18><loc_11><loc_63><loc_89><loc_90></location>
+<caption>Figure 9 Remote AI governance solution end-to-end flow</caption>
+</figure>
+<text><location><page_18><loc_22><loc_59><loc_72><loc_60></location>To achieve end-to-end AI governance, complete the following steps:</text>
+<list_item><location><page_18><loc_22><loc_55><loc_89><loc_58></location>1. Create a model entry in IBM OpenPages by using CP4D on a x86 platform, as shown in Figure 10.</list_item>
+<caption><location><page_18><loc_10><loc_14><loc_46><loc_16></location>Figure 10 Creating a model entry in IBM OpenPages</caption>
+<figure>
+<location><page_18><loc_10><loc_16><loc_89><loc_53></location>
+<caption>Figure 10 Creating a model entry in IBM OpenPages</caption>
+</figure>
+<list_item><location><page_19><loc_22><loc_87><loc_89><loc_91></location>2. Train a model by using Watson Studio and by using development tools such as Jupyter Notebook or JupyterLab on CP4D on Red Hat OpenShift on a virtual machine on IBM Z, as shown in Figure 11.</list_item>
+<caption><location><page_19><loc_11><loc_46><loc_47><loc_47></location>Figure 11 Training an AI model by using Watson Studio</caption>
+<figure>
+<location><page_19><loc_10><loc_48><loc_89><loc_85></location>
+<caption>Figure 11 Training an AI model by using Watson Studio</caption>
+</figure>
+<list_item><location><page_19><loc_22><loc_42><loc_89><loc_45></location>3. Deploy the model by using WML on CP4D on Red Hat OpenShift on a virtual machine on IBM Z, as shown in Figure 12.</list_item>
+<caption><location><page_19><loc_11><loc_7><loc_57><loc_8></location>Figure 12 Deploying an AI model by using WML on Cloud Pak for Data</caption>
+<figure>
+<location><page_19><loc_11><loc_9><loc_90><loc_40></location>
+<caption>Figure 12 Deploying an AI model by using WML on Cloud Pak for Data</caption>
+</figure>
+<list_item><location><page_20><loc_22><loc_85><loc_89><loc_91></location>4. Track the external model lifecycle by browsing through the Catalogs/Platform assets catalog by using AI Factsheets and OpenPages while using CP4D on an x86 platform, as shown in Figure 13. The external model (deployed on CP4D on Red Hat OpenShift on a virtual machine on IBM Z) is saved as a platform asset catalog on the x86 platform.</list_item>
+<caption><location><page_20><loc_22><loc_50><loc_40><loc_51></location>Figure 13 External model</caption>
+<figure>
+<location><page_20><loc_22><loc_51><loc_87><loc_83></location>
+<caption>Figure 13 External model</caption>
+</figure>
+<text><location><page_20><loc_25><loc_45><loc_89><loc_48></location>You can track the model through each stage of the model lifecycle, as shown in Figure 14, by using AI Factsheets and OpenPages.</text>
+<caption><location><page_20><loc_11><loc_9><loc_31><loc_10></location>Figure 14 Tracking the model</caption>
+<figure>
+<location><page_20><loc_10><loc_11><loc_90><loc_44></location>
+<caption>Figure 14 Tracking the model</caption>
+</figure>
+<text><location><page_21><loc_25><loc_88><loc_89><loc_91></location>You can see that the model facts are tracked and synchronized to IBM OpenPages for risk management, as shown in Figure 15.</text>
+<caption><location><page_21><loc_10><loc_46><loc_74><loc_48></location>Figure 15 Model facts that are tracked and synchronized to IBM OpenPages on an x86 platform</caption>
+<figure>
+<location><page_21><loc_10><loc_48><loc_89><loc_86></location>
+<caption>Figure 15 Model facts that are tracked and synchronized to IBM OpenPages on an x86 platform</caption>
+</figure>
+<list_item><location><page_22><loc_22><loc_88><loc_86><loc_91></location>5. Create an external model by using IBM OpenScale on the x86 platform, as shown in Figure 16.</list_item>
+<caption><location><page_22><loc_11><loc_50><loc_48><loc_52></location>Figure 16 Creating an external model on an x86 platform</caption>
+<figure>
+<location><page_22><loc_10><loc_52><loc_89><loc_86></location>
+<caption>Figure 16 Creating an external model on an x86 platform</caption>
+</figure>
+<text><location><page_22><loc_22><loc_43><loc_89><loc_49></location>IBM OpenScale provides a comprehensive dashboard that tracks fairness, quality monitoring, drift, and explainability of a model. Fairness determines whether your model produces biased outcomes. Quality determines how well your model predicts outcomes. Drift is the degradation of predictive performance over time. A sample is shown in Figure 17 on page 21.</text>
+<caption><location><page_23><loc_11><loc_54><loc_63><loc_55></location>Figure 17 IBM OpenScale dashboard that is used to monitor the external model</caption>
+<figure>
+<location><page_23><loc_10><loc_56><loc_89><loc_90></location>
+<caption>Figure 17 IBM OpenScale dashboard that is used to monitor the external model</caption>
+</figure>
+<text><location><page_23><loc_22><loc_45><loc_89><loc_53></location>You developed and deployed the AI model by using Watson Studio, WML on CP4D on Red Hat OpenShift on a virtual machine on IBM Z, and end-to-end AI model governance by leveraging AI Factsheets, OpenScale, and OpenPages on CP4D on a x86 platform. Figure 18 shows end-to-end AI governance when using IBM OpenPages, AI Factsheets, and OpenScale.</text>
+<caption><location><page_23><loc_11><loc_7><loc_83><loc_8></location>Figure 18 Final result: End-to-end AI governance when using IBM OpenPages, AI Factsheets, and OpenScale</caption>
+<figure>
+<location><page_23><loc_10><loc_9><loc_90><loc_44></location>
+<caption>Figure 18 Final result: End-to-end AI governance when using IBM OpenPages, AI Factsheets, and OpenScale</caption>
+</figure>
+<section_header><location><page_24><loc_11><loc_89><loc_64><loc_91></location>Use case 2: Credit default risk assessment</section_header>
+<text><location><page_24><loc_22><loc_83><loc_89><loc_87></location>In today's world, many individuals or businesses seeking loans to meet their growing business needs often look to financial institutions. Financial institutions can offer loans to individuals or businesses and charge interest based on the current market situations.</text>
+<section_header><location><page_24><loc_11><loc_79><loc_31><loc_80></location>Industry challenges</section_header>
+<text><location><page_24><loc_22><loc_71><loc_89><loc_77></location>Financial institutions must make an accurate decision about whether to sanction a loan or not, and judging the likelihood of default is the difference between a successful and unsuccessful loan portfolio. In a traditional scenario, an experienced banker can judge someone's likelihood of default, but that is not an efficient method for judgment as a business grows.</text>
+<section_header><location><page_24><loc_11><loc_67><loc_56><loc_69></location>Predictions of credit default risk assessment</section_header>
+<text><location><page_24><loc_22><loc_55><loc_89><loc_65></location>In the modern world, growing business institutions can no longer rely on only experienced bankers to decide whether to sanction a loan knowing that there is a probability that the borrower might default on their loans. A better choice is to rely on technological advancements that can help with reasoning based on facts, such as leveraging credit risk modeling techniques to process the historical data of past borrowers to understand their credit behavior and make a more informed decision about whether to lend money, how much money, and decide on the tenure to close the loan.</text>
+<text><location><page_24><loc_22><loc_49><loc_89><loc_53></location>Financial institutions can leverage AI solutions by using ML techniques to predict the credit risk. Applying AI to credit risk modeling techniques can benefit institutions in decision-making, and thus can help better manage the exposure to credit risk.</text>
+<text><location><page_24><loc_22><loc_42><loc_89><loc_48></location>Figure 19 on page 23 shows a sample architecture about how to design and develop an AI model for credit risk assessment on IBM Z. An IBM WebSpherefi Application Server is used for handling in-bound transactions, and CP4D is used for AI model lifecycle management that includes building, training, and deploying the model.</text>
+<caption><location><page_25><loc_10><loc_55><loc_65><loc_57></location>Figure 19 Architecture for credit risk prediction by using an ML AI model on IBM Z</caption>
+<figure>
+<location><page_25><loc_11><loc_57><loc_89><loc_90></location>
+<caption>Figure 19 Architecture for credit risk prediction by using an ML AI model on IBM Z</caption>
+</figure>
+<text><location><page_25><loc_22><loc_48><loc_89><loc_54></location>A data scientist can leverage Watson Studio to develop and train an AI model and WML to deploy and score the model. In this sample architecture, the WML Python run time leverages the ML framework, IBM Snap Machine Learning (Snap ML), for scoring, can leverage an integrated AI accelerator at the time of model import.</text>
+<text><location><page_25><loc_22><loc_39><loc_89><loc_47></location>Then, the banking loan approval team can send a loan applicant request to the IBM WebSphere Application Server, which can make a request to the AI inference endpoint. The AI inference engine scores the transaction and sends the result back to the loan approval team. Based on the results, the approval team can decide on whether to approve a loan or not, and also decide how much they can lend, timelines, and other factors.</text>
+<text><location><page_25><loc_22><loc_33><loc_86><loc_38></location>The transaction system that is shown in Figure 19 uses IBM WebSphere Liberty as an application server, but you also can use an IBM Open Libertyfi application server or any application server that can send RESTful API communications.</text>
+<text><location><page_25><loc_22><loc_23><loc_89><loc_32></location>Models are frequently developed and tested in many platforms and languages, such as Python, Scala, R, and Go. Models can leverage ML frameworks like scikit-learn, Snap ML, or XGBoost, or DL frameworks like TensorFlow or PyTorch. Training a model can be done on any platform if you have enough computing power for complex models, but moving that model into production requires careful testing to ensure that transactions are not delayed, especially if you plan to run the model within a transaction.</text>
+<text><location><page_25><loc_22><loc_19><loc_89><loc_22></location>We showed how IBM Z enable customers to use AI frameworks to detect credit risk. Now, we look at how you can leverage CP4D and TensorFlow on IBM Z to detect the credit risk.</text>
+<text><location><page_26><loc_22><loc_90><loc_80><loc_91></location>Figure 20 shows an architecture for predicting credit risk by using DL on IBM Z.</text>
+<caption><location><page_26><loc_11><loc_53><loc_56><loc_54></location>Figure 20 Architecture for credit risk prediction by using DL on IBM Z</caption>
+<figure>
+<location><page_26><loc_11><loc_55><loc_89><loc_88></location>
+<caption>Figure 20 Architecture for credit risk prediction by using DL on IBM Z</caption>
+</figure>
+<text><location><page_26><loc_22><loc_46><loc_87><loc_52></location>Data scientists can start creating and training a DL AI model by using a Jupyter Notebook instance and Watson Studio. Then, they can deploy the model by using WML on CP4D running on IBM Z, which provides an endpoint. Other applications, including the IBM WebSphere server, can produce credit risk results by using the model's endpoint.</text>
+<text><location><page_26><loc_22><loc_42><loc_89><loc_44></location>In summary, here are some considerations for developing real-time AI models, such as credit risk assessment:</text>
+<list_item><location><page_26><loc_22><loc_39><loc_85><loc_41></location>GLYPH<SM590000> A preference for in-platform run times of the model, such as faster execution results.</list_item>
+<list_item><location><page_26><loc_22><loc_37><loc_73><loc_38></location>GLYPH<SM590000> Less overhead in the end-to-end flows might improve scoring time.</list_item>
+<list_item><location><page_26><loc_22><loc_34><loc_89><loc_36></location>GLYPH<SM590000> If you are using models that are not deployable, CP4D offers a custom Python run time to build your own stack if they are not available on the platform.</list_item>
+<list_item><location><page_26><loc_22><loc_30><loc_89><loc_33></location>GLYPH<SM590000> AI inferencing based on ML or DL models can increase the accuracy of better credit risk assessment.</list_item>
+<list_item><location><page_26><loc_22><loc_25><loc_87><loc_29></location>GLYPH<SM590000> Using IBM z16 and on-chip AI acceleration with the Telum chip that is embedded with regular Integrated Facility for Linux (IFLs) provides an execution speed for your transactions that cannot be achieved by other means.</list_item>
+<section_header><location><page_27><loc_11><loc_89><loc_55><loc_91></location>Use case 3: Clearing and settlement</section_header>
+<text><location><page_27><loc_22><loc_80><loc_88><loc_87></location>Clearing and settlements involve banks or financial institutions sending and receiving wire transfers by using secure interbank payments networks that can clear or settle numerous transactions. When an individual or business entity initiates a wire transfer, clearing begins the fund delivery process. Banks can begin the settlement phase either immediately after clearing takes place or later, mostly at the end of the business day.</text>
+<section_header><location><page_27><loc_11><loc_76><loc_29><loc_77></location>Industry challenge</section_header>
+<text><location><page_27><loc_22><loc_71><loc_88><loc_74></location>Banks and financial institutions must deal with high-risk transactions that can lead to loss. Moreover, these transactions can lead to regulatory violations and extra compliance costs.</text>
+<section_header><location><page_27><loc_11><loc_67><loc_43><loc_69></location>Clearing and settlement solution</section_header>
+<text><location><page_27><loc_22><loc_59><loc_89><loc_65></location>Use AI to predict which trades or transactions have high risk exposures, and propose solutions for a more efficient settlement process. The expedited remediation of questionable transactions can prevent costly consequences, regulatory violations, and negative business impacts.</text>
+<text><location><page_27><loc_22><loc_49><loc_89><loc_58></location>In financial institutions, finding which financial transactions are legitimate and which transactions are fraudulent is of paramount importance. In this section, we go through a use case where we use AI to predict which trades or transactions have high risk exposures, and propose solutions for a more efficient settlement process. The expedited remediation of questionable transactions can prevent costly consequences, regulatory violations, and negative business impacts to financial institutions.</text>
+<text><location><page_27><loc_22><loc_40><loc_89><loc_48></location>The goal is to predict in real time whether the transaction being processed might be a fraudulent transaction or not. To achieve this goal, we build an ML model that can do this prediction for the financial institution. Because there would be many transactions being processed at any point by the financial institution, it is important to perform this prediction of fraudulent transactions in near-real time in a few milliseconds.</text>
+<text><location><page_27><loc_22><loc_33><loc_89><loc_39></location>One possible solution is to build and train a TensorFlow based DL model that learns from the historical data and predicts the fraudulent transactions. CP4D on IBM Z and IBM LinuxONE is a suitable product where this task can be achieved and the model deployed, and coming up with a serving endpoint.</text>
+<text><location><page_28><loc_22><loc_88><loc_88><loc_91></location>Figure 21 provides a high-level diagram of a clearing and settlement use case for financial transactions that uses CP4D on IBM Z and IBM LinuxONE.</text>
+<caption><location><page_28><loc_10><loc_59><loc_75><loc_60></location>Figure 21 Clearing and settlement use case for financial transactions by using Cloud Pak for Data</caption>
+<figure>
+<location><page_28><loc_10><loc_61><loc_89><loc_86></location>
+<caption>Figure 21 Clearing and settlement use case for financial transactions by using Cloud Pak for Data</caption>
+</figure>
+<text><location><page_28><loc_22><loc_56><loc_58><loc_57></location>Here are the steps of the high-level process flow:</text>
+<list_item><location><page_28><loc_22><loc_53><loc_86><loc_55></location>1. Create a connection to a database (for example, an IBM Db2fi database) where the historical data will be used for ML model building.</list_item>
+<list_item><location><page_28><loc_22><loc_49><loc_89><loc_52></location>2. Read the data from the database and prepare the data for AI by using the Data Refinery tool in CP4D.</list_item>
+<list_item><location><page_28><loc_22><loc_44><loc_89><loc_48></location>3. A Jupyter Notebook or JupyterLab IDE that is provided by the Watson Studio component in CP4D helps us build and train the AI model. The trained model can be saved into a WML repository.</list_item>
+<list_item><location><page_28><loc_22><loc_42><loc_77><loc_43></location>4. Deploy the saved model into a deployment space for batch deployment.</list_item>
+<list_item><location><page_28><loc_22><loc_39><loc_68><loc_41></location>5. Create a batch deployment by using any of these interfaces:</list_item>
+<list_item><location><page_28><loc_25><loc_37><loc_75><loc_39></location>a. Watson Studio user interface from an Analytics deployment space.</list_item>
+<list_item><location><page_28><loc_25><loc_35><loc_41><loc_36></location>b. WML Python client.</list_item>
+<list_item><location><page_28><loc_25><loc_33><loc_40><loc_34></location>c. WML REST APIs.</list_item>
+<list_item><location><page_28><loc_22><loc_31><loc_68><loc_32></location>6. A hardware configuration can be chosen for the deployment.</list_item>
+<list_item><location><page_28><loc_22><loc_27><loc_89><loc_30></location>7. A batch deployment processes input data from a file, data connection, or connected data in a storage bucket, and writes the output to a selected destination.</list_item>
+<list_item><location><page_28><loc_22><loc_23><loc_83><loc_26></location>8. One way to run batch deployment to predict or score is to create and run a batch deployment job.</list_item>
+<list_item><location><page_28><loc_22><loc_21><loc_44><loc_23></location>9. Provide an input data type:</list_item>
+<list_item><location><page_28><loc_25><loc_19><loc_61><loc_20></location>a. Inline data for entering a JSON format payload.</list_item>
+<list_item><location><page_28><loc_25><loc_17><loc_80><loc_18></location>b. Select Data asset , click Select data source , and then specify your asset.</list_item>
+<list_item><location><page_28><loc_22><loc_15><loc_77><loc_16></location>10.The output data type can be a new output file or a connected data asset.</list_item>
+<list_item><location><page_28><loc_22><loc_11><loc_89><loc_14></location>11.A Kubernetes admin can change the maximum number of concurrent batch jobs that can be run.</list_item>
+<list_item><location><page_28><loc_22><loc_8><loc_87><loc_10></location>12.Get the deployment endpoint URL. For more information, see Getting the deployment endpoint URL.</list_item>
+<section_header><location><page_29><loc_11><loc_89><loc_20><loc_91></location>Summary</section_header>
+<text><location><page_29><loc_22><loc_83><loc_87><loc_88></location>With this use case, we attempted to demonstrate how to predict, in real time, whether the transaction that is being processed might be a fraudulent transaction or not. By using the method, you have the following advantages:</text>
+<list_item><location><page_29><loc_22><loc_81><loc_61><loc_83></location>GLYPH<SM590000> No Impact to SLAs and the batch process window.</list_item>
+<list_item><location><page_29><loc_22><loc_79><loc_83><loc_80></location>GLYPH<SM590000> Proactively stop losses, and lower operational, regulatory, and compliance costs.</list_item>
+<list_item><location><page_29><loc_22><loc_76><loc_87><loc_78></location>GLYPH<SM590000> The solution is using a DL framework like TensorFlow for high-performing, low latency scoring.</list_item>
+<section_header><location><page_29><loc_11><loc_70><loc_79><loc_72></location>Use case 4: Remaining Useful Life of an aircraft engine</section_header>
+<text><location><page_29><loc_22><loc_65><loc_89><loc_68></location>In this use case, we describe how an airline can deploy an AI model for inferencing by using IBMfi zSystems.</text>
+<text><location><page_29><loc_22><loc_58><loc_89><loc_64></location>Remaining Useful Life (RUL) is the remaining time or cycles that an aircraft engine is likely to operate without any failure. In this case, it is the equivalent of the number of flights remaining for the engine after the last flight. By estimating RUL, the operator can decide on the next maintenance schedule and avoid unplanned downtime.</text>
+<text><location><page_29><loc_22><loc_54><loc_86><loc_56></location>Figure 22 provides an overview of the inferencing architecture for the RUL of an aircraft engine when using IBM Z.</text>
+<caption><location><page_29><loc_11><loc_20><loc_40><loc_22></location>Figure 22 Inferencing architecture on IBM Z</caption>
+<figure>
+<location><page_29><loc_10><loc_22><loc_88><loc_52></location>
+<caption>Figure 22 Inferencing architecture on IBM Z</caption>
+</figure>
+<text><location><page_29><loc_22><loc_8><loc_89><loc_19></location>Because we are looking into data-driven model development, the data set of our target is the run-to-failure data of the engine. We are looking into a supervised learning problem, and we use regression techniques to learn from the data. DL techniques such as Long Short-Term Memory (LSTM) or Gated Recurrent Units (GRU) are our choice because we are looking into a time series data set. TensorFlow or PyTorch frameworks are leveraged to create models. AI governance monitors the data and model drift to maintain the model quality throughout the model's life.</text>
+<text><location><page_30><loc_22><loc_78><loc_89><loc_91></location>Open-source data from NASA was used to build the AI model, which then was deployed on CP4D. CP4D enables the data-scientist's journey from modeling to deployment in a seamless process. Data engineers leverage Db2 to host the data set, which includes the training, testing, and validation of a data set. Since data is hosted on Db2, you can expect low latency while retrieving the data and serve data security needs because Db2 is hosted on the IBM Z platform. Data is fetched by the data refinery to do the necessary pre-processing and data imputations. You can use the programming languages Golang or C++ for real-time predictions, depending on customer needs. For more information about this topic, see "Use case 3: Clearing and settlement" on page 25.</text>
+<text><location><page_30><loc_22><loc_70><loc_89><loc_76></location>Model building is done on Watson Studio, leveraging the high-performance computing hardware on IBM Z. You can train the model anywhere (on your own hardware or the cloud) and bring the model directly into CP4D, which provides data scientists with the flexibility of implementation choices.</text>
+<text><location><page_30><loc_22><loc_65><loc_89><loc_69></location>We used LSTM to build the AI model and used the training data. The model was continuously evaluated to model convergence. The final model is tested with the test data, which is never exposed at the time of training to make sure that the model works.</text>
+<text><location><page_30><loc_22><loc_57><loc_89><loc_63></location>This model is deployed on WML on CP4D and runs on IBM Z. If required, the trained model can be converted to the Open Neural Network Exchange (ONNX) format before deployment. Based on project requirements, IBM Z supports high-throughput, low latency inference requirements by leveraging an AI accelerator.</text>
+<text><location><page_30><loc_22><loc_47><loc_89><loc_56></location>For decision-making about an aircraft engine's life, it is important to be able to explain the model predictions from end to end. This explainability may be global or local. Global explainability enables decision-makers to evaluate the trained model in general from the subject matter expert (SME) point of view. Local explainability enables the operator to validate the reasons behind the present inference and relate it to the past data points, which are an indicative cause of the prediction.</text>
+<text><location><page_30><loc_22><loc_40><loc_89><loc_45></location>The AI governance components such as IBM OpenScale on CP4D support explainability and manages the drifts in data and concept. OpenPages and AI FactSheet together can alert the stakeholders about important events through a dashboard and allow course correction at any point.</text>
+<text><location><page_30><loc_22><loc_32><loc_89><loc_38></location>Client-side applications can invoke a REST apiserver that handles some preprocessing of an incoming request before initiating the inference pipeline. Efficiencies might be needed in real-time applications, and inference response time can be reduced by adopting low-level programming while components are communicating.</text>
+<text><location><page_30><loc_22><loc_28><loc_85><loc_31></location>Figure 23 on page 29 provides a more in-depth view of the architecture of an AI-based predictive maintenance application.</text>
+<caption><location><page_31><loc_11><loc_43><loc_35><loc_44></location>Figure 23 In-depth architectural view</caption>
+<figure>
+<location><page_31><loc_10><loc_45><loc_90><loc_90></location>
+<caption>Figure 23 In-depth architectural view</caption>
+</figure>
+<text><location><page_31><loc_22><loc_39><loc_82><loc_41></location>In summary, consider the following points while developing an AI-based predictive maintenance application:</text>
+<list_item><location><page_31><loc_22><loc_33><loc_89><loc_38></location>GLYPH<SM590000> CP4D offers a Python run time to build a custom solution stack, but also supports different components like Watson Studio, WML, Db2, Data Refinery, OpenScale, AI Factsheets, and OpenPages.</list_item>
+<list_item><location><page_31><loc_22><loc_31><loc_80><loc_33></location>GLYPH<SM590000> The trustworthiness of the predicted output is important for critical use cases.</list_item>
+<list_item><location><page_31><loc_22><loc_28><loc_87><loc_30></location>GLYPH<SM590000> IBM Z provides high data security and low latency requirements at scale for the critical applications.</list_item>
+<list_item><location><page_31><loc_22><loc_24><loc_89><loc_27></location>GLYPH<SM590000> A data scientist can choose to train the model and deploy it on CP4D seamlessly with the latest tech stack that is available.</list_item>
+<list_item><location><page_31><loc_22><loc_20><loc_82><loc_23></location>GLYPH<SM590000> The AIOps and MLOps supported by CP4D to track AI model and data lifecycle throughout the application lifecycle.</list_item>
+<section_header><location><page_32><loc_11><loc_87><loc_89><loc_91></location>Use case 5: AI-powered video analytics on an infant's motions for health prediction</section_header>
+<text><location><page_32><loc_22><loc_77><loc_89><loc_85></location>Each year, approximately 5 million newborns worldwide are suffering from a neuro-developmental disorder. Due to the lack of early diagnoses and intervention, many infants are disabled and abandoned, especially in countries with limited numbers of pediatricians with extensive experience in neuro-developmental disorders. This situation is a conundrum that plagues many families around the world.</text>
+<text><location><page_32><loc_22><loc_70><loc_89><loc_76></location>Infant motion analysis plays critical importance to understanding and comprehending healthy childhood development. In infants, monitoring their poses provides information about their health that can lead to a better prediction of early developmental risk assessment and diagnosis.</text>
+<text><location><page_32><loc_22><loc_64><loc_87><loc_68></location>Adults use different techniques and methods to express their feelings (like sick, happy, stressed, or hungry), but this case is usually different for infants who cannot express their feelings. Based on the baby movements, AI can predict their expression or health.</text>
+<text><location><page_32><loc_22><loc_54><loc_87><loc_63></location>In this use case, we examine how AI-powered video analytics can assist new parents and hospitals by addressing pose-based real-time body movements of the infants (such as arching back, head banging, kicking legs, rubbing eyes, stretching, and sucking fingers). During the initial months of a baby's life, spontaneous movements might indicate later developmental disorders, such as cerebral palsy, Rett syndrome, and autism spectrum disorders.</text>
+<section_header><location><page_32><loc_11><loc_50><loc_31><loc_51></location>Industry challenges</section_header>
+<text><location><page_32><loc_22><loc_42><loc_89><loc_48></location>There are video surveillance systems that are installed for monitoring an infant's movement in many hospitals or homes so that any problem can be witnessed and potentially even stopped before they take place. These systems require much manual work to monitor the real-stream videos and intervene when a problem is detected.</text>
+<text><location><page_32><loc_22><loc_33><loc_89><loc_41></location>There is a certain amount of trust that you must place on the person who monitors a surveillance system to ensure that the job is being done effectively and efficiently, and that the surveillance system is being vigilantly watched. Because of the dependency on these manual efforts, you need something "smart" that monitors constantly the surveillance system and detect problems effectively.</text>
+<text><location><page_32><loc_22><loc_28><loc_89><loc_32></location>AI is shaping the controls of surveillance that can map and track occurrences with self-learning abilities, AI can improve on human operations and analyze video footage in real time to alert the hospitals or parents if any anomalies are identified.</text>
+<text><location><page_32><loc_22><loc_23><loc_89><loc_26></location>Video processing a stream of data from surveillance systems and then performing advance analytics and detecting anomalies quickly is a significant challenge in the industry.</text>
+<section_header><location><page_32><loc_11><loc_19><loc_45><loc_21></location>Infant motion analytics in real time</section_header>
+<text><location><page_32><loc_22><loc_9><loc_89><loc_17></location>AI is the current "market trend evolution" in video analytics and advancing the decision-making capabilities of the human mind. DL-based computer vision AI techniques are being widely adopted by various industries to solve real-time problems. These techniques improve the detection and prediction accuracy without increasing the hardware cost exponentially. For users, AI greatly reduces the workload of the monitoring staff and provides benefits by detecting unusual incidents and solving many video forensic problems.</text>
+<text><location><page_33><loc_22><loc_87><loc_88><loc_91></location>CP4D was used to build and deploy the AI-powered video analytics on infant's motion for health prediction use case on IBM Z. IBM Z with AI accelerator enables faster inference for detecting face and body movements and performing angle analytics in real time.</text>
+<text><location><page_33><loc_22><loc_79><loc_89><loc_85></location>Figure 24 shows an architectural diagram about how to design and develop an AI model for real-time body pose detection on IBM Z. A deep convolutional neural network architecture was trained on the task of infant pose estimation on the custom data set by leveraging IBM Cloud Pak for Data.</text>
+<caption><location><page_33><loc_11><loc_47><loc_46><loc_48></location>Figure 24 Architecture for AI-powered video analytics</caption>
+<figure>
+<location><page_33><loc_10><loc_48><loc_89><loc_79></location>
+<caption>Figure 24 Architecture for AI-powered video analytics</caption>
+</figure>
+<text><location><page_33><loc_22><loc_35><loc_89><loc_45></location>Live camera feeds or recorded videos of an infant's movement are the inputs for a pose detection model. This video streaming data was stored in IBM Cloudfi Object Storage for image processing. Video data must be transformed into frames so that the infant's body poses can be detected. These post-estimation components of the pipeline predict the location of all 17-person key points with 3 degrees of freedom each (x, y location and visibility) plus two virtual alignment key points. This approach also embraces a compute-intensive heat map prediction of infant body posture.</text>
+<text><location><page_33><loc_22><loc_24><loc_88><loc_33></location>When changes in body posture or movement happen, analytics can be performed, and a threshold can be set for the angle of the body and posture movements. An analysis can be performed on movement that is based on that threshold to help to predict an infant's health index in the output video stream by leveraging the IBM z16 on-chip AI acceleration, which provides an execution speed in real time on an edge device, which cannot be achieved by other means.</text>
+<text><location><page_33><loc_22><loc_22><loc_72><loc_23></location>We can leverage the following AI technology stack for this use case:</text>
+<list_item><location><page_33><loc_22><loc_18><loc_89><loc_21></location>GLYPH<SM590000> Convolutional neural network: Build an artificial neural network model on video streaming and images.</list_item>
+<list_item><location><page_33><loc_22><loc_16><loc_74><loc_17></location>GLYPH<SM590000> TensorFlow: A DL back-end framework that is based on TensorFlow.</list_item>
+<list_item><location><page_33><loc_22><loc_12><loc_89><loc_15></location>GLYPH<SM590000> Mediapipe: A library that helps with video streaming processing and prediction of human pose estimation.</list_item>
+<list_item><location><page_33><loc_22><loc_10><loc_84><loc_11></location>GLYPH<SM590000> OpenCV: A real-time computer vision library that helps perform image processing.</list_item>
+<text><location><page_34><loc_22><loc_87><loc_89><loc_91></location>WML was used for deployment of the pose detection model and generated notifications to users with web and mobile applications, and it integrates with Fitbit for push notifications so that hospitals and parents can take preventive actions.</text>
+<section_header><location><page_34><loc_11><loc_81><loc_37><loc_83></location>Additional resources</section_header>
+<list_item><location><page_34><loc_22><loc_76><loc_89><loc_79></location>GLYPH<SM590000> The Cloud Pak for Data 4.5 on IBM Z Overview Demo video provides an overview of some of the more important features of CP4D on IBM Z.</list_item>
+<list_item><location><page_34><loc_22><loc_74><loc_49><loc_76></location>GLYPH<SM590000> IBM Cloud Pak for Data Tutorials.</list_item>
+<list_item><location><page_34><loc_22><loc_71><loc_85><loc_73></location>GLYPH<SM590000> Here are some additional use cases that use the data science frameworks that are available as part of CP4D on IBM Z and IBM LinuxONE:</list_item>
+<list_item><location><page_34><loc_25><loc_67><loc_86><loc_70></location>-Payment Card Fraud Detection by using TensorFlow on CP4D on IBM Z and IBM LinuxONE is a payment card fraud detection use case.</list_item>
+<list_item><location><page_34><loc_25><loc_63><loc_88><loc_66></location>-Fashion-MNIST clothing classification with PyTorch on Cloud Pak for Data on IBM Z and IBM LinuxONE is a Fashion-MNIST clothing classification use case.</list_item>
+<list_item><location><page_34><loc_25><loc_57><loc_89><loc_62></location>-Payment Card Fraud Prevention by using Snap ML on IBM Cloud Pak for Data on Red Hat OpenShift on a virtual machine on IBM Z and IBM LinuxONE, which leverage the z16 integrated AI accelerator describes a use case that uses Snap Machine Learning in Cloud Pak for Data on IBM Z and IBM LinuxONE. It is a Snap ML use case.</list_item>
+<text><location><page_34><loc_27><loc_53><loc_89><loc_56></location>A companion video can be found at Credit Card Fraud Detection by using Snap ML on IBM Cloud Pak for Data on IBM Z and IBM LinuxONE.</text>
+<section_header><location><page_34><loc_11><loc_47><loc_23><loc_49></location>Summary</section_header>
+<text><location><page_34><loc_22><loc_32><loc_89><loc_45></location>This IBM Redbooksfi publication presented an overview of how IBM Cloud Pak for Data on IBM Z can modernize your data infrastructure; develop and deploy ML and AI models; and instantiate highly efficient analytics deployment on IBM LinuxONE. This publication demonstrated these tasks by guiding the reader through five common use cases where CP4D on IBM Z and IBM LinuxONE uses the different features that are supported on the platform, and showing how the associated features can help an enterprise to build AI and ML models with core transactional data, which results in a highly efficient analytics deployment that minimizes latency, cost inefficiencies, and potential security exposures that are connected with data transportation.</text>
+<section_header><location><page_34><loc_10><loc_28><loc_19><loc_30></location>Authors</section_header>
+<text><location><page_34><loc_22><loc_23><loc_88><loc_26></location>This publication was produced by a team of specialists from around the world working with the IBM Redbooks team:</text>
+<text><location><page_34><loc_22><loc_15><loc_89><loc_22></location>Jasmeet Bhatia is an AI on IBM Z Product Manager who supports CP4D on IBM Z. She has 2.5 years of combined experience as a data scientist and a product manager. Jasmeet lives in San Francisco, California and holds a Bachelor of Arts degree in Data Science. She is working on her Master of Science degree in Data Science. Her area of expertise includes AI, data science, and product management.</text>
+<text><location><page_35><loc_22><loc_82><loc_89><loc_91></location>Ravi Gummadi is a Technical Leader for CP4D on Linux on IBM Z and IBM LinuxONE in India. He has 18+ years of experience in the design and development of enterprise software for various platforms, including IBM Z and IBM LinuxONE. He holds a master's degree in computer science and engineering from the Indian Institute of Technology Madras (IIT Madras). His areas of expertise include compilers, virtualization, big data analytics, containers, data, and AI, with a special focus on open-source ecosystems.</text>
+<text><location><page_35><loc_22><loc_72><loc_89><loc_81></location>Chandra Shekhar Reddy Potula is a Lead AI on zSystems team Architect for Linux on IBM Z and LinuxONE in India. He has 18+ years of experience in the design and development of enterprise software and firmware for various platforms, including IBM Z and LinuxONE. He holds a degree in computer science of engineering from Jawaharlal Nehru Technological University (JNTU). His areas of expertise include networking, virtualization, containers, data, and AI, with a special focus on open-source ecosystems.</text>
+<text><location><page_35><loc_22><loc_55><loc_89><loc_70></location>Srirama Sharma is a Lead Technical Architect for IBM Cloud Pak, IBM Instanafi, IBM Turbonomicfi, and Red Hat Advanced Cluster Management for Kubernetes (RHACM) on IBM Z and LinuxONE. He has 18+ years of experience in UNIX and Linux application and device driver development. He designs ISV solutions on IBM Systems and IBM Blockchainfi. He also works on cloud-native adoption of enterprise solutions on IBM Z and LinuxONE. Srirama holds a Bachelor of Engineering degree in computer science from Visvesvaraya Technological University (VTU). He lives in Bangalore, Karnataka. His areas of expertise include UNIX and Linux systems programming, virtualization, performance benchmarking of Financial Services Sector (FSS) industry solutions, open-source ecosystems, server infrastructure, and cloud-native adoption and modernization.</text>
+<text><location><page_35><loc_22><loc_53><loc_71><loc_54></location>Thanks to the following people for their contributions to this project:</text>
+<text><location><page_35><loc_22><loc_48><loc_51><loc_51></location>Lydia Parziale, Project Manager IBM Redbooks, Poughkeepsie Center</text>
+<text><location><page_35><loc_22><loc_44><loc_60><loc_47></location>Shin Kelly Yang, AI on IBM Z Product Management IBM US</text>
+<text><location><page_35><loc_22><loc_40><loc_88><loc_43></location>Tom Ramey, Anna Shugol, Andrew Sica, Jonathan Sloan, Elpida Tzortzatos, Meeta Vouk, IBM</text>
+<section_header><location><page_35><loc_11><loc_36><loc_57><loc_37></location>Now you can become a published author, too!</section_header>
+<text><location><page_35><loc_22><loc_24><loc_89><loc_34></location>Here's an opportunity to spotlight your skills, grow your career, and become a published author-all at the same time! Join an IBM Redbooks residency project and help write a book in your area of expertise, while honing your experience using leading-edge technologies. Your efforts will help to increase product acceptance and customer satisfaction, as you expand your network of technical contacts and relationships. Residencies run from two to six weeks in length, and you can participate either in person or as a remote resident working from your home base.</text>
+<text><location><page_35><loc_22><loc_21><loc_89><loc_22></location>Find out more about the residency program, browse the residency index, and apply online at:</text>
+<text><location><page_35><loc_22><loc_19><loc_49><loc_20></location>ibm.com /redbooks/residencies.html</text>
+<section_header><location><page_36><loc_11><loc_89><loc_44><loc_91></location>Stay connected to IBM Redbooks</section_header>
+<list_item><location><page_36><loc_22><loc_87><loc_39><loc_88></location>GLYPH<SM590000> Find us on LinkedIn:</list_item>
+<text><location><page_36><loc_25><loc_84><loc_64><loc_86></location>http://www.linkedin.com/groups?home=&gid=2130806</text>
+<list_item><location><page_36><loc_22><loc_81><loc_89><loc_83></location>GLYPH<SM590000> Explore new Redbooks publications, residencies, and workshops with the IBM Redbooks weekly newsletter:</list_item>
+<list_item><location><page_36><loc_25><loc_79><loc_74><loc_80></location>https://www.redbooks.ibm.com/Redbooks.nsf/subscribe?OpenForm</list_item>
+<list_item><location><page_36><loc_22><loc_76><loc_70><loc_78></location>GLYPH<SM590000> Stay current on recent Redbooks publications with RSS Feeds:</list_item>
+<text><location><page_36><loc_25><loc_74><loc_54><loc_76></location>http://www.redbooks.ibm.com/rss.html</text>
+<section_header><location><page_37><loc_11><loc_88><loc_25><loc_91></location>Notices</section_header>
+<text><location><page_37><loc_10><loc_80><loc_89><loc_83></location>This information was developed for products and services offered in the US. This material might be available from IBM in other languages. However, you may be required to own a copy of the product or product version in that language in order to access it.</text>
+<text><location><page_37><loc_10><loc_71><loc_89><loc_78></location>IBM may not offer the products, services, or features discussed in this document in other countries. Consult your local IBM representative for information on the products and services currently available in your area. Any reference to an IBM product, program, or service is not intended to state or imply that only that IBM product, program, or service may be used. Any functionally equivalent product, program, or service that does not infringe any IBM intellectual property right may be used instead. However, it is the user's responsibility to evaluate and verify the operation of any non-IBM product, program, or service.</text>
+<text><location><page_37><loc_10><loc_66><loc_89><loc_69></location>IBM may have patents or pending patent applications covering subject matter described in this document. The furnishing of this document does not grant you any license to these patents. You can send license inquiries, in writing, to:</text>
+<text><location><page_37><loc_10><loc_64><loc_87><loc_66></location>IBM Director of Licensing, IBM Corporation, North Castle Drive, MD-NC119, Armonk, NY 10504-1785, US</text>
+<text><location><page_37><loc_10><loc_57><loc_89><loc_63></location>INTERNATIONAL BUSINESS MACHINES CORPORATION PROVIDES THIS PUBLICATION "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. Some jurisdictions do not allow disclaimer of express or implied warranties in certain transactions, therefore, this statement may not apply to you.</text>
+<text><location><page_37><loc_10><loc_51><loc_89><loc_56></location>This information could include technical inaccuracies or typographical errors. Changes are periodically made to the information herein; these changes will be incorporated in new editions of the publication. IBM may make improvements and/or changes in the product(s) and/or the program(s) described in this publication at any time without notice.</text>
+<text><location><page_37><loc_10><loc_45><loc_88><loc_49></location>Any references in this information to non-IBM websites are provided for convenience only and do not in any manner serve as an endorsement of those websites. The materials at those websites are not part of the materials for this IBM product and use of those websites is at your own risk.</text>
+<text><location><page_37><loc_10><loc_42><loc_85><loc_44></location>IBM may use or distribute any of the information you provide in any way it believes appropriate without incurring any obligation to you.</text>
+<text><location><page_37><loc_10><loc_38><loc_83><loc_40></location>The performance data and client examples cited are presented for illustrative purposes only. Actual performance results may vary depending on specific configurations and operating conditions.</text>
+<text><location><page_37><loc_10><loc_32><loc_89><loc_37></location>Information concerning non-IBM products was obtained from the suppliers of those products, their published announcements or other publicly available sources. IBM has not tested those products and cannot confirm the accuracy of performance, compatibility or any other claims related to non-IBM products. Questions on the capabilities of non-IBM products should be addressed to the suppliers of those products.</text>
+<text><location><page_37><loc_10><loc_28><loc_89><loc_30></location>Statements regarding IBM's future direction or intent are subject to change or withdrawal without notice, and represent goals and objectives only.</text>
+<text><location><page_37><loc_10><loc_21><loc_89><loc_26></location>This information contains examples of data and reports used in daily business operations. To illustrate them as completely as possible, the examples include the names of individuals, companies, brands, and products. All of these names are fictitious and any similarity to actual people or business enterprises is entirely coincidental.</text>
+<section_header><location><page_37><loc_11><loc_19><loc_28><loc_20></location>COPYRIGHT LICENSE:</section_header>
+<text><location><page_37><loc_10><loc_8><loc_89><loc_18></location>This information contains sample application programs in source language, which illustrate programming techniques on various operating platforms. You may copy, modify, and distribute these sample programs in any form without payment to IBM, for the purposes of developing, using, marketing or distributing application programs conforming to the application programming interface for the operating platform for which the sample programs are written. These examples have not been thoroughly tested under all conditions. IBM, therefore, cannot guarantee or imply reliability, serviceability, or function of these programs. The sample programs are provided "AS IS", without warranty of any kind. IBM shall not be liable for any damages arising out of your use of the sample programs.</text>
+<section_header><location><page_38><loc_10><loc_89><loc_25><loc_91></location>Trademarks</section_header>
+<text><location><page_38><loc_10><loc_82><loc_89><loc_87></location>IBM, the IBM logo, and ibm.com are trademarks or registered trademarks of International Business Machines Corporation, registered in many jurisdictions worldwide. Other product and service names might be trademarks of IBM or other companies. A current list of IBM trademarks is available on the web at "Copyright and trademark information" at http://www.ibm.com/legal/copytrade.shtml</text>
+<text><location><page_38><loc_10><loc_78><loc_89><loc_81></location>The following terms are trademarks or registered trademarks of International Business Machines Corporation, and might also be trademarks or registered trademarks in other countries.</text>
+<text><location><page_38><loc_12><loc_76><loc_16><loc_77></location>Db2fi IBMfi</text>
+<text><location><page_38><loc_12><loc_73><loc_24><loc_74></location>IBM Blockchainfi</text>
+<text><location><page_38><loc_12><loc_72><loc_20><loc_73></location>IBM Cloudfi IBM Clou</text>
+<text><location><page_38><loc_12><loc_70><loc_23><loc_72></location>d Pakfi</text>
+<text><location><page_38><loc_12><loc_69><loc_21><loc_70></location>IBM Telum™</text>
+<text><location><page_38><loc_39><loc_76><loc_48><loc_77></location>IBM Watsonfi</text>
+<text><location><page_38><loc_39><loc_75><loc_45><loc_76></location>IBM z16™</text>
+<text><location><page_38><loc_39><loc_73><loc_45><loc_74></location>Instanafi</text>
+<text><location><page_38><loc_39><loc_72><loc_48><loc_73></location>Open Libertyfi</text>
+<text><location><page_38><loc_39><loc_70><loc_47><loc_72></location>OpenPagesfi</text>
+<text><location><page_38><loc_39><loc_69><loc_46><loc_70></location>Redbooksfi</text>
+<text><location><page_38><loc_10><loc_66><loc_51><loc_67></location>The following terms are trademarks of other companies:</text>
+<text><location><page_38><loc_10><loc_62><loc_86><loc_65></location>Intel, Intel logo, Intel Inside logo, and Intel Centrino logo are trademarks or registered trademarks of Intel Corporation or its subsidiaries in the United States and other countries.</text>
+<text><location><page_38><loc_10><loc_59><loc_89><loc_61></location>The registered trademark Linuxfi is used pursuant to a sublicense from the Linux Foundation, the exclusive licensee of Linus Torvalds, owner of the mark on a worldwide basis.</text>
+<text><location><page_38><loc_11><loc_55><loc_87><loc_57></location>Red Hat and OpenShift are trademarks or registered trademarks of Red Hat, Inc. or its subsidiaries in the United States and other countries.</text>
+<text><location><page_38><loc_11><loc_52><loc_77><loc_54></location>UNIX is a registered trademark of The Open Group in the United States and other countries.</text>
+<text><location><page_38><loc_10><loc_50><loc_76><loc_51></location>Other company, product, or service names may be trademarks or service marks of others.</text>
+<text><location><page_38><loc_65><loc_76><loc_76><loc_77></location>Redbooks (log o) fi Turbon</text>
+<text><location><page_38><loc_65><loc_75><loc_74><loc_76></location>omicfi</text>
+<text><location><page_38><loc_65><loc_73><loc_74><loc_74></location>WebSpherefi</text>
+<text><location><page_38><loc_65><loc_72><loc_69><loc_73></location>z/OSfi</text>
+<text><location><page_38><loc_65><loc_70><loc_69><loc_72></location>z16™</text>
+<figure>
+<location><page_40><loc_7><loc_2><loc_11><loc_5></location>
+</figure>
+<text><location><page_40><loc_47><loc_94><loc_68><loc_96></location>Back cover</text>
+<figure>
+<location><page_40><loc_78><loc_90><loc_92><loc_94></location>
+</figure>
+<text><location><page_40><loc_81><loc_85><loc_92><loc_86></location>REDP-5695-00</text>
+<text><location><page_40><loc_79><loc_82><loc_92><loc_83></location>ISBN 0738461067</text>
+<figure>
+<location><page_40><loc_71><loc_2><loc_93><loc_7></location>
+</figure>
+</document>

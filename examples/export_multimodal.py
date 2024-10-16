@@ -1,1 +1,0 @@
-../docs/examples/export_multimodal.py

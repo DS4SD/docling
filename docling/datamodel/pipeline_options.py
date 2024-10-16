@@ -1,4 +1,5 @@
 from enum import Enum, auto
+from pathlib import Path
 from typing import List, Literal, Optional, Union
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -58,6 +59,13 @@ class TesseractOcrOptions(OcrOptions):
 
 
 class PipelineOptions(BaseModel):
+    create_legacy_output: bool = (
+        True  # This defautl will be set to False on a future version of docling
+    )
+
+
+class PdfPipelineOptions(PipelineOptions):
+    artifacts_path: Optional[Union[Path, str]] = None
     do_table_structure: bool = True  # True: perform table structure extraction
     do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
 
@@ -65,3 +73,8 @@ class PipelineOptions(BaseModel):
     ocr_options: Union[EasyOcrOptions, TesseractCliOcrOptions, TesseractOcrOptions] = (
         Field(EasyOcrOptions(), discriminator="kind")
     )
+
+    images_scale: float = 1.0
+    generate_page_images: bool = False
+    generate_picture_images: bool = False
+    generate_table_images: bool = False

@@ -17,13 +17,13 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![License MIT](https://img.shields.io/github/license/DS4SD/docling)](https://opensource.org/licenses/MIT)
 
-Docling bundles PDF document conversion to JSON and Markdown in an easy, self-contained package.
+Docling parses documents and exports them to the desired format with ease and speed.
 
 ## Features
 
-* ⚡ Converts any PDF document to JSON or Markdown format, stable and lightning fast
-* 📑 Understands detailed page layout, reading order and recovers table structures
-* 📝 Extracts metadata from the document, such as title, authors, references and language
-* 🔍 Includes OCR support for scanned PDFs
-* 🤖 Integrates easily with LLM app / RAG frameworks like LlamaIndex&nbsp;🦙 & LangChain&nbsp;🦜🔗
-* 💻 Provides a simple and convenient CLI
+* 🗂️ Multi-format support for input (PDF, DOCX etc.) & output (Markdown, JSON etc.)
+* 📑 Advanced PDF document understanding incl. page layout, reading order & table structures
+* 📝 Metadata extraction, including title, authors, references & language
+* 🤖 Seamless LlamaIndex 🦙 & LangChain 🦜🔗 integration for powerful RAG / QA applications
+* 🔍 OCR support for scanned PDFs
+* 💻 Simple and convenient CLI

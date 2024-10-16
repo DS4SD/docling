@@ -2,6 +2,7 @@ import copy
 import logging
 
 import networkx as nx
+from docling_core.types.doc import DocItemLabel
 
 logger = logging.getLogger("layout_utils")
 
@@ -370,7 +371,7 @@ def adapt_bboxes(raw_cells, clusters, orphan_cell_indices):
             "Treating cluster " + str(ix) + ", type " + str(new_cluster["type"])
         )
         logger.debug("  with cells: " + str(new_cluster["cell_ids"]))
-        if len(cluster["cell_ids"]) == 0 and cluster["type"] != "Picture":
+        if len(cluster["cell_ids"]) == 0 and cluster["type"] != DocItemLabel.PICTURE:
             logger.debug("  Empty non-picture, removed")
             continue  ## Skip this former cluster, now without cells.
         new_bbox = adapt_bbox(raw_cells, new_cluster, orphan_cell_indices)
@@ -380,14 +381,14 @@ def adapt_bboxes(raw_cells, clusters, orphan_cell_indices):
 
 
 def adapt_bbox(raw_cells, cluster, orphan_cell_indices):
-    if not (cluster["type"] in ["Table", "Picture"]):
+    if not (cluster["type"] in [DocItemLabel.TABLE, DocItemLabel.PICTURE]):
         ## A text-like cluster. The bbox only needs to be around the text cells:
         logger.debug("    Initial bbox: " + str(cluster["bbox"]))
         new_bbox = surrounding_list(
             [raw_cells[cid]["bbox"] for cid in cluster["cell_ids"]]
         )
         logger.debug("  New bounding box:" + str(new_bbox))
-    if cluster["type"] == "Picture":
+    if cluster["type"] == DocItemLabel.PICTURE:
         ## We only make the bbox completely comprise included text cells:
         logger.debug("  Picture")
         if len(cluster["cell_ids"]) != 0:
@@ -587,7 +588,7 @@ def set_orphan_as_text(
     max_id = -1
     figures = []
     for cluster in cluster_predictions:
-        if cluster["type"] == "Picture":
+        if cluster["type"] == DocItemLabel.PICTURE:
             figures.append(cluster)
 
         if cluster["id"] > max_id:
@@ -638,13 +639,13 @@ def set_orphan_as_text(
             # if fig_flag == False and raw_cells[orph_id]["text"] not in line_orphans:
             if fig_flag == False and lines_detector == False:
                 # get class from low confidence detections if not set as text:
-                class_type = "Text"
+                class_type = DocItemLabel.TEXT
 
                 for cluster in cluster_predictions_low:
                     intersection = compute_intersection(
                         orph_cell["bbox"], cluster["bbox"]
                     )
-                    class_type = "Text"
+                    class_type = DocItemLabel.TEXT
                     if (
                         cluster["confidence"] > 0.1
                         and bb_iou(cluster["bbox"], orph_cell["bbox"]) > 0.4
@@ -718,7 +719,9 @@ def merge_cells(cluster_predictions):
                     if cluster["id"] == node:
                         lines.append(cluster)
                         cluster_predictions.remove(cluster)
-            new_merged_cluster = build_cluster_from_lines(lines, "Text", max_id)
+            new_merged_cluster = build_cluster_from_lines(
+                lines, DocItemLabel.TEXT, max_id
+            )
             cluster_predictions.append(new_merged_cluster)
     return cluster_predictions
 
@@ -753,9 +756,9 @@ def clean_up_clusters(
                 # remove clusters that might appear inside tables, or images (such as pdf cells in graphs)
                 elif img_table == True:
                     if (
-                        cluster_1["type"] == "Text"
-                        and cluster_2["type"] == "Picture"
-                        or cluster_2["type"] == "Table"
+                        cluster_1["type"] == DocItemLabel.TEXT
+                        and cluster_2["type"] == DocItemLabel.PICTURE
+                        or cluster_2["type"] == DocItemLabel.TABLE
                     ):
                         if bb_iou(cluster_1["bbox"], cluster_2["bbox"]) > 0.5:
                             DuplicateDeletedClusterIDs.append(cluster_1["id"])
@@ -771,7 +774,10 @@ def clean_up_clusters(
                             DuplicateDeletedClusterIDs.append(cluster_1["id"])
             # remove tables that have one pdf cell
             if one_cell_table == True:
-                if cluster_1["type"] == "Table" and len(cluster_1["cell_ids"]) < 2:
+                if (
+                    cluster_1["type"] == DocItemLabel.TABLE
+                    and len(cluster_1["cell_ids"]) < 2
+                ):
                     DuplicateDeletedClusterIDs.append(cluster_1["id"])
 
     DuplicateDeletedClusterIDs = list(set(DuplicateDeletedClusterIDs))

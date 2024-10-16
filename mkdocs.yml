@@ -54,16 +54,19 @@ nav:
   - Get started:
     - Home: index.md
     - Installation: installation.md
-  #   - Docling v2: v2.md
-  # - Concepts:
-  #   - Docling Document: concepts/document.md
+    - Use Docling: use_docling.md
+    - Docling v2: v2.md
+  - Concepts:
+    - The Docling Document format: concepts/docling_format.md
   #   - Chunking: concepts/chunking.md
   - Examples:
     - Conversion:
       - "Simple conversion": examples/minimal.py
       - "Custom conversion": examples/custom_convert.py
       - "Batch conversion": examples/batch_convert.py
+      - "Multi-format conversion": examples/run_with_formats.py
       - "Figure export": examples/export_figures.py
+      - "Figure enrichment": examples/develop_picture_enrichment.py
       - "Table export": examples/export_tables.py
       - "Multimodal export": examples/export_multimodal.py
     - RAG / QA:
