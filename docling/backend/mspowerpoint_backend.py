@@ -91,8 +91,12 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             mimetype="application/vnd.ms-powerpoint",
             binary_hash=self.document_hash,
         )
+        if len(fname) > 0:
+            docname = Path(fname).stem
+        else:
+            docname = "stream"
         doc = DoclingDocument(
-            description=DescriptionItem(), name="name_without_extension", origin=origin
+            description=DescriptionItem(), name=docname, origin=origin
         )  # must add origin information
         doc = self.walk_linear(self.pptx_obj, doc)
 
