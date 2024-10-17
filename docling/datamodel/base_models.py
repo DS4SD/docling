@@ -30,6 +30,7 @@ class InputFormat(str, Enum):
     HTML = "html"
     IMAGE = "image"
     PDF = "pdf"
+    MD = "md"
 
 
 class OutputFormat(str, Enum):
@@ -43,6 +44,7 @@ FormatToExtensions: Dict[InputFormat, List[str]] = {
     InputFormat.DOCX: ["docx", "dotx", "docm", "dotm"],
     InputFormat.PPTX: ["pptx", "potx", "ppsx", "pptm", "potm", "ppsm"],
     InputFormat.PDF: ["pdf"],
+    InputFormat.MD: ["md"],
     InputFormat.HTML: ["html", "htm", "xhtml"],
     InputFormat.IMAGE: ["jpg", "jpeg", "png", "tif", "tiff", "bmp"],
 }
@@ -66,6 +68,7 @@ FormatToMimeType: Dict[InputFormat, Set[str]] = {
         "image/bmp",
     },
     InputFormat.PDF: {"application/pdf"},
+    InputFormat.MD: {"text/markdown", "text/x-markdown"},
 }
 MimeTypeToFormat = {
     mime: fmt for fmt, mimes in FormatToMimeType.items() for mime in mimes
