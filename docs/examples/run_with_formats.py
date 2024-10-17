@@ -19,6 +19,7 @@ _log = logging.getLogger(__name__)
 
 def main():
     input_paths = [
+        Path("README.md"),
         Path("tests/data/wiki_duck.html"),
         Path("tests/data/word_sample.docx"),
         Path("tests/data/lorem_ipsum.docx"),
