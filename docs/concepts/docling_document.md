@@ -11,9 +11,10 @@ It also brings a set of document construction APIs to build up a `DoclingDocumen
 
 ## Example document structures
 
-To illustrate the features of the `DoclingDocument` format, consider the following side-by-side comparison of a
-`DoclingDocument` converted from `test/data/word_sample.docx`. Left side shows snippets from the converted document
-serialized as YAML, right side shows the corresponding visual parts in MS Word.
+To illustrate the features of the `DoclingDocument` format, in the subsections below we consider the
+`DoclingDocument` converted from `tests/data/word_sample.docx` and we present some side-by-side comparisons,
+where the left side shows snippets from the converted document
+serialized as YAML and the right one shows the corresponding parts of the original MS Word.
 
 ### Basic structure
 
