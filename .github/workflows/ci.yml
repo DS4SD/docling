@@ -16,7 +16,7 @@ env:
 jobs:
   code-checks:
     uses: ./.github/workflows/checks.yml
-  build-deploy-docs:
+  build-docs:
     uses: ./.github/workflows/docs.yml
     with:
       deploy: false
