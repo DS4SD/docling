@@ -31,22 +31,31 @@ To see all available options (export formats etc.) run `docling --help`.
   ```console
   $ docling --help
 
-  Usage: docling [OPTIONS] source
-
-  ╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-  │ *    input_sources      source  PDF files to convert. Can be local file / directory paths or URL. [default: None] [required] │
-  ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-  ╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-  │ --json       --no-json                            If enabled the document is exported as JSON. [default: no-json]            │
-  │ --md         --no-md                              If enabled the document is exported as Markdown. [default: md]             │
-  │ --txt        --no-txt                             If enabled the document is exported as Text. [default: no-txt]             │
-  │ --doctags    --no-doctags                         If enabled the document is exported as Doc Tags. [default: no-doctags]     │
-  │ --ocr        --no-ocr                             If enabled, the bitmap content will be processed using OCR. [default: ocr] │
-  │ --backend                    [pypdfium2|docling]  The PDF backend to use. [default: docling]                                 │
-  │ --output                     PATH                 Output directory where results are saved. [default: .]                     │
-  │ --version                                         Show version information.                                                  │
-  │ --help                                            Show this message and exit.                                                │
-  ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+ Usage: docling [OPTIONS] source                                                                      
+                                                                                                      
+╭─ Arguments ───────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *    input_sources      source  PDF files to convert. Can be local file / directory paths or URL. [default: None]         │
+│                                 [required]                                                                                │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --from                                     [docx|pptx|html|image|pdf]         Specify input formats to convert from.      │
+│                                                                               Defaults to all formats.                    │
+│                                                                               [default: None]                             │
+│ --to                                       [md|json|text|doctags]             Specify output formats. Defaults to         │
+│                                                                               Markdown.                                   │
+│                                                                               [default: None]                             │
+│ --ocr               --no-ocr                                                  If enabled, the bitmap content will be      │
+│                                                                               processed using OCR.                        │
+│                                                                               [default: ocr]                              │
+│ --ocr-engine                               [easyocr|tesseract_cli|tesseract]  The OCR engine to use. [default: easyocr]   │
+│ --abort-on-error    --no-abort-on-error                                       If enabled, the bitmap content will be      │
+│                                                                               processed using OCR.                        │
+│                                                                               [default: no-abort-on-error]                │
+│ --output                                   PATH                               Output directory where results are saved.   │
+│                                                                               [default: .]                                │
+│ --version                                                                     Show version information.                   │
+│ --help                                                                        Show this message and exit.                 │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
   ```
 </details>
 
