@@ -53,7 +53,6 @@ source = "https://arxiv.org/pdf/2408.09869"  # PDF path or URL
 converter = DocumentConverter()
 result = converter.convert(source)
 print(result.document.export_to_markdown())  # output: "## Docling Technical Report[...]"
-print(result.document.export_to_document_tokens())  # output: "<document><title><page_1><loc_20>..."
 ```
 
 
