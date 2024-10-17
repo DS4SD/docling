@@ -53,6 +53,7 @@ top-level `groups` field.
 
 ![doc_hierarchy_2](../assets/docling_doc_hierarchy_2.png)
 
+<!--
 ### Tables
 
 TBD
@@ -64,3 +65,4 @@ TBD
 ### Provenance
 
 TBD
+ -->
