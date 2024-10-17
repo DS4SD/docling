@@ -110,61 +110,65 @@ class TesseractOcrCliModel(BaseOcrModel):
 
         for page in page_batch:
             assert page._backend is not None
+            if not page._backend.is_valid():
+                yield page
+            else:
+                ocr_rects = self.get_ocr_rects(page)
 
-            ocr_rects = self.get_ocr_rects(page)
-
-            all_ocr_cells = []
-            for ocr_rect in ocr_rects:
-                # Skip zero area boxes
-                if ocr_rect.area() == 0:
-                    continue
-                high_res_image = page._backend.get_page_image(
-                    scale=self.scale, cropbox=ocr_rect
-                )
-
-                with tempfile.NamedTemporaryFile(suffix=".png", mode="w") as image_file:
-                    fname = image_file.name
-                    high_res_image.save(fname)
-
-                    df = self._run_tesseract(fname)
-
-                # _log.info(df)
-
-                # Print relevant columns (bounding box and text)
-                for ix, row in df.iterrows():
-                    text = row["text"]
-                    conf = row["conf"]
-
-                    l = float(row["left"])
-                    b = float(row["top"])
-                    w = float(row["width"])
-                    h = float(row["height"])
-
-                    t = b + h
-                    r = l + w
-
-                    cell = OcrCell(
-                        id=ix,
-                        text=text,
-                        confidence=conf / 100.0,
-                        bbox=BoundingBox.from_tuple(
-                            coord=(
-                                (l / self.scale) + ocr_rect.l,
-                                (b / self.scale) + ocr_rect.t,
-                                (r / self.scale) + ocr_rect.l,
-                                (t / self.scale) + ocr_rect.t,
-                            ),
-                            origin=CoordOrigin.TOPLEFT,
-                        ),
+                all_ocr_cells = []
+                for ocr_rect in ocr_rects:
+                    # Skip zero area boxes
+                    if ocr_rect.area() == 0:
+                        continue
+                    high_res_image = page._backend.get_page_image(
+                        scale=self.scale, cropbox=ocr_rect
                     )
-                    all_ocr_cells.append(cell)
 
-            ## Remove OCR cells which overlap with programmatic cells.
-            filtered_ocr_cells = self.filter_ocr_cells(all_ocr_cells, page.cells)
+                    with tempfile.NamedTemporaryFile(
+                        suffix=".png", mode="w"
+                    ) as image_file:
+                        fname = image_file.name
+                        high_res_image.save(fname)
 
-            page.cells.extend(filtered_ocr_cells)
+                        df = self._run_tesseract(fname)
 
-            # DEBUG code:
-            # self.draw_ocr_rects_and_cells(page, ocr_rects)
+                    # _log.info(df)
 
-            yield page
+                    # Print relevant columns (bounding box and text)
+                    for ix, row in df.iterrows():
+                        text = row["text"]
+                        conf = row["conf"]
+
+                        l = float(row["left"])
+                        b = float(row["top"])
+                        w = float(row["width"])
+                        h = float(row["height"])
+
+                        t = b + h
+                        r = l + w
+
+                        cell = OcrCell(
+                            id=ix,
+                            text=text,
+                            confidence=conf / 100.0,
+                            bbox=BoundingBox.from_tuple(
+                                coord=(
+                                    (l / self.scale) + ocr_rect.l,
+                                    (b / self.scale) + ocr_rect.t,
+                                    (r / self.scale) + ocr_rect.l,
+                                    (t / self.scale) + ocr_rect.t,
+                                ),
+                                origin=CoordOrigin.TOPLEFT,
+                            ),
+                        )
+                        all_ocr_cells.append(cell)
+
+                ## Remove OCR cells which overlap with programmatic cells.
+                filtered_ocr_cells = self.filter_ocr_cells(all_ocr_cells, page.cells)
+
+                page.cells.extend(filtered_ocr_cells)
+
+                # DEBUG code:
+                # self.draw_ocr_rects_and_cells(page, ocr_rects)
+
+                yield page

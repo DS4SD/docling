@@ -41,48 +41,50 @@ class EasyOcrModel(BaseOcrModel):
 
         for page in page_batch:
             assert page._backend is not None
+            if not page._backend.is_valid():
+                yield page
+            else:
+                ocr_rects = self.get_ocr_rects(page)
 
-            ocr_rects = self.get_ocr_rects(page)
-
-            all_ocr_cells = []
-            for ocr_rect in ocr_rects:
-                # Skip zero area boxes
-                if ocr_rect.area() == 0:
-                    continue
-                high_res_image = page._backend.get_page_image(
-                    scale=self.scale, cropbox=ocr_rect
-                )
-                im = numpy.array(high_res_image)
-                result = self.reader.readtext(im)
-
-                del high_res_image
-                del im
-
-                cells = [
-                    OcrCell(
-                        id=ix,
-                        text=line[1],
-                        confidence=line[2],
-                        bbox=BoundingBox.from_tuple(
-                            coord=(
-                                (line[0][0][0] / self.scale) + ocr_rect.l,
-                                (line[0][0][1] / self.scale) + ocr_rect.t,
-                                (line[0][2][0] / self.scale) + ocr_rect.l,
-                                (line[0][2][1] / self.scale) + ocr_rect.t,
-                            ),
-                            origin=CoordOrigin.TOPLEFT,
-                        ),
+                all_ocr_cells = []
+                for ocr_rect in ocr_rects:
+                    # Skip zero area boxes
+                    if ocr_rect.area() == 0:
+                        continue
+                    high_res_image = page._backend.get_page_image(
+                        scale=self.scale, cropbox=ocr_rect
                     )
-                    for ix, line in enumerate(result)
-                ]
-                all_ocr_cells.extend(cells)
+                    im = numpy.array(high_res_image)
+                    result = self.reader.readtext(im)
 
-            ## Remove OCR cells which overlap with programmatic cells.
-            filtered_ocr_cells = self.filter_ocr_cells(all_ocr_cells, page.cells)
+                    del high_res_image
+                    del im
 
-            page.cells.extend(filtered_ocr_cells)
+                    cells = [
+                        OcrCell(
+                            id=ix,
+                            text=line[1],
+                            confidence=line[2],
+                            bbox=BoundingBox.from_tuple(
+                                coord=(
+                                    (line[0][0][0] / self.scale) + ocr_rect.l,
+                                    (line[0][0][1] / self.scale) + ocr_rect.t,
+                                    (line[0][2][0] / self.scale) + ocr_rect.l,
+                                    (line[0][2][1] / self.scale) + ocr_rect.t,
+                                ),
+                                origin=CoordOrigin.TOPLEFT,
+                            ),
+                        )
+                        for ix, line in enumerate(result)
+                    ]
+                    all_ocr_cells.extend(cells)
 
-            # DEBUG code:
-            # self.draw_ocr_rects_and_cells(page, ocr_rects)
+                ## Remove OCR cells which overlap with programmatic cells.
+                filtered_ocr_cells = self.filter_ocr_cells(all_ocr_cells, page.cells)
 
-            yield page
+                page.cells.extend(filtered_ocr_cells)
+
+                # DEBUG code:
+                # self.draw_ocr_rects_and_cells(page, ocr_rects)
+
+                yield page

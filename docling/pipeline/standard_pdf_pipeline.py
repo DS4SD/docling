@@ -134,13 +134,13 @@ class StandardPdfPipeline(PaginatedPipeline):
         all_body = []
 
         for p in conv_res.pages:
-            assert p.assembled is not None
-            for el in p.assembled.body:
-                all_body.append(el)
-            for el in p.assembled.headers:
-                all_headers.append(el)
-            for el in p.assembled.elements:
-                all_elements.append(el)
+            if p.assembled is not None:
+                for el in p.assembled.body:
+                    all_body.append(el)
+                for el in p.assembled.headers:
+                    all_headers.append(el)
+                for el in p.assembled.elements:
+                    all_elements.append(el)
 
         conv_res.assembled = AssembledUnit(
             elements=all_elements, headers=all_headers, body=all_body
