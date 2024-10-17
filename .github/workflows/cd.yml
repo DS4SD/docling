@@ -23,6 +23,12 @@ jobs:
 
   code-checks:
     uses: ./.github/workflows/checks.yml
+  build-deploy-docs:
+    uses: ./.github/workflows/docs.yml
+    with:
+      deploy: true
+    permissions:
+      contents: write
   pre-release-check:
     runs-on: ubuntu-latest
     outputs:
