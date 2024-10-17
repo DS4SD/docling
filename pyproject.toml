@@ -75,6 +75,8 @@ pandas-stubs = "^2.1.4.231227"
 ipykernel = "^6.29.5"
 ipywidgets = "^8.1.5"
 nbqa = "^1.9.0"
+
+[tool.poetry.group.docs.dependencies]
 mkdocs-material = "^9.5.40"
 mkdocs-jupyter = "^0.25.0"
 
