@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/ds4sd/docling">
-    <img loading="lazy" alt="Docling" src="https://github.com/DS4SD/docling/raw/main/docs/assets/logo.png" width="150" />
+    <img loading="lazy" alt="Docling" src="docs/assets/docling_processing.png" width="100%"/>
   </a>
 </p>
 
@@ -18,6 +18,7 @@
 [![License MIT](https://img.shields.io/github/license/DS4SD/docling)](https://opensource.org/licenses/MIT)
 
 Docling parses documents and exports them to the desired format with ease and speed.
+
 
 ## Features
 
