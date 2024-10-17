@@ -69,57 +69,62 @@ class TesseractOcrModel(BaseOcrModel):
 
         for page in page_batch:
             assert page._backend is not None
-            assert self.reader is not None
+            if not page._backend.is_valid():
+                yield page
+            else:
+                assert self.reader is not None
 
-            ocr_rects = self.get_ocr_rects(page)
+                ocr_rects = self.get_ocr_rects(page)
 
-            all_ocr_cells = []
-            for ocr_rect in ocr_rects:
-                # Skip zero area boxes
-                if ocr_rect.area() == 0:
-                    continue
-                high_res_image = page._backend.get_page_image(
-                    scale=self.scale, cropbox=ocr_rect
-                )
-
-                # Retrieve text snippets with their bounding boxes
-                self.reader.SetImage(high_res_image)
-                boxes = self.reader.GetComponentImages(self.reader_RIL.TEXTLINE, True)
-
-                cells = []
-                for ix, (im, box, _, _) in enumerate(boxes):
-                    # Set the area of interest. Tesseract uses Bottom-Left for the origin
-                    self.reader.SetRectangle(box["x"], box["y"], box["w"], box["h"])
-
-                    # Extract text within the bounding box
-                    text = self.reader.GetUTF8Text().strip()
-                    confidence = self.reader.MeanTextConf()
-                    left = box["x"] / self.scale
-                    bottom = box["y"] / self.scale
-                    right = (box["x"] + box["w"]) / self.scale
-                    top = (box["y"] + box["h"]) / self.scale
-
-                    cells.append(
-                        OcrCell(
-                            id=ix,
-                            text=text,
-                            confidence=confidence,
-                            bbox=BoundingBox.from_tuple(
-                                coord=(left, top, right, bottom),
-                                origin=CoordOrigin.TOPLEFT,
-                            ),
-                        )
+                all_ocr_cells = []
+                for ocr_rect in ocr_rects:
+                    # Skip zero area boxes
+                    if ocr_rect.area() == 0:
+                        continue
+                    high_res_image = page._backend.get_page_image(
+                        scale=self.scale, cropbox=ocr_rect
                     )
 
-                # del high_res_image
-                all_ocr_cells.extend(cells)
+                    # Retrieve text snippets with their bounding boxes
+                    self.reader.SetImage(high_res_image)
+                    boxes = self.reader.GetComponentImages(
+                        self.reader_RIL.TEXTLINE, True
+                    )
 
-            ## Remove OCR cells which overlap with programmatic cells.
-            filtered_ocr_cells = self.filter_ocr_cells(all_ocr_cells, page.cells)
+                    cells = []
+                    for ix, (im, box, _, _) in enumerate(boxes):
+                        # Set the area of interest. Tesseract uses Bottom-Left for the origin
+                        self.reader.SetRectangle(box["x"], box["y"], box["w"], box["h"])
 
-            page.cells.extend(filtered_ocr_cells)
+                        # Extract text within the bounding box
+                        text = self.reader.GetUTF8Text().strip()
+                        confidence = self.reader.MeanTextConf()
+                        left = box["x"] / self.scale
+                        bottom = box["y"] / self.scale
+                        right = (box["x"] + box["w"]) / self.scale
+                        top = (box["y"] + box["h"]) / self.scale
 
-            # DEBUG code:
-            # self.draw_ocr_rects_and_cells(page, ocr_rects)
+                        cells.append(
+                            OcrCell(
+                                id=ix,
+                                text=text,
+                                confidence=confidence,
+                                bbox=BoundingBox.from_tuple(
+                                    coord=(left, top, right, bottom),
+                                    origin=CoordOrigin.TOPLEFT,
+                                ),
+                            )
+                        )
 
-            yield page
+                    # del high_res_image
+                    all_ocr_cells.extend(cells)
+
+                ## Remove OCR cells which overlap with programmatic cells.
+                filtered_ocr_cells = self.filter_ocr_cells(all_ocr_cells, page.cells)
+
+                page.cells.extend(filtered_ocr_cells)
+
+                # DEBUG code:
+                # self.draw_ocr_rects_and_cells(page, ocr_rects)
+
+                yield page
