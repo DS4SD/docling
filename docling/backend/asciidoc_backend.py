@@ -65,7 +65,7 @@ class AsciidocBackend(DeclarativeDocumentBackend):
         
         doc = DoclingDocument(name=docname, origin=origin)
 
-        doc = self.parse_stream(doc)
+        doc = self.parse(doc)
         
         return doc
 
@@ -77,7 +77,7 @@ class AsciidocBackend(DeclarativeDocumentBackend):
 
         content=""
         with open(self.path_or_stream, "r") as fr:
-            self.lines = fr.read_lines()
+            self.lines = fr.readlines()
         
         #self.lines = file_content.splitlines()
         
@@ -91,7 +91,7 @@ class AsciidocBackend(DeclarativeDocumentBackend):
             # Title
             if self.is_title(line):
                 item = self.parse_title(line)
-                doc.set_title(text=item["text"])
+                doc.add_text(text=item["text"], label="title")
 
             # Section headers
             elif self.is_section_header(line):
@@ -104,7 +104,7 @@ class AsciidocBackend(DeclarativeDocumentBackend):
                     in_list = True
 
                 item = self.parse_list_item(line)
-                doc.add_listitem(item["text"])
+                doc.add_list_item(item["text"])
             
             elif in_list and not self.is_list_item(line):
                 in_list = False
@@ -113,12 +113,11 @@ class AsciidocBackend(DeclarativeDocumentBackend):
             elif self.is_table_line(line):
                 in_table = True                
                 table_data.append(self.parse_table_line(line))
-                continue
             
             elif in_table and not self.is_table_line(line):
                 
-                grid = self.populate_table_as_grid(table_data)
-                doc.add_table(data=grid)
+                data = self.populate_table_as_grid(table_data)
+                doc.add_table(data=data)
                 
                 in_table = False
                 table_data = []
@@ -126,8 +125,15 @@ class AsciidocBackend(DeclarativeDocumentBackend):
             # Plain text
             elif line:
                 item = self.parse_text(line)
-                doc.add_text(text=item["text"])
-        
+                doc.add_text(text=item["text"], label="text")
+
+        if in_table and len(table_data)>0:
+            data = self.populate_table_as_grid(table_data)
+            doc.add_table(data=data)
+            
+            in_table = False
+            table_data = []
+                
         return doc
 
     # Title
@@ -161,13 +167,34 @@ class AsciidocBackend(DeclarativeDocumentBackend):
         return [cell.strip() for cell in line.split('|') if cell.strip()]
 
     def populate_table_as_grid(self, table_data):
+
+        num_rows = len(table_data)
+        
         # Adjust the table data into a grid format
-        max_cols = max(len(row) for row in table_data)
-        grid = []
-        for row in table_data:
+        num_cols = max(len(row) for row in table_data)
+
+        data = TableData(num_rows=num_rows, num_cols=num_cols, table_cells=[])        
+        for row_idx,row in enumerate(table_data):
             # Pad rows with empty strings to match column count
-            grid.append(row + [''] * (max_cols - len(row)))
-        return grid
+            #grid.append(row + [''] * (max_cols - len(row)))
+
+            for col_idx,text in enumerate(row):
+                row_span = 1
+                col_span = 1
+                
+                cell = TableCell(
+                    text=text,
+                    row_span=row_span,
+                    col_span=col_span,
+                    start_row_offset_idx=row_idx,
+                    end_row_offset_idx=row_idx + row_span,
+                    start_col_offset_idx=col_idx,
+                    end_col_offset_idx=col_idx + col_span,
+                    col_header=False,
+                    row_header=False)
+                data.table_cells.append(cell)                
+            
+        return data
     
     # Plain text
     def parse_text(self, line):
