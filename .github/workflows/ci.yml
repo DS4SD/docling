@@ -14,6 +14,13 @@ env:
   PYTHON_KEYRING_BACKEND: keyring.backends.null.Keyring
 
 jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print 1
+        run: echo "${{ github.event_name }}"
+      - name: print 2
+        run: echo "${{ github.event.pull_request.head.repo.full_name }}"
   code-checks:
     if: ${{ github.event_name == 'push' }} || (${{ github.event.pull_request.head.repo.full_name != 'DS4SD/docling' }} && ${{ github.event.pull_request.head.repo.full_name != 'ds4sd/docling' }})
     uses: ./.github/workflows/checks.yml
