@@ -45,7 +45,7 @@ More [detailed installation instructions](https://ds4sd.github.io/docling/instal
 
 ## Getting started
 
-To convert invidual documents, use `convert()`, for example:
+To convert individual documents, use `convert()`, for example:
 
 ```python
 from docling.document_converter import DocumentConverter
