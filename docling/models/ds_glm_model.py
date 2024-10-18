@@ -5,15 +5,23 @@ from typing import List, Union
 from deepsearch_glm.nlp_utils import init_nlp_model
 from deepsearch_glm.utils.doc_utils import to_docling_document
 from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_models
-from docling_core.types import BaseText
-from docling_core.types import Document as DsDocument
-from docling_core.types import DocumentDescription as DsDocumentDescription
-from docling_core.types import FileInfoObject as DsFileInfoObject
-from docling_core.types import PageDimensions, PageReference, Prov, Ref
-from docling_core.types import Table as DsSchemaTable
 from docling_core.types.doc import BoundingBox, CoordOrigin, DoclingDocument
 from docling_core.types.legacy_doc.base import BoundingBox as DsBoundingBox
-from docling_core.types.legacy_doc.base import Figure, TableCell
+from docling_core.types.legacy_doc.base import (
+    Figure,
+    PageDimensions,
+    PageReference,
+    Prov,
+    Ref,
+)
+from docling_core.types.legacy_doc.base import Table as DsSchemaTable
+from docling_core.types.legacy_doc.base import TableCell
+from docling_core.types.legacy_doc.document import BaseText
+from docling_core.types.legacy_doc.document import (
+    CCSDocumentDescription as DsDocumentDescription,
+)
+from docling_core.types.legacy_doc.document import CCSFileInfoObject as DsFileInfoObject
+from docling_core.types.legacy_doc.document import ExportedCCSDocument as DsDocument
 from PIL import ImageDraw
 from pydantic import BaseModel, ConfigDict
 
