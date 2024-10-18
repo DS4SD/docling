@@ -46,7 +46,7 @@ FormatToExtensions: Dict[InputFormat, List[str]] = {
     InputFormat.PDF: ["pdf"],
     InputFormat.HTML: ["html", "htm", "xhtml"],
     InputFormat.IMAGE: ["jpg", "jpeg", "png", "tif", "tiff", "bmp"],
-    InputFormat.ASCIIDOC: ["adoc", ".asciidoc", "asc"],    
+    InputFormat.ASCIIDOC: ["adoc", ".asciidoc", "asc"],
 }
 
 FormatToMimeType: Dict[InputFormat, Set[str]] = {
