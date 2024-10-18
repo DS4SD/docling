@@ -47,7 +47,7 @@ def test_e2e_conversions(test_doc_path):
 def test_ocr_coverage_threshold(test_doc_path):
     pipeline_options = PdfPipelineOptions()
     pipeline_options.do_ocr = True
-    pipeline_options.ocr_options.coverage_threshold = 1.1
+    pipeline_options.ocr_options.bitmap_area_threshold = 1.1
 
     converter = DocumentConverter(
         format_options={

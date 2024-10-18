@@ -69,7 +69,7 @@ class BaseOcrModel:
         coverage, ocr_rects = find_ocr_rects(page.size, bitmap_rects)
 
         # return full-page rectangle if sufficiently covered with bitmaps
-        if coverage > max(BITMAP_COVERAGE_TRESHOLD, self.options.coverage_threshold):
+        if coverage > max(BITMAP_COVERAGE_TRESHOLD, self.options.bitmap_area_threshold):
             return [
                 BoundingBox(
                     l=0,
@@ -87,7 +87,7 @@ class BaseOcrModel:
                 rect
                 for rect in ocr_rects
                 if rect.area() / (page.size.width * page.size.height)
-                > self.options.coverage_threshold
+                > self.options.bitmap_area_threshold
             ]
             return ocr_rects
 
