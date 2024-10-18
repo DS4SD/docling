@@ -1,3 +1,19 @@
+## [v2.1.0](https://github.com/DS4SD/docling/releases/tag/v2.1.0) - 2024-10-18
+
+### Feature
+
+* Add coverage_threshold to skip OCR for small images ([#161](https://github.com/DS4SD/docling/issues/161)) ([`b346faf`](https://github.com/DS4SD/docling/commit/b346faf622190c4895dffdc1ee2365b3f7808cbc))
+
+### Fix
+
+* Fix legacy doc ref ([#162](https://github.com/DS4SD/docling/issues/162)) ([`63bef59`](https://github.com/DS4SD/docling/commit/63bef59d9ed6cfd937aefd36a4ef38a54a10dac5))
+
+### Documentation
+
+* Typo fix ([#155](https://github.com/DS4SD/docling/issues/155)) ([`f799e77`](https://github.com/DS4SD/docling/commit/f799e777c1248559eb2f84bc334e392cd3c98e49))
+* Add graphical band in readme ([#154](https://github.com/DS4SD/docling/issues/154)) ([`034a411`](https://github.com/DS4SD/docling/commit/034a4110573df3ac88fd623970958f02309dd6da))
+* Add use docling ([#150](https://github.com/DS4SD/docling/issues/150)) ([`61c092f`](https://github.com/DS4SD/docling/commit/61c092f445ccde8ed5d7c0f2fa91a3d19a1f7a1e))
+
 ## [v2.0.0](https://github.com/DS4SD/docling/releases/tag/v2.0.0) - 2024-10-16
 
 ### Feature
