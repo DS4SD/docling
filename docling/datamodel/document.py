@@ -6,12 +6,6 @@ from pathlib import Path, PurePath
 from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Tuple, Type, Union
 
 import filetype
-from docling_core.types import BaseText
-from docling_core.types import Document as DsDocument
-from docling_core.types import DocumentDescription as DsDocumentDescription
-from docling_core.types import FileInfoObject as DsFileInfoObject
-from docling_core.types import PageDimensions, PageReference, Prov, Ref
-from docling_core.types import Table as DsSchemaTable
 from docling_core.types.doc import (
     DocItem,
     DocItemLabel,
@@ -22,7 +16,22 @@ from docling_core.types.doc import (
     TextItem,
 )
 from docling_core.types.doc.document import ListItem
-from docling_core.types.legacy_doc.base import Figure, GlmTableCell, TableCell
+from docling_core.types.legacy_doc.base import (
+    BaseText,
+    Figure,
+    GlmTableCell,
+    PageDimensions,
+    PageReference,
+    Prov,
+    Ref,
+)
+from docling_core.types.legacy_doc.base import Table as DsSchemaTable
+from docling_core.types.legacy_doc.base import TableCell
+from docling_core.types.legacy_doc.document import (
+    CCSDocumentDescription as DsDocumentDescription,
+)
+from docling_core.types.legacy_doc.document import CCSFileInfoObject as DsFileInfoObject
+from docling_core.types.legacy_doc.document import ExportedCCSDocument as DsDocument
 from docling_core.utils.file import resolve_file_source
 from pydantic import BaseModel
 from typing_extensions import deprecated
