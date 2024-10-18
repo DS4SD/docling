@@ -1,5 +1,5 @@
 import re
-
+    
 import logging
 from io import BytesIO
 from pathlib import Path
@@ -16,12 +16,12 @@ from docling_core.types.doc import (
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import InputDocument
+#from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
 
 
-class ASCIIDocDocumentBackend(DeclarativeDocumentBackend):
+class AsciidocBackend(DeclarativeDocumentBackend):
 
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
@@ -55,7 +55,7 @@ class ASCIIDocDocumentBackend(DeclarativeDocumentBackend):
 
         origin = DocumentOrigin(
             filename=fname,
-            mimetype="asciidoc",
+            mimetype="text/asciidoc",
             binary_hash=self.document_hash,
         )
         if len(fname) > 0:
