@@ -17,9 +17,13 @@ class PagePreprocessingModel(BasePageModel):
 
     def __call__(self, page_batch: Iterable[Page]) -> Iterable[Page]:
         for page in page_batch:
-            page = self._populate_page_images(page)
-            page = self._parse_page_cells(page)
-            yield page
+            assert page._backend is not None
+            if not page._backend.is_valid():
+                yield page
+            else:
+                page = self._populate_page_images(page)
+                page = self._parse_page_cells(page)
+                yield page
 
     # Generate the page image and store it in the page object
     def _populate_page_images(self, page: Page) -> Page:
