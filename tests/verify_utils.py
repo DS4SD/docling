@@ -3,8 +3,8 @@ import warnings
 from pathlib import Path
 from typing import List
 
-from docling_core.types import Document as DsDocument
 from docling_core.types.doc import DoclingDocument
+from docling_core.types.legacy_doc.document import ExportedCCSDocument as DsDocument
 from pydantic import TypeAdapter
 from pydantic.json import pydantic_encoder
 
