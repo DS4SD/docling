@@ -10,19 +10,14 @@ env:
   PYTHON_KEYRING_BACKEND: keyring.backends.null.Keyring
 
 jobs:
-  # To be enabled when we add docs
-  # docs:
-  #   permissions:
-  #     contents: write
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: ./.github/actions/setup-poetry
-  #     - name: Build and push docs
-  #       run: poetry run mkdocs gh-deploy --force
-
   code-checks:
     uses: ./.github/workflows/checks.yml
+  build-deploy-docs:
+    uses: ./.github/workflows/docs.yml
+    with:
+      deploy: true
+    permissions:
+      contents: write
   pre-release-check:
     runs-on: ubuntu-latest
     outputs:

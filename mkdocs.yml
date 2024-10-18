@@ -54,10 +54,10 @@ nav:
   - Get started:
     - Home: index.md
     - Installation: installation.md
-    - Use Docling: use_docling.md
+    - Usage: usage.md
     - Docling v2: v2.md
   - Concepts:
-    - The Docling Document format: concepts/docling_format.md
+    - Docling Document: concepts/docling_document.md
   #   - Chunking: concepts/chunking.md
   - Examples:
     - Conversion:

@@ -16,13 +16,7 @@ env:
 jobs:
   code-checks:
     uses: ./.github/workflows/checks.yml
-
-    # To enable when we add the ./docs
-  # build-docs:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: ./.github/actions/setup-poetry
-  #     - name: Build docs
-  #       run: poetry run mkdocs build --verbose --clean
-  
+  build-docs:
+    uses: ./.github/workflows/docs.yml
+    with:
+      deploy: false
