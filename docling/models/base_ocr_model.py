@@ -68,6 +68,10 @@ class BaseOcrModel:
             bitmap_rects = []
         coverage, ocr_rects = find_ocr_rects(page.size, bitmap_rects)
 
+        # skip OCR if the bitmap area on the page is smaller than the options threshold
+        if coverage < self.options.coverage_threshold:
+            return []
+
         # return full-page rectangle if sufficiently covered with bitmaps
         if coverage > BITMAP_COVERAGE_TRESHOLD:
             return [

@@ -22,6 +22,9 @@ class TableStructureOptions(BaseModel):
 
 class OcrOptions(BaseModel):
     kind: str
+    coverage_threshold: float = (
+        0.3  # percentage of the area which must be covered by bitmaps for triggering OCR
+    )
 
 
 class EasyOcrOptions(OcrOptions):
