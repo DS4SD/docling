@@ -24,107 +24,23 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
 import marko
-from marko.block import Heading, List, ListItem, Paragraph, BlockQuote, FencedCode, Table, TableRow, TableCell
-from marko.inline import Image, Link, Emphasis, Strong
+from marko.ext.gfm import gfm  # GitHub Flavored Markdown plugin (tables, task lists, etc.)
+from marko.block import BlockElement
+from marko.inline import InlineElement
 
 _log = logging.getLogger(__name__)
 
 
-class MarkdownToDoclingRenderer(marko.Renderer):
-    """
-    # This is text analog of object based methods...
-    def render_heading(self, element: Heading):
-        return f"{'#' * element.level} {self.render_children(element)}\n\n"
-
-    def render_list(self, element: List):
-        if element.ordered:
-            return ''.join(f"{i+1}. {self.render(child)}\n" for i, child in enumerate(element.children))
-        else:
-            return ''.join(f"* {self.render(child)}\n" for child in element.children)
-
-    def render_list_item(self, element: ListItem):
-        return self.render_children(element)
-
-    def render_paragraph(self, element: Paragraph):
-        return f"{self.render_children(element)}\n\n"
-
-    def render_image(self, element: Image):
-        return f"![{element.title}]({element.dest})\n\n"
-
-    def render_table(self, element: Table):
-        rows = [self.render(child) for child in element.children]
-        return '\n'.join(rows) + '\n'
-
-    def render_table_row(self, element: TableRow):
-        cells = ' | '.join(self.render(cell) for cell in element.children)
-        return f"| {cells} |"
-
-    def render_table_cell(self, element: TableCell):
-        return self.render_children(element)
-    """
-    def render_heading(self, element: Heading):
-        return {
-            "type": "heading",
-            "level": element.level,
-            "content": self.render_children(element),
-        }
-
-    def render_paragraph(self, element: Paragraph):
-        return {
-            "type": "paragraph",
-            "content": self.render_children(element),
-        }
-
-    def render_list(self, element: List):
-        return {
-            "type": "list",
-            "ordered": element.ordered,
-            "items": [self.render(child) for child in element.children]
-        }
-
-    def render_list_item(self, element: ListItem):
-        return {
-            "type": "list_item",
-            "content": self.render_children(element),
-        }
-
-    def render_image(self, element: Image):
-        return {
-            "type": "image",
-            "alt": element.title,
-            "url": element.dest,
-        }
-
-    def render_table(self, element: Table):
-        return {
-            "type": "table",
-            "rows": [self.render(row) for row in element.children]
-        }
-
-    def render_table_row(self, element: TableRow):
-        return {
-            "type": "table_row",
-            "cells": [self.render(cell) for cell in element.children]
-        }
-
-    def render_table_cell(self, element: TableCell):
-        return {
-            "type": "table_cell",
-            "content": self.render_children(element)
-        }
-
-    def render(self, element):
-        if isinstance(element, str):
-            return element
-        return super().render(element)
-
-class MarkdownDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBackend):
+class MarkdownDocumentBackend(DeclarativeDocumentBackend):
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
+
+        _log.info("MD INIT!!!")
+
         # Markdown file:
         self.path_or_stream = path_or_stream
-
-        self.valid = False
+        self.valid = True
+        self.markdown = ""  # To store original Markdown string
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
@@ -134,21 +50,52 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacke
                 with open(self.path_or_stream, "r", encoding="utf-8") as f:
                     md_content = f.read()
                     self.markdown = md_content
+            self.valid = True
+
+            _log.info(self.markdown)
         except Exception as e:
             raise RuntimeError(
                 f"Could not initialize MD backend for file with hash {self.document_hash}."
             ) from e
         return
 
-    def page_count(self) -> int:
-        return 0
+    # Function to iterate over all elements in the AST
+    def iterate_elements(self, element, depth=0):
+        # Print the element type and optionally its content
+        print(f"{'  ' * depth}- {type(element).__name__}", end="")
+        
+        if isinstance(element, BlockElement):
+            print(" (Block Element)")
+        elif isinstance(element, InlineElement):
+            print(" (Inline Element)")
+        
+        # Check for different element types and print relevant details
+        if isinstance(element, marko.block.Heading):
+            print(f" - Heading level {element.level}, content: {element.children[0].children}")
+        
+        elif isinstance(element, marko.block.List):
+            print(f" - List {'ordered' if element.ordered else 'unordered'}")
+        
+        elif isinstance(element, marko.block.ListItem):
+            print(" - List item")
+
+        elif isinstance(element, marko.block.Paragraph):
+            print(f" - Paragraph: {element.children[0].children}")
+        
+        elif isinstance(element, marko.inline.Image):
+            print(f" - Image with alt: {element.title}, url: {element.dest}")
+        
+        # elif isinstance(element, marko.block.Table):
+        # 
+            print(" - Table")
+
+        # Iterate through the element's children (if any)
+        if hasattr(element, 'children'):
+            for child in element.children:
+                self.iterate_elements(child, depth + 1)
 
     def is_valid(self) -> bool:
         return self.valid
-
-    @classmethod
-    def supports_pagination(cls) -> bool:
-        return False
 
     def unload(self):
         if isinstance(self.path_or_stream, BytesIO):
@@ -156,18 +103,25 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacke
         self.path_or_stream = None
 
     @classmethod
+    def supports_pagination(cls) -> bool:
+        return False  # True? if so, how to handle pages...
+
+    @classmethod
     def supported_formats(cls) -> Set[InputFormat]:
         return {InputFormat.MD}
 
     def convert(self) -> DoclingDocument:
-            # Parse and render
-            parser = marko.Markdown(renderer=MarkdownToDoclingRenderer)
-            parsed_object = parser.parse(markdown_text)
-            # Render the parsed Markdown into a structured object
-            markdown_object = parser.render(parsed_object)
+        print("converting Markdown...")
+        doc = DoclingDocument(name="Test")
+        doc.add_text(label=DocItemLabel.PARAGRAPH, text="Markdown conversion")
 
-            print(marko_doc)
-            # doc = self.walk(self.soup.body, doc)
+        if self.is_valid():
+            # Parse the markdown into an abstract syntax tree (AST)
+            parser = marko.Markdown(extensions=['gfm'])
+            parsed_ast = parser.parse(self.markdown)
+            # Start iterating from the root of the AST
+            self.iterate_elements(parsed_ast)
+
         else:
             raise RuntimeError(
                 f"Cannot convert md with {self.document_hash} because the backend failed to init."
