@@ -68,12 +68,8 @@ class BaseOcrModel:
             bitmap_rects = []
         coverage, ocr_rects = find_ocr_rects(page.size, bitmap_rects)
 
-        # skip OCR if the bitmap area on the page is smaller than the options threshold
-        if coverage < self.options.coverage_threshold:
-            return []
-
         # return full-page rectangle if sufficiently covered with bitmaps
-        if coverage > BITMAP_COVERAGE_TRESHOLD:
+        if coverage > max(BITMAP_COVERAGE_TRESHOLD, self.options.coverage_threshold):
             return [
                 BoundingBox(
                     l=0,
@@ -85,6 +81,14 @@ class BaseOcrModel:
             ]
         # return individual rectangles if the bitmap coverage is smaller
         else:  # coverage <= BITMAP_COVERAGE_TRESHOLD:
+
+            # skip OCR if the bitmap area on the page is smaller than the options threshold
+            ocr_rects = [
+                rect
+                for rect in ocr_rects
+                if rect.area() / (page.size.width * page.size.height)
+                > self.options.coverage_threshold
+            ]
             return ocr_rects
 
     # Filters OCR cells by dropping any OCR cell that intersects with an existing programmatic cell.
