@@ -60,39 +60,83 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         return
 
     # Function to iterate over all elements in the AST
-    def iterate_elements(self, element, depth=0):
+    def iterate_elements(self, element, depth=0, doc=None, parent_element = None):
         # Print the element type and optionally its content
-        print(f"{'  ' * depth}- {type(element).__name__}", end="")
+        # print(f"{'  ' * depth}- {type(element).__name__}", end="")
+        # print(f"{'  ' * depth}", end="")
         
-        if isinstance(element, BlockElement):
-            print(" (Block Element)")
-        elif isinstance(element, InlineElement):
-            print(" (Inline Element)")
-        
+        # if isinstance(element, BlockElement):
+        #     print(" (Block Element)")
+        # elif isinstance(element, InlineElement):
+        #     print(" (Inline Element)")
+
+        not_a_list_item = True
+
         # Check for different element types and print relevant details
         if isinstance(element, marko.block.Heading):
             print(f" - Heading level {element.level}, content: {element.children[0].children}")
+            if element.level == 1:
+                doc_label = DocItemLabel.TITLE
+            else:
+                doc_label = DocItemLabel.SECTION_HEADER
+            snippet_text = element.children[0].children
+
+            parent_element = doc.add_text(
+                label=doc_label,
+                parent=parent_element,
+                text=snippet_text
+            )
+
         
         elif isinstance(element, marko.block.List):
             print(f" - List {'ordered' if element.ordered else 'unordered'}")
+
+            list_label = GroupLabel.LIST
+            if element.ordered:
+                list_label = GroupLabel.ORDERED_LIST
+            parent_element = doc.add_group(
+                label=list_label,
+                name=f"list",
+                parent=parent_element
+            )
         
         elif isinstance(element, marko.block.ListItem):
             print(" - List item")
+            not_a_list_item = False
+            snippet_text = str(element.children[0].children[0].children)
+            is_numbered = False
+            if parent_element.label == GroupLabel.ORDERED_LIST:
+                is_numbered = True
+            doc.add_list_item(
+                # marker=enum_marker,
+                enumerated=is_numbered,
+                parent=parent_element,
+                text=snippet_text
+            )
 
         elif isinstance(element, marko.block.Paragraph):
             print(f" - Paragraph: {element.children[0].children}")
+            snippet_text = str(element.children[0].children)
+            doc.add_text(
+                label=DocItemLabel.PARAGRAPH,
+                parent=parent_element,
+                text=snippet_text
+            )
         
         elif isinstance(element, marko.inline.Image):
             print(f" - Image with alt: {element.title}, url: {element.dest}")
+            doc.add_picture(
+                parent=parent_element,
+                caption=element.title
+            )
         
         # elif isinstance(element, marko.block.Table):
-        # 
-            print(" - Table")
+        #     print(" - Table")
 
         # Iterate through the element's children (if any)
         if hasattr(element, 'children'):
             for child in element.children:
-                self.iterate_elements(child, depth + 1)
+                self.iterate_elements(child, depth + 1, doc, parent_element)
 
     def is_valid(self) -> bool:
         return self.valid
@@ -113,14 +157,14 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
     def convert(self) -> DoclingDocument:
         print("converting Markdown...")
         doc = DoclingDocument(name="Test")
-        doc.add_text(label=DocItemLabel.PARAGRAPH, text="Markdown conversion")
+        # doc.add_text(label=DocItemLabel.PARAGRAPH, text="Markdown conversion")
 
         if self.is_valid():
             # Parse the markdown into an abstract syntax tree (AST)
             parser = marko.Markdown(extensions=['gfm'])
             parsed_ast = parser.parse(self.markdown)
             # Start iterating from the root of the AST
-            self.iterate_elements(parsed_ast)
+            self.iterate_elements(parsed_ast, 0 , doc, None)
 
         else:
             raise RuntimeError(
