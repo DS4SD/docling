@@ -19,13 +19,21 @@ jobs:
     steps:
       - name: print 1
         run: echo "${{ github.event_name }}"
+      - name: print 1a
+        run: echo "${{ github.event_name == 'push' }}"
       - name: print 2
         run: echo "${{ github.event.pull_request.head.repo.full_name }}"
+      - name: print 2a
+        run: echo "${{ github.event.pull_request.head.repo.full_name != 'DS4SD/docling' }}"
+      - name: print 2b
+        run: echo "${{ github.event.pull_request.head.repo.full_name != 'ds4sd/docling' }}"
+      - name: print 2a
+        run: echo "${{ github.event.pull_request.head.repo.full_name != 'ds4sd/docling' && github.event.pull_request.head.repo.full_name != 'DS4SD/docling' }}"
   code-checks:
-    if: ${{ github.event_name == 'push' }} || (${{ github.event.pull_request.head.repo.full_name != 'DS4SD/docling' }} && ${{ github.event.pull_request.head.repo.full_name != 'ds4sd/docling' }})
+    if: ${{ github.event_name == 'push' }} || (${{ github.event.pull_request.head.repo.full_name != 'DS4SD/docling' && github.event.pull_request.head.repo.full_name != 'ds4sd/docling' }})
     uses: ./.github/workflows/checks.yml
   build-docs:
-    if: ${{ github.event_name == 'push' }} || (${{ github.event.pull_request.head.repo.full_name != 'DS4SD/docling' }} && ${{ github.event.pull_request.head.repo.full_name != 'ds4sd/docling' }})
+    if: ${{ github.event_name == 'push' }} || (${{ github.event.pull_request.head.repo.full_name != 'DS4SD/docling' && github.event.pull_request.head.repo.full_name != 'ds4sd/docling' }})
     uses: ./.github/workflows/docs.yml
     with:
       deploy: false
