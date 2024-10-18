@@ -30,10 +30,10 @@ jobs:
       - name: print 2c
         run: echo "${{ github.event.pull_request.head.repo.full_name != 'ds4sd/docling' && github.event.pull_request.head.repo.full_name != 'DS4SD/docling' }}"
   to-skip:
-    if: ${{ github.event_name == 'push' }} || ${{ github.event.pull_request.head.repo.full_name != 'DS4SD/docling' && github.event.pull_request.head.repo.full_name != 'ds4sd/docling' }}
+    if: ${{ github.event_name == 'push' || (github.event.pull_request.head.repo.full_name != 'DS4SD/docling' && github.event.pull_request.head.repo.full_name != 'ds4sd/docling') }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "I was here..." 
+      - run: echo "I was here... event_name=${{ github.event_name }}" 
   # code-checks:
   #   if: ${{ github.event_name == 'push' }} || (${{ github.event.pull_request.head.repo.full_name != 'DS4SD/docling' && github.event.pull_request.head.repo.full_name != 'ds4sd/docling' }})
   #   uses: ./.github/workflows/checks.yml
