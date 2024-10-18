@@ -129,7 +129,31 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 parent=parent_element,
                 caption=element.title
             )
-        
+
+        elif isinstance(element, marko.inline.RawText):
+            print(f" - Paragraph (raw text): {element.children}")
+            snippet_text = str(element.children)
+            doc.add_text(
+                label=DocItemLabel.PARAGRAPH,
+                parent=parent_element,
+                text=snippet_text
+            )
+
+        elif isinstance(element, marko.inline.CodeSpan):
+            print(f" - Paragraph (code): {element.children}")
+            snippet_text = str(element.children)
+            doc.add_text(
+                label=DocItemLabel.PARAGRAPH,
+                parent=parent_element,
+                text=snippet_text
+            )
+        else:
+            if not isinstance(element, str):
+                print("Something else: {}".format(element))
+            # print(element)
+
+        # elif isinstance(element, marko.block.Table):
+        #     print(" - Table")
         # elif isinstance(element, marko.block.Table):
         #     print(" - Table")
 
