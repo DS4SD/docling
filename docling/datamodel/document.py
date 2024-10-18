@@ -30,8 +30,8 @@ from docling_core.types.legacy_doc.base import TableCell
 from docling_core.types.legacy_doc.document import (
     CCSDocumentDescription as DsDocumentDescription,
 )
+from docling_core.types.legacy_doc.document import CCSFileInfoObject as DsFileInfoObject
 from docling_core.types.legacy_doc.document import ExportedCCSDocument as DsDocument
-from docling_core.types.legacy_doc.document import FileInfoObject as DsFileInfoObject
 from docling_core.utils.file import resolve_file_source
 from pydantic import BaseModel
 from typing_extensions import deprecated
