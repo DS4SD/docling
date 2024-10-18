@@ -487,6 +487,8 @@ class _DocumentConversionInput(BaseModel):
 
         if mime is None:
             mime = self._detect_html_xhtml(content)
+        if mime is None:
+            mime = "text/markdown"
 
         format = MimeTypeToFormat.get(mime)
         return format
