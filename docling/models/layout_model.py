@@ -273,68 +273,72 @@ class LayoutModel(BasePageModel):
 
     def __call__(self, page_batch: Iterable[Page]) -> Iterable[Page]:
         for page in page_batch:
-            assert page.size is not None
+            assert page._backend is not None
+            if not page._backend.is_valid():
+                yield page
+            else:
+                assert page.size is not None
 
-            clusters = []
-            for ix, pred_item in enumerate(
-                self.layout_predictor.predict(page.get_image(scale=1.0))
-            ):
-                label = DocItemLabel(
-                    pred_item["label"].lower().replace(" ", "_").replace("-", "_")
-                )  # Temporary, until docling-ibm-model uses docling-core types
-                cluster = Cluster(
-                    id=ix,
-                    label=label,
-                    confidence=pred_item["confidence"],
-                    bbox=BoundingBox.model_validate(pred_item),
-                    cells=[],
-                )
-                clusters.append(cluster)
-
-            # Map cells to clusters
-            # TODO: Remove, postprocess should take care of it anyway.
-            for cell in page.cells:
-                for cluster in clusters:
-                    if not cell.bbox.area() > 0:
-                        overlap_frac = 0.0
-                    else:
-                        overlap_frac = (
-                            cell.bbox.intersection_area_with(cluster.bbox)
-                            / cell.bbox.area()
-                        )
-
-                    if overlap_frac > 0.5:
-                        cluster.cells.append(cell)
-
-            # Pre-sort clusters
-            # clusters = self.sort_clusters_by_cell_order(clusters)
-
-            # DEBUG code:
-            def draw_clusters_and_cells():
-                image = copy.deepcopy(page.image)
-                draw = ImageDraw.Draw(image)
-                for c in clusters:
-                    x0, y0, x1, y1 = c.bbox.as_tuple()
-                    draw.rectangle([(x0, y0), (x1, y1)], outline="green")
-
-                    cell_color = (
-                        random.randint(30, 140),
-                        random.randint(30, 140),
-                        random.randint(30, 140),
+                clusters = []
+                for ix, pred_item in enumerate(
+                    self.layout_predictor.predict(page.get_image(scale=1.0))
+                ):
+                    label = DocItemLabel(
+                        pred_item["label"].lower().replace(" ", "_").replace("-", "_")
+                    )  # Temporary, until docling-ibm-model uses docling-core types
+                    cluster = Cluster(
+                        id=ix,
+                        label=label,
+                        confidence=pred_item["confidence"],
+                        bbox=BoundingBox.model_validate(pred_item),
+                        cells=[],
                     )
-                    for tc in c.cells:  # [:1]:
-                        x0, y0, x1, y1 = tc.bbox.as_tuple()
-                        draw.rectangle([(x0, y0), (x1, y1)], outline=cell_color)
-                image.show()
+                    clusters.append(cluster)
 
-            # draw_clusters_and_cells()
+                # Map cells to clusters
+                # TODO: Remove, postprocess should take care of it anyway.
+                for cell in page.cells:
+                    for cluster in clusters:
+                        if not cell.bbox.area() > 0:
+                            overlap_frac = 0.0
+                        else:
+                            overlap_frac = (
+                                cell.bbox.intersection_area_with(cluster.bbox)
+                                / cell.bbox.area()
+                            )
 
-            clusters, page.cells = self.postprocess(
-                clusters, page.cells, page.size.height
-            )
+                        if overlap_frac > 0.5:
+                            cluster.cells.append(cell)
 
-            # draw_clusters_and_cells()
+                # Pre-sort clusters
+                # clusters = self.sort_clusters_by_cell_order(clusters)
 
-            page.predictions.layout = LayoutPrediction(clusters=clusters)
+                # DEBUG code:
+                def draw_clusters_and_cells():
+                    image = copy.deepcopy(page.image)
+                    draw = ImageDraw.Draw(image)
+                    for c in clusters:
+                        x0, y0, x1, y1 = c.bbox.as_tuple()
+                        draw.rectangle([(x0, y0), (x1, y1)], outline="green")
 
-            yield page
+                        cell_color = (
+                            random.randint(30, 140),
+                            random.randint(30, 140),
+                            random.randint(30, 140),
+                        )
+                        for tc in c.cells:  # [:1]:
+                            x0, y0, x1, y1 = tc.bbox.as_tuple()
+                            draw.rectangle([(x0, y0), (x1, y1)], outline=cell_color)
+                    image.show()
+
+                # draw_clusters_and_cells()
+
+                clusters, page.cells = self.postprocess(
+                    clusters, page.cells, page.size.height
+                )
+
+                # draw_clusters_and_cells()
+
+                page.predictions.layout = LayoutPrediction(clusters=clusters)
+
+                yield page

@@ -202,6 +202,7 @@ class GlmModel:
         page_dimensions = [
             PageDimensions(page=p.page_no + 1, height=p.size.height, width=p.size.width)
             for p in conv_res.pages
+            if p.size is not None
         ]
 
         ds_doc: DsDocument = DsDocument(
