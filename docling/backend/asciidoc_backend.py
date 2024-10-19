@@ -15,15 +15,14 @@ from docling_core.types.doc import (
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
-
-# from docling.datamodel.document import InputDocument
+from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
 
 
 class AsciidocBackend(DeclarativeDocumentBackend):
 
-    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+    def __init__(self, in_doc: InputDocument, path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
 
         self.path_or_stream = path_or_stream
@@ -76,8 +75,9 @@ class AsciidocBackend(DeclarativeDocumentBackend):
         """
 
         content = ""
-        with open(self.path_or_stream, "r") as fr:
-            self.lines = fr.readlines()
+        if isinstance(self.path_or_stream, Path):
+            with open(self.path_or_stream.name, "r") as fr:
+                self.lines = fr.readlines()
 
         # self.lines = file_content.splitlines()
 
@@ -91,7 +91,7 @@ class AsciidocBackend(DeclarativeDocumentBackend):
             # Title
             if self.is_title(line):
                 item = self.parse_title(line)
-                doc.add_text(text=item["text"], label="title")
+                doc.add_text(text=item["text"], label=DocItemLabel.TITLE)
 
             # Section headers
             elif self.is_section_header(line):
@@ -125,7 +125,7 @@ class AsciidocBackend(DeclarativeDocumentBackend):
             # Plain text
             elif line:
                 item = self.parse_text(line)
-                doc.add_text(text=item["text"], label="text")
+                doc.add_text(text=item["text"], label=DocItemLabel.TEXT)
 
         if in_table and len(table_data) > 0:
             data = self.populate_table_as_grid(table_data)
