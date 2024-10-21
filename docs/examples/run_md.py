@@ -1,11 +1,10 @@
 import json
 import logging
+import os
 from pathlib import Path
 
 import yaml
 
-from docling.datamodel.base_models import InputFormat
-import os
 from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
@@ -15,7 +14,12 @@ _log = logging.getLogger(__name__)
 
 def main():
     input_paths = [
-        Path("README.md")
+        Path("README.md"),
+        Path("scratch_a/2203.01017v2.md"),
+        Path("scratch_a/2206.01062.md"),
+        Path("scratch_a/2305.03393v1.md"),
+        Path("scratch_a/redp5110.md"),
+        Path("scratch_a/redp5695.md"),
     ]
 
     for path in input_paths:
@@ -24,13 +28,12 @@ def main():
             format=InputFormat.PDF,
             backend=MarkdownDocumentBackend,
         )
-        mdb = MarkdownDocumentBackend(in_doc = in_doc, path_or_stream = path)
+        mdb = MarkdownDocumentBackend(in_doc=in_doc, path_or_stream=path)
         document = mdb.convert()
 
         out_path = Path("scratch")
         print(
-            f"Document {path} converted."
-            f"\nSaved markdown output to: {str(out_path)}"
+            f"Document {path} converted." f"\nSaved markdown output to: {str(out_path)}"
         )
 
         # Export Docling document format to markdowndoc:

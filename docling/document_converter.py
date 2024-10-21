@@ -10,9 +10,9 @@ from pydantic import BaseModel, ConfigDict, model_validator, validate_call
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.html_backend import HTMLDocumentBackend
+from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
-from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
 from docling.datamodel.document import (
     ConversionResult,

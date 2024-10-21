@@ -3,6 +3,10 @@ from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
 
+import marko
+import marko.ext
+import marko.ext.gfm
+import marko.inline
 from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
@@ -10,18 +14,11 @@ from docling_core.types.doc import (
     TableCell,
     TableData,
 )
-import marko.ext
-import marko.ext.gfm
-import marko.inline
+from marko import Markdown
 
-from docling.backend.abstract_backend import (
-    DeclarativeDocumentBackend
-)
+from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
-
-import marko
-from marko import Markdown
 
 _log = logging.getLogger(__name__)
 
@@ -38,7 +35,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         self.markdown = ""  # To store original Markdown string
 
         self.in_table = False
-        self.md_table_buffer = []
+        self.md_table_buffer: list[str] = []
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
@@ -57,7 +54,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             ) from e
         return
 
-    def close_table(self, doc = None):
+    def close_table(self, doc=None):
 
         if self.in_table:
             _log.debug("=== TABLE START ===")
@@ -69,20 +66,24 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             for n, md_table_row in enumerate(self.md_table_buffer):
                 data = []
                 if n == 0:
-                    header = [t.strip() for t in md_table_row.split('|')[1:-1]]
+                    header = [t.strip() for t in md_table_row.split("|")[1:-1]]
                     for value in header:
                         data.append(value)
                     result_table.append(data)
                 if n > 1:
-                    values = [t.strip() for t in md_table_row.split('|')[1:-1]]
+                    values = [t.strip() for t in md_table_row.split("|")[1:-1]]
                     for value in values:
                         data.append(value)
                     result_table.append(data)
 
             for trow_ind, trow in enumerate(result_table):
                 for tcol_ind, cellval in enumerate(trow):
-                    row_span = 1  # currently supporting just simple tables (without spans)
-                    col_span = 1  # currently supporting just simple tables (without spans)
+                    row_span = (
+                        1  # currently supporting just simple tables (without spans)
+                    )
+                    col_span = (
+                        1  # currently supporting just simple tables (without spans)
+                    )
                     icell = TableCell(
                         text=cellval.strip(),
                         row_span=row_span,
@@ -109,12 +110,14 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 doc.add_table(data=data)
         return
 
-    def iterate_elements(self, element, depth=0, doc=None, parent_element = None):
+    def iterate_elements(self, element, depth=0, doc=None, parent_element=None):
         # Iterates over all elements in the AST
         # Check for different element types and process relevant details
         if isinstance(element, marko.block.Heading):
             self.close_table(doc)
-            _log.debug(f" - Heading level {element.level}, content: {element.children[0].children}")
+            _log.debug(
+                f" - Heading level {element.level}, content: {element.children[0].children}"
+            )
             if element.level == 1:
                 doc_label = DocItemLabel.TITLE
             else:
@@ -122,12 +125,9 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             snippet_text = element.children[0].children
 
             parent_element = doc.add_text(
-                label=doc_label,
-                parent=parent_element,
-                text=snippet_text
+                label=doc_label, parent=parent_element, text=snippet_text
             )
 
-        
         elif isinstance(element, marko.block.List):
             self.close_table(doc)
             _log.debug(f" - List {'ordered' if element.ordered else 'unordered'}")
@@ -135,11 +135,9 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             if element.ordered:
                 list_label = GroupLabel.ORDERED_LIST
             parent_element = doc.add_group(
-                label=list_label,
-                name=f"list",
-                parent=parent_element
+                label=list_label, name=f"list", parent=parent_element
             )
-        
+
         elif isinstance(element, marko.block.ListItem):
             self.close_table(doc)
             _log.debug(" - List item")
@@ -148,9 +146,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             if parent_element.label == GroupLabel.ORDERED_LIST:
                 is_numbered = True
             doc.add_list_item(
-                enumerated=is_numbered,
-                parent=parent_element,
-                text=snippet_text
+                enumerated=is_numbered, parent=parent_element, text=snippet_text
             )
 
         elif isinstance(element, marko.block.Paragraph):
@@ -158,29 +154,26 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             _log.debug(f" - Paragraph: {element.children[0].children}")
             snippet_text = str(element.children[0].children)
             doc.add_text(
-                label=DocItemLabel.PARAGRAPH,
-                parent=parent_element,
-                text=snippet_text
+                label=DocItemLabel.PARAGRAPH, parent=parent_element, text=snippet_text
             )
-        
+
         elif isinstance(element, marko.inline.Image):
             self.close_table(doc)
             _log.debug(f" - Image with alt: {element.title}, url: {element.dest}")
-            doc.add_picture(
-                parent=parent_element,
-                caption=element.title
-            )
+            doc.add_picture(parent=parent_element, caption=element.title)
 
         elif isinstance(element, marko.inline.RawText):
             _log.debug(f" - Paragraph (raw text): {element.children}")
             snippet_text = str(element.children)
 
             # Detect start of the table:
-            if  "|" in snippet_text:
+            if "|" in snippet_text:
                 # most likely part of the markdown table
                 self.in_table = True
                 if len(self.md_table_buffer) > 0:
-                    self.md_table_buffer[len(self.md_table_buffer)-1] += str(snippet_text)
+                    self.md_table_buffer[len(self.md_table_buffer) - 1] += str(
+                        snippet_text
+                    )
                 else:
                     self.md_table_buffer.append(snippet_text)
             else:
@@ -190,7 +183,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 doc.add_text(
                     label=DocItemLabel.PARAGRAPH,
                     parent=parent_element,
-                    text=snippet_text
+                    text=snippet_text,
                 )
 
         elif isinstance(element, marko.inline.CodeSpan):
@@ -198,9 +191,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             _log.debug(f" - Paragraph (code): {element.children}")
             snippet_text = str(element.children)
             doc.add_text(
-                label=DocItemLabel.CODE,
-                parent=parent_element,
-                text=snippet_text
+                label=DocItemLabel.CODE, parent=parent_element, text=snippet_text
             )
 
         elif isinstance(element, marko.inline.LineBreak):
@@ -213,9 +204,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             _log.debug("HTML Block: {}".format(element))
             snippet_text = str(element.children)
             doc.add_text(
-                label=DocItemLabel.CODE,
-                parent=parent_element,
-                text=snippet_text
+                label=DocItemLabel.CODE, parent=parent_element, text=snippet_text
             )
 
         else:
@@ -224,7 +213,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 _log.debug("Some other element: {}".format(element))
 
         # Iterate through the element's children (if any)
-        if hasattr(element, 'children'):
+        if hasattr(element, "children"):
             for child in element.children:
                 self.iterate_elements(child, depth + 1, doc, parent_element)
 
@@ -250,10 +239,10 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         if self.is_valid():
             # Parse the markdown into an abstract syntax tree (AST)
-            marko_parser = Markdown()            
+            marko_parser = Markdown()
             parsed_ast = marko_parser.parse(self.markdown)
             # Start iterating from the root of the AST
-            self.iterate_elements(parsed_ast, 0 , doc, None)
+            self.iterate_elements(parsed_ast, 0, doc, None)
         else:
             raise RuntimeError(
                 f"Cannot convert md with {self.document_hash} because the backend failed to init."
