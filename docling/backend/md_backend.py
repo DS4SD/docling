@@ -15,18 +15,25 @@ from docling_core.types.doc import (
     TableCell,
     TableData,
 )
+import marko.ext
+import marko.ext.gfm
+import marko.inline
 
 from docling.backend.abstract_backend import (
-    DeclarativeDocumentBackend,
-    PaginatedDocumentBackend,
+    DeclarativeDocumentBackend
 )
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
 import marko
-from marko.ext.gfm import gfm  # GitHub Flavored Markdown plugin (tables, task lists, etc.)
-from marko.block import BlockElement
-from marko.inline import InlineElement
+from marko import Markdown
+# from marko.ext.gfm import gfm  # GitHub Flavored Markdown plugin (tables, task lists, etc.)
+# from marko.ext.gfm.elements import Table
+# from marko.ext.gfm.elements import TableCell
+# from marko.ext.gfm.elements import TableRow
+
+# from marko.block import BlockElement
+# from marko.inline import InlineElement
 
 _log = logging.getLogger(__name__)
 
@@ -41,6 +48,9 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         self.path_or_stream = path_or_stream
         self.valid = True
         self.markdown = ""  # To store original Markdown string
+
+        self.in_table = False
+        self.md_table_buffer = []
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
@@ -59,6 +69,19 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             ) from e
         return
 
+    def close_table(self):
+        if self.in_table:
+            print("")
+            print("====================================== TABLE START")
+            for md_table_row in self.md_table_buffer:
+                print(md_table_row)
+            print("====================================== TABLE END")
+            print("")
+            self.in_table = False
+            self.md_table_buffer = []  # clean table markdown buffer
+        # return self.in_table, self.md_table_buffer
+        return
+
     # Function to iterate over all elements in the AST
     def iterate_elements(self, element, depth=0, doc=None, parent_element = None):
         # Print the element type and optionally its content
@@ -70,11 +93,13 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         # elif isinstance(element, InlineElement):
         #     print(" (Inline Element)")
 
-        not_a_list_item = True
+        # not_a_list_item = True
+
 
         # Check for different element types and print relevant details
         if isinstance(element, marko.block.Heading):
-            print(f" - Heading level {element.level}, content: {element.children[0].children}")
+            self.close_table()
+            # print(f" - Heading level {element.level}, content: {element.children[0].children}")
             if element.level == 1:
                 doc_label = DocItemLabel.TITLE
             else:
@@ -89,8 +114,8 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         
         elif isinstance(element, marko.block.List):
-            print(f" - List {'ordered' if element.ordered else 'unordered'}")
-
+            self.close_table()
+            # print(f" - List {'ordered' if element.ordered else 'unordered'}")
             list_label = GroupLabel.LIST
             if element.ordered:
                 list_label = GroupLabel.ORDERED_LIST
@@ -101,8 +126,9 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             )
         
         elif isinstance(element, marko.block.ListItem):
-            print(" - List item")
-            not_a_list_item = False
+            self.close_table()
+            # print(" - List item")
+            # not_a_list_item = False
             snippet_text = str(element.children[0].children[0].children)
             is_numbered = False
             if parent_element.label == GroupLabel.ORDERED_LIST:
@@ -115,7 +141,8 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             )
 
         elif isinstance(element, marko.block.Paragraph):
-            print(f" - Paragraph: {element.children[0].children}")
+            self.close_table()
+            # print(f" - Paragraph: {element.children[0].children}")
             snippet_text = str(element.children[0].children)
             doc.add_text(
                 label=DocItemLabel.PARAGRAPH,
@@ -124,36 +151,69 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             )
         
         elif isinstance(element, marko.inline.Image):
-            print(f" - Image with alt: {element.title}, url: {element.dest}")
+            self.close_table()
+            # print(f" - Image with alt: {element.title}, url: {element.dest}")
             doc.add_picture(
                 parent=parent_element,
                 caption=element.title
             )
 
         elif isinstance(element, marko.inline.RawText):
-            print(f" - Paragraph (raw text): {element.children}")
+            # print(f" - Paragraph (raw text): {element.children}")
+            # TODO: Detect start of the table here...
             snippet_text = str(element.children)
-            doc.add_text(
-                label=DocItemLabel.PARAGRAPH,
-                parent=parent_element,
-                text=snippet_text
-            )
+            if "|" in snippet_text:
+                # most likely table
+                # if in_table == False:
+                #     print("====================================== TABLE START!")
+                self.in_table = True
+                # print(f" - TABLE: {element.children}")
+                if len(self.md_table_buffer) > 0:
+                    self.md_table_buffer[len(self.md_table_buffer)-1] += str(snippet_text)
+                else:
+                    self.md_table_buffer.append(snippet_text)
+            else:
+                self.close_table()
+                self.in_table = False
+                # most likely just text
+                doc.add_text(
+                    label=DocItemLabel.PARAGRAPH,
+                    parent=parent_element,
+                    text=snippet_text
+                )
 
         elif isinstance(element, marko.inline.CodeSpan):
-            print(f" - Paragraph (code): {element.children}")
+            self.close_table()
+            # print(f" - Paragraph (code): {element.children}")
             snippet_text = str(element.children)
             doc.add_text(
-                label=DocItemLabel.PARAGRAPH,
+                label=DocItemLabel.CODE,
                 parent=parent_element,
                 text=snippet_text
             )
+
+        elif isinstance(element, marko.inline.LineBreak):
+            if self.in_table:
+                print("Line break in table")
+                self.md_table_buffer.append("")
+                # print("HTML Block else: {}".format(element))
+
+        elif isinstance(element, marko.block.HTMLBlock):
+            self.close_table()
+            print("HTML Block else: {}".format(element))
+
+            # elif isinstance(element, marko.ext.gfm.elements.Table):
+        # elif isinstance(element, marko.ext.gfm.elements.Table):
+        #     print(" - Table")
+        # elif isinstance(element, TableRow):
+        #     print(" - TableRow")
+        # elif isinstance(element, TableCell):
+        #     print(" - TableCell")
         else:
             if not isinstance(element, str):
+                self.close_table()
                 print("Something else: {}".format(element))
-            # print(element)
 
-        # elif isinstance(element, marko.block.Table):
-        #     print(" - Table")
         # elif isinstance(element, marko.block.Table):
         #     print(" - Table")
 
@@ -185,8 +245,15 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         if self.is_valid():
             # Parse the markdown into an abstract syntax tree (AST)
-            parser = marko.Markdown(extensions=['gfm'])
-            parsed_ast = parser.parse(self.markdown)
+            # parser = marko.Markdown(extensions=['gfm'])
+
+            # gfm_parser = Markdown(extensions=['gfm'])
+            gfm_parser = Markdown()
+            # gfm_parser.use('gfm')
+            
+            parsed_ast = gfm_parser.parse(self.markdown)
+
+            # parsed_ast = gfm(self.markdown)
             # Start iterating from the root of the AST
             self.iterate_elements(parsed_ast, 0 , doc, None)
 
