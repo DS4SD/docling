@@ -69,7 +69,8 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             ) from e
         return
 
-    def close_table(self):
+    def close_table(self, doc = None):
+
         if self.in_table:
             print("")
             print("====================================== TABLE START")
@@ -77,8 +78,56 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 print(md_table_row)
             print("====================================== TABLE END")
             print("")
+
+            tcells = []
+            result_table = []
+            for n, md_table_row in enumerate(self.md_table_buffer):
+                data = []
+                if n == 0:
+                    header = [t.strip() for t in md_table_row.split('|')[1:-1]]
+                    for value in header:
+                        data.append(value)
+                    result_table.append(data)
+                if n > 1:
+                    values = [t.strip() for t in md_table_row.split('|')[1:-1]]
+                    for value in values:
+                        data.append(value)
+                    result_table.append(data)
+
+            print(result_table)
+            print()
+
+            for trow_ind, trow in enumerate(result_table):
+                for tcol_ind, cellval in enumerate(trow):
+                    row_span = 1  # currently supporting just simple tables (without spans)
+                    col_span = 1  # currently supporting just simple tables (without spans)
+                    icell = TableCell(
+                        text=cellval.strip(),
+                        row_span=row_span,
+                        col_span=col_span,
+                        start_row_offset_idx=trow_ind,
+                        end_row_offset_idx=trow_ind + row_span,
+                        start_col_offset_idx=tcol_ind,
+                        end_col_offset_idx=tcol_ind + col_span,
+                        col_header=False,
+                        row_header=False,
+                    )
+                    tcells.append(icell)
+
+            num_rows = len(result_table)
+            num_cols = len(result_table[0])
+
             self.in_table = False
             self.md_table_buffer = []  # clean table markdown buffer
+
+            # Initialize Docling TableData
+            data = TableData(num_rows=num_rows, num_cols=num_cols, table_cells=tcells)
+            # Populate
+            for tcell in tcells:
+                data.table_cells.append(tcell)
+            if len(tcells) > 0:
+                doc.add_table(data=data)
+
         # return self.in_table, self.md_table_buffer
         return
 
@@ -98,7 +147,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         # Check for different element types and print relevant details
         if isinstance(element, marko.block.Heading):
-            self.close_table()
+            self.close_table(doc)
             # print(f" - Heading level {element.level}, content: {element.children[0].children}")
             if element.level == 1:
                 doc_label = DocItemLabel.TITLE
@@ -114,7 +163,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         
         elif isinstance(element, marko.block.List):
-            self.close_table()
+            self.close_table(doc)
             # print(f" - List {'ordered' if element.ordered else 'unordered'}")
             list_label = GroupLabel.LIST
             if element.ordered:
@@ -126,7 +175,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             )
         
         elif isinstance(element, marko.block.ListItem):
-            self.close_table()
+            self.close_table(doc)
             # print(" - List item")
             # not_a_list_item = False
             snippet_text = str(element.children[0].children[0].children)
@@ -141,7 +190,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             )
 
         elif isinstance(element, marko.block.Paragraph):
-            self.close_table()
+            self.close_table(doc)
             # print(f" - Paragraph: {element.children[0].children}")
             snippet_text = str(element.children[0].children)
             doc.add_text(
@@ -151,7 +200,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             )
         
         elif isinstance(element, marko.inline.Image):
-            self.close_table()
+            self.close_table(doc)
             # print(f" - Image with alt: {element.title}, url: {element.dest}")
             doc.add_picture(
                 parent=parent_element,
@@ -162,7 +211,8 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             # print(f" - Paragraph (raw text): {element.children}")
             # TODO: Detect start of the table here...
             snippet_text = str(element.children)
-            if "|" in snippet_text:
+            # if  snippet_text.count("|") > 1:
+            if  "|" in snippet_text:
                 # most likely table
                 # if in_table == False:
                 #     print("====================================== TABLE START!")
@@ -173,7 +223,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 else:
                     self.md_table_buffer.append(snippet_text)
             else:
-                self.close_table()
+                self.close_table(doc)
                 self.in_table = False
                 # most likely just text
                 doc.add_text(
@@ -183,7 +233,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 )
 
         elif isinstance(element, marko.inline.CodeSpan):
-            self.close_table()
+            self.close_table(doc)
             # print(f" - Paragraph (code): {element.children}")
             snippet_text = str(element.children)
             doc.add_text(
@@ -199,7 +249,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 # print("HTML Block else: {}".format(element))
 
         elif isinstance(element, marko.block.HTMLBlock):
-            self.close_table()
+            self.close_table(doc)
             print("HTML Block else: {}".format(element))
 
             # elif isinstance(element, marko.ext.gfm.elements.Table):
@@ -211,7 +261,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         #     print(" - TableCell")
         else:
             if not isinstance(element, str):
-                self.close_table()
+                self.close_table(doc)
                 print("Something else: {}".format(element))
 
         # elif isinstance(element, marko.block.Table):
