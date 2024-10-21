@@ -13,14 +13,7 @@ _log = logging.getLogger(__name__)
 
 
 def main():
-    input_paths = [
-        Path("README.md"),
-        Path("scratch_a/2203.01017v2.md"),
-        Path("scratch_a/2206.01062.md"),
-        Path("scratch_a/2305.03393v1.md"),
-        Path("scratch_a/redp5110.md"),
-        Path("scratch_a/redp5695.md"),
-    ]
+    input_paths = [Path("README.md")]
 
     for path in input_paths:
         in_doc = InputDocument(
