@@ -76,7 +76,7 @@ class AsciidocBackend(DeclarativeDocumentBackend):
 
         content = ""
         if isinstance(self.path_or_stream, Path):
-            with open(self.path_or_stream.name, "r") as fr:
+            with open(self.path_or_stream, "r") as fr:
                 self.lines = fr.readlines()
 
         # self.lines = file_content.splitlines()
@@ -85,30 +85,50 @@ class AsciidocBackend(DeclarativeDocumentBackend):
         in_table = False
         table_data = []
 
+        parents = {}
+        for i in range(0, 10):
+            parents[i] = None
+        
         for line in self.lines:
             line = line.strip()
 
             # Title
             if self.is_title(line):
                 item = self.parse_title(line)
-                doc.add_text(text=item["text"], label=DocItemLabel.TITLE)
-
+                level = item["level"]
+                
+                parents[level] = doc.add_text(text=item["text"], label=DocItemLabel.TITLE)
+                
             # Section headers
             elif self.is_section_header(line):
-                heading = self.parse_section_header(line)
-                doc.add_heading(text=heading["text"], level=heading["level"])
-
+                item = self.parse_section_header(line)
+                level = item["level"]
+                
+                parents[level] = doc.add_heading(text=item["text"], level=item["level"], parent=parents[level-1])
+                for k,v in parents.items():
+                    if k>level:
+                        parents[k] = None
+                
             # Lists
             elif self.is_list_item(line):
                 if not in_list:
                     in_list = True
 
+                    level = self.get_current_level(parents)
+                    
+                    parents[level+1] = doc.add_group(
+                        parent=parents[level], name="list", label=GroupLabel.LIST
+                    )
+                    
                 item = self.parse_list_item(line)
-                doc.add_list_item(item["text"])
+                doc.add_list_item(item["text"], parent=self.get_current_parent(parents))
 
             elif in_list and not self.is_list_item(line):
                 in_list = False
 
+                level = self.get_current_level(parents)
+                parents[level]=None
+                
             # Tables
             elif self.is_table_line(line):
                 in_table = True
@@ -117,42 +137,61 @@ class AsciidocBackend(DeclarativeDocumentBackend):
             elif in_table and not self.is_table_line(line):
 
                 data = self.populate_table_as_grid(table_data)
-                doc.add_table(data=data)
+                doc.add_table(data=data, parent=self.get_current_parent(parents))
 
                 in_table = False
                 table_data = []
 
             # Plain text
-            elif line:
+            elif len(line)>0:
                 item = self.parse_text(line)
-                doc.add_text(text=item["text"], label=DocItemLabel.TEXT)
+                doc.add_text(text=item["text"], label=DocItemLabel.PARAGRAPH, parent=self.get_current_parent(parents))
 
         if in_table and len(table_data) > 0:
             data = self.populate_table_as_grid(table_data)
-            doc.add_table(data=data)
+            doc.add_table(data=data, parent=self.get_current_parent(parents))
 
             in_table = False
             table_data = []
 
         return doc
 
+    def get_current_level(self, parents):
+        for k,v in parents.items():
+            if v==None and k>0:
+                return k-1
+
+        return 0
+    
+    def get_current_parent(self, parents):
+        for k,v in parents.items():
+            if v==None and k>0:
+                return parents[k-1]
+
+        return None
+            
     # Title
     def is_title(self, line):
         return re.match(r"^= ", line)
 
     def parse_title(self, line):
-        return {"type": "title", "text": line[2:].strip()}
+        return {"type": "title", "text": line[2:].strip(), "level":0}
 
     # Section headers
     def is_section_header(self, line):
         return re.match(r"^==+", line)
 
     def parse_section_header(self, line):
-        header_level = line.count("=")  # number of '=' represents level
+        match = re.match(r"^(=+)\s+(.*)", line)
+        
+        marker = match.group(1)  # The list marker (e.g., "*", "-", "1.")
+        text = match.group(2)    # The actual text of the list item
+        
+        header_level = marker.count("=")  # number of '=' represents level
         return {
             "type": "header",
-            "level": header_level,
-            "text": line[header_level:].strip(),
+            "level": header_level-1,
+            "text": text.strip(),
         }
 
     # Lists
@@ -160,8 +199,20 @@ class AsciidocBackend(DeclarativeDocumentBackend):
         return re.match(r"^(\*|-|\d+\.|\w+\.) ", line)
 
     def parse_list_item(self, line):
-        return {"type": "list_item", "text": line}
+        """Extract the item marker (number or bullet symbol) and the text of the item."""
 
+        match = re.match(r"^(\*|-|\d+\.)\s+(.*)", line)
+        if match:
+            item_marker = match.group(1)  # The list marker (e.g., "*", "-", "1.")
+            item_text = match.group(2)    # The actual text of the list item
+            if item_marker=="*" or item_marker=="-":
+                return {"type": "list_item", "marker": item_marker, "text": item_text.strip(), "numbered": False}
+            else:
+                return {"type": "list_item", "marker": item_marker, "text": item_text.strip(), "numbered": True}
+        else:
+            # Fallback if no match
+            return {"type": "list_item", "marker": item_marker, "text": line, "numbered": False}
+    
     # Tables
     def is_table_line(self, line):
         return re.match(r"^\|.*\|", line)

@@ -1,8 +1,13 @@
-= Sample Document Title
+= 1st Sample Document Title
+
+This is an abstract.
 
 == Section 1
 
 This is some introductory text in section 1.
+
+This spans multiple lines but should be treated
+as a single paragraph.
     
 === Subsection 1.1
 * First list item

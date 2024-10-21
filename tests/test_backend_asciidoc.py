@@ -27,15 +27,22 @@ def test_asciidocs_examples():
 
     for fname in fnames:
         print(f"reading {fname}")
-
+        
         bname = os.path.basename(fname)
         gname = os.path.join("./tests/data/groundtruth/docling_v2/", bname + ".md")
-
+        
         doc_backend = _get_backend(Path(fname))
         doc = doc_backend.convert()
 
+        pred_itdoc = doc.export_to_indented_text(max_text_len=16)
+        print("\n\n", pred_itdoc)
+        
         pred_mddoc = doc.export_to_markdown()
+        print("\n\n", pred_mddoc)
 
+        pred_mddocv2 = doc.export_to_markdown(version="v2")
+        print("\n\n", pred_mddocv2)        
+        
         if os.path.exists(gname):
             with open(gname, "r") as fr:
                 true_mddoc = fr.read()

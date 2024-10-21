@@ -37,7 +37,8 @@ torchvision = [
 ######################
 python = "^3.10"
 pydantic = "^2.0.0"
-docling-core = "^2.0.1"
+#docling-core = "^2.0.1"
+docling-core = { git = "https://github.com/DS4SD/docling-core.git", rev = "334a9871fc6c666431ed6c59e5d8d69972b41f19" }
 docling-ibm-models = "^2.0.1"
 deepsearch-glm = "^0.25.0"
 filetype = "^1.2.0"
