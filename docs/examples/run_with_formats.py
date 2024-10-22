@@ -25,6 +25,7 @@ def main():
         Path("tests/data/powerpoint_sample.pptx"),
         Path("tests/data/2305.03393v1-pg9-img.png"),
         Path("tests/data/2206.01062.pdf"),
+        Path("tests/data/test_01.asciidoc"),
     ]
 
     ## for defaults use:
@@ -40,6 +41,7 @@ def main():
                 InputFormat.DOCX,
                 InputFormat.HTML,
                 InputFormat.PPTX,
+                InputFormat.ASCIIDOC,
             ],  # whitelist formats, non-matching files are ignored.
             format_options={
                 InputFormat.PDF: PdfFormatOption(
