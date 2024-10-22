@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/ds4sd/docling">
-    <img loading="lazy" alt="Docling" src="docs/assets/docling_processing.png" width="100%"/>
+    <img loading="lazy" alt="Docling" src="https://github.com/DS4SD/docling/raw/main/docs/assets/docling_processing.png" width="100%"/>
   </a>
 </p>
 
@@ -50,7 +50,7 @@ To convert individual documents, use `convert()`, for example:
 ```python
 from docling.document_converter import DocumentConverter
 
-source = "https://arxiv.org/pdf/2408.09869"  # PDF path or URL
+source = "https://arxiv.org/pdf/2408.09869"  # document per local path or URL
 converter = DocumentConverter()
 result = converter.convert(source)
 print(result.document.export_to_markdown())  # output: "## Docling Technical Report[...]"

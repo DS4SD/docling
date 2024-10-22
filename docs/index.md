@@ -1,9 +1,7 @@
 # Docling
 
 <p align="center">
-  <a href="https://ds4sd.github.io/docling/">
-    <img loading="lazy" alt="Docling" src="assets/logo.png" width="150" />
-  </a>
+  <img loading="lazy" alt="Docling" src="assets/docling_processing.png" width="100%" />
 </p>
 
 
