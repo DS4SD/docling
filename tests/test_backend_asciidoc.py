@@ -51,6 +51,4 @@ def test_asciidocs_examples():
 
             # print("\n\n", doc.export_to_markdown())
 
-        input("continue")
-
     assert True
