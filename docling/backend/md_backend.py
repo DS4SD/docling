@@ -37,7 +37,6 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         self.in_table = False
         self.md_table_buffer: list[str] = []
-        
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
@@ -143,7 +142,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         elif isinstance(element, marko.block.ListItem):
             self.close_table(doc)
             _log.debug(" - List item")
-            
+
             snippet_text = str(element.children[0].children[0].children)
             is_numbered = False
             if parent_element.label == GroupLabel.ORDERED_LIST:
@@ -154,7 +153,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         elif isinstance(element, marko.inline.Image):
             self.close_table(doc)
-            
+
             _log.debug(f" - Image with alt: {element.title}, url: {element.dest}")
             doc.add_picture(parent=parent_element, caption=element.title)
 

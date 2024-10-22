@@ -94,5 +94,5 @@ If you use Docling in your projects, please consider citing the following:
 
 ## License
 
-The Docling codebase is under MIT license.
+The Docling codebase is under MIT license. 
 For individual model usage, please refer to the model licenses found in the original packages.
