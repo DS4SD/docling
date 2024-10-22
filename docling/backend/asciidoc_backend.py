@@ -4,7 +4,12 @@ from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
 
+from pydantic import (
+    AnyUrl,
+)
+
 from docling_core.types.doc import (
+    Size,    
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
@@ -190,7 +195,19 @@ class AsciidocBackend(DeclarativeDocumentBackend):
                 item = self.parse_picture(line)
                 print(item)
 
-                image = ImageRef(mimetype="image/png", size=[100,100], dpi=70, uri=item["uri"])
+                size = None
+                if "width" in item and "height" in item:
+                    size = Size(width=int(item["width"]), height=int(item["height"]))
+
+                uri = None
+                if "uri" in item and not item["uri"].startswith("http") and item["uri"].startswith("//"):
+                    uri = "file:"+item["uri"]
+                elif "uri" in item and not item["uri"].startswith("http") and item["uri"].startswith("/"):
+                    uri = "file:/"+item["uri"]
+                elif "uri" in item and not item["uri"].startswith("http"):
+                    uri = "file://"+item["uri"]
+
+                image = ImageRef(mimetype="image/png", size=size, dpi=70, uri=uri)
                 doc.add_picture(image=image, caption=caption)
                 
             # Caption
