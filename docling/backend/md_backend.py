@@ -37,6 +37,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         self.in_table = False
         self.md_table_buffer: list[str] = []
+        
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
@@ -123,7 +124,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 doc_label = DocItemLabel.TITLE
             else:
                 doc_label = DocItemLabel.SECTION_HEADER
-            snippet_text = element.children[0].children
+            snippet_text = element.children[0].children.strip()
 
             parent_element = doc.add_text(
                 label=doc_label, parent=parent_element, text=snippet_text
@@ -142,6 +143,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         elif isinstance(element, marko.block.ListItem):
             self.close_table(doc)
             _log.debug(" - List item")
+            
             snippet_text = str(element.children[0].children[0].children)
             is_numbered = False
             if parent_element.label == GroupLabel.ORDERED_LIST:
@@ -150,23 +152,15 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 enumerated=is_numbered, parent=parent_element, text=snippet_text
             )
 
-        elif isinstance(element, marko.block.Paragraph):
-            self.close_table(doc)
-            _log.debug(f" - Paragraph: {element.children[0].children}")
-            snippet_text = str(element.children[0].children)
-            doc.add_text(
-                label=DocItemLabel.PARAGRAPH, parent=parent_element, text=snippet_text
-            )
-
         elif isinstance(element, marko.inline.Image):
             self.close_table(doc)
+            
             _log.debug(f" - Image with alt: {element.title}, url: {element.dest}")
             doc.add_picture(parent=parent_element, caption=element.title)
 
         elif isinstance(element, marko.inline.RawText):
             _log.debug(f" - Paragraph (raw text): {element.children}")
-            snippet_text = str(element.children)
-
+            snippet_text = str(element.children).strip()
             # Detect start of the table:
             if "|" in snippet_text:
                 # most likely part of the markdown table
@@ -190,7 +184,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         elif isinstance(element, marko.inline.CodeSpan):
             self.close_table(doc)
             _log.debug(f" - Paragraph (code): {element.children}")
-            snippet_text = str(element.children)
+            snippet_text = str(element.children).strip()
             doc.add_text(
                 label=DocItemLabel.CODE, parent=parent_element, text=snippet_text
             )
@@ -203,7 +197,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         elif isinstance(element, marko.block.HTMLBlock):
             self.close_table(doc)
             _log.debug("HTML Block: {}".format(element))
-            snippet_text = str(element.children)
+            snippet_text = str(element.children).strip()
             doc.add_text(
                 label=DocItemLabel.CODE, parent=parent_element, text=snippet_text
             )
@@ -214,9 +208,12 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 _log.debug("Some other element: {}".format(element))
 
         # Iterate through the element's children (if any)
-        if hasattr(element, "children"):
-            for child in element.children:
-                self.iterate_elements(child, depth + 1, doc, parent_element)
+        if not isinstance(element, marko.block.ListItem):
+            if not isinstance(element, marko.block.Heading):
+                # if not isinstance(element, marko.block.Paragraph):
+                if hasattr(element, "children"):
+                    for child in element.children:
+                        self.iterate_elements(child, depth + 1, doc, parent_element)
 
     def is_valid(self) -> bool:
         return self.valid
