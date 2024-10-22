@@ -27,10 +27,10 @@ To see all available options (export formats etc.) run `docling --help`.
 <details>
   <summary><b>CLI reference</b></summary>
 
-  Here are the available options as of this writing (for an up-to-date listing, run `docling --help`):
+Here are the available options as of this writing (for an up-to-date listing, run `docling --help`):
 
-  ```console
-  $ docling --help
+```console
+$ docling --help
 
  Usage: docling [OPTIONS] source
 
@@ -57,7 +57,7 @@ To see all available options (export formats etc.) run `docling --help`.
 │ --version                                                                     Show version information.                   │
 │ --help                                                                        Show this message and exit.                 │
 ╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-  ```
+```
 </details>
 
 
