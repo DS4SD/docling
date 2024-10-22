@@ -157,10 +157,10 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             _log.debug(f" - Image with alt: {element.title}, url: {element.dest}")
             doc.add_picture(parent=parent_element, caption=element.title)
 
-        elif isinstance(element, marko.block.Paragraph):
-            print("Paragraph:")
-            print(element)
-            print("")
+        # elif isinstance(element, marko.block.Paragraph):
+        #     print("Paragraph:")
+        #     print(element)
+        #     print("")
 
         elif isinstance(element, marko.inline.RawText):
             _log.debug(f" - Paragraph (raw text): {element.children}")
@@ -195,9 +195,6 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         elif isinstance(element, marko.block.CodeBlock):
             self.close_table(doc)
-            print("CODE BLOCK")
-            print(element)
-            print("")
             _log.debug(f" - Code Block: {element.children}")
             snippet_text = str(element.children[0].children).strip()
             doc.add_text(
@@ -206,9 +203,6 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         elif isinstance(element, marko.block.FencedCode):
             self.close_table(doc)
-            print("FENCED CODE")
-            print(element)
-            print("")
             _log.debug(f" - Code Block: {element.children}")
             snippet_text = str(element.children[0].children).strip()
             doc.add_text(
@@ -232,9 +226,6 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             if not isinstance(element, str):
                 self.close_table(doc)
                 _log.debug("Some other element: {}".format(element))
-                print("SOMETHING ELSE")
-                print(element)
-                print("")
 
         # Iterate through the element's children (if any)
         if not isinstance(element, marko.block.ListItem):
