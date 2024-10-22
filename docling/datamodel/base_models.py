@@ -51,27 +51,27 @@ FormatToExtensions: Dict[InputFormat, List[str]] = {
     InputFormat.ASCIIDOC: ["adoc", "asciidoc", "asc"],
 }
 
-FormatToMimeType: Dict[InputFormat, Set[str]] = {
-    InputFormat.DOCX: {
+FormatToMimeType: Dict[InputFormat, List[str]] = {
+    InputFormat.DOCX: [
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.template",
-    },
-    InputFormat.PPTX: {
+    ],
+    InputFormat.PPTX: [
         "application/vnd.openxmlformats-officedocument.presentationml.template",
         "application/vnd.openxmlformats-officedocument.presentationml.slideshow",
         "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    },
-    InputFormat.HTML: {"text/html", "application/xhtml+xml"},
-    InputFormat.IMAGE: {
+    ],
+    InputFormat.HTML: ["text/html", "application/xhtml+xml"],
+    InputFormat.IMAGE: [
         "image/png",
         "image/jpeg",
         "image/tiff",
         "image/gif",
         "image/bmp",
-    },
-    InputFormat.PDF: {"application/pdf"},
-    InputFormat.ASCIIDOC: {"text/asciidoc"},
-    InputFormat.MD: {"text/markdown", "text/x-markdown"},
+    ],
+    InputFormat.PDF: ["application/pdf"],
+    InputFormat.ASCIIDOC: ["text/asciidoc"],
+    InputFormat.MD: ["text/markdown", "text/x-markdown"],
 }
 MimeTypeToFormat = {
     mime: fmt for fmt, mimes in FormatToMimeType.items() for mime in mimes

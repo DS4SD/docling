@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 from io import BytesIO
 from pathlib import Path
@@ -67,21 +68,13 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
         Parses the ASCII into a structured document model.
         """
 
-        fname = ""
-        if isinstance(self.path_or_stream, Path):
-            fname = self.path_or_stream.name
-
         origin = DocumentOrigin(
-            filename=fname,
+            filename=self.file.name or "file",
             mimetype="text/asciidoc",
             binary_hash=self.document_hash,
         )
-        if len(fname) > 0:
-            docname = Path(fname).stem
-        else:
-            docname = "stream"
 
-        doc = DoclingDocument(name=docname, origin=origin)
+        doc = DoclingDocument(name=self.file.stem or "file", origin=origin)
 
         doc = self._parse(doc)
 
@@ -138,9 +131,9 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
             # Lists
             elif self._is_list_item(line):
 
-                print("line: ", line)
+                _log.debug(f"line: {line}")
                 item = self._parse_list_item(line)
-                print("parsed list-item: ", item)
+                _log.debug(f"parsed list-item: {item}")
 
                 level = self._get_current_level(parents)
 
@@ -160,9 +153,9 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
 
                 elif in_list and item["indent"] < indents[level]:
 
-                    print(item["indent"], " => ", indents[level])
+                    # print(item["indent"], " => ", indents[level])
                     while item["indent"] < indents[level]:
-                        print(item["indent"], " => ", indents[level])
+                        # print(item["indent"], " => ", indents[level])
                         parents[level] = None
                         indents[level] = None
                         level -= 1
@@ -217,7 +210,6 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                 caption_data = []
 
                 item = self._parse_picture(line)
-                print(item)
 
                 size = None
                 if "width" in item and "height" in item:
@@ -355,7 +347,7 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
             # Fallback if no match
             return {
                 "type": "list_item",
-                "marker": item_marker,
+                "marker": "-",
                 "text": line,
                 "numbered": False,
                 "indent": 0,

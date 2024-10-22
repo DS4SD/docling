@@ -237,21 +237,13 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
     def convert(self) -> DoclingDocument:
         _log.debug("converting Markdown...")
 
-        fname = ""
-        if isinstance(self.path_or_stream, Path):
-            fname = self.path_or_stream.name
-
         origin = DocumentOrigin(
-            filename=fname,
+            filename=self.file.name or "file",
             mimetype="text/markdown",
             binary_hash=self.document_hash,
         )
-        if len(fname) > 0:
-            docname = Path(fname).stem
-        else:
-            docname = "stream"
 
-        doc = DoclingDocument(name=docname, origin=origin)
+        doc = DoclingDocument(name=self.file.stem or "file", origin=origin)
 
         if self.is_valid():
             # Parse the markdown into an abstract syntax tree (AST)

@@ -1,11 +1,13 @@
 import json
 import logging
+from io import BytesIO
 from pathlib import Path
 
 import yaml
 
+from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import InputFormat
+from docling.datamodel.base_models import DocumentStream, InputFormat
 from docling.document_converter import (
     DocumentConverter,
     PdfFormatOption,
@@ -19,17 +21,23 @@ _log = logging.getLogger(__name__)
 
 def main():
     input_paths = [
-        Path("README.md"),
         Path("tests/data/wiki_duck.html"),
         Path("tests/data/word_sample.docx"),
+        Path("tests/data/word_nested.docx"),
         Path("tests/data/lorem_ipsum.docx"),
         Path("tests/data/powerpoint_sample.pptx"),
         Path("tests/data/2305.03393v1-pg9-img.png"),
         Path("tests/data/2206.01062.pdf"),
         Path("tests/data/test_01.asciidoc"),
-        Path("tests/data/test_01.asciidoc"),
+        Path("tests/data/test_02.asciidoc"),
         Path("README.md"),
     ]
+
+    # To read from bytes instead:
+    # docs = [
+    #    DocumentStream(name=f.name, stream=BytesIO(f.open("rb").read()))
+    #    for f in input_paths
+    # ]
 
     ## for defaults use:
     # doc_converter = DocumentConverter()
@@ -49,7 +57,8 @@ def main():
             ],  # whitelist formats, non-matching files are ignored.
             format_options={
                 InputFormat.PDF: PdfFormatOption(
-                    pipeline_cls=StandardPdfPipeline, backend=PyPdfiumDocumentBackend
+                    pipeline_cls=StandardPdfPipeline,
+                    backend=DoclingParseDocumentBackend,
                 ),
                 InputFormat.DOCX: WordFormatOption(
                     pipeline_cls=SimplePipeline  # , backend=MsWordDocumentBackend
@@ -59,6 +68,7 @@ def main():
     )
 
     conv_results = doc_converter.convert_all(input_paths)
+    # conv_results = doc_converter.convert_all(docs)
 
     for res in conv_results:
         out_path = Path("scratch")

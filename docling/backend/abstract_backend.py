@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 class AbstractDocumentBackend(ABC):
     @abstractmethod
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+        self.file = in_doc.file
         self.path_or_stream = path_or_stream
         self.document_hash = in_doc.document_hash
         self.input_format = in_doc.format

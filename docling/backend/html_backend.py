@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
+    DocumentOrigin,
     GroupLabel,
     TableCell,
     TableData,
@@ -66,7 +67,13 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
     def convert(self) -> DoclingDocument:
         # access self.path_or_stream to load stuff
-        doc = DoclingDocument(name="dummy")
+        origin = DocumentOrigin(
+            filename=self.file.name or "file",
+            mimetype="text/html",
+            binary_hash=self.document_hash,
+        )
+
+        doc = DoclingDocument(name=self.file.stem or "file", origin=origin)
         _log.debug("Trying to convert HTML...")
 
         if self.is_valid():
