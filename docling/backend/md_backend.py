@@ -157,6 +157,11 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             _log.debug(f" - Image with alt: {element.title}, url: {element.dest}")
             doc.add_picture(parent=parent_element, caption=element.title)
 
+        elif isinstance(element, marko.block.Paragraph):
+            print("Paragraph:")
+            print(element)
+            print("")
+
         elif isinstance(element, marko.inline.RawText):
             _log.debug(f" - Paragraph (raw text): {element.children}")
             snippet_text = str(element.children).strip()
@@ -182,8 +187,30 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         elif isinstance(element, marko.inline.CodeSpan):
             self.close_table(doc)
-            _log.debug(f" - Paragraph (code): {element.children}")
+            _log.debug(f" - Code Span: {element.children}")
             snippet_text = str(element.children).strip()
+            doc.add_text(
+                label=DocItemLabel.CODE, parent=parent_element, text=snippet_text
+            )
+
+        elif isinstance(element, marko.block.CodeBlock):
+            self.close_table(doc)
+            print("CODE BLOCK")
+            print(element)
+            print("")
+            _log.debug(f" - Code Block: {element.children}")
+            snippet_text = str(element.children[0].children).strip()
+            doc.add_text(
+                label=DocItemLabel.CODE, parent=parent_element, text=snippet_text
+            )
+
+        elif isinstance(element, marko.block.FencedCode):
+            self.close_table(doc)
+            print("FENCED CODE")
+            print(element)
+            print("")
+            _log.debug(f" - Code Block: {element.children}")
+            snippet_text = str(element.children[0].children).strip()
             doc.add_text(
                 label=DocItemLabel.CODE, parent=parent_element, text=snippet_text
             )
@@ -205,14 +232,18 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             if not isinstance(element, str):
                 self.close_table(doc)
                 _log.debug("Some other element: {}".format(element))
+                print("SOMETHING ELSE")
+                print(element)
+                print("")
 
         # Iterate through the element's children (if any)
         if not isinstance(element, marko.block.ListItem):
             if not isinstance(element, marko.block.Heading):
-                # if not isinstance(element, marko.block.Paragraph):
-                if hasattr(element, "children"):
-                    for child in element.children:
-                        self.iterate_elements(child, depth + 1, doc, parent_element)
+                if not isinstance(element, marko.block.FencedCode):
+                    # if not isinstance(element, marko.block.Paragraph):
+                    if hasattr(element, "children"):
+                        for child in element.children:
+                            self.iterate_elements(child, depth + 1, doc, parent_element)
 
     def is_valid(self) -> bool:
         return self.valid
