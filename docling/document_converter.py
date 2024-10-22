@@ -8,8 +8,10 @@ from typing import Dict, Iterable, Iterator, List, Optional, Type
 from pydantic import BaseModel, ConfigDict, model_validator, validate_call
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
+from docling.backend.asciidoc_backend import AsciiDocBackend
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.html_backend import HTMLDocumentBackend
+from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
@@ -52,6 +54,16 @@ class PowerpointFormatOption(FormatOption):
     backend: Type[AbstractDocumentBackend] = MsPowerpointDocumentBackend
 
 
+class MarkdownFormatOption(FormatOption):
+    pipeline_cls: Type = SimplePipeline
+    backend: Type[AbstractDocumentBackend] = MarkdownDocumentBackend
+
+
+class AsciiDocFormatOption(FormatOption):
+    pipeline_cls: Type = SimplePipeline
+    backend: Type[AbstractDocumentBackend] = AsciiDocBackend
+
+
 class HTMLFormatOption(FormatOption):
     pipeline_cls: Type = SimplePipeline
     backend: Type[AbstractDocumentBackend] = HTMLDocumentBackend
@@ -73,6 +85,12 @@ _format_to_default_options = {
     ),
     InputFormat.PPTX: FormatOption(
         pipeline_cls=SimplePipeline, backend=MsPowerpointDocumentBackend
+    ),
+    InputFormat.MD: FormatOption(
+        pipeline_cls=SimplePipeline, backend=MarkdownDocumentBackend
+    ),
+    InputFormat.ASCIIDOC: FormatOption(
+        pipeline_cls=SimplePipeline, backend=AsciiDocBackend
     ),
     InputFormat.HTML: FormatOption(
         pipeline_cls=SimplePipeline, backend=HTMLDocumentBackend

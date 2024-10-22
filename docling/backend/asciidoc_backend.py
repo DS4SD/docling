@@ -26,14 +26,27 @@ from docling.datamodel.document import InputDocument
 _log = logging.getLogger(__name__)
 
 
-class AsciidocBackend(DeclarativeDocumentBackend):
+class AsciiDocBackend(DeclarativeDocumentBackend):
 
     def __init__(self, in_doc: InputDocument, path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
 
         self.path_or_stream = path_or_stream
 
-        self.valid = True
+        try:
+            if isinstance(self.path_or_stream, BytesIO):
+                text_stream = self.path_or_stream.getvalue().decode("utf-8")
+                self.lines = text_stream.split("\n")
+            if isinstance(self.path_or_stream, Path):
+                with open(self.path_or_stream, "r", encoding="utf-8") as f:
+                    self.lines = f.readlines()
+            self.valid = True
+
+        except Exception as e:
+            raise RuntimeError(
+                f"Could not initialize AsciiDoc backend for file with hash {self.document_hash}."
+            ) from e
+        return
 
     def is_valid(self) -> bool:
         return self.valid
@@ -70,22 +83,17 @@ class AsciidocBackend(DeclarativeDocumentBackend):
 
         doc = DoclingDocument(name=docname, origin=origin)
 
-        doc = self.parse(doc)
+        doc = self._parse(doc)
 
         return doc
 
-    def parse(self, doc: DoclingDocument):
+    def _parse(self, doc: DoclingDocument):
         """
         Main function that orchestrates the parsing by yielding components:
         title, section headers, text, lists, and tables.
         """
 
         content = ""
-        if isinstance(self.path_or_stream, Path):
-            with open(self.path_or_stream, "r") as fr:
-                self.lines = fr.readlines()
-
-        # self.lines = file_content.splitlines()
 
         in_list = False
         in_table = False
@@ -107,8 +115,8 @@ class AsciidocBackend(DeclarativeDocumentBackend):
             # line = line.strip()
 
             # Title
-            if self.is_title(line):
-                item = self.parse_title(line)
+            if self._is_title(line):
+                item = self._parse_title(line)
                 level = item["level"]
 
                 parents[level] = doc.add_text(
@@ -116,8 +124,8 @@ class AsciidocBackend(DeclarativeDocumentBackend):
                 )
 
             # Section headers
-            elif self.is_section_header(line):
-                item = self.parse_section_header(line)
+            elif self._is_section_header(line):
+                item = self._parse_section_header(line)
                 level = item["level"]
 
                 parents[level] = doc.add_heading(
@@ -128,13 +136,13 @@ class AsciidocBackend(DeclarativeDocumentBackend):
                         parents[k] = None
 
             # Lists
-            elif self.is_list_item(line):
+            elif self._is_list_item(line):
 
                 print("line: ", line)
-                item = self.parse_list_item(line)
+                item = self._parse_list_item(line)
                 print("parsed list-item: ", item)
 
-                level = self.get_current_level(parents)
+                level = self._get_current_level(parents)
 
                 if not in_list:
                     in_list = True
@@ -159,24 +167,26 @@ class AsciidocBackend(DeclarativeDocumentBackend):
                         indents[level] = None
                         level -= 1
 
-                doc.add_list_item(item["text"], parent=self.get_current_parent(parents))
+                doc.add_list_item(
+                    item["text"], parent=self._get_current_parent(parents)
+                )
 
-            elif in_list and not self.is_list_item(line):
+            elif in_list and not self._is_list_item(line):
                 in_list = False
 
-                level = self.get_current_level(parents)
+                level = self._get_current_level(parents)
                 parents[level] = None
 
             # Tables
             elif line.strip() == "|===" and not in_table:  # start of table
                 in_table = True
 
-            elif self.is_table_line(line):  # within a table
+            elif self._is_table_line(line):  # within a table
                 in_table = True
-                table_data.append(self.parse_table_line(line))
+                table_data.append(self._parse_table_line(line))
 
             elif in_table and (
-                (not self.is_table_line(line)) or line.strip() == "|==="
+                (not self._is_table_line(line)) or line.strip() == "|==="
             ):  # end of table
 
                 caption = None
@@ -187,16 +197,16 @@ class AsciidocBackend(DeclarativeDocumentBackend):
 
                 caption_data = []
 
-                data = self.populate_table_as_grid(table_data)
+                data = self._populate_table_as_grid(table_data)
                 doc.add_table(
-                    data=data, parent=self.get_current_parent(parents), caption=caption
+                    data=data, parent=self._get_current_parent(parents), caption=caption
                 )
 
                 in_table = False
                 table_data = []
 
             # Picture
-            elif self.is_picture(line):
+            elif self._is_picture(line):
 
                 caption = None
                 if len(caption_data) > 0:
@@ -206,7 +216,7 @@ class AsciidocBackend(DeclarativeDocumentBackend):
 
                 caption_data = []
 
-                item = self.parse_picture(line)
+                item = self._parse_picture(line)
                 print(item)
 
                 size = None
@@ -233,14 +243,14 @@ class AsciidocBackend(DeclarativeDocumentBackend):
                 doc.add_picture(image=image, caption=caption)
 
             # Caption
-            elif self.is_caption(line) and len(caption_data) == 0:
-                item = self.parse_caption(line)
+            elif self._is_caption(line) and len(caption_data) == 0:
+                item = self._parse_caption(line)
                 caption_data.append(item["text"])
 
             elif (
                 len(line.strip()) > 0 and len(caption_data) > 0
             ):  # allow multiline captions
-                item = self.parse_text(line)
+                item = self._parse_text(line)
                 caption_data.append(item["text"])
 
             # Plain text
@@ -248,40 +258,40 @@ class AsciidocBackend(DeclarativeDocumentBackend):
                 doc.add_text(
                     text=" ".join(text_data),
                     label=DocItemLabel.PARAGRAPH,
-                    parent=self.get_current_parent(parents),
+                    parent=self._get_current_parent(parents),
                 )
                 text_data = []
 
             elif len(line.strip()) > 0:  # allow multiline texts
 
-                item = self.parse_text(line)
+                item = self._parse_text(line)
                 text_data.append(item["text"])
 
         if len(text_data) > 0:
             doc.add_text(
                 text=" ".join(text_data),
                 label=DocItemLabel.PARAGRAPH,
-                parent=self.get_current_parent(parents),
+                parent=self._get_current_parent(parents),
             )
             text_data = []
 
         if in_table and len(table_data) > 0:
-            data = self.populate_table_as_grid(table_data)
-            doc.add_table(data=data, parent=self.get_current_parent(parents))
+            data = self._populate_table_as_grid(table_data)
+            doc.add_table(data=data, parent=self._get_current_parent(parents))
 
             in_table = False
             table_data = []
 
         return doc
 
-    def get_current_level(self, parents):
+    def _get_current_level(self, parents):
         for k, v in parents.items():
             if v == None and k > 0:
                 return k - 1
 
         return 0
 
-    def get_current_parent(self, parents):
+    def _get_current_parent(self, parents):
         for k, v in parents.items():
             if v == None and k > 0:
                 return parents[k - 1]
@@ -289,17 +299,17 @@ class AsciidocBackend(DeclarativeDocumentBackend):
         return None
 
     #   =========   Title
-    def is_title(self, line):
+    def _is_title(self, line):
         return re.match(r"^= ", line)
 
-    def parse_title(self, line):
+    def _parse_title(self, line):
         return {"type": "title", "text": line[2:].strip(), "level": 0}
 
     #   =========   Section headers
-    def is_section_header(self, line):
+    def _is_section_header(self, line):
         return re.match(r"^==+", line)
 
-    def parse_section_header(self, line):
+    def _parse_section_header(self, line):
         match = re.match(r"^(=+)\s+(.*)", line)
 
         marker = match.group(1)  # The list marker (e.g., "*", "-", "1.")
@@ -313,10 +323,10 @@ class AsciidocBackend(DeclarativeDocumentBackend):
         }
 
     #   =========   Lists
-    def is_list_item(self, line):
+    def _is_list_item(self, line):
         return re.match(r"^(\s)*(\*|-|\d+\.|\w+\.) ", line)
 
-    def parse_list_item(self, line):
+    def _parse_list_item(self, line):
         """Extract the item marker (number or bullet symbol) and the text of the item."""
 
         match = re.match(r"^(\s*)(\*|-|\d+\.)\s+(.*)", line)
@@ -352,14 +362,14 @@ class AsciidocBackend(DeclarativeDocumentBackend):
             }
 
     #   =========   Tables
-    def is_table_line(self, line):
+    def _is_table_line(self, line):
         return re.match(r"^\|.*\|", line)
 
-    def parse_table_line(self, line):
+    def _parse_table_line(self, line):
         # Split table cells and trim extra spaces
         return [cell.strip() for cell in line.split("|") if cell.strip()]
 
-    def populate_table_as_grid(self, table_data):
+    def _populate_table_as_grid(self, table_data):
 
         num_rows = len(table_data)
 
@@ -391,10 +401,10 @@ class AsciidocBackend(DeclarativeDocumentBackend):
         return data
 
     #   =========   Pictures
-    def is_picture(self, line):
+    def _is_picture(self, line):
         return re.match(r"^image::", line)
 
-    def parse_picture(self, line):
+    def _parse_picture(self, line):
         """
         Parse an image macro, extracting its path and attributes.
         Syntax: image::path/to/image.png[Alt Text, width=200, height=150, align=center]
@@ -417,10 +427,10 @@ class AsciidocBackend(DeclarativeDocumentBackend):
         return {"type": "picture", "uri": line}
 
     #   =========   Captions
-    def is_caption(self, line):
+    def _is_caption(self, line):
         return re.match(r"^\.(.+)", line)
 
-    def parse_caption(self, line):
+    def _parse_caption(self, line):
         mtch = re.match(r"^\.(.+)", line)
         if mtch:
             text = mtch.group(1)
@@ -429,5 +439,5 @@ class AsciidocBackend(DeclarativeDocumentBackend):
         return {"type": "caption", "text": ""}
 
     #   =========   Plain text
-    def parse_text(self, line):
+    def _parse_text(self, line):
         return {"type": "text", "text": line.strip()}

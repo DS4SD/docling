@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from docling_core.types.doc import BoundingBox
 
-from docling.backend.asciidoc_backend import AsciidocBackend
+from docling.backend.asciidoc_backend import AsciiDocBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
@@ -14,7 +14,7 @@ def _get_backend(fname):
     in_doc = InputDocument(
         path_or_stream=fname,
         format=InputFormat.ASCIIDOC,
-        backend=AsciidocBackend,
+        backend=AsciiDocBackend,
     )
 
     doc_backend = in_doc._backend

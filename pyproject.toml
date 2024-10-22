@@ -38,9 +38,9 @@ torchvision = [
 python = "^3.10"
 pydantic = "^2.0.0"
 #docling-core = "^2.0.1"
-docling-core = { git = "https://github.com/DS4SD/docling-core.git", rev = "c78e8f16524fd378d9a261a74982f60fa9debd47" }
+docling-core = { git = "https://github.com/DS4SD/docling-core.git", branch = "dev/add-to_indented_text" }
 docling-ibm-models = "^2.0.1"
-deepsearch-glm = "^0.25.0"
+deepsearch-glm = "^0.26.1"
 filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"
 pydantic-settings = "^2.3.0"
@@ -58,6 +58,7 @@ python-docx = "^1.1.2"
 python-pptx = "^1.0.2"
 beautifulsoup4 = "^4.12.3"
 pandas = "^2.1.4"
+marko = "^2.1.2"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
