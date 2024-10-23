@@ -47,7 +47,7 @@ huggingface_hub = ">=0.23,<1"
 requests = "^2.32.3"
 easyocr = "^1.7"
 tesserocr = { version = "^2.7.1", optional = true }
-docling-parse = "^1.6.0"
+docling-parse = "^2.0.0"
 certifi = ">=2024.7.4"
 rtree = "^1.3.0"
 scipy = "^1.14.1"

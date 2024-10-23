@@ -26,9 +26,9 @@ class DoclingParseV2PageBackend(PdfPageBackend):
         self._ppage = page_obj
         parsed_page = parser.parse_pdf_from_key_on_page(document_hash, page_no)
 
-        self.valid = "pages" in parsed_page
+        self.valid = "pages" in parsed_page and len(parsed_page["pages"]) == 1
         if self.valid:
-            self._dpage = parsed_page["pages"][page_no]
+            self._dpage = parsed_page["pages"][0]
         else:
             _log.info(
                 f"An error occured when loading page {page_no} of document {document_hash}."
@@ -223,7 +223,15 @@ class DoclingParseV2DocumentBackend(PdfDocumentBackend):
             )
 
     def page_count(self) -> int:
-        return len(self._pdoc)  # To be replaced with docling-parse API
+        # return len(self._pdoc)  # To be replaced with docling-parse API
+
+        len_1 = len(self._pdoc)
+        len_2 = self.parser.number_of_pages(self.document_hash)
+
+        if len_1 != len_2:
+            _log.error(f"Inconsistent number of pages: {len_1}!={len_2}")
+
+        return len_2
 
     def load_page(self, page_no: int) -> DoclingParseV2PageBackend:
         return DoclingParseV2PageBackend(
