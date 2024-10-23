@@ -143,11 +143,13 @@ class InputDocument(BaseModel):
                         self.valid = False
 
         except (FileNotFoundError, OSError) as e:
+            self.valid = False
             _log.exception(
                 f"File {self.file.name} not found or cannot be opened.", exc_info=e
             )
             # raise
         except RuntimeError as e:
+            self.valid = False
             _log.exception(
                 f"An unexpected error occurred while opening the document {self.file.name}",
                 exc_info=e,
@@ -166,6 +168,8 @@ class InputDocument(BaseModel):
             )
 
         self._backend = backend(self, path_or_stream=path_or_stream)
+        if not self._backend.is_valid():
+            self.valid = False
 
 
 class DocumentFormat(str, Enum):
