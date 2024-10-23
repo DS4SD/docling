@@ -6,7 +6,7 @@ from typing import Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
 from docling_core.types.doc import BoundingBox, CoordOrigin, Size
-from docling_parse.docling_parse import pdf_parser
+from docling_parse.docling_parse import pdf_parser_v1
 from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage
 
@@ -19,7 +19,7 @@ _log = logging.getLogger(__name__)
 
 class DoclingParsePageBackend(PdfPageBackend):
     def __init__(
-        self, parser: pdf_parser, document_hash: str, page_no: int, page_obj: PdfPage
+        self, parser: pdf_parser_v1, document_hash: str, page_no: int, page_obj: PdfPage
     ):
         self._ppage = page_obj
         parsed_page = parser.parse_pdf_from_key_on_page(document_hash, page_no)
@@ -192,7 +192,7 @@ class DoclingParseDocumentBackend(PdfDocumentBackend):
         super().__init__(in_doc, path_or_stream)
 
         self._pdoc = pdfium.PdfDocument(self.path_or_stream)
-        self.parser = pdf_parser()
+        self.parser = pdf_parser_v1()
 
         success = False
         if isinstance(self.path_or_stream, BytesIO):
