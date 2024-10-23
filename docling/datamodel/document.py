@@ -45,6 +45,8 @@ from docling.datamodel.base_models import (
     ConversionStatus,
     DocumentStream,
     ErrorItem,
+    FormatToExtensions,
+    FormatToMimeType,
     InputFormat,
     MimeTypeToFormat,
     Page,
@@ -143,11 +145,13 @@ class InputDocument(BaseModel):
                         self.valid = False
 
         except (FileNotFoundError, OSError) as e:
+            self.valid = False
             _log.exception(
                 f"File {self.file.name} not found or cannot be opened.", exc_info=e
             )
             # raise
         except RuntimeError as e:
+            self.valid = False
             _log.exception(
                 f"An unexpected error occurred while opening the document {self.file.name}",
                 exc_info=e,
@@ -166,6 +170,8 @@ class InputDocument(BaseModel):
             )
 
         self._backend = backend(self, path_or_stream=path_or_stream)
+        if not self._backend.is_valid():
+            self.valid = False
 
 
 class DocumentFormat(str, Enum):
@@ -480,25 +486,47 @@ class _DocumentConversionInput(BaseModel):
             else:
                 raise RuntimeError(f"Unexpected obj type in iterator: {type(obj)}")
 
-    def _guess_format(self, obj):
-        content = None
+    def _guess_format(self, obj: Union[Path, DocumentStream]):
+        content = b""  # empty binary blob
+        format = None
+
         if isinstance(obj, Path):
             mime = filetype.guess_mime(str(obj))
             if mime is None:
+                ext = obj.suffix[1:]
+                mime = self._mime_from_extension(ext)
+            if mime is None:  # must guess from
                 with obj.open("rb") as f:
                     content = f.read(1024)  # Read first 1KB
 
         elif isinstance(obj, DocumentStream):
-            obj.stream.seek(0)
             content = obj.stream.read(8192)
             obj.stream.seek(0)
             mime = filetype.guess_mime(content)
+            if mime is None:
+                ext = (
+                    obj.name.rsplit(".", 1)[-1]
+                    if ("." in obj.name and not obj.name.startswith("."))
+                    else ""
+                )
+                mime = self._mime_from_extension(ext)
 
-        if mime is None:
-            mime = self._detect_html_xhtml(content)
+        mime = mime or self._detect_html_xhtml(content)
+        mime = mime or "text/plain"
 
         format = MimeTypeToFormat.get(mime)
         return format
+
+    def _mime_from_extension(self, ext):
+        mime = None
+        if ext in FormatToExtensions[InputFormat.ASCIIDOC]:
+            mime = FormatToMimeType[InputFormat.ASCIIDOC][0]
+        elif ext in FormatToExtensions[InputFormat.HTML]:
+            mime = FormatToMimeType[InputFormat.HTML][0]
+        elif ext in FormatToExtensions[InputFormat.MD]:
+            mime = FormatToMimeType[InputFormat.MD][0]
+
+        return mime
 
     def _detect_html_xhtml(self, content):
         content_str = content.decode("ascii", errors="ignore").lower()

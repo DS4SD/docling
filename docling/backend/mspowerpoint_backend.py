@@ -83,21 +83,14 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         # Parses the PPTX into a structured document model.
         # origin = DocumentOrigin(filename=self.path_or_stream.name, mimetype=next(iter(FormatToMimeType.get(InputFormat.PPTX))), binary_hash=self.document_hash)
 
-        fname = ""
-        if isinstance(self.path_or_stream, Path):
-            fname = self.path_or_stream.name
-
         origin = DocumentOrigin(
-            filename=fname,
+            filename=self.file.name or "file",
             mimetype="application/vnd.ms-powerpoint",
             binary_hash=self.document_hash,
         )
-        if len(fname) > 0:
-            docname = Path(fname).stem
-        else:
-            docname = "stream"
+
         doc = DoclingDocument(
-            name=docname, origin=origin
+            name=self.file.stem or "file", origin=origin
         )  # must add origin information
         doc = self.walk_linear(self.pptx_obj, doc)
 
@@ -119,10 +112,16 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
 
     def handle_text_elements(self, shape, parent_slide, slide_ind, doc):
         is_a_list = False
+        is_list_group_created = False
         enum_list_item_value = 0
+        new_list = None
+        bullet_type = "None"
+        list_text = ""
+        list_label = GroupLabel.LIST
+        prov = self.generate_prov(shape, slide_ind, shape.text.strip())
+
+        # Identify if shape contains lists
         for paragraph in shape.text_frame.paragraphs:
-            enum_list_item_value += 1
-            bullet_type = "None"
             # Check if paragraph is a bullet point using the `element` XML
             p = paragraph._element
             if (
@@ -143,29 +142,32 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             if paragraph.level > 0:
                 # Most likely a sub-list
                 is_a_list = True
-            list_text = paragraph.text.strip()
-
-            prov = self.generate_prov(shape, slide_ind, shape.text.strip())
 
             if is_a_list:
                 # Determine if this is an unordered list or an ordered list.
                 # Set GroupLabel.ORDERED_LIST when it fits.
-                list_label = GroupLabel.LIST
                 if bullet_type == "Numbered":
                     list_label = GroupLabel.ORDERED_LIST
-
-                new_list = doc.add_group(
-                    label=list_label, name=f"list", parent=parent_slide
-                )
-            else:
-                new_list = None
 
             if is_a_list:
                 _log.debug("LIST DETECTED!")
             else:
                 _log.debug("No List")
 
-            # for e in p.iter():
+        # If there is a list inside of the shape, create a new docling list to assign list items to
+        # if is_a_list:
+        #     new_list = doc.add_group(
+        #         label=list_label, name=f"list", parent=parent_slide
+        #     )
+
+        # Iterate through paragraphs to build up text
+        for paragraph in shape.text_frame.paragraphs:
+            # p_text = paragraph.text.strip()
+            p = paragraph._element
+            enum_list_item_value += 1
+            inline_paragraph_text = ""
+            inline_list_item_text = ""
+
             for e in p.iterfind(".//a:r", namespaces={"a": self.namespaces["a"]}):
                 if len(e.text.strip()) > 0:
                     e_is_a_list_item = False
@@ -187,15 +189,17 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                         e_is_a_list_item = False
 
                     if e_is_a_list_item:
+                        if len(inline_paragraph_text) > 0:
+                            # output accumulated inline text:
+                            doc.add_text(
+                                label=doc_label,
+                                parent=parent_slide,
+                                text=inline_paragraph_text,
+                                prov=prov,
+                            )
                         # Set marker and enumerated arguments if this is an enumeration element.
-                        enum_marker = str(enum_list_item_value) + "."
-                        doc.add_list_item(
-                            marker=enum_marker,
-                            enumerated=is_numbered,
-                            parent=new_list,
-                            text=list_text,
-                            prov=prov,
-                        )
+                        inline_list_item_text += e.text
+                        # print(e.text)
                     else:
                         # Assign proper label to the text, depending if it's a Title or Section Header
                         # For other types of text, assign - PARAGRAPH
@@ -210,15 +214,34 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                                 doc_label = DocItemLabel.TITLE
                             elif placeholder_type == PP_PLACEHOLDER.SUBTITLE:
                                 DocItemLabel.SECTION_HEADER
-
                         enum_list_item_value = 0
+                        inline_paragraph_text += e.text
 
-                        doc.add_text(
-                            label=doc_label,
-                            parent=parent_slide,
-                            text=list_text,
-                            prov=prov,
-                        )
+            if len(inline_paragraph_text) > 0:
+                # output accumulated inline text:
+                doc.add_text(
+                    label=doc_label,
+                    parent=parent_slide,
+                    text=inline_paragraph_text,
+                    prov=prov,
+                )
+
+            if len(inline_list_item_text) > 0:
+                enum_marker = ""
+                if is_numbered:
+                    enum_marker = str(enum_list_item_value) + "."
+                if not is_list_group_created:
+                    new_list = doc.add_group(
+                        label=list_label, name=f"list", parent=parent_slide
+                    )
+                    is_list_group_created = True
+                doc.add_list_item(
+                    marker=enum_marker,
+                    enumerated=is_numbered,
+                    parent=new_list,
+                    text=inline_list_item_text,
+                    prov=prov,
+                )
         return
 
     def handle_title(self, shape, parent_slide, slide_ind, doc):
@@ -311,7 +334,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             if len(tcells) > 0:
                 # If table is not fully empty...
                 # Create Docling table
-                doc.add_table(data=data, prov=prov)
+                doc.add_table(parent=parent_slide, data=data, prov=prov)
         return
 
     def walk_linear(self, pptx_obj, doc) -> DoclingDocument:
