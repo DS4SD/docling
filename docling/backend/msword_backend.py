@@ -85,20 +85,13 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def convert(self) -> DoclingDocument:
         # Parses the DOCX into a structured document model.
 
-        fname = ""
-        if isinstance(self.path_or_stream, Path):
-            fname = self.path_or_stream.name
-
         origin = DocumentOrigin(
-            filename=fname,
+            filename=self.file.name or "file",
             mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             binary_hash=self.document_hash,
         )
-        if len(fname) > 0:
-            docname = Path(fname).stem
-        else:
-            docname = "stream"
-        doc = DoclingDocument(name=docname, origin=origin)
+
+        doc = DoclingDocument(name=self.file.stem or "file", origin=origin)
         if self.is_valid():
             assert self.docx_obj is not None
             doc = self.walk_linear(self.docx_obj.element.body, self.docx_obj, doc)
