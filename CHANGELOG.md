@@ -1,3 +1,14 @@
+## [v2.2.0](https://github.com/DS4SD/docling/releases/tag/v2.2.0) - 2024-10-23
+
+### Feature
+
+* Update to docling-parse v2 without history ([#170](https://github.com/DS4SD/docling/issues/170)) ([`4116819`](https://github.com/DS4SD/docling/commit/4116819b515a0611e8e5bf2bb0e1e39f1096b7bf))
+* Support AsciiDoc and Markdown input format ([#168](https://github.com/DS4SD/docling/issues/168)) ([`3023f18`](https://github.com/DS4SD/docling/commit/3023f18ba0462a224f75ea40953b5605abef6427))
+
+### Fix
+
+* Set valid=false for invalid backends ([#171](https://github.com/DS4SD/docling/issues/171)) ([`3496b48`](https://github.com/DS4SD/docling/commit/3496b4838fd52cb0d74eadf78b27c19f633871b1))
+
 ## [v2.1.0](https://github.com/DS4SD/docling/releases/tag/v2.1.0) - 2024-10-18
 
 ### Feature
