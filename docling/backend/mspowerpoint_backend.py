@@ -112,6 +112,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
 
     def handle_text_elements(self, shape, parent_slide, slide_ind, doc):
         is_a_list = False
+        is_list_group_created = False
         enum_list_item_value = 0
         new_list = None
         bullet_type = "None"
@@ -152,6 +153,12 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                 _log.debug("LIST DETECTED!")
             else:
                 _log.debug("No List")
+
+        # If there is a list inside of the shape, create a new docling list to assign list items to
+        # if is_a_list:
+        #     new_list = doc.add_group(
+        #         label=list_label, name=f"list", parent=parent_slide
+        #     )
 
         # Iterate through paragraphs to build up text
         for paragraph in shape.text_frame.paragraphs:
@@ -219,16 +226,15 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                     prov=prov,
                 )
 
-            # If there is a list inside of the shape, create a new docling list to assign list items to
-            if is_a_list:
-                new_list = doc.add_group(
-                    label=list_label, name=f"list", parent=parent_slide
-                )
-
             if len(inline_list_item_text) > 0:
                 enum_marker = ""
                 if is_numbered:
                     enum_marker = str(enum_list_item_value) + "."
+                if not is_list_group_created:
+                    new_list = doc.add_group(
+                        label=list_label, name=f"list", parent=parent_slide
+                    )
+                    is_list_group_created = True
                 doc.add_list_item(
                     marker=enum_marker,
                     enumerated=is_numbered,
@@ -328,7 +334,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             if len(tcells) > 0:
                 # If table is not fully empty...
                 # Create Docling table
-                doc.add_table(data=data, prov=prov)
+                doc.add_table(parent=parent_slide, data=data, prov=prov)
         return
 
     def walk_linear(self, pptx_obj, doc) -> DoclingDocument:
