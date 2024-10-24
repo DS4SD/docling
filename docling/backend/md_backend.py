@@ -25,6 +25,11 @@ _log = logging.getLogger(__name__)
 
 
 class MarkdownDocumentBackend(DeclarativeDocumentBackend):
+
+    def clean_md(self, md_text):
+        res_text = md_text.replace("____", "")
+        return res_text
+
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
 
@@ -42,11 +47,13 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         try:
             if isinstance(self.path_or_stream, BytesIO):
                 text_stream = self.path_or_stream.getvalue().decode("utf-8")
-                self.markdown = text_stream
+                self.markdown = self.clean_md(text_stream)  # remove invalid sequences
             if isinstance(self.path_or_stream, Path):
                 with open(self.path_or_stream, "r", encoding="utf-8") as f:
                     md_content = f.read()
-                    self.markdown = md_content
+                    self.markdown = self.clean_md(
+                        md_content
+                    )  # remove invalid sequences
             self.valid = True
 
             _log.debug(self.markdown)
