@@ -1,4 +1,5 @@
 import logging
+import re
 from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
@@ -26,11 +27,25 @@ _log = logging.getLogger(__name__)
 
 class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
-    def clean_md(self, md_text):
-        # Long sequences of unescaped underscore symbols "_" hangs parser
-        # Up to 3 characters "___" are allowed to represent italic, bold, and bold-italic
-        res_text = md_text.replace("____", "")
-        return res_text
+    def shorten_underscore_sequences(self, markdown_text, max_length=4):
+        # This regex will match any sequence of underscores
+        pattern = r"_+"
+
+        def replace_match(match):
+            underscore_sequence = match.group(
+                0
+            )  # Get the full match (sequence of underscores)
+
+            # Shorten the sequence if it exceeds max_length
+            if len(underscore_sequence) > max_length:
+                return "_" * max_length
+            else:
+                return underscore_sequence  # Leave it unchanged if it is shorter or equal to max_length
+
+        # Use re.sub to replace long underscore sequences
+        shortened_text = re.sub(pattern, replace_match, markdown_text)
+
+        return shortened_text
 
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
@@ -49,13 +64,19 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         try:
             if isinstance(self.path_or_stream, BytesIO):
                 text_stream = self.path_or_stream.getvalue().decode("utf-8")
-                self.markdown = self.clean_md(text_stream)  # remove invalid sequences
+                # remove invalid sequences
+                # very long sequences of underscores will lead to unnecessary long processing times.
+                # In any proper Markdown files, underscores have to be escaped,
+                # otherwise they represent emphasis (bold or italic)
+                self.markdown = self.shorten_underscore_sequences(text_stream)
             if isinstance(self.path_or_stream, Path):
                 with open(self.path_or_stream, "r", encoding="utf-8") as f:
                     md_content = f.read()
-                    self.markdown = self.clean_md(
-                        md_content
-                    )  # remove invalid sequences
+                    # remove invalid sequences
+                    # very long sequences of underscores will lead to unnecessary long processing times.
+                    # In any proper Markdown files, underscores have to be escaped,
+                    # otherwise they represent emphasis (bold or italic)
+                    self.markdown = self.shorten_underscore_sequences(md_content)
             self.valid = True
 
             _log.debug(self.markdown)
@@ -295,6 +316,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             parsed_ast = marko_parser.parse(self.markdown)
             # Start iterating from the root of the AST
             self.iterate_elements(parsed_ast, 0, doc, None)
+            self.process_inline_text(None, doc)  # handle last hanging inline text
         else:
             raise RuntimeError(
                 f"Cannot convert md with {self.document_hash} because the backend failed to init."
