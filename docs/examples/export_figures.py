@@ -2,7 +2,7 @@ import logging
 import time
 from pathlib import Path
 
-from docling_core.types.doc import PictureItem, TableItem
+from docling_core.types.doc import ImageRefMode, PictureItem, TableItem
 
 from docling.datamodel.base_models import FigureElement, InputFormat, Table
 from docling.datamodel.pipeline_options import PdfPipelineOptions
@@ -70,6 +70,12 @@ def main():
             )
             with element_image_filename.open("wb") as fp:
                 element.image.pil_image.save(fp, "PNG")
+
+    # Save markdown with embedded pictures
+    content_md = conv_res.document.export_to_markdown(image_mode=ImageRefMode.EMBEDDED)
+    md_filename = output_dir / f"{doc_filename}-with-images.md"
+    with md_filename.open("w") as fp:
+        fp.write(content_md)
 
     end_time = time.time() - start_time
 
