@@ -27,6 +27,8 @@ _log = logging.getLogger(__name__)
 class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
     def clean_md(self, md_text):
+        # Long sequences of unescaped underscore symbols "_" hangs parser
+        # Up to 3 characters "___" are allowed to represent italic, bold, and bold-italic
         res_text = md_text.replace("____", "")
         return res_text
 
