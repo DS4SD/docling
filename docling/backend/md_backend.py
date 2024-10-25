@@ -136,18 +136,24 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             else:
                 doc_label = DocItemLabel.SECTION_HEADER
 
-            if isinstance(element.children[0].children, str):
-                # Straight text in the header
-                snippet_text = element.children[0].children.strip()
-            elif isinstance(element.children[0].children[0].children, str):
-                # Bold or italic text in the header
-                snippet_text = element.children[0].children[0].children.strip()
-            elif isinstance(element.children[0].children[0].children[0].children, str):
-                # Emphasized text in the header
-                snippet_text = (
-                    element.children[0].children[0].children[0].children.strip()
-                )
+            # Header could have arbitrary inclusion of bold, italic or emphasis,
+            # hence we need to traverse the tree to get full text of a header
+            strings = []
 
+            # Define a recursive function to traverse the tree
+            def traverse(node):
+                # Check if the node has a "children" attribute
+                if hasattr(node, "children"):
+                    # If "children" is a list, continue traversal
+                    if isinstance(node.children, list):
+                        for child in node.children:
+                            traverse(child)
+                    # If "children" is text, add it to header text
+                    elif isinstance(node.children, str):
+                        strings.append(node.children)
+
+            traverse(element)
+            snippet_text = "".join(strings)
             if len(snippet_text) > 0:
                 parent_element = doc.add_text(
                     label=doc_label, parent=parent_element, text=snippet_text
