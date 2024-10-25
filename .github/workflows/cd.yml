@@ -1,9 +1,7 @@
 name: "Run CD"
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 env:
   # disable keyring (https://github.com/actions/runner-images/issues/6185):
