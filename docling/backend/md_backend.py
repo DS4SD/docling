@@ -1,5 +1,6 @@
 import logging
 import re
+import warnings
 from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
@@ -27,7 +28,7 @@ _log = logging.getLogger(__name__)
 
 class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
-    def shorten_underscore_sequences(self, markdown_text, max_length=4):
+    def shorten_underscore_sequences(self, markdown_text, max_length=10):
         # This regex will match any sequence of underscores
         pattern = r"_+"
 
@@ -44,6 +45,9 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         # Use re.sub to replace long underscore sequences
         shortened_text = re.sub(pattern, replace_match, markdown_text)
+
+        if len(shortened_text) != len(markdown_text):
+            warnings.warn("Detected potentially incorrect Markdown, correcting...")
 
         return shortened_text
 
