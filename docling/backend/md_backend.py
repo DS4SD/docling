@@ -147,7 +147,6 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 snippet_text = (
                     element.children[0].children[0].children[0].children.strip()
                 )
-            print("snippet_text: {}".format(snippet_text))
 
             if len(snippet_text) > 0:
                 parent_element = doc.add_text(
