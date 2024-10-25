@@ -136,8 +136,6 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def get_direct_text(self, item):
         """Get the direct text of the <li> element (ignoring nested lists)."""
         text = item.find(string=True, recursive=False)
-        print(text)
-
         if isinstance(text, str):
             return text.strip()
 
