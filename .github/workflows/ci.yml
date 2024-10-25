@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - "**"
-      - "!main"
       - "!gh-pages"
 
 env:
