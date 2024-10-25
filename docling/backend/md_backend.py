@@ -286,6 +286,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             parsed_ast = marko_parser.parse(self.markdown)
             # Start iterating from the root of the AST
             self.iterate_elements(parsed_ast, 0, doc, None)
+            self.process_inline_text(None, doc)  # handle last hanging inline text
         else:
             raise RuntimeError(
                 f"Cannot convert md with {self.document_hash} because the backend failed to init."
