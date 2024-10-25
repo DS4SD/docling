@@ -135,11 +135,24 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 doc_label = DocItemLabel.TITLE
             else:
                 doc_label = DocItemLabel.SECTION_HEADER
-            snippet_text = element.children[0].children.strip()
 
-            parent_element = doc.add_text(
-                label=doc_label, parent=parent_element, text=snippet_text
-            )
+            if isinstance(element.children[0].children, str):
+                # Straight text in the header
+                snippet_text = element.children[0].children.strip()
+            elif isinstance(element.children[0].children[0].children, str):
+                # Bold or italic text in the header
+                snippet_text = element.children[0].children[0].children.strip()
+            elif isinstance(element.children[0].children[0].children[0].children, str):
+                # Emphasized text in the header
+                snippet_text = (
+                    element.children[0].children[0].children[0].children.strip()
+                )
+            print("snippet_text: {}".format(snippet_text))
+
+            if len(snippet_text) > 0:
+                parent_element = doc.add_text(
+                    label=doc_label, parent=parent_element, text=snippet_text
+                )
 
         elif isinstance(element, marko.block.List):
             self.close_table(doc)
