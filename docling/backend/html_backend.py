@@ -148,8 +148,6 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         if isinstance(item, str):
             return [item]
 
-        # result.append(self.get_direct_text(item))
-
         if item.name not in ["ul", "ol"]:
             try:
                 # Iterate over the children (and their text and tails)
@@ -255,7 +253,6 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         if nested_lists:
             name = element.name
-            # text = self.get_direct_text(element)
             # Text in list item can be hidden within hierarchy, hence
             # we need to extract it recursively
             text = self.extract_text_recursively(element)
