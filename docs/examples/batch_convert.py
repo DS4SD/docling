@@ -13,7 +13,7 @@ from docling.document_converter import DocumentConverter
 _log = logging.getLogger(__name__)
 
 USE_V2 = True
-USE_LEGACY = False
+USE_LEGACY = True
 
 
 def export_documents(
@@ -77,7 +77,7 @@ def export_documents(
                 with (output_dir / f"{doc_filename}.legacy.doctags.txt").open(
                     "w", encoding="utf-8"
                 ) as fp:
-                    fp.write(conv_res.legacy_document.export_to_doctags())
+                    fp.write(conv_res.legacy_document.export_to_document_tokens())
 
         elif conv_res.status == ConversionStatus.PARTIAL_SUCCESS:
             _log.info(
