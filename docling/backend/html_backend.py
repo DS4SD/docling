@@ -136,7 +136,6 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def get_direct_text(self, item):
         """Get the direct text of the <li> element (ignoring nested lists)."""
         text = item.find(string=True, recursive=False)
-
         if isinstance(text, str):
             return text.strip()
 
@@ -149,21 +148,20 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         if isinstance(item, str):
             return [item]
 
-        result.append(self.get_direct_text(item))
+        if item.name not in ["ul", "ol"]:
+            try:
+                # Iterate over the children (and their text and tails)
+                for child in item:
+                    try:
+                        # Recursively get the child's text content
+                        result.extend(self.extract_text_recursively(child))
+                    except:
+                        pass
+            except:
+                _log.warn("item has no children")
+                pass
 
-        try:
-            # Iterate over the children (and their text and tails)
-            for child in item:
-                try:
-                    # Recursively get the child's text content
-                    result.extend(self.extract_text_recursively(child))
-                except:
-                    pass
-        except:
-            _log.warn("item has no children")
-            pass
-
-        return " ".join(result)
+        return "".join(result) + " "
 
     def handle_header(self, element, idx, doc):
         """Handles header tags (h1, h2, etc.)."""
@@ -255,7 +253,12 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         if nested_lists:
             name = element.name
-            text = self.get_direct_text(element)
+            # Text in list item can be hidden within hierarchy, hence
+            # we need to extract it recursively
+            text = self.extract_text_recursively(element)
+            # Flatten text, remove break lines:
+            text = text.replace("\n", "").replace("\r", "")
+            text = " ".join(text.split()).strip()
 
             marker = ""
             enumerated = False
@@ -263,14 +266,15 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 marker = str(index_in_list)
                 enumerated = True
 
-            # create a list-item
-            self.parents[self.level + 1] = doc.add_list_item(
-                text=text,
-                enumerated=enumerated,
-                marker=marker,
-                parent=self.parents[self.level],
-            )
-            self.level += 1
+            if len(text) > 0:
+                # create a list-item
+                self.parents[self.level + 1] = doc.add_list_item(
+                    text=text,
+                    enumerated=enumerated,
+                    marker=marker,
+                    parent=self.parents[self.level],
+                )
+                self.level += 1
 
             self.walk(element, doc)
 
