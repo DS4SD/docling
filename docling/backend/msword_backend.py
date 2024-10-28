@@ -294,13 +294,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         level = self.get_level()
         if isinstance(curr_level, int):
 
-            if curr_level == level:
-
-                self.parents[level] = doc.add_heading(
-                    parent=self.parents[level - 1], text=text
-                )
-
-            elif curr_level > level:
+            if curr_level > level:
 
                 # add invisible group
                 for i in range(level, curr_level):
@@ -310,10 +304,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                         name=f"header-{i}",
                     )
 
-                self.parents[curr_level] = doc.add_heading(
-                    parent=self.parents[curr_level - 1], text=text
-                )
-
             elif curr_level < level:
 
                 # remove the tail
@@ -321,13 +311,17 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     if key >= curr_level:
                         self.parents[key] = None
 
-                self.parents[curr_level] = doc.add_heading(
-                    parent=self.parents[curr_level - 1], text=text
-                )
+            self.parents[curr_level] = doc.add_heading(
+                parent=self.parents[curr_level - 1],
+                text=text,
+                level=curr_level,
+            )
 
         else:
             self.parents[self.level] = doc.add_heading(
-                parent=self.parents[self.level - 1], text=text
+                parent=self.parents[self.level - 1],
+                text=text,
+                level=1,
             )
         return
 
