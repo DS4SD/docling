@@ -4,7 +4,8 @@ from PIL import ImageDraw
 from pydantic import BaseModel
 
 from docling.datamodel.base_models import Page
-from docling.models.base_model import BasePageModel
+from docling.datamodel.document import ConversionResult
+from docling.models.base_model import BasePageModel, TimeRecorder
 
 
 class PagePreprocessingOptions(BaseModel):
@@ -15,14 +16,17 @@ class PagePreprocessingModel(BasePageModel):
     def __init__(self, options: PagePreprocessingOptions):
         self.options = options
 
-    def __call__(self, page_batch: Iterable[Page]) -> Iterable[Page]:
+    def __call__(
+        self, conv_res: ConversionResult, page_batch: Iterable[Page]
+    ) -> Iterable[Page]:
         for page in page_batch:
             assert page._backend is not None
             if not page._backend.is_valid():
                 yield page
             else:
-                page = self._populate_page_images(page)
-                page = self._parse_page_cells(page)
+                with TimeRecorder(conv_res, "page_parse"):
+                    page = self._populate_page_images(page)
+                    page = self._parse_page_cells(page)
                 yield page
 
     # Generate the page image and store it in the page object

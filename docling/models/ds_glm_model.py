@@ -27,6 +27,7 @@ from pydantic import BaseModel, ConfigDict
 
 from docling.datamodel.base_models import Cluster, FigureElement, Table, TextElement
 from docling.datamodel.document import ConversionResult, layout_label_to_ds_type
+from docling.models.base_model import TimeRecorder
 from docling.utils.utils import create_hash
 
 
@@ -226,12 +227,13 @@ class GlmModel:
         return ds_doc
 
     def __call__(self, conv_res: ConversionResult) -> DoclingDocument:
-        ds_doc = self._to_legacy_document(conv_res)
-        ds_doc_dict = ds_doc.model_dump(by_alias=True)
+        with TimeRecorder(conv_res, "glm"):
+            ds_doc = self._to_legacy_document(conv_res)
+            ds_doc_dict = ds_doc.model_dump(by_alias=True)
 
-        glm_doc = self.model.apply_on_doc(ds_doc_dict)
+            glm_doc = self.model.apply_on_doc(ds_doc_dict)
 
-        docling_doc: DoclingDocument = to_docling_document(glm_doc)  # Experimental
+            docling_doc: DoclingDocument = to_docling_document(glm_doc)  # Experimental
 
         # DEBUG code:
         def draw_clusters_and_cells(ds_document, page_no):

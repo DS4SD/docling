@@ -6,6 +6,7 @@ from pathlib import Path, PurePath
 from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Tuple, Type, Union
 
 import filetype
+import numpy as np
 from docling_core.types.doc import (
     DocItem,
     DocItemLabel,
@@ -179,6 +180,29 @@ class DocumentFormat(str, Enum):
     V1 = "v1"
 
 
+class ProfilingScope(str, Enum):
+    PAGE = "page"
+    DOCUMENT = "document"
+
+
+class ProfilingItem(BaseModel):
+    scope: ProfilingScope
+    count: int = 0
+    times: List[float] = []
+
+    def avg(self) -> float:
+        return np.average(self.times)  # type: ignore
+
+    def std(self) -> float:
+        return np.std(self.times)  # type: ignore
+
+    def mean(self) -> float:
+        return np.mean(self.times)  # type: ignore
+
+    def percentile(self, perc: float) -> float:
+        return np.percentile(self.times, perc)  # type: ignore
+
+
 class ConversionResult(BaseModel):
     input: InputDocument
 
@@ -187,6 +211,7 @@ class ConversionResult(BaseModel):
 
     pages: List[Page] = []
     assembled: AssembledUnit = AssembledUnit()
+    timings: Dict[str, ProfilingItem] = {}
 
     document: DoclingDocument = _EMPTY_DOCLING_DOC
 

@@ -32,6 +32,8 @@ class DebugSettings(BaseModel):
     visualize_layout: bool = False
     visualize_tables: bool = False
 
+    profile_pipeline_timings: bool = False
+
 
 class AppSettings(BaseSettings):
     perf: BatchConcurrencySettings

@@ -10,12 +10,14 @@ from rtree import index
 from scipy.ndimage import find_objects, label
 
 from docling.datamodel.base_models import OcrCell, Page
+from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import OcrOptions
+from docling.models.base_model import BasePageModel
 
 _log = logging.getLogger(__name__)
 
 
-class BaseOcrModel:
+class BaseOcrModel(BasePageModel):
     def __init__(self, enabled: bool, options: OcrOptions):
         self.enabled = enabled
         self.options = options
@@ -133,5 +135,7 @@ class BaseOcrModel:
         image.show()
 
     @abstractmethod
-    def __call__(self, page_batch: Iterable[Page]) -> Iterable[Page]:
+    def __call__(
+        self, conv_res: ConversionResult, page_batch: Iterable[Page]
+    ) -> Iterable[Page]:
         pass
