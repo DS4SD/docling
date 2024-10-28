@@ -9,6 +9,7 @@ from PIL import ImageDraw
 
 from docling.datamodel.base_models import Page, Table, TableStructurePrediction
 from docling.datamodel.pipeline_options import TableFormerMode, TableStructureOptions
+from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
 
 
@@ -35,7 +36,7 @@ class TableStructureModel(BasePageModel):
             self.tf_predictor = TFPredictor(self.tm_config)
             self.scale = 2.0  # Scale up table input images to 144 dpi
 
-    def draw_table_and_cells(self, page: Page, tbl_list: List[Table]):
+    def draw_table_and_cells(self, page: Page, tbl_list: Iterable[Table]):
         assert page._backend is not None
 
         image = (
@@ -166,6 +167,9 @@ class TableStructureModel(BasePageModel):
                         )
 
                     # For debugging purposes:
-                    # self.draw_table_and_cells(page, page.predictions.tablestructure.table_map.values())
+                    if settings.debug.visualize_tables:
+                        self.draw_table_and_cells(
+                            page, page.predictions.tablestructure.table_map.values()
+                        )
 
                 yield page

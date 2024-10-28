@@ -6,6 +6,7 @@ from docling_core.types.doc import BoundingBox, CoordOrigin
 
 from docling.datamodel.base_models import OcrCell, Page
 from docling.datamodel.pipeline_options import EasyOcrOptions
+from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
 
 _log = logging.getLogger(__name__)
@@ -85,6 +86,7 @@ class EasyOcrModel(BaseOcrModel):
                 page.cells.extend(filtered_ocr_cells)
 
                 # DEBUG code:
-                # self.draw_ocr_rects_and_cells(page, ocr_rects)
+                if settings.debug.visualize_ocr:
+                    self.draw_ocr_rects_and_cells(page, ocr_rects)
 
                 yield page

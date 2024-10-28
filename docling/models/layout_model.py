@@ -16,6 +16,7 @@ from docling.datamodel.base_models import (
     LayoutPrediction,
     Page,
 )
+from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
 from docling.utils import layout_utils as lu
 
@@ -314,22 +315,24 @@ class LayoutModel(BasePageModel):
                 # clusters = self.sort_clusters_by_cell_order(clusters)
 
                 # DEBUG code:
-                def draw_clusters_and_cells():
+                def draw_clusters_and_cells(show: bool = True):
                     image = copy.deepcopy(page.image)
-                    draw = ImageDraw.Draw(image)
-                    for c in clusters:
-                        x0, y0, x1, y1 = c.bbox.as_tuple()
-                        draw.rectangle([(x0, y0), (x1, y1)], outline="green")
+                    if image is not None:
+                        draw = ImageDraw.Draw(image)
+                        for c in clusters:
+                            x0, y0, x1, y1 = c.bbox.as_tuple()
+                            draw.rectangle([(x0, y0), (x1, y1)], outline="green")
 
-                        cell_color = (
-                            random.randint(30, 140),
-                            random.randint(30, 140),
-                            random.randint(30, 140),
-                        )
-                        for tc in c.cells:  # [:1]:
-                            x0, y0, x1, y1 = tc.bbox.as_tuple()
-                            draw.rectangle([(x0, y0), (x1, y1)], outline=cell_color)
-                    image.show()
+                            cell_color = (
+                                random.randint(30, 140),
+                                random.randint(30, 140),
+                                random.randint(30, 140),
+                            )
+                            for tc in c.cells:  # [:1]:
+                                x0, y0, x1, y1 = tc.bbox.as_tuple()
+                                draw.rectangle([(x0, y0), (x1, y1)], outline=cell_color)
+                        if show:
+                            image.show()
 
                 # draw_clusters_and_cells()
 
@@ -337,7 +340,8 @@ class LayoutModel(BasePageModel):
                     clusters, page.cells, page.size.height
                 )
 
-                # draw_clusters_and_cells()
+                if settings.debug.visualize_layout:
+                    draw_clusters_and_cells()
 
                 page.predictions.layout = LayoutPrediction(clusters=clusters)
 

@@ -26,8 +26,16 @@ class BatchConcurrencySettings(BaseModel):
     # To force models into single core: export OMP_NUM_THREADS=1
 
 
+class DebugSettings(BaseModel):
+    visualize_cells: bool = False
+    visualize_ocr: bool = False
+    visualize_layout: bool = False
+    visualize_tables: bool = False
+
+
 class AppSettings(BaseSettings):
     perf: BatchConcurrencySettings
+    debug: DebugSettings
 
 
-settings = AppSettings(perf=BatchConcurrencySettings())
+settings = AppSettings(perf=BatchConcurrencySettings(), debug=DebugSettings())
