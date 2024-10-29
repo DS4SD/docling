@@ -1,6 +1,7 @@
 import copy
 import logging
 from abc import abstractmethod
+from pathlib import Path
 from typing import Iterable, List
 
 import numpy as np
@@ -12,6 +13,7 @@ from scipy.ndimage import find_objects, label
 from docling.datamodel.base_models import OcrCell, Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import OcrOptions
+from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
 
 _log = logging.getLogger(__name__)
@@ -115,7 +117,7 @@ class BaseOcrModel(BasePageModel):
         ]
         return filtered_ocr_cells
 
-    def draw_ocr_rects_and_cells(self, page, ocr_rects):
+    def draw_ocr_rects_and_cells(self, conv_res, page, ocr_rects, show: bool = False):
         image = copy.deepcopy(page.image)
         draw = ImageDraw.Draw(image, "RGBA")
 
@@ -132,7 +134,18 @@ class BaseOcrModel(BasePageModel):
             if isinstance(tc, OcrCell):
                 color = "magenta"
             draw.rectangle([(x0, y0), (x1, y1)], outline=color)
-        image.show()
+
+        if show:
+            image.show()
+        else:
+            out_path: Path = (
+                Path(settings.debug.debug_output_path)
+                / f"debug_{conv_res.input.file.stem}"
+            )
+            out_path.mkdir(parents=True, exist_ok=True)
+
+            out_file = out_path / f"ocr_page_{page.page_no:05}.png"
+            image.save(str(out_file), format="png")
 
     @abstractmethod
     def __call__(

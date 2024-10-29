@@ -36,7 +36,7 @@ class DebugSettings(BaseModel):
     profile_pipeline_timings: bool = False
 
     # Path used to output debug information.
-    debug_output_path: str = str(Path.cwd())
+    debug_output_path: str = str(Path.cwd() / "debug")
 
 
 class AppSettings(BaseSettings):

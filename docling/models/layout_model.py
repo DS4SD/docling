@@ -324,7 +324,7 @@ class LayoutModel(BasePageModel):
                     # clusters = self.sort_clusters_by_cell_order(clusters)
 
                     # DEBUG code:
-                    def draw_clusters_and_cells(show: bool = True):
+                    def draw_clusters_and_cells(show: bool = False):
                         image = copy.deepcopy(page.image)
                         if image is not None:
                             draw = ImageDraw.Draw(image)
@@ -344,6 +344,17 @@ class LayoutModel(BasePageModel):
                                     )
                             if show:
                                 image.show()
+                            else:
+                                out_path: Path = (
+                                    Path(settings.debug.debug_output_path)
+                                    / f"debug_{conv_res.input.file.stem}"
+                                )
+                                out_path.mkdir(parents=True, exist_ok=True)
+
+                                out_file = (
+                                    out_path / f"layout_page_{page.page_no:05}.png"
+                                )
+                                image.save(str(out_file), format="png")
 
                     # draw_clusters_and_cells()
 

@@ -38,7 +38,13 @@ class TableStructureModel(BasePageModel):
             self.tf_predictor = TFPredictor(self.tm_config)
             self.scale = 2.0  # Scale up table input images to 144 dpi
 
-    def draw_table_and_cells(self, page: Page, tbl_list: Iterable[Table]):
+    def draw_table_and_cells(
+        self,
+        conv_res: ConversionResult,
+        page: Page,
+        tbl_list: Iterable[Table],
+        show: bool = False,
+    ):
         assert page._backend is not None
 
         image = (
@@ -64,7 +70,17 @@ class TableStructureModel(BasePageModel):
                         fill="black",
                     )
 
-        image.show()
+        if show:
+            image.show()
+        else:
+            out_path: Path = (
+                Path(settings.debug.debug_output_path)
+                / f"debug_{conv_res.input.file.stem}"
+            )
+            out_path.mkdir(parents=True, exist_ok=True)
+
+            out_file = out_path / f"table_struct_page_{page.page_no:05}.png"
+            image.save(str(out_file), format="png")
 
     def __call__(
         self, conv_res: ConversionResult, page_batch: Iterable[Page]
@@ -182,7 +198,9 @@ class TableStructureModel(BasePageModel):
                     # For debugging purposes:
                     if settings.debug.visualize_tables:
                         self.draw_table_and_cells(
-                            page, page.predictions.tablestructure.table_map.values()
+                            conv_res,
+                            page,
+                            page.predictions.tablestructure.table_map.values(),
                         )
 
                 yield page

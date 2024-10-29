@@ -96,6 +96,6 @@ class EasyOcrModel(BaseOcrModel):
 
                 # DEBUG code:
                 if settings.debug.visualize_ocr:
-                    self.draw_ocr_rects_and_cells(page, ocr_rects)
+                    self.draw_ocr_rects_and_cells(conv_res, page, ocr_rects)
 
                 yield page
