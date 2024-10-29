@@ -894,13 +894,13 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "2.2.2"
+version = "2.2.3"
 description = "A python library to define and validate data types in Docling."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "docling_core-2.2.2-py3-none-any.whl", hash = "sha256:cc076dcded7c899e4d5774eb8bf873a836114d3e640b7b88a7e1d3e2c093534d"},
-    {file = "docling_core-2.2.2.tar.gz", hash = "sha256:a993b4c7c359274cae83dd71094818ecae7d2bc37440903f26a99ad0eb1f2449"},
+    {file = "docling_core-2.2.3-py3-none-any.whl", hash = "sha256:3080c0fb916dbc6a445b1c69a0a71922a902c61205b5dc434cd4bb727a72166c"},
+    {file = "docling_core-2.2.3.tar.gz", hash = "sha256:c6e622e61792a3edebf34f560d91f12abfa5e97afcaf7930f3b4d6a310de8f7a"},
 ]
 
 [package.dependencies]
@@ -7163,4 +7163,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f481e0f6e25638c4ab4481c9f57a30803a91b7cc989f1c5a4b3dc027eee44055"
+content-hash = "0fa3ccd2d6b5d23f83e5abe3f5ae72ad7b0835045f4acd92388bb22c168011b0"

@@ -1,4 +1,5 @@
 # Introduction
+
 This is the first paragraph of the introduction.
 
 ## Background

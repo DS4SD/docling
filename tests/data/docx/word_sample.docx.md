@@ -1,6 +1,7 @@
 Summer activities
 
 # Swimming in the lake
+
 Duck
 
 Figure 1: This is a cute duckling
