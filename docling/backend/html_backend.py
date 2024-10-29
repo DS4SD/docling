@@ -180,11 +180,6 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 parent=self.parents[0], label=DocItemLabel.TITLE, text=text
             )
 
-        elif hlevel == self.level:
-            self.parents[hlevel] = doc.add_text(
-                parent=self.parents[hlevel - 1], label=label, text=text
-            )
-
         elif hlevel > self.level:
 
             # add invisible group
@@ -194,10 +189,6 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     label=GroupLabel.SECTION,
                     parent=self.parents[i - 1],
                 )
-
-            self.parents[hlevel] = doc.add_text(
-                parent=self.parents[hlevel - 1], label=label, text=text
-            )
             self.level = hlevel
 
         elif hlevel < self.level:
@@ -206,11 +197,13 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             for key, val in self.parents.items():
                 if key > hlevel:
                     self.parents[key] = None
-
-            self.parents[hlevel] = doc.add_text(
-                parent=self.parents[hlevel - 1], label=label, text=text
-            )
             self.level = hlevel
+
+        self.parents[hlevel] = doc.add_heading(
+            parent=self.parents[hlevel - 1],
+            text=text,
+            level=hlevel,
+        )
 
     def handle_paragraph(self, element, idx, doc):
         """Handles paragraph tags (p)."""

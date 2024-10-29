@@ -1,3 +1,18 @@
+## [v2.2.1](https://github.com/DS4SD/docling/releases/tag/v2.2.1) - 2024-10-28
+
+### Fix
+
+* Fix header levels for DOCX & HTML ([#184](https://github.com/DS4SD/docling/issues/184)) ([`b9f5c74`](https://github.com/DS4SD/docling/commit/b9f5c74a7d13827c2b7887ddbf0b4eb43edd0846))
+* Handling of long sequence of unescaped underscore chars in markdown ([#173](https://github.com/DS4SD/docling/issues/173)) ([`94d0729`](https://github.com/DS4SD/docling/commit/94d0729c500b0be8ac4a1cd3025b42048f6e8d5a))
+* HTML backend, fixes for Lists and nested texts ([#180](https://github.com/DS4SD/docling/issues/180)) ([`7d19418`](https://github.com/DS4SD/docling/commit/7d19418b779408c345473af684de6b7f60872b6e))
+* MD Backend, fixes to properly handle trailing inline text and emphasis in headers ([#178](https://github.com/DS4SD/docling/issues/178)) ([`88c1673`](https://github.com/DS4SD/docling/commit/88c16730571afdd3bfb8894f64d41b5e99bc5a5b))
+
+### Documentation
+
+* Update LlamaIndex docs for Docling v2 ([#182](https://github.com/DS4SD/docling/issues/182)) ([`2cece27`](https://github.com/DS4SD/docling/commit/2cece27208c4bce715d20000b845794dfb97843d))
+* Fix batch convert ([#177](https://github.com/DS4SD/docling/issues/177)) ([`189d3c2`](https://github.com/DS4SD/docling/commit/189d3c2d44ec389856f48696eaa78ac9f02f8cde))
+* Add export with embedded images ([#175](https://github.com/DS4SD/docling/issues/175)) ([`8d356aa`](https://github.com/DS4SD/docling/commit/8d356aa24715433d458eff4f5f0937ff5cb9cc69))
+
 ## [v2.2.0](https://github.com/DS4SD/docling/releases/tag/v2.2.0) - 2024-10-23
 
 ### Feature
