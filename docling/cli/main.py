@@ -87,12 +87,12 @@ def export_documents(
             success_count += 1
             doc_filename = conv_res.input.file.stem
 
-            # Export Deep Search document JSON format:
+            # Export JSON format:
             if export_json:
                 fname = output_dir / f"{doc_filename}.json"
                 with fname.open("w") as fp:
                     _log.info(f"writing JSON output to {fname}")
-                    fp.write(json.dumps(conv_res.document.export_to_dict()))
+                    fp.write(json.dumps(conv_res.document.export_to_dict(), indent=4))
 
             # Export Text format:
             if export_txt:
