@@ -11,8 +11,8 @@ from docling.datamodel.base_models import OcrCell, Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import TesseractCliOcrOptions
 from docling.datamodel.settings import settings
-from docling.models.base_model import TimeRecorder
 from docling.models.base_ocr_model import BaseOcrModel
+from docling.utils.profiling import TimeRecorder
 
 _log = logging.getLogger(__name__)
 

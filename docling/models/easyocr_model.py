@@ -6,11 +6,11 @@ import numpy
 from docling_core.types.doc import BoundingBox, CoordOrigin
 
 from docling.datamodel.base_models import OcrCell, Page
-from docling.datamodel.document import ConversionResult, ProfilingItem
+from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import EasyOcrOptions
 from docling.datamodel.settings import settings
-from docling.models.base_model import TimeRecorder
 from docling.models.base_ocr_model import BaseOcrModel
+from docling.utils.profiling import ProfilingItem, TimeRecorder
 
 _log = logging.getLogger(__name__)
 

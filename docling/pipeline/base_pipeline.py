@@ -15,15 +15,11 @@ from docling.datamodel.base_models import (
     ErrorItem,
     Page,
 )
-from docling.datamodel.document import (
-    ConversionResult,
-    InputDocument,
-    ProfilingItem,
-    ProfilingScope,
-)
+from docling.datamodel.document import ConversionResult, InputDocument
 from docling.datamodel.pipeline_options import PipelineOptions
 from docling.datamodel.settings import settings
-from docling.models.base_model import BaseEnrichmentModel, TimeRecorder
+from docling.models.base_model import BaseEnrichmentModel
+from docling.utils.profiling import ProfilingItem, ProfilingScope, TimeRecorder
 from docling.utils.utils import chunkify
 
 _log = logging.getLogger(__name__)
@@ -40,13 +36,14 @@ class BasePipeline(ABC):
 
         _log.info(f"Processing document {in_doc.file.name}")
         try:
-            # These steps are building and assembling the structure of the
-            # output DoclingDocument
-            conv_res = self._build_document(conv_res)
-            conv_res = self._assemble_document(conv_res)
-            # From this stage, all operations should rely only on conv_res.output
-            conv_res = self._enrich_document(conv_res)
-            conv_res.status = self._determine_status(conv_res)
+            with TimeRecorder(conv_res, "total", scope=ProfilingScope.DOCUMENT):
+                # These steps are building and assembling the structure of the
+                # output DoclingDocument
+                conv_res = self._build_document(conv_res)
+                conv_res = self._assemble_document(conv_res)
+                # From this stage, all operations should rely only on conv_res.output
+                conv_res = self._enrich_document(conv_res)
+                conv_res.status = self._determine_status(conv_res)
         except Exception as e:
             conv_res.status = ConversionStatus.FAILURE
             if raises_on_error:

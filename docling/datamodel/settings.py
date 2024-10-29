@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
@@ -33,6 +34,9 @@ class DebugSettings(BaseModel):
     visualize_tables: bool = False
 
     profile_pipeline_timings: bool = False
+
+    # Path used to output debug information.
+    debug_output_path: str = str(Path.cwd())
 
 
 class AppSettings(BaseSettings):

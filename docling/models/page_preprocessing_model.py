@@ -5,7 +5,8 @@ from pydantic import BaseModel
 
 from docling.datamodel.base_models import Page
 from docling.datamodel.document import ConversionResult
-from docling.models.base_model import BasePageModel, TimeRecorder
+from docling.models.base_model import BasePageModel
+from docling.utils.profiling import TimeRecorder
 
 
 class PagePreprocessingOptions(BaseModel):

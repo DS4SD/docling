@@ -7,14 +7,13 @@ from docling_core.types.doc import DocItem, ImageRef, PictureItem, TableItem
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
 from docling.datamodel.base_models import AssembledUnit, Page
-from docling.datamodel.document import ConversionResult, InputDocument, ProfilingScope
+from docling.datamodel.document import ConversionResult, InputDocument
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     PdfPipelineOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
 )
-from docling.models.base_model import TimeRecorder
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.ds_glm_model import GlmModel, GlmOptions
 from docling.models.easyocr_model import EasyOcrModel
@@ -28,6 +27,7 @@ from docling.models.table_structure_model import TableStructureModel
 from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
 from docling.models.tesseract_ocr_model import TesseractOcrModel
 from docling.pipeline.base_pipeline import PaginatedPipeline
+from docling.utils.profiling import ProfilingScope, TimeRecorder
 
 _log = logging.getLogger(__name__)
 
@@ -121,7 +121,7 @@ class StandardPdfPipeline(PaginatedPipeline):
         return None
 
     def initialize_page(self, conv_res: ConversionResult, page: Page) -> Page:
-        with TimeRecorder(conv_res, "init_page"):
+        with TimeRecorder(conv_res, "page_init"):
             page._backend = conv_res.input._backend.load_page(page.page_no)  # type: ignore
             if page._backend is not None and page._backend.is_valid():
                 page.size = page._backend.get_size()

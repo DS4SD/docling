@@ -5,10 +5,10 @@ from docling.backend.abstract_backend import (
     DeclarativeDocumentBackend,
 )
 from docling.datamodel.base_models import ConversionStatus
-from docling.datamodel.document import ConversionResult, InputDocument, ProfilingScope
+from docling.datamodel.document import ConversionResult, InputDocument
 from docling.datamodel.pipeline_options import PipelineOptions
-from docling.models.base_model import TimeRecorder
 from docling.pipeline.base_pipeline import BasePipeline
+from docling.utils.profiling import ProfilingScope, TimeRecorder
 
 _log = logging.getLogger(__name__)
 

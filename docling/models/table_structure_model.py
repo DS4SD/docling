@@ -11,7 +11,8 @@ from docling.datamodel.base_models import Page, Table, TableStructurePrediction
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import TableFormerMode, TableStructureOptions
 from docling.datamodel.settings import settings
-from docling.models.base_model import BasePageModel, TimeRecorder
+from docling.models.base_model import BasePageModel
+from docling.utils.profiling import TimeRecorder
 
 
 class TableStructureModel(BasePageModel):

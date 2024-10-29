@@ -27,7 +27,7 @@ from pydantic import BaseModel, ConfigDict
 
 from docling.datamodel.base_models import Cluster, FigureElement, Table, TextElement
 from docling.datamodel.document import ConversionResult, layout_label_to_ds_type
-from docling.models.base_model import TimeRecorder
+from docling.utils.profiling import ProfilingScope, TimeRecorder
 from docling.utils.utils import create_hash
 
 
@@ -227,7 +227,7 @@ class GlmModel:
         return ds_doc
 
     def __call__(self, conv_res: ConversionResult) -> DoclingDocument:
-        with TimeRecorder(conv_res, "glm"):
+        with TimeRecorder(conv_res, "glm", scope=ProfilingScope.DOCUMENT):
             ds_doc = self._to_legacy_document(conv_res)
             ds_doc_dict = ds_doc.model_dump(by_alias=True)
 

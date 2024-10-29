@@ -13,8 +13,9 @@ from docling.datamodel.base_models import (
     TextElement,
 )
 from docling.datamodel.document import ConversionResult
-from docling.models.base_model import BasePageModel, TimeRecorder
+from docling.models.base_model import BasePageModel
 from docling.models.layout_model import LayoutModel
+from docling.utils.profiling import TimeRecorder
 
 _log = logging.getLogger(__name__)
 
