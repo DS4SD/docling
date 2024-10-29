@@ -81,7 +81,7 @@ def test_e2e_html_conversions():
         # print(f"converting {html_path}")
 
         gt_path = (
-            docx_path.parent.parent / "groundtruth" / "docling_v2" / docx_path.name
+            html_path.parent.parent / "groundtruth" / "docling_v2" / html_path.name
         )
 
         conv_result: ConversionResult = converter.convert(html_path)
