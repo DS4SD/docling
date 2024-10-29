@@ -80,19 +80,23 @@ def test_e2e_docx_conversions():
     for docx_path in docx_paths:
         # print(f"converting {docx_path}")
 
+        gt_path = (
+            docx_path.parent.parent / "groundtruth" / "docling_v2" / docx_path.name
+        )
+
         conv_result: ConversionResult = converter.convert(docx_path)
 
         doc: DoclingDocument = conv_result.document
 
         pred_md: str = doc.export_to_markdown()
-        assert verify_export(pred_md, str(docx_path) + ".md"), "export to md"
+        assert verify_export(pred_md, str(gt_path) + ".md"), "export to md"
 
         pred_itxt: str = doc._export_to_indented_text(
             max_text_len=70, explicit_tables=False
         )
         assert verify_export(
-            pred_itxt, str(docx_path) + ".itxt"
+            pred_itxt, str(gt_path) + ".itxt"
         ), "export to indented-text"
 
         pred_json: str = json.dumps(doc.export_to_dict(), indent=2)
-        assert verify_export(pred_json, str(docx_path) + ".json"), "export to json"
+        assert verify_export(pred_json, str(gt_path) + ".json"), "export to json"
