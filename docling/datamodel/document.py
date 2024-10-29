@@ -1,5 +1,6 @@
 import logging
 import re
+import time
 from enum import Enum
 from io import BytesIO
 from pathlib import Path, PurePath
@@ -52,7 +53,7 @@ from docling.datamodel.base_models import (
     Page,
 )
 from docling.datamodel.settings import DocumentLimits
-from docling.utils.profiling import ProfilingItem
+from docling.utils.profiling import ProfilingItem, TimeRecorder
 from docling.utils.utils import create_file_hash, create_hash
 
 if TYPE_CHECKING:

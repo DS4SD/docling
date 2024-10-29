@@ -36,7 +36,9 @@ class BasePipeline(ABC):
 
         _log.info(f"Processing document {in_doc.file.name}")
         try:
-            with TimeRecorder(conv_res, "total", scope=ProfilingScope.DOCUMENT):
+            with TimeRecorder(
+                conv_res, "pipeline_total", scope=ProfilingScope.DOCUMENT
+            ):
                 # These steps are building and assembling the structure of the
                 # output DoclingDocument
                 conv_res = self._build_document(conv_res)
