@@ -75,7 +75,7 @@ def test_e2e_docx_conversions():
     converter = get_converter()
     
     for docx_path in docx_paths:
-        print(f"converting {docx_path}")
+        #print(f"converting {docx_path}")
         
         conv_result: ConversionResult = converter.convert(docx_path)
         
@@ -84,7 +84,7 @@ def test_e2e_docx_conversions():
         pred_md:str = doc.export_to_markdown()
         assert verify_export(pred_md, str(docx_path)+".md"), "export to md"
         
-        pred_itxt:str = doc._export_to_indented_text()
+        pred_itxt:str = doc._export_to_indented_text(max_text_len=70, explicit_tables=False)
         assert verify_export(pred_itxt, str(docx_path)+".itxt"), "export to indented-text"
         
         pred_json:str = json.dumps(doc.export_to_dict(), indent=2)

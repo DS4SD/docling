@@ -82,12 +82,10 @@ def test_e2e_html_conversions():
         pred_md:str = doc.export_to_markdown()
         assert verify_export(pred_md, str(html_path)+".md"), "export to md"
         
-        pred_itxt:str = doc._export_to_indented_text()
+        pred_itxt:str = doc._export_to_indented_text(max_text_len=70, explicit_tables=False)
         assert verify_export(pred_itxt, str(html_path)+".itxt"), "export to indented-text"
         
         pred_json:str = json.dumps(doc.export_to_dict(), indent=2)
         assert verify_export(pred_json, str(html_path)+".json"), "export to json"
-        
-        #print(pred_itxt)
 
 

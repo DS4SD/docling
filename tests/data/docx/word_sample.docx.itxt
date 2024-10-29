@@ -5,7 +5,7 @@ item-0 at level 0: GroupLabel.UNSPECIFIED: group _root_
     item-4 at level 2: DocItemLabel.PARAGRAPH: 
     item-5 at level 2: DocItemLabel.PARAGRAPH: Figure 1: This is a cute duckling
     item-6 at level 2: DocItemLabel.SECTION_HEADER: Let’s swim!
-      item-7 at level 3: DocItemLabel.PARAGRAPH: To get started with swimming, first lay down in a water and try not to drown:
+      item-7 at level 3: DocItemLabel.PARAGRAPH: To get started with swimming, fi ...  down in a water and try not to drown:
       item-8 at level 3: GroupLabel.LIST: group list
         item-9 at level 4: DocItemLabel.LIST_ITEM: You can relax and look around
         item-10 at level 4: DocItemLabel.LIST_ITEM: Paddle about
@@ -17,7 +17,7 @@ item-0 at level 0: GroupLabel.UNSPECIFIED: group _root_
         item-16 at level 4: DocItemLabel.LIST_ITEM: Use sun cream
       item-17 at level 3: DocItemLabel.PARAGRAPH: Hmm, what else…
       item-18 at level 3: DocItemLabel.SECTION_HEADER: Let’s eat
-        item-19 at level 4: DocItemLabel.PARAGRAPH: After we had a good day of swimming in the lake, it’s important to eat something nice
+        item-19 at level 4: DocItemLabel.PARAGRAPH: After we had a good day of swimm ... , it’s important to eat something nice
         item-20 at level 4: DocItemLabel.PARAGRAPH: I like to eat leaves
         item-21 at level 4: DocItemLabel.PARAGRAPH: Here are some interesting things a respectful duck could eat:
         item-22 at level 4: DocItemLabel.TABLE with [4x3]
