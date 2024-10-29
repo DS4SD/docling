@@ -1,0 +1,9 @@
+item-0 at level 0: GroupLabel.UNSPECIFIED: group _root_
+  item-1 at level 1: DocItemLabel.TITLE: Title
+    item-2 at level 2: DocItemLabel.SECTION_HEADER: section-1
+      item-3 at level 3: DocItemLabel.SECTION_HEADER: section-1.1
+    item-4 at level 2: DocItemLabel.SECTION_HEADER: section-2
+      item-5 at level 3: GroupLabel.SECTION: group header-3
+        item-6 at level 4: DocItemLabel.SECTION_HEADER: section-2.0.1
+      item-7 at level 3: DocItemLabel.SECTION_HEADER: section-2.2
+      item-8 at level 3: DocItemLabel.SECTION_HEADER: section-2.3

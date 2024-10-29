@@ -43,7 +43,7 @@ def get_converter():
     return converter
 
 
-def test_e2e_conversions():
+def test_e2e_pdfs_conversions():
 
     pdf_paths = get_pdf_paths()
     converter = get_converter()

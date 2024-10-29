@@ -180,6 +180,8 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 parent=self.parents[0], label=DocItemLabel.TITLE, text=text
             )
 
+            return # dont add another heading with the same text!
+        
         elif hlevel > self.level:
 
             # add invisible group

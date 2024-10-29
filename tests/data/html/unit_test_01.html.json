@@ -1,0 +1,151 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.0.0",
+  "name": "unit_test_01",
+  "origin": {
+    "mimetype": "text/html",
+    "binary_hash": 11574357959810932112,
+    "filename": "unit_test_01.html"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      }
+    ],
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [
+    {
+      "self_ref": "#/groups/0",
+      "parent": {
+        "$ref": "#/texts/3"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/4"
+        }
+      ],
+      "name": "header-3",
+      "label": "section"
+    }
+  ],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/1"
+        },
+        {
+          "$ref": "#/texts/3"
+        }
+      ],
+      "label": "title",
+      "prov": [],
+      "orig": "Title",
+      "text": "Title"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/2"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "section-1",
+      "text": "section-1",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/texts/1"
+      },
+      "children": [],
+      "label": "section_header",
+      "prov": [],
+      "orig": "section-1.1",
+      "text": "section-1.1",
+      "level": 3
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/groups/0"
+        },
+        {
+          "$ref": "#/texts/5"
+        },
+        {
+          "$ref": "#/texts/6"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "section-2",
+      "text": "section-2",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "section_header",
+      "prov": [],
+      "orig": "section-2.0.1",
+      "text": "section-2.0.1",
+      "level": 4
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/texts/3"
+      },
+      "children": [],
+      "label": "section_header",
+      "prov": [],
+      "orig": "section-2.2",
+      "text": "section-2.2",
+      "level": 3
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/texts/3"
+      },
+      "children": [],
+      "label": "section_header",
+      "prov": [],
+      "orig": "section-2.3",
+      "text": "section-2.3",
+      "level": 3
+    }
+  ],
+  "pictures": [],
+  "tables": [],
+  "key_value_items": [],
+  "pages": {}
+}
