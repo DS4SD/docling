@@ -1,6 +1,6 @@
 import copy
 from pathlib import Path
-from typing import Iterable, List
+from typing import Iterable
 
 import numpy
 from docling_core.types.doc import BoundingBox, DocItemLabel, TableCell

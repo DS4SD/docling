@@ -7,7 +7,7 @@ from docling_core.types.doc import DocItem, ImageRef, PictureItem, TableItem
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
 from docling.datamodel.base_models import AssembledUnit, Page
-from docling.datamodel.document import ConversionResult, InputDocument
+from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     PdfPipelineOptions,

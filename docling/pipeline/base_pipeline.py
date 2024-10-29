@@ -19,7 +19,7 @@ from docling.datamodel.document import ConversionResult, InputDocument
 from docling.datamodel.pipeline_options import PipelineOptions
 from docling.datamodel.settings import settings
 from docling.models.base_model import BaseEnrichmentModel
-from docling.utils.profiling import ProfilingItem, ProfilingScope, TimeRecorder
+from docling.utils.profiling import ProfilingScope, TimeRecorder
 from docling.utils.utils import chunkify
 
 _log = logging.getLogger(__name__)

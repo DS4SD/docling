@@ -1,5 +1,4 @@
 import logging
-import time
 from typing import Iterable
 
 import numpy
@@ -10,7 +9,7 @@ from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import EasyOcrOptions
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
-from docling.utils.profiling import ProfilingItem, TimeRecorder
+from docling.utils.profiling import TimeRecorder
 
 _log = logging.getLogger(__name__)
 

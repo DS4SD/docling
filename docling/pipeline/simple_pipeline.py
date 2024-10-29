@@ -5,7 +5,7 @@ from docling.backend.abstract_backend import (
     DeclarativeDocumentBackend,
 )
 from docling.datamodel.base_models import ConversionStatus
-from docling.datamodel.document import ConversionResult, InputDocument
+from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import PipelineOptions
 from docling.pipeline.base_pipeline import BasePipeline
 from docling.utils.profiling import ProfilingScope, TimeRecorder
