@@ -11,10 +11,10 @@ from docling.document_converter import DocumentConverter, PdfFormatOption
 @pytest.fixture
 def test_doc_paths():
     return [
-        Path("tests/data/wiki_duck.html"),
-        Path("tests/data/word_sample.docx"),
-        Path("tests/data/lorem_ipsum.docx"),
-        Path("tests/data/powerpoint_sample.pptx"),
+        Path("tests/data/html/wiki_duck.html"),
+        Path("tests/data/docx/word_sample.docx"),
+        Path("tests/data/docx/lorem_ipsum.docx"),
+        Path("tests/data/pptx/powerpoint_sample.pptx"),
         Path("tests/data/2305.03393v1-pg9-img.png"),
         Path("tests/data/2206.01062.pdf"),
     ]
