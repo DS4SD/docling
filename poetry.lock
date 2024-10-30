@@ -912,13 +912,13 @@ tabulate = ">=0.9.0,<0.10.0"
 
 [[package]]
 name = "docling-ibm-models"
-version = "2.0.2"
+version = "2.0.3"
 description = "This package contains the AI models used by the Docling PDF conversion package"
 optional = false
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "docling_ibm_models-2.0.2-py3-none-any.whl", hash = "sha256:dd27889838319d55a45704f80eb1e75ccfe98de907e5d53f7815ef50402dffe7"},
-    {file = "docling_ibm_models-2.0.2.tar.gz", hash = "sha256:5c8b7030faa171558fa83fabd3d1bade729e0319265ad776ed78b89aefbb1982"},
+    {file = "docling_ibm_models-2.0.3-py3-none-any.whl", hash = "sha256:49e6d5eb8ca87bbee1a2aa95cddd2570ca303e87b7135d089eb5c52a61c0841c"},
+    {file = "docling_ibm_models-2.0.3.tar.gz", hash = "sha256:4ac155490a8646daca8aa7a45f0ee136ef96c4a0fbc24812694ec8fc45e5cadb"},
 ]
 
 [package.dependencies]
@@ -932,14 +932,8 @@ numpy = [
 ]
 opencv-python-headless = ">=4.6.0.66,<5.0.0.0"
 Pillow = ">=10.0.0,<11.0.0"
-torch = [
-    {version = ">=2.2.2,<3.0.0", markers = "sys_platform != \"darwin\" or platform_machine != \"x86_64\""},
-    {version = ">=2.2.2,<2.3.0", markers = "sys_platform == \"darwin\" and platform_machine == \"x86_64\""},
-]
-torchvision = [
-    {version = ">=0,<1", markers = "sys_platform != \"darwin\" or platform_machine != \"x86_64\""},
-    {version = ">=0.17.2,<0.18.0", markers = "sys_platform == \"darwin\" and platform_machine == \"x86_64\""},
-]
+torch = ">=2.2.2,<3.0.0"
+torchvision = ">=0,<1"
 tqdm = ">=4.64.0,<5.0.0"
 
 [[package]]
@@ -7170,4 +7164,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "2de6e167bcd682b692daf92adca9d2c86888df969b03e570d80b4f56c997a70c"
+content-hash = "3d187fb42d7001455eecc58d73b141fbe3d3972d963b2b0997dee282218d626e"
