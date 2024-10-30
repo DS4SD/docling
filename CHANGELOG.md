@@ -1,3 +1,13 @@
+## [v2.3.0](https://github.com/DS4SD/docling/releases/tag/v2.3.0) - 2024-10-30
+
+### Feature
+
+* Add pipeline timings and toggle visualization, establish debug settings ([#183](https://github.com/DS4SD/docling/issues/183)) ([`2a2c65b`](https://github.com/DS4SD/docling/commit/2a2c65bf4f89a715c27310eaa9cd9db635e0f673))
+
+### Fix
+
+* Fix duplicate title and heading + add e2e tests for html and docx ([#186](https://github.com/DS4SD/docling/issues/186)) ([`f542460`](https://github.com/DS4SD/docling/commit/f542460af3c7676e5f8dee3b6ce729b139560cd6))
+
 ## [v2.2.1](https://github.com/DS4SD/docling/releases/tag/v2.2.1) - 2024-10-28
 
 ### Fix
