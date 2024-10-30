@@ -1,3 +1,10 @@
+## [v2.3.1](https://github.com/DS4SD/docling/releases/tag/v2.3.1) - 2024-10-30
+
+### Fix
+
+* Simplify torch dependencies and update pinned docling deps ([#190](https://github.com/DS4SD/docling/issues/190)) ([`eb679cc`](https://github.com/DS4SD/docling/commit/eb679ccbb484fc3ef50dcf00be54ccd488d4a34d))
+* Allow to explicitly initialize the pipeline ([#189](https://github.com/DS4SD/docling/issues/189)) ([`904d24d`](https://github.com/DS4SD/docling/commit/904d24d6005d113c50bde0ad398fdaafbbfb3027))
+
 ## [v2.3.0](https://github.com/DS4SD/docling/releases/tag/v2.3.0) - 2024-10-30
 
 ### Feature
