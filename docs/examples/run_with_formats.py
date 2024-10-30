@@ -57,12 +57,6 @@ def main():
         )
     )
 
-    # initialize the pipeline for PDF. This will also download the required models.
-    print("Doing initialize for PDF")
-    doc_converter.initialize_pipeline(InputFormat.PDF)
-
-    # convert the documents
-    print("Converting documents")
     conv_results = doc_converter.convert_all(input_paths)
 
     for res in conv_results:
