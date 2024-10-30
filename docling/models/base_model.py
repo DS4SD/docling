@@ -4,11 +4,14 @@ from typing import Any, Iterable
 from docling_core.types.doc import DoclingDocument, NodeItem
 
 from docling.datamodel.base_models import Page
+from docling.datamodel.document import ConversionResult
 
 
 class BasePageModel(ABC):
     @abstractmethod
-    def __call__(self, page_batch: Iterable[Page]) -> Iterable[Page]:
+    def __call__(
+        self, conv_res: ConversionResult, page_batch: Iterable[Page]
+    ) -> Iterable[Page]:
         pass
 
 

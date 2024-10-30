@@ -189,24 +189,35 @@ class DocumentConverter:
     ) -> Iterator[ConversionResult]:
         assert self.format_to_options is not None
 
+        start_time = time.monotonic()
+
         for input_batch in chunkify(
             conv_input.docs(self.format_to_options),
             settings.perf.doc_batch_size,  # pass format_options
         ):
             _log.info(f"Going to convert document batch...")
+
             # parallel processing only within input_batch
             # with ThreadPoolExecutor(
             #    max_workers=settings.perf.doc_batch_concurrency
             # ) as pool:
             #   yield from pool.map(self.process_document, input_batch)
-
             # Note: PDF backends are not thread-safe, thread pool usage was disabled.
+
             for item in map(
                 partial(self._process_document, raises_on_error=raises_on_error),
                 input_batch,
             ):
+                elapsed = time.monotonic() - start_time
+                start_time = time.monotonic()
+
                 if item is not None:
+                    _log.info(
+                        f"Finished converting document {item.input.file.name} in {elapsed:.2f} sec."
+                    )
                     yield item
+                else:
+                    _log.info(f"Skipped a document. We lost {elapsed:.2f} sec.")
 
     def _get_pipeline(self, doc: InputDocument) -> Optional[BasePipeline]:
         assert self.format_to_options is not None
@@ -237,14 +248,7 @@ class DocumentConverter:
         assert self.allowed_formats is not None
         assert in_doc.format in self.allowed_formats
 
-        start_doc_time = time.time()
-
         conv_res = self._execute_pipeline(in_doc, raises_on_error=raises_on_error)
-
-        end_doc_time = time.time() - start_doc_time
-        _log.info(
-            f"Finished converting document {in_doc.file.name} in {end_doc_time:.2f} seconds."
-        )
 
         return conv_res
 

@@ -1,24 +1,20 @@
 import logging
-import os
 import re
 from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
 
 from docling_core.types.doc import (
-    DocItem,
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
     GroupItem,
     GroupLabel,
     ImageRef,
-    NodeItem,
     Size,
     TableCell,
     TableData,
 )
-from pydantic import AnyUrl
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat

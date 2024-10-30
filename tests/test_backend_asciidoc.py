@@ -2,9 +2,6 @@ import glob
 import os
 from pathlib import Path
 
-import pytest
-from docling_core.types.doc import BoundingBox
-
 from docling.backend.asciidoc_backend import AsciiDocBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument

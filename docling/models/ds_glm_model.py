@@ -1,5 +1,6 @@
 import copy
 import random
+from pathlib import Path
 from typing import List, Union
 
 from deepsearch_glm.nlp_utils import init_nlp_model
@@ -27,6 +28,8 @@ from pydantic import BaseModel, ConfigDict
 
 from docling.datamodel.base_models import Cluster, FigureElement, Table, TextElement
 from docling.datamodel.document import ConversionResult, layout_label_to_ds_type
+from docling.datamodel.settings import settings
+from docling.utils.profiling import ProfilingScope, TimeRecorder
 from docling.utils.utils import create_hash
 
 
@@ -226,23 +229,24 @@ class GlmModel:
         return ds_doc
 
     def __call__(self, conv_res: ConversionResult) -> DoclingDocument:
-        ds_doc = self._to_legacy_document(conv_res)
-        ds_doc_dict = ds_doc.model_dump(by_alias=True)
+        with TimeRecorder(conv_res, "glm", scope=ProfilingScope.DOCUMENT):
+            ds_doc = self._to_legacy_document(conv_res)
+            ds_doc_dict = ds_doc.model_dump(by_alias=True)
 
-        glm_doc = self.model.apply_on_doc(ds_doc_dict)
+            glm_doc = self.model.apply_on_doc(ds_doc_dict)
 
-        docling_doc: DoclingDocument = to_docling_document(glm_doc)  # Experimental
+            docling_doc: DoclingDocument = to_docling_document(glm_doc)  # Experimental
 
         # DEBUG code:
-        def draw_clusters_and_cells(ds_document, page_no):
+        def draw_clusters_and_cells(ds_document, page_no, show: bool = False):
             clusters_to_draw = []
             image = copy.deepcopy(conv_res.pages[page_no].image)
             for ix, elem in enumerate(ds_document.main_text):
                 if isinstance(elem, BaseText):
-                    prov = elem.prov[0]
+                    prov = elem.prov[0]  # type: ignore
                 elif isinstance(elem, Ref):
                     _, arr, index = elem.ref.split("/")
-                    index = int(index)
+                    index = int(index)  # type: ignore
                     if arr == "tables":
                         prov = ds_document.tables[index].prov[0]
                     elif arr == "figures":
@@ -256,7 +260,7 @@ class GlmModel:
                             id=ix,
                             label=elem.name,
                             bbox=BoundingBox.from_tuple(
-                                coord=prov.bbox,
+                                coord=prov.bbox,  # type: ignore
                                 origin=CoordOrigin.BOTTOMLEFT,
                             ).to_top_left_origin(conv_res.pages[page_no].size.height),
                         )
@@ -276,9 +280,21 @@ class GlmModel:
                 for tc in c.cells:  # [:1]:
                     x0, y0, x1, y1 = tc.bbox.as_tuple()
                     draw.rectangle([(x0, y0), (x1, y1)], outline=cell_color)
-            image.show()
 
-        # draw_clusters_and_cells(ds_doc, 0)
-        # draw_clusters_and_cells(exported_doc, 0)
+            if show:
+                image.show()
+            else:
+                out_path: Path = (
+                    Path(settings.debug.debug_output_path)
+                    / f"debug_{conv_res.input.file.stem}"
+                )
+                out_path.mkdir(parents=True, exist_ok=True)
+
+                out_file = out_path / f"doc_page_{page_no:05}.png"
+                image.save(str(out_file), format="png")
+
+        # for item in ds_doc.page_dimensions:
+        #    page_no = item.page
+        #    draw_clusters_and_cells(ds_doc, page_no)
 
         return docling_doc

@@ -3,7 +3,7 @@ import re
 from enum import Enum
 from io import BytesIO
 from pathlib import Path, PurePath
-from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Tuple, Type, Union
+from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Type, Union
 
 import filetype
 from docling_core.types.doc import (
@@ -52,6 +52,7 @@ from docling.datamodel.base_models import (
     Page,
 )
 from docling.datamodel.settings import DocumentLimits
+from docling.utils.profiling import ProfilingItem
 from docling.utils.utils import create_file_hash, create_hash
 
 if TYPE_CHECKING:
@@ -187,6 +188,7 @@ class ConversionResult(BaseModel):
 
     pages: List[Page] = []
     assembled: AssembledUnit = AssembledUnit()
+    timings: Dict[str, ProfilingItem] = {}
 
     document: DoclingDocument = _EMPTY_DOCLING_DOC
 

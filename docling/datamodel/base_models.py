@@ -1,6 +1,6 @@
 from enum import Enum, auto
 from io import BytesIO
-from typing import TYPE_CHECKING, Dict, List, Optional, Set, Union
+from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from docling_core.types.doc import (
     BoundingBox,

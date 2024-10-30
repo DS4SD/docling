@@ -1,8 +1,5 @@
 from pathlib import Path
 
-import yaml
-from docling_core.types.doc import DoclingDocument
-
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import ConversionResult
