@@ -1,4 +1,4 @@
-name: "Run CI"
+name: "Run Docs CI"
 
 on:
   pull_request:
@@ -6,14 +6,11 @@ on:
   push:
     branches:
       - "**"
-      - "!main"
       - "!gh-pages"
 
-env:
-  # disable keyring (https://github.com/actions/runner-images/issues/6185):
-  PYTHON_KEYRING_BACKEND: keyring.backends.null.Keyring
-
 jobs:
-  code-checks:
+  build-docs:
     if: ${{ github.event_name == 'push' || (github.event.pull_request.head.repo.full_name != 'DS4SD/docling' && github.event.pull_request.head.repo.full_name != 'ds4sd/docling') }}
-    uses: ./.github/workflows/checks.yml
+    uses: ./.github/workflows/docs.yml
+    with:
+      deploy: false

@@ -22,8 +22,9 @@ Docling parses documents and exports them to the desired format with ease and sp
 
 ## Features
 
-* 🗂️ Multi-format support for input (PDF, DOCX etc.) & output (Markdown, JSON etc.)
-* 📑 Advanced PDF document understanding incl. page layout, reading order & table structures
+* 🗂️ Reads popular document formats (PDF, DOCX, PPTX, Images, HTML, AsciiDoc, Markdown) and exports to Markdown and JSON
+* 📑 Advanced PDF document understanding including page layout, reading order & table structures
+* 🧩 Unified, expressive [DoclingDocument](https://ds4sd.github.io/docling/concepts/docling_document/) representation format
 * 📝 Metadata extraction, including title, authors, references & language
 * 🤖 Seamless LlamaIndex 🦙 & LangChain 🦜🔗 integration for powerful RAG / QA applications
 * 🔍 OCR support for scanned PDFs
