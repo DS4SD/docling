@@ -19,7 +19,7 @@ Docling parses documents and exports them to the desired format with ease and sp
 
 ## Features
 
-* 🗂️ Multi-format support for input (PDF, DOCX, PPTX, HTML, AsciiDoc, MarkDown) and output (Markdown, JSON, YAML)
+* 🗂️ Multi-format support for input (PDF, DOCX, PPTX, Bitmap images, HTML, AsciiDoc, MarkDown) and output (Markdown, JSON, YAML)
 * 📑 Advanced PDF document understanding incl. page layout, reading order & table structures
 * 🧩 Strongly typed Pydantic v2 data structure named [DoclingDocument](./concepts/docling_document.md) which supports hierarchies and provides native iterators and chunkers.
 * 📝 Metadata extraction, including title, authors, references & language
