@@ -139,6 +139,10 @@ class DocumentConverter:
 
         self.initialized_pipelines: Dict[Type[BasePipeline], BasePipeline] = {}
 
+    def initialize_pipeline(self, format: InputFormat):
+        """Initialize the conversion pipeline for the selected format."""
+        self._get_pipeline(doc_format=format)
+
     @validate_call(config=ConfigDict(strict=True))
     def convert(
         self,
@@ -219,13 +223,13 @@ class DocumentConverter:
                 else:
                     _log.info(f"Skipped a document. We lost {elapsed:.2f} sec.")
 
-    def _get_pipeline(self, doc: InputDocument) -> Optional[BasePipeline]:
+    def _get_pipeline(self, doc_format: InputFormat) -> Optional[BasePipeline]:
         assert self.format_to_options is not None
 
-        fopt = self.format_to_options.get(doc.format)
+        fopt = self.format_to_options.get(doc_format)
 
         if fopt is None:
-            raise RuntimeError(f"Could not get pipeline for document {doc.file}")
+            raise RuntimeError(f"Could not get pipeline for {doc_format}")
         else:
             pipeline_class = fopt.pipeline_cls
             pipeline_options = fopt.pipeline_options
@@ -256,7 +260,7 @@ class DocumentConverter:
         self, in_doc: InputDocument, raises_on_error: bool
     ) -> ConversionResult:
         if in_doc.valid:
-            pipeline = self._get_pipeline(in_doc)
+            pipeline = self._get_pipeline(in_doc.format)
             if pipeline is None:  # Can't find a default pipeline. Should this raise?
                 if raises_on_error:
                     raise RuntimeError(
