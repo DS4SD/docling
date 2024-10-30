@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING, List
 
@@ -20,6 +21,7 @@ class ProfilingItem(BaseModel):
     scope: ProfilingScope
     count: int = 0
     times: List[float] = []
+    start_timestamps: List[datetime] = []
 
     def avg(self) -> float:
         return np.average(self.times)  # type: ignore
@@ -50,6 +52,7 @@ class TimeRecorder:
     def __enter__(self):
         if settings.debug.profile_pipeline_timings:
             self.start = time.monotonic()
+            self.conv_res.timings[self.key].start_timestamps.append(datetime.utcnow())
         return self
 
     def __exit__(self, *args):
