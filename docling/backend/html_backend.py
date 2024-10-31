@@ -21,7 +21,7 @@ _log = logging.getLogger(__name__)
 
 
 class HTMLDocumentBackend(DeclarativeDocumentBackend):
-    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path], skip_furniture:bool=False):
         super().__init__(in_doc, path_or_stream)
         _log.debug("About to init HTML backend...")
         self.soup = None
@@ -35,6 +35,8 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             self.parents[i] = None
         self.labels = {}  # type: ignore
 
+        self.skip_furniture = skip_furniture
+        
         try:
             if isinstance(self.path_or_stream, BytesIO):
                 text_stream = self.path_or_stream.getvalue().decode("utf-8")
@@ -82,7 +84,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             for br in self.soup.body.find_all("br"):
                 br.replace_with("\n")
 
-            self.contains_h1 = True
+            self.contains_h1 = bool(soup.find('h1')) and self.skip_furniture
             self.detected_h1 = False
                 
             doc = self.walk(self.soup.body, doc)
