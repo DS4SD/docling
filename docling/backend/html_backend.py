@@ -81,6 +81,10 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             # Replace <br> tags with newline characters
             for br in self.soup.body.find_all("br"):
                 br.replace_with("\n")
+
+            self.contains_h1 = True
+            self.detected_h1 = False
+                
             doc = self.walk(self.soup.body, doc)
         else:
             raise RuntimeError(
@@ -116,20 +120,30 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         else:
             self.labels[element.name] = 1
 
+        if element.name in ["h1"]:
+            self.detected_h1 = True
+            
         if element.name in ["h1", "h2", "h3", "h4", "h5", "h6"]:
-            self.handle_header(element, idx, doc)
+            if (not self.contains_h1) or (self.contains_h1 and self.detected_h1):
+                self.handle_header(element, idx, doc)
         elif element.name in ["p"]:
-            self.handle_paragraph(element, idx, doc)
+            if (not self.contains_h1) or (self.contains_h1 and self.detected_h1):
+                self.handle_paragraph(element, idx, doc)
         elif element.name in ["ul", "ol"]:
-            self.handle_list(element, idx, doc)
+            if (not self.contains_h1) or (self.contains_h1 and self.detected_h1):
+                self.handle_list(element, idx, doc)
         elif element.name in ["li"]:
-            self.handle_listitem(element, idx, doc)
+            if (not self.contains_h1) or (self.contains_h1 and self.detected_h1):
+                self.handle_listitem(element, idx, doc)
         elif element.name == "table":
-            self.handle_table(element, idx, doc)
+            if (not self.contains_h1) or (self.contains_h1 and self.detected_h1):
+                self.handle_table(element, idx, doc)
         elif element.name == "figure":
-            self.handle_figure(element, idx, doc)
+            if (not self.contains_h1) or (self.contains_h1 and self.detected_h1):
+                self.handle_figure(element, idx, doc)
         elif element.name == "img":
-            self.handle_image(element, idx, doc)
+            if (not self.contains_h1) or (self.contains_h1 and self.detected_h1):
+                self.handle_image(element, idx, doc)
         else:
             self.walk(element, doc)
 
