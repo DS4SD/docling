@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 from pathlib import Path
 from typing import List, Literal, Optional, Union
 
@@ -6,8 +6,8 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class TableFormerMode(str, Enum):
-    FAST = auto()
-    ACCURATE = auto()
+    FAST = "fast"
+    ACCURATE = "accurate"
 
 
 class TableStructureOptions(BaseModel):
