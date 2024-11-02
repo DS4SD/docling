@@ -4,6 +4,8 @@ from pathlib import Path
 from typing import Set, Union
 
 from bs4 import BeautifulSoup
+from bs4.element import Tag
+
 from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
@@ -25,7 +27,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         self,
         in_doc: "InputDocument",
         path_or_stream: Union[BytesIO, Path],
-        skip_furniture: bool = False,
+        skip_furniture: bool = True,
     ):
         super().__init__(in_doc, path_or_stream)
         _log.debug("About to init HTML backend...")
@@ -45,10 +47,16 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         try:
             if isinstance(self.path_or_stream, BytesIO):
                 text_stream = self.path_or_stream.getvalue().decode("utf-8")
+                print("BytesIO")
                 self.soup = BeautifulSoup(text_stream, "html.parser")
             if isinstance(self.path_or_stream, Path):
+                print("file")
                 with open(self.path_or_stream, "r", encoding="utf-8") as f:
                     html_content = f.read()
+
+                    with open("./scratch/file.html", "w") as fw:
+                        fw.write(html_content)
+                    
                     self.soup = BeautifulSoup(html_content, "html.parser")
         except Exception as e:
             raise RuntimeError(
@@ -101,27 +109,38 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
     def walk(self, element, doc):
         try:
-            # Iterate over elements in the body of the document
-            for idx, element in enumerate(element.children):
+            if isinstance(element, Tag) and any(element.children):
+                # Iterate over elements in the body of the document
+                for idx, child in enumerate(element.children):
+                    try:
+                        self.analyse_element(child, idx, doc)
+                    except Exception as exc:
+                        _log.error(f" -> error treating child: {exc}")
+                        raise exc
+
+            elif isinstance(element, Tag):
                 try:
-                    self.analyse_element(element, idx, doc)
-                except Exception as exc_child:
-
-                    _log.error(" -> error treating child: ", exc_child)
-                    _log.error(" => element: ", element, "\n")
-                    raise exc_child
-
+                    self.analyse_element(element, 0, doc)
+                except Exception as exc:
+                    _log.error(f" -> error treating elem: {exc}")
+                    raise exc
+            else:
+                _log.warn(f"ignoring element of type {type(element)}")
+                
         except Exception as exc:
+            _log.warn(f"error walking element: {type(element)}")
             pass
 
         return doc
 
     def analyse_element(self, element, idx, doc):
-        """
-        if element.name!=None:
-            _log.debug("\t"*self.level, idx, "\t", f"{element.name} ({self.level})")
-        """
 
+        if element.name!=None:
+            #_log.debug("\t"*self.level, idx, "\t", f"{element.name} ({self.level})")
+            print("\t"*self.level, idx, "\t", f"{element.name} ({self.level})")
+            
+        #print(element.name)
+        
         if element.name in self.labels:
             self.labels[element.name] += 1
         else:
@@ -134,8 +153,11 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             if (not self.contains_h1) or (self.contains_h1 and self.detected_h1):
                 self.handle_header(element, idx, doc)
         elif element.name in ["p"]:
+            print(" --> detected ...")
             if (not self.contains_h1) or (self.contains_h1 and self.detected_h1):
                 self.handle_paragraph(element, idx, doc)
+                print(" --> registered ...")
+                
         elif element.name in ["ul", "ol"]:
             if (not self.contains_h1) or (self.contains_h1 and self.detected_h1):
                 self.handle_list(element, idx, doc)
@@ -151,6 +173,33 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         elif element.name == "img":
             if (not self.contains_h1) or (self.contains_h1 and self.detected_h1):
                 self.handle_image(element, idx, doc)
+        elif element.name == "svg":
+            if (not self.contains_h1) or (self.contains_h1 and self.detected_h1):
+                #self.handle_image(element, idx, doc)
+                _log.warn("Add `svg` elements")
+
+        elif True and isinstance(element, Tag) and element.name in ["section"] and element.has_attr('data-content'):
+            try:
+                #print("\n\n\nattempt decoding: ", element['data-content'])
+                
+                # Decode the data-content attribute
+                #data_content = html.unescape(element['data-content'])
+                #print(data_content)
+
+                data_content = element['data-content']
+                
+                # Parse the decoded HTML content
+                content_soup = BeautifulSoup(data_content, 'html.parser')
+                print("\n\n\nsoup: ", content_soup)
+
+                for jdx, _ in enumerate(content_soup):
+                    print(_)
+                    self.analyse_element(_, jdx, doc)
+            except:
+                _log.warn("could not parse the `data-content` attribute")
+
+            self.walk(element, doc)
+                
         else:
             self.walk(element, doc)
 
@@ -229,11 +278,16 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def handle_paragraph(self, element, idx, doc):
         """Handles paragraph tags (p)."""
         if element.text is None:
+            print(" -> text is None ...")
             return
         text = element.text.strip()
+        print("doc is adding paragraph: ", text)
+        
         label = DocItemLabel.PARAGRAPH
         if len(text) == 0:
+            print(" -> text is zero length ...")
             return
+        print("doc is adding paragraph: ", text)
         doc.add_text(parent=self.parents[self.level], label=label, text=text)
 
     def handle_list(self, element, idx, doc):
