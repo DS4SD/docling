@@ -2,7 +2,7 @@
 
 ### Convert a single document
 
-To convert invidual PDF documents, use `convert()`, for example:
+To convert individual PDF documents, use `convert()`, for example:
 
 ```python
 from docling.document_converter import DocumentConverter
