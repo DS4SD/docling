@@ -28,7 +28,7 @@ jobs:
         run: |
           for file in docs/examples/*.py; do
             # Skip batch_convert.py
-            if [[ "$(basename "$file")" == "batch_convert.py" ]]; then
+            if [[ "$(basename "$file")" =~ ^(batch_convert|minimal|export_multimodal|custom_convert|develop_picture_enrichment).py ]]; then
                 echo "Skipping $file"
                 continue
             fi

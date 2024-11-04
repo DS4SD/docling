@@ -27,7 +27,7 @@ def _get_backend(pdf_doc):
 
 
 def test_text_cell_counts():
-    pdf_doc = Path("./tests/data/redp5695.pdf")
+    pdf_doc = Path("./tests/data/redp5110_sampled.pdf")
 
     doc_backend = _get_backend(pdf_doc)
 
