@@ -163,6 +163,10 @@ def convert(
         TableFormerMode,
         typer.Option(..., help="The mode to use in the table structure model."),
     ] = TableFormerMode.FAST,
+    artifacts_path: Annotated[
+        Optional[Path],
+        typer.Option(..., help="If provided, the location of the model artifacts."),
+    ] = None,
     abort_on_error: Annotated[
         bool,
         typer.Option(
@@ -230,6 +234,9 @@ def convert(
     )
     pipeline_options.table_structure_options.do_cell_matching = True  # do_cell_matching
     pipeline_options.table_structure_options.mode = table_mode
+
+    if artifacts_path is not None:
+        pipeline_options.artifacts_path = artifacts_path
 
     match pdf_backend:
         case PdfBackend.DLPARSE_V1:
