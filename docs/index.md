@@ -22,7 +22,12 @@ Docling parses documents and exports them to the desired format with ease and sp
 * 🗂️ Reads popular document formats (PDF, DOCX, PPTX, Images, HTML, AsciiDoc, Markdown) and exports to Markdown and JSON
 * 📑 Advanced PDF document understanding incl. page layout, reading order & table structures
 * 🧩 Unified, expressive [DoclingDocument](./concepts/docling_document.md) representation format
-* 📝 Metadata extraction, including title, authors, references & language
-* 🤖 Seamless LlamaIndex 🦙 & LangChain 🦜🔗 integration for powerful RAG / QA applications
+* 🤖 Easy integration with LlamaIndex 🦙 & LangChain 🦜🔗 for powerful RAG / QA applications
 * 🔍 OCR support for scanned PDFs
 * 💻 Simple and convenient CLI
+
+### Coming soon
+
+* ♾️ Equation & code extraction
+* 📝 Metadata extraction, including title, authors, references & language
+* 🦜🔗 Native LangChain extension
