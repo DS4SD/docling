@@ -131,7 +131,6 @@ doc_converter = DocumentConverter(
 )
 ```
 
-
 #### Impose limits on the document size
 
 You can limit the file size and number of pages which should be allowed to process per document:
