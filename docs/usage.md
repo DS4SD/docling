@@ -115,6 +115,29 @@ doc_converter = DocumentConverter(
 )
 ```
 
+##### Provide specific artifacts path
+
+By default, artifacts such as models are downloaded automatically upon first usage. If you would prefer to use a local path where the artifacts have been explicitly prefetched, you can do that as follows:
+
+```python
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
+from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
+
+# # to explicitly prefetch:
+# artifacts_path = StandardPdfPipeline.download_models_hf()
+
+artifacts_path = "/local/path/to/artifacts"
+
+pipeline_options = PdfPipelineOptions(artifacts_path=artifacts_path)
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+    }
+)
+```
+
 #### Impose limits on the document size
 
 You can limit the file size and number of pages which should be allowed to process per document:
