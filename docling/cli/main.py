@@ -90,28 +90,28 @@ def export_documents(
             # Export Deep Search document JSON format:
             if export_json:
                 fname = output_dir / f"{doc_filename}.json"
-                with fname.open("w") as fp:
+                with fname.open("w", encoding="utf8") as fp:
                     _log.info(f"writing JSON output to {fname}")
                     fp.write(json.dumps(conv_res.document.export_to_dict()))
 
             # Export Text format:
             if export_txt:
                 fname = output_dir / f"{doc_filename}.txt"
-                with fname.open("w") as fp:
+                with fname.open("w", encoding="utf8") as fp:
                     _log.info(f"writing Text output to {fname}")
                     fp.write(conv_res.document.export_to_markdown(strict_text=True))
 
             # Export Markdown format:
             if export_md:
                 fname = output_dir / f"{doc_filename}.md"
-                with fname.open("w") as fp:
+                with fname.open("w", encoding="utf8") as fp:
                     _log.info(f"writing Markdown output to {fname}")
                     fp.write(conv_res.document.export_to_markdown())
 
             # Export Document Tags format:
             if export_doctags:
                 fname = output_dir / f"{doc_filename}.doctags"
-                with fname.open("w") as fp:
+                with fname.open("w", encoding="utf8") as fp:
                     _log.info(f"writing Doc Tags output to {fname}")
                     fp.write(conv_res.document.export_to_document_tokens())
 
