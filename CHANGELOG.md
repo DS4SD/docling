@@ -1,3 +1,16 @@
+## [v2.4.0](https://github.com/DS4SD/docling/releases/tag/v2.4.0) - 2024-11-04
+
+### Feature
+
+* Pdf backend, table mode as options and artifacts path ([#203](https://github.com/DS4SD/docling/issues/203)) ([`40ad987`](https://github.com/DS4SD/docling/commit/40ad98730356218359d6fa9b3deb5bc094d6c699))
+
+### Documentation
+
+* Add explicit artifacts path example ([#224](https://github.com/DS4SD/docling/issues/224)) ([`eeee3b4`](https://github.com/DS4SD/docling/commit/eeee3b4371cb8207a8e7a887acba3fc5afc6de4d))
+* Update custom convert and dockerfile ([#226](https://github.com/DS4SD/docling/issues/226)) ([`5f5fea9`](https://github.com/DS4SD/docling/commit/5f5fea90a963f73a92b551dfefb353fa3e9657d7))
+* Correct spelling of 'individual' ([#219](https://github.com/DS4SD/docling/issues/219)) ([`41acaa9`](https://github.com/DS4SD/docling/commit/41acaa9e2ef4cff8d781f79fb5ae1b31762fa644))
+* Update LlamaIndex docs ([#196](https://github.com/DS4SD/docling/issues/196)) ([`244ca69`](https://github.com/DS4SD/docling/commit/244ca69cfd8a17b449a0a6baaf062b0b5b798bb1))
+
 ## [v2.3.1](https://github.com/DS4SD/docling/releases/tag/v2.3.1) - 2024-10-30
 
 ### Fix
