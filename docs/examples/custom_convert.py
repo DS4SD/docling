@@ -3,9 +3,12 @@ import logging
 import time
 from pathlib import Path
 
+from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
+from docling.models.tesseract_ocr_cli_model import TesseractCliOcrOptions
+from docling.models.tesseract_ocr_model import TesseractOcrOptions
 
 _log = logging.getLogger(__name__)
 
@@ -23,32 +26,51 @@ def main():
 
     # PyPdfium without EasyOCR
     # --------------------
-    # pipeline_options = PipelineOptions()
-    # pipeline_options.do_ocr=False
-    # pipeline_options.do_table_structure=True
+    # pipeline_options = PdfPipelineOptions()
+    # pipeline_options.do_ocr = False
+    # pipeline_options.do_table_structure = True
     # pipeline_options.table_structure_options.do_cell_matching = False
 
     # doc_converter = DocumentConverter(
-    #     pipeline_options=pipeline_options,
-    #     pdf_backend=PyPdfiumDocumentBackend,
+    #     format_options={
+    #         InputFormat.PDF: PdfFormatOption(
+    #             pipeline_options=pipeline_options, backend=PyPdfiumDocumentBackend
+    #         )
+    #     }
     # )
 
     # PyPdfium with EasyOCR
     # -----------------
-    # pipeline_options = PipelineOptions()
-    # pipeline_options.do_ocr=True
-    # pipeline_options.do_table_structure=True
+    # pipeline_options = PdfPipelineOptions()
+    # pipeline_options.do_ocr = True
+    # pipeline_options.do_table_structure = True
     # pipeline_options.table_structure_options.do_cell_matching = True
 
     # doc_converter = DocumentConverter(
-    #     pipeline_options=pipeline_options,
-    #     pdf_backend=PyPdfiumDocumentBackend,
+    #     format_options={
+    #         InputFormat.PDF: PdfFormatOption(
+    #             pipeline_options=pipeline_options, backend=PyPdfiumDocumentBackend
+    #         )
+    #     }
     # )
 
     # Docling Parse without EasyOCR
     # -------------------------
+    # pipeline_options = PdfPipelineOptions()
+    # pipeline_options.do_ocr = False
+    # pipeline_options.do_table_structure = True
+    # pipeline_options.table_structure_options.do_cell_matching = True
+
+    # doc_converter = DocumentConverter(
+    #     format_options={
+    #         InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+    #     }
+    # )
+
+    # Docling Parse with EasyOCR
+    # ----------------------
     pipeline_options = PdfPipelineOptions()
-    pipeline_options.do_ocr = False
+    pipeline_options.do_ocr = True
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
 
@@ -58,42 +80,32 @@ def main():
         }
     )
 
-    # Docling Parse with EasyOCR
-    # ----------------------
-    # pipeline_options = PipelineOptions()
-    # pipeline_options.do_ocr=True
-    # pipeline_options.do_table_structure=True
-    # pipeline_options.table_structure_options.do_cell_matching = True
-
-    # doc_converter = DocumentConverter(
-    #     pipeline_options=pipeline_options,
-    #     pdf_backend=DoclingParseDocumentBackend,
-    # )
-
     # Docling Parse with Tesseract
     # ----------------------
-    # pipeline_options = PipelineOptions()
+    # pipeline_options = PdfPipelineOptions()
     # pipeline_options.do_ocr = True
     # pipeline_options.do_table_structure = True
     # pipeline_options.table_structure_options.do_cell_matching = True
     # pipeline_options.ocr_options = TesseractOcrOptions()
 
     # doc_converter = DocumentConverter(
-    #     pipeline_options=pipeline_options,
-    #     pdf_backend=DoclingParseDocumentBackend,
+    #     format_options={
+    #         InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+    #     }
     # )
 
     # Docling Parse with Tesseract CLI
     # ----------------------
-    # pipeline_options = PipelineOptions()
+    # pipeline_options = PdfPipelineOptions()
     # pipeline_options.do_ocr = True
     # pipeline_options.do_table_structure = True
     # pipeline_options.table_structure_options.do_cell_matching = True
     # pipeline_options.ocr_options = TesseractCliOcrOptions()
 
     # doc_converter = DocumentConverter(
-    #     pipeline_options=pipeline_options,
-    #     pdf_backend=DoclingParseDocumentBackend,
+    #     format_options={
+    #         InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+    #     }
     # )
 
     ###########################################################################
