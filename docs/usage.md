@@ -118,7 +118,7 @@ from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
 
-#to explicitly prefetch:
+# # to explicitly prefetch:
 # artifacts_path = StandardPdfPipeline.download_models_hf()
 
 artifacts_path = "/local/path/to/artifacts"
