@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "docling"
 version = "2.3.1"  # DO NOT EDIT, updated automatically
-description = "Docling PDF conversion package"
-authors = ["Christoph Auer <cau@zurich.ibm.com>", "Michele Dolfi <dol@zurich.ibm.com>", "Maxim Lysak <mly@zurich.ibm.com>", "Nikos Livathinos <nli@zurich.ibm.com>", "Ahmed Nassar <ahn@zurich.ibm.com>", "Peter Staar <taa@zurich.ibm.com>"]
+description = "SDK and CLI for parsing PDF, DOCX, HTML, and more, to a unified document representation for powering downstream workflows such as gen AI applications."
+authors = ["Christoph Auer <cau@zurich.ibm.com>", "Michele Dolfi <dol@zurich.ibm.com>", "Maxim Lysak <mly@zurich.ibm.com>", "Nikos Livathinos <nli@zurich.ibm.com>", "Ahmed Nassar <ahn@zurich.ibm.com>", "Panos Vagenas <pva@zurich.ibm.com>", "Peter Staar <taa@zurich.ibm.com>"]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/DS4SD/docling"
 homepage = "https://github.com/DS4SD/docling"
-keywords= ["docling", "convert", "document", "pdf", "layout model", "segmentation", "table structure", "table former"]
+keywords= ["docling", "convert", "document", "pdf", "docx", "html", "markdown", "layout model", "segmentation", "table structure", "table former"]
  classifiers = [
      "License :: OSI Approved :: MIT License",
      "Operating System :: MacOS :: MacOS X",
@@ -73,12 +73,6 @@ mkdocs-jupyter = "^0.25.0"
 [tool.poetry.group.examples.dependencies]
 datasets = "^2.21.0"
 python-dotenv = "^1.0.1"
-# llama-index-readers-docling = { version = "^0.1.0", markers = 'python_version < "3.13"' }
-# llama-index-node-parser-docling = { version = "^0.1.0", markers = 'python_version < "3.13"' }
-# llama-index-readers-file = { version = "^0.2.2", markers = 'python_version < "3.13"' }
-# llama-index-embeddings-huggingface = { version = "^0.3.1", markers = 'python_version < "3.13"' }
-# llama-index-llms-huggingface-api = { version = "^0.2.0", markers = 'python_version < "3.13"' }
-# llama-index-vector-stores-milvus ={ version =  "^0.2.1", markers = 'python_version < "3.13"' }
 langchain-huggingface = "^0.0.3"
 langchain-milvus = "^0.1.4"
 langchain-text-splitters = "^0.2.4"
