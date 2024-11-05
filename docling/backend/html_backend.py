@@ -1,3 +1,4 @@
+import re
 import logging
 from io import BytesIO
 from pathlib import Path
@@ -46,17 +47,17 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
-                text_stream = self.path_or_stream.getvalue().decode("utf-8")
                 _log.debug("reading from BytesIO")
+                text_stream = self.path_or_stream.getvalue().decode("utf-8")
                 self.soup = BeautifulSoup(text_stream, "html.parser")
             if isinstance(self.path_or_stream, Path):
                 _log.debug("reading from file")
-                with open(self.path_or_stream, "r", encoding="utf-8") as f:
-                    html_content = f.read()
+                with open(self.path_or_stream, "r", encoding="utf-8") as fr:
+                    html_content = fr.read()
                     self.soup = BeautifulSoup(html_content, "html.parser")
         except Exception as e:
             raise RuntimeError(
-                f"Could not initialize HTML backend for file with hash {self.document_hash}."
+                f"Could not initialize HTML backend for file with hash '{self.document_hash}'."
             ) from e
 
     def is_valid(self) -> bool:
@@ -310,7 +311,8 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             # Flatten text, remove break lines:
             text = text.replace("\n", " ").replace("\r", "")
             text = " ".join(text.split()).strip()
-
+            text = re.sub(r'\s{2,}', ' ', text)
+            
             marker = ""
             enumerated = False
             if parent_list_label == GroupLabel.ORDERED_LIST:
@@ -334,7 +336,9 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         elif isinstance(element.text, str):
             text = element.text.strip()
-
+            text = text.replace("\n", " ").replace("\r", "")
+            text = re.sub(r'\s{2,}', ' ', text)
+            
             marker = ""
             enumerated = False
             if parent_list_label == GroupLabel.ORDERED_LIST:
