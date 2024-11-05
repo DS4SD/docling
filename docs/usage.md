@@ -55,6 +55,9 @@ $ docling --help
 │ --table-mode                               [fast|accurate]                         The mode to use in the table structure │
 │                                                                                    model.                                 │
 │                                                                                    [default: fast]                        │
+│ --artifacts-path                           PATH                                    If provided, the location of the model │
+│                                                                                    artifacts.                             │
+│                                                                                    [default: None]                        │
 │ --abort-on-error    --no-abort-on-error                                            If enabled, the bitmap content will be │
 │                                                                                    processed using OCR.                   │
 │                                                                                    [default: no-abort-on-error]           │
@@ -64,6 +67,7 @@ $ docling --help
 │ --version                                                                          Show version information.              │
 │ --help                                                                             Show this message and exit.            │
 ╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
 ```
 </details>
 
