@@ -29,7 +29,7 @@ class PyPdfiumPageBackend(PdfPageBackend):
             self._ppage: pdfium.PdfPage = pdfium_doc[page_no]
         except PdfiumError as e:
             _log.info(
-                f"An exception occured when loading page {page_no} of document {document_hash}.",
+                f"An exception occurred when loading page {page_no} of document {document_hash}.",
                 exc_info=True,
             )
             self.valid = False
