@@ -31,7 +31,7 @@ class DoclingParseV2PageBackend(PdfPageBackend):
             self._dpage = parsed_page["pages"][0]
         else:
             _log.info(
-                f"An error occured when loading page {page_no} of document {document_hash}."
+                f"An error occurred when loading page {page_no} of document {document_hash}."
             )
 
     def is_valid(self) -> bool:
