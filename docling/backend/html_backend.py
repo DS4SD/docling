@@ -1,12 +1,11 @@
-import re
 import logging
+import re
 from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
 
 from bs4 import BeautifulSoup
 from bs4.element import Tag
-
 from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
@@ -123,7 +122,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     raise exc
             else:
                 _log.debug(f"ignoring element of type {type(element)}")
-                
+
         except Exception as exc:
             _log.debug(f"error walking element: {type(element)}")
             pass
@@ -132,12 +131,12 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
     def is_body(self):
         return (not self.contains_h1) or (self.contains_h1 and self.detected_h1)
-    
+
     def analyse_element(self, element, idx, doc):
 
-        if element.name!=None:
-            _log.debug("\t"*self.level, idx, "\t", f"{element.name} ({self.level})")
-            
+        if element.name != None:
+            _log.debug("\t" * self.level, idx, "\t", f"{element.name} ({self.level})")
+
         if element.name in self.labels:
             self.labels[element.name] += 1
         else:
@@ -171,14 +170,18 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             if self.is_body():
                 self.handle_svg(element, idx, doc)
 
-        elif isinstance(element, Tag) and element.name in ["section"] and element.has_attr('data-content'):
+        elif (
+            isinstance(element, Tag)
+            and element.name in ["section"]
+            and element.has_attr("data-content")
+        ):
             try:
                 # Decode the data-content attribute
-                #data_content = html.unescape(element['data-content'])
-                data_content = element['data-content']
-                
+                # data_content = html.unescape(element['data-content'])
+                data_content = element["data-content"]
+
                 # Parse the decoded HTML content
-                content_soup = BeautifulSoup(data_content, 'html.parser')
+                content_soup = BeautifulSoup(data_content, "html.parser")
 
                 for jdx, _ in enumerate(content_soup):
                     self.analyse_element(_, jdx, doc)
@@ -186,7 +189,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 _log.debug("could not parse the `data-content` attribute")
 
             self.walk(element, doc)
-                
+
         else:
             self.walk(element, doc)
 
@@ -264,9 +267,9 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
     def handle_paragraph(self, element, idx, doc):
         """Handles paragraph tags (p)."""
-        if element.text is None:            
+        if element.text is None:
             return
-        
+
         text = element.text.strip()
         if len(text) == 0:
             return
@@ -311,8 +314,8 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             # Flatten text, remove break lines:
             text = text.replace("\n", " ").replace("\r", "")
             text = " ".join(text.split()).strip()
-            text = re.sub(r'\s{2,}', ' ', text)
-            
+            text = re.sub(r"\s{2,}", " ", text)
+
             marker = ""
             enumerated = False
             if parent_list_label == GroupLabel.ORDERED_LIST:
@@ -337,8 +340,8 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         elif isinstance(element.text, str):
             text = element.text.strip()
             text = text.replace("\n", " ").replace("\r", "")
-            text = re.sub(r'\s{2,}', ' ', text)
-            
+            text = re.sub(r"\s{2,}", " ", text)
+
             marker = ""
             enumerated = False
             if parent_list_label == GroupLabel.ORDERED_LIST:
@@ -491,7 +494,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def handle_image(self, element, idx, doc):
         """Handles image tags (img)."""
         doc.add_picture(parent=self.parents[self.level], caption=None)
-        
+
     def handle_svg(self, element, idx, doc):
         """Handles svg tags."""
         doc.add_picture(parent=self.parents[self.level], caption=None)
