@@ -1,0 +1,2822 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.0.0",
+  "name": "real_example_01",
+  "origin": {
+    "mimetype": "text/html",
+    "binary_hash": 3819277586200936836,
+    "filename": "real_example_01.html"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      }
+    ],
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [
+    {
+      "self_ref": "#/groups/0",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [],
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/1",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/19"
+        },
+        {
+          "$ref": "#/texts/20"
+        },
+        {
+          "$ref": "#/texts/21"
+        }
+      ],
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/2",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/22"
+        },
+        {
+          "$ref": "#/texts/23"
+        },
+        {
+          "$ref": "#/texts/24"
+        },
+        {
+          "$ref": "#/texts/25"
+        },
+        {
+          "$ref": "#/texts/26"
+        },
+        {
+          "$ref": "#/texts/27"
+        }
+      ],
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/3",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/28"
+        },
+        {
+          "$ref": "#/texts/29"
+        },
+        {
+          "$ref": "#/texts/30"
+        },
+        {
+          "$ref": "#/texts/31"
+        },
+        {
+          "$ref": "#/texts/32"
+        }
+      ],
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/4",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/33"
+        },
+        {
+          "$ref": "#/texts/34"
+        },
+        {
+          "$ref": "#/texts/35"
+        },
+        {
+          "$ref": "#/texts/36"
+        },
+        {
+          "$ref": "#/texts/37"
+        },
+        {
+          "$ref": "#/texts/38"
+        },
+        {
+          "$ref": "#/texts/39"
+        }
+      ],
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/5",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/40"
+        },
+        {
+          "$ref": "#/texts/41"
+        },
+        {
+          "$ref": "#/texts/42"
+        },
+        {
+          "$ref": "#/texts/43"
+        },
+        {
+          "$ref": "#/texts/44"
+        }
+      ],
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/6",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/45"
+        },
+        {
+          "$ref": "#/texts/46"
+        },
+        {
+          "$ref": "#/texts/47"
+        },
+        {
+          "$ref": "#/texts/48"
+        },
+        {
+          "$ref": "#/texts/49"
+        },
+        {
+          "$ref": "#/texts/50"
+        }
+      ],
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/7",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/51"
+        },
+        {
+          "$ref": "#/texts/52"
+        },
+        {
+          "$ref": "#/texts/53"
+        },
+        {
+          "$ref": "#/texts/54"
+        },
+        {
+          "$ref": "#/texts/55"
+        },
+        {
+          "$ref": "#/texts/56"
+        },
+        {
+          "$ref": "#/texts/57"
+        }
+      ],
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/8",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/58"
+        },
+        {
+          "$ref": "#/texts/59"
+        },
+        {
+          "$ref": "#/texts/60"
+        },
+        {
+          "$ref": "#/texts/61"
+        },
+        {
+          "$ref": "#/texts/62"
+        },
+        {
+          "$ref": "#/texts/63"
+        }
+      ],
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/9",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/65"
+        },
+        {
+          "$ref": "#/texts/66"
+        },
+        {
+          "$ref": "#/texts/67"
+        }
+      ],
+      "name": "list",
+      "label": "list"
+    }
+  ],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/1"
+        },
+        {
+          "$ref": "#/groups/0"
+        },
+        {
+          "$ref": "#/pictures/0"
+        },
+        {
+          "$ref": "#/pictures/1"
+        },
+        {
+          "$ref": "#/pictures/2"
+        },
+        {
+          "$ref": "#/texts/2"
+        },
+        {
+          "$ref": "#/texts/3"
+        },
+        {
+          "$ref": "#/texts/6"
+        },
+        {
+          "$ref": "#/texts/8"
+        },
+        {
+          "$ref": "#/texts/10"
+        },
+        {
+          "$ref": "#/texts/14"
+        },
+        {
+          "$ref": "#/texts/64"
+        }
+      ],
+      "label": "title",
+      "prov": [],
+      "orig": "New electrification, thanks to renewables",
+      "text": "New electrification, thanks to renewables"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "In the transition towards energy generation that respects the environment Enel is making a substantial contribution to projects centered on sustainability and innovation, built on renewable sources and electrification. Examples include the new photovoltaic Gigafactory in Sicily and the initiatives to integrate its power plants into the local communities.",
+      "text": "In the transition towards energy generation that respects the environment Enel is making a substantial contribution to projects centered on sustainability and innovation, built on renewable sources and electrification. Examples include the new photovoltaic Gigafactory in Sicily and the initiatives to integrate its power plants into the local communities."
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "Cutting carbon dioxide emissions and reducing the use of fossil fuels are two goals that can no longer be postponed. This linear process means increasing generation from renewable sources and, at the same time, extending the benefits of low-emission electricity to industry, transport and domestic use, sectors in which Europe is still strongly dependent on traditional fuels.",
+      "text": "Cutting carbon dioxide emissions and reducing the use of fossil fuels are two goals that can no longer be postponed. This linear process means increasing generation from renewable sources and, at the same time, extending the benefits of low-emission electricity to industry, transport and domestic use, sectors in which Europe is still strongly dependent on traditional fuels."
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/4"
+        },
+        {
+          "$ref": "#/texts/5"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Ambitious plans",
+      "text": "Ambitious plans",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/texts/3"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "Last July, with the Fit for 55 package, the European Commission proposed a 55% reduction in greenhouse gas emissions by 2030 compared with 1990 levels, adopting a series of measures to provide a substantial boost for renewable energies.",
+      "text": "Last July, with the Fit for 55 package, the European Commission proposed a 55% reduction in greenhouse gas emissions by 2030 compared with 1990 levels, adopting a series of measures to provide a substantial boost for renewable energies."
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/texts/3"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "Europe\u2019s commitment to bolstering the development of renewables was reinforced recently with the REPowerEU plan, through which the Commission proposed increasing the share of energy from renewable sources used at European level to 45% by 2030, compared with the current target of 40%. Furthermore, the new EU Solar Strategy foresees the installation of an additional 600 GW of solar energy by the end of the decade.",
+      "text": "Europe\u2019s commitment to bolstering the development of renewables was reinforced recently with the REPowerEU plan, through which the Commission proposed increasing the share of energy from renewable sources used at European level to 45% by 2030, compared with the current target of 40%. Furthermore, the new EU Solar Strategy foresees the installation of an additional 600 GW of solar energy by the end of the decade."
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/7"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "The photovoltaic Gigafactory",
+      "text": "The photovoltaic Gigafactory",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/7",
+      "parent": {
+        "$ref": "#/texts/6"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "To achieve this will require genuine large-scale projects. The Enel Group is directly involved in these, deploying our design, operational and productive capacity in full. One example of this is the TANGO (iTaliAN pv Giga factOry) project to create a Gigafactory producing high-performance, innovative and sustainable photovoltaic modules. The facility will be based in Catania, in Sicily, where Enel Green Power\u2019s 3Sun solar panel factory currently has an annual production capacity of 200 MW. The project will be partly financed by the European Union and will see production increase 15-fold to reach a final total of 3GW, after an initial increase of 400MW by September 2023 and the full commissioning of the site by July 2024.",
+      "text": "To achieve this will require genuine large-scale projects. The Enel Group is directly involved in these, deploying our design, operational and productive capacity in full. One example of this is the TANGO (iTaliAN pv Giga factOry) project to create a Gigafactory producing high-performance, innovative and sustainable photovoltaic modules. The facility will be based in Catania, in Sicily, where Enel Green Power\u2019s 3Sun solar panel factory currently has an annual production capacity of 200 MW. The project will be partly financed by the European Union and will see production increase 15-fold to reach a final total of 3GW, after an initial increase of 400MW by September 2023 and the full commissioning of the site by July 2024."
+    },
+    {
+      "self_ref": "#/texts/8",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/9"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Super-efficient technology",
+      "text": "Super-efficient technology",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/9",
+      "parent": {
+        "$ref": "#/texts/8"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "The total investment amounts to 600 million euros, of which 118 are allocated through European funds. The initiative will have a substantial impact in terms of employment and is expected to create around one thousand jobs directly and indirectly. The project involves the production of bifacial hetero-junction photovoltaic cells, created by sandwiching a crystalline silicon cell between two thin-film amorphous silicon layers. This technology ensures a higher conversion of solar energy into electricity than traditional crystalline silicon cells. What\u2019s more, the bifacial cells can absorb solar radiation both on their front and back. The adoption of the \u201cTandem\u201d system is another innovative aspect developed with the help of an ambitious research and development (R&D) program. \u201cTandem\u201d enables the overlapping of two photovoltaic cells, thereby increasing solar collection capacity. It is estimated that the modules produced in Catania will exceed a conversion efficiency level of 30%, positioning this technology at the very top end of the market.",
+      "text": "The total investment amounts to 600 million euros, of which 118 are allocated through European funds. The initiative will have a substantial impact in terms of employment and is expected to create around one thousand jobs directly and indirectly. The project involves the production of bifacial hetero-junction photovoltaic cells, created by sandwiching a crystalline silicon cell between two thin-film amorphous silicon layers. This technology ensures a higher conversion of solar energy into electricity than traditional crystalline silicon cells. What\u2019s more, the bifacial cells can absorb solar radiation both on their front and back. The adoption of the \u201cTandem\u201d system is another innovative aspect developed with the help of an ambitious research and development (R&D) program. \u201cTandem\u201d enables the overlapping of two photovoltaic cells, thereby increasing solar collection capacity. It is estimated that the modules produced in Catania will exceed a conversion efficiency level of 30%, positioning this technology at the very top end of the market."
+    },
+    {
+      "self_ref": "#/texts/10",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/11"
+        },
+        {
+          "$ref": "#/texts/12"
+        },
+        {
+          "$ref": "#/texts/13"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Positive impacts",
+      "text": "Positive impacts",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/11",
+      "parent": {
+        "$ref": "#/texts/10"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "Once in operation, the total annual production of photovoltaic modules by the Catania Gigafactory will be able to generate 5.5 TWh of electricity each year. This will have the potential to avoid the emission into the atmosphere of almost 25 million tons of carbon dioxide in the first ten years of activity. Moreover, this will avoid the need to purchase 1.2 billion cubic meters of gas each year. The entire architectural structure will meet rigorous eco-sustainability and energy efficiency criteria, thanks to the use of recyclable materials and the adoption of low-consumption system solutions.",
+      "text": "Once in operation, the total annual production of photovoltaic modules by the Catania Gigafactory will be able to generate 5.5 TWh of electricity each year. This will have the potential to avoid the emission into the atmosphere of almost 25 million tons of carbon dioxide in the first ten years of activity. Moreover, this will avoid the need to purchase 1.2 billion cubic meters of gas each year. The entire architectural structure will meet rigorous eco-sustainability and energy efficiency criteria, thanks to the use of recyclable materials and the adoption of low-consumption system solutions."
+    },
+    {
+      "self_ref": "#/texts/12",
+      "parent": {
+        "$ref": "#/texts/10"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "The R&D partnerships Enel has activated with international research centers will make the Catania facility a hub where new processes for producing and recycling photovoltaic modules can be developed and trialed. There will be a significant emphasis on considering the product\u2019s end of life right from the initial design phase.",
+      "text": "The R&D partnerships Enel has activated with international research centers will make the Catania facility a hub where new processes for producing and recycling photovoltaic modules can be developed and trialed. There will be a significant emphasis on considering the product\u2019s end of life right from the initial design phase."
+    },
+    {
+      "self_ref": "#/texts/13",
+      "parent": {
+        "$ref": "#/texts/10"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "Francesco Starace, CEO and General Manager of Enel",
+      "text": "Francesco Starace, CEO and General Manager of Enel"
+    },
+    {
+      "self_ref": "#/texts/14",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/15"
+        },
+        {
+          "$ref": "#/texts/16"
+        },
+        {
+          "$ref": "#/texts/17"
+        },
+        {
+          "$ref": "#/texts/18"
+        },
+        {
+          "$ref": "#/groups/1"
+        },
+        {
+          "$ref": "#/groups/2"
+        },
+        {
+          "$ref": "#/groups/3"
+        },
+        {
+          "$ref": "#/groups/4"
+        },
+        {
+          "$ref": "#/groups/5"
+        },
+        {
+          "$ref": "#/groups/6"
+        },
+        {
+          "$ref": "#/groups/7"
+        },
+        {
+          "$ref": "#/groups/8"
+        },
+        {
+          "$ref": "#/pictures/3"
+        },
+        {
+          "$ref": "#/pictures/4"
+        },
+        {
+          "$ref": "#/pictures/5"
+        },
+        {
+          "$ref": "#/pictures/6"
+        },
+        {
+          "$ref": "#/pictures/7"
+        },
+        {
+          "$ref": "#/pictures/8"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "A new concept for electrification and engaging communities",
+      "text": "A new concept for electrification and engaging communities",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/15",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "On the journey towards electrification, the Enel Group is also endeavoring to make its renewable source plants increasingly inclusive in the areas where they are built. Within this context we have launched numerous projects in various countries. One of the most innovative is in Carmona, in Spain. Here two photovoltaic plants, Los Naranjos and Las Corchas, were built and managed by Enel Green Power Espa\u00f1a through the subsidiary Endesa. They exemplify a new concept for electrification based on renewables and are capable of producing positive effects for the environment and society. The two plants have a combined total of 250 thousand photovoltaic modules and are equipped with nine electricity transformation centers, a substation and 4.5 km of underground cables.",
+      "text": "On the journey towards electrification, the Enel Group is also endeavoring to make its renewable source plants increasingly inclusive in the areas where they are built. Within this context we have launched numerous projects in various countries. One of the most innovative is in Carmona, in Spain. Here two photovoltaic plants, Los Naranjos and Las Corchas, were built and managed by Enel Green Power Espa\u00f1a through the subsidiary Endesa. They exemplify a new concept for electrification based on renewables and are capable of producing positive effects for the environment and society. The two plants have a combined total of 250 thousand photovoltaic modules and are equipped with nine electricity transformation centers, a substation and 4.5 km of underground cables."
+    },
+    {
+      "self_ref": "#/texts/16",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "In addition to producing energy, however, a scheme is being implemented to optimize the use of land, making it available for sheep farming, the cultivation of aromatic herbs and beekeeping.",
+      "text": "In addition to producing energy, however, a scheme is being implemented to optimize the use of land, making it available for sheep farming, the cultivation of aromatic herbs and beekeeping."
+    },
+    {
+      "self_ref": "#/texts/17",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "Of particular note are the beekeeping and honey production projects which are being developed in partnership with the Municipality of Carmona, with a plan that will eventually see 25 to 30 beehives managed by a local beekeeper. The aim is to promote training activities to pave the way for new businesses and jobs in the area, in addition to tourism linked to the world of bees and honey, while also promoting inclusion by involving disadvantaged groups. The El Alcazar day center for the disabled, for example, had a role in designing the labels for the honey jars, having already helped in the assembly of the pivots for the PV panels.",
+      "text": "Of particular note are the beekeeping and honey production projects which are being developed in partnership with the Municipality of Carmona, with a plan that will eventually see 25 to 30 beehives managed by a local beekeeper. The aim is to promote training activities to pave the way for new businesses and jobs in the area, in addition to tourism linked to the world of bees and honey, while also promoting inclusion by involving disadvantaged groups. The El Alcazar day center for the disabled, for example, had a role in designing the labels for the honey jars, having already helped in the assembly of the pivots for the PV panels."
+    },
+    {
+      "self_ref": "#/texts/18",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "There are many positive aspects regarding the approach that was trialed in Carmona. Some benefits are of a technical nature, in that the presence of grazing meadows and cultivated plants can help reduce the temperature of the land, resulting in a better yield for the PV plant, while reducing dust that could be deposited on the panels. This cuts maintenance costs. Among the standout benefits for society is the active role that the two plants can have within the community, where local people can experience tangible support in their day-to-day lives.",
+      "text": "There are many positive aspects regarding the approach that was trialed in Carmona. Some benefits are of a technical nature, in that the presence of grazing meadows and cultivated plants can help reduce the temperature of the land, resulting in a better yield for the PV plant, while reducing dust that could be deposited on the panels. This cuts maintenance costs. Among the standout benefits for society is the active role that the two plants can have within the community, where local people can experience tangible support in their day-to-day lives."
+    },
+    {
+      "self_ref": "#/texts/19",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Renewables",
+      "text": "Renewables",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/20",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Sustainability",
+      "text": "Sustainability",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/21",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Electrification",
+      "text": "Electrification",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/22",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Company",
+      "text": "Company",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/23",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "About",
+      "text": "About",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/24",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Our business",
+      "text": "Our business",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/25",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Commitments",
+      "text": "Commitments",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/26",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Join us",
+      "text": "Join us",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/27",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "All stories",
+      "text": "All stories",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/28",
+      "parent": {
+        "$ref": "#/groups/3"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "More about us",
+      "text": "More about us",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/29",
+      "parent": {
+        "$ref": "#/groups/3"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Locations",
+      "text": "Locations",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/30",
+      "parent": {
+        "$ref": "#/groups/3"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Management team",
+      "text": "Management team",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/31",
+      "parent": {
+        "$ref": "#/groups/3"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Our story",
+      "text": "Our story",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/32",
+      "parent": {
+        "$ref": "#/groups/3"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Vision",
+      "text": "Vision",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/33",
+      "parent": {
+        "$ref": "#/groups/4"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Media",
+      "text": "Media",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/34",
+      "parent": {
+        "$ref": "#/groups/4"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Press releases",
+      "text": "Press releases",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/35",
+      "parent": {
+        "$ref": "#/groups/4"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "News",
+      "text": "News",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/36",
+      "parent": {
+        "$ref": "#/groups/4"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Photos",
+      "text": "Photos",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/37",
+      "parent": {
+        "$ref": "#/groups/4"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Videos",
+      "text": "Videos",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/38",
+      "parent": {
+        "$ref": "#/groups/4"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Our Brand",
+      "text": "Our Brand",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/39",
+      "parent": {
+        "$ref": "#/groups/4"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "A word from...",
+      "text": "A word from...",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/40",
+      "parent": {
+        "$ref": "#/groups/5"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Sustainable Power",
+      "text": "Sustainable Power",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/41",
+      "parent": {
+        "$ref": "#/groups/5"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Ideas for the future",
+      "text": "Ideas for the future",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/42",
+      "parent": {
+        "$ref": "#/groups/5"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "#AsktheProfessor",
+      "text": "#AsktheProfessor",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/43",
+      "parent": {
+        "$ref": "#/groups/5"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Power for sports",
+      "text": "Power for sports",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/44",
+      "parent": {
+        "$ref": "#/groups/5"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "PlayEnergy",
+      "text": "PlayEnergy",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/45",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Sustainability and Innovation",
+      "text": "Sustainability and Innovation",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/46",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Sustainable Development Goals",
+      "text": "Sustainable Development Goals",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/47",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Letter to Stakeholders",
+      "text": "Letter to Stakeholders",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/48",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Circular Economy",
+      "text": "Circular Economy",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/49",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Innovation Hubs",
+      "text": "Innovation Hubs",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/50",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Open Innovability\u00ae",
+      "text": "Open Innovability\u00ae",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/51",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Investors",
+      "text": "Investors",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/52",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Overview",
+      "text": "Overview",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/53",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Strategy",
+      "text": "Strategy",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/54",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Financial",
+      "text": "Financial",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/55",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Investing",
+      "text": "Investing",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/56",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Sustainability",
+      "text": "Sustainability",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/57",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Governance",
+      "text": "Governance",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/58",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Careers",
+      "text": "Careers",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/59",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Home",
+      "text": "Home",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/60",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Being Enel",
+      "text": "Being Enel",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/61",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Teams",
+      "text": "Teams",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/62",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Students",
+      "text": "Students",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/63",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Jobs",
+      "text": "Jobs",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/64",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [
+        {
+          "$ref": "#/groups/9"
+        },
+        {
+          "$ref": "#/pictures/9"
+        },
+        {
+          "$ref": "#/pictures/10"
+        },
+        {
+          "$ref": "#/pictures/11"
+        },
+        {
+          "$ref": "#/pictures/12"
+        },
+        {
+          "$ref": "#/pictures/13"
+        },
+        {
+          "$ref": "#/pictures/14"
+        },
+        {
+          "$ref": "#/pictures/15"
+        },
+        {
+          "$ref": "#/pictures/16"
+        },
+        {
+          "$ref": "#/pictures/17"
+        },
+        {
+          "$ref": "#/pictures/18"
+        },
+        {
+          "$ref": "#/pictures/19"
+        },
+        {
+          "$ref": "#/pictures/20"
+        },
+        {
+          "$ref": "#/pictures/21"
+        },
+        {
+          "$ref": "#/pictures/22"
+        },
+        {
+          "$ref": "#/pictures/23"
+        },
+        {
+          "$ref": "#/pictures/24"
+        },
+        {
+          "$ref": "#/pictures/25"
+        },
+        {
+          "$ref": "#/pictures/26"
+        },
+        {
+          "$ref": "#/pictures/27"
+        },
+        {
+          "$ref": "#/pictures/28"
+        },
+        {
+          "$ref": "#/pictures/29"
+        },
+        {
+          "$ref": "#/pictures/30"
+        },
+        {
+          "$ref": "#/pictures/31"
+        },
+        {
+          "$ref": "#/pictures/32"
+        },
+        {
+          "$ref": "#/pictures/33"
+        },
+        {
+          "$ref": "#/pictures/34"
+        },
+        {
+          "$ref": "#/pictures/35"
+        },
+        {
+          "$ref": "#/pictures/36"
+        },
+        {
+          "$ref": "#/pictures/37"
+        },
+        {
+          "$ref": "#/pictures/38"
+        },
+        {
+          "$ref": "#/pictures/39"
+        },
+        {
+          "$ref": "#/pictures/40"
+        },
+        {
+          "$ref": "#/pictures/41"
+        },
+        {
+          "$ref": "#/pictures/42"
+        },
+        {
+          "$ref": "#/pictures/43"
+        },
+        {
+          "$ref": "#/pictures/44"
+        },
+        {
+          "$ref": "#/pictures/45"
+        },
+        {
+          "$ref": "#/pictures/46"
+        },
+        {
+          "$ref": "#/pictures/47"
+        },
+        {
+          "$ref": "#/pictures/48"
+        },
+        {
+          "$ref": "#/pictures/49"
+        },
+        {
+          "$ref": "#/pictures/50"
+        },
+        {
+          "$ref": "#/pictures/51"
+        },
+        {
+          "$ref": "#/pictures/52"
+        },
+        {
+          "$ref": "#/pictures/53"
+        },
+        {
+          "$ref": "#/pictures/54"
+        },
+        {
+          "$ref": "#/pictures/55"
+        },
+        {
+          "$ref": "#/pictures/56"
+        },
+        {
+          "$ref": "#/pictures/57"
+        },
+        {
+          "$ref": "#/pictures/58"
+        },
+        {
+          "$ref": "#/pictures/59"
+        },
+        {
+          "$ref": "#/pictures/60"
+        },
+        {
+          "$ref": "#/pictures/61"
+        },
+        {
+          "$ref": "#/pictures/62"
+        },
+        {
+          "$ref": "#/pictures/63"
+        },
+        {
+          "$ref": "#/pictures/64"
+        },
+        {
+          "$ref": "#/pictures/65"
+        },
+        {
+          "$ref": "#/pictures/66"
+        },
+        {
+          "$ref": "#/pictures/67"
+        },
+        {
+          "$ref": "#/pictures/68"
+        },
+        {
+          "$ref": "#/pictures/69"
+        },
+        {
+          "$ref": "#/pictures/70"
+        },
+        {
+          "$ref": "#/pictures/71"
+        },
+        {
+          "$ref": "#/pictures/72"
+        },
+        {
+          "$ref": "#/pictures/73"
+        },
+        {
+          "$ref": "#/pictures/74"
+        },
+        {
+          "$ref": "#/pictures/75"
+        },
+        {
+          "$ref": "#/pictures/76"
+        },
+        {
+          "$ref": "#/pictures/77"
+        },
+        {
+          "$ref": "#/pictures/78"
+        },
+        {
+          "$ref": "#/pictures/79"
+        },
+        {
+          "$ref": "#/pictures/80"
+        },
+        {
+          "$ref": "#/pictures/81"
+        },
+        {
+          "$ref": "#/pictures/82"
+        },
+        {
+          "$ref": "#/pictures/83"
+        },
+        {
+          "$ref": "#/pictures/84"
+        },
+        {
+          "$ref": "#/pictures/85"
+        },
+        {
+          "$ref": "#/pictures/86"
+        },
+        {
+          "$ref": "#/pictures/87"
+        },
+        {
+          "$ref": "#/pictures/88"
+        },
+        {
+          "$ref": "#/pictures/89"
+        },
+        {
+          "$ref": "#/pictures/90"
+        },
+        {
+          "$ref": "#/pictures/91"
+        },
+        {
+          "$ref": "#/pictures/92"
+        },
+        {
+          "$ref": "#/pictures/93"
+        },
+        {
+          "$ref": "#/pictures/94"
+        },
+        {
+          "$ref": "#/pictures/95"
+        },
+        {
+          "$ref": "#/pictures/96"
+        },
+        {
+          "$ref": "#/pictures/97"
+        },
+        {
+          "$ref": "#/pictures/98"
+        },
+        {
+          "$ref": "#/pictures/99"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Select your language",
+      "text": "Select your language",
+      "level": 2
+    },
+    {
+      "self_ref": "#/texts/65",
+      "parent": {
+        "$ref": "#/groups/9"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Italian",
+      "text": "Italian",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/66",
+      "parent": {
+        "$ref": "#/groups/9"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "English",
+      "text": "English",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/67",
+      "parent": {
+        "$ref": "#/groups/9"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Spanish",
+      "text": "Spanish",
+      "enumerated": false,
+      "marker": "-"
+    }
+  ],
+  "pictures": [
+    {
+      "self_ref": "#/pictures/0",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/1",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/2",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/3",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/4",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/5",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/6",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/7",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/8",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/9",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/10",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/11",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/12",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/13",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/14",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/15",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/16",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/17",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/18",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/19",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/20",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/21",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/22",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/23",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/24",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/25",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/26",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/27",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/28",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/29",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/30",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/31",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/32",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/33",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/34",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/35",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/36",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/37",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/38",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/39",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/40",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/41",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/42",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/43",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/44",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/45",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/46",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/47",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/48",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/49",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/50",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/51",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/52",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/53",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/54",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/55",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/56",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/57",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/58",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/59",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/60",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/61",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/62",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/63",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/64",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/65",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/66",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/67",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/68",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/69",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/70",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/71",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/72",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/73",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/74",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/75",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/76",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/77",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/78",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/79",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/80",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/81",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/82",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/83",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/84",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/85",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/86",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/87",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/88",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/89",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/90",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/91",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/92",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/93",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/94",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/95",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/96",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/97",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/98",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/99",
+      "parent": {
+        "$ref": "#/texts/64"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    }
+  ],
+  "tables": [],
+  "key_value_items": [],
+  "pages": {}
+}
