@@ -1,8 +1,8 @@
 from enum import Enum
 from pathlib import Path
-from typing import List, Literal, Optional, Union
+from typing import Annotated, Any, Dict, List, Literal, Optional, Union
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import AnyUrl, BaseModel, ConfigDict, Field
 
 
 class TableFormerMode(str, Enum):
@@ -61,6 +61,46 @@ class TesseractOcrOptions(OcrOptions):
     )
 
 
+class PicDescBaseOptions(BaseModel):
+    kind: str
+    batch_size: int = 8
+    scale: float = 2
+
+    bitmap_area_threshold: float = (
+        0.2  # percentage of the area for a bitmap to processed with the models
+    )
+
+
+class PicDescApiOptions(PicDescBaseOptions):
+    kind: Literal["api"] = "api"
+
+    url: AnyUrl = AnyUrl("")
+    headers: Dict[str, str] = {}
+    params: Dict[str, Any] = {}
+    timeout: float = 20
+
+    llm_prompt: str = ""
+    provenance: str = ""
+
+
+class PicDescVllmOptions(PicDescBaseOptions):
+    kind: Literal["vllm"] = "vllm"
+
+    # For more example parameters see https://docs.vllm.ai/en/latest/getting_started/examples/offline_inference_vision_language.html
+
+    # Parameters for LLaVA-1.6/LLaVA-NeXT
+    llm_name: str = "llava-hf/llava-v1.6-mistral-7b-hf"
+    llm_prompt: str = "[INST] <image>\nDescribe the image in details. [/INST]"
+    llm_extra: Dict[str, Any] = dict(max_model_len=8192)
+
+    # Parameters for Phi-3-Vision
+    # llm_name: str = "microsoft/Phi-3-vision-128k-instruct"
+    # llm_prompt: str = "<|user|>\n<|image_1|>\nDescribe the image in details.<|end|>\n<|assistant|>\n"
+    # llm_extra: Dict[str, Any] = dict(max_num_seqs=5, trust_remote_code=True)
+
+    sampling_params: Dict[str, Any] = dict(max_tokens=64, seed=42)
+
+
 class PipelineOptions(BaseModel):
     create_legacy_output: bool = (
         True  # This defautl will be set to False on a future version of docling
@@ -71,11 +111,15 @@ class PdfPipelineOptions(PipelineOptions):
     artifacts_path: Optional[Union[Path, str]] = None
     do_table_structure: bool = True  # True: perform table structure extraction
     do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
+    do_picture_description: bool = False
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
     ocr_options: Union[EasyOcrOptions, TesseractCliOcrOptions, TesseractOcrOptions] = (
         Field(EasyOcrOptions(), discriminator="kind")
     )
+    picture_description_options: Annotated[
+        Union[PicDescApiOptions, PicDescVllmOptions], Field(discriminator="kind")
+    ] = PicDescApiOptions()  # TODO: needs defaults or optional
 
     images_scale: float = 1.0
     generate_page_images: bool = False

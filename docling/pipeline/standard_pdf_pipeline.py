@@ -11,6 +11,8 @@ from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     PdfPipelineOptions,
+    PicDescApiOptions,
+    PicDescVllmOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
 )
@@ -23,6 +25,9 @@ from docling.models.page_preprocessing_model import (
     PagePreprocessingModel,
     PagePreprocessingOptions,
 )
+from docling.models.pic_description_api_model import PictureDescriptionApiModel
+from docling.models.pic_description_base_model import PictureDescriptionBaseModel
+from docling.models.pic_description_vllm_model import PictureDescriptionVllmModel
 from docling.models.table_structure_model import TableStructureModel
 from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
 from docling.models.tesseract_ocr_model import TesseractOcrModel
@@ -83,8 +88,15 @@ class StandardPdfPipeline(PaginatedPipeline):
             PageAssembleModel(options=PageAssembleOptions(keep_images=keep_images)),
         ]
 
+        # Picture description model
+        if (pic_desc_model := self.get_pic_description_model()) is None:
+            raise RuntimeError(
+                f"The specified picture description kind is not supported: {pipeline_options.picture_description_options.kind}."
+            )
+
         self.enrichment_pipe = [
             # Other models working on `NodeItem` elements in the DoclingDocument
+            pic_desc_model,
         ]
 
     @staticmethod
@@ -117,6 +129,23 @@ class StandardPdfPipeline(PaginatedPipeline):
             return TesseractOcrModel(
                 enabled=self.pipeline_options.do_ocr,
                 options=self.pipeline_options.ocr_options,
+            )
+        return None
+
+    def get_pic_description_model(self) -> Optional[PictureDescriptionBaseModel]:
+        if isinstance(
+            self.pipeline_options.picture_description_options, PicDescApiOptions
+        ):
+            return PictureDescriptionApiModel(
+                enabled=self.pipeline_options.do_picture_description,
+                options=self.pipeline_options.picture_description_options,
+            )
+        elif isinstance(
+            self.pipeline_options.picture_description_options, PicDescVllmOptions
+        ):
+            return PictureDescriptionVllmModel(
+                enabled=self.pipeline_options.do_picture_description,
+                options=self.pipeline_options.picture_description_options,
             )
         return None
 
