@@ -114,15 +114,19 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                         _log.info(f" -> error treating child: {exc}")
                         raise exc
 
+            else:
+                _log.debug(f"ignoring element of type {type(element)}")
+
+            """
             elif isinstance(element, Tag):
                 try:
                     self.analyse_element(element, 0, doc)
                 except Exception as exc:
                     _log.info(f" -> error treating elem: {exc}")
                     raise exc
-            else:
-                _log.debug(f"ignoring element of type {type(element)}")
+            """
 
+                
         except Exception as exc:
             _log.debug(f"error walking element: {type(element)}")
             pass
