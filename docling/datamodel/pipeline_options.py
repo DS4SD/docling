@@ -60,6 +60,16 @@ class TesseractOcrOptions(OcrOptions):
         extra="forbid",
     )
 
+class OcrMacOptions(OcrOptions):
+    kind: Literal["ocrmac"] = "ocrmac"
+    lang: List[str] = ["ko-KR", "en-US", "ja-JP"]
+    recognition: str = "accurate"
+    framework: str = "vision"
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+
 
 class PipelineOptions(BaseModel):
     create_legacy_output: bool = (
@@ -73,7 +83,7 @@ class PdfPipelineOptions(PipelineOptions):
     do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
-    ocr_options: Union[EasyOcrOptions, TesseractCliOcrOptions, TesseractOcrOptions] = (
+    ocr_options: Union[EasyOcrOptions, TesseractCliOcrOptions, TesseractOcrOptions, OcrMacOptions] = (
         Field(EasyOcrOptions(), discriminator="kind")
     )
 

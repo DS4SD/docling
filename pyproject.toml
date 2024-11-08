@@ -89,6 +89,7 @@ torchvision = [
   {markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'", version = "^0"},
   {markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'", version = "~0.17.2"}
 ]
+ocrmac = {markers = "sys_platform == 'darwin'", version = "^1.0.0"}
 
 [tool.poetry.extras]
 tesserocr = ["tesserocr"]

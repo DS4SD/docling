@@ -30,6 +30,7 @@ Works on macOS, Linux, and Windows, with support for both x86_64 and arm64 archi
     | [EasyOCR](https://github.com/JaidedAI/EasyOCR) | Default in Docling or via `pip install easyocr`. | `EasyOcrOptions` |
     | Tesseract | System dependency. See description for Tesseract and Tesserocr below.  | `TesseractOcrOptions` |
     | Tesseract CLI | System dependency. See description below. | `TesseractCliOcrOptions` |
+    | OcrMac | System dependency. See description below. | `OcrMacOptions` |
 
     The Docling `DocumentConverter` allows to choose the OCR engine with the `ocr_options` settings. For example
 
