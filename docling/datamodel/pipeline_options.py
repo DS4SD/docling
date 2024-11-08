@@ -60,6 +60,7 @@ class TesseractOcrOptions(OcrOptions):
         extra="forbid",
     )
 
+
 class OcrMacOptions(OcrOptions):
     kind: Literal["ocrmac"] = "ocrmac"
     lang: List[str] = ["fr-FR", "de-DE", "es-ES", "en-US"]
@@ -83,9 +84,9 @@ class PdfPipelineOptions(PipelineOptions):
     do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
-    ocr_options: Union[EasyOcrOptions, TesseractCliOcrOptions, TesseractOcrOptions, OcrMacOptions] = (
-        Field(EasyOcrOptions(), discriminator="kind")
-    )
+    ocr_options: Union[
+        EasyOcrOptions, TesseractCliOcrOptions, TesseractOcrOptions, OcrMacOptions
+    ] = Field(EasyOcrOptions(), discriminator="kind")
 
     images_scale: float = 1.0
     generate_page_images: bool = False

@@ -1,6 +1,5 @@
 import logging
 import tempfile
-
 from typing import Iterable, Optional, Tuple
 
 from docling_core.types.doc import BoundingBox, CoordOrigin
@@ -11,7 +10,6 @@ from docling.datamodel.pipeline_options import OcrMacOptions
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.utils.profiling import TimeRecorder
-
 
 _log = logging.getLogger(__name__)
 
@@ -35,7 +33,6 @@ class OcrMacModel(BaseOcrModel):
                 raise ImportError(setup_errmsg)
 
             self.reader_RIL = ocrmac.OCR
-
 
     def __call__(
         self, conv_res: ConversionResult, page_batch: Iterable[Page]
@@ -69,7 +66,8 @@ class OcrMacModel(BaseOcrModel):
                             fname = image_file.name
                             high_res_image.save(fname)
 
-                            boxes = self.reader_RIL(fname,
+                            boxes = self.reader_RIL(
+                                fname,
                                 recognition_level=self.options.recognition,
                                 framework=self.options.framework,
                                 language_preference=self.options.lang,

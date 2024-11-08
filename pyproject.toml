@@ -128,6 +128,7 @@ module = [
     "tesserocr.*",
     "docling_ibm_models.*",
     "easyocr.*",
+    "ocrmac.*",
     "deepsearch_glm.*",
     "lxml.*",
     "bs4.*",
