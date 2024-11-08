@@ -1,3 +1,16 @@
+## [v2.4.1](https://github.com/DS4SD/docling/releases/tag/v2.4.1) - 2024-11-08
+
+### Fix
+
+* **tesserocr:** Raise Exception if tesserocr has not loaded any languages ([#279](https://github.com/DS4SD/docling/issues/279)) ([`704d792`](https://github.com/DS4SD/docling/commit/704d792a7997c4ca34f9f9045ed4ae02b4f5df47))
+* Dockerfile example copy command ([#234](https://github.com/DS4SD/docling/issues/234)) ([`90836db`](https://github.com/DS4SD/docling/commit/90836db90accf4a66c9c20544c98452840e3a308))
+
+### Documentation
+
+* Update badges & credits ([#248](https://github.com/DS4SD/docling/issues/248)) ([`a84ec27`](https://github.com/DS4SD/docling/commit/a84ec276b0997c4ba9b32e18e911a966124dc3bc))
+* Add coming-soon section ([#235](https://github.com/DS4SD/docling/issues/235)) ([`5ce02c5`](https://github.com/DS4SD/docling/commit/5ce02c5c598a2efa615ad15f0ead8d752d3ad2ea))
+* Add artifacts-path param to CLI ([#233](https://github.com/DS4SD/docling/issues/233)) ([`d5e65ae`](https://github.com/DS4SD/docling/commit/d5e65aedac23d6849c805a0e88dd06f2a285eb18))
+
 ## [v2.4.0](https://github.com/DS4SD/docling/releases/tag/v2.4.0) - 2024-11-04
 
 ### Feature
