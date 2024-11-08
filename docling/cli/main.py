@@ -120,8 +120,8 @@ def export_documents(
             if export_itxt:
                 fname = output_dir / f"{doc_filename}.itxt"
                 with fname.open("w") as fp:
-                    _log.info(f"writing Doc Tags output to {fname}")
-                    fp.write(conv_res.document._export_to_indented_text())                    
+                    _log.info(f"writing Indented Text output to {fname}")
+                    fp.write(conv_res.document._export_to_indented_text())
         else:
             _log.warning(f"Document {conv_res.input.file} failed to convert.")
             failure_count += 1

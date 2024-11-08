@@ -11,6 +11,8 @@ from docling_core.types.doc import (
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
+    ImageRef,
+    Size,
     TableCell,
     TableData,
 )
@@ -117,16 +119,6 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             else:
                 _log.debug(f"ignoring element of type {type(element)}")
 
-            """
-            elif isinstance(element, Tag):
-                try:
-                    self.analyse_element(element, 0, doc)
-                except Exception as exc:
-                    _log.info(f" -> error treating elem: {exc}")
-                    raise exc
-            """
-
-                
         except Exception as exc:
             _log.debug(f"error walking element: {type(element)}")
             pass
@@ -472,17 +464,63 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             )
             return cell.text
 
-    def handle_figure(self, element, idx, doc):
-        """Handles image tags (img)."""
+    def _get_imageref(self, element):
 
-        # Extract the image URI from the <img> tag
-        # image_uri = root.xpath('//figure//img/@src')[0]
+        fig_ref = None
+
+        img = element.find(["img"])
+        _log.info(img)
+
+        if img is not None and img.has_attr("src"):
+            fig_uri = img["src"]
+            _log.info(fig_uri)
+
+            dpi = 128
+            try:
+                dpi = int(img["dpi"])
+            except:
+                _log.debug("could not identify `dpi` of image")
+
+            width = 128
+            try:
+                width = int(img["width"])
+            except:
+                _log.debug("could not identify `width` of image")
+
+            height = 128
+            try:
+                height = int(img["height"])
+            except:
+                _log.debug("could not identify `height` of image")
+
+            if fig_uri.endswith(".jpg"):
+                fig_ref = ImageRef(
+                    mimetype="image/jpg", dpi=dpi, size=Size(width, height), uri=fig_uri
+                )
+
+            elif fig_uri.endswith(".jpeg"):
+                fig_ref = ImageRef(
+                    mimetype="image/jpg", dpi=dpi, size=Size(width, height), uri=fig_uri
+                )
+
+            elif fig_uri.endswith(".png"):
+                fig_ref = ImageRef(
+                    mimetype="image/png", dpi=dpi, size=Size(width, height), uri=fig_uri
+                )
+
+            elif fig_uri.endswith(".svg"):
+                fig_ref = ImageRef(
+                    mimetype="image/svg", dpi=dpi, size=Size(width, height), uri=fig_uri
+                )
+
+        return fig_ref
+
+    def _get_figcaption(self, element, doc):
+
+        fig_caption = None
 
         contains_captions = element.find(["figcaption"])
-        if contains_captions is None:
-            doc.add_picture(parent=self.parents[self.level], caption=None)
-
-        else:
+        if contains_captions is not None:
             texts = []
             for item in contains_captions:
                 texts.append(item.text)
@@ -490,15 +528,34 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             fig_caption = doc.add_text(
                 label=DocItemLabel.CAPTION, text=("".join(texts)).strip()
             )
-            doc.add_picture(
-                parent=self.parents[self.level],
-                caption=fig_caption,
-            )
+
+        return fig_caption
+
+    def handle_figure(self, element, idx, doc):
+        """Handles image tags (img)."""
+
+        fig_ref = self._get_imageref(element)
+        fig_caption = self._get_figcaption(element, doc)
+
+        _log.warn(fig_ref)
+
+        doc.add_picture(
+            parent=self.parents[self.level], image=fig_ref, caption=fig_caption
+        )
 
     def handle_image(self, element, idx, doc):
         """Handles image tags (img)."""
-        doc.add_picture(parent=self.parents[self.level], caption=None)
+
+        fig_ref = self._get_imageref(element)
+
+        doc.add_picture(parent=self.parents[self.level], image=fig_ref, caption=None)
 
     def handle_svg(self, element, idx, doc):
         """Handles svg tags."""
-        doc.add_picture(parent=self.parents[self.level], caption=None)
+
+        fig_ref = self._get_imageref(element)
+        fig_caption = self._get_figcaption(element, doc)
+
+        doc.add_picture(
+            parent=self.parents[self.level], image=fig_ref, caption=fig_caption
+        )
