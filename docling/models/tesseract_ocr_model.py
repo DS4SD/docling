@@ -36,6 +36,9 @@ class TesseractOcrModel(BaseOcrModel):
 
             try:
                 tesseract_version = tesserocr.tesseract_version()
+                _, tesserocr_languages = tesserocr.get_languages()
+                if not tesserocr_languages:
+                    raise ImportError(setup_errmsg)
                 _log.debug("Initializing TesserOCR: %s", tesseract_version)
             except:
                 raise ImportError(setup_errmsg)
