@@ -2,6 +2,7 @@ import logging
 from typing import Iterable
 
 import numpy
+import torch
 from docling_core.types.doc import BoundingBox, CoordOrigin
 
 from docling.datamodel.base_models import OcrCell, Page
@@ -30,8 +31,12 @@ class EasyOcrModel(BaseOcrModel):
                     "Alternatively, Docling has support for other OCR engines. See the documentation."
                 )
 
+            use_gpu = (
+                False if torch.backends.mps.is_available() else self.options.use_gpu
+            )
             self.reader = easyocr.Reader(
                 lang_list=self.options.lang,
+                gpu=use_gpu,
                 model_storage_directory=self.options.model_storage_directory,
                 download_enabled=self.options.download_enabled,
             )
