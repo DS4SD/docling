@@ -214,7 +214,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     except:
                         pass
             except:
-                _log.warn("item has no children")
+                _log.warning("item has no children")
                 pass
 
         return "".join(result) + " "
@@ -352,14 +352,14 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     parent=self.parents[self.level],
                 )
         else:
-            _log.warn("list-item has no text: ", element)
+            _log.debug("list-item has no text: ", element)
 
     def handle_table(self, element, idx, doc):
         """Handles table tags."""
 
         nested_tables = element.find("table")
         if nested_tables is not None:
-            _log.warn("detected nested tables: skipping for now")
+            _log.warning("detected nested tables: skipping for now")
             return
 
         # Count the number of rows (number of <tr> elements)
@@ -398,10 +398,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 try:
                     text = self.extract_table_cell_text(html_cell)
                 except Exception as exc:
-                    _log.warn("exception: ", exc)
-                    exit(-1)
-
-                # label = html_cell.name
+                    _log.warning("exception: ", exc)
 
                 col_span = int(html_cell.get("colspan", 1))
                 row_span = int(html_cell.get("rowspan", 1))
@@ -469,49 +466,49 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         fig_ref = None
 
         img = element.find(["img"])
-        _log.info(img)
 
         if img is not None and img.has_attr("src"):
             fig_uri = img["src"]
-            _log.info(fig_uri)
 
-            dpi = 128
+            if fig_uri.startswith("//"):
+                fig_uri = "https:" + fig_uri
+
+            dpi: int = 128
             try:
                 dpi = int(img["dpi"])
             except:
                 _log.debug("could not identify `dpi` of image")
 
-            width = 128
+            width: float = 128.0
             try:
-                width = int(img["width"])
+                width = float(img["width"])
             except:
                 _log.debug("could not identify `width` of image")
 
-            height = 128
+            height: float = 128.0
             try:
-                height = int(img["height"])
+                height = float(img["height"])
             except:
                 _log.debug("could not identify `height` of image")
 
-            if fig_uri.endswith(".jpg"):
-                fig_ref = ImageRef(
-                    mimetype="image/jpg", dpi=dpi, size=Size(width, height), uri=fig_uri
-                )
+            size = Size(width=width, height=height)
 
-            elif fig_uri.endswith(".jpeg"):
+            if fig_uri.endswith(".jpg") or fig_uri.endswith(".jpeg"):
                 fig_ref = ImageRef(
-                    mimetype="image/jpg", dpi=dpi, size=Size(width, height), uri=fig_uri
+                    mimetype="image/jpeg", dpi=dpi, size=size, uri=fig_uri
                 )
 
             elif fig_uri.endswith(".png"):
                 fig_ref = ImageRef(
-                    mimetype="image/png", dpi=dpi, size=Size(width, height), uri=fig_uri
+                    mimetype="image/png", dpi=dpi, size=size, uri=fig_uri
                 )
 
             elif fig_uri.endswith(".svg"):
                 fig_ref = ImageRef(
-                    mimetype="image/svg", dpi=dpi, size=Size(width, height), uri=fig_uri
+                    mimetype="image/svg", dpi=dpi, size=size, uri=fig_uri
                 )
+            else:
+                _log.debug(f"We do not yet support uri of type: {fig_uri}")
 
         return fig_ref
 
@@ -536,8 +533,6 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         fig_ref = self._get_imageref(element)
         fig_caption = self._get_figcaption(element, doc)
-
-        _log.warn(fig_ref)
 
         doc.add_picture(
             parent=self.parents[self.level], image=fig_ref, caption=fig_caption
