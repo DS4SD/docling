@@ -22,25 +22,37 @@ class TesseractOcrModel(BaseOcrModel):
         self.reader = None
 
         if self.enabled:
-            setup_errmsg = (
+            install_errmsg = (
                 "tesserocr is not correctly installed. "
                 "Please install it via `pip install tesserocr` to use this OCR engine. "
-                "Note that tesserocr might have to be manually compiled for working with"
+                "Note that tesserocr might have to be manually compiled for working with "
                 "your Tesseract installation. The Docling documentation provides examples for it. "
-                "Alternatively, Docling has support for other OCR engines. See the documentation."
+                "Alternatively, Docling has support for other OCR engines. See the documentation: "
+                "https://ds4sd.github.io/docling/installation/"
             )
+            missing_langs_errmsg = (
+                "tesserocr is not correctly configured. No language models have been detected. "
+                "Please ensure that the TESSDATA_PREFIX envvar points to tesseract languages dir. "
+                "You can find more information how to setup other OCR engines in Docling "
+                "documentation: "
+                "https://ds4sd.github.io/docling/installation/"
+            )
+
             try:
                 import tesserocr
             except ImportError:
-                raise ImportError(setup_errmsg)
-
+                raise ImportError(install_errmsg)
             try:
                 tesseract_version = tesserocr.tesseract_version()
-                _log.debug("Initializing TesserOCR: %s", tesseract_version)
             except:
-                raise ImportError(setup_errmsg)
+                raise ImportError(install_errmsg)
+
+            _, tesserocr_languages = tesserocr.get_languages()
+            if not tesserocr_languages:
+                raise ImportError(missing_langs_errmsg)
 
             # Initialize the tesseractAPI
+            _log.debug("Initializing TesserOCR: %s", tesseract_version)
             lang = "+".join(self.options.lang)
             if self.options.path is not None:
                 self.reader = tesserocr.PyTessBaseAPI(
