@@ -5,7 +5,7 @@ import numpy
 import torch
 from docling_core.types.doc import BoundingBox, CoordOrigin
 
-from docling.datamodel.base_models import OcrCell, Page
+from docling.datamodel.base_models import Cell, OcrCell, Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import EasyOcrOptions
 from docling.datamodel.settings import settings
@@ -88,12 +88,18 @@ class EasyOcrModel(BaseOcrModel):
                         ]
                         all_ocr_cells.extend(cells)
 
-                    ## Remove OCR cells which overlap with programmatic cells.
-                    filtered_ocr_cells = self.filter_ocr_cells(
-                        all_ocr_cells, page.cells
-                    )
-
-                    page.cells.extend(filtered_ocr_cells)
+                    if self.options.force_full_page_ocr:
+                        # If a full page OCR is forced, use only the OCR cells
+                        page.cells = [
+                            Cell(id=c_ocr.id, text=c_ocr.text, bbox=c_ocr.bbox)
+                            for c_ocr in all_ocr_cells
+                        ]
+                    else:
+                        ## Remove OCR cells which overlap with programmatic cells.
+                        filtered_ocr_cells = self.filter_ocr_cells(
+                            all_ocr_cells, page.cells
+                        )
+                        page.cells.extend(filtered_ocr_cells)
 
                 # DEBUG code:
                 if settings.debug.visualize_ocr:
