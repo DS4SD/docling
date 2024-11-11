@@ -88,18 +88,8 @@ class EasyOcrModel(BaseOcrModel):
                         ]
                         all_ocr_cells.extend(cells)
 
-                    if self.options.force_full_page_ocr:
-                        # If a full page OCR is forced, use only the OCR cells
-                        page.cells = [
-                            Cell(id=c_ocr.id, text=c_ocr.text, bbox=c_ocr.bbox)
-                            for c_ocr in all_ocr_cells
-                        ]
-                    else:
-                        ## Remove OCR cells which overlap with programmatic cells.
-                        filtered_ocr_cells = self.filter_ocr_cells(
-                            all_ocr_cells, page.cells
-                        )
-                        page.cells.extend(filtered_ocr_cells)
+                    # Post-process the cells
+                    page.cells = self.post_process_cells(all_ocr_cells, page.cells)
 
                 # DEBUG code:
                 if settings.debug.visualize_ocr:
