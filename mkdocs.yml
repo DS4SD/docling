@@ -39,7 +39,7 @@ theme:
     - content.code.copy
     - announce.dismiss
     - navigation.tabs
-    # - navigation.indexes  # <= if set, each "section" can have its own page, if index.md is used
+    - navigation.indexes  # <= if set, each "section" can have its own page, if index.md is used
     - navigation.instant
     - navigation.instant.prefetch
     # - navigation.instant.preview
@@ -57,9 +57,11 @@ nav:
     - Usage: usage.md
     - Docling v2: v2.md
   - Concepts:
+    - Concepts: concepts/index.md
     - Docling Document: concepts/docling_document.md
   #   - Chunking: concepts/chunking.md
   - Examples:
+    - Examples: examples/index.md
     - Conversion:
       - "Simple conversion": examples/minimal.py
       - "Custom conversion": examples/custom_convert.py
@@ -77,6 +79,7 @@ nav:
     # - CLI:
     #   - CLI: examples/cli.md
   - Integrations:
+    - Integrations: integrations/index.md
     - "LlamaIndex 🦙 extension": integrations/llamaindex.md
     # - "LangChain 🦜🔗 extension": integrations/langchain.md
   # - API reference:
