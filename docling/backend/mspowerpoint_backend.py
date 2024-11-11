@@ -375,7 +375,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                 if len(shape.text.strip()) == 0:
                     return
                 if not shape.has_text_frame:
-                    _log.warn("Warning: shape has text but not text_frame")
+                    _log.warning("Warning: shape has text but not text_frame")
                     return
                 # Handle other text elements, including lists (bullet lists, numbered lists)
                 self.handle_text_elements(shape, parent_slide, slide_ind, doc)
