@@ -141,10 +141,10 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
             # Check for Tables
             if element.tag.endswith("tbl"):
-                # try:
-                self.handle_tables(element, docx_obj, doc)
-                # except Exception:
-                #     _log.debug("could not parse a table, broken docx table")
+                try:
+                    self.handle_tables(element, docx_obj, doc)
+                except Exception:
+                    _log.debug("could not parse a table, broken docx table")
 
             elif found_drawing or found_pict:
                 self.handle_pictures(element, docx_obj, doc)
