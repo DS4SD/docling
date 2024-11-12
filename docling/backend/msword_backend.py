@@ -130,7 +130,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def walk_linear(self, body, docx_obj, doc) -> DoclingDocument:
         for element in body:
             tag_name = etree.QName(element).localname
-
             # Check for Inline Images (drawings or blip elements)
             found_drawing = etree.ElementBase.xpath(
                 element, ".//w:drawing", namespaces=self.xml_namespaces
@@ -201,7 +200,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             label_str = ""
             label_level = 0
             if parts[0] == "Heading":
-                # print("{} - {}".format(parts[0], parts[1]))
                 label_str = parts[0]
                 label_level = self.str_to_int(parts[1], default=None)
             if parts[1] == "Heading":
@@ -217,19 +215,16 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         if paragraph.text is None:
             # _log.warn(f"paragraph has text==None")
             return
-
         text = paragraph.text.strip()
         # if len(text)==0 # keep empty paragraphs, they seperate adjacent lists!
 
         # Common styles for bullet and numbered lists.
         # "List Bullet", "List Number", "List Paragraph"
-        # TODO: reliably identify wether list is a numbered list or not
+        # Identify wether list is a numbered list or not
         # is_numbered = "List Bullet" not in paragraph.style.name
         is_numbered = False
-
         p_style_name, p_level = self.get_label_and_level(paragraph)
         numid, ilevel = self.get_numId_and_ilvl(paragraph)
-        # print("numid: {}, ilevel: {}, text: {}".format(numid, ilevel, text))
 
         if numid == 0:
             numid = None
@@ -450,8 +445,13 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         for row in table.rows:
             # Calculate the max number of columns
             num_cols = max(num_cols, sum(get_colspan(cell) for cell in row.cells))
-            # if row.cells:
-            #     num_cols = max(num_cols, len(row.cells))
+
+        if num_rows == 1 and num_cols == 1:
+            cell_element = table.rows[0].cells[0]
+            # In case we have a table of only 1 cell, we consider it furniture
+            # And proceed processing the content of the cell as though it's in the document body
+            self.walk_linear(cell_element._element, docx_obj, doc)
+            return
 
         # Initialize the table grid
         table_grid = [[None for _ in range(num_cols)] for _ in range(num_rows)]
