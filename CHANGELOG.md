@@ -1,3 +1,14 @@
+## [v2.5.1](https://github.com/DS4SD/docling/releases/tag/v2.5.1) - 2024-11-12
+
+### Fix
+
+* Handling of single-cell tables in DOCX backend ([#314](https://github.com/DS4SD/docling/issues/314)) ([`fb8ba86`](https://github.com/DS4SD/docling/commit/fb8ba861e28eda0079daa44fb1ea3ed17745f1d2))
+
+### Documentation
+
+* Hybrid RAG with Qdrant ([#312](https://github.com/DS4SD/docling/issues/312)) ([`7f5d35e`](https://github.com/DS4SD/docling/commit/7f5d35ea3c225ce1ce7328825842f98755c0104f))
+* Add Data Prep Kit integration ([#316](https://github.com/DS4SD/docling/issues/316)) ([`93fc1be`](https://github.com/DS4SD/docling/commit/93fc1be61abfe0669daf26c0984a51ec8675bf62))
+
 ## [v2.5.0](https://github.com/DS4SD/docling/releases/tag/v2.5.0) - 2024-11-12
 
 ### Feature
