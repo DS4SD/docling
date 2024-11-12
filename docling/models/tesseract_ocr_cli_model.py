@@ -7,7 +7,7 @@ from typing import Iterable, Optional, Tuple
 import pandas as pd
 from docling_core.types.doc import BoundingBox, CoordOrigin
 
-from docling.datamodel.base_models import OcrCell, Page
+from docling.datamodel.base_models import Cell, OcrCell, Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import TesseractCliOcrOptions
 from docling.datamodel.settings import settings
@@ -170,12 +170,8 @@ class TesseractOcrCliModel(BaseOcrModel):
                             )
                             all_ocr_cells.append(cell)
 
-                    ## Remove OCR cells which overlap with programmatic cells.
-                    filtered_ocr_cells = self.filter_ocr_cells(
-                        all_ocr_cells, page.cells
-                    )
-
-                    page.cells.extend(filtered_ocr_cells)
+                    # Post-process the cells
+                    page.cells = self.post_process_cells(all_ocr_cells, page.cells)
 
                 # DEBUG code:
                 if settings.debug.visualize_ocr:

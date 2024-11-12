@@ -1,3 +1,19 @@
+## [v2.5.0](https://github.com/DS4SD/docling/releases/tag/v2.5.0) - 2024-11-12
+
+### Feature
+
+* **OCR:** Introduce the OcrOptions.force_full_page_ocr parameter that forces a full page OCR scanning ([#290](https://github.com/DS4SD/docling/issues/290)) ([`c6b3763`](https://github.com/DS4SD/docling/commit/c6b3763ecb6ef862840a30978ee177b907f86505))
+
+### Fix
+
+* Configure env prefix for docling settings ([#315](https://github.com/DS4SD/docling/issues/315)) ([`5d4a10b`](https://github.com/DS4SD/docling/commit/5d4a10b121317fa481208dacbee47032b08ff928))
+* Added handling of grouped elements in pptx backend ([#307](https://github.com/DS4SD/docling/issues/307)) ([`81c8243`](https://github.com/DS4SD/docling/commit/81c8243a8bf177feed8f87ea283b5bb6836350cb))
+* Allow mps usage for easyocr ([#286](https://github.com/DS4SD/docling/issues/286)) ([`97f214e`](https://github.com/DS4SD/docling/commit/97f214efddcf66f0734a95c17c08936f6111d113))
+
+### Documentation
+
+* Add navigation indices ([#305](https://github.com/DS4SD/docling/issues/305)) ([`1239ade`](https://github.com/DS4SD/docling/commit/1239ade2750349d13d4e865d88449b232bbad944))
+
 ## [v2.4.2](https://github.com/DS4SD/docling/releases/tag/v2.4.2) - 2024-11-08
 
 ### Fix

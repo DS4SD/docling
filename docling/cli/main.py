@@ -153,6 +153,13 @@ def convert(
             ..., help="If enabled, the bitmap content will be processed using OCR."
         ),
     ] = True,
+    force_ocr: Annotated[
+        bool,
+        typer.Option(
+            ...,
+            help="Replace any existing text with OCR generated text over the full content.",
+        ),
+    ] = False,
     ocr_engine: Annotated[
         OcrEngine, typer.Option(..., help="The OCR engine to use.")
     ] = OcrEngine.EASYOCR,
@@ -219,11 +226,11 @@ def convert(
 
     match ocr_engine:
         case OcrEngine.EASYOCR:
-            ocr_options: OcrOptions = EasyOcrOptions()
+            ocr_options: OcrOptions = EasyOcrOptions(force_full_page_ocr=force_ocr)
         case OcrEngine.TESSERACT_CLI:
-            ocr_options = TesseractCliOcrOptions()
+            ocr_options = TesseractCliOcrOptions(force_full_page_ocr=force_ocr)
         case OcrEngine.TESSERACT:
-            ocr_options = TesseractOcrOptions()
+            ocr_options = TesseractOcrOptions(force_full_page_ocr=force_ocr)
         case _:
             raise RuntimeError(f"Unexpected OCR engine type {ocr_engine}")
 

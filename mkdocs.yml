@@ -71,6 +71,7 @@ nav:
       - "Figure enrichment": examples/develop_picture_enrichment.py
       - "Table export": examples/export_tables.py
       - "Multimodal export": examples/export_multimodal.py
+      - "Force full page OCR": examples/full_page_ocr.py
     - RAG / QA:
       - "RAG with LlamaIndex 🦙": examples/rag_llamaindex.ipynb
       - "RAG with LangChain 🦜🔗": examples/rag_langchain.ipynb
@@ -81,8 +82,9 @@ nav:
     #   - CLI: examples/cli.md
   - Integrations:
     - Integrations: integrations/index.md
-    - "LlamaIndex 🦙 extension": integrations/llamaindex.md
-    # - "LangChain 🦜🔗 extension": integrations/langchain.md
+    - "Data Prep Kit": integrations/data_prep_kit.md
+    - "LlamaIndex 🦙": integrations/llamaindex.md
+    # - "LangChain 🦜🔗": integrations/langchain.md
   # - API reference:
   #   - API reference: api_reference/index.md
 
