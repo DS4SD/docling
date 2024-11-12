@@ -141,10 +141,10 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
             # Check for Tables
             if element.tag.endswith("tbl"):
-                try:
-                    self.handle_tables(element, docx_obj, doc)
-                except Exception:
-                    _log.debug("could not parse a table, broken docx table")
+                # try:
+                self.handle_tables(element, docx_obj, doc)
+                # except Exception:
+                #     _log.debug("could not parse a table, broken docx table")
 
             elif found_drawing or found_pict:
                 self.handle_pictures(element, docx_obj, doc)
@@ -164,6 +164,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             return default
 
     def get_numId_and_ilvl(self, paragraph):
+        if not hasattr(paragraph._element, "find"):
+            return None, None
         # Access the XML element of the paragraph
         numPr = paragraph._element.find(
             ".//w:numPr", namespaces=paragraph._element.nsmap
@@ -201,7 +203,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             label_str = ""
             label_level = 0
             if parts[0] == "Heading":
-                # print("{} - {}".format(parts[0], parts[1]))
                 label_str = parts[0]
                 label_level = self.str_to_int(parts[1], default=None)
             if parts[1] == "Heading":
@@ -212,24 +213,25 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             return label, None
 
     def handle_text_elements(self, element, docx_obj, doc):
+        # if hasattr(element, "text"):
+        #     paragraph = element
+        # else:
         paragraph = docx.text.paragraph.Paragraph(element, docx_obj)
 
         if paragraph.text is None:
             # _log.warn(f"paragraph has text==None")
             return
-
         text = paragraph.text.strip()
+
         # if len(text)==0 # keep empty paragraphs, they seperate adjacent lists!
 
         # Common styles for bullet and numbered lists.
         # "List Bullet", "List Number", "List Paragraph"
-        # TODO: reliably identify wether list is a numbered list or not
+        # Identify wether list is a numbered list or not
         # is_numbered = "List Bullet" not in paragraph.style.name
         is_numbered = False
-
         p_style_name, p_level = self.get_label_and_level(paragraph)
         numid, ilevel = self.get_numId_and_ilvl(paragraph)
-        # print("numid: {}, ilevel: {}, text: {}".format(numid, ilevel, text))
 
         if numid == 0:
             numid = None
@@ -452,6 +454,15 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             num_cols = max(num_cols, sum(get_colspan(cell) for cell in row.cells))
             # if row.cells:
             #     num_cols = max(num_cols, len(row.cells))
+
+        print("num_rows = {}, num_cols = {}".format(num_rows, num_cols))
+        if num_rows == 1:
+            if num_cols == 1:
+                cell_element = table.rows[0].cells[0]
+                for paragraph in cell_element.paragraphs:
+                    # print(paragraph.text)
+                    self.handle_text_elements(paragraph, docx_obj, doc)
+                return
 
         # Initialize the table grid
         table_grid = [[None for _ in range(num_cols)] for _ in range(num_rows)]
