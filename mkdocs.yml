@@ -75,6 +75,7 @@ nav:
     - RAG / QA:
       - "RAG with LlamaIndex 🦙": examples/rag_llamaindex.ipynb
       - "RAG with LangChain 🦜🔗": examples/rag_langchain.ipynb
+      - "Hybrid RAG with Qdrant": examples/hybrid_rag_qdrant.ipynb
     # - Chunking:
     #   - Chunking: examples/chunking.md
     # - CLI:
