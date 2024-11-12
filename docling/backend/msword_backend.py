@@ -130,7 +130,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def walk_linear(self, body, docx_obj, doc) -> DoclingDocument:
         for element in body:
             tag_name = etree.QName(element).localname
-
             # Check for Inline Images (drawings or blip elements)
             found_drawing = etree.ElementBase.xpath(
                 element, ".//w:drawing", namespaces=self.xml_namespaces
@@ -164,8 +163,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             return default
 
     def get_numId_and_ilvl(self, paragraph):
-        if not hasattr(paragraph._element, "find"):
-            return None, None
         # Access the XML element of the paragraph
         numPr = paragraph._element.find(
             ".//w:numPr", namespaces=paragraph._element.nsmap
@@ -448,17 +445,13 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         for row in table.rows:
             # Calculate the max number of columns
             num_cols = max(num_cols, sum(get_colspan(cell) for cell in row.cells))
-            # if row.cells:
-            #     num_cols = max(num_cols, len(row.cells))
 
-        print("num_rows = {}, num_cols = {}".format(num_rows, num_cols))
-        if num_rows == 1:
-            if num_cols == 1:
-                cell_element = table.rows[0].cells[0]
-                for paragraph in cell_element.paragraphs:
-                    # print(paragraph.text)
-                    self.handle_text_elements(paragraph, docx_obj, doc)
-                return
+        if num_rows == 1 and num_cols == 1:
+            cell_element = table.rows[0].cells[0]
+            # In case we have a table of only 1 cell, we consider it furniture
+            # And proceed processing the content of the cell as though it's in the document body
+            self.walk_linear(cell_element._element, docx_obj, doc)
+            return
 
         # Initialize the table grid
         table_grid = [[None for _ in range(num_cols)] for _ in range(num_rows)]
