@@ -81,8 +81,9 @@ nav:
     #   - CLI: examples/cli.md
   - Integrations:
     - Integrations: integrations/index.md
-    - "LlamaIndex 🦙 extension": integrations/llamaindex.md
-    # - "LangChain 🦜🔗 extension": integrations/langchain.md
+    - "Data Prep Kit": integrations/data_prep_kit.md
+    - "LlamaIndex 🦙": integrations/llamaindex.md
+    # - "LangChain 🦜🔗": integrations/langchain.md
   # - API reference:
   #   - API reference: api_reference/index.md
 
