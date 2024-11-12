@@ -213,16 +213,12 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             return label, None
 
     def handle_text_elements(self, element, docx_obj, doc):
-        # if hasattr(element, "text"):
-        #     paragraph = element
-        # else:
         paragraph = docx.text.paragraph.Paragraph(element, docx_obj)
 
         if paragraph.text is None:
             # _log.warn(f"paragraph has text==None")
             return
         text = paragraph.text.strip()
-
         # if len(text)==0 # keep empty paragraphs, they seperate adjacent lists!
 
         # Common styles for bullet and numbered lists.
