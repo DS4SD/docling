@@ -256,15 +256,19 @@ def verify_conversion_result_v1(
     dt_path = gt_subpath.with_suffix(f"{engine_suffix}.doctags.txt")
 
     if generate:  # only used when re-generating truth
+        pages_path.parent.mkdir(parents=True, exist_ok=True)
         with open(pages_path, "w") as fw:
             fw.write(json.dumps(doc_pred_pages, default=pydantic_encoder))
 
+        json_path.parent.mkdir(parents=True, exist_ok=True)
         with open(json_path, "w") as fw:
             fw.write(json.dumps(doc_pred, default=pydantic_encoder))
 
+        md_path.parent.mkdir(parents=True, exist_ok=True)
         with open(md_path, "w") as fw:
             fw.write(doc_pred_md)
 
+        dt_path.parent.mkdir(parents=True, exist_ok=True)
         with open(dt_path, "w") as fw:
             fw.write(doc_pred_dt)
     else:  # default branch in test
@@ -328,15 +332,19 @@ def verify_conversion_result_v2(
     dt_path = gt_subpath.with_suffix(f"{engine_suffix}.doctags.txt")
 
     if generate:  # only used when re-generating truth
+        pages_path.parent.mkdir(parents=True, exist_ok=True)
         with open(pages_path, "w") as fw:
             fw.write(json.dumps(doc_pred_pages, default=pydantic_encoder))
 
+        json_path.parent.mkdir(parents=True, exist_ok=True)
         with open(json_path, "w") as fw:
             fw.write(json.dumps(doc_pred, default=pydantic_encoder))
 
+        md_path.parent.mkdir(parents=True, exist_ok=True)
         with open(md_path, "w") as fw:
             fw.write(doc_pred_md)
 
+        dt_path.parent.mkdir(parents=True, exist_ok=True)
         with open(dt_path, "w") as fw:
             fw.write(doc_pred_dt)
     else:  # default branch in test
