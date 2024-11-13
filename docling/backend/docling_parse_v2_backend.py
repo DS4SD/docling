@@ -2,7 +2,7 @@ import logging
 import random
 from io import BytesIO
 from pathlib import Path
-from typing import TYPE_CHECKING, Iterable, List, Optional, Union
+from typing import TYPE_CHECKING, Iterable, List, Optional, Tuple, Union
 
 import pypdfium2 as pdfium
 from docling_core.types.doc import BoundingBox, CoordOrigin
@@ -77,21 +77,9 @@ class DoclingParseV2PageBackend(PdfPageBackend):
 
         return text_piece
 
-    def get_text_cells(self) -> Iterable[Cell]:
+    def make_cells(self, page_size, cells_data, cells_header):
         cells: List[Cell] = []
         cell_counter = 0
-
-        if not self.valid:
-            return cells
-
-        page_size = self.get_size()
-
-        parser_width = self._dpage["sanitized"]["dimension"]["width"]
-        parser_height = self._dpage["sanitized"]["dimension"]["height"]
-
-        cells_data = self._dpage["sanitized"]["cells"]["data"]
-        cells_header = self._dpage["sanitized"]["cells"]["header"]
-
         for i, cell_data in enumerate(cells_data):
             x0 = cell_data[cells_header.index("x0")]
             y0 = cell_data[cells_header.index("y0")]
@@ -119,6 +107,28 @@ class DoclingParseV2PageBackend(PdfPageBackend):
                 )
             )
             cell_counter += 1
+        return cells
+
+    def get_text_cells(self) -> Tuple[Iterable[Cell], Iterable[Cell]]:
+        cells: List[Cell] = []
+        word_cells: List[Cell] = []
+
+        if not self.valid:
+            return cells, word_cells
+
+        page_size = self.get_size()
+
+        parser_width = self._dpage["sanitized"]["dimension"]["width"]
+        parser_height = self._dpage["sanitized"]["dimension"]["height"]
+
+        cells_data = self._dpage["sanitized"]["cells"]["data"]
+        cells_header = self._dpage["sanitized"]["cells"]["header"]
+
+        word_cells_data = self._dpage["original"]["cells"]["data"]
+        word_cells_header = self._dpage["original"]["cells"]["header"]
+
+        cells = self.make_cells(page_size, cells_data, cells_header)
+        word_cells = self.make_cells(page_size, word_cells_data, word_cells_header)
 
         def draw_clusters_and_cells():
             image = (
@@ -137,7 +147,7 @@ class DoclingParseV2PageBackend(PdfPageBackend):
 
         # draw_clusters_and_cells()
 
-        return cells
+        return cells, word_cells
 
     def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:
         AREA_THRESHOLD = 32 * 32

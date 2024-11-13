@@ -122,7 +122,12 @@ class TableStructureModel(BasePageModel):
                         continue
 
                     tokens = []
-                    for c in page.cells:
+
+                    page_cells = page.cells
+                    if hasattr(page, "word_cells"):
+                        page_cells = page.word_cells
+
+                    for c in page_cells:
                         for cluster, _ in in_tables:
                             if c.bbox.area() > 0:
                                 if (

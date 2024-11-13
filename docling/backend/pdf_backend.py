@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
 from pathlib import Path
-from typing import Iterable, Optional, Set, Union
+from typing import Iterable, Optional, Set, Tuple, Union
 
 from docling_core.types.doc import BoundingBox, Size
 from PIL import Image
@@ -18,7 +18,7 @@ class PdfPageBackend(ABC):
         pass
 
     @abstractmethod
-    def get_text_cells(self) -> Iterable[Cell]:
+    def get_text_cells(self) -> Tuple[Iterable[Cell], Optional[Iterable[Cell]]]:
         pass
 
     @abstractmethod

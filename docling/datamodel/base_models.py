@@ -180,6 +180,7 @@ class Page(BaseModel):
     # page_hash: Optional[str] = None
     size: Optional[Size] = None
     cells: List[Cell] = []
+    word_cells: List[Cell] = []
     predictions: PagePredictions = PagePredictions()
     assembled: Optional[AssembledUnit] = None
 

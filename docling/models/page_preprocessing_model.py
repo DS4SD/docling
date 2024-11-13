@@ -53,7 +53,17 @@ class PagePreprocessingModel(BasePageModel):
     def _parse_page_cells(self, conv_res: ConversionResult, page: Page) -> Page:
         assert page._backend is not None
 
-        page.cells = list(page._backend.get_text_cells())
+        # page.cells = list(page._backend.get_text_cells())
+        cells_result = page._backend.get_text_cells()
+        if type(cells_result) is not tuple:
+            # Backend supports just PDF cells
+            page.cells = list(cells_result)
+        else:
+            # Backend also supports word cells
+            pdf_cells, word_cells = cells_result
+            page.cells = list(pdf_cells)
+            # preserve word_cells for usage in tables
+            page.word_cells = list(word_cells)
 
         # DEBUG code:
         def draw_text_boxes(image, cells, show: bool = False):
