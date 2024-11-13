@@ -43,7 +43,8 @@ class GlmModel:
     def __init__(self, options: GlmOptions):
         self.options = options
 
-        load_pretrained_nlp_models()
+        if self.options.model_names != "":
+            load_pretrained_nlp_models()
         self.model = init_nlp_model(model_names=self.options.model_names)
 
     def _to_legacy_document(self, conv_res) -> DsDocument:
