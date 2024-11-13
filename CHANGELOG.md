@@ -1,3 +1,9 @@
+## [v2.5.2](https://github.com/DS4SD/docling/releases/tag/v2.5.2) - 2024-11-13
+
+### Fix
+
+* Skip glm model downloads ([#322](https://github.com/DS4SD/docling/issues/322)) ([`c9341bf`](https://github.com/DS4SD/docling/commit/c9341bf22e08920284cbc14821c190eaf6abf8a6))
+
 ## [v2.5.1](https://github.com/DS4SD/docling/releases/tag/v2.5.1) - 2024-11-12
 
 ### Fix
