@@ -1,3 +1,4 @@
+import base64
 import logging
 from io import BytesIO
 from pathlib import Path
@@ -130,13 +131,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def walk_linear(self, body, docx_obj, doc) -> DoclingDocument:
         for element in body:
             tag_name = etree.QName(element).localname
-            # Check for Inline Images (drawings or blip elements)
-            found_drawing = etree.ElementBase.xpath(
-                element, ".//w:drawing", namespaces=self.xml_namespaces
-            )
-            found_pict = etree.ElementBase.xpath(
-                element, ".//w:pict", namespaces=self.xml_namespaces
-            )
+            # Check for Inline Images (blip elements)
+            drawing_blip = element.xpath(".//a:blip")
 
             # Check for Tables
             if element.tag.endswith("tbl"):
@@ -145,8 +141,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 except Exception:
                     _log.debug("could not parse a table, broken docx table")
 
-            elif found_drawing or found_pict:
-                self.handle_pictures(element, docx_obj, doc)
+            elif drawing_blip:
+                self.handle_pictures(element, docx_obj, drawing_blip, doc)
             # Check for Text
             elif tag_name in ["p"]:
                 self.handle_text_elements(element, docx_obj, doc)
@@ -491,6 +487,18 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         doc.add_table(data=data, parent=self.parents[level - 1])
         return
 
-    def handle_pictures(self, element, docx_obj, doc):
+    def handle_pictures(self, element, docx_obj, drawing_blip, doc):
+        """
+        # WIP:
+        def get_base64_image(element, drawing_blip):
+            rId = drawing_blip[0].get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed')
+            # Access the image part using the relationship ID
+            image_part = element.paragraph.runs[0].part.rels[rId].target_part
+            image_data = image_part.blob  # Get the binary image data
+            # Encode the image data in base64
+            return base64.b64encode(image_data).decode('utf-8')
+        """
+        # base64_image = get_base64_image(element, drawing_blip)
+        # print(base64_image)
         doc.add_picture(parent=self.parents[self.level], caption=None)
         return
