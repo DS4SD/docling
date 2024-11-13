@@ -185,6 +185,15 @@ def convert(
     output: Annotated[
         Path, typer.Option(..., help="Output directory where results are saved.")
     ] = Path("."),
+    verbose: Annotated[
+        int,
+        typer.Option(
+            "--verbose",
+            "-v",
+            count=True,
+            help="Set the verbosity level. -v for info logging, -vv for debug logging.",
+        ),
+    ] = 0,
     version: Annotated[
         Optional[bool],
         typer.Option(
@@ -195,7 +204,12 @@ def convert(
         ),
     ] = None,
 ):
-    logging.basicConfig(level=logging.INFO)
+    if verbose == 0:
+        logging.basicConfig(level=logging.WARNING)
+    elif verbose == 1:
+        logging.basicConfig(level=logging.INFO)
+    elif verbose == 2:
+        logging.basicConfig(level=logging.DEBUG)
 
     if from_formats is None:
         from_formats = [e for e in InputFormat]
