@@ -165,7 +165,7 @@ from docling.datamodel.base_models import DocumentStream
 from docling.document_converter import DocumentConverter
 
 buf = BytesIO(your_binary_stream)
-source = DocumentStream(filename="my_doc.pdf", stream=buf)
+source = DocumentStream(name="my_doc.pdf", stream=buf)
 converter = DocumentConverter()
 result = converter.convert(source)
 ```
