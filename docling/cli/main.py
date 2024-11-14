@@ -24,6 +24,7 @@ from docling.datamodel.pipeline_options import (
     PdfPipelineOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
+    TableFormerMode,
 )
 from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
 
@@ -225,7 +226,8 @@ def convert(
         do_table_structure=True,
     )
     pipeline_options.table_structure_options.do_cell_matching = True  # do_cell_matching
-
+    pipeline_options.table_structure_options.mode = TableFormerMode.ACCURATE
+    
     format_options: Dict[InputFormat, FormatOption] = {
         InputFormat.PDF: PdfFormatOption(
             pipeline_options=pipeline_options,
