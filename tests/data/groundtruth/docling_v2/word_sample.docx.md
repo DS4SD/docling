@@ -4,6 +4,8 @@ Summer activities
 
 Duck
 
+<!-- image -->
+
 Figure 1: This is a cute duckling
 
 ## Let’s swim!
