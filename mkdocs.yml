@@ -58,6 +58,7 @@ nav:
     - Docling v2: v2.md
   - Concepts:
     - Concepts: concepts/index.md
+    - Architecture: concepts/architecture.md
     - Docling Document: concepts/docling_document.md
   #   - Chunking: concepts/chunking.md
   - Examples:
