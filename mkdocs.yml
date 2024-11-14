@@ -103,6 +103,12 @@ markdown_extensions:
 plugins:
   - search
   - mkdocs-jupyter
+  # - mkdocstrings:
+  #     default_handler: python
+  #     options:
+  #       preload_modules:
+  #       - docling
+  #       - docling_core
 
 extra_css:
   - stylesheets/extra.css

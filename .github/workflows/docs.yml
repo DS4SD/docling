@@ -11,15 +11,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@v4
-        - name: Install poetry
-          run: pipx install poetry==1.8.3
-          shell: bash
-        - uses: actions/setup-python@v5
-          with:
-              cache: 'poetry'
-        - name: Install dependencies
-          run: poetry install --only docs
-          shell: bash
+        - uses: ./.github/actions/setup-poetry
         - name: Build docs
           run: poetry run mkdocs build --verbose --clean
         - name: Build and push docs
