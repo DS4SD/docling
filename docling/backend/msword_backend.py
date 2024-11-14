@@ -10,10 +10,12 @@ from docling_core.types.doc import (
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
+    ImageRef,
     TableCell,
     TableData,
 )
 from lxml import etree
+from PIL import Image
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
@@ -488,17 +490,24 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         return
 
     def handle_pictures(self, element, docx_obj, drawing_blip, doc):
-        """
-        # WIP:
-        def get_base64_image(element, drawing_blip):
-            rId = drawing_blip[0].get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed')
-            # Access the image part using the relationship ID
-            image_part = element.paragraph.runs[0].part.rels[rId].target_part
-            image_data = image_part.blob  # Get the binary image data
-            # Encode the image data in base64
-            return base64.b64encode(image_data).decode('utf-8')
-        """
-        # base64_image = get_base64_image(element, drawing_blip)
-        # print(base64_image)
-        doc.add_picture(parent=self.parents[self.level], caption=None)
+        def get_docx_image(element, drawing_blip):
+            base64_image_data = None
+            rId = drawing_blip[0].get(
+                "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed"
+            )
+            if rId in docx_obj.part.rels:
+                # Access the image part using the relationship ID
+                image_part = docx_obj.part.rels[rId].target_part
+                image_data = image_part.blob  # Get the binary image data
+            return image_data
+
+        image_data = get_docx_image(element, drawing_blip)
+        image_bytes = BytesIO(image_data)
+        # Open the BytesIO object with PIL to create an Image
+        pil_image = Image.open(image_bytes)
+        doc.add_picture(
+            parent=self.parents[self.level],
+            image=ImageRef.from_pil(image=pil_image, dpi=72),
+            caption=None,
+        )
         return
