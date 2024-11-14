@@ -1,4 +1,3 @@
-import base64
 import logging
 from io import BytesIO
 from pathlib import Path
@@ -491,7 +490,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
     def handle_pictures(self, element, docx_obj, drawing_blip, doc):
         def get_docx_image(element, drawing_blip):
-            base64_image_data = None
             rId = drawing_blip[0].get(
                 "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed"
             )
