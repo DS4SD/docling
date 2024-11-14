@@ -9,10 +9,12 @@ from docling_core.types.doc import (
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
+    ImageRef,
     TableCell,
     TableData,
 )
 from lxml import etree
+from PIL import Image
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
@@ -130,13 +132,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def walk_linear(self, body, docx_obj, doc) -> DoclingDocument:
         for element in body:
             tag_name = etree.QName(element).localname
-            # Check for Inline Images (drawings or blip elements)
-            found_drawing = etree.ElementBase.xpath(
-                element, ".//w:drawing", namespaces=self.xml_namespaces
-            )
-            found_pict = etree.ElementBase.xpath(
-                element, ".//w:pict", namespaces=self.xml_namespaces
-            )
+            # Check for Inline Images (blip elements)
+            drawing_blip = element.xpath(".//a:blip")
 
             # Check for Tables
             if element.tag.endswith("tbl"):
@@ -145,8 +142,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 except Exception:
                     _log.debug("could not parse a table, broken docx table")
 
-            elif found_drawing or found_pict:
-                self.handle_pictures(element, docx_obj, doc)
+            elif drawing_blip:
+                self.handle_pictures(element, docx_obj, drawing_blip, doc)
             # Check for Text
             elif tag_name in ["p"]:
                 self.handle_text_elements(element, docx_obj, doc)
@@ -491,6 +488,24 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         doc.add_table(data=data, parent=self.parents[level - 1])
         return
 
-    def handle_pictures(self, element, docx_obj, doc):
-        doc.add_picture(parent=self.parents[self.level], caption=None)
+    def handle_pictures(self, element, docx_obj, drawing_blip, doc):
+        def get_docx_image(element, drawing_blip):
+            rId = drawing_blip[0].get(
+                "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed"
+            )
+            if rId in docx_obj.part.rels:
+                # Access the image part using the relationship ID
+                image_part = docx_obj.part.rels[rId].target_part
+                image_data = image_part.blob  # Get the binary image data
+            return image_data
+
+        image_data = get_docx_image(element, drawing_blip)
+        image_bytes = BytesIO(image_data)
+        # Open the BytesIO object with PIL to create an Image
+        pil_image = Image.open(image_bytes)
+        doc.add_picture(
+            parent=self.parents[self.level],
+            image=ImageRef.from_pil(image=pil_image, dpi=72),
+            caption=None,
+        )
         return
