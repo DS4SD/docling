@@ -11,5 +11,8 @@ merge_protections:
     description: When test data is updated, we require two reviewers
     if:
       - base = main
+      - or:
+          - files ~= ^tests/data
+          - files ~= ^tests/data_scanned
     success_conditions:
       - "#approved-reviews-by >= 2"
