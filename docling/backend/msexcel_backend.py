@@ -7,6 +7,15 @@ from lxml import etree
 from openpyxl import load_workbook
 from openpyxl.cell.cell import Cell
 
+from docling_core.types.doc import (
+    DocItemLabel,
+    DoclingDocument,
+    DocumentOrigin,
+    GroupLabel,
+    TableCell,
+    TableData,
+)
+
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
