@@ -55,6 +55,7 @@ nav:
     - Home: index.md
     - Installation: installation.md
     - Usage: usage.md
+    - CLI: cli.md
     - Docling v2: v2.md
   - Concepts:
     - Concepts: concepts/index.md
@@ -99,9 +100,16 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - attr_list
+  - mkdocs-click
 plugins:
   - search
   - mkdocs-jupyter
+  # - mkdocstrings:
+  #     default_handler: python
+  #     options:
+  #       preload_modules:
+  #       - docling
+  #       - docling_core
 
 extra_css:
   - stylesheets/extra.css

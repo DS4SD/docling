@@ -69,6 +69,7 @@ nbqa = "^1.9.0"
 [tool.poetry.group.docs.dependencies]
 mkdocs-material = "^9.5.40"
 mkdocs-jupyter = "^0.25.0"
+mkdocs-click = "^0.8.1"
 
 [tool.poetry.group.examples.dependencies]
 datasets = "^2.21.0"

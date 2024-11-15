@@ -301,5 +301,7 @@ def convert(
     _log.info(f"All documents were converted in {end_time:.2f} seconds.")
 
 
+click_app = typer.main.get_command(app)
+
 if __name__ == "__main__":
     app()
