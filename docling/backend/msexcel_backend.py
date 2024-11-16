@@ -67,7 +67,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
 
     @classmethod
     def supported_formats(cls) -> Set[InputFormat]:
-        return {InputFormat.EXCEL}
+        return {InputFormat.XLSX}
 
     def convert(self) -> DoclingDocument:
         # Parses the DOCX into a structured document model.
@@ -76,7 +76,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
 
         origin = DocumentOrigin(
             filename=self.file.name or "file",
-            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",            
+            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             binary_hash=self.document_hash,
         )
 

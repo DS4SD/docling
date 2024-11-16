@@ -86,7 +86,7 @@ class ImageFormatOption(FormatOption):
 
 
 _format_to_default_options = {
-    InputFormat.EXCEL: FormatOption(
+    InputFormat.XLSX: FormatOption(
         pipeline_cls=SimplePipeline, backend=MsExcelDocumentBackend
     ),
     InputFormat.DOCX: FormatOption(
