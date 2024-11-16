@@ -15,6 +15,7 @@ from lxml import etree
 from openpyxl import Workbook, load_workbook
 from openpyxl.cell.cell import Cell
 from openpyxl.worksheet.worksheet import Worksheet
+from openpyxl.drawing.image import Image
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
@@ -72,8 +73,6 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
     def convert(self) -> DoclingDocument:
         # Parses the DOCX into a structured document model.
 
-        _log.info("starting to convert excel ...")
-
         origin = DocumentOrigin(
             filename=self.file.name or "file",
             mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -85,7 +84,6 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         if self.is_valid():
             doc = self.convert_workbook(doc)
         else:
-            _log.warning("file is not valid")
             raise RuntimeError(
                 f"Cannot convert doc with {self.document_hash} because the backend failed to init."
             )
@@ -100,7 +98,6 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         return 0
 
     def convert_workbook(self, doc: DoclingDocument) -> DoclingDocument:
-        _log.info("starting to convert_workbook excel ...")
 
         if self.workbook is not None:
 
@@ -124,27 +121,28 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         return doc
 
     def convert_sheet(self, doc: DoclingDocument, sheet: Worksheet):
-        _log.info(" => convert_sheet")
 
+        doc = self.find_tables_in_sheet(doc, sheet)
+
+        doc = self.find_images_in_sheet(doc, sheet)
+
+        return doc
+        
+    def find_tables_in_sheet(self, doc: DoclingDocument, sheet: Worksheet):
+        
         tables = self.find_data_tables(sheet)
 
         for excel_table in tables:
-            print(excel_table)
-
             num_rows = excel_table["num_rows"]
             num_cols = excel_table["num_cols"]
-
-            _log.info(f"({num_rows}, {num_cols})")
 
             table_data = TableData(
                 num_rows=num_rows,
                 num_cols=num_cols,
                 table_cells=[],
             )
-            _log.info(f"({num_rows}, {num_cols})")
 
             for excel_cell in excel_table["data"]:
-                _log.info(excel_cell)
 
                 cell = TableCell(
                     text=str(excel_cell["cell"].value),
@@ -157,25 +155,16 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                     col_header=False,  # col_header,
                     row_header=False,  # ((not col_header) and html_cell.name=='th')
                 )
-                _log.info(cell)
                 table_data.table_cells.append(cell)
 
-            _log.info(f" --> adding a table ({num_rows}, {num_cols})!")
-
-            try:
-                doc.add_table(data=table_data, parent=self.parents[0])
-            except Exception as e:
-                _log.warning(f"Could not add table: {str(e)}")
-
-            _log.info(f" --> added the table ({num_rows}, {num_cols})!")
+            doc.add_table(data=table_data, parent=self.parents[0])
 
         return doc
-
+    
     def find_data_tables(self, sheet: Worksheet):
         """
         Find all compact rectangular data tables in a sheet.
         """
-        _log.info("find_data_tables")
 
         tables = []  # List to store found tables
         visited: set[Tuple[int, int]] = set()  # Track already visited cells
@@ -183,7 +172,6 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         # Iterate over all cells in the sheet
         for ri, row in enumerate(sheet.iter_rows(values_only=False)):
             for rj, cell in enumerate(row):
-                _log.info(f"({ri}, {rj}): {cell}")
 
                 # Skip empty or already visited cells
                 if cell.value is None or (ri, rj) in visited:
@@ -193,12 +181,9 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                 table_bounds, visited_cells = self.find_table_bounds(
                     sheet, ri, rj, visited
                 )
-                _log.info(table_bounds)
 
                 visited.update(visited_cells)  # Mark these cells as visited
                 tables.append(table_bounds)
-
-        _log.info(f"#-tables: {len(tables)}, #-cells: {len(visited)}")
 
         return tables
 
@@ -277,3 +262,18 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
             "num_cols": max_col + 1 - start_col,
             "data": data,
         }, visited_cells
+
+    def find_images_in_sheet(self, doc: DoclingDocument, sheet: Worksheet) -> DoclingDocument:
+
+        # FIXME
+        """
+        # Iterate over images in the sheet
+        for idx, image in enumerate(sheet._images):  # Access embedded images
+            # Save the image to the output folder
+            image_path = f"{output_folder}/{sheet_name}_image_{idx + 1}.png"
+            with open(image_path, "wb") as img_file:
+                img_file.write(image.ref.blob)
+            print(f"Image saved to: {image_path}")        
+        """
+
+        return doc
