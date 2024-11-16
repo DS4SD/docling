@@ -6575,6 +6575,17 @@ shellingham = ">=1.3.0"
 typing-extensions = ">=3.7.4.3"
 
 [[package]]
+name = "types-openpyxl"
+version = "3.1.5.20241114"
+description = "Typing stubs for openpyxl"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "types-openpyxl-3.1.5.20241114.tar.gz", hash = "sha256:caeb9aafed8a5ffabdc74f880b148d90375364a1cfe7915d5065c5d79f3fe6a2"},
+    {file = "types_openpyxl-3.1.5.20241114-py3-none-any.whl", hash = "sha256:f2925f595b08f5aef1baa725c9ee40baaf51beb05d98ac150593d3bdd37b1029"},
+]
+
+[[package]]
 name = "types-pytz"
 version = "2024.2.0.20241003"
 description = "Typing stubs for pytz"
@@ -7177,4 +7188,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "de6821640f0f67bdcfc0a6484cac9c243f9207163b2af90f3a3e2c04f6f13386"
+content-hash = "95357a52d305fc7dda3da7e397f20d6fe0d4050a90d904c1714536c5a005ea34"

@@ -1,11 +1,7 @@
 import logging
 from io import BytesIO
 from pathlib import Path
-from typing import Set, Union
-
-from lxml import etree
-from openpyxl import load_workbook
-from openpyxl.cell.cell import Cell
+from typing import Set, Tuple, Union
 
 from docling_core.types.doc import (
     DocItemLabel,
@@ -15,6 +11,10 @@ from docling_core.types.doc import (
     TableCell,
     TableData,
 )
+from lxml import etree
+from openpyxl import Workbook, load_workbook
+from openpyxl.cell.cell import Cell
+from openpyxl.worksheet.worksheet import Worksheet
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
@@ -73,16 +73,16 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         # Parses the DOCX into a structured document model.
 
         _log.info("starting to convert excel ...")
-        
+
         origin = DocumentOrigin(
             filename=self.file.name or "file",
-            #mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            # mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             binary_hash=self.document_hash,
         )
 
         doc = DoclingDocument(name=self.file.stem or "file", origin=origin)
-        
+
         if self.is_valid():
             doc = self.convert_workbook(doc)
         else:
@@ -101,36 +101,40 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         return 0
 
     def convert_workbook(self, doc: DoclingDocument) -> DoclingDocument:
-        _log.info("starting to convert_workbook excel ...")        
+        _log.info("starting to convert_workbook excel ...")
 
-        # Iterate over all sheets
-        for sheet_name in self.workbook.sheetnames:            
-            _log.info(f"Processing sheet: {sheet_name}")
-            
-            sheet = self.workbook[sheet_name]  # Access the sheet by name
+        if self.workbook is not None:
 
-            # level = self.get_level()
-            self.parents[0] = doc.add_group(
-                parent=None,  # self.parents[level-1],
-                label=GroupLabel.SECTION,
-                name=f"sheet: {sheet_name}",
-            )
-            
-            doc = self.convert_sheet(doc, sheet)
+            # Iterate over all sheets
+            for sheet_name in self.workbook.sheetnames:
+                _log.info(f"Processing sheet: {sheet_name}")
+
+                sheet = self.workbook[sheet_name]  # Access the sheet by name
+
+                # level = self.get_level()
+                self.parents[0] = doc.add_group(
+                    parent=None,  # self.parents[level-1],
+                    label=GroupLabel.SECTION,
+                    name=f"sheet: {sheet_name}",
+                )
+
+                doc = self.convert_sheet(doc, sheet)
+        else:
+            _log.error("Workbook is not initialized.")
 
         return doc
 
-    def convert_sheet(self, doc: DoclingDocument, sheet):
+    def convert_sheet(self, doc: DoclingDocument, sheet: Worksheet):
         _log.info(" => convert_sheet")
-        
+
         tables = self.find_data_tables(sheet)
 
         for excel_table in tables:
             print(excel_table)
-            
+
             num_rows = excel_table["num_rows"]
             num_cols = excel_table["num_cols"]
-            
+
             _log.info(f"({num_rows}, {num_cols})")
 
             table_data = TableData(
@@ -142,7 +146,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
 
             for excel_cell in excel_table["data"]:
                 _log.info(excel_cell)
-                
+
                 cell = TableCell(
                     text=str(excel_cell["cell"].value),
                     row_span=excel_cell["row_span"],
@@ -156,48 +160,56 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                 )
                 _log.info(cell)
                 table_data.table_cells.append(cell)
-            
+
             _log.info(f" --> adding a table ({num_rows}, {num_cols})!")
 
             try:
                 doc.add_table(data=table_data, parent=self.parents[0])
             except Exception as e:
                 _log.warning(f"Could not add table: {str(e)}")
-                
+
             _log.info(f" --> added the table ({num_rows}, {num_cols})!")
 
         return doc
 
-    def find_data_tables(self, sheet):
+    def find_data_tables(self, sheet: Worksheet):
         """
         Find all compact rectangular data tables in a sheet.
         """
         _log.info("find_data_tables")
-        
+
         tables = []  # List to store found tables
-        visited = set()  # Track already visited cells
+        visited: set[Tuple[int, int]] = set()  # Track already visited cells
 
         # Iterate over all cells in the sheet
         for ri, row in enumerate(sheet.iter_rows(values_only=False)):
             for rj, cell in enumerate(row):
                 _log.info(f"({ri}, {rj}): {cell}")
-                
+
                 # Skip empty or already visited cells
                 if cell.value is None or (ri, rj) in visited:
                     continue
 
                 # If the cell starts a new table, find its bounds
-                table_bounds, visited_cells = self.find_table_bounds(sheet, ri, rj, visited)
+                table_bounds, visited_cells = self.find_table_bounds(
+                    sheet, ri, rj, visited
+                )
                 _log.info(table_bounds)
-                
+
                 visited.update(visited_cells)  # Mark these cells as visited
                 tables.append(table_bounds)
 
         _log.info(f"#-tables: {len(tables)}, #-cells: {len(visited)}")
-                
+
         return tables
 
-    def find_table_bounds(self, sheet, start_row, start_col, visited):
+    def find_table_bounds(
+        self,
+        sheet: Worksheet,
+        start_row: int,
+        start_col: int,
+        visited: set[Tuple[int, int]],
+    ):
         """
         Determine the bounds of a compact rectangular table.
         Returns:
@@ -205,7 +217,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         - A set of visited cell coordinates.
         """
         _log.info("find_table_bounds")
-        
+
         max_row = start_row
         max_col = start_col
 
@@ -227,7 +239,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         data = []
         visited_cells = set()
         for ri in range(start_row, max_row + 1):
-            #row_data = []
+            # row_data = []
             for rj in range(start_col, max_col + 1):
 
                 cell = sheet.cell(row=ri + 1, column=rj + 1)  # 1-based indexing
@@ -251,7 +263,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                         "col_span": col_span,
                     }
                 )
-                
+
                 # Mark all cells in the span as visited
                 for span_row in range(ri, ri + row_span):
                     for span_col in range(rj, rj + col_span):

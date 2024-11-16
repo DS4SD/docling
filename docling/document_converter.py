@@ -12,9 +12,9 @@ from docling.backend.asciidoc_backend import AsciiDocBackend
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.html_backend import HTMLDocumentBackend
 from docling.backend.md_backend import MarkdownDocumentBackend
+from docling.backend.msexcel_backend import MsExcelDocumentBackend
 from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
-from docling.backend.msexcel_backend import MsExcelDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
 from docling.datamodel.document import (
     ConversionResult,
@@ -48,8 +48,9 @@ class FormatOption(BaseModel):
 class ExcelFormatOption(FormatOption):
     pipeline_cls: Type = SimplePipeline
     backend: Type[AbstractDocumentBackend] = MsExcelDocumentBackend
-    
-class WordFormatOption(FormatOption):    
+
+
+class WordFormatOption(FormatOption):
     pipeline_cls: Type = SimplePipeline
     backend: Type[AbstractDocumentBackend] = MsWordDocumentBackend
 
