@@ -32,7 +32,7 @@ class InputFormat(str, Enum):
     PDF = "pdf"
     ASCIIDOC = "asciidoc"
     MD = "md"
-    EXCEL = "excel"
+    XLSX = "xlsx"
 
 
 class OutputFormat(str, Enum):
@@ -50,7 +50,7 @@ FormatToExtensions: Dict[InputFormat, List[str]] = {
     InputFormat.HTML: ["html", "htm", "xhtml"],
     InputFormat.IMAGE: ["jpg", "jpeg", "png", "tif", "tiff", "bmp"],
     InputFormat.ASCIIDOC: ["adoc", "asciidoc", "asc"],
-    InputFormat.EXCEL: ["xlsx"],
+    InputFormat.XLSX: ["xlsx"],
 }
 
 FormatToMimeType: Dict[InputFormat, List[str]] = {
@@ -74,7 +74,7 @@ FormatToMimeType: Dict[InputFormat, List[str]] = {
     InputFormat.PDF: ["application/pdf"],
     InputFormat.ASCIIDOC: ["text/asciidoc"],
     InputFormat.MD: ["text/markdown", "text/x-markdown"],
-    InputFormat.EXCEL: [
+    InputFormat.XLSX: [
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ],
 }

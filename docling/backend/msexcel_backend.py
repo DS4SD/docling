@@ -76,8 +76,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
 
         origin = DocumentOrigin(
             filename=self.file.name or "file",
-            # mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",            
             binary_hash=self.document_hash,
         )
 
