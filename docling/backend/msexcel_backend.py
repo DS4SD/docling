@@ -8,6 +8,7 @@ from docling_core.types.doc import (
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
+    ImageRef,
     TableCell,
     TableData,
 )
@@ -267,15 +268,49 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         self, doc: DoclingDocument, sheet: Worksheet
     ) -> DoclingDocument:
 
-        # FIXME
+        # FIXME: mypy does not agree with _images ...
         """
         # Iterate over images in the sheet
         for idx, image in enumerate(sheet._images):  # Access embedded images
-            # Save the image to the output folder
-            image_path = f"{output_folder}/{sheet_name}_image_{idx + 1}.png"
-            with open(image_path, "wb") as img_file:
-                img_file.write(image.ref.blob)
-            print(f"Image saved to: {image_path}")
+
+            image_bytes = BytesIO(image.ref.blob)
+            pil_image = Image.open(image_bytes)
+
+            doc.add_picture(
+                parent=self.parents[0],
+                image=ImageRef.from_pil(image=pil_image, dpi=72),
+                caption=None,
+            )
+        """
+
+        # FIXME: mypy does not agree with _charts ...
+        """
+        for idx, chart in enumerate(sheet._charts):  # Access embedded charts
+            chart_path = f"chart_{idx + 1}.png"
+            _log.info(
+                f"Chart found, but dynamic rendering is required for: {chart_path}"
+            )
+
+            _log.info(f"Chart {idx + 1}:")
+        
+            # Chart type
+            _log.info(f"Type: {type(chart).__name__}")
+            
+            # Title
+            if chart.title:
+                _log.info(f"Title: {chart.title}")
+            else:
+                _log.info("No title")
+            
+            # Data series
+            for series in chart.series:
+                _log.info(" => series ...")
+                _log.info(f"Data Series: {series.title}")
+                _log.info(f"Values: {series.values}")
+                _log.info(f"Categories: {series.categories}")
+                
+            # Position
+            # _log.info(f"Anchor Cell: {chart.anchor}")
         """
 
         return doc
