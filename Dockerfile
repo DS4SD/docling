@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir docling --extra-index-url https://download.pytorc
 ENV HF_HOME=/tmp/
 ENV TORCH_HOME=/tmp/
 
-COPY examples/minimal.py /root/minimal.py
+COPY docs/examples/minimal.py /root/minimal.py
 
 RUN python -c 'from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_models; load_pretrained_nlp_models(verbose=True);'
 RUN python -c 'from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline; StandardPdfPipeline.download_models_hf(force=True);'

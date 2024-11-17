@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw
 from rtree import index
 from scipy.ndimage import find_objects, label
 
-from docling.datamodel.base_models import OcrCell, Page
+from docling.datamodel.base_models import Cell, OcrCell, Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import OcrOptions
 from docling.datamodel.settings import settings
@@ -73,7 +73,9 @@ class BaseOcrModel(BasePageModel):
         coverage, ocr_rects = find_ocr_rects(page.size, bitmap_rects)
 
         # return full-page rectangle if sufficiently covered with bitmaps
-        if coverage > max(BITMAP_COVERAGE_TRESHOLD, self.options.bitmap_area_threshold):
+        if self.options.force_full_page_ocr or coverage > max(
+            BITMAP_COVERAGE_TRESHOLD, self.options.bitmap_area_threshold
+        ):
             return [
                 BoundingBox(
                     l=0,
@@ -96,7 +98,7 @@ class BaseOcrModel(BasePageModel):
             return ocr_rects
 
     # Filters OCR cells by dropping any OCR cell that intersects with an existing programmatic cell.
-    def filter_ocr_cells(self, ocr_cells, programmatic_cells):
+    def _filter_ocr_cells(self, ocr_cells, programmatic_cells):
         # Create R-tree index for programmatic cells
         p = index.Property()
         p.dimension = 2
@@ -116,6 +118,23 @@ class BaseOcrModel(BasePageModel):
             rect for rect in ocr_cells if not is_overlapping_with_existing_cells(rect)
         ]
         return filtered_ocr_cells
+
+    def post_process_cells(self, ocr_cells, programmatic_cells):
+        r"""
+        Post-process the ocr and programmatic cells and return the final list of of cells
+        """
+        if self.options.force_full_page_ocr:
+            # If a full page OCR is forced, use only the OCR cells
+            cells = [
+                Cell(id=c_ocr.id, text=c_ocr.text, bbox=c_ocr.bbox)
+                for c_ocr in ocr_cells
+            ]
+            return cells
+
+        ## Remove OCR cells which overlap with programmatic cells.
+        filtered_ocr_cells = self._filter_ocr_cells(ocr_cells, programmatic_cells)
+        programmatic_cells.extend(filtered_ocr_cells)
+        return programmatic_cells
 
     def draw_ocr_rects_and_cells(self, conv_res, page, ocr_rects, show: bool = False):
         image = copy.deepcopy(page.image)

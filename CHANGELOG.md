@@ -1,3 +1,55 @@
+## [v2.5.2](https://github.com/DS4SD/docling/releases/tag/v2.5.2) - 2024-11-13
+
+### Fix
+
+* Skip glm model downloads ([#322](https://github.com/DS4SD/docling/issues/322)) ([`c9341bf`](https://github.com/DS4SD/docling/commit/c9341bf22e08920284cbc14821c190eaf6abf8a6))
+
+## [v2.5.1](https://github.com/DS4SD/docling/releases/tag/v2.5.1) - 2024-11-12
+
+### Fix
+
+* Handling of single-cell tables in DOCX backend ([#314](https://github.com/DS4SD/docling/issues/314)) ([`fb8ba86`](https://github.com/DS4SD/docling/commit/fb8ba861e28eda0079daa44fb1ea3ed17745f1d2))
+
+### Documentation
+
+* Hybrid RAG with Qdrant ([#312](https://github.com/DS4SD/docling/issues/312)) ([`7f5d35e`](https://github.com/DS4SD/docling/commit/7f5d35ea3c225ce1ce7328825842f98755c0104f))
+* Add Data Prep Kit integration ([#316](https://github.com/DS4SD/docling/issues/316)) ([`93fc1be`](https://github.com/DS4SD/docling/commit/93fc1be61abfe0669daf26c0984a51ec8675bf62))
+
+## [v2.5.0](https://github.com/DS4SD/docling/releases/tag/v2.5.0) - 2024-11-12
+
+### Feature
+
+* **OCR:** Introduce the OcrOptions.force_full_page_ocr parameter that forces a full page OCR scanning ([#290](https://github.com/DS4SD/docling/issues/290)) ([`c6b3763`](https://github.com/DS4SD/docling/commit/c6b3763ecb6ef862840a30978ee177b907f86505))
+
+### Fix
+
+* Configure env prefix for docling settings ([#315](https://github.com/DS4SD/docling/issues/315)) ([`5d4a10b`](https://github.com/DS4SD/docling/commit/5d4a10b121317fa481208dacbee47032b08ff928))
+* Added handling of grouped elements in pptx backend ([#307](https://github.com/DS4SD/docling/issues/307)) ([`81c8243`](https://github.com/DS4SD/docling/commit/81c8243a8bf177feed8f87ea283b5bb6836350cb))
+* Allow mps usage for easyocr ([#286](https://github.com/DS4SD/docling/issues/286)) ([`97f214e`](https://github.com/DS4SD/docling/commit/97f214efddcf66f0734a95c17c08936f6111d113))
+
+### Documentation
+
+* Add navigation indices ([#305](https://github.com/DS4SD/docling/issues/305)) ([`1239ade`](https://github.com/DS4SD/docling/commit/1239ade2750349d13d4e865d88449b232bbad944))
+
+## [v2.4.2](https://github.com/DS4SD/docling/releases/tag/v2.4.2) - 2024-11-08
+
+### Fix
+
+* **EasyOcrModel:** Support the use_gpu pipeline parameter in EasyOcrModel. Initialize easyocr ([#282](https://github.com/DS4SD/docling/issues/282)) ([`0eb065e`](https://github.com/DS4SD/docling/commit/0eb065e9b6e4619d4c412ed98bc7408915ca3f95))
+
+## [v2.4.1](https://github.com/DS4SD/docling/releases/tag/v2.4.1) - 2024-11-08
+
+### Fix
+
+* **tesserocr:** Raise Exception if tesserocr has not loaded any languages ([#279](https://github.com/DS4SD/docling/issues/279)) ([`704d792`](https://github.com/DS4SD/docling/commit/704d792a7997c4ca34f9f9045ed4ae02b4f5df47))
+* Dockerfile example copy command ([#234](https://github.com/DS4SD/docling/issues/234)) ([`90836db`](https://github.com/DS4SD/docling/commit/90836db90accf4a66c9c20544c98452840e3a308))
+
+### Documentation
+
+* Update badges & credits ([#248](https://github.com/DS4SD/docling/issues/248)) ([`a84ec27`](https://github.com/DS4SD/docling/commit/a84ec276b0997c4ba9b32e18e911a966124dc3bc))
+* Add coming-soon section ([#235](https://github.com/DS4SD/docling/issues/235)) ([`5ce02c5`](https://github.com/DS4SD/docling/commit/5ce02c5c598a2efa615ad15f0ead8d752d3ad2ea))
+* Add artifacts-path param to CLI ([#233](https://github.com/DS4SD/docling/issues/233)) ([`d5e65ae`](https://github.com/DS4SD/docling/commit/d5e65aedac23d6849c805a0e88dd06f2a285eb18))
+
 ## [v2.4.0](https://github.com/DS4SD/docling/releases/tag/v2.4.0) - 2024-11-04
 
 ### Feature

@@ -80,6 +80,20 @@ def main():
         }
     )
 
+    # Docling Parse with EasyOCR (CPU only)
+    # ----------------------
+    # pipeline_options = PdfPipelineOptions()
+    # pipeline_options.do_ocr = True
+    # pipeline_options.ocr_options.use_gpu = False  # <-- set this.
+    # pipeline_options.do_table_structure = True
+    # pipeline_options.table_structure_options.do_cell_matching = True
+
+    # doc_converter = DocumentConverter(
+    #     format_options={
+    #         InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+    #     }
+    # )
+
     # Docling Parse with Tesseract
     # ----------------------
     # pipeline_options = PdfPipelineOptions()

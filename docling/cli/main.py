@@ -153,6 +153,13 @@ def convert(
             ..., help="If enabled, the bitmap content will be processed using OCR."
         ),
     ] = True,
+    force_ocr: Annotated[
+        bool,
+        typer.Option(
+            ...,
+            help="Replace any existing text with OCR generated text over the full content.",
+        ),
+    ] = False,
     ocr_engine: Annotated[
         OcrEngine, typer.Option(..., help="The OCR engine to use.")
     ] = OcrEngine.EASYOCR,
@@ -178,6 +185,15 @@ def convert(
     output: Annotated[
         Path, typer.Option(..., help="Output directory where results are saved.")
     ] = Path("."),
+    verbose: Annotated[
+        int,
+        typer.Option(
+            "--verbose",
+            "-v",
+            count=True,
+            help="Set the verbosity level. -v for info logging, -vv for debug logging.",
+        ),
+    ] = 0,
     version: Annotated[
         Optional[bool],
         typer.Option(
@@ -188,7 +204,12 @@ def convert(
         ),
     ] = None,
 ):
-    logging.basicConfig(level=logging.INFO)
+    if verbose == 0:
+        logging.basicConfig(level=logging.WARNING)
+    elif verbose == 1:
+        logging.basicConfig(level=logging.INFO)
+    elif verbose == 2:
+        logging.basicConfig(level=logging.DEBUG)
 
     if from_formats is None:
         from_formats = [e for e in InputFormat]
@@ -219,11 +240,11 @@ def convert(
 
     match ocr_engine:
         case OcrEngine.EASYOCR:
-            ocr_options: OcrOptions = EasyOcrOptions()
+            ocr_options: OcrOptions = EasyOcrOptions(force_full_page_ocr=force_ocr)
         case OcrEngine.TESSERACT_CLI:
-            ocr_options = TesseractCliOcrOptions()
+            ocr_options = TesseractCliOcrOptions(force_full_page_ocr=force_ocr)
         case OcrEngine.TESSERACT:
-            ocr_options = TesseractOcrOptions()
+            ocr_options = TesseractOcrOptions(force_full_page_ocr=force_ocr)
         case _:
             raise RuntimeError(f"Unexpected OCR engine type {ocr_engine}")
 
@@ -279,6 +300,8 @@ def convert(
 
     _log.info(f"All documents were converted in {end_time:.2f} seconds.")
 
+
+click_app = typer.main.get_command(app)
 
 if __name__ == "__main__":
     app()

@@ -9,10 +9,12 @@ from docling_core.types.doc import (
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
+    ImageRef,
     TableCell,
     TableData,
 )
 from lxml import etree
+from PIL import Image
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
@@ -130,14 +132,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def walk_linear(self, body, docx_obj, doc) -> DoclingDocument:
         for element in body:
             tag_name = etree.QName(element).localname
-
-            # Check for Inline Images (drawings or blip elements)
-            found_drawing = etree.ElementBase.xpath(
-                element, ".//w:drawing", namespaces=self.xml_namespaces
-            )
-            found_pict = etree.ElementBase.xpath(
-                element, ".//w:pict", namespaces=self.xml_namespaces
-            )
+            # Check for Inline Images (blip elements)
+            drawing_blip = element.xpath(".//a:blip")
 
             # Check for Tables
             if element.tag.endswith("tbl"):
@@ -146,8 +142,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 except Exception:
                     _log.debug("could not parse a table, broken docx table")
 
-            elif found_drawing or found_pict:
-                self.handle_pictures(element, docx_obj, doc)
+            elif drawing_blip:
+                self.handle_pictures(element, docx_obj, drawing_blip, doc)
             # Check for Text
             elif tag_name in ["p"]:
                 self.handle_text_elements(element, docx_obj, doc)
@@ -201,7 +197,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             label_str = ""
             label_level = 0
             if parts[0] == "Heading":
-                # print("{} - {}".format(parts[0], parts[1]))
                 label_str = parts[0]
                 label_level = self.str_to_int(parts[1], default=None)
             if parts[1] == "Heading":
@@ -217,19 +212,16 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         if paragraph.text is None:
             # _log.warn(f"paragraph has text==None")
             return
-
         text = paragraph.text.strip()
         # if len(text)==0 # keep empty paragraphs, they seperate adjacent lists!
 
         # Common styles for bullet and numbered lists.
         # "List Bullet", "List Number", "List Paragraph"
-        # TODO: reliably identify wether list is a numbered list or not
+        # Identify wether list is a numbered list or not
         # is_numbered = "List Bullet" not in paragraph.style.name
         is_numbered = False
-
         p_style_name, p_level = self.get_label_and_level(paragraph)
         numid, ilevel = self.get_numId_and_ilvl(paragraph)
-        # print("numid: {}, ilevel: {}, text: {}".format(numid, ilevel, text))
 
         if numid == 0:
             numid = None
@@ -450,8 +442,13 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         for row in table.rows:
             # Calculate the max number of columns
             num_cols = max(num_cols, sum(get_colspan(cell) for cell in row.cells))
-            # if row.cells:
-            #     num_cols = max(num_cols, len(row.cells))
+
+        if num_rows == 1 and num_cols == 1:
+            cell_element = table.rows[0].cells[0]
+            # In case we have a table of only 1 cell, we consider it furniture
+            # And proceed processing the content of the cell as though it's in the document body
+            self.walk_linear(cell_element._element, docx_obj, doc)
+            return
 
         # Initialize the table grid
         table_grid = [[None for _ in range(num_cols)] for _ in range(num_rows)]
@@ -491,6 +488,24 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         doc.add_table(data=data, parent=self.parents[level - 1])
         return
 
-    def handle_pictures(self, element, docx_obj, doc):
-        doc.add_picture(parent=self.parents[self.level], caption=None)
+    def handle_pictures(self, element, docx_obj, drawing_blip, doc):
+        def get_docx_image(element, drawing_blip):
+            rId = drawing_blip[0].get(
+                "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed"
+            )
+            if rId in docx_obj.part.rels:
+                # Access the image part using the relationship ID
+                image_part = docx_obj.part.rels[rId].target_part
+                image_data = image_part.blob  # Get the binary image data
+            return image_data
+
+        image_data = get_docx_image(element, drawing_blip)
+        image_bytes = BytesIO(image_data)
+        # Open the BytesIO object with PIL to create an Image
+        pil_image = Image.open(image_bytes)
+        doc.add_picture(
+            parent=self.parents[self.level],
+            image=ImageRef.from_pil(image=pil_image, dpi=72),
+            caption=None,
+        )
         return
