@@ -14,8 +14,8 @@ from docling_core.types.doc import (
 from lxml import etree
 from openpyxl import Workbook, load_workbook
 from openpyxl.cell.cell import Cell
-from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.drawing.image import Image
+from openpyxl.worksheet.worksheet import Worksheet
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
@@ -127,9 +127,9 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         doc = self.find_images_in_sheet(doc, sheet)
 
         return doc
-        
+
     def find_tables_in_sheet(self, doc: DoclingDocument, sheet: Worksheet):
-        
+
         tables = self.find_data_tables(sheet)
 
         for excel_table in tables:
@@ -160,7 +160,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
             doc.add_table(data=table_data, parent=self.parents[0])
 
         return doc
-    
+
     def find_data_tables(self, sheet: Worksheet):
         """
         Find all compact rectangular data tables in a sheet.
@@ -263,7 +263,9 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
             "data": data,
         }, visited_cells
 
-    def find_images_in_sheet(self, doc: DoclingDocument, sheet: Worksheet) -> DoclingDocument:
+    def find_images_in_sheet(
+        self, doc: DoclingDocument, sheet: Worksheet
+    ) -> DoclingDocument:
 
         # FIXME
         """
@@ -273,7 +275,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
             image_path = f"{output_folder}/{sheet_name}_image_{idx + 1}.png"
             with open(image_path, "wb") as img_file:
                 img_file.write(image.ref.blob)
-            print(f"Image saved to: {image_path}")        
+            print(f"Image saved to: {image_path}")
         """
 
         return doc
