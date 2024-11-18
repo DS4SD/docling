@@ -273,6 +273,8 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         # Get the image bytes
         image = shape.image
         image_bytes = image.blob
+        im_dpi, _ = image.dpi
+
         # Open it with PIL
         pil_image = Image.open(BytesIO(image_bytes))
 
@@ -280,7 +282,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         prov = self.generate_prov(shape, slide_ind, "")
         doc.add_picture(
             parent=parent_slide,
-            image=ImageRef.from_pil(image=pil_image, dpi=72),
+            image=ImageRef.from_pil(image=pil_image, dpi=im_dpi),
             caption=None,
             prov=prov,
         )
