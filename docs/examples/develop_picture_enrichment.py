@@ -39,7 +39,7 @@ class ExamplePictureClassifierEnrichmentModel(BaseEnrichmentModel):
             assert isinstance(element, PictureItem)
 
             # uncomment this to interactively visualize the image
-            # element.image.pil_image.show()
+            # element.get_image(doc).show()
 
             element.annotations.append(
                 PictureClassificationData(
