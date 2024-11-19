@@ -177,8 +177,8 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         """
         Find all compact rectangular data tables in a sheet.
         """
-        #_log.info("find_data_tables")
-        
+        # _log.info("find_data_tables")
+
         tables = []  # List to store found tables
         visited: set[Tuple[int, int]] = set()  # Track already visited cells
 
@@ -199,7 +199,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                 tables.append(table_bounds)
 
         return tables
-    
+
     def _find_table_bounds(
         self,
         sheet: Worksheet,
@@ -217,25 +217,29 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
 
         max_row = self._find_table_bottom(sheet, start_row, start_col)
         max_col = self._find_table_right(sheet, start_row, start_col)
-            
+
         # Collect the data within the bounds
         data = []
         visited_cells = set()
         for ri in range(start_row, max_row + 1):
             for rj in range(start_col, max_col + 1):
-                
+
                 cell = sheet.cell(row=ri + 1, column=rj + 1)  # 1-based indexing
 
                 # Check if the cell belongs to a merged range
                 row_span = 1
                 col_span = 1
 
-                #_log.info(sheet.merged_cells.ranges)
+                # _log.info(sheet.merged_cells.ranges)
                 for merged_range in sheet.merged_cells.ranges:
 
-                    if merged_range.min_row<=ri+1 and ri+1<=merged_range.max_row and \
-                       merged_range.min_col<=rj+1 and rj+1<=merged_range.max_col:
-                        
+                    if (
+                        merged_range.min_row <= ri + 1
+                        and ri + 1 <= merged_range.max_row
+                        and merged_range.min_col <= rj + 1
+                        and rj + 1 <= merged_range.max_col
+                    ):
+
                         row_span = merged_range.max_row - merged_range.min_row + 1
                         col_span = merged_range.max_col - merged_range.min_col + 1
                         break
@@ -243,15 +247,15 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                 if (ri, rj) not in visited_cells:
                     data.append(
                         ExcelCell(
-                            row = ri - start_row,
-                            col = rj - start_col,
+                            row=ri - start_row,
+                            col=rj - start_col,
                             text=str(cell.value),
                             row_span=row_span,
                             col_span=col_span,
                         )
-                    )                    
+                    )
                     # _log.info(f"cell: {ri}, {rj} -> {ri - start_row}, {rj - start_col}, {row_span}, {col_span}: {str(cell.value)}")
-                
+
                     # Mark all cells in the span as visited
                     for span_row in range(ri, ri + row_span):
                         for span_col in range(rj, rj + col_span):
@@ -266,41 +270,41 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
             visited_cells,
         )
 
-    def _find_table_bottom(self, sheet: Worksheet, start_row:int, start_col:int):
+    def _find_table_bottom(self, sheet: Worksheet, start_row: int, start_col: int):
         """Function to find the bottom boundary of the table"""
-        
+
         max_row = start_row
-        
+
         while max_row < sheet.max_row - 1:
             # Get the cell value or check if it is part of a merged cell
             cell = sheet.cell(row=max_row + 2, column=start_col + 1)
-            
+
             # Check if the cell is part of a merged range
             merged_range = next(
                 (mr for mr in sheet.merged_cells.ranges if cell.coordinate in mr),
                 None,
             )
-            
+
             if cell.value is None and not merged_range:
                 break  # Stop if the cell is empty and not merged
 
             # Expand max_row to include the merged range if applicable
             if merged_range:
-                max_row = max(max_row, merged_range.max_row-1)
+                max_row = max(max_row, merged_range.max_row - 1)
             else:
                 max_row += 1
-                
+
         return max_row
 
-    def _find_table_right(self, sheet: Worksheet, start_row:int, start_col:int):
+    def _find_table_right(self, sheet: Worksheet, start_row: int, start_col: int):
         """Function to find the right boundary of the table"""
-        
+
         max_col = start_col
-        
+
         while max_col < sheet.max_column - 1:
             # Get the cell value or check if it is part of a merged cell
             cell = sheet.cell(row=start_row + 1, column=max_col + 2)
-            
+
             # Check if the cell is part of a merged range
             merged_range = next(
                 (mr for mr in sheet.merged_cells.ranges if cell.coordinate in mr),
@@ -309,16 +313,15 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
 
             if cell.value is None and not merged_range:
                 break  # Stop if the cell is empty and not merged
-            
+
             # Expand max_col to include the merged range if applicable
             if merged_range:
-                max_col = max(max_col, merged_range.max_col-1)
+                max_col = max(max_col, merged_range.max_col - 1)
             else:
                 max_col += 1
-                
+
         return max_col
 
-    
     def _find_images_in_sheet(
         self, doc: DoclingDocument, sheet: Worksheet
     ) -> DoclingDocument:
