@@ -12,7 +12,8 @@ from docling_core.types.doc import (
     TableCell,
     TableData,
 )
-from lxml import etree
+
+# from lxml import etree
 from openpyxl import Workbook, load_workbook
 from openpyxl.cell.cell import Cell
 from openpyxl.drawing.image import Image
@@ -23,6 +24,28 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
+
+from typing import Any, List
+
+from pydantic import BaseModel
+
+
+class ExcelCell(BaseModel):
+    row: int
+    col: int
+    text: str  # Any
+    row_span: int
+    col_span: int
+
+
+class ExcelTable(BaseModel):
+    # beg_row: int
+    # beg_col: int
+    # end_row: int
+    # end_col: int
+    num_rows: int
+    num_cols: int
+    data: List[ExcelCell]
 
 
 class MsExcelDocumentBackend(DeclarativeDocumentBackend):
@@ -72,18 +95,18 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         return {InputFormat.XLSX}
 
     def convert(self) -> DoclingDocument:
-        # Parses the DOCX into a structured document model.
+        # Parses the XLSX into a structured document model.
 
         origin = DocumentOrigin(
-            filename=self.file.name or "file",
+            filename=self.file.name or "file.xlsx",
             mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             binary_hash=self.document_hash,
         )
 
-        doc = DoclingDocument(name=self.file.stem or "file", origin=origin)
+        doc = DoclingDocument(name=self.file.stem or "file.xlsx", origin=origin)
 
         if self.is_valid():
-            doc = self.convert_workbook(doc)
+            doc = self._convert_workbook(doc)
         else:
             raise RuntimeError(
                 f"Cannot convert doc with {self.document_hash} because the backend failed to init."
@@ -91,14 +114,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
 
         return doc
 
-    def get_level(self) -> int:
-        """Return the first None index."""
-        for k, v in self.parents.items():
-            if k >= 0 and v == None:
-                return k
-        return 0
-
-    def convert_workbook(self, doc: DoclingDocument) -> DoclingDocument:
+    def _convert_workbook(self, doc: DoclingDocument) -> DoclingDocument:
 
         if self.workbook is not None:
 
@@ -108,34 +124,33 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
 
                 sheet = self.workbook[sheet_name]  # Access the sheet by name
 
-                # level = self.get_level()
                 self.parents[0] = doc.add_group(
-                    parent=None,  # self.parents[level-1],
+                    parent=None,
                     label=GroupLabel.SECTION,
                     name=f"sheet: {sheet_name}",
                 )
 
-                doc = self.convert_sheet(doc, sheet)
+                doc = self._convert_sheet(doc, sheet)
         else:
             _log.error("Workbook is not initialized.")
 
         return doc
 
-    def convert_sheet(self, doc: DoclingDocument, sheet: Worksheet):
+    def _convert_sheet(self, doc: DoclingDocument, sheet: Worksheet):
 
-        doc = self.find_tables_in_sheet(doc, sheet)
+        doc = self._find_tables_in_sheet(doc, sheet)
 
-        doc = self.find_images_in_sheet(doc, sheet)
+        doc = self._find_images_in_sheet(doc, sheet)
 
         return doc
 
-    def find_tables_in_sheet(self, doc: DoclingDocument, sheet: Worksheet):
+    def _find_tables_in_sheet(self, doc: DoclingDocument, sheet: Worksheet):
 
-        tables = self.find_data_tables(sheet)
+        tables = self._find_data_tables(sheet)
 
         for excel_table in tables:
-            num_rows = excel_table["num_rows"]
-            num_cols = excel_table["num_cols"]
+            num_rows = excel_table.num_rows
+            num_cols = excel_table.num_cols
 
             table_data = TableData(
                 num_rows=num_rows,
@@ -143,16 +158,16 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                 table_cells=[],
             )
 
-            for excel_cell in excel_table["data"]:
+            for excel_cell in excel_table.data:
 
                 cell = TableCell(
-                    text=str(excel_cell["cell"].value),
-                    row_span=excel_cell["row_span"],
-                    col_span=excel_cell["col_span"],
-                    start_row_offset_idx=excel_cell["row"],
-                    end_row_offset_idx=excel_cell["row"] + excel_cell["row_span"],
-                    start_col_offset_idx=excel_cell["col"],
-                    end_col_offset_idx=excel_cell["col"] + excel_cell["col_span"],
+                    text=excel_cell.text,
+                    row_span=excel_cell.row_span,
+                    col_span=excel_cell.col_span,
+                    start_row_offset_idx=excel_cell.row,
+                    end_row_offset_idx=excel_cell.row + excel_cell.row_span,
+                    start_col_offset_idx=excel_cell.col,
+                    end_col_offset_idx=excel_cell.col + excel_cell.col_span,
                     col_header=False,  # col_header,
                     row_header=False,  # ((not col_header) and html_cell.name=='th')
                 )
@@ -162,7 +177,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
 
         return doc
 
-    def find_data_tables(self, sheet: Worksheet):
+    def _find_data_tables(self, sheet: Worksheet):
         """
         Find all compact rectangular data tables in a sheet.
         """
@@ -179,7 +194,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                     continue
 
                 # If the cell starts a new table, find its bounds
-                table_bounds, visited_cells = self.find_table_bounds(
+                table_bounds, visited_cells = self._find_table_bounds(
                     sheet, ri, rj, visited
                 )
 
@@ -188,7 +203,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
 
         return tables
 
-    def find_table_bounds(
+    def _find_table_bounds(
         self,
         sheet: Worksheet,
         start_row: int,
@@ -224,7 +239,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         data = []
         visited_cells = set()
         for ri in range(start_row, max_row + 1):
-            # row_data = []
+
             for rj in range(start_col, max_col + 1):
 
                 cell = sheet.cell(row=ri + 1, column=rj + 1)  # 1-based indexing
@@ -240,13 +255,13 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                         break
 
                 data.append(
-                    {
-                        "row": ri - start_row,
-                        "col": rj - start_col,
-                        "cell": cell,
-                        "row_span": row_span,
-                        "col_span": col_span,
-                    }
+                    ExcelCell(
+                        row=ri - start_row,
+                        col=rj - start_col,
+                        text=str(cell.value),
+                        row_span=row_span,
+                        col_span=col_span,
+                    )
                 )
 
                 # Mark all cells in the span as visited
@@ -254,17 +269,16 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                     for span_col in range(rj, rj + col_span):
                         visited_cells.add((span_row, span_col))
 
-        return {
-            "beg_row": start_row,
-            "beg_col": start_col,
-            "end_row": max_row,
-            "end_col": max_col,
-            "num_rows": max_row + 1 - start_row,
-            "num_cols": max_col + 1 - start_col,
-            "data": data,
-        }, visited_cells
+        return (
+            ExcelTable(
+                num_rows=max_row + 1 - start_row,
+                num_cols=max_col + 1 - start_col,
+                data=data,
+            ),
+            visited_cells,
+        )
 
-    def find_images_in_sheet(
+    def _find_images_in_sheet(
         self, doc: DoclingDocument, sheet: Worksheet
     ) -> DoclingDocument:
 

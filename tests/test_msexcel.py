@@ -11,7 +11,7 @@ from docling.datamodel.document import (
 )
 from docling.document_converter import DocumentConverter
 
-GENERATE = True
+GENERATE = False
 
 
 def get_xlsx_paths():
