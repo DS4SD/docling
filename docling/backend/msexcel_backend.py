@@ -177,7 +177,8 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         """
         Find all compact rectangular data tables in a sheet.
         """
-
+        #_log.info("find_data_tables")
+        
         tables = []  # List to store found tables
         visited: set[Tuple[int, int]] = set()  # Track already visited cells
 
@@ -198,7 +199,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                 tables.append(table_bounds)
 
         return tables
-
+    
     def _find_table_bounds(
         self,
         sheet: Worksheet,
@@ -214,56 +215,47 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         """
         _log.info("find_table_bounds")
 
-        max_row = start_row
-        max_col = start_col
-
-        # Expand downward to find the table's bottom boundary
-        while (
-            max_row < sheet.max_row - 1
-            and sheet.cell(row=max_row + 2, column=start_col + 1).value is not None
-        ):
-            max_row += 1
-
-        # Expand rightward to find the table's right boundary
-        while (
-            max_col < sheet.max_column - 1
-            and sheet.cell(row=start_row + 1, column=max_col + 2).value is not None
-        ):
-            max_col += 1
-
+        max_row = self._find_table_bottom(sheet, start_row, start_col)
+        max_col = self._find_table_right(sheet, start_row, start_col)
+            
         # Collect the data within the bounds
         data = []
         visited_cells = set()
         for ri in range(start_row, max_row + 1):
-
             for rj in range(start_col, max_col + 1):
-
+                
                 cell = sheet.cell(row=ri + 1, column=rj + 1)  # 1-based indexing
 
                 # Check if the cell belongs to a merged range
                 row_span = 1
                 col_span = 1
+
+                #_log.info(sheet.merged_cells.ranges)
                 for merged_range in sheet.merged_cells.ranges:
-                    if (ri + 1, rj + 1) in merged_range:
-                        # Calculate the spans
+
+                    if merged_range.min_row<=ri+1 and ri+1<=merged_range.max_row and \
+                       merged_range.min_col<=rj+1 and rj+1<=merged_range.max_col:
+                        
                         row_span = merged_range.max_row - merged_range.min_row + 1
                         col_span = merged_range.max_col - merged_range.min_col + 1
                         break
 
-                data.append(
-                    ExcelCell(
-                        row=ri - start_row,
-                        col=rj - start_col,
-                        text=str(cell.value),
-                        row_span=row_span,
-                        col_span=col_span,
-                    )
-                )
-
-                # Mark all cells in the span as visited
-                for span_row in range(ri, ri + row_span):
-                    for span_col in range(rj, rj + col_span):
-                        visited_cells.add((span_row, span_col))
+                if (ri, rj) not in visited_cells:
+                    data.append(
+                        ExcelCell(
+                            row = ri - start_row,
+                            col = rj - start_col,
+                            text=str(cell.value),
+                            row_span=row_span,
+                            col_span=col_span,
+                        )
+                    )                    
+                    # _log.info(f"cell: {ri}, {rj} -> {ri - start_row}, {rj - start_col}, {row_span}, {col_span}: {str(cell.value)}")
+                
+                    # Mark all cells in the span as visited
+                    for span_row in range(ri, ri + row_span):
+                        for span_col in range(rj, rj + col_span):
+                            visited_cells.add((span_row, span_col))
 
         return (
             ExcelTable(
@@ -274,6 +266,59 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
             visited_cells,
         )
 
+    def _find_table_bottom(self, sheet: Worksheet, start_row:int, start_col:int):
+        """Function to find the bottom boundary of the table"""
+        
+        max_row = start_row
+        
+        while max_row < sheet.max_row - 1:
+            # Get the cell value or check if it is part of a merged cell
+            cell = sheet.cell(row=max_row + 2, column=start_col + 1)
+            
+            # Check if the cell is part of a merged range
+            merged_range = next(
+                (mr for mr in sheet.merged_cells.ranges if cell.coordinate in mr),
+                None,
+            )
+            
+            if cell.value is None and not merged_range:
+                break  # Stop if the cell is empty and not merged
+
+            # Expand max_row to include the merged range if applicable
+            if merged_range:
+                max_row = max(max_row, merged_range.max_row-1)
+            else:
+                max_row += 1
+                
+        return max_row
+
+    def _find_table_right(self, sheet: Worksheet, start_row:int, start_col:int):
+        """Function to find the right boundary of the table"""
+        
+        max_col = start_col
+        
+        while max_col < sheet.max_column - 1:
+            # Get the cell value or check if it is part of a merged cell
+            cell = sheet.cell(row=start_row + 1, column=max_col + 2)
+            
+            # Check if the cell is part of a merged range
+            merged_range = next(
+                (mr for mr in sheet.merged_cells.ranges if cell.coordinate in mr),
+                None,
+            )
+
+            if cell.value is None and not merged_range:
+                break  # Stop if the cell is empty and not merged
+            
+            # Expand max_col to include the merged range if applicable
+            if merged_range:
+                max_col = max(max_col, merged_range.max_col-1)
+            else:
+                max_col += 1
+                
+        return max_col
+
+    
     def _find_images_in_sheet(
         self, doc: DoclingDocument, sheet: Worksheet
     ) -> DoclingDocument:
