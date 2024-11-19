@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import Set, Tuple, Union
 
 from docling_core.types.doc import (
-    DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
@@ -33,16 +32,12 @@ from pydantic import BaseModel
 class ExcelCell(BaseModel):
     row: int
     col: int
-    text: str  # Any
+    text: str
     row_span: int
     col_span: int
 
 
 class ExcelTable(BaseModel):
-    # beg_row: int
-    # beg_col: int
-    # end_row: int
-    # end_col: int
     num_rows: int
     num_cols: int
     data: List[ExcelCell]
@@ -56,7 +51,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         # Initialise the parents for the hierarchy
         self.max_levels = 10
 
-        self.parents = {}  # type: ignore
+        self.parents = {}
         for i in range(-1, self.max_levels):
             self.parents[i] = None
 
@@ -122,7 +117,8 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
             for sheet_name in self.workbook.sheetnames:
                 _log.info(f"Processing sheet: {sheet_name}")
 
-                sheet = self.workbook[sheet_name]  # Access the sheet by name
+                # Access the sheet by name
+                sheet = self.workbook[sheet_name]  
 
                 self.parents[0] = doc.add_group(
                     parent=None,
@@ -168,8 +164,8 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                     end_row_offset_idx=excel_cell.row + excel_cell.row_span,
                     start_col_offset_idx=excel_cell.col,
                     end_col_offset_idx=excel_cell.col + excel_cell.col_span,
-                    col_header=False,  # col_header,
-                    row_header=False,  # ((not col_header) and html_cell.name=='th')
+                    col_header=False,
+                    row_header=False,
                 )
                 table_data.table_cells.append(cell)
 
