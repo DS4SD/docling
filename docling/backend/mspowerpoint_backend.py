@@ -10,11 +10,13 @@ from docling_core.types.doc import (
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
+    ImageRef,
     ProvenanceItem,
     Size,
     TableCell,
     TableData,
 )
+from PIL import Image
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
 
@@ -268,9 +270,22 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         return
 
     def handle_pictures(self, shape, parent_slide, slide_ind, doc):
+        # Get the image bytes
+        image = shape.image
+        image_bytes = image.blob
+        im_dpi, _ = image.dpi
+
+        # Open it with PIL
+        pil_image = Image.open(BytesIO(image_bytes))
+
         # shape has picture
         prov = self.generate_prov(shape, slide_ind, "")
-        doc.add_picture(parent=parent_slide, caption=None, prov=prov)
+        doc.add_picture(
+            parent=parent_slide,
+            image=ImageRef.from_pil(image=pil_image, dpi=im_dpi),
+            caption=None,
+            prov=prov,
+        )
         return
 
     def handle_tables(self, shape, parent_slide, slide_ind, doc):
