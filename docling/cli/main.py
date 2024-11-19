@@ -129,6 +129,12 @@ def export_documents(
     )
 
 
+def _comma_split(raw: Optional[str]) -> Optional[List[str]]:
+    if raw is None:
+        return None
+    return raw.split(",")
+
+
 @app.command(no_args_is_help=True)
 def convert(
     input_sources: Annotated[
@@ -163,6 +169,13 @@ def convert(
     ocr_engine: Annotated[
         OcrEngine, typer.Option(..., help="The OCR engine to use.")
     ] = OcrEngine.EASYOCR,
+    ocr_lang: Annotated[
+        Optional[str],
+        typer.Option(
+            ...,
+            help="Provide a comma-separated list of languages used by the OCR engine. Note that each OCR engine has different values for the language names.",
+        ),
+    ] = None,
     pdf_backend: Annotated[
         PdfBackend, typer.Option(..., help="The PDF backend to use.")
     ] = PdfBackend.DLPARSE_V1,
@@ -247,6 +260,10 @@ def convert(
             ocr_options = TesseractOcrOptions(force_full_page_ocr=force_ocr)
         case _:
             raise RuntimeError(f"Unexpected OCR engine type {ocr_engine}")
+
+    ocr_lang_list = _comma_split(ocr_lang)
+    if ocr_lang_list is not None:
+        ocr_options.lang = ocr_lang_list
 
     pipeline_options = PdfPipelineOptions(
         do_ocr=ocr,
