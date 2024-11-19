@@ -1,7 +1,7 @@
 import logging
 from io import BytesIO
 from pathlib import Path
-from typing import Set, Tuple, Union
+from typing import Dict, Set, Tuple, Union
 
 from docling_core.types.doc import (
     DoclingDocument,
@@ -51,7 +51,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         # Initialise the parents for the hierarchy
         self.max_levels = 10
 
-        self.parents = {}
+        self.parents: Dict[int, Any] = {}
         for i in range(-1, self.max_levels):
             self.parents[i] = None
 
@@ -118,7 +118,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                 _log.info(f"Processing sheet: {sheet_name}")
 
                 # Access the sheet by name
-                sheet = self.workbook[sheet_name]  
+                sheet = self.workbook[sheet_name]
 
                 self.parents[0] = doc.add_group(
                     parent=None,
