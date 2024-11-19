@@ -1,6 +1,7 @@
 import importlib
 import json
 import logging
+import re
 import time
 import warnings
 from enum import Enum
@@ -129,10 +130,10 @@ def export_documents(
     )
 
 
-def _comma_split(raw: Optional[str]) -> Optional[List[str]]:
+def _split_list(raw: Optional[str]) -> Optional[List[str]]:
     if raw is None:
         return None
-    return raw.split(",")
+    return re.split(r"[;,]", raw)
 
 
 @app.command(no_args_is_help=True)
@@ -261,7 +262,7 @@ def convert(
         case _:
             raise RuntimeError(f"Unexpected OCR engine type {ocr_engine}")
 
-    ocr_lang_list = _comma_split(ocr_lang)
+    ocr_lang_list = _split_list(ocr_lang)
     if ocr_lang_list is not None:
         ocr_options.lang = ocr_lang_list
 
