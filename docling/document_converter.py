@@ -12,6 +12,7 @@ from docling.backend.asciidoc_backend import AsciiDocBackend
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.html_backend import HTMLDocumentBackend
 from docling.backend.md_backend import MarkdownDocumentBackend
+from docling.backend.msexcel_backend import MsExcelDocumentBackend
 from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
@@ -42,6 +43,11 @@ class FormatOption(BaseModel):
         if self.pipeline_options is None:
             self.pipeline_options = self.pipeline_cls.get_default_options()
         return self
+
+
+class ExcelFormatOption(FormatOption):
+    pipeline_cls: Type = SimplePipeline
+    backend: Type[AbstractDocumentBackend] = MsExcelDocumentBackend
 
 
 class WordFormatOption(FormatOption):
@@ -80,6 +86,9 @@ class ImageFormatOption(FormatOption):
 
 
 _format_to_default_options = {
+    InputFormat.XLSX: FormatOption(
+        pipeline_cls=SimplePipeline, backend=MsExcelDocumentBackend
+    ),
     InputFormat.DOCX: FormatOption(
         pipeline_cls=SimplePipeline, backend=MsWordDocumentBackend
     ),

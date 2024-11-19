@@ -47,6 +47,7 @@ python-pptx = "^1.0.2"
 beautifulsoup4 = "^4.12.3"
 pandas = "^2.1.4"
 marko = "^2.1.2"
+openpyxl = "^3.1.5"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
@@ -65,6 +66,7 @@ pandas-stubs = "^2.1.4.231227"
 ipykernel = "^6.29.5"
 ipywidgets = "^8.1.5"
 nbqa = "^1.9.0"
+types-openpyxl = "^3.1.5.20241114"
 
 [tool.poetry.group.docs.dependencies]
 mkdocs-material = "^9.5.40"
