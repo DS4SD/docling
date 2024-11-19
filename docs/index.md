@@ -2,8 +2,8 @@
 
 <p align="center">
   <img loading="lazy" alt="Docling" src="assets/docling_processing.png" width="100%" />
+  <a href="https://trendshift.io/repositories/12132" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12132" alt="DS4SD%2Fdocling | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 </p>
-
 
 [![arXiv](https://img.shields.io/badge/arXiv-2408.09869-b31b1b.svg)](https://arxiv.org/abs/2408.09869)
 [![PyPI version](https://img.shields.io/pypi/v/docling)](https://pypi.org/project/docling/)
@@ -22,7 +22,16 @@ Docling parses documents and exports them to the desired format with ease and sp
 * 🗂️ Reads popular document formats (PDF, DOCX, PPTX, Images, HTML, AsciiDoc, Markdown) and exports to Markdown and JSON
 * 📑 Advanced PDF document understanding incl. page layout, reading order & table structures
 * 🧩 Unified, expressive [DoclingDocument](./concepts/docling_document.md) representation format
-* 📝 Metadata extraction, including title, authors, references & language
-* 🤖 Seamless LlamaIndex 🦙 & LangChain 🦜🔗 integration for powerful RAG / QA applications
+* 🤖 Easy integration with LlamaIndex 🦙 & LangChain 🦜🔗 for powerful RAG / QA applications
 * 🔍 OCR support for scanned PDFs
 * 💻 Simple and convenient CLI
+
+### Coming soon
+
+* ♾️ Equation & code extraction
+* 📝 Metadata extraction, including title, authors, references & language
+* 🦜🔗 Native LangChain extension
+
+## IBM ❤️ Open Source AI
+
+Docling has been brought to you by IBM.

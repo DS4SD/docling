@@ -2,7 +2,7 @@
 
 ### Convert a single document
 
-To convert invidual PDF documents, use `convert()`, for example:
+To convert individual PDF documents, use `convert()`, for example:
 
 ```python
 from docling.document_converter import DocumentConverter
@@ -22,43 +22,7 @@ A simple example would look like this:
 docling https://arxiv.org/pdf/2206.01062
 ```
 
-To see all available options (export formats etc.) run `docling --help`.
-
-<details>
-  <summary><b>CLI reference</b></summary>
-
-Here are the available options as of this writing (for an up-to-date listing, run `docling --help`):
-
-```console
-$ docling --help
-
- Usage: docling [OPTIONS] source
-
-╭─ Arguments ───────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    input_sources      source  PDF files to convert. Can be local file / directory paths or URL. [default: None]         │
-│                                 [required]                                                                                │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --from                                     [docx|pptx|html|image|pdf]         Specify input formats to convert from.      │
-│                                                                               Defaults to all formats.                    │
-│                                                                               [default: None]                             │
-│ --to                                       [md|json|text|doctags]             Specify output formats. Defaults to         │
-│                                                                               Markdown.                                   │
-│                                                                               [default: None]                             │
-│ --ocr               --no-ocr                                                  If enabled, the bitmap content will be      │
-│                                                                               processed using OCR.                        │
-│                                                                               [default: ocr]                              │
-│ --ocr-engine                               [easyocr|tesseract_cli|tesseract]  The OCR engine to use. [default: easyocr]   │
-│ --abort-on-error    --no-abort-on-error                                       If enabled, the bitmap content will be      │
-│                                                                               processed using OCR.                        │
-│                                                                               [default: no-abort-on-error]                │
-│ --output                                   PATH                               Output directory where results are saved.   │
-│                                                                               [default: .]                                │
-│ --version                                                                     Show version information.                   │
-│ --help                                                                        Show this message and exit.                 │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-```
-</details>
+To see all available options (export formats etc.) run `docling --help`. More details in the [CLI reference page](./cli.md).
 
 
 
@@ -108,6 +72,29 @@ doc_converter = DocumentConverter(
 )
 ```
 
+##### Provide specific artifacts path
+
+By default, artifacts such as models are downloaded automatically upon first usage. If you would prefer to use a local path where the artifacts have been explicitly prefetched, you can do that as follows:
+
+```python
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
+from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
+
+# # to explicitly prefetch:
+# artifacts_path = StandardPdfPipeline.download_models_hf()
+
+artifacts_path = "/local/path/to/artifacts"
+
+pipeline_options = PdfPipelineOptions(artifacts_path=artifacts_path)
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+    }
+)
+```
+
 #### Impose limits on the document size
 
 You can limit the file size and number of pages which should be allowed to process per document:
@@ -131,7 +118,7 @@ from docling.datamodel.base_models import DocumentStream
 from docling.document_converter import DocumentConverter
 
 buf = BytesIO(your_binary_stream)
-source = DocumentStream(filename="my_doc.pdf", stream=buf)
+source = DocumentStream(name="my_doc.pdf", stream=buf)
 converter = DocumentConverter()
 result = converter.convert(source)
 ```

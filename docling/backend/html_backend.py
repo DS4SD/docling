@@ -147,6 +147,9 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         elif element.name in ["p"]:
             if self.is_body():
                 self.handle_paragraph(element, idx, doc)
+        elif element.name in ["pre"]:
+            if self.is_body():
+                self.handle_code(element, idx, doc)
         elif element.name in ["ul", "ol"]:
             if self.is_body():
                 self.handle_list(element, idx, doc)
@@ -260,6 +263,16 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 text=text,
                 level=hlevel,
             )
+
+    def handle_code(self, element, idx, doc):
+        """Handles monospace code snippets (pre)."""
+        if element.text is None:
+            return
+        text = element.text.strip()
+        label = DocItemLabel.CODE
+        if len(text) == 0:
+            return
+        doc.add_text(parent=self.parents[self.level], label=label, text=text)
 
     def handle_paragraph(self, element, idx, doc):
         """Handles paragraph tags (p)."""

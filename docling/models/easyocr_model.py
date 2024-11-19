@@ -2,9 +2,10 @@ import logging
 from typing import Iterable
 
 import numpy
+import torch
 from docling_core.types.doc import BoundingBox, CoordOrigin
 
-from docling.datamodel.base_models import OcrCell, Page
+from docling.datamodel.base_models import Cell, OcrCell, Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import EasyOcrOptions
 from docling.datamodel.settings import settings
@@ -32,6 +33,7 @@ class EasyOcrModel(BaseOcrModel):
 
             self.reader = easyocr.Reader(
                 lang_list=self.options.lang,
+                gpu=self.options.use_gpu,
                 model_storage_directory=self.options.model_storage_directory,
                 download_enabled=self.options.download_enabled,
             )
@@ -86,12 +88,8 @@ class EasyOcrModel(BaseOcrModel):
                         ]
                         all_ocr_cells.extend(cells)
 
-                    ## Remove OCR cells which overlap with programmatic cells.
-                    filtered_ocr_cells = self.filter_ocr_cells(
-                        all_ocr_cells, page.cells
-                    )
-
-                    page.cells.extend(filtered_ocr_cells)
+                    # Post-process the cells
+                    page.cells = self.post_process_cells(all_ocr_cells, page.cells)
 
                 # DEBUG code:
                 if settings.debug.visualize_ocr:

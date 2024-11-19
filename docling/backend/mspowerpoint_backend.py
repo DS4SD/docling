@@ -10,11 +10,13 @@ from docling_core.types.doc import (
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
+    ImageRef,
     ProvenanceItem,
     Size,
     TableCell,
     TableData,
 )
+from PIL import Image
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
 
@@ -268,9 +270,22 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         return
 
     def handle_pictures(self, shape, parent_slide, slide_ind, doc):
+        # Get the image bytes
+        image = shape.image
+        image_bytes = image.blob
+        im_dpi, _ = image.dpi
+
+        # Open it with PIL
+        pil_image = Image.open(BytesIO(image_bytes))
+
         # shape has picture
         prov = self.generate_prov(shape, slide_ind, "")
-        doc.add_picture(parent=parent_slide, caption=None, prov=prov)
+        doc.add_picture(
+            parent=parent_slide,
+            image=ImageRef.from_pil(image=pil_image, dpi=im_dpi),
+            caption=None,
+            prov=prov,
+        )
         return
 
     def handle_tables(self, shape, parent_slide, slide_ind, doc):
@@ -358,41 +373,36 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
 
             size = Size(width=slide_width, height=slide_height)
             parent_page = doc.add_page(page_no=slide_ind + 1, size=size)
-            # parent_page = doc.add_page(page_no=slide_ind, size=size, hash=hash)
 
-            # Loop through each shape in the slide
-            for shape in slide.shapes:
-
+            def handle_shapes(shape, parent_slide, slide_ind, doc):
+                handle_groups(shape, parent_slide, slide_ind, doc)
                 if shape.has_table:
                     # Handle Tables
                     self.handle_tables(shape, parent_slide, slide_ind, doc)
-
                 if shape.shape_type == MSO_SHAPE_TYPE.PICTURE:
-                    # Handle Tables
+                    # Handle Pictures
                     self.handle_pictures(shape, parent_slide, slide_ind, doc)
-
                 # If shape doesn't have any text, move on to the next shape
                 if not hasattr(shape, "text"):
-                    continue
+                    return
                 if shape.text is None:
-                    continue
+                    return
                 if len(shape.text.strip()) == 0:
-                    continue
+                    return
                 if not shape.has_text_frame:
-                    _log.warn("Warning: shape has text but not text_frame")
-                    continue
-
-                # if shape.is_placeholder:
-                # Handle Titles (Headers) and Subtitles
-                # Check if the shape is a placeholder (titles are placeholders)
-                # self.handle_title(shape, parent_slide, slide_ind, doc)
-                # self.handle_text_elements(shape, parent_slide, slide_ind, doc)
-                # else:
-
+                    _log.warning("Warning: shape has text but not text_frame")
+                    return
                 # Handle other text elements, including lists (bullet lists, numbered lists)
                 self.handle_text_elements(shape, parent_slide, slide_ind, doc)
+                return
 
-                # figures...
-                # doc.add_figure(data=BaseFigureData(), parent=self.parents[self.level], caption=None)
+            def handle_groups(shape, parent_slide, slide_ind, doc):
+                if shape.shape_type == MSO_SHAPE_TYPE.GROUP:
+                    for groupedshape in shape.shapes:
+                        handle_shapes(groupedshape, parent_slide, slide_ind, doc)
+
+            # Loop through each shape in the slide
+            for shape in slide.shapes:
+                handle_shapes(shape, parent_slide, slide_ind, doc)
 
         return doc

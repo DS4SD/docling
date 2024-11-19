@@ -6,6 +6,10 @@
 
 # Docling
 
+<p align="center">
+  <a href="https://trendshift.io/repositories/12132" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12132" alt="DS4SD%2Fdocling | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+</p>
+
 [![arXiv](https://img.shields.io/badge/arXiv-2408.09869-b31b1b.svg)](https://arxiv.org/abs/2408.09869)
 [![Docs](https://img.shields.io/badge/docs-live-brightgreen)](https://ds4sd.github.io/docling/)
 [![PyPI version](https://img.shields.io/pypi/v/docling)](https://pypi.org/project/docling/)
@@ -19,19 +23,22 @@
 
 Docling parses documents and exports them to the desired format with ease and speed.
 
-
 ## Features
 
 * 🗂️ Reads popular document formats (PDF, DOCX, PPTX, Images, HTML, AsciiDoc, Markdown) and exports to Markdown and JSON
 * 📑 Advanced PDF document understanding including page layout, reading order & table structures
 * 🧩 Unified, expressive [DoclingDocument](https://ds4sd.github.io/docling/concepts/docling_document/) representation format
-* 📝 Metadata extraction, including title, authors, references & language
-* 🤖 Seamless LlamaIndex 🦙 & LangChain 🦜🔗 integration for powerful RAG / QA applications
+* 🤖 Easy integration with LlamaIndex 🦙 & LangChain 🦜🔗 for powerful RAG / QA applications
 * 🔍 OCR support for scanned PDFs
 * 💻 Simple and convenient CLI
 
 Explore the [documentation](https://ds4sd.github.io/docling/) to discover plenty examples and unlock the full power of Docling!
 
+### Coming soon
+
+* ♾️ Equation & code extraction
+* 📝 Metadata extraction, including title, authors, references & language
+* 🦜🔗 Native LangChain extension
 
 ## Installation
 
@@ -57,15 +64,12 @@ result = converter.convert(source)
 print(result.document.export_to_markdown())  # output: "## Docling Technical Report[...]"
 ```
 
-
 Check out [Getting started](https://ds4sd.github.io/docling/).
 You will find lots of tuning options to leverage all the advanced capabilities.
-
 
 ## Get help and support
 
 Please feel free to connect with us using the [discussion section](https://github.com/DS4SD/docling/discussions).
-
 
 ## Technical report
 
@@ -74,7 +78,6 @@ For more details on Docling's inner workings, check out the [Docling Technical R
 ## Contributing
 
 Please read [Contributing to Docling](https://github.com/DS4SD/docling/blob/main/CONTRIBUTING.md) for details.
-
 
 ## References
 
@@ -95,5 +98,9 @@ If you use Docling in your projects, please consider citing the following:
 
 ## License
 
-The Docling codebase is under MIT license. 
+The Docling codebase is under MIT license.
 For individual model usage, please refer to the model licenses found in the original packages.
+
+## IBM ❤️ Open Source AI
+
+Docling has been brought to you by IBM.

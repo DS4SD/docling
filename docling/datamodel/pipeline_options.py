@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 from pathlib import Path
 from typing import List, Literal, Optional, Union
 
@@ -6,8 +6,8 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class TableFormerMode(str, Enum):
-    FAST = auto()
-    ACCURATE = auto()
+    FAST = "fast"
+    ACCURATE = "accurate"
 
 
 class TableStructureOptions(BaseModel):
@@ -22,6 +22,7 @@ class TableStructureOptions(BaseModel):
 
 class OcrOptions(BaseModel):
     kind: str
+    force_full_page_ocr: bool = False  # If enabled a full page OCR is always applied
     bitmap_area_threshold: float = (
         0.05  # percentage of the area for a bitmap to processed with OCR
     )
