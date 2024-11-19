@@ -28,7 +28,6 @@ def main():
     pipeline_options = PdfPipelineOptions()
     pipeline_options.images_scale = IMAGE_RESOLUTION_SCALE
     pipeline_options.generate_page_images = True
-    pipeline_options.generate_table_images = True
     pipeline_options.generate_picture_images = True
 
     doc_converter = DocumentConverter(
@@ -61,7 +60,7 @@ def main():
                 output_dir / f"{doc_filename}-table-{table_counter}.png"
             )
             with element_image_filename.open("wb") as fp:
-                element.image.pil_image.save(fp, "PNG")
+                element.get_image(conv_res.document).save(fp, "PNG")
 
         if isinstance(element, PictureItem):
             picture_counter += 1
@@ -69,7 +68,7 @@ def main():
                 output_dir / f"{doc_filename}-picture-{picture_counter}.png"
             )
             with element_image_filename.open("wb") as fp:
-                element.image.pil_image.save(fp, "PNG")
+                element.get_image(conv_res.document).save(fp, "PNG")
 
     # Save markdown with embedded pictures
     content_md = conv_res.document.export_to_markdown(image_mode=ImageRefMode.EMBEDDED)

@@ -82,4 +82,11 @@ class PdfPipelineOptions(PipelineOptions):
     images_scale: float = 1.0
     generate_page_images: bool = False
     generate_picture_images: bool = False
-    generate_table_images: bool = False
+    generate_table_images: bool = Field(
+        default=False,
+        deprecated=(
+            "Field `generate_table_images` is deprecated. "
+            "To obtain table images, set `PdfPipelineOptions.generate_page_images = True` "
+            "before conversion and then use the `TableItem.get_image` function."
+        ),
+    )
