@@ -1,3 +1,24 @@
+## [v2.6.0](https://github.com/DS4SD/docling/releases/tag/v2.6.0) - 2024-11-19
+
+### Feature
+
+* Added support for exporting DocItem to an image when page image is available ([#379](https://github.com/DS4SD/docling/issues/379)) ([`3f91e7d`](https://github.com/DS4SD/docling/commit/3f91e7d3f166901c139ab036c4d9dad5fa560aa9))
+* Expose ocr-lang in CLI ([#375](https://github.com/DS4SD/docling/issues/375)) ([`ed785ea`](https://github.com/DS4SD/docling/commit/ed785ea122d8d736c2031a38fce81dc5c19e244c))
+* Added excel backend ([#334](https://github.com/DS4SD/docling/issues/334)) ([`926dfd2`](https://github.com/DS4SD/docling/commit/926dfd29d51c52628fe9fe8acb0ad0121c88e58a))
+* Extracting picture data for raster images found in PPTX ([#349](https://github.com/DS4SD/docling/issues/349)) ([`7a97d71`](https://github.com/DS4SD/docling/commit/7a97d7119f69a83042477d4272e8ef93a2252cc8))
+
+### Fix
+
+* Fixing images in the input Word files ([#330](https://github.com/DS4SD/docling/issues/330)) ([`8533039`](https://github.com/DS4SD/docling/commit/8533039b0c0eff131b524da765f15c3279b554c5))
+* Reduce logging by keeping option for more verbose ([#323](https://github.com/DS4SD/docling/issues/323)) ([`8b437ad`](https://github.com/DS4SD/docling/commit/8b437adcde4acc1d309c81c707c264bcca05d394))
+
+### Documentation
+
+* Fixed typo in v2 example v2 ([#378](https://github.com/DS4SD/docling/issues/378)) ([`911c3bd`](https://github.com/DS4SD/docling/commit/911c3bda27c4108167b89fa70ec8204c854c583b))
+* Add automatic generation of CLI reference ([#325](https://github.com/DS4SD/docling/issues/325)) ([`ca8524e`](https://github.com/DS4SD/docling/commit/ca8524ecaea93cca0c808c8e7dee29fda0c1977e))
+* Add architecture outline ([#341](https://github.com/DS4SD/docling/issues/341)) ([`25fd149`](https://github.com/DS4SD/docling/commit/25fd149c3839343f8bd42ae993e35f80acda2a52))
+* Fix parameter in usage.md ([#332](https://github.com/DS4SD/docling/issues/332)) ([`835e077`](https://github.com/DS4SD/docling/commit/835e077b021d0a3615247906dd82ecfa19f3cf98))
+
 ## [v2.5.2](https://github.com/DS4SD/docling/releases/tag/v2.5.2) - 2024-11-13
 
 ### Fix
