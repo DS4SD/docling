@@ -28,7 +28,6 @@ from docling.datamodel.pipeline_options import (
     TableFormerMode,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
-    TableFormerMode,
 )
 from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
 
