@@ -1,3 +1,14 @@
+## [v2.7.0](https://github.com/DS4SD/docling/releases/tag/v2.7.0) - 2024-11-20
+
+### Feature
+
+* Add support for `ocrmac` OCR engine on macOS ([#276](https://github.com/DS4SD/docling/issues/276)) ([`6efa96c`](https://github.com/DS4SD/docling/commit/6efa96c983fc509b2c7b35a4a25a714284f2f782))
+
+### Fix
+
+* Python3.9 support ([#396](https://github.com/DS4SD/docling/issues/396)) ([`7b013ab`](https://github.com/DS4SD/docling/commit/7b013abcf31ba49e2141dfd408bc8c23e8d87d91))
+* Propagate document limits to converter ([#388](https://github.com/DS4SD/docling/issues/388)) ([`32ebf55`](https://github.com/DS4SD/docling/commit/32ebf55e3338dd22f9a23c55595f15835794d961))
+
 ## [v2.6.0](https://github.com/DS4SD/docling/releases/tag/v2.6.0) - 2024-11-19
 
 ### Feature
