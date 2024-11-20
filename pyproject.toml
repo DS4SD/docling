@@ -95,6 +95,7 @@ torchvision = [
 
 [tool.poetry.extras]
 tesserocr = ["tesserocr"]
+paddleocr = ["paddlepaddle", "paddleocr"]
 
 [tool.poetry.scripts]
 docling = "docling.cli.main:app"
