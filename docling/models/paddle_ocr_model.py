@@ -4,13 +4,12 @@ from typing import Iterable
 import numpy
 from docling_core.types.doc import BoundingBox, CoordOrigin
 
-from docling.datamodel.base_models import Cell, OcrCell, Page
+from docling.datamodel.base_models import OcrCell, Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import PaddleOcrOptions
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.utils.profiling import TimeRecorder
-import cv2
 
 _log = logging.getLogger(__name__)
 
@@ -32,7 +31,7 @@ class PaddleOcrModel(BaseOcrModel):
                 )
 
             self.reader = PaddleOCR(
-                lang=self.options.lang,
+                lang=self.options.lang[0],
                 use_gpu=self.options.use_gpu,
                 use_angle_cls=self.options.use_angle_cls, 
                 show_log=self.options.show_log,

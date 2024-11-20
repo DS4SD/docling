@@ -7,6 +7,7 @@ from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
+from docling.models.ocr_mac_model import OcrMacOptions
 from docling.models.tesseract_ocr_cli_model import TesseractCliOcrOptions
 from docling.models.tesseract_ocr_model import TesseractOcrOptions
 
@@ -115,6 +116,20 @@ def main():
     # pipeline_options.do_table_structure = True
     # pipeline_options.table_structure_options.do_cell_matching = True
     # pipeline_options.ocr_options = TesseractCliOcrOptions()
+
+    # doc_converter = DocumentConverter(
+    #     format_options={
+    #         InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+    #     }
+    # )
+
+    # Docling Parse with ocrmac(Mac only)
+    # ----------------------
+    # pipeline_options = PdfPipelineOptions()
+    # pipeline_options.do_ocr = True
+    # pipeline_options.do_table_structure = True
+    # pipeline_options.table_structure_options.do_cell_matching = True
+    # pipeline_options.ocr_options = OcrMacOptions()
 
     # doc_converter = DocumentConverter(
     #     format_options={

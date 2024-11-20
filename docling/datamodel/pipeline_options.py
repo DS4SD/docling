@@ -1,6 +1,6 @@
 from enum import Enum
 from pathlib import Path
-from typing import List, Literal, Optional, Union
+from typing import List, Literal, Optional, Union, Annotated
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -43,7 +43,10 @@ class EasyOcrOptions(OcrOptions):
 
 class PaddleOcrOptions(OcrOptions):
     kind: Literal["paddleocr"] = "paddleocr"
-    lang: str = "en"
+    lang: Annotated[
+        list[str],
+        Field(min_items=1, max_items=1)  # Limits the list length to 0 or 1 items
+    ] = ["en"]
     use_gpu: bool = True  # same default as paddleocr.ocr
     use_angle_cls: bool = True
     show_log: bool = False
@@ -75,6 +78,17 @@ class TesseractOcrOptions(OcrOptions):
     )
 
 
+class OcrMacOptions(OcrOptions):
+    kind: Literal["ocrmac"] = "ocrmac"
+    lang: List[str] = ["fr-FR", "de-DE", "es-ES", "en-US"]
+    recognition: str = "accurate"
+    framework: str = "vision"
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+
+
 class PipelineOptions(BaseModel):
     create_legacy_output: bool = (
         True  # This defautl will be set to False on a future version of docling
@@ -87,9 +101,9 @@ class PdfPipelineOptions(PipelineOptions):
     do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
-    ocr_options: Union[EasyOcrOptions, TesseractCliOcrOptions, TesseractOcrOptions, PaddleOcrOptions] = (
-        Field(EasyOcrOptions(), discriminator="kind")
-    )
+    ocr_options: Union[
+        EasyOcrOptions, TesseractCliOcrOptions, TesseractOcrOptions, PaddleOcrOptions, OcrMacOptions
+    ] = Field(EasyOcrOptions(), discriminator="kind")
 
     images_scale: float = 1.0
     generate_page_images: bool = False
