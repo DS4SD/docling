@@ -183,7 +183,7 @@ class DocumentConverter:
         )
         conv_input = _DocumentConversionInput(
             path_or_stream_iterator=source,
-            limit=limits,
+            limits=limits,
         )
         conv_res_iter = self._convert(conv_input, raises_on_error=raises_on_error)
         for conv_res in conv_res_iter:
