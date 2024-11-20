@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 from typing import List
 
@@ -6,6 +7,7 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
+    OcrMacOptions,
     OcrOptions,
     PdfPipelineOptions,
     TesseractCliOcrOptions,
@@ -58,6 +60,11 @@ def test_e2e_conversions():
         TesseractOcrOptions(force_full_page_ocr=True),
         TesseractCliOcrOptions(force_full_page_ocr=True),
     ]
+
+    # only works on mac
+    if "darwin" == sys.platform:
+        engines.append(OcrMacOptions())
+        engines.append(OcrMacOptions(force_full_page_ocr=True))
 
     for ocr_options in engines:
         print(f"Converting with ocr_engine: {ocr_options.kind}")
