@@ -41,6 +41,18 @@ class EasyOcrOptions(OcrOptions):
         protected_namespaces=(),
     )
 
+class PaddleOcrOptions(OcrOptions):
+    kind: Literal["paddleocr"] = "paddleocr"
+    lang: str = "en"
+    use_gpu: bool = True  # same default as paddleocr.ocr
+    use_angle_cls: bool = True
+    show_log: bool = False
+    cls: bool = True
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+
 
 class TesseractCliOcrOptions(OcrOptions):
     kind: Literal["tesseract"] = "tesseract"
@@ -75,7 +87,7 @@ class PdfPipelineOptions(PipelineOptions):
     do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
-    ocr_options: Union[EasyOcrOptions, TesseractCliOcrOptions, TesseractOcrOptions] = (
+    ocr_options: Union[EasyOcrOptions, TesseractCliOcrOptions, TesseractOcrOptions, PaddleOcrOptions] = (
         Field(EasyOcrOptions(), discriminator="kind")
     )
 
