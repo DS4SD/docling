@@ -7360,9 +7360,10 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 type = ["pytest-mypy"]
 
 [extras]
+ocrmac = ["ocrmac"]
 tesserocr = ["tesserocr"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "22ce94f59bd5912d1d43d3583318fe4672ee1c97a35d5dbec46fb0a222ea09ff"
+content-hash = "a9912d5333298b629d774f669f4e5eb794333d1694ca7f72f56b9a37e51d5776"

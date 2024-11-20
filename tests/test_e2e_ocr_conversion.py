@@ -63,6 +63,7 @@ def test_e2e_conversions():
 
     # only works on mac
     if "darwin" == sys.platform:
+        engines.append(OcrMacOptions())
         engines.append(OcrMacOptions(force_full_page_ocr=True))
 
     for ocr_options in engines:

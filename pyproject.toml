@@ -48,6 +48,7 @@ beautifulsoup4 = "^4.12.3"
 pandas = "^2.1.4"
 marko = "^2.1.2"
 openpyxl = "^3.1.5"
+ocrmac = { version = "^1.0.0", optional = true }
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
@@ -92,10 +93,10 @@ torchvision = [
   {markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'", version = "^0"},
   {markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'", version = "~0.17.2"}
 ]
-ocrmac = {markers = "sys_platform == 'darwin'", version = "^1.0.0", optional = true}
 
 [tool.poetry.extras]
 tesserocr = ["tesserocr"]
+ocrmac = ["ocrmac"]
 
 [tool.poetry.scripts]
 docling = "docling.cli.main:app"
