@@ -92,6 +92,17 @@ Works on macOS, Linux, and Windows, with support for both x86_64 and arm64 archi
     pip install --no-binary :all: tesserocr
     ```
 
+    <h3>ocrmac installation</h3>
+
+    [ocrmac](https://github.com/straussmaximilian/ocrmac) is using
+    Apple's vision(or livetext) framework as OCR backend.
+    For using this engine with Docling, ocrmac must be installed on your system.
+    This only works on macOS systems with newer macOS versions (10.15+).
+
+    ```console
+    pip install ocrmac
+    ```
+
 ## Development setup
 
 To develop Docling features, bugfixes etc., install as follows from your local clone's root dir:
