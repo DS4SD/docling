@@ -3,7 +3,7 @@ import sys
 import time
 from functools import partial
 from pathlib import Path
-from typing import Dict, Iterable, Iterator, List, Optional, Type
+from typing import Dict, Iterable, Iterator, List, Optional, Type, Union
 
 from pydantic import BaseModel, ConfigDict, model_validator, validate_call
 
@@ -155,7 +155,7 @@ class DocumentConverter:
     @validate_call(config=ConfigDict(strict=True))
     def convert(
         self,
-        source: Path | str | DocumentStream,  # TODO review naming
+        source: Union[Path, str, DocumentStream],  # TODO review naming
         raises_on_error: bool = True,
         max_num_pages: int = sys.maxsize,
         max_file_size: int = sys.maxsize,
@@ -172,7 +172,7 @@ class DocumentConverter:
     @validate_call(config=ConfigDict(strict=True))
     def convert_all(
         self,
-        source: Iterable[Path | str | DocumentStream],  # TODO review naming
+        source: Iterable[Union[Path, str, DocumentStream]],  # TODO review naming
         raises_on_error: bool = True,  # True: raises on first conversion error; False: does not raise on conv error
         max_num_pages: int = sys.maxsize,
         max_file_size: int = sys.maxsize,

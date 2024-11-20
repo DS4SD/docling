@@ -254,17 +254,16 @@ def convert(
     export_txt = OutputFormat.TEXT in to_formats
     export_doctags = OutputFormat.DOCTAGS in to_formats
 
-    match ocr_engine:
-        case OcrEngine.EASYOCR:
-            ocr_options: OcrOptions = EasyOcrOptions(force_full_page_ocr=force_ocr)
-        case OcrEngine.TESSERACT_CLI:
-            ocr_options = TesseractCliOcrOptions(force_full_page_ocr=force_ocr)
-        case OcrEngine.TESSERACT:
-            ocr_options = TesseractOcrOptions(force_full_page_ocr=force_ocr)
-        case OcrEngine.OCRMAC:
-            ocr_options = OcrMacOptions(force_full_page_ocr=force_ocr)
-        case _:
-            raise RuntimeError(f"Unexpected OCR engine type {ocr_engine}")
+    if ocr_engine == OcrEngine.EASYOCR:
+        ocr_options: OcrOptions = EasyOcrOptions(force_full_page_ocr=force_ocr)
+    elif ocr_engine == OcrEngine.TESSERACT_CLI:
+        ocr_options = TesseractCliOcrOptions(force_full_page_ocr=force_ocr)
+    elif ocr_engine == OcrEngine.TESSERACT:
+        ocr_options = TesseractOcrOptions(force_full_page_ocr=force_ocr)
+    elif ocr_engine == OcrEngine.OCRMAC:
+        ocr_options = OcrMacOptions(force_full_page_ocr=force_ocr)
+    else:
+        raise RuntimeError(f"Unexpected OCR engine type {ocr_engine}")
 
     ocr_lang_list = _split_list(ocr_lang)
     if ocr_lang_list is not None:
@@ -281,15 +280,14 @@ def convert(
     if artifacts_path is not None:
         pipeline_options.artifacts_path = artifacts_path
 
-    match pdf_backend:
-        case PdfBackend.DLPARSE_V1:
-            backend: Type[PdfDocumentBackend] = DoclingParseDocumentBackend
-        case PdfBackend.DLPARSE_V2:
-            backend = DoclingParseV2DocumentBackend
-        case PdfBackend.PYPDFIUM2:
-            backend = PyPdfiumDocumentBackend
-        case _:
-            raise RuntimeError(f"Unexpected PDF backend type {pdf_backend}")
+    if pdf_backend == PdfBackend.DLPARSE_V1:
+        backend: Type[PdfDocumentBackend] = DoclingParseDocumentBackend
+    elif pdf_backend == PdfBackend.DLPARSE_V2:
+        backend = DoclingParseV2DocumentBackend
+    elif pdf_backend == PdfBackend.PYPDFIUM2:
+        backend = PyPdfiumDocumentBackend
+    else:
+        raise RuntimeError(f"Unexpected PDF backend type {pdf_backend}")
 
     format_options: Dict[InputFormat, FormatOption] = {
         InputFormat.PDF: PdfFormatOption(
