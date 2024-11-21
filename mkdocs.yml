@@ -38,6 +38,7 @@ theme:
     - content.code.annotate
     - content.code.copy
     - announce.dismiss
+    - navigation.footer
     - navigation.tabs
     - navigation.indexes  # <= if set, each "section" can have its own page, if index.md is used
     - navigation.instant
@@ -85,7 +86,10 @@ nav:
   - Integrations:
     - Integrations: integrations/index.md
     - "Data Prep Kit": integrations/data_prep_kit.md
+    - "DocETL": integrations/docetl.md
+    - "Kotaemon": integrations/kotaemon.md
     - "LlamaIndex 🦙": integrations/llamaindex.md
+    - "spaCy": integrations/spacy.md
     # - "LangChain 🦜🔗": integrations/langchain.md
   # - API reference:
   #   - API reference: api_reference/index.md
