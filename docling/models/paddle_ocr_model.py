@@ -23,7 +23,7 @@ class PaddleOcrModel(BaseOcrModel):
 
         if self.enabled:
             try:
-                from paddleocr import PaddleOCR, draw_ocr
+                from paddleocr import PaddleOCR, draw_ocr  # type: ignore
             except ImportError:
                 raise ImportError(
                     "PaddleOCR is not installed. Please install it via `pip install paddlepaddle` and `pip install paddleocr` to use this OCR engine. "
@@ -33,7 +33,7 @@ class PaddleOcrModel(BaseOcrModel):
             self.reader = PaddleOCR(
                 lang=self.options.lang[0],
                 use_gpu=self.options.use_gpu,
-                use_angle_cls=self.options.use_angle_cls, 
+                use_angle_cls=self.options.use_angle_cls,
                 show_log=self.options.show_log,
             )
 

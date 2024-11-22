@@ -12,17 +12,17 @@ from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     OcrMacOptions,
+    PaddleOcrOptions,
     PdfPipelineOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
-    PaddleOcrOptions,
 )
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.ds_glm_model import GlmModel, GlmOptions
 from docling.models.easyocr_model import EasyOcrModel
-from docling.models.paddle_ocr_model import PaddleOcrModel
 from docling.models.layout_model import LayoutModel
 from docling.models.ocr_mac_model import OcrMacModel
+from docling.models.paddle_ocr_model import PaddleOcrModel
 from docling.models.page_assemble_model import PageAssembleModel, PageAssembleOptions
 from docling.models.page_preprocessing_model import (
     PagePreprocessingModel,

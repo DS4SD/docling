@@ -1,6 +1,6 @@
 from enum import Enum
 from pathlib import Path
-from typing import List, Literal, Optional, Union, Annotated
+from typing import Annotated, List, Literal, Optional, Union
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -41,11 +41,12 @@ class EasyOcrOptions(OcrOptions):
         protected_namespaces=(),
     )
 
+
 class PaddleOcrOptions(OcrOptions):
     kind: Literal["paddleocr"] = "paddleocr"
     lang: Annotated[
         list[str],
-        Field(min_items=1, max_items=1)  # Limits the list length to 0 or 1 items
+        Field(min_items=1, max_items=1),  # Limits the list length to 0 or 1 items
     ] = ["en"]
     use_gpu: bool = True  # same default as paddleocr.ocr
     use_angle_cls: bool = True
@@ -102,7 +103,11 @@ class PdfPipelineOptions(PipelineOptions):
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
     ocr_options: Union[
-        EasyOcrOptions, TesseractCliOcrOptions, TesseractOcrOptions, PaddleOcrOptions, OcrMacOptions
+        EasyOcrOptions,
+        TesseractCliOcrOptions,
+        TesseractOcrOptions,
+        PaddleOcrOptions,
+        OcrMacOptions,
     ] = Field(EasyOcrOptions(), discriminator="kind")
 
     images_scale: float = 1.0

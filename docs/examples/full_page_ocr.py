@@ -5,10 +5,10 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     OcrMacOptions,
+    PaddleOcrOptions,
     PdfPipelineOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
-    PaddleOcrOptions
 )
 from docling.document_converter import DocumentConverter, PdfFormatOption
 

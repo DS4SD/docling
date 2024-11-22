@@ -26,11 +26,11 @@ from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     OcrMacOptions,
     OcrOptions,
+    PaddleOcrOptions,
     PdfPipelineOptions,
     TableFormerMode,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
-    PaddleOcrOptions
 )
 from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
 
@@ -264,7 +264,7 @@ def convert(
         ocr_options = TesseractOcrOptions(force_full_page_ocr=force_ocr)
     elif ocr_engine == OcrEngine.OCRMAC:
         ocr_options = OcrMacOptions(force_full_page_ocr=force_ocr)
-    elif ocr_engine ==  OcrEngine.PADDLEOCR:
+    elif ocr_engine == OcrEngine.PADDLEOCR:
         ocr_options = PaddleOcrOptions(force_full_page_ocr=force_ocr)
     else:
         raise RuntimeError(f"Unexpected OCR engine type {ocr_engine}")
