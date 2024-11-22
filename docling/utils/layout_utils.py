@@ -388,7 +388,7 @@ def adapt_bbox(raw_cells, cluster, orphan_cell_indices):
             [raw_cells[cid]["bbox"] for cid in cluster["cell_ids"]]
         )
         logger.debug("  New bounding box:" + str(new_bbox))
-    if cluster["type"] == DocItemLabel.PICTURE:
+    elif cluster["type"] == DocItemLabel.PICTURE:
         ## We only make the bbox completely comprise included text cells:
         logger.debug("  Picture")
         if len(cluster["cell_ids"]) != 0:
