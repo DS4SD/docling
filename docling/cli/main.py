@@ -27,10 +27,10 @@ from docling.datamodel.pipeline_options import (
     OcrMacOptions,
     OcrOptions,
     PdfPipelineOptions,
+    RapidOcrOptions,
     TableFormerMode,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
-    RapidOcrOptions
 )
 from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
 

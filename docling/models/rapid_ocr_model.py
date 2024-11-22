@@ -23,7 +23,7 @@ class RapidOcrModel(BaseOcrModel):
 
         if self.enabled:
             try:
-                from rapidocr_onnxruntime import RapidOCR
+                from rapidocr_onnxruntime import RapidOCR  # type: ignore
             except ImportError:
                 raise ImportError(
                     "RapidOCR is not installed. Please install it via `pip install rapidocr_onnxruntime` to use this OCR engine. "
@@ -31,17 +31,17 @@ class RapidOcrModel(BaseOcrModel):
                 )
 
             self.reader = RapidOCR(
-                text_score = self.options.text_score,
-                cls_use_cuda = self.options.cls_use_cuda,
-                rec_use_cuda = self.options.rec_use_cuda,
-                det_use_cuda = self.options.det_use_cuda,
-                det_use_dml = self.options.det_use_dml,
-                cls_use_dml = self.options.cls_use_dml,
-                rec_use_dml = self.options.rec_use_dml,
-                print_verbose = self.options.print_verbose,
-                det_model_path = self.options.det_model_path,
-                cls_model_path = self.options.cls_model_path,
-                rec_model_path = self.options.rec_model_path,
+                text_score=self.options.text_score,
+                cls_use_cuda=self.options.cls_use_cuda,
+                rec_use_cuda=self.options.rec_use_cuda,
+                det_use_cuda=self.options.det_use_cuda,
+                det_use_dml=self.options.det_use_dml,
+                cls_use_dml=self.options.cls_use_dml,
+                rec_use_dml=self.options.rec_use_dml,
+                print_verbose=self.options.print_verbose,
+                det_model_path=self.options.det_model_path,
+                cls_model_path=self.options.cls_model_path,
+                rec_model_path=self.options.rec_model_path,
             )
 
     def __call__(
@@ -70,7 +70,12 @@ class RapidOcrModel(BaseOcrModel):
                             scale=self.scale, cropbox=ocr_rect
                         )
                         im = numpy.array(high_res_image)
-                        result, _ = self.reader(im, use_det=self.options.use_det, use_cls=self.options.use_cls, use_rec=self.options.use_rec)
+                        result, _ = self.reader(
+                            im,
+                            use_det=self.options.use_det,
+                            use_cls=self.options.use_cls,
+                            use_rec=self.options.use_rec,
+                        )
 
                         del high_res_image
                         del im

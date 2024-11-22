@@ -6,9 +6,9 @@ from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     OcrMacOptions,
     PdfPipelineOptions,
+    RapidOcrOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
-    RapidOcrOptions
 )
 from docling.document_converter import DocumentConverter, PdfFormatOption
 

@@ -13,9 +13,9 @@ from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     OcrMacOptions,
     PdfPipelineOptions,
+    RapidOcrOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
-    RapidOcrOptions
 )
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.ds_glm_model import GlmModel, GlmOptions
@@ -27,10 +27,10 @@ from docling.models.page_preprocessing_model import (
     PagePreprocessingModel,
     PagePreprocessingOptions,
 )
+from docling.models.rapid_ocr_model import RapidOcrModel
 from docling.models.table_structure_model import TableStructureModel
 from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
 from docling.models.tesseract_ocr_model import TesseractOcrModel
-from docling.models.rapid_ocr_model import RapidOcrModel
 from docling.pipeline.base_pipeline import PaginatedPipeline
 from docling.utils.profiling import ProfilingScope, TimeRecorder
 
