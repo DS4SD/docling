@@ -15,6 +15,7 @@ from docling.datamodel.pipeline_options import (
     PdfPipelineOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
+    RapidOcrOptions
 )
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.ds_glm_model import GlmModel, GlmOptions
@@ -29,6 +30,7 @@ from docling.models.page_preprocessing_model import (
 from docling.models.table_structure_model import TableStructureModel
 from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
 from docling.models.tesseract_ocr_model import TesseractOcrModel
+from docling.models.rapid_ocr_model import RapidOcrModel
 from docling.pipeline.base_pipeline import PaginatedPipeline
 from docling.utils.profiling import ProfilingScope, TimeRecorder
 
@@ -118,6 +120,11 @@ class StandardPdfPipeline(PaginatedPipeline):
             )
         elif isinstance(self.pipeline_options.ocr_options, TesseractOcrOptions):
             return TesseractOcrModel(
+                enabled=self.pipeline_options.do_ocr,
+                options=self.pipeline_options.ocr_options,
+            )
+        elif isinstance(self.pipeline_options.ocr_options, RapidOcrOptions):
+            return RapidOcrModel(
                 enabled=self.pipeline_options.do_ocr,
                 options=self.pipeline_options.ocr_options,
             )

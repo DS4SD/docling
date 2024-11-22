@@ -49,6 +49,7 @@ pandas = "^2.1.4"
 marko = "^2.1.2"
 openpyxl = "^3.1.5"
 ocrmac = { version = "^1.0.0", markers = "sys_platform == 'darwin'", optional = true }
+rapidocr-onnxruntime = { version = "^1.4.0", optional = true, markers = "python_version < '3.13'" }
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
@@ -103,6 +104,7 @@ torchvision = [
 [tool.poetry.extras]
 tesserocr = ["tesserocr"]
 ocrmac = ["ocrmac"]
+rapidocr = ["rapidocr-onnxruntime"]
 
 [tool.poetry.scripts]
 docling = "docling.cli.main:app"
