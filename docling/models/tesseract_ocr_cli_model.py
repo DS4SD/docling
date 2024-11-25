@@ -1,4 +1,5 @@
 import io
+import os
 import logging
 import tempfile
 from subprocess import DEVNULL, PIPE, Popen
@@ -130,14 +131,17 @@ class TesseractOcrCliModel(BaseOcrModel):
                         high_res_image = page._backend.get_page_image(
                             scale=self.scale, cropbox=ocr_rect
                         )
-
-                        with tempfile.NamedTemporaryFile(
-                            suffix=".png", mode="w"
-                        ) as image_file:
-                            fname = image_file.name
-                            high_res_image.save(fname)
+                        try:
+                            with tempfile.NamedTemporaryFile(
+                                suffix=".png", mode="w+b", delete=False
+                            ) as image_file:
+                                fname = image_file.name
+                                high_res_image.save(image_file)
 
                             df = self._run_tesseract(fname)
+                        finally:
+                            if os.path.exists(fname):
+                                os.remove(fname)
 
                         # _log.info(df)
 
