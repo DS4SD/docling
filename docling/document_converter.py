@@ -159,7 +159,7 @@ class DocumentConverter:
         raises_on_error: bool = True,
         max_num_pages: int = sys.maxsize,
         max_file_size: int = sys.maxsize,
-    ) -> ConversionResult:
+    ) -> Optional[ConversionResult]:
 
         all_res = self.convert_all(
             source=[source],
@@ -167,7 +167,7 @@ class DocumentConverter:
             max_num_pages=max_num_pages,
             max_file_size=max_file_size,
         )
-        return next(all_res)
+        return next(all_res, None)
 
     @validate_call(config=ConfigDict(strict=True))
     def convert_all(
@@ -186,7 +186,10 @@ class DocumentConverter:
             limits=limits,
         )
         conv_res_iter = self._convert(conv_input, raises_on_error=raises_on_error)
+
+        had_result = False
         for conv_res in conv_res_iter:
+            had_result = True
             if raises_on_error and conv_res.status not in {
                 ConversionStatus.SUCCESS,
                 ConversionStatus.PARTIAL_SUCCESS,
@@ -196,6 +199,14 @@ class DocumentConverter:
                 )
             else:
                 yield conv_res
+
+        if not had_result:
+            if raises_on_error:
+                raise RuntimeError(
+                    f"Conversion failed because the provided file has no recognizable format or it wasn't in the list of allowed formats."
+                )
+            else:
+                return None
 
     def _convert(
         self, conv_input: _DocumentConversionInput, raises_on_error: bool
