@@ -15,7 +15,7 @@ from docling_core.types.doc import (
 )
 from lxml import etree
 from lxml.etree import XPath
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
@@ -509,10 +509,16 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         image_data = get_docx_image(element, drawing_blip)
         image_bytes = BytesIO(image_data)
         # Open the BytesIO object with PIL to create an Image
-        pil_image = Image.open(image_bytes)
-        doc.add_picture(
-            parent=self.parents[self.level],
-            image=ImageRef.from_pil(image=pil_image, dpi=72),
-            caption=None,
-        )
+        try:
+            pil_image = Image.open(image_bytes)
+            doc.add_picture(
+                parent=self.parents[self.level],
+                image=ImageRef.from_pil(image=pil_image, dpi=72),
+                caption=None,
+            )
+        except (UnidentifiedImageError, OSError) as e:
+            doc.add_picture(
+                parent=self.parents[self.level],
+                caption=None,
+            )
         return
