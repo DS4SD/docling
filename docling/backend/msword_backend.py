@@ -14,6 +14,7 @@ from docling_core.types.doc import (
     TableData,
 )
 from lxml import etree
+from lxml.etree import XPath
 from PIL import Image
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
@@ -132,8 +133,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def walk_linear(self, body, docx_obj, doc) -> DoclingDocument:
         for element in body:
             tag_name = etree.QName(element).localname
+
             # Check for Inline Images (blip elements)
-            drawing_blip = element.xpath(".//a:blip")
+            namespaces = {
+                "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+                "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            }
+            xpath_expr = XPath(".//a:blip", namespaces=namespaces)
+            drawing_blip = xpath_expr(element)
 
             # Check for Tables
             if element.tag.endswith("tbl"):
