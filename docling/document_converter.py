@@ -200,13 +200,10 @@ class DocumentConverter:
             else:
                 yield conv_res
 
-        if not had_result:
-            if raises_on_error:
-                raise RuntimeError(
-                    f"Conversion failed because the provided file has no recognizable format or it wasn't in the list of allowed formats."
-                )
-            else:
-                return None
+        if not had_result and raises_on_error:
+            raise RuntimeError(
+                f"Conversion failed because the provided file has no recognizable format or it wasn't in the list of allowed formats."
+            )
 
     def _convert(
         self, conv_input: _DocumentConversionInput, raises_on_error: bool
