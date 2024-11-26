@@ -7312,4 +7312,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "a313657a3d0e8a5baad9f484f5e9ac972343fcdc237edd8001f695acf7e181b7"
+content-hash = "d824c81c132de19beea5d5e395d70c1b9566bf5b938fec3d12ad478b953fd639"
