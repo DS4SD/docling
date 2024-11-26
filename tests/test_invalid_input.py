@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from docling.datamodel.base_models import ConversionStatus, DocumentStream
-from docling.document_converter import DocumentConverter
+from docling.document_converter import ConversionError, DocumentConverter
 
 
 def get_pdf_path():
@@ -20,26 +20,26 @@ def converter():
     return converter
 
 
-def test_convert_invalid_doc(converter: DocumentConverter):
-
-    # Test with unrecognizable file format (xyz)
+def test_convert_unsupported_doc_format_wout_exception(converter: DocumentConverter):
     result = converter.convert(
         DocumentStream(name="input.xyz", stream=BytesIO(b"xyz")), raises_on_error=False
     )
-    assert result is None  # No result comes back at all, since this file is skipped.
+    assert result.status == ConversionStatus.UNSUPPORTED
 
-    with pytest.raises(RuntimeError):
-        result = converter.convert(
+
+def test_convert_unsupported_doc_format_with_exception(converter: DocumentConverter):
+    with pytest.raises(ConversionError):
+        converter.convert(
             DocumentStream(name="input.xyz", stream=BytesIO(b"xyz")),
             raises_on_error=True,
         )
 
-    # Test with too small filesize limit
+
+def test_convert_too_small_filesize_limit_wout_exception(converter: DocumentConverter):
     result = converter.convert(get_pdf_path(), max_file_size=1, raises_on_error=False)
-    assert result is not None
     assert result.status == ConversionStatus.FAILURE
 
-    with pytest.raises(RuntimeError):
-        result = converter.convert(
-            get_pdf_path(), max_file_size=1, raises_on_error=True
-        )
+
+def test_convert_too_small_filesize_limit_with_exception(converter: DocumentConverter):
+    with pytest.raises(ConversionError):
+        converter.convert(get_pdf_path(), max_file_size=1, raises_on_error=True)

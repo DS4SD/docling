@@ -22,6 +22,7 @@ class ConversionStatus(str, Enum):
     FAILURE = auto()
     SUCCESS = auto()
     PARTIAL_SUCCESS = auto()
+    UNSUPPORTED = auto()
 
 
 class InputFormat(str, Enum):
