@@ -1,3 +1,14 @@
+## [v2.7.1](https://github.com/DS4SD/docling/releases/tag/v2.7.1) - 2024-11-26
+
+### Fix
+
+* Fixes for wordx ([#432](https://github.com/DS4SD/docling/issues/432)) ([`d0a1180`](https://github.com/DS4SD/docling/commit/d0a118047804765b1b8532e72e08272e678c0c93))
+* Force pydantic < 2.10.0 ([#407](https://github.com/DS4SD/docling/issues/407)) ([`d7072b4`](https://github.com/DS4SD/docling/commit/d7072b4b56227756eb2c7abd3a6e7387eeefe7c1))
+
+### Documentation
+
+* Add DocETL, Kotaemon, spaCy integrations; minor docs improvements ([#408](https://github.com/DS4SD/docling/issues/408)) ([`7a45b92`](https://github.com/DS4SD/docling/commit/7a45b92078b3a9fdd8f0650002eddc03e9d780af))
+
 ## [v2.7.0](https://github.com/DS4SD/docling/releases/tag/v2.7.0) - 2024-11-20
 
 ### Feature
