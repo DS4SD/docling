@@ -14,7 +14,8 @@ from docling_core.types.doc import (
     TableData,
 )
 from lxml import etree
-from PIL import Image
+from lxml.etree import XPath
+from PIL import Image, UnidentifiedImageError
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
@@ -132,8 +133,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def walk_linear(self, body, docx_obj, doc) -> DoclingDocument:
         for element in body:
             tag_name = etree.QName(element).localname
+
             # Check for Inline Images (blip elements)
-            drawing_blip = element.xpath(".//a:blip")
+            namespaces = {
+                "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+                "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            }
+            xpath_expr = XPath(".//a:blip", namespaces=namespaces)
+            drawing_blip = xpath_expr(element)
 
             # Check for Tables
             if element.tag.endswith("tbl"):
@@ -210,7 +217,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         paragraph = docx.text.paragraph.Paragraph(element, docx_obj)
 
         if paragraph.text is None:
-            # _log.warn(f"paragraph has text==None")
             return
         text = paragraph.text.strip()
         # if len(text)==0 # keep empty paragraphs, they seperate adjacent lists!
@@ -502,10 +508,17 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         image_data = get_docx_image(element, drawing_blip)
         image_bytes = BytesIO(image_data)
         # Open the BytesIO object with PIL to create an Image
-        pil_image = Image.open(image_bytes)
-        doc.add_picture(
-            parent=self.parents[self.level],
-            image=ImageRef.from_pil(image=pil_image, dpi=72),
-            caption=None,
-        )
+        try:
+            pil_image = Image.open(image_bytes)
+            doc.add_picture(
+                parent=self.parents[self.level],
+                image=ImageRef.from_pil(image=pil_image, dpi=72),
+                caption=None,
+            )
+        except (UnidentifiedImageError, OSError) as e:
+            _log.warning("Warning: image cannot be loaded by Pillow")
+            doc.add_picture(
+                parent=self.parents[self.level],
+                caption=None,
+            )
         return

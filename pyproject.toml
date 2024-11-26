@@ -48,6 +48,7 @@ beautifulsoup4 = "^4.12.3"
 pandas = "^2.1.4"
 marko = "^2.1.2"
 openpyxl = "^3.1.5"
+lxml = ">=4.0.0,<6.0.0"
 ocrmac = { version = "^1.0.0", markers = "sys_platform == 'darwin'", optional = true }
 
 [tool.poetry.group.dev.dependencies]
