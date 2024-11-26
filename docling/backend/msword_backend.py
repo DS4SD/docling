@@ -503,8 +503,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         image_bytes = BytesIO(image_data)
         # Open the BytesIO object with PIL to create an Image
         pil_image = Image.open(image_bytes)
+        level = self.get_level()
         doc.add_picture(
-            parent=self.parents[self.level],
+            parent=self.parents[level - 1],
             image=ImageRef.from_pil(image=pil_image, dpi=72),
             caption=None,
         )
