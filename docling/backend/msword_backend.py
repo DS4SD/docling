@@ -217,7 +217,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         paragraph = docx.text.paragraph.Paragraph(element, docx_obj)
 
         if paragraph.text is None:
-            # _log.warn(f"paragraph has text==None")
             return
         text = paragraph.text.strip()
         # if len(text)==0 # keep empty paragraphs, they seperate adjacent lists!
@@ -517,6 +516,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 caption=None,
             )
         except (UnidentifiedImageError, OSError) as e:
+            _log.warning("Warning: image cannot be loaded by Pillow")
             doc.add_picture(
                 parent=self.parents[self.level],
                 caption=None,
