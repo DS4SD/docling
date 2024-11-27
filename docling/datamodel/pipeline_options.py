@@ -41,18 +41,13 @@ class RapidOcrOptions(OcrOptions):
 
     # For more details on the following options visit https://rapidai.github.io/RapidOCRDocs/install_usage/api/RapidOCR/
     text_score: float = 0.5  # same default as rapidocr
+    class Device(Enum): 
+        CPU = "CPU"
+        CUDA = "CUDA"
+        DIRECTML = "DIRECTML"
+        AUTO = "AUTO"
 
-    use_det: Optional[bool] = None  # same default as rapidocr
-    use_cls: Optional[bool] = None  # same default as rapidocr
-    use_rec: Optional[bool] = None  # same default as rapidocr
-
-    det_use_cuda: bool = False  # same default as rapidocr
-    cls_use_cuda: bool = False  # same default as rapidocr
-    rec_use_cuda: bool = False  # same default as rapidocr
-
-    det_use_dml: bool = False  # same default as rapidocr
-    cls_use_dml: bool = False  # same default as rapidocr
-    rec_use_dml: bool = False  # same default as rapidocr
+    device: Device = Device.AUTO  # Default value is AUTO
 
     print_verbose: bool = False  # same default as rapidocr
 

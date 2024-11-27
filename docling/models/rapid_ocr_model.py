@@ -29,15 +29,44 @@ class RapidOcrModel(BaseOcrModel):
                     "RapidOCR is not installed. Please install it via `pip install rapidocr_onnxruntime` to use this OCR engine. "
                     "Alternatively, Docling has support for other OCR engines. See the documentation."
                 )
+            
+            # Same as Defaults in RapidOCR
+            cls_use_cuda = False 
+            rec_use_cuda = False 
+            det_use_cuda = False 
+            det_use_dml = False
+            cls_use_dml = False
+            rec_use_dml = False
 
+            # If we set everything to true onnx-runtime would automatically choose the fastest accelerator
+            if self.options.device == self.options.Device.AUTO:
+                cls_use_cuda = True 
+                rec_use_cuda = True 
+                det_use_cuda = True 
+                det_use_dml = True
+                cls_use_dml = True
+                rec_use_dml = True
+            
+            # If we set use_cuda to true onnx would use the cuda device available in runtime if no cuda device is available it would run on CPU. 
+            elif self.options.device == self.options.Device.CUDA:
+                cls_use_cuda = True 
+                rec_use_cuda = True 
+                det_use_cuda = True 
+
+            # If we set use_dml to true onnx would use the dml device available in runtime if no dml device is available it would work on CPU. 
+            elif self.options.device == self.options.Device.DIRECTML: 
+                det_use_dml = True
+                cls_use_dml = True
+                rec_use_dml = True  
+                
             self.reader = RapidOCR(
                 text_score=self.options.text_score,
-                cls_use_cuda=self.options.cls_use_cuda,
-                rec_use_cuda=self.options.rec_use_cuda,
-                det_use_cuda=self.options.det_use_cuda,
-                det_use_dml=self.options.det_use_dml,
-                cls_use_dml=self.options.cls_use_dml,
-                rec_use_dml=self.options.rec_use_dml,
+                cls_use_cuda=cls_use_cuda,
+                rec_use_cuda=rec_use_cuda,
+                det_use_cuda=det_use_cuda,
+                det_use_dml=det_use_dml,
+                cls_use_dml=cls_use_dml,
+                rec_use_dml=rec_use_dml,
                 print_verbose=self.options.print_verbose,
                 det_model_path=self.options.det_model_path,
                 cls_model_path=self.options.cls_model_path,
