@@ -86,32 +86,37 @@ class ImageFormatOption(FormatOption):
     backend: Type[AbstractDocumentBackend] = DoclingParseDocumentBackend
 
 
-_format_to_default_options = {
-    InputFormat.XLSX: FormatOption(
-        pipeline_cls=SimplePipeline, backend=MsExcelDocumentBackend
-    ),
-    InputFormat.DOCX: FormatOption(
-        pipeline_cls=SimplePipeline, backend=MsWordDocumentBackend
-    ),
-    InputFormat.PPTX: FormatOption(
-        pipeline_cls=SimplePipeline, backend=MsPowerpointDocumentBackend
-    ),
-    InputFormat.MD: FormatOption(
-        pipeline_cls=SimplePipeline, backend=MarkdownDocumentBackend
-    ),
-    InputFormat.ASCIIDOC: FormatOption(
-        pipeline_cls=SimplePipeline, backend=AsciiDocBackend
-    ),
-    InputFormat.HTML: FormatOption(
-        pipeline_cls=SimplePipeline, backend=HTMLDocumentBackend
-    ),
-    InputFormat.IMAGE: FormatOption(
-        pipeline_cls=StandardPdfPipeline, backend=DoclingParseDocumentBackend
-    ),
-    InputFormat.PDF: FormatOption(
-        pipeline_cls=StandardPdfPipeline, backend=DoclingParseDocumentBackend
-    ),
-}
+def _get_default_option(format: InputFormat) -> FormatOption:
+    format_to_default_options = {
+        InputFormat.XLSX: FormatOption(
+            pipeline_cls=SimplePipeline, backend=MsExcelDocumentBackend
+        ),
+        InputFormat.DOCX: FormatOption(
+            pipeline_cls=SimplePipeline, backend=MsWordDocumentBackend
+        ),
+        InputFormat.PPTX: FormatOption(
+            pipeline_cls=SimplePipeline, backend=MsPowerpointDocumentBackend
+        ),
+        InputFormat.MD: FormatOption(
+            pipeline_cls=SimplePipeline, backend=MarkdownDocumentBackend
+        ),
+        InputFormat.ASCIIDOC: FormatOption(
+            pipeline_cls=SimplePipeline, backend=AsciiDocBackend
+        ),
+        InputFormat.HTML: FormatOption(
+            pipeline_cls=SimplePipeline, backend=HTMLDocumentBackend
+        ),
+        InputFormat.IMAGE: FormatOption(
+            pipeline_cls=StandardPdfPipeline, backend=DoclingParseDocumentBackend
+        ),
+        InputFormat.PDF: FormatOption(
+            pipeline_cls=StandardPdfPipeline, backend=DoclingParseDocumentBackend
+        ),
+    }
+    if (options := format_to_default_options.get(format)) is not None:
+        return options
+    else:
+        raise RuntimeError(f"No default options configured for {format}")
 
 
 class DocumentConverter:
@@ -125,23 +130,14 @@ class DocumentConverter:
         self.allowed_formats = (
             allowed_formats if allowed_formats is not None else [e for e in InputFormat]
         )
-        self.format_to_options = (
-            format_options if format_options is not None else _format_to_default_options
-        )
-        if format_options is not None:
-            for f in self.allowed_formats:
-                if f not in self.format_to_options.keys():
-                    _log.debug(f"Requested format {f} will use default options.")
-                    self.format_to_options[f] = _format_to_default_options[f]
-
-            remove_keys = []
-            for f in self.format_to_options.keys():
-                if f not in self.allowed_formats:
-                    remove_keys.append(f)
-
-            for f in remove_keys:
-                self.format_to_options.pop(f)
-
+        self.format_to_options = {
+            format: (
+                _get_default_option(format=format)
+                if (custom_option := (format_options or {}).get(format)) is None
+                else custom_option
+            )
+            for format in self.allowed_formats
+        }
         self.initialized_pipelines: Dict[Type[BasePipeline], BasePipeline] = {}
 
     def initialize_pipeline(self, format: InputFormat):
