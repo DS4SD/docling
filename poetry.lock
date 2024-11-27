@@ -879,13 +879,13 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "2.5.0"
+version = "2.5.1"
 description = "A python library to define and validate data types in Docling."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "docling_core-2.5.0-py3-none-any.whl", hash = "sha256:7694f89e10b46a4e85af74b8ead1b67b79a775993ac2207860d349eb70270b03"},
-    {file = "docling_core-2.5.0.tar.gz", hash = "sha256:41e9e24afc749bc4dd8751d845b1ad2dd699432c1af0513f3ed888c5d59114af"},
+    {file = "docling_core-2.5.1-py3-none-any.whl", hash = "sha256:e4a5626520714c25a5ec2f9f7495407e730485257c2272e8467faae7357435bf"},
+    {file = "docling_core-2.5.1.tar.gz", hash = "sha256:e9a7c7c46f869b13747436a2ce42df3632af655e1a3af574dfcd114e71dcbb75"},
 ]
 
 [package.dependencies]
@@ -3544,10 +3544,10 @@ files = [
 numpy = [
     {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
     {version = ">=1.21.0", markers = "python_version == \"3.9\" and platform_system == \"Darwin\" and platform_machine == \"arm64\""},
-    {version = ">=1.23.5", markers = "python_version >= \"3.11\" and python_version < \"3.12\""},
     {version = ">=1.21.4", markers = "python_version >= \"3.10\" and platform_system == \"Darwin\" and python_version < \"3.11\""},
     {version = ">=1.21.2", markers = "platform_system != \"Darwin\" and python_version >= \"3.10\" and python_version < \"3.11\""},
     {version = ">=1.19.3", markers = "platform_system == \"Linux\" and platform_machine == \"aarch64\" and python_version >= \"3.8\" and python_version < \"3.10\" or python_version > \"3.9\" and python_version < \"3.10\" or python_version >= \"3.9\" and platform_system != \"Darwin\" and python_version < \"3.10\" or python_version >= \"3.9\" and platform_machine != \"arm64\" and python_version < \"3.10\""},
+    {version = ">=1.23.5", markers = "python_version >= \"3.11\" and python_version < \"3.12\""},
 ]
 
 [[package]]
@@ -7231,4 +7231,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "3950c331252eef7e4b31a11d0150903b8cb8376ca7d943ee93ffbf88e3c0184e"
+content-hash = "0e1ba9bc3f10cdd3ddf161469701ca603279bad13505ff3b7b042826e2de4c35"
