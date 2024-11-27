@@ -46,13 +46,13 @@ class RapidOcrOptions(OcrOptions):
     use_cls: Optional[bool] = None  # same default as rapidocr
     use_rec: Optional[bool] = None  # same default as rapidocr
 
-    class Device(Enum):
-        CPU = "CPU"
-        CUDA = "CUDA"
-        DIRECTML = "DIRECTML"
-        AUTO = "AUTO"
+    # class Device(Enum):
+    #     CPU = "CPU"
+    #     CUDA = "CUDA"
+    #     DIRECTML = "DIRECTML"
+    #     AUTO = "AUTO"
 
-    device: Device = Device.AUTO  # Default value is AUTO
+    # device: Device = Device.AUTO  # Default value is AUTO
 
     print_verbose: bool = False  # same default as rapidocr
 
