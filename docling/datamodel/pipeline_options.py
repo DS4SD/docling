@@ -29,6 +29,42 @@ class OcrOptions(BaseModel):
     )
 
 
+class RapidOcrOptions(OcrOptions):
+    kind: Literal["rapidocr"] = "rapidocr"
+
+    # English and chinese are the most commly used models and have been tested with RapidOCR.
+    lang: List[str] = [
+        "english",
+        "chinese",
+    ]  # However, language as a parameter is not supported by rapidocr yet and hence changing this options doesn't affect anything.
+    # For more details on supported languages by RapidOCR visit https://rapidai.github.io/RapidOCRDocs/blog/2022/09/28/%E6%94%AF%E6%8C%81%E8%AF%86%E5%88%AB%E8%AF%AD%E8%A8%80/
+
+    # For more details on the following options visit https://rapidai.github.io/RapidOCRDocs/install_usage/api/RapidOCR/
+    text_score: float = 0.5  # same default as rapidocr
+
+    use_det: Optional[bool] = None  # same default as rapidocr
+    use_cls: Optional[bool] = None  # same default as rapidocr
+    use_rec: Optional[bool] = None  # same default as rapidocr
+
+    # class Device(Enum):
+    #     CPU = "CPU"
+    #     CUDA = "CUDA"
+    #     DIRECTML = "DIRECTML"
+    #     AUTO = "AUTO"
+
+    # device: Device = Device.AUTO  # Default value is AUTO
+
+    print_verbose: bool = False  # same default as rapidocr
+
+    det_model_path: Optional[str] = None  # same default as rapidocr
+    cls_model_path: Optional[str] = None  # same default as rapidocr
+    rec_model_path: Optional[str] = None  # same default as rapidocr
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+
+
 class EasyOcrOptions(OcrOptions):
     kind: Literal["easyocr"] = "easyocr"
     lang: List[str] = ["fr", "de", "es", "en"]
