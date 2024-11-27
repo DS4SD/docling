@@ -78,7 +78,6 @@ def test_e2e_conversions():
                 input_path=pdf_path,
                 doc_result=doc_result,
                 generate=GENERATE_V1,
-                ocr_engine=ocr_options.kind,
                 fuzzy=True,
             )
 
@@ -86,6 +85,5 @@ def test_e2e_conversions():
                 input_path=pdf_path,
                 doc_result=doc_result,
                 generate=GENERATE_V2,
-                ocr_engine=ocr_options.kind,
                 fuzzy=True,
             )
