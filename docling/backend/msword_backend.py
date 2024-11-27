@@ -507,18 +507,19 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         image_data = get_docx_image(element, drawing_blip)
         image_bytes = BytesIO(image_data)
+        level = self.get_level()
         # Open the BytesIO object with PIL to create an Image
         try:
             pil_image = Image.open(image_bytes)
             doc.add_picture(
-                parent=self.parents[self.level],
+                parent=self.parents[level - 1],
                 image=ImageRef.from_pil(image=pil_image, dpi=72),
                 caption=None,
             )
         except (UnidentifiedImageError, OSError) as e:
             _log.warning("Warning: image cannot be loaded by Pillow")
             doc.add_picture(
-                parent=self.parents[self.level],
+                parent=self.parents[level - 1],
                 caption=None,
             )
         return
