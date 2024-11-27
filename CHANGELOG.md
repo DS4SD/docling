@@ -1,3 +1,14 @@
+## [v2.8.0](https://github.com/DS4SD/docling/releases/tag/v2.8.0) - 2024-11-27
+
+### Feature
+
+* **ocr:** Added support for RapidOCR engine ([#415](https://github.com/DS4SD/docling/issues/415)) ([`85b2999`](https://github.com/DS4SD/docling/commit/85b29990be6468516b6dbe49f880d9f1f4c11c5a))
+
+### Fix
+
+* Use correct image index in word backend ([#442](https://github.com/DS4SD/docling/issues/442)) ([`767563b`](https://github.com/DS4SD/docling/commit/767563bf8b331304892285c0789bba481acaa1b5))
+* Update tests and examples for docling-core 2.5.1 ([#449](https://github.com/DS4SD/docling/issues/449)) ([`29807a2`](https://github.com/DS4SD/docling/commit/29807a2d687896c67ada934c6a626401f5930e50))
+
 ## [v2.7.1](https://github.com/DS4SD/docling/releases/tag/v2.7.1) - 2024-11-26
 
 ### Fix
