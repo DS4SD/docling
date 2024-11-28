@@ -1,3 +1,5 @@
+# spaCy
+
 Docling is available in [spaCy](https://spacy.io/) as the "SpaCy Layout" plugin:
 
 - 💻 [SpacyLayout GitHub][github]

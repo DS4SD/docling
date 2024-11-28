@@ -4,7 +4,7 @@
   </a>
 </p>
 
-# Docling
+# 🦆 Docling
 
 <p align="center">
   <a href="https://trendshift.io/repositories/12132" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12132" alt="DS4SD%2Fdocling | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
@@ -29,7 +29,7 @@ Docling parses documents and exports them to the desired format with ease and sp
 * 🗂️ Reads popular document formats (PDF, DOCX, PPTX, XLSX, Images, HTML, AsciiDoc & Markdown) and exports to Markdown and JSON
 * 📑 Advanced PDF document understanding including page layout, reading order & table structures
 * 🧩 Unified, expressive [DoclingDocument](https://ds4sd.github.io/docling/concepts/docling_document/) representation format
-* 🤖 Easy integration with LlamaIndex 🦙 & LangChain 🦜🔗 for powerful RAG / QA applications
+* 🤖 Easy integration with 🦙 LlamaIndex & 🦜🔗 LangChain for powerful RAG / QA applications
 * 🔍 OCR support for scanned PDFs
 * 💻 Simple and convenient CLI
 
@@ -65,8 +65,24 @@ result = converter.convert(source)
 print(result.document.export_to_markdown())  # output: "## Docling Technical Report[...]"
 ```
 
-Check out [Getting started](https://ds4sd.github.io/docling/).
-You will find lots of tuning options to leverage all the advanced capabilities.
+More [advanced usage options](https://ds4sd.github.io/docling/usage/) are available in
+the docs.
+
+## Documentation
+
+Check out Docling's [documentation](https://ds4sd.github.io/docling/), for details on
+installation, usage, concepts, recipes, extensions, and more.
+
+## Examples
+
+Go hands-on with our [examples](https://ds4sd.github.io/docling/examples/),
+demonstrating how to address different application use cases with Docling.
+
+## Integrations
+
+To further accelerate your AI application development, check out Docling's native
+[integrations](https://ds4sd.github.io/docling/integrations/) with popular frameworks
+and tools.
 
 ## Get help and support
 
