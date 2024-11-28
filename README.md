@@ -57,12 +57,31 @@ More [detailed installation instructions](https://ds4sd.github.io/docling/instal
 To convert individual documents, use `convert()`, for example:
 
 ```python
+from docling_core.types.doc.base import ImageRefMode
+from docling_core.types.doc.document import DoclingDocument
+
 from docling.document_converter import DocumentConverter
 
 source = "https://arxiv.org/pdf/2408.09869"  # document per local path or URL
 converter = DocumentConverter()
 result = converter.convert(source)
-print(result.document.export_to_markdown())  # output: "## Docling Technical Report[...]"
+
+doc: DoclingDocument = result.document
+
+# returning the document in-memory
+print(doc.export_to_markdown())  # output: "## Docling Technical Report[...]"
+print(doc.export_to_html())  # output: "<h1>Docling Technical Report[...]"
+
+# save document to disk, keep only placeholders for images
+doc.save_as_markdown(filename="output_pl.md", image_mode=ImageRefMode.PLACEHOLDER)
+
+# save document to disk, embed images in base64
+doc.save_as_markdown(filename="output_emb.md", image_mode=ImageRefMode.EMBEDDED)
+doc.save_as_html(filename="output_emb.html", image_mode=ImageRefMode.EMBEDDED)
+
+# save document to disk, save images in PNG format and reference them in markdown
+doc.save_as_markdown(filename="output_ref.md", image_mode=ImageRefMode.REFERENCED)
+doc.save_as_html(filename="output_ref.html", image_mode=ImageRefMode.REFERENCED)
 ```
 
 Check out [Getting started](https://ds4sd.github.io/docling/).
