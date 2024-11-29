@@ -32,6 +32,7 @@ from docling.datamodel.pipeline_options import (
     TesseractCliOcrOptions,
     TesseractOcrOptions,
 )
+from docling.datamodel.settings import settings
 from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
@@ -212,6 +213,24 @@ def convert(
             help="Set the verbosity level. -v for info logging, -vv for debug logging.",
         ),
     ] = 0,
+    debug_visualize_cells: Annotated[
+        bool,
+        typer.Option(..., help="Enable debug output which visualizes the PDF cells"),
+    ] = False,
+    debug_visualize_ocr: Annotated[
+        bool,
+        typer.Option(..., help="Enable debug output which visualizes the OCR cells"),
+    ] = False,
+    debug_visualize_layout: Annotated[
+        bool,
+        typer.Option(
+            ..., help="Enable debug output which visualizes the layour clusters"
+        ),
+    ] = False,
+    debug_visualize_tables: Annotated[
+        bool,
+        typer.Option(..., help="Enable debug output which visualizes the table cells"),
+    ] = False,
     version: Annotated[
         Optional[bool],
         typer.Option(
@@ -228,6 +247,11 @@ def convert(
         logging.basicConfig(level=logging.INFO)
     elif verbose == 2:
         logging.basicConfig(level=logging.DEBUG)
+
+    settings.debug.visualize_cells = debug_visualize_cells
+    settings.debug.visualize_layout = debug_visualize_layout
+    settings.debug.visualize_tables = debug_visualize_tables
+    settings.debug.visualize_ocr = debug_visualize_ocr
 
     if from_formats is None:
         from_formats = [e for e in InputFormat]
