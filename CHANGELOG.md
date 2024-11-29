@@ -1,3 +1,14 @@
+## [v2.8.1](https://github.com/DS4SD/docling/releases/tag/v2.8.1) - 2024-11-29
+
+### Fix
+
+* **cli:** Expose debug options ([#467](https://github.com/DS4SD/docling/issues/467)) ([`dd8de46`](https://github.com/DS4SD/docling/commit/dd8de462676993b81926610fd573d51d3272cbaf))
+* Remove unused deps ([#466](https://github.com/DS4SD/docling/issues/466)) ([`af63818`](https://github.com/DS4SD/docling/commit/af63818df5636c4cbe77c0a01e6dcc0d47c4bfdb))
+
+### Documentation
+
+* Extend integration docs & README ([#456](https://github.com/DS4SD/docling/issues/456)) ([`84c46fd`](https://github.com/DS4SD/docling/commit/84c46fdeb344502edf9647c610c4828ab0ffb9dd))
+
 ## [v2.8.0](https://github.com/DS4SD/docling/releases/tag/v2.8.0) - 2024-11-27
 
 ### Feature
