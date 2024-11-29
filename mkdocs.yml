@@ -57,6 +57,7 @@ nav:
     - Installation: installation.md
     - Usage: usage.md
     - CLI: cli.md
+    - FAQ: faq.md
     - Docling v2: v2.md
   - Concepts:
     - Concepts: concepts/index.md
