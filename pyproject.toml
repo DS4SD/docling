@@ -80,6 +80,8 @@ types-openpyxl = "^3.1.5.20241114"
 mkdocs-material = "^9.5.40"
 mkdocs-jupyter = "^0.25.0"
 mkdocs-click = "^0.8.1"
+mkdocstrings = {extras = ["python"], version = "^0.27.0"}
+griffe-pydantic = "^1.1.0"
 
 [tool.poetry.group.examples.dependencies]
 datasets = "^2.21.0"
