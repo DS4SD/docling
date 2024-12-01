@@ -1,6 +1,6 @@
 import io
-import os
 import logging
+import os
 import tempfile
 from subprocess import DEVNULL, PIPE, Popen
 from typing import Iterable, Optional, Tuple
