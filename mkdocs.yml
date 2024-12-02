@@ -95,8 +95,10 @@ nav:
     - "Prodigy": integrations/prodigy.md
     - "spaCy": integrations/spacy.md
     # - "LangChain 🦜🔗": integrations/langchain.md
-  # - API reference:
-  #   - API reference: api_reference/index.md
+  - API reference:
+    - Document Converter: api_reference/document_converter.md
+    - Pipeline options: api_reference/pipeline_options.md
+    - Docling Document: api_reference/docling_document.md
 
 markdown_extensions:
   - pymdownx.superfences
@@ -112,12 +114,15 @@ markdown_extensions:
 plugins:
   - search
   - mkdocs-jupyter
-  # - mkdocstrings:
-  #     default_handler: python
-  #     options:
-  #       preload_modules:
-  #       - docling
-  #       - docling_core
+  - mkdocstrings:
+      default_handler: python
+      options:
+        extensions:
+          - griffe_pydantic:
+              schema: true
+        preload_modules:
+          - docling
+          - docling_core
 
 extra_css:
   - stylesheets/extra.css
