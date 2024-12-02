@@ -7,16 +7,26 @@ from docling_core.types.doc import BoundingBox, CoordOrigin
 
 from docling.datamodel.base_models import Cell, OcrCell, Page
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import EasyOcrOptions
+from docling.datamodel.pipeline_options import (
+    AcceleratorDevice,
+    AcceleratorOptions,
+    EasyOcrOptions,
+)
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
+from docling.utils import accelerator_utils as au
 from docling.utils.profiling import TimeRecorder
 
 _log = logging.getLogger(__name__)
 
 
 class EasyOcrModel(BaseOcrModel):
-    def __init__(self, enabled: bool, options: EasyOcrOptions):
+    def __init__(
+        self,
+        enabled: bool,
+        options: EasyOcrOptions,
+        accelerator_options: AcceleratorOptions,
+    ):
         super().__init__(enabled=enabled, options=options)
         self.options: EasyOcrOptions
 
@@ -31,11 +41,20 @@ class EasyOcrModel(BaseOcrModel):
                     "Alternatively, Docling has support for other OCR engines. See the documentation."
                 )
 
+            use_gpu = False
+            if self.options.use_gpu:
+                device = au.decide_device(accelerator_options.device)
+                # Enable easyocr GPU if running on CUDA, MPS
+                use_gpu = device in [
+                    AcceleratorDevice.CUDA,
+                    AcceleratorDevice.MPS,
+                ]
             self.reader = easyocr.Reader(
                 lang_list=self.options.lang,
-                gpu=self.options.use_gpu,
+                gpu=use_gpu,
                 model_storage_directory=self.options.model_storage_directory,
                 download_enabled=self.options.download_enabled,
+                verbose=False,
             )
 
     def __call__(
