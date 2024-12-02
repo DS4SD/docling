@@ -15,6 +15,7 @@ from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.msexcel_backend import MsExcelDocumentBackend
 from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
+from docling.backend.patent_uspto_backend import PatentUsptoDocumentBackend
 from docling.datamodel.base_models import (
     ConversionStatus,
     DoclingComponentType,
@@ -82,12 +83,17 @@ class HTMLFormatOption(FormatOption):
     backend: Type[AbstractDocumentBackend] = HTMLDocumentBackend
 
 
-class PdfFormatOption(FormatOption):
+class PatentUsptoFormatOption(FormatOption):
+    pipeline_cls: Type = SimplePipeline
+    backend: Type[PatentUsptoDocumentBackend] = PatentUsptoDocumentBackend
+
+
+class ImageFormatOption(FormatOption):
     pipeline_cls: Type = StandardPdfPipeline
     backend: Type[AbstractDocumentBackend] = DoclingParseV2DocumentBackend
 
 
-class ImageFormatOption(FormatOption):
+class PdfFormatOption(FormatOption):
     pipeline_cls: Type = StandardPdfPipeline
     backend: Type[AbstractDocumentBackend] = DoclingParseV2DocumentBackend
 
@@ -111,6 +117,9 @@ def _get_default_option(format: InputFormat) -> FormatOption:
         ),
         InputFormat.HTML: FormatOption(
             pipeline_cls=SimplePipeline, backend=HTMLDocumentBackend
+        ),
+        InputFormat.PATENT_USPTO: FormatOption(
+            pipeline_cls=SimplePipeline, backend=PatentUsptoDocumentBackend
         ),
         InputFormat.IMAGE: FormatOption(
             pipeline_cls=StandardPdfPipeline, backend=DoclingParseV2DocumentBackend

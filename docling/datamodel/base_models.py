@@ -36,6 +36,7 @@ class InputFormat(str, Enum):
     ASCIIDOC = "asciidoc"
     MD = "md"
     XLSX = "xlsx"
+    PATENT_USPTO = "uspto"
 
 
 class OutputFormat(str, Enum):
@@ -55,6 +56,7 @@ FormatToExtensions: Dict[InputFormat, List[str]] = {
     InputFormat.IMAGE: ["jpg", "jpeg", "png", "tif", "tiff", "bmp"],
     InputFormat.ASCIIDOC: ["adoc", "asciidoc", "asc"],
     InputFormat.XLSX: ["xlsx"],
+    InputFormat.PATENT_USPTO: ["xml", "txt"],
 }
 
 FormatToMimeType: Dict[InputFormat, List[str]] = {
@@ -81,6 +83,7 @@ FormatToMimeType: Dict[InputFormat, List[str]] = {
     InputFormat.XLSX: [
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ],
+    InputFormat.PATENT_USPTO: ["application/xml", "text/plain"],
 }
 
 MimeTypeToFormat = {
