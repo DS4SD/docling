@@ -8,7 +8,9 @@ from docling_core.types.doc import (
     Size,
     TableCell,
 )
-from docling_core.types.io import DocumentStream
+from docling_core.types.io import (  # DO ΝΟΤ REMOVE; explicitly exposed from this location
+    DocumentStream,
+)
 from PIL.Image import Image
 from pydantic import BaseModel, ConfigDict
 
