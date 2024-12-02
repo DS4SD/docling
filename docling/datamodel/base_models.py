@@ -22,7 +22,7 @@ class ConversionStatus(str, Enum):
     FAILURE = auto()
     SUCCESS = auto()
     PARTIAL_SUCCESS = auto()
-    UNSUPPORTED = auto()
+    SKIPPED = auto()
 
 
 class InputFormat(str, Enum):
@@ -94,6 +94,7 @@ class DoclingComponentType(str, Enum):
     DOCUMENT_BACKEND = auto()
     MODEL = auto()
     DOC_ASSEMBLER = auto()
+    USER_INPUT = auto()
 
 
 class ErrorItem(BaseModel):

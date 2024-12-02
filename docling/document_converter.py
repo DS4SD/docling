@@ -15,7 +15,13 @@ from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.msexcel_backend import MsExcelDocumentBackend
 from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
-from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
+from docling.datamodel.base_models import (
+    ConversionStatus,
+    DoclingComponentType,
+    DocumentStream,
+    ErrorItem,
+    InputFormat,
+)
 from docling.datamodel.document import (
     ConversionResult,
     InputDocument,
@@ -262,11 +268,17 @@ class DocumentConverter:
         if valid:
             conv_res = self._execute_pipeline(in_doc, raises_on_error=raises_on_error)
         else:
+            error_message = f"File format not allowed: {in_doc.file}"
             if raises_on_error:
-                raise ConversionError(f"Unsupported format in: {in_doc.file}")
+                raise ConversionError(error_message)
             else:
+                error_item = ErrorItem(
+                    component_type=DoclingComponentType.USER_INPUT,
+                    module_name="",
+                    error_message=error_message,
+                )
                 conv_res = ConversionResult(
-                    input=in_doc, status=ConversionStatus.UNSUPPORTED
+                    input=in_doc, status=ConversionStatus.SKIPPED, errors=[error_item]
                 )
 
         return conv_res

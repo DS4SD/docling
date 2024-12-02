@@ -24,7 +24,7 @@ def test_convert_unsupported_doc_format_wout_exception(converter: DocumentConver
     result = converter.convert(
         DocumentStream(name="input.xyz", stream=BytesIO(b"xyz")), raises_on_error=False
     )
-    assert result.status == ConversionStatus.UNSUPPORTED
+    assert result.status == ConversionStatus.SKIPPED
 
 
 def test_convert_unsupported_doc_format_with_exception(converter: DocumentConverter):
