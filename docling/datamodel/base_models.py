@@ -117,6 +117,7 @@ class Cluster(BaseModel):
     bbox: BoundingBox
     confidence: float = 1.0
     cells: List[Cell] = []
+    children: List["Cluster"] = []  # Add child cluster support
 
 
 class BasePageElement(BaseModel):
