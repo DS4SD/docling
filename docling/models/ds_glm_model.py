@@ -215,17 +215,21 @@ class GlmModel:
                             )
                         ],
                         obj_type=layout_label_to_ds_type.get(element.label),
-                        payload=TypeAdapter(List[Cluster]).dump_python(
-                            element.cluster.children
-                        ),  # hack to channel child clusters through GLM
+                        payload={
+                            "children": TypeAdapter(List[Cluster]).dump_python(
+                                element.cluster.children
+                            )
+                        },  # hack to channel child clusters through GLM
                     )
                 )
             elif isinstance(element, ContainerElement):
                 main_text.append(
                     BaseText(
-                        payload=TypeAdapter(List[Cluster]).dump_python(
-                            element.cluster.children
-                        ),  # hack to channel child clusters through GLM
+                        payload={
+                            "children": TypeAdapter(List[Cluster]).dump_python(
+                                element.cluster.children
+                            )
+                        },  # hack to channel child clusters through GLM
                         obj_type=layout_label_to_ds_type.get(element.label),
                         name=element.label,
                         prov=[
