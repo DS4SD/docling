@@ -17,7 +17,7 @@ This is a collection of FAQ collected from the user questions on <https://github
     source ./venv/bin/activate
 
     # Install torch nightly builds, see https://pytorch.org/
-    pip3 install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cpu
+    pip3 install --pre torch torchvision --index-url https://download.pytorch.org/whl/nightly/cpu
 
     # Install docling
     pip3 install docling
