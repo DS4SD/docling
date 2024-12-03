@@ -1,3 +1,9 @@
+## [v2.8.3](https://github.com/DS4SD/docling/releases/tag/v2.8.3) - 2024-12-03
+
+### Fix
+
+* Improve handling of disallowed formats ([#429](https://github.com/DS4SD/docling/issues/429)) ([`34c7c79`](https://github.com/DS4SD/docling/commit/34c7c798580476a86ce8abec30b1115fbb36fdd8))
+
 ## [v2.8.2](https://github.com/DS4SD/docling/releases/tag/v2.8.2) - 2024-12-03
 
 ### Fix
