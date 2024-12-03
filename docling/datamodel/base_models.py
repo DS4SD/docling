@@ -132,6 +132,12 @@ class LayoutPrediction(BaseModel):
     clusters: List[Cluster] = []
 
 
+class ContainerElement(
+    BasePageElement
+):  # Used for Form and Key-Value-Regions, only for typing.
+    pass
+
+
 class Table(BasePageElement):
     otsl_seq: List[str]
     num_rows: int = 0
@@ -171,7 +177,7 @@ class PagePredictions(BaseModel):
     equations_prediction: Optional[EquationPrediction] = None
 
 
-PageElement = Union[TextElement, Table, FigureElement]
+PageElement = Union[TextElement, Table, FigureElement, ContainerElement]
 
 
 class AssembledUnit(BaseModel):
