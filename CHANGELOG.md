@@ -1,3 +1,21 @@
+## [v2.8.2](https://github.com/DS4SD/docling/releases/tag/v2.8.2) - 2024-12-03
+
+### Fix
+
+* ParserError EOF inside string (#470) ([#472](https://github.com/DS4SD/docling/issues/472)) ([`c90c41c`](https://github.com/DS4SD/docling/commit/c90c41c391de4366db554d7a71ce9a35467c981e))
+* PermissionError when using tesseract_ocr_cli_model ([#496](https://github.com/DS4SD/docling/issues/496)) ([`d3f84b2`](https://github.com/DS4SD/docling/commit/d3f84b2457125feacd0c21d6513e7ae69a308ea5))
+
+### Documentation
+
+* Add styling for faq ([#502](https://github.com/DS4SD/docling/issues/502)) ([`5ba3807`](https://github.com/DS4SD/docling/commit/5ba3807f315a01b1a4e8df9bab40e34a4238205a))
+* Typo in faq ([#484](https://github.com/DS4SD/docling/issues/484)) ([`33cff98`](https://github.com/DS4SD/docling/commit/33cff98d360c02a382a66850c696a0cf511659ac))
+* Add automatic api reference ([#475](https://github.com/DS4SD/docling/issues/475)) ([`d487210`](https://github.com/DS4SD/docling/commit/d4872103b8f24e38b37a8cd3ac414d3e02e7d6e8))
+* Introduce faq section ([#468](https://github.com/DS4SD/docling/issues/468)) ([`8ccb3c6`](https://github.com/DS4SD/docling/commit/8ccb3c6db69318789af7deec26cfa2a3fd71302e))
+
+### Performance
+
+* Prevent temp file leftovers, reuse core type ([#487](https://github.com/DS4SD/docling/issues/487)) ([`051789d`](https://github.com/DS4SD/docling/commit/051789d01706d3823dd6307eca4dc5faacd1b7ce))
+
 ## [v2.8.1](https://github.com/DS4SD/docling/releases/tag/v2.8.1) - 2024-11-29
 
 ### Fix
