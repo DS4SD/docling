@@ -3,7 +3,7 @@ from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
@@ -92,6 +92,8 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         try:
             # Iterate over elements in the body of the document
             for idx, element in enumerate(element.children):
+                if isinstance(element, NavigableString):
+                    continue  # Skip over navigable strings
                 try:
                     self.analyse_element(element, idx, doc)
                 except Exception as exc_child:
