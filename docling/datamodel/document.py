@@ -32,7 +32,7 @@ from docling_core.types.legacy_doc.document import (
 )
 from docling_core.types.legacy_doc.document import CCSFileInfoObject as DsFileInfoObject
 from docling_core.types.legacy_doc.document import ExportedCCSDocument as DsDocument
-from docling_core.utils.file import resolve_file_source
+from docling_core.utils.file import resolve_source_to_stream
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
@@ -459,7 +459,7 @@ class _DocumentConversionInput(BaseModel):
         self, format_options: Dict[InputFormat, "FormatOption"]
     ) -> Iterable[InputDocument]:
         for item in self.path_or_stream_iterator:
-            obj = resolve_file_source(item) if isinstance(item, str) else item
+            obj = resolve_source_to_stream(item) if isinstance(item, str) else item
             format = self._guess_format(obj)
             if format not in format_options.keys():
                 _log.info(
