@@ -1,5 +1,4 @@
 from enum import Enum, auto
-from io import BytesIO
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from docling_core.types.doc import (
@@ -8,6 +7,9 @@ from docling_core.types.doc import (
     PictureDataType,
     Size,
     TableCell,
+)
+from docling_core.types.io import (  # DO ΝΟΤ REMOVE; explicitly exposed from this location
+    DocumentStream,
 )
 from PIL.Image import Image
 from pydantic import BaseModel, ConfigDict
@@ -207,10 +209,3 @@ class Page(BaseModel):
     @property
     def image(self) -> Optional[Image]:
         return self.get_image(scale=self._default_image_scale)
-
-
-class DocumentStream(BaseModel):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    name: str
-    stream: BytesIO
