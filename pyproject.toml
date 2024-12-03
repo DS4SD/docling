@@ -90,10 +90,13 @@ langchain-huggingface = "^0.0.3"
 langchain-milvus = "^0.1.4"
 langchain-text-splitters = "^0.2.4"
 
+[tool.poetry.group.constraints]
+optional = true
+
 [tool.poetry.group.constraints.dependencies]
 numpy = [
-    { version = "^2.1.0", markers = 'python_version >= "3.13"' },
-    { version = "^1.24.4", markers = 'python_version < "3.13"' },
+    { version = ">=1.24.4,<3.0.0", markers = 'python_version >= "3.10"' },
+    { version = ">=1.24.4,<2.1.0", markers = 'python_version < "3.10"' },
 ]
 
 [tool.poetry.group.mac_intel]
