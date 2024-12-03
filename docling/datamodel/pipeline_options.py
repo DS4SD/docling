@@ -142,9 +142,7 @@ class PdfPipelineOptions(PipelineOptions):
     do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
-    ocr_options: Union[
-        EasyOcrOptions, TesseractCliOcrOptions, TesseractOcrOptions, OcrMacOptions
-    ] = Field(EasyOcrOptions(), discriminator="kind")
+    ocr_options: OcrOptions = Field(EasyOcrOptions(), discriminator="kind")
 
     images_scale: float = 1.0
     generate_page_images: bool = False
