@@ -88,6 +88,7 @@ def export_documents(
     export_md: bool,
     export_txt: bool,
     export_doctags: bool,
+    export_itxt: bool,
 ):
 
     success_count = 0
@@ -126,6 +127,12 @@ def export_documents(
                     _log.info(f"writing Doc Tags output to {fname}")
                     fp.write(conv_res.document.export_to_document_tokens())
 
+            # Export Indented Text format:
+            if export_itxt:
+                fname = output_dir / f"{doc_filename}.itxt"
+                with fname.open("w") as fp:
+                    _log.info(f"writing Indented Text output to {fname}")
+                    fp.write(conv_res.document._export_to_indented_text())
         else:
             _log.warning(f"Document {conv_res.input.file} failed to convert.")
             failure_count += 1
@@ -279,6 +286,7 @@ def convert(
     export_md = OutputFormat.MARKDOWN in to_formats
     export_txt = OutputFormat.TEXT in to_formats
     export_doctags = OutputFormat.DOCTAGS in to_formats
+    export_itxt = OutputFormat.INDENTED_TEXT in to_formats
 
     if ocr_engine == OcrEngine.EASYOCR:
         ocr_options: OcrOptions = EasyOcrOptions(force_full_page_ocr=force_ocr)
@@ -303,6 +311,7 @@ def convert(
         do_table_structure=True,
     )
     pipeline_options.table_structure_options.do_cell_matching = True  # do_cell_matching
+
     pipeline_options.table_structure_options.mode = table_mode
 
     if artifacts_path is not None:
@@ -342,6 +351,7 @@ def convert(
         export_md=export_md,
         export_txt=export_txt,
         export_doctags=export_doctags,
+        export_itxt=export_itxt,
     )
 
     end_time = time.time() - start_time

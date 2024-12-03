@@ -40,6 +40,7 @@ class OutputFormat(str, Enum):
     JSON = "json"
     TEXT = "text"
     DOCTAGS = "doctags"
+    INDENTED_TEXT = "itxt"
 
 
 FormatToExtensions: Dict[InputFormat, List[str]] = {
