@@ -97,30 +97,32 @@ class LayoutModel(BasePageModel):
         # Function to draw clusters on an image
         def draw_clusters(image, clusters):
             draw = ImageDraw.Draw(image, "RGBA")
-            for c in clusters:
-                cell_color = (0, 0, 0, 40)  # Transparent black for cells
-                for tc in c.cells:
-                    cx0, cy0, cx1, cy1 = tc.bbox.as_tuple()
-                    draw.rectangle(
-                        [(cx0, cy0), (cx1, cy1)],
-                        outline=None,
-                        fill=cell_color,
-                    )
+            for c_tl in clusters:
+                all_clusters = [c_tl, *c_tl.children]
+                for c in all_clusters:
+                    cell_color = (0, 0, 0, 40)  # Transparent black for cells
+                    for tc in c.cells:
+                        cx0, cy0, cx1, cy1 = tc.bbox.as_tuple()
+                        draw.rectangle(
+                            [(cx0, cy0), (cx1, cy1)],
+                            outline=None,
+                            fill=cell_color,
+                        )
 
-                x0, y0, x1, y1 = c.bbox.as_tuple()
-                cluster_fill_color = (
-                    *list(label_to_color.get(c.label)),  # type: ignore
-                    70,
-                )
-                cluster_outline_color = (
-                    *list(label_to_color.get(c.label)),  # type: ignore
-                    255,
-                )
-                draw.rectangle(
-                    [(x0, y0), (x1, y1)],
-                    outline=cluster_outline_color,
-                    fill=cluster_fill_color,
-                )
+                    x0, y0, x1, y1 = c.bbox.as_tuple()
+                    cluster_fill_color = (
+                        *list(label_to_color.get(c.label)),  # type: ignore
+                        70,
+                    )
+                    cluster_outline_color = (
+                        *list(label_to_color.get(c.label)),  # type: ignore
+                        255,
+                    )
+                    draw.rectangle(
+                        [(x0, y0), (x1, y1)],
+                        outline=cluster_outline_color,
+                        fill=cluster_fill_color,
+                    )
 
         # Draw clusters on both images
         draw_clusters(left_image, left_clusters)
