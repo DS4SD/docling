@@ -46,6 +46,8 @@ class LayoutModel(BasePageModel):
     FIGURE_LABEL = DocItemLabel.PICTURE
     FORMULA_LABEL = DocItemLabel.FORMULA
 
+    CONTAINER_LABELS = [DocItemLabel.FORM, DocItemLabel.KEY_VALUE_REGION]
+
     def __init__(self, artifacts_path: Path):
         self.layout_predictor = LayoutPredictor(artifacts_path)  # TODO temporary
 
@@ -177,24 +179,6 @@ class LayoutModel(BasePageModel):
                             cells=[],
                         )
                         clusters.append(cluster)
-                    #
-                    # # Map cells to clusters
-                    # # TODO: Remove, postprocess should take care of it anyway.
-                    # for cell in page.cells:
-                    #     for cluster in clusters:
-                    #         if not cell.bbox.area() > 0:
-                    #             overlap_frac = 0.0
-                    #         else:
-                    #             overlap_frac = (
-                    #                 cell.bbox.intersection_area_with(cluster.bbox)
-                    #                 / cell.bbox.area()
-                    #             )
-                    #
-                    #         if overlap_frac > 0.5:
-                    #             cluster.cells.append(cell)
-
-                    # Pre-sort clusters
-                    # clusters = self.sort_clusters_by_cell_order(clusters)
 
                     # DEBUG code:
                     def draw_clusters_and_cells(
@@ -298,18 +282,6 @@ class LayoutModel(BasePageModel):
                     page.predictions.layout = LayoutPrediction(
                         clusters=processed_clusters
                     )
-
-                    # def check_for_overlaps(clusters):
-                    #     for i, cluster in enumerate(clusters):
-                    #         for j, other_cluster in enumerate(clusters):
-                    #             if i >= j or cluster.label in [DocItemLabel.FORM, DocItemLabel.KEY_VALUE_REGION, DocItemLabel.PICTURE]:
-                    #                 continue
-                    #
-                    #             overlap_area = cluster.bbox.intersection_area_with(other_cluster.bbox)
-                    #             if overlap_area > 0:
-                    #                 print(f"Overlap detected between cluster {i} and cluster {j}")
-                    #                 print(f"Cluster {i} bbox: {cluster.bbox}, Cluster {j} bbox: {other_cluster.bbox}")
-                    # check_for_overlaps(processed_clusters)
 
                 if settings.debug.visualize_layout:
                     self.draw_clusters_and_cells_side_by_side(

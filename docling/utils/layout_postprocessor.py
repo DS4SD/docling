@@ -1,5 +1,6 @@
 import bisect
 import logging
+import sys
 from collections import defaultdict
 from typing import Dict, List, Set, Tuple
 
@@ -279,7 +280,16 @@ class LayoutPostprocessor:
                         contained.append(cluster)
 
             if contained:
+                # Sort contained clusters by minimum cell ID
+                contained.sort(
+                    key=lambda cluster: (
+                        min(cell.id for cell in cluster.cells)
+                        if cluster.cells
+                        else sys.maxsize
+                    )
+                )
                 special.children = contained
+
                 # Adjust bbox only for wrapper types
                 if special.label in self.WRAPPER_TYPES:
                     special.bbox = BoundingBox(
