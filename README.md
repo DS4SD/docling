@@ -4,7 +4,7 @@
   </a>
 </p>
 
-# 🦆 Docling
+# Docling
 
 <p align="center">
   <a href="https://trendshift.io/repositories/12132" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12132" alt="DS4SD%2Fdocling | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
