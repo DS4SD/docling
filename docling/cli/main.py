@@ -11,6 +11,7 @@ from typing import Annotated, Dict, Iterable, List, Optional, Type
 
 import typer
 from docling_core.utils.file import resolve_source_to_path
+from pydantic import TypeAdapter, ValidationError
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.docling_parse_v2_backend import DoclingParseV2DocumentBackend
@@ -260,19 +261,39 @@ def convert(
     with tempfile.TemporaryDirectory() as tempdir:
         input_doc_paths: List[Path] = []
         for src in input_sources:
-            source = resolve_source_to_path(source=src, workdir=Path(tempdir))
-            if not source.exists():
+            try:
+                # check if we can fetch some remote url
+                source = resolve_source_to_path(source=src, workdir=Path(tempdir))
+                input_doc_paths.append(source)
+            except FileNotFoundError:
                 err_console.print(
-                    f"[red]Error: The input file {source} does not exist.[/red]"
+                    f"[red]Error: The input file {src} does not exist.[/red]"
                 )
                 raise typer.Abort()
-            elif source.is_dir():
-                for fmt in from_formats:
-                    for ext in FormatToExtensions[fmt]:
-                        input_doc_paths.extend(list(source.glob(f"**/*.{ext}")))
-                        input_doc_paths.extend(list(source.glob(f"**/*.{ext.upper()}")))
-            else:
-                input_doc_paths.append(source)
+            except IsADirectoryError:
+                # if the input matches to a file or a folder
+                try:
+                    local_path = TypeAdapter(Path).validate_python(src)
+                    if local_path.exists() and local_path.is_dir():
+                        for fmt in from_formats:
+                            for ext in FormatToExtensions[fmt]:
+                                input_doc_paths.extend(
+                                    list(local_path.glob(f"**/*.{ext}"))
+                                )
+                                input_doc_paths.extend(
+                                    list(local_path.glob(f"**/*.{ext.upper()}"))
+                                )
+                    elif local_path.exists():
+                        input_doc_paths.append(local_path)
+                    else:
+                        err_console.print(
+                            f"[red]Error: The input file {src} does not exist.[/red]"
+                        )
+                        raise typer.Abort()
+                except Exception as err:
+                    err_console.print(f"[red]Error: Cannot read the input {src}.[/red]")
+                    _log.info(err)  # will print more details if verbose is activated
+                    raise typer.Abort()
 
         if to_formats is None:
             to_formats = [OutputFormat.MARKDOWN]
