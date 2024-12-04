@@ -15,7 +15,13 @@ from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.msexcel_backend import MsExcelDocumentBackend
 from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
-from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
+from docling.datamodel.base_models import (
+    ConversionStatus,
+    DoclingComponentType,
+    DocumentStream,
+    ErrorItem,
+    InputFormat,
+)
 from docling.datamodel.document import (
     ConversionResult,
     InputDocument,
@@ -23,6 +29,7 @@ from docling.datamodel.document import (
 )
 from docling.datamodel.pipeline_options import PipelineOptions
 from docling.datamodel.settings import DocumentLimits, settings
+from docling.exceptions import ConversionError
 from docling.pipeline.base_pipeline import BasePipeline
 from docling.pipeline.simple_pipeline import SimplePipeline
 from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
@@ -85,32 +92,37 @@ class ImageFormatOption(FormatOption):
     backend: Type[AbstractDocumentBackend] = DoclingParseDocumentBackend
 
 
-_format_to_default_options = {
-    InputFormat.XLSX: FormatOption(
-        pipeline_cls=SimplePipeline, backend=MsExcelDocumentBackend
-    ),
-    InputFormat.DOCX: FormatOption(
-        pipeline_cls=SimplePipeline, backend=MsWordDocumentBackend
-    ),
-    InputFormat.PPTX: FormatOption(
-        pipeline_cls=SimplePipeline, backend=MsPowerpointDocumentBackend
-    ),
-    InputFormat.MD: FormatOption(
-        pipeline_cls=SimplePipeline, backend=MarkdownDocumentBackend
-    ),
-    InputFormat.ASCIIDOC: FormatOption(
-        pipeline_cls=SimplePipeline, backend=AsciiDocBackend
-    ),
-    InputFormat.HTML: FormatOption(
-        pipeline_cls=SimplePipeline, backend=HTMLDocumentBackend
-    ),
-    InputFormat.IMAGE: FormatOption(
-        pipeline_cls=StandardPdfPipeline, backend=DoclingParseDocumentBackend
-    ),
-    InputFormat.PDF: FormatOption(
-        pipeline_cls=StandardPdfPipeline, backend=DoclingParseDocumentBackend
-    ),
-}
+def _get_default_option(format: InputFormat) -> FormatOption:
+    format_to_default_options = {
+        InputFormat.XLSX: FormatOption(
+            pipeline_cls=SimplePipeline, backend=MsExcelDocumentBackend
+        ),
+        InputFormat.DOCX: FormatOption(
+            pipeline_cls=SimplePipeline, backend=MsWordDocumentBackend
+        ),
+        InputFormat.PPTX: FormatOption(
+            pipeline_cls=SimplePipeline, backend=MsPowerpointDocumentBackend
+        ),
+        InputFormat.MD: FormatOption(
+            pipeline_cls=SimplePipeline, backend=MarkdownDocumentBackend
+        ),
+        InputFormat.ASCIIDOC: FormatOption(
+            pipeline_cls=SimplePipeline, backend=AsciiDocBackend
+        ),
+        InputFormat.HTML: FormatOption(
+            pipeline_cls=SimplePipeline, backend=HTMLDocumentBackend
+        ),
+        InputFormat.IMAGE: FormatOption(
+            pipeline_cls=StandardPdfPipeline, backend=DoclingParseDocumentBackend
+        ),
+        InputFormat.PDF: FormatOption(
+            pipeline_cls=StandardPdfPipeline, backend=DoclingParseDocumentBackend
+        ),
+    }
+    if (options := format_to_default_options.get(format)) is not None:
+        return options
+    else:
+        raise RuntimeError(f"No default options configured for {format}")
 
 
 class DocumentConverter:
@@ -121,36 +133,26 @@ class DocumentConverter:
         allowed_formats: Optional[List[InputFormat]] = None,
         format_options: Optional[Dict[InputFormat, FormatOption]] = None,
     ):
-        self.allowed_formats = allowed_formats
-        self.format_to_options = format_options
-
-        if self.allowed_formats is None:
-            # if self.format_to_options is not None:
-            #    self.allowed_formats = self.format_to_options.keys()
-            # else:
-            self.allowed_formats = [e for e in InputFormat]  # all formats
-
-        if self.format_to_options is None:
-            self.format_to_options = _format_to_default_options
-        else:
-            for f in self.allowed_formats:
-                if f not in self.format_to_options.keys():
-                    _log.debug(f"Requested format {f} will use default options.")
-                    self.format_to_options[f] = _format_to_default_options[f]
-
-            remove_keys = []
-            for f in self.format_to_options.keys():
-                if f not in self.allowed_formats:
-                    remove_keys.append(f)
-
-            for f in remove_keys:
-                self.format_to_options.pop(f)
-
+        self.allowed_formats = (
+            allowed_formats if allowed_formats is not None else [e for e in InputFormat]
+        )
+        self.format_to_options = {
+            format: (
+                _get_default_option(format=format)
+                if (custom_option := (format_options or {}).get(format)) is None
+                else custom_option
+            )
+            for format in self.allowed_formats
+        }
         self.initialized_pipelines: Dict[Type[BasePipeline], BasePipeline] = {}
 
     def initialize_pipeline(self, format: InputFormat):
         """Initialize the conversion pipeline for the selected format."""
-        self._get_pipeline(doc_format=format)
+        pipeline = self._get_pipeline(doc_format=format)
+        if pipeline is None:
+            raise ConversionError(
+                f"No pipeline could be initialized for format {format}"
+            )
 
     @validate_call(config=ConfigDict(strict=True))
     def convert(
@@ -186,22 +188,28 @@ class DocumentConverter:
             limits=limits,
         )
         conv_res_iter = self._convert(conv_input, raises_on_error=raises_on_error)
+
+        had_result = False
         for conv_res in conv_res_iter:
+            had_result = True
             if raises_on_error and conv_res.status not in {
                 ConversionStatus.SUCCESS,
                 ConversionStatus.PARTIAL_SUCCESS,
             }:
-                raise RuntimeError(
+                raise ConversionError(
                     f"Conversion failed for: {conv_res.input.file} with status: {conv_res.status}"
                 )
             else:
                 yield conv_res
 
+        if not had_result and raises_on_error:
+            raise ConversionError(
+                f"Conversion failed because the provided file has no recognizable format or it wasn't in the list of allowed formats."
+            )
+
     def _convert(
         self, conv_input: _DocumentConversionInput, raises_on_error: bool
     ) -> Iterator[ConversionResult]:
-        assert self.format_to_options is not None
-
         start_time = time.monotonic()
 
         for input_batch in chunkify(
@@ -223,27 +231,22 @@ class DocumentConverter:
             ):
                 elapsed = time.monotonic() - start_time
                 start_time = time.monotonic()
-
-                if item is not None:
-                    _log.info(
-                        f"Finished converting document {item.input.file.name} in {elapsed:.2f} sec."
-                    )
-                    yield item
-                else:
-                    _log.info(f"Skipped a document. We lost {elapsed:.2f} sec.")
+                _log.info(
+                    f"Finished converting document {item.input.file.name} in {elapsed:.2f} sec."
+                )
+                yield item
 
     def _get_pipeline(self, doc_format: InputFormat) -> Optional[BasePipeline]:
-        assert self.format_to_options is not None
-
         fopt = self.format_to_options.get(doc_format)
 
         if fopt is None:
-            raise RuntimeError(f"Could not get pipeline for {doc_format}")
+            return None
         else:
             pipeline_class = fopt.pipeline_cls
             pipeline_options = fopt.pipeline_options
 
-        assert pipeline_options is not None
+        if pipeline_options is None:
+            return None
         # TODO this will ignore if different options have been defined for the same pipeline class.
         if (
             pipeline_class not in self.initialized_pipelines
@@ -257,11 +260,26 @@ class DocumentConverter:
 
     def _process_document(
         self, in_doc: InputDocument, raises_on_error: bool
-    ) -> Optional[ConversionResult]:
-        assert self.allowed_formats is not None
-        assert in_doc.format in self.allowed_formats
+    ) -> ConversionResult:
 
-        conv_res = self._execute_pipeline(in_doc, raises_on_error=raises_on_error)
+        valid = (
+            self.allowed_formats is not None and in_doc.format in self.allowed_formats
+        )
+        if valid:
+            conv_res = self._execute_pipeline(in_doc, raises_on_error=raises_on_error)
+        else:
+            error_message = f"File format not allowed: {in_doc.file}"
+            if raises_on_error:
+                raise ConversionError(error_message)
+            else:
+                error_item = ErrorItem(
+                    component_type=DoclingComponentType.USER_INPUT,
+                    module_name="",
+                    error_message=error_message,
+                )
+                conv_res = ConversionResult(
+                    input=in_doc, status=ConversionStatus.SKIPPED, errors=[error_item]
+                )
 
         return conv_res
 
@@ -270,26 +288,28 @@ class DocumentConverter:
     ) -> ConversionResult:
         if in_doc.valid:
             pipeline = self._get_pipeline(in_doc.format)
-            if pipeline is None:  # Can't find a default pipeline. Should this raise?
+            if pipeline is not None:
+                conv_res = pipeline.execute(in_doc, raises_on_error=raises_on_error)
+            else:
                 if raises_on_error:
-                    raise RuntimeError(
+                    raise ConversionError(
                         f"No pipeline could be initialized for {in_doc.file}."
                     )
                 else:
-                    conv_res = ConversionResult(input=in_doc)
-                    conv_res.status = ConversionStatus.FAILURE
-                    return conv_res
-
-            conv_res = pipeline.execute(in_doc, raises_on_error=raises_on_error)
-
+                    conv_res = ConversionResult(
+                        input=in_doc,
+                        status=ConversionStatus.FAILURE,
+                    )
         else:
             if raises_on_error:
-                raise RuntimeError(f"Input document {in_doc.file} is not valid.")
+                raise ConversionError(f"Input document {in_doc.file} is not valid.")
 
             else:
                 # invalid doc or not of desired format
-                conv_res = ConversionResult(input=in_doc)
-                conv_res.status = ConversionStatus.FAILURE
+                conv_res = ConversionResult(
+                    input=in_doc,
+                    status=ConversionStatus.FAILURE,
+                )
                 # TODO add error log why it failed.
 
         return conv_res

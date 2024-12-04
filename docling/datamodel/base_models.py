@@ -1,5 +1,4 @@
 from enum import Enum, auto
-from io import BytesIO
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from docling_core.types.doc import (
@@ -8,6 +7,9 @@ from docling_core.types.doc import (
     PictureDataType,
     Size,
     TableCell,
+)
+from docling_core.types.io import (  # DO ΝΟΤ REMOVE; explicitly exposed from this location
+    DocumentStream,
 )
 from PIL.Image import Image
 from pydantic import BaseModel, ConfigDict
@@ -22,6 +24,7 @@ class ConversionStatus(str, Enum):
     FAILURE = auto()
     SUCCESS = auto()
     PARTIAL_SUCCESS = auto()
+    SKIPPED = auto()
 
 
 class InputFormat(str, Enum):
@@ -93,6 +96,7 @@ class DoclingComponentType(str, Enum):
     DOCUMENT_BACKEND = auto()
     MODEL = auto()
     DOC_ASSEMBLER = auto()
+    USER_INPUT = auto()
 
 
 class ErrorItem(BaseModel):
@@ -214,10 +218,3 @@ class Page(BaseModel):
     @property
     def image(self) -> Optional[Image]:
         return self.get_image(scale=self._default_image_scale)
-
-
-class DocumentStream(BaseModel):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    name: str
-    stream: BytesIO

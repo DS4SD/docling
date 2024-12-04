@@ -1,5 +1,3 @@
-# Docling
-
 <p align="center">
   <img loading="lazy" alt="Docling" src="assets/docling_processing.png" width="100%" />
   <a href="https://trendshift.io/repositories/12132" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12132" alt="DS4SD%2Fdocling | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
@@ -23,7 +21,7 @@ Docling parses documents and exports them to the desired format with ease and sp
 * 🗂️ Reads popular document formats (PDF, DOCX, PPTX, XLSX, Images, HTML, AsciiDoc & Markdown) and exports to Markdown and JSON
 * 📑 Advanced PDF document understanding incl. page layout, reading order & table structures
 * 🧩 Unified, expressive [DoclingDocument](./concepts/docling_document.md) representation format
-* 🤖 Easy integration with LlamaIndex 🦙 & LangChain 🦜🔗 for powerful RAG / QA applications
+* 🤖 Easy integration with 🦙 LlamaIndex & 🦜🔗 LangChain for powerful RAG / QA applications
 * 🔍 OCR support for scanned PDFs
 * 💻 Simple and convenient CLI
 
