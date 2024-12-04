@@ -114,7 +114,7 @@ def export_documents(
                 with fname.open("w", encoding="utf8") as fp:
                     _log.info(f"writing HTML output to {fname}")
                     fp.write(conv_res.document.export_to_html())
-                    
+
             # Export Text format:
             if export_txt:
                 fname = output_dir / f"{doc_filename}.txt"
