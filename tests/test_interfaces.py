@@ -10,7 +10,7 @@ from docling.document_converter import DocumentConverter, PdfFormatOption
 
 from .verify_utils import verify_conversion_result_v1, verify_conversion_result_v2
 
-GENERATE = True
+GENERATE = False
 
 
 def get_pdf_path():
