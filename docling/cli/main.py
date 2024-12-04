@@ -87,6 +87,7 @@ def export_documents(
     conv_results: Iterable[ConversionResult],
     output_dir: Path,
     export_json: bool,
+    export_html: bool,
     export_md: bool,
     export_txt: bool,
     export_doctags: bool,
@@ -100,13 +101,20 @@ def export_documents(
             success_count += 1
             doc_filename = conv_res.input.file.stem
 
-            # Export Deep Search document JSON format:
+            # Export JSON format:
             if export_json:
                 fname = output_dir / f"{doc_filename}.json"
                 with fname.open("w", encoding="utf8") as fp:
                     _log.info(f"writing JSON output to {fname}")
                     fp.write(json.dumps(conv_res.document.export_to_dict()))
 
+            # Export HTML format:
+            if export_html:
+                fname = output_dir / f"{doc_filename}.html"
+                with fname.open("w", encoding="utf8") as fp:
+                    _log.info(f"writing HTML output to {fname}")
+                    fp.write(conv_res.document.export_to_html())
+                    
             # Export Text format:
             if export_txt:
                 fname = output_dir / f"{doc_filename}.txt"
@@ -299,6 +307,7 @@ def convert(
             to_formats = [OutputFormat.MARKDOWN]
 
         export_json = OutputFormat.JSON in to_formats
+        export_html = OutputFormat.HTML in to_formats
         export_md = OutputFormat.MARKDOWN in to_formats
         export_txt = OutputFormat.TEXT in to_formats
         export_doctags = OutputFormat.DOCTAGS in to_formats
@@ -364,6 +373,7 @@ def convert(
             conv_results,
             output_dir=output,
             export_json=export_json,
+            export_html=export_html,
             export_md=export_md,
             export_txt=export_txt,
             export_doctags=export_doctags,
