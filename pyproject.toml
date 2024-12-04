@@ -26,7 +26,7 @@ packages = [{include = "docling"}]
 ######################
 python = "^3.9"
 pydantic = "^2.0.0"
-docling-core = {git = "https://github.com/DS4SD/docling-core.git", rev = "fix/pydantic-210-issues"}
+docling-core = "^2.7.0"
 docling-ibm-models = "^2.0.6"
 deepsearch-glm = "^0.26.1"
 filetype = "^1.2.0"

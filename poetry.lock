@@ -890,28 +890,24 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "2.6.1"
+version = "2.7.0"
 description = "A python library to define and validate data types in Docling."
 optional = false
-python-versions = "^3.9"
-files = []
-develop = false
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "docling_core-2.7.0-py3-none-any.whl", hash = "sha256:45cd51d7803587e779d49458399373eb399a599e52e2356bd358f63bd2559fa8"},
+    {file = "docling_core-2.7.0.tar.gz", hash = "sha256:180a78cfd334b207f4984962f1f7a5d8e6f91734a9c7bd96d78bc9d19135f114"},
+]
 
 [package.dependencies]
-jsonref = "^1.1.0"
-jsonschema = "^4.16.0"
-pandas = "^2.1.4"
-pillow = "^10.3.0"
-pydantic = ">=2.6.0,<3.0.0,!=2.10.0,!=2.10.1,!=2.10.2"
+jsonref = ">=1.1.0,<2.0.0"
+jsonschema = ">=4.16.0,<5.0.0"
+pandas = ">=2.1.4,<3.0.0"
+pillow = ">=10.3.0,<11.0.0"
+pydantic = ">=2.6.0,<2.10.0 || >2.10.0,<2.10.1 || >2.10.1,<2.10.2 || >2.10.2,<3.0.0"
 pyyaml = ">=5.1,<7.0.0"
-tabulate = "^0.9.0"
-typing-extensions = "^4.12.2"
-
-[package.source]
-type = "git"
-url = "https://github.com/DS4SD/docling-core.git"
-reference = "fix/pydantic-210-issues"
-resolved_reference = "26b383c1cec62cab70cb7639189beec494d30319"
+tabulate = ">=0.9.0,<0.10.0"
+typing-extensions = ">=4.12.2,<5.0.0"
 
 [[package]]
 name = "docling-ibm-models"
@@ -7661,4 +7657,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "ce23f45cd543738b8a6a9196f6ef5b8cfc53e0a1fb22e777a19c53e9cbf320e6"
+content-hash = "9937d92a9800a7064976f0e1f797c5da648e635c7b331904ad302dacef961ecc"
