@@ -1,12 +1,10 @@
-import hashlib
 import logging
 from io import BytesIO
 from pathlib import Path
-from pprint import pprint
-from typing import Final, Set, Union
-
+from typing import Set, Union
 import pubmed_parser  # type: ignore
 from bs4 import BeautifulSoup
+
 from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
