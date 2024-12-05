@@ -15,6 +15,7 @@ from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.msexcel_backend import MsExcelDocumentBackend
 from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
+from docling.backend.pubmed_backend import PubMedDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
 from docling.datamodel.document import (
     ConversionResult,
@@ -75,6 +76,11 @@ class HTMLFormatOption(FormatOption):
     backend: Type[AbstractDocumentBackend] = HTMLDocumentBackend
 
 
+class PubMedFormatOption(FormatOption):
+    pipeline_cls: Type = SimplePipeline
+    backend: Type[AbstractDocumentBackend] = PubMedDocumentBackend
+
+
 class PdfFormatOption(FormatOption):
     pipeline_cls: Type = StandardPdfPipeline
     backend: Type[AbstractDocumentBackend] = DoclingParseDocumentBackend
@@ -103,6 +109,9 @@ _format_to_default_options = {
     ),
     InputFormat.HTML: FormatOption(
         pipeline_cls=SimplePipeline, backend=HTMLDocumentBackend
+    ),
+    InputFormat.PUBMED: FormatOption(
+        pipeline_cls=SimplePipeline, backend=PubMedDocumentBackend
     ),
     InputFormat.IMAGE: FormatOption(
         pipeline_cls=StandardPdfPipeline, backend=DoclingParseDocumentBackend
@@ -160,7 +169,6 @@ class DocumentConverter:
         max_num_pages: int = sys.maxsize,
         max_file_size: int = sys.maxsize,
     ) -> ConversionResult:
-
         all_res = self.convert_all(
             source=[source],
             raises_on_error=raises_on_error,

@@ -501,6 +501,11 @@ class _DocumentConversionInput(BaseModel):
                 with obj.open("rb") as f:
                     content = f.read(1024)  # Read first 1KB
 
+            # Detect PubMed XML documents
+            xml_doctype = re.search(r"<!DOCTYPE [^>]+>", content.decode("utf-8"))
+            if xml_doctype and ("/NLM//DTD JATS" in xml_doctype.group()):
+                return InputFormat.PUBMED
+
         elif isinstance(obj, DocumentStream):
             content = obj.stream.read(8192)
             obj.stream.seek(0)
