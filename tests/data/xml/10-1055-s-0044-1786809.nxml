@@ -1,0 +1,296 @@
+<!DOCTYPE article
+PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD with MathML3 v1.3 20210610//EN" "JATS-archivearticle1-3-mathml3.dtd">
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" article-type="research-article" xml:lang="en" dtd-version="1.3"><?properties open_access?><processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats"><restricted-by>pmc</restricted-by></processing-meta><front><journal-meta><journal-id journal-id-type="nlm-ta">Thromb Haemost</journal-id><journal-id journal-id-type="iso-abbrev">Thromb Haemost</journal-id><journal-id journal-id-type="doi">10.1055/s-00035024</journal-id><journal-title-group><journal-title>Thrombosis and Haemostasis</journal-title></journal-title-group><issn pub-type="ppub">0340-6245</issn><issn pub-type="epub">2567-689X</issn><publisher><publisher-name>Georg Thieme Verlag KG</publisher-name><publisher-loc>R&#x000fc;digerstra&#x000df;e 14, 70469 Stuttgart, Germany</publisher-loc></publisher></journal-meta>
+<article-meta><article-id pub-id-type="pmid">38788766</article-id><article-id pub-id-type="pmc">11518616</article-id>
+<article-id pub-id-type="doi">10.1055/s-0044-1786809</article-id><article-id pub-id-type="publisher-id">TH-23-12-0539</article-id><article-categories><subj-group><subject>Atherosclerosis and Ischaemic Disease</subject></subj-group></article-categories><title-group><article-title>Exploring Causal Relationships between Circulating Inflammatory Proteins and Thromboangiitis Obliterans: A Mendelian Randomization Study</article-title></title-group><contrib-group><contrib contrib-type="author"><contrib-id contrib-id-type="orcid">http://orcid.org/0000-0003-3693-6153</contrib-id><name><surname>Zhang</surname><given-names>Bihui</given-names></name><xref rid="AF23120539-1" ref-type="aff">1</xref><xref rid="FN23120539-1" ref-type="fn">*</xref><xref rid="CO23120539-2" ref-type="author-notes"/></contrib><contrib contrib-type="author"><name><surname>He</surname><given-names>Rui</given-names></name><xref rid="AF23120539-2" ref-type="aff">2</xref><xref rid="FN23120539-1" ref-type="fn">*</xref></contrib><contrib contrib-type="author"><name><surname>Yao</surname><given-names>Ziping</given-names></name><xref rid="AF23120539-1" ref-type="aff">1</xref><xref rid="FN23120539-1" ref-type="fn">*</xref></contrib><contrib contrib-type="author"><name><surname>Li</surname><given-names>Pengyu</given-names></name><xref rid="AF23120539-1" ref-type="aff">1</xref></contrib><contrib contrib-type="author"><name><surname>Niu</surname><given-names>Guochen</given-names></name><xref rid="AF23120539-1" ref-type="aff">1</xref></contrib><contrib contrib-type="author"><name><surname>Yan</surname><given-names>Ziguang</given-names></name><xref rid="AF23120539-1" ref-type="aff">1</xref></contrib><contrib contrib-type="author"><name><surname>Zou</surname><given-names>Yinghua</given-names></name><xref rid="AF23120539-1" ref-type="aff">1</xref></contrib><contrib contrib-type="author"><name><surname>Tong</surname><given-names>Xiaoqiang</given-names></name><xref rid="AF23120539-1" ref-type="aff">1</xref></contrib><contrib contrib-type="author"><name><surname>Yang</surname><given-names>Min</given-names></name><xref rid="AF23120539-1" ref-type="aff">1</xref><xref rid="CO23120539-1" ref-type="author-notes"/></contrib></contrib-group><aff id="AF23120539-1"><label>1</label><institution>Department of Interventional Radiology and Vascular Surgery, Peking University First Hospital, Beijing, China</institution></aff><aff id="AF23120539-2"><label>2</label><institution>Department of Plastic Surgery and Burn, Peking University First Hospital, Beijing, China</institution></aff><author-notes><corresp id="CO23120539-1"><bold>Address for correspondence </bold>Min Yang, MD <institution>Department of Interventional Radiology and Vascular Surgery, Peking University First Hospital</institution><addr-line>No. 8, Xishiku Street, Xicheng-Qu, Beijing, 100000</addr-line><country>China</country><email>dryangmin@gmail.com</email></corresp><corresp id="CO23120539-2">Bihui Zhang, MD <institution>Department of Interventional Radiology and Vascular Surgery, Peking University First Hospital</institution><addr-line>No. 8, Xishiku Street, Xicheng-Qu, Beijing, 100000</addr-line><country>China</country><email>dr_zhangbihui@163.com</email></corresp></author-notes><pub-date pub-type="epub"><day>24</day><month>5</month><year>2024</year></pub-date><pub-date pub-type="collection"><month>11</month><year>2024</year></pub-date><pub-date pub-type="pmc-release"><day>1</day><month>5</month><year>2024</year></pub-date><volume>124</volume><issue>11</issue><fpage>1075</fpage><lpage>1083</lpage><history><date date-type="received"><day>07</day><month>12</month><year>2023</year></date><date date-type="accepted"><day>05</day><month>4</month><year>2024</year></date></history><permissions><copyright-statement>
+The Author(s). This is an open access article published by Thieme under the terms of the Creative Commons Attribution-NonDerivative-NonCommercial License, permitting copying and reproduction so long as the original work is given appropriate credit. Contents may not be used for commercial purposes, or adapted, remixed, transformed or built upon. (
+<uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://creativecommons.org/licenses/by-nc-nd/4.0/">https://creativecommons.org/licenses/by-nc-nd/4.0/</uri>
+)
+</copyright-statement><copyright-year>2024</copyright-year><copyright-holder>The Author(s).</copyright-holder><license><ali:license_ref xmlns:ali="http://www.niso.org/schemas/ali/1.0/" specific-use="textmining" content-type="ccbyncndlicense">https://creativecommons.org/licenses/by-nc-nd/4.0/</ali:license_ref><license-p>This is an open-access article distributed under the terms of the Creative Commons Attribution-NonCommercial-NoDerivatives License, which permits unrestricted reproduction and distribution, for non-commercial purposes only; and use and reproduction, but not distribution, of adapted material for non-commercial purposes only, provided the original work is properly cited.</license-p></license></permissions><abstract abstract-type="graphical"><p><bold>Background</bold>
+&#x02003;Thromboangiitis obliterans (TAO) is a vascular condition characterized by poor prognosis and an unclear etiology. This study employs Mendelian randomization (MR) to investigate the causal impact of circulating inflammatory proteins on TAO.
+</p><p><bold>Methods</bold>
+&#x02003;In this MR analysis, summary statistics from a genome-wide association study meta-analysis of 91 inflammation-related proteins were integrated with independently sourced TAO data from the FinnGen consortium's R10 release. Methods such as inverse variance weighting, MR&#x02013;Egger regression, weighted median approaches, MR-PRESSO, and multivariable MR (MVMR) analysis were utilized.
+</p><p><bold>Results</bold>
+&#x02003;The analysis indicated an association between higher levels of C&#x02013;C motif chemokine 4 and a reduced risk of TAO, with an odds ratio (OR) of 0.44 (95% confidence interval [CI]: 0.29&#x02013;0.67;
+<italic>p</italic>
+&#x02009;=&#x02009;1.4&#x02009;&#x000d7;&#x02009;10
+<sup>&#x02212;4</sup>
+; adjusted
+<italic>p</italic>
+&#x02009;=&#x02009;0.013). Similarly, glial cell line-derived neurotrophic factor exhibited a suggestively protective effect against TAO (OR: 0.43, 95% CI: 0.22&#x02013;0.81;
+<italic>p</italic>
+&#x02009;=&#x02009;0.010; adjusted
+<italic>p</italic>
+&#x02009;=&#x02009;0.218). Conversely, higher levels of C&#x02013;C motif chemokine 23 were suggestively linked to an increased risk of TAO (OR: 1.88, 95% CI: 1.21&#x02013;2.93;
+<italic>p</italic>
+&#x02009;=&#x02009;0.005; adjusted
+<italic>p</italic>
+&#x02009;=&#x02009;0.218). The sensitivity analysis and MVMR revealed no evidence of heterogeneity or pleiotropy.
+</p><p><bold>Conclusion</bold>
+&#x02003;This study identifies C&#x02013;C motif chemokine 4 and glial cell line-derived neurotrophic factor as potential protective biomarkers for TAO, whereas C&#x02013;C motif chemokine 23 emerges as a suggestive risk marker. These findings elucidate potential causal relationships and highlight the significance of these proteins in the pathogenesis and prospective therapeutic strategies for TAO.
+</p><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0044-1786809-i23120539-toc.jpg"/></abstract><kwd-group><title>Keywords</title><kwd>thromboangiitis obliterans</kwd><kwd>Mendelian randomization</kwd><kwd>inflammatory proteins</kwd><kwd>biomarkers</kwd><kwd>therapeutic target</kwd></kwd-group><funding-group><funding-statement><bold>Funding</bold>
+This research was funded by National High Level Hospital Clinical Research Funding (Interdepartmental Research Project of Peking University First Hospital) 2023IR32, the National Natural Science Foundation of China (82200537), and the Interdisciplinary Clinical Research Project of Peking University First Hospital, grant No. 2018CR33. The APC was funded by Peking University First Hospital.
+</funding-statement></funding-group></article-meta></front><body><sec><title>Introduction</title><p>
+Thromboangiitis obliterans (TAO), commonly referred to as Buerger's disease, is a distinct nonatherosclerotic, segmental inflammatory disorder that predominantly affects small- and medium-sized arteries and veins in both the upper and lower extremities.
+<xref rid="JR23120539-1" ref-type="bibr">1</xref>
+TAO, with an annual incidence of 12.6 per 100,000 in the United States, is observed worldwide but is more prevalent in the Middle East and Far East.
+<xref rid="JR23120539-1" ref-type="bibr">1</xref>
+The disease typically presents in patients &#x0003c;45 years of age. Despite over a century of recognition, advancements in comprehending its etiology, pathophysiology, and optimal treatment strategies have been limited.
+<xref rid="JR23120539-2" ref-type="bibr">2</xref>
+<xref rid="JR23120539-3" ref-type="bibr">3</xref>
+Vascular event-free survival and amputation-free survival rates at 5, 10, and 15 years are reported at 41 and 85%, 23 and 74%, and 19 and 66%, respectively.
+<xref rid="JR23120539-4" ref-type="bibr">4</xref>
+</p><p>
+An immune-mediated response is implicated in TAO pathogenesis.
+<xref rid="JR23120539-5" ref-type="bibr">5</xref>
+Recent studies have identified a balanced presence of CD4+ and CD8+ T cells near the internal lamina. Additionally, macrophages and S100+ dendritic cells are present in thrombi and intimal layers.
+<xref rid="JR23120539-5" ref-type="bibr">5</xref>
+<xref rid="JR23120539-6" ref-type="bibr">6</xref>
+Elevated levels of diverse cytokines in TAO patients highlight the critical importance of inflammatory and autoimmune mechanisms.
+<xref rid="JR23120539-2" ref-type="bibr">2</xref>
+<xref rid="JR23120539-7" ref-type="bibr">7</xref>
+Nonetheless, the clinical significance of these cytokines is yet to be fully understood, due to the scarcity of comprehensive experimental and clinical studies. Investigating circulating inflammatory proteins could shed light on the biological underpinnings of TAO, offering new diagnostic and therapeutic avenues.
+</p><p>
+Mendelian randomization (MR) is an approach that leverages genetic variants associated with specific exposures to infer causal relationships between risk factors and disease outcomes.
+<xref rid="JR23120539-8" ref-type="bibr">8</xref>
+This method, which relies on the random distribution of genetic variants during meiosis, helps minimize confounding factors and biases inherent in environmental or behavioral influences.
+<xref rid="JR23120539-9" ref-type="bibr">9</xref>
+It is particularly useful in addressing limitations of conventional observational studies and randomized controlled trials, especially for rare diseases like TAO.
+<xref rid="JR23120539-10" ref-type="bibr">10</xref>
+For a robust MR analysis, three critical assumptions must be met: the genetic variants should be strongly associated with the risk factor, not linked to confounding variables, and affect the outcome solely through the risk factor, excluding any direct causal pathways.
+<xref rid="JR23120539-10" ref-type="bibr">10</xref>
+In the present study, a MR was employed to evaluate the impact of genetically proxied inflammatory protein levels on the risk of developing TAO.
+</p></sec><sec><title>Materials and Methods</title><sec><title>Study Design</title><p>
+The current research represents a MR analysis conducted in accordance with STROBE-MR guidelines.
+<xref rid="JR23120539-11" ref-type="bibr">11</xref>
+Genetic variants associated with circulating inflammatory proteins were identified from a comprehensive genome-wide meta-analysis, which analyzed 91 plasma proteins in a sample of 14,824 individuals of European descent, spanning 11 distinct cohorts.
+<xref rid="JR23120539-12" ref-type="bibr">12</xref>
+This study utilized the Olink Target-96 Inflammation immunoassay panel to focus on 92 inflammation-related proteins. However, due to assay issues, brain-derived neurotrophic factor was subsequently removed from the panel by Olink, resulting in the inclusion of 91 proteins in the analysis. Protein quantitative trait locus (pQTL) mapping was employed to determine genetic impacts on these inflammation-related proteins. The data on these 91 plasma inflammatory proteins, including the pQTL findings, are accessible in the EBI GWAS Catalog (accession numbers GCST90274758 to GCST90274848).
+</p><p>
+Flowchart of the study is shown in
+<xref rid="FI23120539-1" ref-type="fig">Fig. 1</xref>
+. Summary statistics for TAO in the genome-wide association study (GWAS) were derived from the FinnGen consortium R10 release (finngen_R10_I9_THROMBANG). Launched in 2017, the FinnGen study is a comprehensive nationwide effort combining genetic information from Finnish biobanks with digital health records from national registries.
+<xref rid="JR23120539-13" ref-type="bibr">13</xref>
+The GWAS included a substantial cohort of 412,181 Finnish participants, analyzing 21,311,942 variants, with TAO cases (114) and controls (381,977) identified according to International Classification of Diseases (ICD)-8 (44310), ICD-9 (4431A), and ICD-10 (I73.1) classifications.
+</p><fig id="FI23120539-1"><label>Fig. 1</label><caption><p>
+The flowchart of the study. The whole workflow of MR analysis. GWAS, genome-wide association study; TAO, thromboangiitis obliterans; SNP, single nucleotide polymorphism; MR, Mendelian randomization.
+</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0044-1786809-i23120539-1"/></fig><p>All included studies had received approval from their respective institutional review boards and ethical committees.</p></sec><sec><title>Instrumental Variable Selection</title><p>
+We employed comprehensive GWAS summary statistics for 91 inflammation-related proteins to select genetic instruments. The criteria for eligibility included: (1) single nucleotide polymorphisms (SNPs) must exhibit a genome-wide significant association with each protein (
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;5.0&#x02009;&#x000d7;&#x02009;10
+<sup>&#x02212;6</sup>
+); (2) SNPs should be independently associated with the exposure, meaning they must not be in linkage disequilibrium (defined as
+<italic>r</italic>
+<sup>2</sup>
+&#x02009;&#x0003c;&#x02009;0.01, distance&#x02009;&#x0003e;&#x02009;10,000&#x02009;kb) with other SNPs for the same exposure; (3) the chosen genetic instruments must account for at least 0.1% of the exposure variance, ensuring sufficient strength for the genetic instrumental variables (IVs) to assess a causal effect. For each exposure, we harmonized IVs to ensure compatibility and consistency between different data sources and variables. Since smoking is a well-accepted risk factor for TAO, SNPs that were associated with smoking or thrombo-associated events were deleted for MR due to the PhenoScanner V2 database (http://www.phenoscanner.medschl.cam.ac.uk/), details are shown in
+<xref rid="SM23120539-1" ref-type="supplementary-material">Supplementary Table S1</xref>
+(available in the online version).
+<xref rid="JR23120539-14" ref-type="bibr">14</xref>
+</p></sec><sec><title>Statistical Analysis</title><p>
+The random-effects inverse variance weighted (IVW) method was used as the primary MR method to estimate the causal relationships between circulating inflammatory proteins and TAO. The IVW method offers a consistent estimate of the causal effect of exposure on the outcome, under the assumption that each genetic variant meets the IV criteria.
+<xref rid="JR23120539-15" ref-type="bibr">15</xref>
+<xref rid="JR23120539-16" ref-type="bibr">16</xref>
+For sensitivity analysis, multiple methods, including MR&#x02013;Egger regression, MR pleiotropy Residual Sum and Outlier (MR-PRESSO), and weighted median approaches, were employed in this study to examine the robustness of results. An adaptation of MR&#x02013;Egger regression is capable of identifying certain violations of standard IV assumptions, providing an adjusted estimate that is unaffected by these issues. This method also measures the extent of directional pleiotropy and serves as a robustness check.
+<xref rid="JR23120539-17" ref-type="bibr">17</xref>
+The weighted median is consistent even when up to 50% of the information comes from invalid IVs.
+<xref rid="JR23120539-18" ref-type="bibr">18</xref>
+For SNPs numbering more than three, MRPRESSO was employed to identify and adjust for horizontal pleiotropy. This method can pinpoint horizontal pleiotropic outliers among SNPs and deliver results matching those from IVW when outliers are absent.
+<xref rid="JR23120539-19" ref-type="bibr">19</xref>
+Leave-one-out analysis was conducted to determine if significant findings were driven by a single SNP. To mitigate potential pleiotropic effects attributable to smoking, a multivariable MR (MVMR) analysis incorporating adjustments for genetically predicted smoking behaviors was conducted. The GWAS data pertaining to smoking were sourced from the EBI GWAS Catalog (GCST90029014), ensuring no sample overlap with the FinnGen database.
+<xref rid="JR23120539-20" ref-type="bibr">20</xref>
+</p><p>
+Heterogeneity among individual SNP-based estimates was assessed using Cochran's Q value. In instances with only one SNP for the exposure, the Wald ratio method was applied, dividing the SNP&#x02013;outcome association estimate by the SNP&#x02013;exposure association estimate to determine the causal link. The F-statistic was estimated to evaluate the strength of each instrument, with an F-statistic greater than 10 indicating a sufficiently strong instrument.
+<xref rid="JR23120539-21" ref-type="bibr">21</xref>
+False discovery rate (FDR) correction was conducted by the Benjamini&#x02013;Hochberg method, with a FDR of adjusted
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.1. A suggestive association was considered when
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.05 but adjusted
+<italic>p</italic>
+&#x02265; 0.1. All analyses were two-sided and performed using the TwoSampleMR (version 0.5.8), MendelianRandomization (version 0.9.0), and MRPRESSO (version 1.0) packages in R software version 4.3.2.
+</p></sec></sec><sec><title>Results</title><sec><title>Selection of Instrumental Variables</title><p>
+The association between 91 circulating inflammatory proteins and TAO through the IVW method is detailed in
+<xref rid="SM23120539-1" ref-type="supplementary-material">Supplementary Table S2</xref>
+(available in the online version). After an extensive quality control review, 173 SNPs associated with six circulating inflammation-related proteins were identified as IVs for TAO. Notably, C&#x02013;C motif chemokine 23 (CCL23) levels were linked to 30 SNPs, C&#x02013;C motif chemokine 25 to 37 SNPs, C&#x02013;C motif chemokine 28 to 21 SNPs, C&#x02013;C motif chemokine 4 (CCL4) to 27 SNPs, glial cell line-derived neurotrophic factor (GDNF) to 22 SNPs, and stem cell factor to 36 SNPs.
+</p></sec><sec><title>The Causal Role of Inflammation-Related Proteins in TAO</title><p>
+Elevated genetically predicted CCL4 levels were linked to a decreased TAO risk, as shown in
+<xref rid="FI23120539-2" ref-type="fig">Fig. 2</xref>
+. Specifically, each unit increase in the genetically predicted level of CCL4 was associated with an odds ratio (OR) of 0.44 (95% confidence interval [CI]: 0.29&#x02013;0.67;
+<italic>p</italic>
+&#x02009;=&#x02009;1.4&#x02009;&#x000d7;&#x02009;10
+<sup>&#x02212;4</sup>
+; adjusted
+<italic>p</italic>
+&#x02009;=&#x02009;0.013) for TAO. Similarly, levels of C&#x02013;C motif chemokine 28 (OR: 0.33; 95% CI: 0.12&#x02013;0.91;
+<italic>p</italic>
+&#x02009;=&#x02009;0.034; adjusted
+<italic>p</italic>
+&#x02009;=&#x02009;0.579), GDNF (OR: 0.43, 95% CI: 0.22&#x02013;0.81;
+<italic>p</italic>
+&#x02009;=&#x02009;0.010; adjusted
+<italic>p</italic>
+&#x02009;=&#x02009;0.218), and stem cell factor (OR: 0.49, 95% CI: 0.29&#x02013;0.84;
+<italic>p</italic>
+&#x02009;=&#x02009;0.009; adjusted
+<italic>p</italic>
+&#x02009;=&#x02009;0.218) also showed a suggestive inverse association with TAO, as depicted in
+<xref rid="FI23120539-2" ref-type="fig">Fig. 2</xref>
+. Conversely, higher levels of genetically predicted CCL23 (OR: 1.88, 95% CI: 1.21&#x02013;2.93;
+<italic>p</italic>
+&#x02009;=&#x02009;0.005; adjusted
+<italic>p</italic>
+&#x02009;=&#x02009;0.218) and C&#x02013;C motif chemokine 25 (OR: 1.44, 95% CI: 1.01&#x02013;2.06;
+<italic>p</italic>
+&#x02009;=&#x02009;0.046; adjusted
+<italic>p</italic>
+&#x02009;=&#x02009;0.579) suggested an increased risk of TAO.
+</p><fig id="FI23120539-2"><label>Fig. 2</label><caption><p>
+Causal relationship between circulating inflammatory proteins and TAO. TAO, thromboangiitis obliterans.
+</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0044-1786809-i23120539-2"/></fig></sec><sec><title>Sensitivity Analysis</title><p>
+MR&#x02013;Egger regression intercepts were not significantly different from zero, suggesting no horizontal pleiotropy (all intercept
+<italic>p</italic>
+&#x02009;&#x0003e;&#x02009;0.05), as depicted in
+<xref rid="FI23120539-2" ref-type="fig">Fig. 2</xref>
+. The MR-PRESSO test also found no pleiotropic outliers among these SNPs (
+<italic>p</italic>
+&#x02009;&#x0003e;&#x02009;0.05), further corroborating the absence of pleiotropy. Consistency with these findings was confirmed by the weighted median approach. Scatter plots illustrating the genetic associations with circulating inflammatory proteins and TAO are presented in
+<xref rid="FI23120539-3" ref-type="fig">Fig. 3</xref>
+. Cochran's Q test detected no heterogeneity among the genetic IVs for the measured levels (all
+<italic>p</italic>
+&#x02009;&#x0003e;&#x02009;0.1). Additionally, funnel plots showed no significant asymmetry, suggesting negligible publication bias and directional horizontal pleiotropy (
+<xref rid="FI23120539-4" ref-type="fig">Fig. 4</xref>
+). The robustness of these causal estimates was further validated by a leave-one-out analysis, demonstrating that no single IV disproportionately influenced the observed causal relationships, as shown in
+<xref rid="FI23120539-5" ref-type="fig">Fig. 5</xref>
+.
+</p><fig id="FI23120539-3"><label>Fig. 3</label><caption><p>
+Scatter plots for the causal association between circulating inflammatory proteins and TAO. TAO, thromboangiitis obliterans.
+</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0044-1786809-i23120539-3"/></fig><fig id="FI23120539-4"><label>Fig. 4</label><caption><p>
+Funnel plots of circulating inflammatory proteins.
+</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0044-1786809-i23120539-4"/></fig><fig id="FI23120539-5"><label>Fig. 5</label><caption><p>
+Leave-one-out plots for the causal association between circulating inflammatory proteins and TAO. TAO, thromboangiitis obliterans.
+</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0044-1786809-i23120539-5"/></fig></sec><sec><title>MVMR Analysis</title><p><xref rid="FI23120539-6" ref-type="fig">Fig. 6</xref>
+reveals that, even after adjusting for genetically predicted smoking, the level of CCL4 still exerts a direct protective influence against TAO (IVW: OR= 0.54,
+<italic>p</italic>
+&#x02009;=&#x02009;0.009; MR&#x02013;Egger:
+<italic>p</italic>
+&#x02009;=&#x02009;0.013, intercept
+<italic>p</italic>
+&#x02009;=&#x02009;0.843). The level of CCL23 is suggestively associated with an increased risk of TAO (IVW: OR&#x02009;=&#x02009;2.24,
+<italic>p</italic>
+&#x02009;=&#x02009;0.011; MR&#x02013;Egger:
+<italic>p</italic>
+&#x02009;=&#x02009;0.019, intercept
+<italic>p</italic>
+&#x02009;=&#x02009;0.978). GDNF levels show a suggestively protective effect against TAO (IVW: OR&#x02009;=&#x02009;0.315,
+<italic>p</italic>
+&#x02009;=&#x02009;0.016; MR&#x02013;Egger:
+<italic>p</italic>
+&#x02009;=&#x02009;0.020, intercept
+<italic>p</italic>
+&#x02009;=&#x02009;0.634). However, no significant direct impacts were observed for the levels of C&#x02013;C motif chemokine 25 (
+<italic>p</italic>
+&#x02009;=&#x02009;0.079), C&#x02013;C motif chemokine 28 (
+<italic>p</italic>
+&#x02009;=&#x02009;0.179), or stem cell factor (
+<italic>p</italic>
+&#x02009;=&#x02009;0.159) on TAO.
+</p><fig id="FI23120539-6"><label>Fig. 6</label><caption><p>
+Results from multivariable Mendelian randomization analysis on the impact of circulating inflammatory proteins on TAO, after adjusting for genetically predicted smoking. IVW, inverse variance weighting; TAO, thromboangiitis obliterans.
+</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0044-1786809-i23120539-6"/></fig></sec></sec><sec><title>Discussion</title><p>This study utilized a two-sample and MVMR approach to evaluate the causal relationships between specific circulating inflammation-related proteins and TAO. Utilizing summary statistics from GWAS meta-analyses for these proteins, alongside TAO data from the FinnGen consortium R10 release and GWAS information on smoking, our findings underscore a protective influence of CCL4 and GDNF on TAO. In contrast, elevated levels of CCL23 emerge as potential risk indicators for TAO. These insights position these proteins as potential biomarkers for TAO, offering new avenues for understanding its pathogenesis.</p><p>
+C&#x02013;C motif chemokines, a subfamily of small, secreted proteins, engage with G protein-coupled chemokine receptors on the cell surface, which are distinguished by directly juxtaposed cysteines.
+<xref rid="JR23120539-22" ref-type="bibr">22</xref>
+Their renowned function is to orchestrate cell migration, particularly of leukocytes, playing crucial roles in both protective and destructive immune and inflammatory responses.
+<xref rid="JR23120539-23" ref-type="bibr">23</xref>
+CCL4, also known as the macrophage inflammatory protein, is a significant member of the CC chemokine family. This protein, encoded by the CCL4 gene in humans, interacts with CCR5 and is identified as a pivotal human immunodeficiency virus-suppressive factor secreted by CD8+ T-cells.
+<xref rid="JR23120539-24" ref-type="bibr">24</xref>
+Additionally, its involvement has been increasingly recognized in cardiovascular diseases.
+<xref rid="JR23120539-23" ref-type="bibr">23</xref>
+While CCL4 exhibits a protective effect in Type 1 diabetes mellitus patients, it is also found to be elevated in conditions such as atherosclerosis and myocardial infarction.
+<xref rid="JR23120539-23" ref-type="bibr">23</xref>
+CCL4's ability to activate PI3K and MAPK signaling pathways and inhibit the NF-&#x003ba;B pathway contributes to the enhanced proliferation of porcine uterine luminal epithelial cells.
+<xref rid="JR23120539-25" ref-type="bibr">25</xref>
+This mechanism may elucidate CCL4's protective role in TAO, as demonstrated in this study (OR: 0.44; 95% CI: 0.29&#x02013;0.67;
+<italic>p</italic>
+&#x02009;=&#x02009;1.4&#x02009;&#x000d7;&#x02009;10
+<sup>&#x02212;4</sup>
+; adjusted
+<italic>p</italic>
+&#x02009;=&#x02009;0.013), highlighting its potential as both a biomarker and a therapeutic target.
+</p><p>
+CCL23, also known as myeloid progenitor inhibitory factor-1, represents another key member of the CC chemokine subfamily. It plays a role in the inflammatory process, capable of inhibiting the release of polymorphonuclear leukocytes from the bone marrow.
+<xref rid="JR23120539-26" ref-type="bibr">26</xref>
+As a relatively novel chemokine, CCL23's biological significance remains partially unexplored.
+<xref rid="JR23120539-27" ref-type="bibr">27</xref>
+Circulating CCL23 exhibited a continuous increase from baseline to 24&#x02009;hours in ischemic stroke patients and could predict the clinical outcome after 3 months.
+<xref rid="JR23120539-28" ref-type="bibr">28</xref>
+Elevated blood levels of CCL23 have been linked with antineutrophil cytoplasmic antibody-associated vasculitis.
+<xref rid="JR23120539-29" ref-type="bibr">29</xref>
+Although its mechanisms are largely uncharted, CCL23 is known to facilitate the chemotaxis of human THP-1 monocytes, increase adhesion molecule CD11c expression, and stimulate MMP-2 release from THP-1 monocytes.
+<xref rid="JR23120539-30" ref-type="bibr">30</xref>
+Moreover, CCL23 can enhance leucocyte trafficking and direct the migration of monocytes, macrophages, dendritic cells, and T lymphocytes.
+<xref rid="JR23120539-27" ref-type="bibr">27</xref>
+This study posits CCL23 as a suggestive risk factor for TAO (OR: 1.88, 95% CI: 1.21&#x02013;2.93;
+<italic>p</italic>
+&#x02009;=&#x02009;0.005; adjusted
+<italic>p</italic>
+&#x02009;=&#x02009;0.218), warranting further investigation into its precise role.
+</p><p>
+GDNF was first discovered as a potent survival factor for midbrain dopaminergic neurons and has shown promise in preserving these neurons in animal models of Parkinson's disease.
+<xref rid="JR23120539-31" ref-type="bibr">31</xref>
+Recent studies have further elucidated GDNF's significance in neuronal safeguarding and cerebral recuperation.
+<xref rid="JR23120539-32" ref-type="bibr">32</xref>
+Additionally, GDNF has been implicated in inflammatory bowel disease (IBD), where it bolsters the integrity of the intestinal epithelial barrier and facilitates wound repair, while also exerting an immunomodulatory influence.
+<xref rid="JR23120539-33" ref-type="bibr">33</xref>
+<xref rid="JR23120539-34" ref-type="bibr">34</xref>
+In our study, GDNF is identified as a potential protective agent against TAO, with an OR of 0.43 (95% CI: 0.22&#x02013;0.81;
+<italic>p</italic>
+&#x02009;=&#x02009;0.010; adjusted
+<italic>p</italic>
+&#x02009;=&#x02009;0.218). It is postulated that GDNF's protective mechanism in TAO may involve the inhibition of apoptosis through the activation of MAPK and AKT pathways, akin to its action in IBD.
+<xref rid="JR23120539-34" ref-type="bibr">34</xref>
+</p><p>This study utilized MR analysis to ascertain the causal relationship between circulating inflammation-related proteins and TAO. This approach was chosen to mitigate confounding factors and the potential reverse causation in causal inference. Genetic variations linked to these proteins were sourced from a recent GWAS meta-analysis, ensuring robust instrument strength in the MR analysis. MR-PRESSO and MR&#x02013;Egger regression intercept tests were employed to assess the level of pleiotropy. A two-sample MR design was adopted, using nonoverlapping summary data for exposure and outcomes to minimize bias. An MVMR was finally performed to adjust the possible cofounding of smoking.</p><p>Nonetheless, this study is subject to several limitations. First, the absence of additional GWAS cohorts encompassing TAO precluded replication analysis, thereby constraining the validation of the causal relationship and impacting the study's credibility. Second, while the case count in our study is constrained, potentially increasing the likelihood of Type II errors, robust IVs were carefully chosen, and both sensitivity and MVMR analyses were conducted. These measures were taken to mitigate risks, and the outcomes affirm the study's resilience. Third, given that the FinnGen study exclusively comprised Finnish participants and considering the lower prevalence of TAO in Northeastern European countries compared with other regions globally, the findings' applicability may be somewhat restricted.</p></sec><sec><title>Conclusion</title><p>This two-sample and MVMR analysis reveals a protective effect of CCL4 and GDNF on TAO, and suggests a potential causal relationship between CCL23 and TAO. These findings offer new perspectives on potential biomarkers and therapeutic targets for TAO.</p></sec></body><back><sec><boxed-text content-type="backinfo"><p>
+<bold>What is known about this topic?</bold>
+</p><list list-type="bullet"><list-item><p>Thromboangiitis obliterans (TAO), or Buerger's disease, is a distinct, nonatherosclerotic inflammatory condition.</p></list-item><list-item><p>It primarily impacts small- and medium-sized arteries and veins in the extremities, with uncertain etiology and prognosis.</p></list-item><list-item><p>The disease is thought to involve an immune response, but evidence supporting this is limited.</p></list-item></list><p>
+<bold>What does this paper add?</bold>
+</p><list list-type="bullet"><list-item><p>Utilizes a two-sample and multivariable Mendelian randomization approach, integrating GWAS data of 91 inflammation-related proteins with TAO data.</p></list-item><list-item><p>Identifies C&#x02013;C motif chemokine 4 and glial cell line-derived neurotrophic factor as potential protective biomarkers for TAO, offering new insights for diagnosis and treatment.</p></list-item><list-item><p>Suggests that C&#x02013;C motif chemokine 23 emerges as a suggestive risk marker in TAO, offering new insights for diagnosis and treatment.</p></list-item></list></boxed-text></sec><ack><title>Acknowledgment</title><p>This manuscript underwent editing and enhancement by ChatGPT-4. We want to acknowledge the participants and investigators of the FinnGen study and the GWAS research for their generous sharing of data.</p></ack><fn-group><fn fn-type="COI-statement" id="d35e141"><p><bold>Conflict of Interest</bold> None declared.</p></fn></fn-group><fn-group><title>Data Availability Statement</title><fn id="FN23120539-2"><p>
+The datasets analyzed during the current study are available in the EBI GWAS Catalog (accession numbers GCST90274758 to GCST90274848 and GCST90029014),
+<uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.ebi.ac.uk/gwas/">https://www.ebi.ac.uk/gwas/</uri>
+, and the FinnGen repository (finngen_R10_I9_THROMBANG),
+<uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.finngen.fi/en/access_results">https://www.finngen.fi/en/access_results</uri>
+.
+</p></fn></fn-group><fn-group><title>Ethical Approval Statement</title><fn id="FN23120539-3"><p>This research has been conducted using published studies and consortia providing publicly available summary statistics. All original studies have been approved by the corresponding ethical review board, and the participants have provided informed consent. In addition, no individual-level data were used in this study. Therefore, no new ethical review board approval was required</p></fn></fn-group><fn-group><title>Authors' Contribution</title><fn id="FN23120539-4"><p>Conception and design: M.Y. and B.Z. Administrative support: X.T. and Y.Z. Provision of study materials or patients: Z.Y. and G.N. Collection and assembly of data: B.Z., Z.Y., and R.H. Data analysis and interpretation: B.Z., R.H., and Z.Y. Manuscript writing: All authors. Final approval of manuscript: All authors.</p></fn></fn-group><fn-group><fn id="FN23120539-1"><label>*</label><p>
+<italic>These authors equally contributed to this paper and thus shared the co-first authorship.</italic>
+</p></fn></fn-group><sec sec-type="supplementary-material"><title>Supplementary Material</title><supplementary-material id="SM23120539-1"><media xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0044-1786809-s23120539.pdf"><caption><p>Supplementary Material</p></caption><caption><p>Supplementary Material</p></caption></media></supplementary-material></sec><ref-list><title>References</title><ref id="JR23120539-1"><label>1</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Olin</surname><given-names>J W</given-names></name></person-group><article-title>Thromboangiitis obliterans (Buerger's disease)</article-title><source>N Engl J Med</source><year>2000</year><volume>343</volume><issue>12</issue><fpage>864</fpage><lpage>869</lpage><pub-id pub-id-type="pmid">10995867</pub-id>
+</mixed-citation></ref><ref id="JR23120539-2"><label>2</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Sun</surname><given-names>X L</given-names></name><name><surname>Law</surname><given-names>B Y</given-names></name><name><surname>de Seabra Rodrigues Dias</surname><given-names>I R</given-names></name><name><surname>Mok</surname><given-names>S WF</given-names></name><name><surname>He</surname><given-names>Y Z</given-names></name><name><surname>Wong</surname><given-names>V K</given-names></name></person-group><article-title>Pathogenesis of thromboangiitis obliterans: gene polymorphism and immunoregulation of human vascular endothelial cells</article-title><source>Atherosclerosis</source><year>2017</year><volume>265</volume><fpage>258</fpage><lpage>265</lpage><pub-id pub-id-type="pmid">28864202</pub-id>
+</mixed-citation></ref><ref id="JR23120539-3"><label>3</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Olin</surname><given-names>J W</given-names></name></person-group><article-title>Thromboangiitis obliterans: 110 years old and little progress made</article-title><source>J Am Heart Assoc</source><year>2018</year><volume>7</volume><issue>23</issue><fpage>e011214</fpage><pub-id pub-id-type="pmid">30571606</pub-id>
+</mixed-citation></ref><ref id="JR23120539-4"><label>4</label><mixed-citation publication-type="journal"><collab>French Buerger's Network </collab><person-group person-group-type="author"><name><surname>Le Joncour</surname><given-names>A</given-names></name><name><surname>Soudet</surname><given-names>S</given-names></name><name><surname>Dupont</surname><given-names>A</given-names></name></person-group><etal/><article-title>Long-term outcome and prognostic factors of complications in thromboangiitis obliterans (Buerger's Disease): a multicenter study of 224 patients</article-title><source>J Am Heart Assoc</source><year>2018</year><volume>7</volume><issue>23</issue><fpage>e010677</fpage><pub-id pub-id-type="pmid">30571594</pub-id>
+</mixed-citation></ref><ref id="JR23120539-5"><label>5</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Ketha</surname><given-names>S S</given-names></name><name><surname>Cooper</surname><given-names>L T</given-names></name></person-group><article-title>The role of autoimmunity in thromboangiitis obliterans (Buerger's disease)</article-title><source>Ann N Y Acad Sci</source><year>2013</year><volume>1285</volume><fpage>15</fpage><lpage>25</lpage><pub-id pub-id-type="pmid">23510296</pub-id>
+</mixed-citation></ref><ref id="JR23120539-6"><label>6</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Kobayashi</surname><given-names>M</given-names></name><name><surname>Ito</surname><given-names>M</given-names></name><name><surname>Nakagawa</surname><given-names>A</given-names></name><name><surname>Nishikimi</surname><given-names>N</given-names></name><name><surname>Nimura</surname><given-names>Y</given-names></name></person-group><article-title>Immunohistochemical analysis of arterial wall cellular infiltration in Buerger's disease (endarteritis obliterans)</article-title><source>J Vasc Surg</source><year>1999</year><volume>29</volume><issue>03</issue><fpage>451</fpage><lpage>458</lpage><pub-id pub-id-type="pmid">10069909</pub-id>
+</mixed-citation></ref><ref id="JR23120539-7"><label>7</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Dellalibera-Joviliano</surname><given-names>R</given-names></name><name><surname>Joviliano</surname><given-names>E E</given-names></name><name><surname>Silva</surname><given-names>J S</given-names></name><name><surname>Evora</surname><given-names>P R</given-names></name></person-group><article-title>Activation of cytokines corroborate with development of inflammation and autoimmunity in thromboangiitis obliterans patients</article-title><source>Clin Exp Immunol</source><year>2012</year><volume>170</volume><issue>01</issue><fpage>28</fpage><lpage>35</lpage><pub-id pub-id-type="pmid">22943198</pub-id>
+</mixed-citation></ref><ref id="JR23120539-8"><label>8</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Davey Smith</surname><given-names>G</given-names></name><name><surname>Hemani</surname><given-names>G</given-names></name></person-group><article-title>Mendelian randomization: genetic anchors for causal inference in epidemiological studies</article-title><source>Hum Mol Genet</source><year>2014</year><volume>23</volume>(R1):<fpage>R89</fpage><lpage>R98</lpage><pub-id pub-id-type="pmid">25064373</pub-id>
+</mixed-citation></ref><ref id="JR23120539-9"><label>9</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Emdin</surname><given-names>C A</given-names></name><name><surname>Khera</surname><given-names>A V</given-names></name><name><surname>Kathiresan</surname><given-names>S</given-names></name></person-group><article-title>Mendelian randomization</article-title><source>JAMA</source><year>2017</year><volume>318</volume><issue>19</issue><fpage>1925</fpage><lpage>1926</lpage><pub-id pub-id-type="pmid">29164242</pub-id>
+</mixed-citation></ref><ref id="JR23120539-10"><label>10</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Larsson</surname><given-names>S C</given-names></name><name><surname>Butterworth</surname><given-names>A S</given-names></name><name><surname>Burgess</surname><given-names>S</given-names></name></person-group><article-title>Mendelian randomization for cardiovascular diseases: principles and applications</article-title><source>Eur Heart J</source><year>2023</year><volume>44</volume><issue>47</issue><fpage>4913</fpage><lpage>4924</lpage><pub-id pub-id-type="pmid">37935836</pub-id>
+</mixed-citation></ref><ref id="JR23120539-11"><label>11</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Skrivankova</surname><given-names>V W</given-names></name><name><surname>Richmond</surname><given-names>R C</given-names></name><name><surname>Woolf</surname><given-names>B AR</given-names></name></person-group><etal/><article-title>Strengthening the reporting of observational studies in epidemiology using mendelian randomisation (STROBE-MR): explanation and elaboration</article-title><source>BMJ</source><year>2021</year><volume>375</volume><issue>2233</issue><fpage>n2233</fpage><pub-id pub-id-type="pmid">34702754</pub-id>
+</mixed-citation></ref><ref id="JR23120539-12"><label>12</label><mixed-citation publication-type="journal"><collab>Estonian Biobank Research Team </collab><person-group person-group-type="author"><name><surname>Zhao</surname><given-names>J H</given-names></name><name><surname>Stacey</surname><given-names>D</given-names></name><name><surname>Eriksson</surname><given-names>N</given-names></name></person-group><etal/><article-title>Genetics of circulating inflammatory proteins identifies drivers of immune-mediated disease risk and therapeutic targets</article-title><source>Nat Immunol</source><year>2023</year><volume>24</volume><issue>09</issue><fpage>1540</fpage><lpage>1551</lpage><pub-id pub-id-type="pmid">37563310</pub-id>
+</mixed-citation></ref><ref id="JR23120539-13"><label>13</label><mixed-citation publication-type="journal"><collab>FinnGen </collab><person-group person-group-type="author"><name><surname>Kurki</surname><given-names>M I</given-names></name><name><surname>Karjalainen</surname><given-names>J</given-names></name><name><surname>Palta</surname><given-names>P</given-names></name></person-group><etal/><article-title>FinnGen provides genetic insights from a well-phenotyped isolated population</article-title><source>Nature</source><year>2023</year><volume>613</volume><issue>7944</issue><fpage>508</fpage><lpage>518</lpage><pub-id pub-id-type="pmid">36653562</pub-id>
+</mixed-citation></ref><ref id="JR23120539-14"><label>14</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Kamat</surname><given-names>M A</given-names></name><name><surname>Blackshaw</surname><given-names>J A</given-names></name><name><surname>Young</surname><given-names>R</given-names></name></person-group><etal/><article-title>PhenoScanner V2: an expanded tool for searching human genotype-phenotype associations</article-title><source>Bioinformatics</source><year>2019</year><volume>35</volume><issue>22</issue><fpage>4851</fpage><lpage>4853</lpage><pub-id pub-id-type="pmid">31233103</pub-id>
+</mixed-citation></ref><ref id="JR23120539-15"><label>15</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Burgess</surname><given-names>S</given-names></name><name><surname>Dudbridge</surname><given-names>F</given-names></name><name><surname>Thompson</surname><given-names>S G</given-names></name></person-group><article-title>Combining information on multiple instrumental variables in Mendelian randomization: comparison of allele score and summarized data methods</article-title><source>Stat Med</source><year>2016</year><volume>35</volume><issue>11</issue><fpage>1880</fpage><lpage>1906</lpage><pub-id pub-id-type="pmid">26661904</pub-id>
+</mixed-citation></ref><ref id="JR23120539-16"><label>16</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Yavorska</surname><given-names>O O</given-names></name><name><surname>Burgess</surname><given-names>S</given-names></name></person-group><article-title>MendelianRandomization: an R package for performing Mendelian randomization analyses using summarized data</article-title><source>Int J Epidemiol</source><year>2017</year><volume>46</volume><issue>06</issue><fpage>1734</fpage><lpage>1739</lpage><pub-id pub-id-type="pmid">28398548</pub-id>
+</mixed-citation></ref><ref id="JR23120539-17"><label>17</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Bowden</surname><given-names>J</given-names></name><name><surname>Davey Smith</surname><given-names>G</given-names></name><name><surname>Burgess</surname><given-names>S</given-names></name></person-group><article-title>Mendelian randomization with invalid instruments: effect estimation and bias detection through Egger regression</article-title><source>Int J Epidemiol</source><year>2015</year><volume>44</volume><issue>02</issue><fpage>512</fpage><lpage>525</lpage><pub-id pub-id-type="pmid">26050253</pub-id>
+</mixed-citation></ref><ref id="JR23120539-18"><label>18</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Bowden</surname><given-names>J</given-names></name><name><surname>Davey Smith</surname><given-names>G</given-names></name><name><surname>Haycock</surname><given-names>P C</given-names></name><name><surname>Burgess</surname><given-names>S</given-names></name></person-group><article-title>Consistent estimation in mendelian randomization with some invalid instruments using a weighted median estimator</article-title><source>Genet Epidemiol</source><year>2016</year><volume>40</volume><issue>04</issue><fpage>304</fpage><lpage>314</lpage><pub-id pub-id-type="pmid">27061298</pub-id>
+</mixed-citation></ref><ref id="JR23120539-19"><label>19</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Verbanck</surname><given-names>M</given-names></name><name><surname>Chen</surname><given-names>C Y</given-names></name><name><surname>Neale</surname><given-names>B</given-names></name><name><surname>Do</surname><given-names>R</given-names></name></person-group><article-title>Detection of widespread horizontal pleiotropy in causal relationships inferred from Mendelian randomization between complex traits and diseases</article-title><source>Nat Genet</source><year>2018</year><volume>50</volume><issue>05</issue><fpage>693</fpage><lpage>698</lpage><pub-id pub-id-type="pmid">29686387</pub-id>
+</mixed-citation></ref><ref id="JR23120539-20"><label>20</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Loh</surname><given-names>P R</given-names></name><name><surname>Kichaev</surname><given-names>G</given-names></name><name><surname>Gazal</surname><given-names>S</given-names></name><name><surname>Schoech</surname><given-names>A P</given-names></name><name><surname>Price</surname><given-names>A L</given-names></name></person-group><article-title>Mixed-model association for biobank-scale datasets</article-title><source>Nat Genet</source><year>2018</year><volume>50</volume><issue>07</issue><fpage>906</fpage><lpage>908</lpage><pub-id pub-id-type="pmid">29892013</pub-id>
+</mixed-citation></ref><ref id="JR23120539-21"><label>21</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Staiger</surname><given-names>D</given-names></name><name><surname>James</surname><given-names>H</given-names></name></person-group><article-title>Stock. 1997.&#x0201c;instrumental variables with weak instruments.&#x0201d;</article-title><source>Econometrica</source><year>1997</year><volume>65</volume><fpage>557</fpage><lpage>586</lpage></mixed-citation></ref><ref id="JR23120539-22"><label>22</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Hughes</surname><given-names>C E</given-names></name><name><surname>Nibbs</surname><given-names>R JB</given-names></name></person-group><article-title>A guide to chemokines and their receptors</article-title><source>FEBS J</source><year>2018</year><volume>285</volume><issue>16</issue><fpage>2944</fpage><lpage>2971</lpage><pub-id pub-id-type="pmid">29637711</pub-id>
+</mixed-citation></ref><ref id="JR23120539-23"><label>23</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Chang</surname><given-names>T T</given-names></name><name><surname>Chen</surname><given-names>J W</given-names></name></person-group><article-title>Emerging role of chemokine CC motif ligand 4 related mechanisms in diabetes mellitus and cardiovascular disease: friends or foes?</article-title><source>Cardiovasc Diabetol</source><year>2016</year><volume>15</volume><issue>01</issue><fpage>117</fpage><pub-id pub-id-type="pmid">27553774</pub-id>
+</mixed-citation></ref><ref id="JR23120539-24"><label>24</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Irving</surname><given-names>S G</given-names></name><name><surname>Zipfel</surname><given-names>P F</given-names></name><name><surname>Balke</surname><given-names>J</given-names></name></person-group><etal/><article-title>Two inflammatory mediator cytokine genes are closely linked and variably amplified on chromosome 17q</article-title><source>Nucleic Acids Res</source><year>1990</year><volume>18</volume><issue>11</issue><fpage>3261</fpage><lpage>3270</lpage><pub-id pub-id-type="pmid">1972563</pub-id>
+</mixed-citation></ref><ref id="JR23120539-25"><label>25</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Lim</surname><given-names>W</given-names></name><name><surname>Bae</surname><given-names>H</given-names></name><name><surname>Bazer</surname><given-names>F W</given-names></name><name><surname>Song</surname><given-names>G</given-names></name></person-group><article-title>Characterization of C-C motif chemokine ligand 4 in the porcine endometrium during the presence of the maternal-fetal interface</article-title><source>Dev Biol</source><year>2018</year><volume>441</volume><issue>01</issue><fpage>146</fpage><lpage>158</lpage><pub-id pub-id-type="pmid">30056935</pub-id>
+</mixed-citation></ref><ref id="JR23120539-26"><label>26</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Shih</surname><given-names>C H</given-names></name><name><surname>van Eeden</surname><given-names>S F</given-names></name><name><surname>Goto</surname><given-names>Y</given-names></name><name><surname>Hogg</surname><given-names>J C</given-names></name></person-group><article-title>CCL23/myeloid progenitor inhibitory factor-1 inhibits production and release of polymorphonuclear leukocytes and monocytes from the bone marrow</article-title><source>Exp Hematol</source><year>2005</year><volume>33</volume><issue>10</issue><fpage>1101</fpage><lpage>1108</lpage><pub-id pub-id-type="pmid">16219532</pub-id>
+</mixed-citation></ref><ref id="JR23120539-27"><label>27</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Karan</surname><given-names>D</given-names></name></person-group><article-title>CCL23 in balancing the act of endoplasmic reticulum stress and antitumor immunity in hepatocellular carcinoma</article-title><source>Front Oncol</source><year>2021</year><volume>11</volume><fpage>727583</fpage><pub-id pub-id-type="pmid">34671553</pub-id>
+</mixed-citation></ref><ref id="JR23120539-28"><label>28</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Simats</surname><given-names>A</given-names></name><name><surname>Garc&#x000ed;a-Berrocoso</surname><given-names>T</given-names></name><name><surname>Penalba</surname><given-names>A</given-names></name></person-group><etal/><article-title>CCL23: a new CC chemokine involved in human brain damage</article-title><source>J Intern Med</source><year>2018</year><volume>283</volume><issue>05</issue><fpage>461</fpage><lpage>475</lpage><pub-id pub-id-type="pmid">29415332</pub-id>
+</mixed-citation></ref><ref id="JR23120539-29"><label>29</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Brink</surname><given-names>M</given-names></name><name><surname>Berglin</surname><given-names>E</given-names></name><name><surname>Mohammad</surname><given-names>A J</given-names></name></person-group><etal/><article-title>Protein profiling in presymptomatic individuals separates myeloperoxidase-antineutrophil cytoplasmic antibody and proteinase 3-antineutrophil cytoplasmic antibody vasculitides</article-title><source>Arthritis Rheumatol</source><year>2023</year><volume>75</volume><issue>06</issue><fpage>996</fpage><lpage>1006</lpage><pub-id pub-id-type="pmid">36533851</pub-id>
+</mixed-citation></ref><ref id="JR23120539-30"><label>30</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Kim</surname><given-names>C S</given-names></name><name><surname>Kang</surname><given-names>J H</given-names></name><name><surname>Cho</surname><given-names>H R</given-names></name></person-group><etal/><article-title>Potential involvement of CCL23 in atherosclerotic lesion formation/progression by the enhancement of chemotaxis, adhesion molecule expression, and MMP-2 release from monocytes</article-title><source>Inflamm Res</source><year>2011</year><volume>60</volume><issue>09</issue><fpage>889</fpage><lpage>895</lpage><pub-id pub-id-type="pmid">21656154</pub-id>
+</mixed-citation></ref><ref id="JR23120539-31"><label>31</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Saarma</surname><given-names>M</given-names></name><name><surname>Sariola</surname><given-names>H</given-names></name></person-group><article-title>Other neurotrophic factors: glial cell line-derived neurotrophic factor (GDNF)</article-title><source>Microsc Res Tech</source><year>1999</year><volume>45</volume>(4&#x02013;5):<fpage>292</fpage><lpage>302</lpage><pub-id pub-id-type="pmid">10383122</pub-id>
+</mixed-citation></ref><ref id="JR23120539-32"><label>32</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Zhang</surname><given-names>Z</given-names></name><name><surname>Sun</surname><given-names>G Y</given-names></name><name><surname>Ding</surname><given-names>S</given-names></name></person-group><article-title>Glial cell line-derived neurotrophic factor and focal ischemic stroke</article-title><source>Neurochem Res</source><year>2021</year><volume>46</volume><issue>10</issue><fpage>2638</fpage><lpage>2650</lpage><pub-id pub-id-type="pmid">33591443</pub-id>
+</mixed-citation></ref><ref id="JR23120539-33"><label>33</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Chen</surname><given-names>H</given-names></name><name><surname>Han</surname><given-names>T</given-names></name><name><surname>Gao</surname><given-names>L</given-names></name><name><surname>Zhang</surname><given-names>D</given-names></name></person-group><article-title>The involvement of glial cell-derived neurotrophic factor in inflammatory bowel disease</article-title><source>J Interferon Cytokine Res</source><year>2022</year><volume>42</volume><issue>01</issue><fpage>1</fpage><lpage>7</lpage><pub-id pub-id-type="pmid">34846920</pub-id>
+</mixed-citation></ref><ref id="JR23120539-34"><label>34</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Meir</surname><given-names>M</given-names></name><name><surname>Flemming</surname><given-names>S</given-names></name><name><surname>Burkard</surname><given-names>N</given-names></name><name><surname>Wagner</surname><given-names>J</given-names></name><name><surname>Germer</surname><given-names>C T</given-names></name><name><surname>Schlegel</surname><given-names>N</given-names></name></person-group><article-title>The glial cell-line derived neurotrophic factor: a novel regulator of intestinal barrier function in health and disease</article-title><source>Am J Physiol Gastrointest Liver Physiol</source><year>2016</year><volume>310</volume><issue>11</issue><fpage>G1118</fpage><lpage>G1123</lpage><pub-id pub-id-type="pmid">27151942</pub-id>
+</mixed-citation></ref></ref-list></back></article>

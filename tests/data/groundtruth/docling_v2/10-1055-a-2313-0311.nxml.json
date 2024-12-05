@@ -1,0 +1,2313 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.0.0",
+  "name": "10-1055-a-2313-0311",
+  "origin": {
+    "mimetype": "text/xml",
+    "binary_hash": 15469079219742339932,
+    "filename": "10-1055-a-2313-0311.nxml"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      },
+      {
+        "$ref": "#/texts/3"
+      },
+      {
+        "$ref": "#/texts/7"
+      },
+      {
+        "$ref": "#/texts/9"
+      },
+      {
+        "$ref": "#/texts/12"
+      },
+      {
+        "$ref": "#/texts/14"
+      },
+      {
+        "$ref": "#/texts/16"
+      },
+      {
+        "$ref": "#/texts/18"
+      },
+      {
+        "$ref": "#/texts/20"
+      },
+      {
+        "$ref": "#/texts/24"
+      },
+      {
+        "$ref": "#/texts/25"
+      },
+      {
+        "$ref": "#/tables/0"
+      },
+      {
+        "$ref": "#/texts/26"
+      },
+      {
+        "$ref": "#/tables/1"
+      },
+      {
+        "$ref": "#/texts/27"
+      },
+      {
+        "$ref": "#/texts/28"
+      },
+      {
+        "$ref": "#/pictures/0"
+      },
+      {
+        "$ref": "#/texts/29"
+      },
+      {
+        "$ref": "#/pictures/1"
+      },
+      {
+        "$ref": "#/texts/30"
+      },
+      {
+        "$ref": "#/pictures/2"
+      },
+      {
+        "$ref": "#/texts/31"
+      },
+      {
+        "$ref": "#/groups/0"
+      }
+    ],
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [
+    {
+      "self_ref": "#/groups/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/32"
+        },
+        {
+          "$ref": "#/texts/33"
+        },
+        {
+          "$ref": "#/texts/34"
+        },
+        {
+          "$ref": "#/texts/35"
+        },
+        {
+          "$ref": "#/texts/36"
+        },
+        {
+          "$ref": "#/texts/37"
+        },
+        {
+          "$ref": "#/texts/38"
+        },
+        {
+          "$ref": "#/texts/39"
+        },
+        {
+          "$ref": "#/texts/40"
+        },
+        {
+          "$ref": "#/texts/41"
+        },
+        {
+          "$ref": "#/texts/42"
+        },
+        {
+          "$ref": "#/texts/43"
+        },
+        {
+          "$ref": "#/texts/44"
+        },
+        {
+          "$ref": "#/texts/45"
+        },
+        {
+          "$ref": "#/texts/46"
+        },
+        {
+          "$ref": "#/texts/47"
+        },
+        {
+          "$ref": "#/texts/48"
+        },
+        {
+          "$ref": "#/texts/49"
+        },
+        {
+          "$ref": "#/texts/50"
+        },
+        {
+          "$ref": "#/texts/51"
+        },
+        {
+          "$ref": "#/texts/52"
+        },
+        {
+          "$ref": "#/texts/53"
+        },
+        {
+          "$ref": "#/texts/54"
+        },
+        {
+          "$ref": "#/texts/55"
+        },
+        {
+          "$ref": "#/texts/56"
+        },
+        {
+          "$ref": "#/texts/57"
+        },
+        {
+          "$ref": "#/texts/58"
+        },
+        {
+          "$ref": "#/texts/59"
+        },
+        {
+          "$ref": "#/texts/60"
+        },
+        {
+          "$ref": "#/texts/61"
+        },
+        {
+          "$ref": "#/texts/62"
+        },
+        {
+          "$ref": "#/texts/63"
+        },
+        {
+          "$ref": "#/texts/64"
+        },
+        {
+          "$ref": "#/texts/65"
+        },
+        {
+          "$ref": "#/texts/66"
+        },
+        {
+          "$ref": "#/texts/67"
+        },
+        {
+          "$ref": "#/texts/68"
+        }
+      ],
+      "name": "list",
+      "label": "list"
+    }
+  ],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "title",
+      "prov": [],
+      "orig": "Exploring the Two-Way Link between Migraines and Venous Thromboembolism: A Bidirectional Two-Sample Mendelian Randomization Study",
+      "text": "Exploring the Two-Way Link between Migraines and Venous Thromboembolism: A Bidirectional Two-Sample Mendelian Randomization Study"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "Yang Wang; Vascular Surgery, Shandong Public Health Clinical Center, Shandong University, Jinan, China; Xiaofang Hu; Department of Neurology, Shandong Public Health Clinical Center, Shandong University, Jinan, China; Xiaoqing Wang; Interventional Department, Shandong Public Health Clinical Center, Shandong University, Jinan, China; Lili Li; Interventional Department, Shandong Public Health Clinical Center, Shandong University, Jinan, China; Peng Lou; Vascular Surgery, Shandong Public Health Clinical Center, Shandong University, Jinan, China; Zhaoxuan Liu; Vascular Surgery, Shandong First Medical University affiliated Central Hospital, Jinan, China",
+      "text": "Yang Wang; Vascular Surgery, Shandong Public Health Clinical Center, Shandong University, Jinan, China; Xiaofang Hu; Department of Neurology, Shandong Public Health Clinical Center, Shandong University, Jinan, China; Xiaoqing Wang; Interventional Department, Shandong Public Health Clinical Center, Shandong University, Jinan, China; Lili Li; Interventional Department, Shandong Public Health Clinical Center, Shandong University, Jinan, China; Peng Lou; Vascular Surgery, Shandong Public Health Clinical Center, Shandong University, Jinan, China; Zhaoxuan Liu; Vascular Surgery, Shandong First Medical University affiliated Central Hospital, Jinan, China"
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Background The objective of this study is to utilize Mendelian randomization to scrutinize the mutual causality between migraine and venous thromboembolism (VTE) thereby addressing the heterogeneity and inconsistency that were observed in prior observational studies concerning the potential interrelation of the two conditions. Methods Employing a bidirectional Mendelian randomization approach, the study explored the link between migraine and VTE, incorporating participants of European descent from a large-scale meta-analysis. An inverse-variance weighted (IVW) regression model, with random-effects, leveraging single nucleotide polymorphisms (SNPs) as instrumental variables was utilized to endorse the mutual causality between migraine and VTE. SNP heterogeneity was evaluated using Cochran's Q-test and to account for multiple testing, correction was implemented using the intercept of the MR-Egger method, and a leave-one-out analysis. Results The IVW model unveiled a statistically considerable causal link between migraine and the development of VTE (odds ratio [OR]\u2009=\u200996.155, 95% confidence interval [CI]: 4.342\u20132129.458, p =\u20090.004), implying that migraine poses a strong risk factor for VTE development. Conversely, both IVW and simple model outcomes indicated that VTE poses as a weaker risk factor for migraine (IVW OR\u2009=\u20091.002, 95% CI: 1.000\u20131.004, p =\u20090.016). The MR-Egger regression analysis denoted absence of evidence for genetic pleiotropy among the SNPs while the durability of our Mendelian randomization results was vouched by the leave-one-out sensitivity analysis. Conclusion The findings of this Mendelian randomization assessment provide substantiation for a reciprocal causative association between migraine and VTE within the European population.",
+      "text": "Background The objective of this study is to utilize Mendelian randomization to scrutinize the mutual causality between migraine and venous thromboembolism (VTE) thereby addressing the heterogeneity and inconsistency that were observed in prior observational studies concerning the potential interrelation of the two conditions. Methods Employing a bidirectional Mendelian randomization approach, the study explored the link between migraine and VTE, incorporating participants of European descent from a large-scale meta-analysis. An inverse-variance weighted (IVW) regression model, with random-effects, leveraging single nucleotide polymorphisms (SNPs) as instrumental variables was utilized to endorse the mutual causality between migraine and VTE. SNP heterogeneity was evaluated using Cochran's Q-test and to account for multiple testing, correction was implemented using the intercept of the MR-Egger method, and a leave-one-out analysis. Results The IVW model unveiled a statistically considerable causal link between migraine and the development of VTE (odds ratio [OR]\u2009=\u200996.155, 95% confidence interval [CI]: 4.342\u20132129.458, p =\u20090.004), implying that migraine poses a strong risk factor for VTE development. Conversely, both IVW and simple model outcomes indicated that VTE poses as a weaker risk factor for migraine (IVW OR\u2009=\u20091.002, 95% CI: 1.000\u20131.004, p =\u20090.016). The MR-Egger regression analysis denoted absence of evidence for genetic pleiotropy among the SNPs while the durability of our Mendelian randomization results was vouched by the leave-one-out sensitivity analysis. Conclusion The findings of this Mendelian randomization assessment provide substantiation for a reciprocal causative association between migraine and VTE within the European population."
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/4"
+        },
+        {
+          "$ref": "#/texts/5"
+        },
+        {
+          "$ref": "#/texts/6"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Introduction",
+      "text": "Introduction",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/texts/3"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Venous thromboembolism (VTE) encompasses both deep vein thrombosis and pulmonary embolism, 1 ranking third globally as a prevalent vascular disorder associated with mortality. 2 This increases the mortality risk for patients and compounds the financial burden on health care services. Hence, the ongoing evaluation and assessment of VTE risk in clinical settings are crucial.",
+      "text": "Venous thromboembolism (VTE) encompasses both deep vein thrombosis and pulmonary embolism, 1 ranking third globally as a prevalent vascular disorder associated with mortality. 2 This increases the mortality risk for patients and compounds the financial burden on health care services. Hence, the ongoing evaluation and assessment of VTE risk in clinical settings are crucial."
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/texts/3"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Migraine, characterized by recurrent episodes of severe unilateral headaches accompanied by pulsating sensations and autonomic symptoms, affects approximately one billion individuals worldwide. 3 Several research studies indicate an increase in VTE incidence among migraine sufferers. 4 5 6 7 8 Hence, there is a significant need for further investigation to elucidate the causal relationship between VTE and migraines.",
+      "text": "Migraine, characterized by recurrent episodes of severe unilateral headaches accompanied by pulsating sensations and autonomic symptoms, affects approximately one billion individuals worldwide. 3 Several research studies indicate an increase in VTE incidence among migraine sufferers. 4 5 6 7 8 Hence, there is a significant need for further investigation to elucidate the causal relationship between VTE and migraines."
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/texts/3"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Mendelian randomization (MR) is a methodology that utilizes genetic variants as instrumental variables (IVs) to explore the causal association between a modifiable exposure and a disease outcome. 9 By leveraging the random allocation and fixed nature of an individual's alleles at conception, this approach helps alleviate concerns regarding reverse causality and environmental confounders commonly encountered in traditional epidemiological methods.",
+      "text": "Mendelian randomization (MR) is a methodology that utilizes genetic variants as instrumental variables (IVs) to explore the causal association between a modifiable exposure and a disease outcome. 9 By leveraging the random allocation and fixed nature of an individual's alleles at conception, this approach helps alleviate concerns regarding reverse causality and environmental confounders commonly encountered in traditional epidemiological methods."
+    },
+    {
+      "self_ref": "#/texts/7",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/8"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Research Methodology",
+      "text": "Research Methodology",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/8",
+      "parent": {
+        "$ref": "#/texts/7"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "A rigorous bidirectional two-sample MR examination was implemented to probe the causal link between migraine and VTE risk, subsequent to a meticulous screening mechanism. For achieving credible estimations of MR causality, efficacious genetic variances serving as IVs must meet three central postulates: (I) relevance assumption, asserting that variations must demonstrate intimate association with the exposure element; (II) independence/exchangeability assumption, demanding no correlations be exhibited with any measured, unmeasured, or inconspicuous confounding elements germane to the researched correlation of interest; and (III) exclusion restriction assumption, maintaining that the variation affects the outcome exclusively through the exposure, devoid of alternative routes. 10 11 A single nucleotide polymorphism (SNP) refers to a genomic variant where a single nucleotide undergoes alteration at a specific locus within the DNA sequence. SNPs were employed as IVs in this study for estimating causal effects. The study's design is graphically portrayed in Fig. 1 , emphasizing the three fundamental postulates of MR. These postulates are of the utmost importance in affirming the validity of the MR examination and ensuring the reliability of the resultant causal inferences. 12",
+      "text": "A rigorous bidirectional two-sample MR examination was implemented to probe the causal link between migraine and VTE risk, subsequent to a meticulous screening mechanism. For achieving credible estimations of MR causality, efficacious genetic variances serving as IVs must meet three central postulates: (I) relevance assumption, asserting that variations must demonstrate intimate association with the exposure element; (II) independence/exchangeability assumption, demanding no correlations be exhibited with any measured, unmeasured, or inconspicuous confounding elements germane to the researched correlation of interest; and (III) exclusion restriction assumption, maintaining that the variation affects the outcome exclusively through the exposure, devoid of alternative routes. 10 11 A single nucleotide polymorphism (SNP) refers to a genomic variant where a single nucleotide undergoes alteration at a specific locus within the DNA sequence. SNPs were employed as IVs in this study for estimating causal effects. The study's design is graphically portrayed in Fig. 1 , emphasizing the three fundamental postulates of MR. These postulates are of the utmost importance in affirming the validity of the MR examination and ensuring the reliability of the resultant causal inferences. 12"
+    },
+    {
+      "self_ref": "#/texts/9",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/10"
+        },
+        {
+          "$ref": "#/texts/11"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Data Sources",
+      "text": "Data Sources",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/10",
+      "parent": {
+        "$ref": "#/texts/9"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Our SNPs are obtained from large-scale genome-wide association studies (GWAS) public databases. The exposure variable for this study was obtained from the largest migraine GWAS meta-analysis conducted by the IEU Open GWAS project, which can be accessed at https://gwas.mrcieu.ac.uk/datasets . 13 14 The outcome variable was derived from the largest VTE GWAS conducted by FinnGen, available at https://www.finngen.fi . 15 A comprehensive overview of the data sources used in our study can be found in Table 1 .",
+      "text": "Our SNPs are obtained from large-scale genome-wide association studies (GWAS) public databases. The exposure variable for this study was obtained from the largest migraine GWAS meta-analysis conducted by the IEU Open GWAS project, which can be accessed at https://gwas.mrcieu.ac.uk/datasets . 13 14 The outcome variable was derived from the largest VTE GWAS conducted by FinnGen, available at https://www.finngen.fi . 15 A comprehensive overview of the data sources used in our study can be found in Table 1 ."
+    },
+    {
+      "self_ref": "#/texts/11",
+      "parent": {
+        "$ref": "#/texts/9"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "The variances in genetic variations and exposure distributions across diverse ethnicities could potentially result in spurious correlations between genetic variants and exposures. 16 Consequently, the migraine and VTE GWAS for this study were sourced from a homogeneous European populace to circumvent such inaccurate associations. It is crucial to highlight that the data harvested from public databases were current up to March 31, 2023. Given the public nature of all data utilized in our study, there was no necessity for further ethical approval.",
+      "text": "The variances in genetic variations and exposure distributions across diverse ethnicities could potentially result in spurious correlations between genetic variants and exposures. 16 Consequently, the migraine and VTE GWAS for this study were sourced from a homogeneous European populace to circumvent such inaccurate associations. It is crucial to highlight that the data harvested from public databases were current up to March 31, 2023. Given the public nature of all data utilized in our study, there was no necessity for further ethical approval."
+    },
+    {
+      "self_ref": "#/texts/12",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/13"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Filtering Criteria of IVs",
+      "text": "Filtering Criteria of IVs",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/13",
+      "parent": {
+        "$ref": "#/texts/12"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "To select appropriate SNPs as IVs, we followed standard assumptions of MR. First, we performed a screening process using the migraine GWAS summary data, applying a significance threshold of p \u2009<\u20095\u2009\u00d7\u200910 \u22128 (Assumption I). To ensure the independence of SNPs and mitigate the effects of linkage disequilibrium, we set the linkage disequilibrium coefficient ( r 2 ) to 0.001 and restricted the width of the linkage disequilibrium region to 10,000\u2009kb. PhenoScanner ( http://www.phenoscanner.medschl.cam.ac.uk/ ) serves as a versatile tool, enabling users to explore genetic variants, genes, and traits linked to a wide spectrum of phenotypes. 17 18 Utilizing PhenoScanner v2, we ruled out SNPs linked with potential confounding constituents and outcomes, thereby addressing assumptions II and III. Subsequently, we extracted the relevant SNPs from the VTE GWAS summary data, ensuring a minimum r 2 \u2009>\u20090.8 and replacing missing SNPs with highly linked SNPs. We excluded SNPs without replacement sites and palindromic SNPs and combined the information from both datasets. Finally, we excluded SNPs directly associated with VTE at a significance level of p \u2009<\u20095\u2009\u00d7\u200910 \u22128 and prioritized IVs with an F-statistic [F-statistic\u2009=\u2009(\u03b2/SE)2]\u2009>\u200910 to minimize weak instrument bias. 19",
+      "text": "To select appropriate SNPs as IVs, we followed standard assumptions of MR. First, we performed a screening process using the migraine GWAS summary data, applying a significance threshold of p \u2009<\u20095\u2009\u00d7\u200910 \u22128 (Assumption I). To ensure the independence of SNPs and mitigate the effects of linkage disequilibrium, we set the linkage disequilibrium coefficient ( r 2 ) to 0.001 and restricted the width of the linkage disequilibrium region to 10,000\u2009kb. PhenoScanner ( http://www.phenoscanner.medschl.cam.ac.uk/ ) serves as a versatile tool, enabling users to explore genetic variants, genes, and traits linked to a wide spectrum of phenotypes. 17 18 Utilizing PhenoScanner v2, we ruled out SNPs linked with potential confounding constituents and outcomes, thereby addressing assumptions II and III. Subsequently, we extracted the relevant SNPs from the VTE GWAS summary data, ensuring a minimum r 2 \u2009>\u20090.8 and replacing missing SNPs with highly linked SNPs. We excluded SNPs without replacement sites and palindromic SNPs and combined the information from both datasets. Finally, we excluded SNPs directly associated with VTE at a significance level of p \u2009<\u20095\u2009\u00d7\u200910 \u22128 and prioritized IVs with an F-statistic [F-statistic\u2009=\u2009(\u03b2/SE)2]\u2009>\u200910 to minimize weak instrument bias. 19"
+    },
+    {
+      "self_ref": "#/texts/14",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/15"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Results",
+      "text": "Results",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/15",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "In the present investigation, we capitalized on a bidirectional two-sample MR analysis in individuals of European descent to scrutinize the potential causative correlation between migraines and VTE risk. Our investigation implies a potential bidirectional pathogenic relationship between migraines and the risk of VTE, as supported by the specific analysis results detailed in Table 2 .",
+      "text": "In the present investigation, we capitalized on a bidirectional two-sample MR analysis in individuals of European descent to scrutinize the potential causative correlation between migraines and VTE risk. Our investigation implies a potential bidirectional pathogenic relationship between migraines and the risk of VTE, as supported by the specific analysis results detailed in Table 2 ."
+    },
+    {
+      "self_ref": "#/texts/16",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/17"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Mendelian Randomization Analysis",
+      "text": "Mendelian Randomization Analysis",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/17",
+      "parent": {
+        "$ref": "#/texts/16"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "During the IV screening process, it was identified that SNP r10908505 was associated with body mass index (BMI) in VTE. Considering the established association between BMI and VTE, 1 15 this violated Assumption III and the SNP was subsequently excluded. The VTE dataset ultimately consisted of 11 SNPs, with individual SNP F-statistics ranging from 29.76 to 96.77 (all >10), indicating a minimal potential for causal associations to be confounded by weak IV bias ( Supplementary Table S1 , available in the online version). The IVW model revealed that migraine was a statistically significant risk factor for the onset of VTE (odds ratio [OR]\u2009=\u200996.155, 95% confidence interval [CI]: 4.3422\u2013129.458, p \u2009=\u20090.004) ( Table 2 , Fig. 2A ). The scatter plot ( Fig. 2B ) and funnel plot ( Fig. 2C ) of migraine demonstrated a symmetrical distribution of all included SNPs, suggesting a limited possibility of bias affecting the causal association. The Cochran's Q test, conducted on the MR-Egger regression and the IVW method, yielded statistics of 5.610 and 5.973 ( p \u2009>\u20090.05), indicating the absence of heterogeneity among the SNPs ( Supplementary Table S2 , available in the online version). These findings suggest a positive correlation between the strength of association between the IVs and migraine, satisfying the assumptions of IV analysis. The MR-Egger regression analysis showed no statistically significant difference from zero for the intercept term ( p \u2009=\u20090.5617), indicating the absence of genetic pleiotropy among the SNPs ( Supplementary Table S3 , available in the online version). Additionally, the leave-one-out analysis revealed that the inclusion or exclusion of individual SNPs did not substantially impact the estimated causal effects, demonstrating the robustness of the MR results obtained in our investigation ( Fig. 2D ).",
+      "text": "During the IV screening process, it was identified that SNP r10908505 was associated with body mass index (BMI) in VTE. Considering the established association between BMI and VTE, 1 15 this violated Assumption III and the SNP was subsequently excluded. The VTE dataset ultimately consisted of 11 SNPs, with individual SNP F-statistics ranging from 29.76 to 96.77 (all >10), indicating a minimal potential for causal associations to be confounded by weak IV bias ( Supplementary Table S1 , available in the online version). The IVW model revealed that migraine was a statistically significant risk factor for the onset of VTE (odds ratio [OR]\u2009=\u200996.155, 95% confidence interval [CI]: 4.3422\u2013129.458, p \u2009=\u20090.004) ( Table 2 , Fig. 2A ). The scatter plot ( Fig. 2B ) and funnel plot ( Fig. 2C ) of migraine demonstrated a symmetrical distribution of all included SNPs, suggesting a limited possibility of bias affecting the causal association. The Cochran's Q test, conducted on the MR-Egger regression and the IVW method, yielded statistics of 5.610 and 5.973 ( p \u2009>\u20090.05), indicating the absence of heterogeneity among the SNPs ( Supplementary Table S2 , available in the online version). These findings suggest a positive correlation between the strength of association between the IVs and migraine, satisfying the assumptions of IV analysis. The MR-Egger regression analysis showed no statistically significant difference from zero for the intercept term ( p \u2009=\u20090.5617), indicating the absence of genetic pleiotropy among the SNPs ( Supplementary Table S3 , available in the online version). Additionally, the leave-one-out analysis revealed that the inclusion or exclusion of individual SNPs did not substantially impact the estimated causal effects, demonstrating the robustness of the MR results obtained in our investigation ( Fig. 2D )."
+    },
+    {
+      "self_ref": "#/texts/18",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/19"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Reverse Mendelian Randomization Analysis",
+      "text": "Reverse Mendelian Randomization Analysis",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/19",
+      "parent": {
+        "$ref": "#/texts/18"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Upon screening for IVs in migraine patients, SNP rs6060308 was excluded due to its association with education 20 21 and violation of Assumption III. The final migraine dataset comprised 13 SNPs, with individual SNP F-statistics ranging from 30.60 to 354.34, all surpassing the threshold of 10 ( Supplementary Table S4 , available in the online version). Both the IVW and simple models supported VTE as a risk factor for migraine. The IVW analysis yielded an OR of 1.002 (95% CI: 1.000\u20131.004, p \u2009=\u20090.016), while the simple model yielded an OR of 1.003 (95% CI: 1.000\u20131.006, p \u2009=\u20090.047) ( Table 2 , Fig. 3A ). The scatter plot ( Fig. 3B ) and funnel plot ( Fig. 3C ) exhibited symmetrical distributions across all included SNPs, indicating minimal potential for biases affecting the causal association. Heterogeneity among SNPs was observed through the Cochran's Q test of the IVW method and MR-Egger regression, with Q statistics of 18.697 and 20.377, respectively, both with p \u2009<\u20090.05 ( Supplementary Table S2 , available in the online version). Therefore, careful consideration is necessary for the results obtained from the random-effects IVW method. MR-Egger regression analysis revealed a nonsignificant difference between the intercept term and zero ( p \u2009=\u20090.3655), suggesting the absence of genetic pleiotropy among the SNPs ( Supplementary Table S3 , available in the online version). Additionally, the leave-one-out analysis demonstrated that the inclusion or exclusion of individual SNPs had no substantial impact on the estimated causal effect ( Fig. 3D ).",
+      "text": "Upon screening for IVs in migraine patients, SNP rs6060308 was excluded due to its association with education 20 21 and violation of Assumption III. The final migraine dataset comprised 13 SNPs, with individual SNP F-statistics ranging from 30.60 to 354.34, all surpassing the threshold of 10 ( Supplementary Table S4 , available in the online version). Both the IVW and simple models supported VTE as a risk factor for migraine. The IVW analysis yielded an OR of 1.002 (95% CI: 1.000\u20131.004, p \u2009=\u20090.016), while the simple model yielded an OR of 1.003 (95% CI: 1.000\u20131.006, p \u2009=\u20090.047) ( Table 2 , Fig. 3A ). The scatter plot ( Fig. 3B ) and funnel plot ( Fig. 3C ) exhibited symmetrical distributions across all included SNPs, indicating minimal potential for biases affecting the causal association. Heterogeneity among SNPs was observed through the Cochran's Q test of the IVW method and MR-Egger regression, with Q statistics of 18.697 and 20.377, respectively, both with p \u2009<\u20090.05 ( Supplementary Table S2 , available in the online version). Therefore, careful consideration is necessary for the results obtained from the random-effects IVW method. MR-Egger regression analysis revealed a nonsignificant difference between the intercept term and zero ( p \u2009=\u20090.3655), suggesting the absence of genetic pleiotropy among the SNPs ( Supplementary Table S3 , available in the online version). Additionally, the leave-one-out analysis demonstrated that the inclusion or exclusion of individual SNPs had no substantial impact on the estimated causal effect ( Fig. 3D )."
+    },
+    {
+      "self_ref": "#/texts/20",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/21"
+        },
+        {
+          "$ref": "#/texts/22"
+        },
+        {
+          "$ref": "#/texts/23"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Discussion",
+      "text": "Discussion",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/21",
+      "parent": {
+        "$ref": "#/texts/20"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "VTE constitutes a grave health hazard to patients, necessitating rigorous clinical surveillance. Distinct from common VTE risk factors such as cancer, 22 diabetes, 23 lupus, 24 and antiphospholipid syndrome, 25 migraines remain absent from prevalent VTE guidelines or advisories. The MR findings from our research provide first-of-its-kind evidence of a causal nexus between migraines and VTE in individuals of European descent, signaling that migraines potently predispose individuals to VTE (IVW OR\u2009=\u200996.155, 95% CI: 4.342\u20132129.458), while VTE presents a weak risk factor for migraines (IVW OR\u2009=\u20091.002, 95% CI: 1.000\u20131.004). Given the robustness of the IVW analysis, the MR analysis is considered reliable.",
+      "text": "VTE constitutes a grave health hazard to patients, necessitating rigorous clinical surveillance. Distinct from common VTE risk factors such as cancer, 22 diabetes, 23 lupus, 24 and antiphospholipid syndrome, 25 migraines remain absent from prevalent VTE guidelines or advisories. The MR findings from our research provide first-of-its-kind evidence of a causal nexus between migraines and VTE in individuals of European descent, signaling that migraines potently predispose individuals to VTE (IVW OR\u2009=\u200996.155, 95% CI: 4.342\u20132129.458), while VTE presents a weak risk factor for migraines (IVW OR\u2009=\u20091.002, 95% CI: 1.000\u20131.004). Given the robustness of the IVW analysis, the MR analysis is considered reliable."
+    },
+    {
+      "self_ref": "#/texts/22",
+      "parent": {
+        "$ref": "#/texts/20"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Our MR analysis discloses a potential causal association between individuals suffering from migraines and VTE incidence, with a risk rate 96.155 times higher in comparison to nonmigraine sufferers. Previous observational endeavors investigating VTE risk amidst migraine patients have been scant and have yielded discordant outcomes, complicating the provision of clinical directives. 26 27 In a longitudinal inquiry with a 19-year follow-up, Adelborg et al discerned a heightened VTE risk in individuals afflicted with migraines. 4 Peng et al's prospective clinical study unveiled a more than double VTE risk increase in migraine patients during a 4-year follow-up. 5 Schwaiger et al's cohort study, incorporating 574 patients aged 55 to 94, observed a significant escalation in VTE risk among elderly individuals with migraines. 6 28 Bushnell et al uncovered a tripled VTE risk during pregnancy in migraine-affected women. 29 Although these studies validate a potential correlation between migraines and VTE, their persuasiveness is restricted due to other prominent VTE risk factors (such as advanced age and pregnancy) and contradicting findings in existing observational studies. For instance, Folsom et al observed no significant correlation between migraines and VTE risk in elderly individuals, contradicting Schwaiger's conclusion. 7 However, he clarified that the cohort incorporated in his study did not undergo rigorous neurological migraine diagnosis, possibly leading to confounding biases and generating findings that contradict other scholarly endeavors. 7 These contradictions originate from observational studies examining associations rather than causal relationships, invariably involving a confluence of various confounding factors. MR, leveraging SNPs as IVs to ascertain the causal link between migraines and VTE risk, can eliminate other confounding elements resulting in more reliable outcomes. Based on this finding, monitoring VTE risk among migraine patients in clinical practice is recommended.",
+      "text": "Our MR analysis discloses a potential causal association between individuals suffering from migraines and VTE incidence, with a risk rate 96.155 times higher in comparison to nonmigraine sufferers. Previous observational endeavors investigating VTE risk amidst migraine patients have been scant and have yielded discordant outcomes, complicating the provision of clinical directives. 26 27 In a longitudinal inquiry with a 19-year follow-up, Adelborg et al discerned a heightened VTE risk in individuals afflicted with migraines. 4 Peng et al's prospective clinical study unveiled a more than double VTE risk increase in migraine patients during a 4-year follow-up. 5 Schwaiger et al's cohort study, incorporating 574 patients aged 55 to 94, observed a significant escalation in VTE risk among elderly individuals with migraines. 6 28 Bushnell et al uncovered a tripled VTE risk during pregnancy in migraine-affected women. 29 Although these studies validate a potential correlation between migraines and VTE, their persuasiveness is restricted due to other prominent VTE risk factors (such as advanced age and pregnancy) and contradicting findings in existing observational studies. For instance, Folsom et al observed no significant correlation between migraines and VTE risk in elderly individuals, contradicting Schwaiger's conclusion. 7 However, he clarified that the cohort incorporated in his study did not undergo rigorous neurological migraine diagnosis, possibly leading to confounding biases and generating findings that contradict other scholarly endeavors. 7 These contradictions originate from observational studies examining associations rather than causal relationships, invariably involving a confluence of various confounding factors. MR, leveraging SNPs as IVs to ascertain the causal link between migraines and VTE risk, can eliminate other confounding elements resulting in more reliable outcomes. Based on this finding, monitoring VTE risk among migraine patients in clinical practice is recommended."
+    },
+    {
+      "self_ref": "#/texts/23",
+      "parent": {
+        "$ref": "#/texts/20"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Our endeavor seeks to offer a preliminary examination of the potential mechanisms underlying the interplay between migraines and VTE. The incidence of VTE habitually involves Virchow's triad, encompassing endothelial damage, venous stasis, and hypercoagulability. 30 On the genetic association front, the SNPs rs9349379 and rs11172113, acting as IVs for migraines, display relevance to the mechanisms underpinning VTE. Prior research earmarks the gene corresponding to rs9349379, PHACTR1 ( Supplementary Table S1 , available in the online version), as a catalyst for the upregulation of EDN1 . 31 Elevated EDN1 expression is associated with increased VTE susceptibility, 32 and EDN1 inhibition can diminish VTE incidence, 33 potentially through Endothelin 1-mediated vascular endothelial inflammation leading to thrombus formation. 34 The SNP rs11172113 corresponds to the gene LRP1 ( Supplementary Table S1 , available in the online version). 35 LRP1 can facilitate the upregulation of FVIII , culminating in an increase in plasma coagulation factor VIII, 36 thereby leading to heightened blood coagulability and an associated elevated VTE risk. 37 While various studies propose divergent mechanisms, they collectively signal that migraines can instigate a hypercoagulable state, thereby promoting the onset of VTE. The SNPs serving as IVs for VTE did not unveil any association with the onset of migraines. This corroborates our MR analysis outcomes, indicating that VTE is merely a weak risk factor for migraines.",
+      "text": "Our endeavor seeks to offer a preliminary examination of the potential mechanisms underlying the interplay between migraines and VTE. The incidence of VTE habitually involves Virchow's triad, encompassing endothelial damage, venous stasis, and hypercoagulability. 30 On the genetic association front, the SNPs rs9349379 and rs11172113, acting as IVs for migraines, display relevance to the mechanisms underpinning VTE. Prior research earmarks the gene corresponding to rs9349379, PHACTR1 ( Supplementary Table S1 , available in the online version), as a catalyst for the upregulation of EDN1 . 31 Elevated EDN1 expression is associated with increased VTE susceptibility, 32 and EDN1 inhibition can diminish VTE incidence, 33 potentially through Endothelin 1-mediated vascular endothelial inflammation leading to thrombus formation. 34 The SNP rs11172113 corresponds to the gene LRP1 ( Supplementary Table S1 , available in the online version). 35 LRP1 can facilitate the upregulation of FVIII , culminating in an increase in plasma coagulation factor VIII, 36 thereby leading to heightened blood coagulability and an associated elevated VTE risk. 37 While various studies propose divergent mechanisms, they collectively signal that migraines can instigate a hypercoagulable state, thereby promoting the onset of VTE. The SNPs serving as IVs for VTE did not unveil any association with the onset of migraines. This corroborates our MR analysis outcomes, indicating that VTE is merely a weak risk factor for migraines."
+    },
+    {
+      "self_ref": "#/texts/24",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Tables",
+      "text": "Tables",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/25",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "caption",
+      "prov": [],
+      "orig": "Table 1 Description of GWAS used for each phenotype",
+      "text": "Table 1 Description of GWAS used for each phenotype"
+    },
+    {
+      "self_ref": "#/texts/26",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "caption",
+      "prov": [],
+      "orig": "Table 2 Mendelian randomization regression causal association results",
+      "text": "Table 2 Mendelian randomization regression causal association results"
+    },
+    {
+      "self_ref": "#/texts/27",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Figures",
+      "text": "Figures",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/28",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "caption",
+      "prov": [],
+      "orig": "Fig. 1 This figure illustrates the research methodology for the bidirectional Mendelian randomization analysis concerning migraine and VTE. Assumption I: relevance assumption; Assumption II: independence/exchangeability assumption; Assumption III: exclusion restriction assumption.",
+      "text": "Fig. 1 This figure illustrates the research methodology for the bidirectional Mendelian randomization analysis concerning migraine and VTE. Assumption I: relevance assumption; Assumption II: independence/exchangeability assumption; Assumption III: exclusion restriction assumption."
+    },
+    {
+      "self_ref": "#/texts/29",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "caption",
+      "prov": [],
+      "orig": "Fig. 2 This figure explores the correlation between migraine risk and VTE, validating the presence of heterogeneity and pleiotropy. (A) The forest plot displays individual IVs, with each point flanked by lines that depict the 95% confidence interval. The effect of SNPs on the exposure (migraine) is shown along thex-axis, whereas their impact on the outcome (VTE) is presented on they-axis. A fitted line reflects the Mendelian randomization analysis results. (B) A scatter plot visualizes each IV, with the SNP effects on both exposure and outcome similar to that of the forest plot. Again, a fitted line represents the Mendelian randomization results. (C) The funnel plot positions the coefficient \u03b2IVfrom the instrumental variable regression on thex-axis to demonstrate the association's strength, while the inverse of its standard error (1/SEIV\u2020) on they-axis indicates the precision of this estimate. (D) A leave-one-out sensitivity analysis is shown on thex-axis, charting the estimated effects from the Mendelian randomization analysis. With each SNP associated with migraine successively excluded, the analysis recalculates the Mendelian randomization effect estimates, culminating with the \u201call\u201d category that encompasses all considered SNPs. IV, instrumental variable; SNP, single nucleotide polymorphisms; VTE, venous thromboembolism; SE, standard error.\u2020SE is the standard error of \u03b2.",
+      "text": "Fig. 2 This figure explores the correlation between migraine risk and VTE, validating the presence of heterogeneity and pleiotropy. (A) The forest plot displays individual IVs, with each point flanked by lines that depict the 95% confidence interval. The effect of SNPs on the exposure (migraine) is shown along thex-axis, whereas their impact on the outcome (VTE) is presented on they-axis. A fitted line reflects the Mendelian randomization analysis results. (B) A scatter plot visualizes each IV, with the SNP effects on both exposure and outcome similar to that of the forest plot. Again, a fitted line represents the Mendelian randomization results. (C) The funnel plot positions the coefficient \u03b2IVfrom the instrumental variable regression on thex-axis to demonstrate the association's strength, while the inverse of its standard error (1/SEIV\u2020) on they-axis indicates the precision of this estimate. (D) A leave-one-out sensitivity analysis is shown on thex-axis, charting the estimated effects from the Mendelian randomization analysis. With each SNP associated with migraine successively excluded, the analysis recalculates the Mendelian randomization effect estimates, culminating with the \u201call\u201d category that encompasses all considered SNPs. IV, instrumental variable; SNP, single nucleotide polymorphisms; VTE, venous thromboembolism; SE, standard error.\u2020SE is the standard error of \u03b2."
+    },
+    {
+      "self_ref": "#/texts/30",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "caption",
+      "prov": [],
+      "orig": "Fig. 3 (A\u2013D) This figure presents the relationship between VTE risk and migraine, also verifying heterogeneity and pleiotropy through similar graphic representations as detailed forFig. 2, but with the exposure and outcome reversed\u2014SNPs' effect on VTE and outcome on migraine. SNP, single nucleotide polymorphisms; VTE, venous thromboembolism.",
+      "text": "Fig. 3 (A\u2013D) This figure presents the relationship between VTE risk and migraine, also verifying heterogeneity and pleiotropy through similar graphic representations as detailed forFig. 2, but with the exposure and outcome reversed\u2014SNPs' effect on VTE and outcome on migraine. SNP, single nucleotide polymorphisms; VTE, venous thromboembolism."
+    },
+    {
+      "self_ref": "#/texts/31",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "section_header",
+      "prov": [],
+      "orig": "References",
+      "text": "References",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/32",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "F Khan; T Tritschler; S R Kahn; M A Rodger. Venous thromboembolism. Lancet (2021)",
+      "text": "F Khan; T Tritschler; S R Kahn; M A Rodger. Venous thromboembolism. Lancet (2021)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/33",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J A Heit. Epidemiology of venous thromboembolism. Nat Rev Cardiol (2015)",
+      "text": "J A Heit. Epidemiology of venous thromboembolism. Nat Rev Cardiol (2015)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/34",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": ". Headache Classification Committee of the International Headache Society (IHS) The International Classification of Headache Disorders, 3rd edition. Cephalalgia (2018)",
+      "text": ". Headache Classification Committee of the International Headache Society (IHS) The International Classification of Headache Disorders, 3rd edition. Cephalalgia (2018)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/35",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "K Adelborg; S K Sz\u00e9pligeti; L Holland-Bill. Migraine and risk of cardiovascular diseases: Danish population based matched cohort study. BMJ (2018)",
+      "text": "K Adelborg; S K Sz\u00e9pligeti; L Holland-Bill. Migraine and risk of cardiovascular diseases: Danish population based matched cohort study. BMJ (2018)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/36",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "K P Peng; Y T Chen; J L Fuh; C H Tang; S J Wang. Association between migraine and risk of venous thromboembolism: a nationwide cohort study. Headache (2016)",
+      "text": "K P Peng; Y T Chen; J L Fuh; C H Tang; S J Wang. Association between migraine and risk of venous thromboembolism: a nationwide cohort study. Headache (2016)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/37",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "S Sacco; A Carolei. Burden of atherosclerosis and risk of venous thromboembolism in patients with migraine. Neurology (2009)",
+      "text": "S Sacco; A Carolei. Burden of atherosclerosis and risk of venous thromboembolism in patients with migraine. Neurology (2009)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/38",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "A R Folsom; P L Lutsey; J R Misialek; M Cushman. A prospective study of migraine history and venous thromboembolism in older adults. Res Pract Thromb Haemost (2019)",
+      "text": "A R Folsom; P L Lutsey; J R Misialek; M Cushman. A prospective study of migraine history and venous thromboembolism in older adults. Res Pract Thromb Haemost (2019)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/39",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "I Y Elgendy; S E Nadeau; C N Bairey Merz; C J Pepine. Migraine headache: an under-appreciated risk factor for cardiovascular disease in women. J Am Heart Assoc (2019)",
+      "text": "I Y Elgendy; S E Nadeau; C N Bairey Merz; C J Pepine. Migraine headache: an under-appreciated risk factor for cardiovascular disease in women. J Am Heart Assoc (2019)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/40",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "C A Emdin; A V Khera; S Kathiresan. Mendelian randomization. JAMA (2017)",
+      "text": "C A Emdin; A V Khera; S Kathiresan. Mendelian randomization. JAMA (2017)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/41",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "T Karlsson; F Hadizadeh; M Rask-Andersen; \u00c5 Johansson; W E Ek. Body mass index and the risk of rheumatic disease: linear and nonlinear Mendelian randomization analyses. Arthritis Rheumatol (2023)",
+      "text": "T Karlsson; F Hadizadeh; M Rask-Andersen; \u00c5 Johansson; W E Ek. Body mass index and the risk of rheumatic disease: linear and nonlinear Mendelian randomization analyses. Arthritis Rheumatol (2023)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/42",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "T Lawler; S Warren Andersen. Serum 25-hydroxyvitamin D and cancer risk: a systematic review of mendelian randomization studies. Nutrients (2023)",
+      "text": "T Lawler; S Warren Andersen. Serum 25-hydroxyvitamin D and cancer risk: a systematic review of mendelian randomization studies. Nutrients (2023)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/43",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "S Burgess; A S Butterworth; J R Thompson. Beyond Mendelian randomization: how to interpret evidence of shared genetic predictors. J Clin Epidemiol (2016)",
+      "text": "S Burgess; A S Butterworth; J R Thompson. Beyond Mendelian randomization: how to interpret evidence of shared genetic predictors. J Clin Epidemiol (2016)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/44",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "C Sudlow; J Gallacher; N Allen. UK biobank: an open access resource for identifying the causes of a wide range of complex diseases of middle and old age. PLoS Med (2015)",
+      "text": "C Sudlow; J Gallacher; N Allen. UK biobank: an open access resource for identifying the causes of a wide range of complex diseases of middle and old age. PLoS Med (2015)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/45",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "M S Lyon; S J Andrews; B Elsworth; T R Gaunt; G Hemani; E Marcora. The variant call format provides efficient and robust storage of GWAS summary statistics. Genome Biol (2021)",
+      "text": "M S Lyon; S J Andrews; B Elsworth; T R Gaunt; G Hemani; E Marcora. The variant call format provides efficient and robust storage of GWAS summary statistics. Genome Biol (2021)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/46",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "M I Kurki; J Karjalainen; P Palta. FinnGen provides genetic insights from a well-phenotyped isolated population. Nature (2023)",
+      "text": "M I Kurki; J Karjalainen; P Palta. FinnGen provides genetic insights from a well-phenotyped isolated population. Nature (2023)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/47",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "E Sanderson; M M Glymour; M V Holmes. Mendelian randomization. Nat Rev Methods Primers (2022)",
+      "text": "E Sanderson; M M Glymour; M V Holmes. Mendelian randomization. Nat Rev Methods Primers (2022)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/48",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J R Staley; J Blackshaw; M A Kamat. PhenoScanner: a database of human genotype-phenotype associations. Bioinformatics (2016)",
+      "text": "J R Staley; J Blackshaw; M A Kamat. PhenoScanner: a database of human genotype-phenotype associations. Bioinformatics (2016)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/49",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "M A Kamat; J A Blackshaw; R Young. PhenoScanner V2: an expanded tool for searching human genotype-phenotype associations. Bioinformatics (2019)",
+      "text": "M A Kamat; J A Blackshaw; R Young. PhenoScanner V2: an expanded tool for searching human genotype-phenotype associations. Bioinformatics (2019)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/50",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "S Burgess; S G Thompson. Mendelian Randomization: Methods for Causal Inference Using Genetic Variants.  (2021)",
+      "text": "S Burgess; S G Thompson. Mendelian Randomization: Methods for Causal Inference Using Genetic Variants.  (2021)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/51",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "A May; L H Schulte. Chronic migraine: risk factors, mechanisms and treatment. Nat Rev Neurol (2016)",
+      "text": "A May; L H Schulte. Chronic migraine: risk factors, mechanisms and treatment. Nat Rev Neurol (2016)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/52",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "D W Dodick. Migraine. Lancet (2018)",
+      "text": "D W Dodick. Migraine. Lancet (2018)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/53",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "A A Khorana; N Mackman; A Falanga. Cancer-associated venous thromboembolism. Nat Rev Dis Primers (2022)",
+      "text": "A A Khorana; N Mackman; A Falanga. Cancer-associated venous thromboembolism. Nat Rev Dis Primers (2022)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/54",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "E J Bell; A R Folsom; P L Lutsey. Diabetes mellitus and venous thromboembolism: a systematic review and meta-analysis. Diabetes Res Clin Pract (2016)",
+      "text": "E J Bell; A R Folsom; P L Lutsey. Diabetes mellitus and venous thromboembolism: a systematic review and meta-analysis. Diabetes Res Clin Pract (2016)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/55",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "S Bhoelan; J Borjas Howard; V Tichelaar. Recurrence risk of venous thromboembolism associated with systemic lupus erythematosus: a retrospective cohort study. Res Pract Thromb Haemost (2022)",
+      "text": "S Bhoelan; J Borjas Howard; V Tichelaar. Recurrence risk of venous thromboembolism associated with systemic lupus erythematosus: a retrospective cohort study. Res Pract Thromb Haemost (2022)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/56",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "V Pengo; G Denas. Antiphospholipid syndrome in patients with venous thromboembolism. Semin Thromb Hemost (2023)",
+      "text": "V Pengo; G Denas. Antiphospholipid syndrome in patients with venous thromboembolism. Semin Thromb Hemost (2023)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/57",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "L Maitrot-Mantelet; M H Horellou; H Massiou; J Conard; A Gompel; G Plu-Bureau. Should women suffering from migraine with aura be screened for biological thrombophilia?: results from a cross-sectional French study. Thromb Res (2014)",
+      "text": "L Maitrot-Mantelet; M H Horellou; H Massiou; J Conard; A Gompel; G Plu-Bureau. Should women suffering from migraine with aura be screened for biological thrombophilia?: results from a cross-sectional French study. Thromb Res (2014)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/58",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "G E Tietjen; S A Collins. Hypercoagulability and migraine. Headache (2018)",
+      "text": "G E Tietjen; S A Collins. Hypercoagulability and migraine. Headache (2018)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/59",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J Schwaiger; S Kiechl; H Stockner. Burden of atherosclerosis and risk of venous thromboembolism in patients with migraine. Neurology (2008)",
+      "text": "J Schwaiger; S Kiechl; H Stockner. Burden of atherosclerosis and risk of venous thromboembolism in patients with migraine. Neurology (2008)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/60",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "C D Bushnell; M Jamison; A H James. Migraines during pregnancy linked to stroke and vascular diseases: US population based case-control study. BMJ (2009)",
+      "text": "C D Bushnell; M Jamison; A H James. Migraines during pregnancy linked to stroke and vascular diseases: US population based case-control study. BMJ (2009)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/61",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "W Y Ding; M B Protty; I G Davies; G YH Lip. Relationship between lipoproteins, thrombosis, and atrial fibrillation. Cardiovasc Res (2022)",
+      "text": "W Y Ding; M B Protty; I G Davies; G YH Lip. Relationship between lipoproteins, thrombosis, and atrial fibrillation. Cardiovasc Res (2022)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/62",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "R M Gupta; J Hadaya; A Trehan. A genetic variant associated with five vascular diseases is a distal regulator of endothelin-1 gene expression. Cell (2017)",
+      "text": "R M Gupta; J Hadaya; A Trehan. A genetic variant associated with five vascular diseases is a distal regulator of endothelin-1 gene expression. Cell (2017)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/63",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "B Kumari; A Prabhakar; A Sahu. Endothelin-1 gene polymorphism and its level predict the risk of venous thromboembolism in male indian population. Clin Appl Thromb Hemost (2017)",
+      "text": "B Kumari; A Prabhakar; A Sahu. Endothelin-1 gene polymorphism and its level predict the risk of venous thromboembolism in male indian population. Clin Appl Thromb Hemost (2017)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/64",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Y Zhang; J Liu; W Jia. AGEs/RAGE blockade downregulates Endothenin-1 (ET-1), mitigating Human Umbilical Vein Endothelial Cells (HUVEC) injury in deep vein thrombosis (DVT). Bioengineered (2021)",
+      "text": "Y Zhang; J Liu; W Jia. AGEs/RAGE blockade downregulates Endothenin-1 (ET-1), mitigating Human Umbilical Vein Endothelial Cells (HUVEC) injury in deep vein thrombosis (DVT). Bioengineered (2021)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/65",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J Padilla; A J Carpenter; N A Das. TRAF3IP2 mediates high glucose-induced endothelin-1 production as well as endothelin-1-induced inflammation in endothelial cells. Am J Physiol Heart Circ Physiol (2018)",
+      "text": "J Padilla; A J Carpenter; N A Das. TRAF3IP2 mediates high glucose-induced endothelin-1 production as well as endothelin-1-induced inflammation in endothelial cells. Am J Physiol Heart Circ Physiol (2018)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/66",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "L Liu; C Jouve; J Sebastien Hulot; A Georges; N Bouatia-Naji. Epigenetic regulation at LRP1 risk locus for cardiovascular diseases and assessment of cellular function in hiPSC derived smooth muscle cells. Cardiovasc Res (2022)",
+      "text": "L Liu; C Jouve; J Sebastien Hulot; A Georges; N Bouatia-Naji. Epigenetic regulation at LRP1 risk locus for cardiovascular diseases and assessment of cellular function in hiPSC derived smooth muscle cells. Cardiovasc Res (2022)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/67",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "R Vormittag; P Bencur; C Ay. Low-density lipoprotein receptor-related protein 1 polymorphism 663\u2009C > T affects clotting factor VIII activity and increases the risk of venous thromboembolism. J Thromb Haemost (2007)",
+      "text": "R Vormittag; P Bencur; C Ay. Low-density lipoprotein receptor-related protein 1 polymorphism 663\u2009C > T affects clotting factor VIII activity and increases the risk of venous thromboembolism. J Thromb Haemost (2007)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/68",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "H Chun; J H Kurasawa; P Olivares. Characterization of interaction between blood coagulation factor VIII and LRP1 suggests dynamic binding by alternating complex contacts. J Thromb Haemost (2022)",
+      "text": "H Chun; J H Kurasawa; P Olivares. Characterization of interaction between blood coagulation factor VIII and LRP1 suggests dynamic binding by alternating complex contacts. J Thromb Haemost (2022)",
+      "enumerated": false,
+      "marker": "-"
+    }
+  ],
+  "pictures": [
+    {
+      "self_ref": "#/pictures/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [
+        {
+          "$ref": "#/texts/28"
+        }
+      ],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [
+        {
+          "$ref": "#/texts/29"
+        }
+      ],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [
+        {
+          "$ref": "#/texts/30"
+        }
+      ],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    }
+  ],
+  "tables": [
+    {
+      "self_ref": "#/tables/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "table",
+      "prov": [],
+      "captions": [
+        {
+          "$ref": "#/texts/25"
+        }
+      ],
+      "references": [],
+      "footnotes": [],
+      "data": {
+        "table_cells": [
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "Variable",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "Sample size",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 2,
+            "end_col_offset_idx": 3,
+            "text": "ID",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 3,
+            "end_col_offset_idx": 4,
+            "text": "Population",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 4,
+            "end_col_offset_idx": 5,
+            "text": "Database",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 5,
+            "end_col_offset_idx": 6,
+            "text": "Year",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "Migraine",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "337159",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 2,
+            "end_col_offset_idx": 3,
+            "text": "ukb-a-87",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 3,
+            "end_col_offset_idx": 4,
+            "text": "European",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 4,
+            "end_col_offset_idx": 5,
+            "text": "IEU Open GWAS project",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 5,
+            "end_col_offset_idx": 6,
+            "text": "2017",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "VTE",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "218792",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 2,
+            "end_col_offset_idx": 3,
+            "text": "finn-b-I9_VTE",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 3,
+            "end_col_offset_idx": 4,
+            "text": "European",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 4,
+            "end_col_offset_idx": 5,
+            "text": "FinnGen",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 5,
+            "end_col_offset_idx": 6,
+            "text": "2021",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          }
+        ],
+        "num_rows": 3,
+        "num_cols": 6,
+        "grid": [
+          [
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Variable",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Sample size",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "ID",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "Population",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 4,
+              "end_col_offset_idx": 5,
+              "text": "Database",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 5,
+              "end_col_offset_idx": 6,
+              "text": "Year",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            }
+          ],
+          [
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Migraine",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "337159",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "ukb-a-87",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "European",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 4,
+              "end_col_offset_idx": 5,
+              "text": "IEU Open GWAS project",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 5,
+              "end_col_offset_idx": 6,
+              "text": "2017",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            }
+          ],
+          [
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "VTE",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "218792",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "finn-b-I9_VTE",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "European",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 4,
+              "end_col_offset_idx": 5,
+              "text": "FinnGen",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 5,
+              "end_col_offset_idx": 6,
+              "text": "2021",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "self_ref": "#/tables/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "table",
+      "prov": [],
+      "captions": [
+        {
+          "$ref": "#/texts/26"
+        }
+      ],
+      "references": [],
+      "footnotes": [],
+      "data": {
+        "table_cells": [
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "Exposures",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "SNPs (no.)",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 2,
+            "end_col_offset_idx": 3,
+            "text": "Methods",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 3,
+            "end_col_offset_idx": 4,
+            "text": "\u03b2",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 4,
+            "end_col_offset_idx": 5,
+            "text": "SE",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 5,
+            "end_col_offset_idx": 6,
+            "text": "OR (95% CI)",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 6,
+            "end_col_offset_idx": 7,
+            "text": "\np\n",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "Migraine",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "11",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 2,
+            "end_col_offset_idx": 3,
+            "text": "IVW",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 3,
+            "end_col_offset_idx": 4,
+            "text": "4.566",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 4,
+            "end_col_offset_idx": 5,
+            "text": "1.580",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 5,
+            "end_col_offset_idx": 6,
+            "text": "96.155 (4.342\u20132129.458)",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 6,
+            "end_col_offset_idx": 7,
+            "text": "0.004",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 2,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 4,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "VTE",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 2,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 4,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "12",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 2,
+            "end_col_offset_idx": 3,
+            "text": "IVW",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 3,
+            "end_col_offset_idx": 4,
+            "text": "0.002",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 4,
+            "end_col_offset_idx": 5,
+            "text": "0.001",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 5,
+            "end_col_offset_idx": 6,
+            "text": "1.002 (1.000\u20131.004);",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 6,
+            "end_col_offset_idx": 7,
+            "text": "0.016",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 3,
+            "end_row_offset_idx": 4,
+            "start_col_offset_idx": 2,
+            "end_col_offset_idx": 3,
+            "text": "Simple mode",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 3,
+            "end_row_offset_idx": 4,
+            "start_col_offset_idx": 3,
+            "end_col_offset_idx": 4,
+            "text": "0.003",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 3,
+            "end_row_offset_idx": 4,
+            "start_col_offset_idx": 4,
+            "end_col_offset_idx": 5,
+            "text": "0.001",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 3,
+            "end_row_offset_idx": 4,
+            "start_col_offset_idx": 5,
+            "end_col_offset_idx": 6,
+            "text": "1.003 (1.000\u20131.006)",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 3,
+            "end_row_offset_idx": 4,
+            "start_col_offset_idx": 6,
+            "end_col_offset_idx": 7,
+            "text": "0.047",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false
+          }
+        ],
+        "num_rows": 4,
+        "num_cols": 7,
+        "grid": [
+          [
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Exposures",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "SNPs (no.)",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "Methods",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "\u03b2",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 4,
+              "end_col_offset_idx": 5,
+              "text": "SE",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 5,
+              "end_col_offset_idx": 6,
+              "text": "OR (95% CI)",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 6,
+              "end_col_offset_idx": 7,
+              "text": "\np\n",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            }
+          ],
+          [
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Migraine",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "11",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "IVW",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "4.566",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 4,
+              "end_col_offset_idx": 5,
+              "text": "1.580",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 5,
+              "end_col_offset_idx": 6,
+              "text": "96.155 (4.342\u20132129.458)",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 6,
+              "end_col_offset_idx": 7,
+              "text": "0.004",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            }
+          ],
+          [
+            {
+              "row_span": 2,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "VTE",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 2,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "12",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "IVW",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "0.002",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 4,
+              "end_col_offset_idx": 5,
+              "text": "0.001",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 5,
+              "end_col_offset_idx": 6,
+              "text": "1.002 (1.000\u20131.004);",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 6,
+              "end_col_offset_idx": 7,
+              "text": "0.016",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            }
+          ],
+          [
+            {
+              "row_span": 2,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "VTE",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 2,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "12",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "Simple mode",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "0.003",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 4,
+              "end_col_offset_idx": 5,
+              "text": "0.001",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 5,
+              "end_col_offset_idx": 6,
+              "text": "1.003 (1.000\u20131.006)",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 6,
+              "end_col_offset_idx": 7,
+              "text": "0.047",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false
+            }
+          ]
+        ]
+      }
+    }
+  ],
+  "key_value_items": [],
+  "pages": {}
+}

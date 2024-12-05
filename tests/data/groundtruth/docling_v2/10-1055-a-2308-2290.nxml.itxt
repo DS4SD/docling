@@ -1,0 +1,85 @@
+item-0 at level 0: unspecified: group _root_
+  item-1 at level 1: title: The Association between Obstruct ... o-Sample Mendelian Randomization Study
+  item-2 at level 1: paragraph: Zhihai Huang; Emergency Medicine ... niversity, Zhanjiang, Guangdong, China
+  item-3 at level 1: text: Background Despite previous obse ... tween OSA and VTE in either direction.
+  item-4 at level 1: section_header: Introduction
+    item-5 at level 2: text: Obstructive sleep apnea (OSA) is ... ed with the prevalence of obesity. 3 4
+    item-6 at level 2: text: There is mounting evidence indic ...  potential bidirectional relationship.
+    item-7 at level 2: text: Although previous observational  ... in classical epidemiologic studies. 17
+  item-8 at level 1: section_header: Data Source and Selection of Instrumental Variables
+    item-9 at level 2: text: Summary-level data for OSA were  ...  data sources is provided in Table 1 .
+    item-10 at level 2: text: The selection criteria for IVs w ... t of IV selection is shown in Fig. 1 .
+  item-11 at level 1: section_header: Statistical Analysis
+    item-12 at level 2: text: This study employed the multipli ...  indicating significant heterogeneity.
+  item-13 at level 1: section_header: Instrumental Variable Selection
+    item-14 at level 2: text: As previously outlined, a total  ... lysis are provided in Tables 2 and 3 .
+  item-15 at level 1: section_header: Effects of OSA on VTE
+    item-16 at level 2: text: Fig. 2 shows the estimates of th ...  to detect any evidence of pleiotropy.
+    item-17 at level 2: text: The validation analysis using ge ... netic association between OSA and VTE.
+  item-18 at level 1: section_header: Effects of VTE on OSA
+    item-19 at level 2: text: We conducted reverse MR analysis ... med the reliability of the MR results.
+  item-20 at level 1: section_header: Discussion
+    item-21 at level 2: text: Our findings contradict some pre ...  an increased risk of VTE. 29 30 31 32
+    item-22 at level 2: text: However, these studies were hind ...  adjusting for obesity confounding. 36
+    item-23 at level 2: text: While our MR study did not find  ... A and VTE, delving into greater depth.
+  item-24 at level 1: section_header: Tables
+  item-26 at level 1: table with [6x7]
+    item-26 at level 2: caption: Table 1 Information on data sources
+  item-28 at level 1: table with [47x17]
+    item-28 at level 2: caption: Table 2 Genetic variants used in the MR analysis
+  item-30 at level 1: table with [112x11]
+    item-30 at level 2: caption: Table 3 Genetic variants used in the reverse MR analysis
+  item-31 at level 1: section_header: Figures
+  item-33 at level 1: picture
+    item-33 at level 2: caption: Fig. 1 The flowchart of instrumental variables selection. LD, linkage disequilibrium; SNPs, single-nucleotide polymorphisms; BMI, body mass index; VTE, venous thromboembolism; PE, pulmonary embolism; DVT, deep vein thrombosis; OSA, obstructive sleep apnea; ①, represents OSA (Jiang et al) as the outcome; ②, represents OSA (Campos et al) as the outcome.
+  item-35 at level 1: picture
+    item-35 at level 2: caption: Fig. 2 The genetic association of OSA with VTE/PE/DVT. OSA, obstructive sleep apnea; VTE, venous thromboembolism; PE, pulmonary embolism; DVT, deep vein thrombosis; MR, mendelian randomization; IVW, inverse variance weighted; PRESSO, pleiotropy residual sum and outlier; P*, represents P for heterogeneity test; P**, represents P for MR-Egger intercept; P***, represents P for MR-PRESSO global test.
+  item-37 at level 1: picture
+    item-37 at level 2: caption: Fig. 3 The genetic association of VTE/PE/DVT with OSA. OSA, obstructive sleep apnea; VTE, venous thromboembolism; PE, pulmonary embolism; DVT, deep vein thrombosis; MR, mendelian randomization; IVW, inverse variance weighted; PRESSO, pleiotropy residual sum and outlier; P*, represents P for heterogeneity test; P**, represents P for MR-Egger intercept; P***, represents P for MR-PRESSO global test.
+  item-38 at level 1: section_header: References
+  item-39 at level 1: list: group list
+    item-40 at level 2: list_item: S H Wang; W S Chen; S E Tang. Be ... ve sleep apnea. Front Pharmacol (2019)
+    item-41 at level 2: list_item: C R Innes; P T Kelly; M Hlavac;  ... pnoea during wakefulness. Sleep (2015)
+    item-42 at level 2: list_item: C V Senaratna; J L Perret; C J L ... ystematic review. Sleep Med Rev (2017)
+    item-43 at level 2: list_item: J Bai; H Wen; J Tai. Altered spo ...  apnea syndrome. Front Neurosci (2021)
+    item-44 at level 2: list_item: J M Marin; A Agusti; I Villar. A ...  and risk of hypertension. JAMA (2012)
+    item-45 at level 2: list_item: S Redline; G Yenokyan; D J Gottl ... tudy. Am J Respir Crit Care Med (2010)
+    item-46 at level 2: list_item: O Mesarwi; A Malhotra. Obstructi ...  relationship. J Clin Sleep Med (2020)
+    item-47 at level 2: list_item: F Piccirillo; S P Crispino; L Bu ... and heart failure. Am J Cardiol (2023)
+    item-48 at level 2: list_item: K Glise Sandblad; A Rosengren; J ... eople. Res Pract Thromb Haemost (2022)
+    item-49 at level 2: list_item: R Raj; A Paturi; M A Ahmed; S E  ... sm: a systematic review. Cureus (2022)
+    item-50 at level 2: list_item: C C Lin; J J Keller; J H Kang; T ... Vasc Surg Venous Lymphat Disord (2013)
+    item-51 at level 2: list_item: Y H Peng; W C Liao; W S Chung. A ... ective cohort study. Thromb Res (2014)
+    item-52 at level 2: list_item: O Nepveu; C Orione; C Tromeur. A ...  from a French cohort. Thromb J (2022)
+    item-53 at level 2: list_item: O Dabbagh; M Sabharwal; O Hassan ...  among females not males. Chest (2010)
+    item-54 at level 2: list_item: J P Bosanquet; B C Bade; M F Zia ... lation. Clin Appl Thromb Hemost (2011)
+    item-55 at level 2: list_item: A Xue; L Jiang; Z Zhu. Genome-wi ... ongitudinal changes. Nat Commun (2021)
+    item-56 at level 2: list_item: B Pu; P Gu; C Zheng; L Ma; X Zhe ... domization analysis. Front Nutr (2022)
+    item-57 at level 2: list_item: L Jiang; Z Zheng; H Fang; J Yang ... r biobank-scale data. Nat Genet (2021)
+    item-58 at level 2: list_item: A I Campos; N Ingold; Y Huang. D ... AS analysis with snoring. Sleep (2023)
+    item-59 at level 2: list_item: R Feng; M Lu; J Xu. Pulmonary em ... omization study. BMC Genom Data (2022)
+    item-60 at level 2: list_item: R Molenberg; C HL Thio; M W Aalb ... ian randomization study. Stroke (2022)
+    item-61 at level 2: list_item: S H Wang; B T Keenan; A Wiemken. ...  fat. Am J Respir Crit Care Med (2020)
+    item-62 at level 2: list_item: C Hotoleanu. Association between ...  thromboembolism. Med Pharm Rep (2020)
+    item-63 at level 2: list_item: H Zhao; X Jin. Causal associatio ... randomization study. Front Nutr (2022)
+    item-64 at level 2: list_item: B Tang; Y Wang; X Jiang. Genetic ...  randomization study. Neurology (2022)
+    item-65 at level 2: list_item: S S Dong; K Zhang; Y Guo. Phenom ... randomization study. Genome Med (2021)
+    item-66 at level 2: list_item: W Huang; J Xiao; J Ji; L Chen. A ... lian randomization study. eLife (2021)
+    item-67 at level 2: list_item: X Chen; J Kong; J Pan. Kidney da ... ndomization study. EBioMedicine (2021)
+    item-68 at level 2: list_item: I Arnulf; M Merino-Andreu; A Per ... nd venous thromboembolism. JAMA (2002)
+    item-69 at level 2: list_item: K T Chou; C C Huang; Y M Chen. S ... -matched cohort study. Am J Med (2012)
+    item-70 at level 2: list_item: A Alonso-Fernández; M de la Peña ... monary embolism. Mayo Clin Proc (2013)
+    item-71 at level 2: list_item: M Ambrosetti; A Lucioni; W Ageno ... nea syndrome?. J Thromb Haemost (2004)
+    item-72 at level 2: list_item: S Reutrakul; B Mokhlesi. Obstruc ...  state of the art review. Chest (2017)
+    item-73 at level 2: list_item: S Lindström; M Germain; M Crous- ...  Randomization study. Hum Genet (2017)
+    item-74 at level 2: list_item: M V Genuardi; A Rathore; R P Ogi ... with OSA: a cohort study. Chest (2022)
+    item-75 at level 2: list_item: R Aman; V G Michael; P O Rachel. ... lism. American Thoracic Society (2019)
+    item-76 at level 2: list_item: C T Esmon. Basic mechanisms and  ... of venous thrombosis. Blood Rev (2009)
+    item-77 at level 2: list_item: A García-Ortega; E Mañas; R Lópe ... ical implications. Eur Respir J (2019)
+    item-78 at level 2: list_item: H Xiong; M Lao; L Wang. The inci ... ctive cohort study. Front Oncol (2022)
+    item-79 at level 2: list_item: A Holt; J Bjerre; B Zareini. Sle ... CPAP) therapy. J Am Heart Assoc (2018)
+    item-80 at level 2: list_item: A Alonso-Fernández; N Toledo-Pon ... ing relationship. Sleep Med Rev (2020)
+    item-81 at level 2: list_item: S N Hong; H C Yun; J H Yoo; S H  ... JAMA Otolaryngol Head Neck Surg (2017)
+    item-82 at level 2: list_item: G V Robinson; J C Pepperell; H C ... mised controlled trials. Thorax (2004)
+    item-83 at level 2: list_item: R von Känel; J S Loredo; F L Pow ... apnea. Clin Hemorheol Microcirc (2005)
+    item-84 at level 2: list_item: C Zolotoff; L Bertoletti; D Goza ... blood-brain barrier. J Clin Med (2021)

@@ -525,6 +525,8 @@ class _DocumentConversionInput(BaseModel):
             mime = FormatToMimeType[InputFormat.ASCIIDOC][0]
         elif ext in FormatToExtensions[InputFormat.HTML]:
             mime = FormatToMimeType[InputFormat.HTML][0]
+        elif ext in FormatToExtensions[InputFormat.XML]:
+            mime = FormatToMimeType[InputFormat.XML][0]
         elif ext in FormatToExtensions[InputFormat.MD]:
             mime = FormatToMimeType[InputFormat.MD][0]
 

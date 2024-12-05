@@ -1,0 +1,586 @@
+<!DOCTYPE article
+PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD with MathML3 v1.3 20210610//EN" "JATS-archivearticle1-3-mathml3.dtd">
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" article-type="research-article" xml:lang="en" dtd-version="1.3"><?properties open_access?><processing-meta base-tagset="archiving" mathml-version="3.0" table-model="xhtml" tagset-family="jats"><restricted-by>pmc</restricted-by></processing-meta><front><journal-meta><journal-id journal-id-type="nlm-ta">Thromb Haemost</journal-id><journal-id journal-id-type="iso-abbrev">Thromb Haemost</journal-id><journal-id journal-id-type="doi">10.1055/s-00035024</journal-id><journal-title-group><journal-title>Thrombosis and Haemostasis</journal-title></journal-title-group><issn pub-type="ppub">0340-6245</issn><issn pub-type="epub">2567-689X</issn><publisher><publisher-name>Georg Thieme Verlag KG</publisher-name><publisher-loc>R&#x000fc;digerstra&#x000df;e 14, 70469 Stuttgart, Germany</publisher-loc></publisher></journal-meta>
+<article-meta><article-id pub-id-type="pmid">37846465</article-id><article-id pub-id-type="pmc">11518618</article-id>
+<article-id pub-id-type="doi">10.1055/s-0043-1775965</article-id><article-id pub-id-type="publisher-id">TH-22-08-0374</article-id><article-categories><subj-group><subject>Stroke, Systemic or Venous Thromboembolism</subject></subj-group></article-categories><title-group><article-title>Differential Effects of Erythropoietin Administration and Overexpression on Venous Thrombosis in Mice</article-title></title-group><contrib-group><contrib contrib-type="author"><contrib-id contrib-id-type="orcid">http://orcid.org/0000-0001-6555-6622</contrib-id><name><surname>Stockhausen</surname><given-names>Sven</given-names></name><xref rid="AF22080374-1" ref-type="aff">1</xref><xref rid="AF22080374-2" ref-type="aff">2</xref><xref rid="AF22080374-3" ref-type="aff">3</xref></contrib><contrib contrib-type="author"><name><surname>Kilani</surname><given-names>Badr</given-names></name><xref rid="AF22080374-1" ref-type="aff">1</xref><xref rid="AF22080374-2" ref-type="aff">2</xref><xref rid="AF22080374-3" ref-type="aff">3</xref></contrib><contrib contrib-type="author"><name><surname>Schubert</surname><given-names>Irene</given-names></name><xref rid="AF22080374-1" ref-type="aff">1</xref><xref rid="AF22080374-2" ref-type="aff">2</xref><xref rid="AF22080374-3" ref-type="aff">3</xref></contrib><contrib contrib-type="author"><name><surname>Steinsiek</surname><given-names>Anna-Lena</given-names></name><xref rid="AF22080374-4" ref-type="aff">4</xref></contrib><contrib contrib-type="author"><name><surname>Chandraratne</surname><given-names>Sue</given-names></name><xref rid="AF22080374-1" ref-type="aff">1</xref><xref rid="AF22080374-2" ref-type="aff">2</xref><xref rid="AF22080374-3" ref-type="aff">3</xref></contrib><contrib contrib-type="author"><name><surname>Wendler</surname><given-names>Franziska</given-names></name><xref rid="AF22080374-1" ref-type="aff">1</xref><xref rid="AF22080374-2" ref-type="aff">2</xref><xref rid="AF22080374-3" ref-type="aff">3</xref></contrib><contrib contrib-type="author"><name><surname>Eivers</surname><given-names>Luke</given-names></name><xref rid="AF22080374-1" ref-type="aff">1</xref><xref rid="AF22080374-2" ref-type="aff">2</xref><xref rid="AF22080374-3" ref-type="aff">3</xref></contrib><contrib contrib-type="author"><name><surname>von Br&#x000fc;hl</surname><given-names>Marie-Luise</given-names></name><xref rid="AF22080374-1" ref-type="aff">1</xref><xref rid="AF22080374-2" ref-type="aff">2</xref><xref rid="AF22080374-3" ref-type="aff">3</xref></contrib><contrib contrib-type="author"><name><surname>Massberg</surname><given-names>Steffen</given-names></name><xref rid="AF22080374-1" ref-type="aff">1</xref><xref rid="AF22080374-2" ref-type="aff">2</xref><xref rid="AF22080374-3" ref-type="aff">3</xref></contrib><contrib contrib-type="author"><name><surname>Ott</surname><given-names>Ilka</given-names></name><xref rid="AF22080374-4" ref-type="aff">4</xref></contrib><contrib contrib-type="author"><name><surname>Stark</surname><given-names>Konstantin</given-names></name><xref rid="AF22080374-1" ref-type="aff">1</xref><xref rid="AF22080374-2" ref-type="aff">2</xref><xref rid="AF22080374-3" ref-type="aff">3</xref><xref rid="CO22080374-1" ref-type="author-notes"/></contrib></contrib-group><aff id="AF22080374-1"><label>1</label><institution>Medizinische Klinik und Poliklinik I, Klinikum der Universit&#x000e4;t M&#x000fc;nchen, Ludwig-Maximilians-Universit&#x000e4;t, Munich, Germany</institution></aff><aff id="AF22080374-2"><label>2</label><institution>German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany</institution></aff><aff id="AF22080374-3"><label>3</label><institution>Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit&#x000e4;t, Munich, Germany</institution></aff><aff id="AF22080374-4"><label>4</label><institution>Department of cardiology, German Heart Center, Munich, Germany.</institution></aff><author-notes><corresp id="CO22080374-1"><bold>Address for correspondence </bold>Konstantin Stark <institution>Medizinische Klinik und Poliklinik I, Ludwig-Maximilians-University</institution><addr-line>Marchioninistr. 15, 81377 Munich</addr-line><country>Germany</country><email>Konstantin.stark@med.uni-muenchen.de</email></corresp></author-notes><pub-date pub-type="epub"><day>16</day><month>10</month><year>2023</year></pub-date><pub-date pub-type="collection"><month>11</month><year>2024</year></pub-date><pub-date pub-type="pmc-release"><day>1</day><month>10</month><year>2023</year></pub-date><volume>124</volume><issue>11</issue><fpage>1027</fpage><lpage>1039</lpage><history><date date-type="received"><day>17</day><month>9</month><year>2022</year></date><date date-type="accepted"><day>06</day><month>8</month><year>2023</year></date></history><permissions><copyright-statement>
+The Author(s). This is an open access article published by Thieme under the terms of the Creative Commons Attribution-NonDerivative-NonCommercial License, permitting copying and reproduction so long as the original work is given appropriate credit. Contents may not be used for commercial purposes, or adapted, remixed, transformed or built upon. (
+<uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://creativecommons.org/licenses/by-nc-nd/4.0/">https://creativecommons.org/licenses/by-nc-nd/4.0/</uri>
+)
+</copyright-statement><copyright-year>2023</copyright-year><copyright-holder>The Author(s).</copyright-holder><license><ali:license_ref xmlns:ali="http://www.niso.org/schemas/ali/1.0/" specific-use="textmining" content-type="ccbyncndlicense">https://creativecommons.org/licenses/by-nc-nd/4.0/</ali:license_ref><license-p>This is an open-access article distributed under the terms of the Creative Commons Attribution-NonCommercial-NoDerivatives License, which permits unrestricted reproduction and distribution, for non-commercial purposes only; and use and reproduction, but not distribution, of adapted material for non-commercial purposes only, provided the original work is properly cited.</license-p></license></permissions><abstract abstract-type="graphical"><p><bold>Background</bold>
+&#x02003;Deep vein thrombosis (DVT) is a common condition associated with significant mortality due to pulmonary embolism. Despite advanced prevention and anticoagulation therapy, the incidence of venous thromboembolism remains unchanged. Individuals with elevated hematocrit and/or excessively high erythropoietin (EPO) serum levels are particularly susceptible to DVT formation. We investigated the influence of short-term EPO administration compared to chronic EPO overproduction on DVT development. Additionally, we examined the role of the spleen in this context and assessed its impact on thrombus composition.
+</p><p><bold>Methods</bold>
+&#x02003;We induced ligation of the caudal vena cava (VCC) in EPO-overproducing Tg(EPO) mice as well as wildtype mice treated with EPO for two weeks, both with and without splenectomy. The effect on platelet circulation time was evaluated through FACS analysis, and thrombus composition was analyzed using immunohistology.
+</p><p><bold>Results</bold>
+&#x02003;We present evidence for an elevated thrombogenic phenotype resulting from chronic EPO overproduction, achieved by combining an EPO-overexpressing mouse model with experimental DVT induction. This increased thrombotic state is largely independent of traditional contributors to DVT, such as neutrophils and platelets. Notably, the pronounced prothrombotic effect of red blood cells (RBCs) only manifests during chronic EPO overproduction and is not influenced by splenic RBC clearance, as demonstrated by splenectomy. In contrast, short-term EPO treatment does not induce thrombogenesis in mice. Consequently, our findings support the existence of a differential thrombogenic effect between chronic enhanced erythropoiesis and exogenous EPO administration.
+</p><p><bold>Conclusion</bold>
+&#x02003;Chronic EPO overproduction significantly increases the risk of DVT, while short-term EPO treatment does not. These findings underscore the importance of considering EPO-related factors in DVT risk assessment and potential therapeutic strategies.
+</p><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0043-1775965-i22080374-toc.jpg"/></abstract><kwd-group><title>Keywords</title><kwd>deep vein thrombosis</kwd><kwd>red blood cells</kwd><kwd>spleen</kwd><kwd>erythropoietin</kwd><kwd>sterile inflammation</kwd><kwd>fibrin</kwd></kwd-group><funding-group><award-group><funding-source>Deutsche Forschungsgemeinschaft</funding-source><award-id>1123</award-id></award-group><award-group><funding-source>Deutsche Forschungsgemeinschaft</funding-source><award-id>914</award-id></award-group><award-group><funding-source>Deutsche Gesellschaft f&#x000fc;r Kardiologie-Herz und Kreislaufforschung</funding-source><award-id>DGK09/2020</award-id></award-group><award-group><funding-source>ERC starting grant</funding-source><award-id>947611</award-id></award-group><award-group><funding-source>F&#x000f6;rderprogramm f&#x000fc;r Forschung und Lehre</funding-source><award-id>1123</award-id></award-group><funding-statement><bold>Funding</bold>
+This project is supported by the ERC starting grant T-MEMORE project 947611 (K.S.). This study was supported by the Deutsche Forschungsgemeinschaft through the collaborative research center 1123 project A07 (K.S., S.M.) and the collaborative research center 914 project B02 (K.S., S.M.). We thank for the support by the grant from the Deutsche Gesellschaft f&#x000fc;r Kardiologie project DGK09/2020 and the F&#x000f6;rderprogramm f&#x000fc;r Forschung und Lehre (F&#x000f6;FoLe) project 1123 (S.S).
+</funding-statement></funding-group></article-meta></front><body><sec><title>Introduction</title><p>
+Red blood cells (RBCs) are the primary carriers oxygen and carbon dioxide in all mammals. Low hemoglobin concentrations in the blood can cause severe oxygen deficiency, leading to ischemia in organs and tissues. At the same time, numerous clinical observations identified elevated hemoglobin levels as an independent risk factor for deep vein thrombosis (DVT) formation. This applies to overproduction of RBCs due to erythropoietin (EPO) administration, as well as foreign blood transfusions.
+<xref rid="JR22080374-1" ref-type="bibr">1</xref>
+<xref rid="JR22080374-2" ref-type="bibr">2</xref>
+<xref rid="JR22080374-3" ref-type="bibr">3</xref>
+<xref rid="JR22080374-4" ref-type="bibr">4</xref>
+<xref rid="JR22080374-5" ref-type="bibr">5</xref>
+<xref rid="JR22080374-6" ref-type="bibr">6</xref>
+<xref rid="JR22080374-7" ref-type="bibr">7</xref>
+This is also evident in illnesses which exhibit an excessive RBC production such as polycythemia vera or Chuvash polycythemia where a significant increase in thromboembolic complications has been reported.
+<xref rid="JR22080374-8" ref-type="bibr">8</xref>
+<xref rid="JR22080374-9" ref-type="bibr">9</xref>
+In such cases, oral or parenteral anticoagulants are effective preventive measures. However, their use entails significant drawbacks in the form of elevated bleeding risks, which can lead to severe complications.
+<xref rid="JR22080374-10" ref-type="bibr">10</xref>
+Therefore, it is crucial to identify patients at risk and to expand our understanding of the pathophysiology to enable a more targeted prevention and treatment of DVT.
+</p><p>
+The mechanism of RBC-mediated DVT formation so far is not fully understood. Essentially, DVT formation is triggered by sterile inflammation.
+<xref rid="JR22080374-11" ref-type="bibr">11</xref>
+Neutrophils and monocytes deliver tissue factor (TF) to the site of thrombus formation creating a procoagulant environment.
+<xref rid="JR22080374-11" ref-type="bibr">11</xref>
+However, the contribution of leukocytes to DVT formation may vary depending on the underlying disease and a leukocyte-recruiting property of RBCs in DVT has not been conclusively proven.
+</p><p>
+In this project we used a transgenic mouse model overexpressing the human EPO gene in an oxygen-independent manner. In these mice the hematocrit is chronically elevated, which leads to several changes. RBCs represent, volumetrically, the largest cellular component in the peripheral blood, thus influencing the viscosity of the blood, fostering cardiovascular events like stroke or ischemic heart disease.
+<xref rid="JR22080374-12" ref-type="bibr">12</xref>
+RBCs from Tg(EPO) mice show increased flexibility which in turn reduces the viscosity, and protects from thrombus formation.
+<xref rid="JR22080374-13" ref-type="bibr">13</xref>
+Additionally, excessive NO production has been described. In Tg(EPO) mice, the vasodilative effect of extensive NO release is partly compensated by endothelin.
+<xref rid="JR22080374-14" ref-type="bibr">14</xref>
+A reduced lifespan of RBCs was also identified in this mouse strain.
+<xref rid="JR22080374-15" ref-type="bibr">15</xref>
+</p><p>
+The spleen is responsible for RBC clearance, which acts as gatekeeper of the state, age, and number of RBCs.
+<xref rid="JR22080374-16" ref-type="bibr">16</xref>
+The loss of function of the spleen, due to removal, leads to changes in the blood count, the most striking of which is the transient thrombocytosis observed after splenectomy.
+<xref rid="JR22080374-17" ref-type="bibr">17</xref>
+Even though the platelet count normalizes within weeks, the risk of thromboembolism remains persistently high; however, the mechanism behind this prothrombotic state is unclear.
+<xref rid="JR22080374-18" ref-type="bibr">18</xref>
+<xref rid="JR22080374-19" ref-type="bibr">19</xref>
+<xref rid="JR22080374-20" ref-type="bibr">20</xref>
+Previous studies reveal an increase in platelet- and (to a lesser extent) RBC-derived microvesicles in splenectomized patients, which could indicate changes in their life cycle or activation state.
+<xref rid="JR22080374-21" ref-type="bibr">21</xref>
+At the same time, the levels of negatively charged prothrombotic phospholipids, like phosphatidylserine, in pulmonary embolism increase after splenectomy.
+<xref rid="JR22080374-22" ref-type="bibr">22</xref>
+<xref rid="JR22080374-23" ref-type="bibr">23</xref>
+<xref rid="JR22080374-24" ref-type="bibr">24</xref>
+Among others, RBCs can contribute to phosphatidylserine exposure.
+<xref rid="JR22080374-25" ref-type="bibr">25</xref>
+Old, rigid RBCs with modified phospholipid exposure promote thrombus formation; however, their relevance for DVT in vivo remains unclear.
+<xref rid="JR22080374-20" ref-type="bibr">20</xref>
+<xref rid="JR22080374-25" ref-type="bibr">25</xref>
+<xref rid="JR22080374-26" ref-type="bibr">26</xref>
+</p><p>
+In this study, we investigated the effect
+<bold>s</bold>
+of short-term EPO administration compared to chronic intrinsic EPO overproduction and the interference with RBC clearance on experimental venous thrombosis. We found that chronic intrinsic EPO overproduction resulted in excessive venous thrombosis. In this setting, platelets and leukocytes were reduced in thrombi, while RBC accumulation was markedly increased. In contrast, short-term EPO administration had no effect on DVT. Interference with RBC clearance by splenectomy had no effect on DVT, either in cases of chronic EPO overproduction or in wild-type (WT) mice. In summary, our data indicate that only long-term and excessively increased EPO levels affect DVT formation in mice, independent of splenic clearance of RBCs.
+</p></sec><sec><title>Methods</title><sec><title>Mouse Model</title><p>
+C57BL/6 mice were obtained from Jackson Laboratory. Human EPO-overexpressing mice were generated as previously described.
+<xref rid="JR22080374-14" ref-type="bibr">14</xref>
+TgN(PDGFBEPO)321Zbz consists of a transgenic mouse line, TgN(PDGFBEPO)321Zbz, expresses human EPO cDNA, and was initially reported by Ruschitzka et al,
+<xref rid="JR22080374-14" ref-type="bibr">14</xref>
+subsequently named Tg(EPO). The expression is regulated by the platelet-derived growth factor promotor. We used the corresponding WT littermate controls named as WT.
+<xref rid="JR22080374-27" ref-type="bibr">27</xref>
+Sex- and age-matched groups were used for the experiments with an age limit ranging between 12 and 29 weeks. The mice were housed in a specific-pathogen-free environment in our animal facility. General anesthesia was induced using a mixture of inhaled isoflurane, intravenous fentanyl, medetomidine, and midazolam. All procedures performed on mice were conducted in accordance with local legislation for the protection of animals (Regierung von Oberbayern, Munich) and were authorized accordingly.
+</p></sec><sec><title>Stenosis of the Inferior Vena Cava</title><p>The operation was carried out under general anesthesia. The procedure involved median laparotomy to access the inferior vena cava (IVC). A suture was placed around the IVC and ligated below the renal vein. To prevent complete stasis, a placeholder with a diameter of about 0.5&#x02009;mm was inserted into the loop and subsequently removed after tightening. Side branches of the IVC were not ligated. As result, intravascular flow reduction occurred, ultimately leading to thrombus formation. Thrombus quantification was conducted by removing the IVC (segment between the renal vein and the confluence of the common iliac veins). The incidence and weight of the thrombus were documented.</p></sec><sec><title>Acute and Chronic EPO Experiments</title><p>To analyze the effect of short-term EPO administration on DVT formation, we subcutaneously (s.c.) injected 300&#x02009;IU (10&#x02009;IU/&#x000b5;L) EPO (Epoetin alfa HEXAL) three times a week into the gluteal region of C57Bl/6J mice purchased from the Jackson Laboratory. The injections were carried out for a duration of 2 weeks resulting in a total of six EPO treatments. After the completion of the 2-week EPO administration, there was a gap of 2 days before ligating the IVC. The ligation procedure was performed when the mice were 18 weeks old. The control group consisted of age- and sex-matched mice that received the same volume (30 &#x000b5;L) of a 0.9% NaCl solution per dosage.</p></sec><sec><title>Ultrasound Analysis of Myocardial Performance</title><p>The cardiac ultrasound analysis was conducted using a Vevo 2100 Imaging System (Visualsonics). To ensure sufficient tolerance during the investigation, short-term inhalation anesthesia (Isofluran CP, cp pharma) was administered during the investigation. Subsequently, the mice were then positioned on their back, and transthoracic echocardiography was performed.</p></sec><sec><title>Intracardial Blood Withdrawal</title><p>Blood was collected from adequately anesthesized mice through cardiac puncture using a syringe containing citrate as an anticoagulant.</p></sec><sec><title>Blood Cell Counts</title><p>Blood cell counts were determined in citrated blood using an automated cell counter (ABX Micros ES60, Horiba ABX).</p></sec><sec><title>Splenectomy</title><p>To remove the spleen, the mice were anesthetized as previously described. A lateral subcostal incision was made, followed by ligation and cutting of the splenic vessels. Subsequently, the spleen was removed and the surgical wound was closed with sutures. The organ removal procedure was performed 5 weeks prior to subsequent experiments, such as ligation of the IVC.</p></sec><sec><title>Immunofluorescence Staining of Frozen Sections</title><p>After harvesting thrombi, the organic material was embedded in OCT, rapidly frozen in liquid nitrogen, and stored at &#x02212;80&#x000b0;C. Subsequently, 5&#x02009;&#x000b5;m slides were sectioned using a cryotome (CryoStar NX70 Kryostat, Thermo Fisher Scientific). The staining procedure began with a fixation step using 4% ethanol-free formaldehyde (Thermo Fisher; #28908), followed by blocking with goat serum (Thermo Fisher; #50062Z). The following antibodies were used: CD41 (clone: MWReg30, BD Bioscience; #12-0411-83; isotype: rat IgG1), Fibrin(-ogen) (clone: polyclonal; DAKO; #A0080; isotype: rabbit IgG), Ly6G (clone: 1A8, Thermo Fisher; #12-9668-82; isotype: rat IgG2a), MPO (polyclonal, Dako; #A0398; isotype: rabbit IgG), TER119 (clone: TER-119; Thermo Fisher; #12-5921-83; isotype: rat IgG2b). Alexa-labeled secondary antibodies were used to induce fluorescence (Invitrogen; #A11007; #A11034). Nuclei were marked using Hoechst (ThermoFisher; #H3570). Image acquisition was performed on an AxioImager M2 (Carl Zeiss Microscopy) using corresponding AxioVision SE65 software. Near-field analysis of fibrin fibers was captured on an inverted Zeiss LSM 880 confocal microscope in AiryScan Super Resolution (SR) Mode (magnification, &#x000d7;63 objective, with 5 to 6 random images acquired per thrombus). Further structural analysis of the fibrin fibers was conducted using Imaris (Oxford instruments). To quantify neutrophil extracellular traps, we identified DNA protrusions (Hoechst-positive) originating from Ly6G-positive cells and covered by MPO.</p></sec><sec><title>Statistics</title><p>
+Statistical analysis was conducted using GraphPad Prism 5, employing a
+<italic>t</italic>
+-test. Based on clinical observations strongly suggesting an increase in thrombus formation in EPO overproducing mice, a one-sided
+<italic>t</italic>
+-test was performed.
+<xref rid="JR22080374-8" ref-type="bibr">8</xref>
+<xref rid="JR22080374-9" ref-type="bibr">9</xref>
+The normal distribution of the data was confirmed using D'Agostino and Pearson omnibus normality testing. Thrombus incidences between groups were compared using the chi-square test.
+</p></sec></sec><sec><title>Results</title><sec><title>Chronic EPO Overproduction Leads to Increased DVT in Mice</title><p>
+To investigate the impact of chronic erythrocyte overproduction on DVT in mice, we analyzed EPO-overexpressing transgenic Tg(EPO) mice. As expected, this mouse strain exhibited a substantial increase in RBC count (
+<xref rid="FI22080374-1" ref-type="fig">Fig. 1A</xref>
+). Additionally, the RBC width coefficient and reticulocyte count were elevated, indicating enhanced RBC production (
+<xref rid="SM22080374-1" ref-type="supplementary-material">Supplementary Fig. S1A, B</xref>
+[available in the online version]). In addition to influencing the RBC lineage, our analyses revealed a significant increase in white blood cell (WBC) count, primarily driven by elevated lymphocyte count (
+<xref rid="SM22080374-1" ref-type="supplementary-material">Supplementary Fig. S1C, E</xref>
+[available in the online version]). However, neutrophils known as major contributors to venous thrombosis showed no significant changes in EPO transgenic mice, while platelet counts were significantly reduced (
+<xref rid="FI22080374-1" ref-type="fig">Fig. 1B</xref>
+and
+<xref rid="SM22080374-1" ref-type="supplementary-material">Supplementary Fig. S1D</xref>
+[available in the online version]). Furthermore, autopsies of the animals confirmed the presence of splenomegaly (
+<xref rid="SM22080374-1" ref-type="supplementary-material">Supplementary Fig. S1F</xref>
+[available in the online version]).
+<xref rid="JR22080374-28" ref-type="bibr">28</xref>
+<xref rid="JR22080374-29" ref-type="bibr">29</xref>
+</p><fig id="FI22080374-1"><label>Fig. 1</label><caption><p>
+EPO-overexpressing mice experience an increased incidence of DVT formation. (
+<bold>A</bold>
+) Comparison of RBC count between EPO-overexpressing Tg(EPO) mice (
+<italic>n</italic>
+&#x02009;=&#x02009;12) and control (WT) mice (
+<italic>n</italic>
+&#x02009;=&#x02009;13). (
+<bold>B</bold>
+) Comparison of platelet count between EPO-overexpressing Tg(EPO) (
+<italic>n</italic>
+&#x02009;=&#x02009;7) mice and control (WT) mice (
+<italic>n</italic>
+&#x02009;=&#x02009;5). (
+<bold>C</bold>
+) Comparison of thrombus weight between Tg(EPO) mice (
+<italic>n</italic>
+&#x02009;=&#x02009;9) and WT (
+<italic>n</italic>
+&#x02009;=&#x02009;10); mean age in the Tg(EPO) group: 19.8 weeks; mean age in the WT group: 20.1 weeks. (
+<bold>D</bold>
+) Comparison of thrombus incidence between Tg(EPO) mice (
+<italic>n</italic>
+&#x02009;=&#x02009;9) and WT mice (
+<italic>n</italic>
+&#x02009;=&#x02009;10); NS&#x02009;=&#x02009;nonsignificant, *
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.05, **
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.01, ***
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.001. DVT, deep vein thrombosis; EPO, erythropoietin; RBC, red blood cell; WT, wild type.
+</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0043-1775965-i22080374-1"/></fig><p>
+Based on clinical observations indicating a correlation between high EPO levels and increased incidence of DVT, we utilized an IVC stenosis model to evaluate venous thrombosis in EPO-overexpressing mice.
+<xref rid="JR22080374-6" ref-type="bibr">6</xref>
+<xref rid="JR22080374-7" ref-type="bibr">7</xref>
+Our findings revealed a significant elevation in both the incidence and thrombus weight in Tg(EPO) mice compared to their WT littermates (
+<xref rid="FI22080374-1" ref-type="fig">Fig. 1C, D</xref>
+). To determine whether chronic EPO overproduction in transgenic mice affected cardiac function, we assessed parameters such as the left ventricular ejection fraction, fractional shortening, and heart rate, ruling out any alternations (
+<xref rid="SM22080374-1" ref-type="supplementary-material">Supplementary Fig. S1G, H, J</xref>
+[available in the online version]), which aligns with previous publications.
+<xref rid="JR22080374-30" ref-type="bibr">30</xref>
+Additionally, morphological parameters including left ventricular mass, left ventricular internal diameter end diastole, and inner ventricular end diastolic septum diameter were similar between Tg(EPO) and WT mice (
+<xref rid="SM22080374-1" ref-type="supplementary-material">Supplementary Fig. S1I, K, L</xref>
+[available in the online version]).
+</p></sec><sec><title>High RBC Count Leads to a Decrease in Platelet Accumulation in Venous Thrombosis</title><p>
+Having observed a correlation between high EPO and hematocrit levels with increased thrombus formation, our aim was to investigate the factors involved in triggering thrombus development through histologic analysis of thrombus composition. In Tg(EPO) mice, the elevated hematocrit levels led to enhanced RBC accumulation within the thrombus, as indicated by the Ter119-covered area measurement (
+<xref rid="FI22080374-2" ref-type="fig">Fig. 2A</xref>
+). Given the interaction between RBCs and platelets, which can initiate coagulation activation, we examined the distribution of fibrinogen in relation to RBCs and platelets within the thrombi.
+<xref rid="JR22080374-31" ref-type="bibr">31</xref>
+Our findings revealed a close association between the fibrinogen signal and RBCs, as well as between the platelet signal and RBCs, indicating interactions among these three factors (
+<xref rid="FI22080374-2" ref-type="fig">Fig. 2E, F</xref>
+). However, we observed significantly lower fibrinogen coverage in thrombi from EPO transgenic mice (
+<xref rid="FI22080374-2" ref-type="fig">Fig. 2B</xref>
+). Furthermore, the structure of the fibrin meshwork exhibited an overall &#x0201c;looser&#x0201d; morphology with significantly thinner fibrin fibers (
+<xref rid="FI22080374-3" ref-type="fig">Fig. 3A-C</xref>
+).
+</p><fig id="FI22080374-2"><label>Fig. 2</label><caption><p>
+Chronic overproduction of EPO in mice leads to a decrease in the accumulation of classical drivers of DVT formation, including platelets, neutrophils, and fibrinogen. (
+<bold>A</bold>
+) The proportion of RBC-covered area in the thrombi of EPO-overexpressing Tg(EPO) mice (
+<italic>n</italic>
+&#x02009;=&#x02009;4) was compared to control (WT) (
+<italic>n</italic>
+&#x02009;=&#x02009;3) by immunofluorescence staining of cross-sections of the IVC 48&#x02009;hours after flow reduction. (
+<bold>B</bold>
+) The proportion of fibrinogen-covered area in the thrombi of EPO- overexpressing Tg(EPO) mice (
+<italic>n</italic>
+&#x02009;=&#x02009;3) was compared to control (WT) (
+<italic>n</italic>
+&#x02009;=&#x02009;3) using immunofluorescence staining of cross-sections of the IVC 48&#x02009;hours after flow reduction. (
+<bold>C</bold>
+) The proportion of platelet-covered area in the thrombi of EPO-overexpressing Tg(EPO) mice (
+<italic>n</italic>
+&#x02009;=&#x02009;3) was compared to control (WT) (
+<italic>n</italic>
+&#x02009;=&#x02009;3) by immunofluorescence staining of cross-sections of the IVC 48&#x02009;hours after flow reduction. (
+<bold>D</bold>
+) Quantification of neutrophils was performed by immunofluorescence staining of cross-sections of the IVC 48&#x02009;hours after flow reduction in EPO-overexpressing Tg(EPO) mice (
+<italic>n</italic>
+&#x02009;=&#x02009;3) compared to control (WT) (
+<italic>n</italic>
+&#x02009;=&#x02009;3). (
+<bold>E</bold>
+) Immunofluorescence staining of cross-sections of the IVC 48&#x02009;hours after flow reduction from EPO-overexpressing Tg(EPO) mice (top) was compared to control (WT) (bottom) for TER119 in red (RBC), CD42b in green (platelets), and Hoechst in blue (DNA). The merged image is on the left, and the single channel image is on the right. Scale bar: 50&#x02009;&#x000b5;m. (
+<bold>F</bold>
+) Immunofluorescence staining of cross-sections of the IVC 48&#x02009;hours after flow reduction from EPO-overexpressing Tg(EPO) mice (top) was compared to control (WT) (bottom) for TER119 in red (RBC), fibrinogen in green, and Hoechst in blue (DNA); the merged image is on the left, and single-channel images are on the right. Scale bar: 50&#x02009;&#x000b5;m.; NS&#x02009;=&#x02009;nonsignificant, *
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.05, **
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.01, ***
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.001. DVT, deep vein thrombosis; EPO, erythropoietin; IVC, inferior vena cava; RBC, red blood cell; WT, wild type.
+</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0043-1775965-i22080374-2"/></fig><fig id="FI22080374-3"><label>Fig. 3</label><caption><p>
+The interaction of RBC with fibrinogen leads to the formation of a branched fibrin structure. (
+<bold>A</bold>
+) Immunofluorescence staining of cross-sections of the IVC 48&#x02009;hours after flow reduction from EPO-overexpressing Tg(EPO) mice (left) was compared to control (WT) for fibrinogen (green). Scare bar: 50&#x02009;&#x000b5;m. (
+<bold>B</bold>
+) High-resolution confocal images of immunofluorescence staining of cross-sections of the IVC 48&#x02009;hours after flow reduction from EPO-overexpressing Tg(EPO) mice (left) compared to control (WT) for fibrinogen (green), RBC (red), and DNA (blue). Scale bar: 2&#x02009;&#x000b5;m. (
+<bold>C</bold>
+) The mean diameter of 2,141 fibrin fibers was measured in cross-sections of thrombi from Tg(EPO) mice (left), and compared to 5,238 fibrin fibers of WT thrombi. (
+<bold>D</bold>
+) The mean diameter of 3,797 fibrin fibers was measured in two cross-sections of thrombi from 2-week EPO-injected mice (left), and compared to 10,920 fibrin fibers of three cross-sections from control (2-week NaCl-injected mice). (
+<bold>E</bold>
+) High
+<bold>-</bold>
+resolution confocal images of immunofluorescence staining of two cross-sections of the IVC 48&#x02009;hours after flow reduction from 2-week EPO-injected mice (left) were compared to control (2 week NaCl-injected mice) for fibrinogen (green), RBC (red), and DNA (blue). Scale bar: 2&#x02009;&#x000b5;m. EPO, erythropoietin; IVC, inferior vena cava; RBC, red blood cell; WT, wild type.
+</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0043-1775965-i22080374-3"/></fig><p>
+To quantify platelet accumulation in thrombi, we analyzed the CD41-covered area in thrombi of both mouse strains. Consistent with the reduced platelet count in peripheral blood, platelet accumulation was also decreased in thrombi from EPO transgenic mice (
+<xref rid="FI22080374-2" ref-type="fig">Fig. 2C</xref>
+).
+</p><p>
+As mentioned previously, inflammation plays a fundamental role in DVT formation. Therefore, we conducted an analysis to quantify the presence of leukocytes in the thrombus material. Our investigation focused specifically on neutrophils, as they represent the predominant leukocyte population in peripheral blood. Despite observing normal neutrophil counts, we identified a significant reduction in neutrophil recruitment within thrombi from EPO transgenic mice (
+<xref rid="FI22080374-2" ref-type="fig">Fig. 2D</xref>
+). In summary, our findings indicate an isolated increase in the number of RBCs within venous thrombi of EPO transgenic mice, while the levels of fibrinogen and platelets were decreased.
+</p></sec><sec><title>Short-Term Administration of EPO Does Not Foster DVT</title><p>
+Due to the significant impact of chronic EPO overproduction in Tg(EPO) mice on peripheral blood count and its detrimental consequences on DVT formation, we proceeded to analyze the effects of 2-week periodic EPO injections on blood count and subsequent DVT formation in WT mice. Within just 2 weeks, a significant increase of RBC and reticulocyte count in peripheral blood was observed (
+<xref rid="FI22080374-4" ref-type="fig">Fig. 4A</xref>
+and
+<xref rid="SM22080374-1" ref-type="supplementary-material">Supplementary Fig. S2A</xref>
+[available in the online version]). Conversely, platelet count exhibited a notable decrease in EPO-treated mice (
+<xref rid="FI22080374-4" ref-type="fig">Fig. 4B</xref>
+). Unlike EPO-overexpressing mice, the leukocyte counts and their differentiation into granulocytes, lymphocytes, and monocytes showed no differences between EPO-treated and nontreated mice (
+<xref rid="SM22080374-1" ref-type="supplementary-material">Supplementary Fig. S2B&#x02013;E</xref>
+[available in the online version]). Autopsy analyses further revealed a significant enlargement and weight increase of the spleen in EPO-treated mice (
+<xref rid="SM22080374-1" ref-type="supplementary-material">Supplementary Fig. S2F, G</xref>
+[available in the online version]).
+</p><fig id="FI22080374-4"><label>Fig. 4</label><caption><p>
+Two-week EPO injection leads to thrombocytopenia without an impact on the bone marrow. (
+<bold>A</bold>
+) RBC count in peripheral blood after 6&#x02009;&#x000d7;&#x02009;300&#x02009;IU EPO treatment of C57Bl/6J mice (
+<italic>n</italic>
+&#x02009;=&#x02009;10) was compared to control (6&#x02009;&#x000d7;&#x02009;30 &#x000b5;L NaCl injection) (
+<italic>n</italic>
+&#x02009;=&#x02009;9). (
+<bold>B</bold>
+) Platelet count in peripheral blood after 6&#x02009;&#x000d7;&#x02009;300&#x02009;IU EPO treatment of C57Bl/6J mice (
+<italic>n</italic>
+&#x02009;=&#x02009;10) was compared to control (6&#x02009;&#x000d7;&#x02009;30 &#x000b5;L NaCl injection) (
+<italic>n</italic>
+&#x02009;=&#x02009;10). (
+<bold>C</bold>
+) Area of RBC-positive area in the bone marrow of 6&#x02009;&#x000d7;&#x02009;300&#x02009;IU EPO
+<bold>-</bold>
+treated C57Bl/6J mice (
+<italic>n</italic>
+&#x02009;=&#x02009;4) was compared to control (6&#x02009;&#x000d7;&#x02009;30 &#x000b5;L NaCl injection) (
+<italic>n</italic>
+&#x02009;=&#x02009;4). (
+<bold>D</bold>
+) Immunofluorescence staining of cross-sections of the bone marrow after 2-week EPO injection (top) was compared to NaCl injection (bottom) stained for TER119 (violet) and Hoechst (white). Scale bar: 100&#x02009;&#x000b5;m. (
+<bold>E</bold>
+) Number of megakaryocyte count in the bone marrow of 6&#x02009;&#x000d7;&#x02009;300&#x02009;IU EPO-treated C57Bl/6J mice (
+<italic>n</italic>
+&#x02009;=&#x02009;4) was compared to control (6&#x02009;&#x000d7;&#x02009;30 &#x000b5;L NaCl injection) (
+<italic>n</italic>
+&#x02009;=&#x02009;4). (
+<bold>F</bold>
+) Immunofluorescence staining of cross-sections of the bone marrow after 2-week EPO injection (top) compared to NaCl injection (bottom) stained for CD41 (violet) and Hoechst (white). Scale bar: 100&#x02009;&#x000b5;m. (
+<bold>G</bold>
+) Platelet large cell ratio in peripheral blood of 6&#x02009;&#x000d7;&#x02009;300&#x02009;IU EPO
+<bold>-</bold>
+treated C57Bl/6J mice (
+<italic>n</italic>
+&#x02009;=&#x02009;10) compared to control (6&#x02009;&#x000d7;&#x02009;30 &#x000b5;L NaCl injection) (
+<italic>n</italic>
+&#x02009;=&#x02009;9). (
+<bold>H</bold>
+) Thrombus weight of 6&#x02009;&#x000d7;&#x02009;300&#x02009;IU EPO
+<bold>-</bold>
+treated C57Bl/6J mice (
+<italic>n</italic>
+&#x02009;=&#x02009;10) and NaCl-injected control mice (
+<italic>n</italic>
+&#x02009;=&#x02009;10). (
+<bold>I</bold>
+) Thrombus incidence of 6&#x02009;&#x000d7;&#x02009;300&#x02009;IU EPO-treated C57Bl/6J mice (
+<italic>n</italic>
+&#x02009;=&#x02009;10) and NaCl-injected control mice (
+<italic>n</italic>
+&#x02009;=&#x02009;10). NS&#x02009;=&#x02009;nonsignificant, *
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.05, **
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.01, ***
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.001. EPO, erythropoietin; RBC, red blood cell.
+</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0043-1775965-i22080374-4"/></fig><p>
+To further investigate the underlying cause of thrombocytopenia in EPO-treated mice, we examined the bone marrow composition. Previous studies by Shibata et al demonstrated a reduction in megakaryocytes in Tg(EPO) mice.
+<xref rid="JR22080374-32" ref-type="bibr">32</xref>
+Therefore, we analyzed the bone marrow composition after 2 weeks of EPO treatment. However, we found no difference in the TER119-covered area, indicating no significant alternation (
+<xref rid="FI22080374-4" ref-type="fig">Fig. 4C, D</xref>
+). Similarly, the megakaryocyte count in the bone marrow showed no changes compared to the control group (
+<xref rid="FI22080374-4" ref-type="fig">Fig. 4E, F</xref>
+,). In terms of platelet morphology, we observed an increased platelet large cell ratio in the EPO-treated group (
+<xref rid="FI22080374-4" ref-type="fig">Fig. 4G</xref>
+). This suggests an elevated production potential of megakaryocytes, as immature platelets tend to have larger cell volumes compared to mature platelets.
+<xref rid="JR22080374-33" ref-type="bibr">33</xref>
+These findings indicate that our EPO administration protocol enhanced the synthesis capacity of bone marrow stem cells, resulting in augmented erythropoiesis. However, the cellular composition of the bone marrow remained unchanged after 2 weeks of treatment.
+</p><p>
+To analyze the impact of 2-week EPO treatment on DVT formation, we utilized the IVC stenosis model. Despite similar changes in blood count in Tg(EPO) mice or WT mice after EPO administration, we observed comparable venous thrombus formation between mice treated with EPO for 2 weeks and the control group treated with NaCl (
+<xref rid="FI22080374-4" ref-type="fig">Fig. 4H, I</xref>
+). Since we previously observed that only long-term elevation of EPO levels with supraphysiologic hematocrit leads to increased thrombus formation, our focus shifted toward identifying the factors triggering thrombus formation. Therefore, we conducted a histological analysis of thrombus composition. Given the significantly thinner fibrin fibers observed in thrombi from Tg(EPO) mice, we investigated whether similar morphological changes occurred in mice treated with EPO for 2 weeks. Interestingly, the histological examination of the thrombi revealed a comparable thinning of fibrin fibers following EPO treatment (
+<xref rid="FI22080374-3" ref-type="fig">Fig. 3D, E</xref>
+).
+</p><p>In contrast to chronic EPO overproduction in Tg(EPO) mice, short-term administration of EPO does not increase the incidence of DVT, despite similar changes in blood cell counts. Therefore, the quantitative changes in blood count alone cannot explain the increased thrombosis observed in the presence of EPO overexpression in Tg(EPO) mice.</p></sec><sec><title>Splenectomy Does Not Affect Venous Thrombus Formation</title><p>
+As the data suggested a qualitative change in RBCs in the context of EPO overproduction, we investigated whether splenic clearance of aged RBCs plays a critical role in the increased formation of DVT. In the spleen, aged and damaged RBCs are eliminated, ensuring the presence of young and flexible RBCs.
+<xref rid="JR22080374-16" ref-type="bibr">16</xref>
+We examined the immediate impact of EPO on spleen morphology. Even a single injection of 300&#x02009;IU EPO s.c. in mice resulted in a significant increase in spleen weight, despite no difference in blood count compared to the control group (
+<xref rid="SM22080374-1" ref-type="supplementary-material">Supplementary Fig. S2F&#x02013;H</xref>
+[available in the online version]). This striking phenotype was also observed in mice with chronic EPO overexpression (
+<xref rid="SM22080374-1" ref-type="supplementary-material">Supplementary Fig. S1F</xref>
+[available in the online version]).
+<xref rid="JR22080374-13" ref-type="bibr">13</xref>
+</p><p>
+To investigate the role of splenic RBC clearance in DVT, we performed splenectomy 5 weeks prior to conducting the IVC stenosis model. Firstly, we analyzed the impact of splenectomy on blood cell counts in WT mice 5 weeks postsurgery. We observed an increase in granulocytes and lymphocytes after splenectomy (
+<xref rid="FI22080374-5" ref-type="fig">Fig. 5A</xref>
+and
+<xref rid="SM22080374-1" ref-type="supplementary-material">Supplementary Fig. S3A, B</xref>
+[available in the online version]). Next, we examined the distribution of blood cells in response to DVT development. Similar to nonsplenectomized mice, we observed an increase in WBC count in the peripheral blood (
+<xref rid="FI22080374-5" ref-type="fig">Fig. 5A</xref>
+). Additionally, we noted a significant decrease in platelet count in splenectomized mice in response to thrombus development (
+<xref rid="FI22080374-5" ref-type="fig">Fig. 5B</xref>
+), which is consistent with the results obtained from nonsplenectomized mice.
+</p><fig id="FI22080374-5"><label>Fig. 5</label><caption><p>
+Splenectomy does not affect the blood count as well as DVT formation. (
+<bold>A</bold>
+) WBC count in C57Bl/6J mice without treatment (
+<italic>n</italic>
+&#x02009;=&#x02009;5), 48&#x02009;hours after induction of DVT (
+<italic>n</italic>
+&#x02009;=&#x02009;7), 5 weeks after splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;3), and 5 weeks after splenectomy with an additional 48-hour induction of DVT (
+<italic>n</italic>
+&#x02009;=&#x02009;9). (
+<bold>B</bold>
+) Platelet count in C57Bl/6J mice without treatment (
+<italic>n</italic>
+&#x02009;=&#x02009;6), 48&#x02009;hours after induction of DVT (
+<italic>n</italic>
+&#x02009;=&#x02009;6), 5 weeks after splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;3), and 5 weeks after splenectomy with an additional 48-hour induction of DVT (
+<italic>n</italic>
+&#x02009;=&#x02009;9). (
+<bold>C</bold>
+) RBC count in C57Bl/6J mice without treatment (
+<italic>n</italic>
+&#x02009;=&#x02009;6), 48&#x02009;hours after induction of DVT (
+<italic>n</italic>
+&#x02009;=&#x02009;6), 5 weeks after splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;3), and 5 weeks after splenectomy with an additional 48-hour induction of DVT (
+<italic>n</italic>
+&#x02009;=&#x02009;9). (
+<bold>D</bold>
+) Thrombus weight in C57Bl6 wild-type mice without splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;6) and with splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;6) (
+<bold>E</bold>
+) Thrombus incidence in C57Bl/6J wild-type mice without splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;6) and with splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;6). (
+<bold>F</bold>
+) Thrombus weight in EPO-overexpressing Tg(EPO) mice without splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;9) and with splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;6) compared to control WT mice without splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;10) and with splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;11). (
+<bold>G</bold>
+) Thrombus incidence in EPO-overexpressing Tg(EPO) mice without splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;9) and with splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;6) compared to control WT mice without splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;10) and with splenectomy (
+<italic>n</italic>
+&#x02009;=&#x02009;11). NS&#x02009;=&#x02009;nonsignificant, *
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.05, **
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.01, ***
+<italic>p</italic>
+&#x02009;&#x0003c;&#x02009;0.001. DVT, deep vein thrombosis; RBC, red blood cell; WT, wild type.
+</p></caption><graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0043-1775965-i22080374-5"/></fig><p>
+Finally, we analyzed the impact of splenectomy on DVT formation in both WT mice and Tg(EPO) mice. Despite changes in blood cell counts and the effects on platelet removal, there was no difference in the incidence and thrombus weight in C57Bl/6 mice (
+<xref rid="FI22080374-5" ref-type="fig">Fig. 5D, E</xref>
+). Next, we examined EPO-overexpressing mice, which have been shown to have an increased risk of DVT formation. Despite significant splenomegaly, the incidence of DVT formation remained statistically unchanged after spleen removal (
+<xref rid="FI22080374-5" ref-type="fig">Fig. 5F, G</xref>
+). Therefore, splenectomy does not affect thrombus formation in the context of enhanced or normal erythropoiesis.
+</p></sec></sec><sec><title>Discussion</title><p>
+Here, we present evidence for a differential thrombotic effect of chronic EPO overproduction and short-term external EPO administration. Consistent with clinical observations, chronic overproduction of EPO is associated with an increased risk of DVT formation. This is similar to Chuvash polycythemia where the von-Hippel&#x02013;Lindau mutation leads to chronic overproduction of hypoxia-induced factors and high EPO levels.
+<xref rid="JR22080374-34" ref-type="bibr">34</xref>
+In addition to genetically altered EPO production, factors such as residence at high altitudes and naturally increasing EPO secretion also represent risk factors for venous thrombosis and pulmonary thromboembolism.
+<xref rid="JR22080374-35" ref-type="bibr">35</xref>
+<xref rid="JR22080374-36" ref-type="bibr">36</xref>
+These conditions can be mimicked in a mouse model through chronic hypoxia.
+<xref rid="JR22080374-37" ref-type="bibr">37</xref>
+</p><p>Therefore, it is highly probable that EPO and RBC play significant roles in DVT formation. In fact, our data suggest that qualitative changes in RBC, rather than solely quantitative changes, are responsible for the increased occurrence of venous thrombus formation.</p><p>
+In our analyses, we observed that short-term administration of EPO does not increase the risk of DVT, in contrast to chronic overproduction of EPO. However, changes in peripheral blood count in response to EPO occur relatively quickly, within 2 weeks of initiating therapy in mice. These changes include elevated levels of hemoglobin and thrombocytopenia, which are consistent with previous studies.
+<xref rid="JR22080374-17" ref-type="bibr">17</xref>
+<xref rid="JR22080374-22" ref-type="bibr">22</xref>
+<xref rid="JR22080374-38" ref-type="bibr">38</xref>
+<xref rid="JR22080374-39" ref-type="bibr">39</xref>
+<xref rid="JR22080374-40" ref-type="bibr">40</xref>
+<xref rid="JR22080374-41" ref-type="bibr">41</xref>
+<xref rid="JR22080374-42" ref-type="bibr">42</xref>
+<xref rid="JR22080374-43" ref-type="bibr">43</xref>
+<xref rid="JR22080374-44" ref-type="bibr">44</xref>
+<xref rid="JR22080374-45" ref-type="bibr">45</xref>
+In the model of transgenic overexpressing EPO mice, there was an age-dependent progressive decrease in megakaryocyte count in the bone marrow.
+<xref rid="JR22080374-32" ref-type="bibr">32</xref>
+A similar phenomenon can be observed in mice exposed to chronic hypoxia.
+<xref rid="JR22080374-46" ref-type="bibr">46</xref>
+It is believed that competition between erythroid and platelet precursors in the stem cell population is responsible for this phenomenon.
+<xref rid="JR22080374-38" ref-type="bibr">38</xref>
+Despite a similar decrease of peripheral platelet counts, we observed normal megakaryocyte counts in the bone marrow of mice injected with EPO for 2 weeks. We speculate that morphological changes in the bone marrow are long-term consequences of EPO administration. In peripheral blood, we observed a significant increase in the platelet large cell ratio in mice treated with EPO for 2 weeks. This is likely due to an elevated count of reticulated platelets, which has been previously observed in response to EPO treatment.
+<xref rid="JR22080374-47" ref-type="bibr">47</xref>
+The presence of high levels of reticulated platelets indicates a high synthetic potential of megakaryocytes. Indeed, megakaryocytes possess high-affinity binding sites for EPO resulting in an increase in size, ploidy, and number of megakaryocytes in vitro.
+<xref rid="JR22080374-48" ref-type="bibr">48</xref>
+<xref rid="JR22080374-49" ref-type="bibr">49</xref>
+Young, reticulated platelets are known risk factors for thrombosis, which may counterbalance the overall low platelet count in terms of thrombogenicity.
+<xref rid="JR22080374-50" ref-type="bibr">50</xref>
+<xref rid="JR22080374-51" ref-type="bibr">51</xref>
+<xref rid="JR22080374-52" ref-type="bibr">52</xref>
+However, the significant increase in DVT observed in chronic EPO-overexpressing mice is likely attributed to qualitative changes in RBCs. There are several ways in which RBCs can interact with platelets and fibrin. The FAS-L-FAS-R interplay between RBCs and platelets has been shown to enhance DVT formation.
+<xref rid="JR22080374-31" ref-type="bibr">31</xref>
+Additionally, interactions such as ICAM-4&#x02013;&#x003b1;1b&#x003b2;3 integrin and adhesion between RBCs and platelets mediated by GPIb and CD36 have been described.
+<xref rid="JR22080374-53" ref-type="bibr">53</xref>
+<xref rid="JR22080374-54" ref-type="bibr">54</xref>
+As demonstrated in this study, the pronounced prothrombotic effect of RBCs only manifests after several weeks to months of EPO overproduction. Thus, we propose that RBC aging plays a role in this phenomenon. This is supported by the finding that RBCs in our Tg(EPO) mouse model exhibit characteristics of accelerated aging including decreased CD47 expression, leading to a 70% reduction in lifespan.
+<xref rid="JR22080374-15" ref-type="bibr">15</xref>
+</p><p>
+During the ageing process, RBCs not only display increasing amounts of procoagulant phosphatidylserine on their surface but also exhibit heightened osmotic and mechanical fragility, which is also observed in Tg(EPO) mice.
+<xref rid="JR22080374-32" ref-type="bibr">32</xref>
+<xref rid="JR22080374-55" ref-type="bibr">55</xref>
+Fragile RBCs are prone to hemolysis, resulting in the release of ADP and free hemoglobin. Furthermore, hemoglobin directly or indirectly contributes to increased platelet activity, for instance, by forming complexes with nitric oxide (NO).
+<xref rid="JR22080374-56" ref-type="bibr">56</xref>
+<xref rid="JR22080374-57" ref-type="bibr">57</xref>
+<xref rid="JR22080374-58" ref-type="bibr">58</xref>
+NO is essential for the survival of Tg(EPO) mice but dispensable for WT mice.
+<xref rid="JR22080374-14" ref-type="bibr">14</xref>
+Consistent with this, patients with polycythemia vera exhibit platelet hypersensitivity despite normal platelet counts, while plasma haptoglobin concentration, a marker for hemolysis, is decreased.
+<xref rid="JR22080374-59" ref-type="bibr">59</xref>
+<xref rid="JR22080374-60" ref-type="bibr">60</xref>
+<xref rid="JR22080374-61" ref-type="bibr">61</xref>
+<xref rid="JR22080374-62" ref-type="bibr">62</xref>
+<xref rid="JR22080374-63" ref-type="bibr">63</xref>
+<xref rid="JR22080374-64" ref-type="bibr">64</xref>
+<xref rid="JR22080374-65" ref-type="bibr">65</xref>
+Similarly, chronic subcutaneous EPO administration in hemodialysis patients leads to a prothrombotic phenotype similar to that of polycythemia vera patients.
+<xref rid="JR22080374-66" ref-type="bibr">66</xref>
+<xref rid="JR22080374-67" ref-type="bibr">67</xref>
+<xref rid="JR22080374-68" ref-type="bibr">68</xref>
+<xref rid="JR22080374-69" ref-type="bibr">69</xref>
+<xref rid="JR22080374-70" ref-type="bibr">70</xref>
+Notably, concentrated RBC transfusions result in the rapid clearance of up to 30% of transfused erythrocytes within 24&#x02009;hours due to their age, thus increasing the risk of DVT formation.
+<xref rid="JR22080374-5" ref-type="bibr">5</xref>
+<xref rid="JR22080374-71" ref-type="bibr">71</xref>
+</p><p>
+Clearance of RBCs primarily occurs in the spleen, where tissue-resident macrophages screen for surface markers such as CD47.
+<xref rid="JR22080374-72" ref-type="bibr">72</xref>
+Subsequently, RBCs are phagocytosed before reaching day 120 of their lifespan.
+<xref rid="JR22080374-73" ref-type="bibr">73</xref>
+The spleen plays a crucial role in maintaining the shape and membrane resilience of RBCs, acting as a guardian in this regard.
+<xref rid="JR22080374-74" ref-type="bibr">74</xref>
+However, shortly after splenectomy, the loss of the organ significantly increases the risk of DVT formation.
+<xref rid="JR22080374-20" ref-type="bibr">20</xref>
+In the long-term basis, we observed no difference in DVT formation after splenectomy, neither in WT mice nor in chronic EPO-overexpressing mice, despite the dramatic increase in macrophage-mediated RBC clearance in these mice.
+<xref rid="JR22080374-15" ref-type="bibr">15</xref>
+Since RBC clearance occurs primarily in the spleen and liver in mice, we hypothesize that the liver is capable of adequately compensating for the absence of the spleen after removal.
+<xref rid="JR22080374-15" ref-type="bibr">15</xref>
+</p><p>
+Besides their activating effect on platelets, RBCs also directly impact the coagulation system. Previous data demonstrate that following TF activation, RBCs contribute to thrombin generation to a similar extent to platelets.
+<xref rid="JR22080374-75" ref-type="bibr">75</xref>
+Furthermore, RBCs expose phosphatidylserine, which activates the contact pathway.
+<xref rid="JR22080374-31" ref-type="bibr">31</xref>
+Notably, the coagulation system in Tg(EPO) mice exhibits normal activity in whole blood adjusted to a physiological hematocrit.
+<xref rid="JR22080374-32" ref-type="bibr">32</xref>
+Additionally, RBCs express a receptor with properties similar to the &#x003b1;
+<sub>IIb</sub>
+&#x003b2;
+<sub>3</sub>
+integrin enabling their interaction with fibrin.
+<xref rid="JR22080374-76" ref-type="bibr">76</xref>
+This interaction contributes to the formation of a dense fibrin meshwork consisting of thin fibers.
+<xref rid="JR22080374-77" ref-type="bibr">77</xref>
+Such a structure hinders clot dissolution, leading to slower lysis.
+<xref rid="JR22080374-77" ref-type="bibr">77</xref>
+In our histological analysis of thrombi, we confirm morphological changes in the fibrin meshwork, resulting in a thinner appearance in both EPO-overexpressing mice and mice subjected to short-term EPO injection.
+</p><p>In summary, our data suggest that chronic EPO overproduction, leading to elevated hematocrit levels, is associated with an increased incidence of venous thrombosis. This is likely attributed to qualitative changes in RBCs that promote a thrombogenic environment. On the other hand, short-term EPO administration does not pose an increased risk of venous thrombosis. Furthermore, splenic clearance of altered RBCs does not play a significant role in DVT formation. Therefore, conditions involving chronically elevated RBC production should be closely monitored due to the heightened risk of venous thrombosis.</p></sec></body><back><sec><boxed-text content-type="backinfo"><p>
+<bold>What is known about this topic?</bold>
+</p><list list-type="bullet"><list-item><p>Patients with high hematocrit and/or excessively increased erythropoietin (EPO) serum concentrations are particularly prone to deep vein thrombus (DVT) formation.</p></list-item><list-item><p>The spleen is an important organ in RBC and platelet clearance. Splenectomy leads to an increased risk of thromboembolic events.</p></list-item></list><p>
+<bold>What does this paper add?</bold>
+</p><list list-type="bullet"><list-item><p>Chronic but not short-term EPO administration/overproduction drives DVT formation in mice.</p></list-item><list-item><p>EPO-mediated DVT is mostly independent of conventional players of DVT (neutrophils, platelets) and splenic erythrocyte clearance.</p></list-item></list></boxed-text></sec><ack><title>Acknowledgment</title><p>Finally, we thank Philipp Lange for the technical support in performing ultrasound analysis of myocardial performance and on mice and Dominic van den Heuvel for the support in confocal microscopy as well as Analysis with Imaris.</p></ack><fn-group><fn fn-type="COI-statement" id="d35e179"><p><bold>Conflict of Interest</bold> None declared.</p></fn></fn-group><fn-group><title>Authors' Contribution</title><fn id="FN22080374-1"><p>K.S., S.M., and S.S. conceived and designed the experiments. S.S., I.S., A.-L.S., and S.C. planned and performed histological and immunohistochemical analysis. B.K., I.S., A.-L.S., F.W., and M.v.B. did surgery for IVC flow reduction in mice. F.W. injected EPO into C57Bl/6J mice. I.S. performed splenectomy on mice. I.S. determined platelet circulation time. B.K. performed platelet clearance essay in liver and spleen FACS experiments. I.O. provided Tg(EPO) mice. S.S. and K.S. wrote the manuscript. All the authors reviewed and edited the manuscript.</p></fn></fn-group><sec sec-type="supplementary-material"><title>Supplementary Material</title><supplementary-material id="SM22080374-1"><media xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="10-1055-s-0043-1775965-s22080374.pdf"><caption><p>Supplementary Material</p></caption><caption><p>Supplementary Material</p></caption></media></supplementary-material></sec><ref-list><title>References</title><ref id="JR22080374-1"><label>1</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Ramsey</surname><given-names>G</given-names></name><name><surname>Lindholm</surname><given-names>P F</given-names></name></person-group><article-title>Thrombosis risk in cancer patients receiving red blood cell transfusions</article-title><source>Semin Thromb Hemost</source><year>2019</year><volume>45</volume><issue>06</issue><fpage>648</fpage><lpage>656</lpage><pub-id pub-id-type="pmid">31430787</pub-id>
+</mixed-citation></ref><ref id="JR22080374-2"><label>2</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Kumar</surname><given-names>M A</given-names></name><name><surname>Boland</surname><given-names>T A</given-names></name><name><surname>Baiou</surname><given-names>M</given-names></name></person-group><etal/><article-title>Red blood cell transfusion increases the risk of thrombotic events in patients with subarachnoid hemorrhage</article-title><source>Neurocrit Care</source><year>2014</year><volume>20</volume><issue>01</issue><fpage>84</fpage><lpage>90</lpage><pub-id pub-id-type="pmid">23423719</pub-id>
+</mixed-citation></ref><ref id="JR22080374-3"><label>3</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Goel</surname><given-names>R</given-names></name><name><surname>Patel</surname><given-names>E U</given-names></name><name><surname>Cushing</surname><given-names>M M</given-names></name></person-group><etal/><article-title>Association of perioperative red blood cell transfusions with venous thromboembolism in a North American Registry</article-title><source>JAMA Surg</source><year>2018</year><volume>153</volume><issue>09</issue><fpage>826</fpage><lpage>833</lpage><pub-id pub-id-type="pmid">29898202</pub-id>
+</mixed-citation></ref><ref id="JR22080374-4"><label>4</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Wang</surname><given-names>C</given-names></name><name><surname>Le Ray</surname><given-names>I</given-names></name><name><surname>Lee</surname><given-names>B</given-names></name><name><surname>Wikman</surname><given-names>A</given-names></name><name><surname>Reilly</surname><given-names>M</given-names></name></person-group><article-title>Association of blood group and red blood cell transfusion with the incidence of antepartum, peripartum and postpartum venous thromboembolism</article-title><source>Sci Rep</source><year>2019</year><volume>9</volume><issue>01</issue><fpage>13535</fpage><pub-id pub-id-type="pmid">31537816</pub-id>
+</mixed-citation></ref><ref id="JR22080374-5"><label>5</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Donahue</surname><given-names>B S</given-names></name></person-group><article-title>Red cell transfusion and thrombotic risk in children</article-title><source>Pediatrics</source><year>2020</year><volume>145</volume><issue>04</issue><fpage>e20193955</fpage><pub-id pub-id-type="pmid">32198294</pub-id>
+</mixed-citation></ref><ref id="JR22080374-6"><label>6</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Dicato</surname><given-names>M</given-names></name></person-group><article-title>Venous thromboembolic events and erythropoiesis-stimulating agents: an update</article-title><source>Oncologist</source><year>2008</year><volume>13</volume><supplement>03</supplement><fpage>11</fpage><lpage>15</lpage><pub-id pub-id-type="pmid">18458119</pub-id>
+</mixed-citation></ref><ref id="JR22080374-7"><label>7</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Bennett</surname><given-names>C L</given-names></name><name><surname>Silver</surname><given-names>S M</given-names></name><name><surname>Djulbegovic</surname><given-names>B</given-names></name></person-group><etal/><article-title>Venous thromboembolism and mortality associated with recombinant erythropoietin and darbepoetin administration for the treatment of cancer-associated anemia</article-title><source>JAMA</source><year>2008</year><volume>299</volume><issue>08</issue><fpage>914</fpage><lpage>924</lpage><pub-id pub-id-type="pmid">18314434</pub-id>
+</mixed-citation></ref><ref id="JR22080374-8"><label>8</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Chievitz</surname><given-names>E</given-names></name><name><surname>Thiede</surname><given-names>T</given-names></name></person-group><article-title>Complications and causes of death in polycythaemia vera</article-title><source>Acta Med Scand</source><year>1962</year><volume>172</volume><fpage>513</fpage><lpage>523</lpage><pub-id pub-id-type="pmid">14020816</pub-id>
+</mixed-citation></ref><ref id="JR22080374-9"><label>9</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Gordeuk</surname><given-names>V R</given-names></name><name><surname>Prchal</surname><given-names>J T</given-names></name></person-group><article-title>Vascular complications in Chuvash polycythemia</article-title><source>Semin Thromb Hemost</source><year>2006</year><volume>32</volume><issue>03</issue><fpage>289</fpage><lpage>294</lpage><pub-id pub-id-type="pmid">16673284</pub-id>
+</mixed-citation></ref><ref id="JR22080374-10"><label>10</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Ballestri</surname><given-names>S</given-names></name><name><surname>Romagnoli</surname><given-names>E</given-names></name><name><surname>Arioli</surname><given-names>D</given-names></name></person-group><etal/><article-title>Risk and management of bleeding complications with direct oral anticoagulants in patients with atrial fibrillation and venous thromboembolism: a narrative review</article-title><source>Adv Ther</source><year>2023</year><volume>40</volume><issue>01</issue><fpage>41</fpage><lpage>66</lpage><pub-id pub-id-type="pmid">36244055</pub-id>
+</mixed-citation></ref><ref id="JR22080374-11"><label>11</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>von Br&#x000fc;hl</surname><given-names>M L</given-names></name><name><surname>Stark</surname><given-names>K</given-names></name><name><surname>Steinhart</surname><given-names>A</given-names></name></person-group><etal/><article-title>Monocytes, neutrophils, and platelets cooperate to initiate and propagate venous thrombosis in mice in vivo</article-title><source>J Exp Med</source><year>2012</year><volume>209</volume><issue>04</issue><fpage>819</fpage><lpage>835</lpage><pub-id pub-id-type="pmid">22451716</pub-id>
+</mixed-citation></ref><ref id="JR22080374-12"><label>12</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Lowe</surname><given-names>G D</given-names></name><name><surname>Lee</surname><given-names>A J</given-names></name><name><surname>Rumley</surname><given-names>A</given-names></name><name><surname>Price</surname><given-names>J F</given-names></name><name><surname>Fowkes</surname><given-names>F G</given-names></name></person-group><article-title>Blood viscosity and risk of cardiovascular events: the Edinburgh Artery Study</article-title><source>Br J Haematol</source><year>1997</year><volume>96</volume><issue>01</issue><fpage>168</fpage><lpage>173</lpage><pub-id pub-id-type="pmid">9012704</pub-id>
+</mixed-citation></ref><ref id="JR22080374-13"><label>13</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Vogel</surname><given-names>J</given-names></name><name><surname>Kiessling</surname><given-names>I</given-names></name><name><surname>Heinicke</surname><given-names>K</given-names></name></person-group><etal/><article-title>Transgenic mice overexpressing erythropoietin adapt to excessive erythrocytosis by regulating blood viscosity</article-title><source>Blood</source><year>2003</year><volume>102</volume><issue>06</issue><fpage>2278</fpage><lpage>2284</lpage><pub-id pub-id-type="pmid">12750170</pub-id>
+</mixed-citation></ref><ref id="JR22080374-14"><label>14</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Ruschitzka</surname><given-names>F T</given-names></name><name><surname>Wenger</surname><given-names>R H</given-names></name><name><surname>Stallmach</surname><given-names>T</given-names></name></person-group><etal/><article-title>Nitric oxide prevents cardiovascular disease and determines survival in polyglobulic mice overexpressing erythropoietin</article-title><source>Proc Natl Acad Sci U S A</source><year>2000</year><volume>97</volume><issue>21</issue><fpage>11609</fpage><lpage>11613</lpage><pub-id pub-id-type="pmid">11027359</pub-id>
+</mixed-citation></ref><ref id="JR22080374-15"><label>15</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Bogdanova</surname><given-names>A</given-names></name><name><surname>Mihov</surname><given-names>D</given-names></name><name><surname>Lutz</surname><given-names>H</given-names></name><name><surname>Saam</surname><given-names>B</given-names></name><name><surname>Gassmann</surname><given-names>M</given-names></name><name><surname>Vogel</surname><given-names>J</given-names></name></person-group><article-title>Enhanced erythro-phagocytosis in polycythemic mice overexpressing erythropoietin</article-title><source>Blood</source><year>2007</year><volume>110</volume><issue>02</issue><fpage>762</fpage><lpage>769</lpage><pub-id pub-id-type="pmid">17395782</pub-id>
+</mixed-citation></ref><ref id="JR22080374-16"><label>16</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Mebius</surname><given-names>R E</given-names></name><name><surname>Kraal</surname><given-names>G</given-names></name></person-group><article-title>Structure and function of the spleen</article-title><source>Nat Rev Immunol</source><year>2005</year><volume>5</volume><issue>08</issue><fpage>606</fpage><lpage>616</lpage><pub-id pub-id-type="pmid">16056254</pub-id>
+</mixed-citation></ref><ref id="JR22080374-17"><label>17</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Boxer</surname><given-names>M A</given-names></name><name><surname>Braun</surname><given-names>J</given-names></name><name><surname>Ellman</surname><given-names>L</given-names></name></person-group><article-title>Thromboembolic risk of postsplenectomy thrombocytosis</article-title><source>Arch Surg</source><year>1978</year><volume>113</volume><issue>07</issue><fpage>808</fpage><lpage>809</lpage><pub-id pub-id-type="pmid">678089</pub-id>
+</mixed-citation></ref><ref id="JR22080374-18"><label>18</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Khan</surname><given-names>P N</given-names></name><name><surname>Nair</surname><given-names>R J</given-names></name><name><surname>Olivares</surname><given-names>J</given-names></name><name><surname>Tingle</surname><given-names>L E</given-names></name><name><surname>Li</surname><given-names>Z</given-names></name></person-group><article-title>Postsplenectomy reactive thrombocytosis</article-title><source>Proc Bayl Univ Med Cent</source><year>2009</year><volume>22</volume><issue>01</issue><fpage>9</fpage><lpage>12</lpage><pub-id pub-id-type="pmid">19169391</pub-id>
+</mixed-citation></ref><ref id="JR22080374-19"><label>19</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Thomsen</surname><given-names>R W</given-names></name><name><surname>Schoonen</surname><given-names>W M</given-names></name><name><surname>Farkas</surname><given-names>D K</given-names></name><name><surname>Riis</surname><given-names>A</given-names></name><name><surname>Fryzek</surname><given-names>J P</given-names></name><name><surname>S&#x000f8;rensen</surname><given-names>H T</given-names></name></person-group><article-title>Risk of venous thromboembolism in splenectomized patients compared with the general population and appendectomized patients: a 10-year nationwide cohort study</article-title><source>J Thromb Haemost</source><year>2010</year><volume>8</volume><issue>06</issue><fpage>1413</fpage><lpage>1416</lpage><pub-id pub-id-type="pmid">20218983</pub-id>
+</mixed-citation></ref><ref id="JR22080374-20"><label>20</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Kato</surname><given-names>G J</given-names></name></person-group><article-title>Vascular complications after splenectomy for hematologic disorders</article-title><source>Blood</source><year>2009</year><volume>114</volume><issue>26</issue><fpage>5404</fpage></mixed-citation></ref><ref id="JR22080374-21"><label>21</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Sewify</surname><given-names>E M</given-names></name><name><surname>Sayed</surname><given-names>D</given-names></name><name><surname>Abdel Aal</surname><given-names>R F</given-names></name><name><surname>Ahmad</surname><given-names>H M</given-names></name><name><surname>Abdou</surname><given-names>M A</given-names></name></person-group><article-title>Increased circulating red cell microparticles (RMP) and platelet microparticles (PMP) in immune thrombocytopenic purpura</article-title><source>Thromb Res</source><year>2013</year><volume>131</volume><issue>02</issue><fpage>e59</fpage><lpage>e63</lpage><pub-id pub-id-type="pmid">23245653</pub-id>
+</mixed-citation></ref><ref id="JR22080374-22"><label>22</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Frey</surname><given-names>M K</given-names></name><name><surname>Alias</surname><given-names>S</given-names></name><name><surname>Winter</surname><given-names>M P</given-names></name></person-group><etal/><article-title>Splenectomy is modifying the vascular remodeling of thrombosis</article-title><source>J Am Heart Assoc</source><year>2014</year><volume>3</volume><issue>01</issue><fpage>e000772</fpage><pub-id pub-id-type="pmid">24584745</pub-id>
+</mixed-citation></ref><ref id="JR22080374-23"><label>23</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Bratosin</surname><given-names>D</given-names></name><name><surname>Mazurier</surname><given-names>J</given-names></name><name><surname>Tissier</surname><given-names>J P</given-names></name></person-group><etal/><article-title>Cellular and molecular mechanisms of senescent erythrocyte phagocytosis by macrophages. A review</article-title><source>Biochimie</source><year>1998</year><volume>80</volume><issue>02</issue><fpage>173</fpage><lpage>195</lpage><pub-id pub-id-type="pmid">9587675</pub-id>
+</mixed-citation></ref><ref id="JR22080374-24"><label>24</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Taher</surname><given-names>A T</given-names></name><name><surname>Musallam</surname><given-names>K M</given-names></name><name><surname>Karimi</surname><given-names>M</given-names></name></person-group><etal/><article-title>Splenectomy and thrombosis: the case of thalassemia intermedia</article-title><source>J Thromb Haemost</source><year>2010</year><volume>8</volume><issue>10</issue><fpage>2152</fpage><lpage>2158</lpage><pub-id pub-id-type="pmid">20546125</pub-id>
+</mixed-citation></ref><ref id="JR22080374-25"><label>25</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Seki</surname><given-names>M</given-names></name><name><surname>Arashiki</surname><given-names>N</given-names></name><name><surname>Takakuwa</surname><given-names>Y</given-names></name><name><surname>Nitta</surname><given-names>K</given-names></name><name><surname>Nakamura</surname><given-names>F</given-names></name></person-group><article-title>Reduction in flippase activity contributes to surface presentation of phosphatidylserine in human senescent erythrocytes</article-title><source>J Cell Mol Med</source><year>2020</year><volume>24</volume><issue>23</issue><fpage>13991</fpage><lpage>14000</lpage><pub-id pub-id-type="pmid">33103382</pub-id>
+</mixed-citation></ref><ref id="JR22080374-26"><label>26</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Whelihan</surname><given-names>M F</given-names></name><name><surname>Mann</surname><given-names>K G</given-names></name></person-group><article-title>The role of the red cell membrane in thrombin generation</article-title><source>Thromb Res</source><year>2013</year><volume>131</volume><issue>05</issue><fpage>377</fpage><lpage>382</lpage><pub-id pub-id-type="pmid">23402970</pub-id>
+</mixed-citation></ref><ref id="JR22080374-27"><label>27</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Frietsch</surname><given-names>T</given-names></name><name><surname>Maurer</surname><given-names>M H</given-names></name><name><surname>Vogel</surname><given-names>J</given-names></name><name><surname>Gassmann</surname><given-names>M</given-names></name><name><surname>Kuschinsky</surname><given-names>W</given-names></name><name><surname>Waschke</surname><given-names>K F</given-names></name></person-group><article-title>Reduced cerebral blood flow but elevated cerebral glucose metabolic rate in erythropoietin overexpressing transgenic mice with excessive erythrocytosis</article-title><source>J Cereb Blood Flow Metab</source><year>2007</year><volume>27</volume><issue>03</issue><fpage>469</fpage><lpage>476</lpage><pub-id pub-id-type="pmid">16804549</pub-id>
+</mixed-citation></ref><ref id="JR22080374-28"><label>28</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Mitchell</surname><given-names>O</given-names></name><name><surname>Feldman</surname><given-names>D M</given-names></name><name><surname>Diakow</surname><given-names>M</given-names></name><name><surname>Sigal</surname><given-names>S H</given-names></name></person-group><article-title>The pathophysiology of thrombocytopenia in chronic liver disease</article-title><source>Hepat Med</source><year>2016</year><volume>8</volume><fpage>39</fpage><lpage>50</lpage><pub-id pub-id-type="pmid">27186144</pub-id>
+</mixed-citation></ref><ref id="JR22080374-29"><label>29</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Lv</surname><given-names>Y</given-names></name><name><surname>Lau</surname><given-names>W Y</given-names></name><name><surname>Li</surname><given-names>Y</given-names></name></person-group><etal/><article-title>Hypersplenism: history and current status</article-title><source>Exp Ther Med</source><year>2016</year><volume>12</volume><issue>04</issue><fpage>2377</fpage><lpage>2382</lpage><pub-id pub-id-type="pmid">27703501</pub-id>
+</mixed-citation></ref><ref id="JR22080374-30"><label>30</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Wagner</surname><given-names>K F</given-names></name><name><surname>Katschinski</surname><given-names>D M</given-names></name><name><surname>Hasegawa</surname><given-names>J</given-names></name></person-group><etal/><article-title>Chronic inborn erythrocytosis leads to cardiac dysfunction and premature death in mice overexpressing erythropoietin</article-title><source>Blood</source><year>2001</year><volume>97</volume><issue>02</issue><fpage>536</fpage><lpage>542</lpage><pub-id pub-id-type="pmid">11154234</pub-id>
+</mixed-citation></ref><ref id="JR22080374-31"><label>31</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Klatt</surname><given-names>C</given-names></name><name><surname>Kr&#x000fc;ger</surname><given-names>I</given-names></name><name><surname>Zey</surname><given-names>S</given-names></name></person-group><etal/><article-title>Platelet-RBC interaction mediated by FasL/FasR induces procoagulant activity important for thrombosis</article-title><source>J Clin Invest</source><year>2018</year><volume>128</volume><issue>09</issue><fpage>3906</fpage><lpage>3925</lpage><pub-id pub-id-type="pmid">29952767</pub-id>
+</mixed-citation></ref><ref id="JR22080374-32"><label>32</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Shibata</surname><given-names>J</given-names></name><name><surname>Hasegawa</surname><given-names>J</given-names></name><name><surname>Siemens</surname><given-names>H J</given-names></name></person-group><etal/><article-title>Hemostasis and coagulation at a hematocrit level of 0.85: functional consequences of erythrocytosis</article-title><source>Blood</source><year>2003</year><volume>101</volume><issue>11</issue><fpage>4416</fpage><lpage>4422</lpage><pub-id pub-id-type="pmid">12576335</pub-id>
+</mixed-citation></ref><ref id="JR22080374-33"><label>33</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Babu</surname><given-names>E</given-names></name><name><surname>Basu</surname><given-names>D</given-names></name></person-group><article-title>Platelet large cell ratio in the differential diagnosis of abnormal platelet counts</article-title><source>Indian J Pathol Microbiol</source><year>2004</year><volume>47</volume><issue>02</issue><fpage>202</fpage><lpage>205</lpage><pub-id pub-id-type="pmid">16295468</pub-id>
+</mixed-citation></ref><ref id="JR22080374-34"><label>34</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Formenti</surname><given-names>F</given-names></name><name><surname>Beer</surname><given-names>P A</given-names></name><name><surname>Croft</surname><given-names>Q P</given-names></name></person-group><etal/><article-title>Cardiopulmonary function in two human disorders of the hypoxia-inducible factor (HIF) pathway: von Hippel-Lindau disease and HIF-2alpha gain-of-function mutation</article-title><source>FASEB J</source><year>2011</year><volume>25</volume><issue>06</issue><fpage>2001</fpage><lpage>2011</lpage><pub-id pub-id-type="pmid">21389259</pub-id>
+</mixed-citation></ref><ref id="JR22080374-35"><label>35</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Ashraf</surname><given-names>H M</given-names></name><name><surname>Javed</surname><given-names>A</given-names></name><name><surname>Ashraf</surname><given-names>S</given-names></name></person-group><article-title>Pulmonary embolism at high altitude and hyperhomocysteinemia</article-title><source>J Coll Physicians Surg Pak</source><year>2006</year><volume>16</volume><issue>01</issue><fpage>71</fpage><lpage>73</lpage><pub-id pub-id-type="pmid">16441997</pub-id>
+</mixed-citation></ref><ref id="JR22080374-36"><label>36</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Smallman</surname><given-names>D P</given-names></name><name><surname>McBratney</surname><given-names>C M</given-names></name><name><surname>Olsen</surname><given-names>C H</given-names></name><name><surname>Slogic</surname><given-names>K M</given-names></name><name><surname>Henderson</surname><given-names>C J</given-names></name></person-group><article-title>Quantification of the 5-year incidence of thromboembolic events in U.S. Air Force Academy cadets in comparison to the U.S. Naval and Military Academies</article-title><source>Mil Med</source><year>2011</year><volume>176</volume><issue>02</issue><fpage>209</fpage><lpage>213</lpage><pub-id pub-id-type="pmid">21366086</pub-id>
+</mixed-citation></ref><ref id="JR22080374-37"><label>37</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Li</surname><given-names>M</given-names></name><name><surname>Tang</surname><given-names>X</given-names></name><name><surname>Liao</surname><given-names>Z</given-names></name></person-group><etal/><article-title>Hypoxia and low temperature upregulate transferrin to induce hypercoagulability at high altitude</article-title><source>Blood</source><year>2022</year><volume>140</volume><issue>19</issue><fpage>2063</fpage><lpage>2075</lpage><pub-id pub-id-type="pmid">36040436</pub-id>
+</mixed-citation></ref><ref id="JR22080374-38"><label>38</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>McDonald</surname><given-names>T P</given-names></name><name><surname>Clift</surname><given-names>R E</given-names></name><name><surname>Cottrell</surname><given-names>M B</given-names></name></person-group><article-title>Large, chronic doses of erythropoietin cause thrombocytopenia in mice</article-title><source>Blood</source><year>1992</year><volume>80</volume><issue>02</issue><fpage>352</fpage><lpage>358</lpage><pub-id pub-id-type="pmid">1627797</pub-id>
+</mixed-citation></ref><ref id="JR22080374-39"><label>39</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Ja&#x000ef;s</surname><given-names>X</given-names></name><name><surname>Ioos</surname><given-names>V</given-names></name><name><surname>Jardim</surname><given-names>C</given-names></name></person-group><etal/><article-title>Splenectomy and chronic thromboembolic pulmonary hypertension</article-title><source>Thorax</source><year>2005</year><volume>60</volume><issue>12</issue><fpage>1031</fpage><lpage>1034</lpage><pub-id pub-id-type="pmid">16085731</pub-id>
+</mixed-citation></ref><ref id="JR22080374-40"><label>40</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Watters</surname><given-names>J M</given-names></name><name><surname>Sambasivan</surname><given-names>C N</given-names></name><name><surname>Zink</surname><given-names>K</given-names></name></person-group><etal/><article-title>Splenectomy leads to a persistent hypercoagulable state after trauma</article-title><source>Am J Surg</source><year>2010</year><volume>199</volume><issue>05</issue><fpage>646</fpage><lpage>651</lpage><pub-id pub-id-type="pmid">20466110</pub-id>
+</mixed-citation></ref><ref id="JR22080374-41"><label>41</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Visudhiphan</surname><given-names>S</given-names></name><name><surname>Ketsa-Ard</surname><given-names>K</given-names></name><name><surname>Piankijagum</surname><given-names>A</given-names></name><name><surname>Tumliang</surname><given-names>S</given-names></name></person-group><article-title>Blood coagulation and platelet profiles in persistent post-splenectomy thrombocytosis. The relationship to thromboembolism</article-title><source>Biomed Pharmacother</source><year>1985</year><volume>39</volume><issue>06</issue><fpage>264</fpage><lpage>271</lpage><pub-id pub-id-type="pmid">4084660</pub-id>
+</mixed-citation></ref><ref id="JR22080374-42"><label>42</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>McDonald</surname><given-names>T P</given-names></name><name><surname>Cottrell</surname><given-names>M B</given-names></name><name><surname>Clift</surname><given-names>R E</given-names></name><name><surname>Cullen</surname><given-names>W C</given-names></name><name><surname>Lin</surname><given-names>F K</given-names></name></person-group><article-title>High doses of recombinant erythropoietin stimulate platelet production in mice</article-title><source>Exp Hematol</source><year>1987</year><volume>15</volume><issue>06</issue><fpage>719</fpage><lpage>721</lpage><pub-id pub-id-type="pmid">3595770</pub-id>
+</mixed-citation></ref><ref id="JR22080374-43"><label>43</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Shikama</surname><given-names>Y</given-names></name><name><surname>Ishibashi</surname><given-names>T</given-names></name><name><surname>Kimura</surname><given-names>H</given-names></name><name><surname>Kawaguchi</surname><given-names>M</given-names></name><name><surname>Uchida</surname><given-names>T</given-names></name><name><surname>Maruyama</surname><given-names>Y</given-names></name></person-group><article-title>Transient effect of erythropoietin on thrombocytopoiesis in vivo in mice</article-title><source>Exp Hematol</source><year>1992</year><volume>20</volume><issue>02</issue><fpage>216</fpage><lpage>222</lpage><pub-id pub-id-type="pmid">1544390</pub-id>
+</mixed-citation></ref><ref id="JR22080374-44"><label>44</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Jackson</surname><given-names>C W</given-names></name><name><surname>Edwards</surname><given-names>C C</given-names></name></person-group><article-title>Biphasic thrombopoietic response to severe hypobaric hypoxia</article-title><source>Br J Haematol</source><year>1977</year><volume>35</volume><issue>02</issue><fpage>233</fpage><lpage>244</lpage><pub-id pub-id-type="pmid">869999</pub-id>
+</mixed-citation></ref><ref id="JR22080374-45"><label>45</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>McDonald</surname><given-names>T P</given-names></name></person-group><article-title>Platelet production in hypoxic and RBC-transfused mice</article-title><source>Scand J Haematol</source><year>1978</year><volume>20</volume><issue>03</issue><fpage>213</fpage><lpage>220</lpage><pub-id pub-id-type="pmid">644251</pub-id>
+</mixed-citation></ref><ref id="JR22080374-46"><label>46</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Rolovi&#x00107;</surname><given-names>Z</given-names></name><name><surname>Basara</surname><given-names>N</given-names></name><name><surname>Biljanovi&#x00107;-Paunovi&#x00107;</surname><given-names>L</given-names></name><name><surname>Stojanovi&#x00107;</surname><given-names>N</given-names></name><name><surname>Suvajdzi&#x00107;</surname><given-names>N</given-names></name><name><surname>Pavlovi&#x00107;-Kentera</surname><given-names>V</given-names></name></person-group><article-title>Megakaryocytopoiesis in experimentally induced chronic normobaric hypoxia</article-title><source>Exp Hematol</source><year>1990</year><volume>18</volume><issue>03</issue><fpage>190</fpage><lpage>194</lpage><pub-id pub-id-type="pmid">2303112</pub-id>
+</mixed-citation></ref><ref id="JR22080374-47"><label>47</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Wolf</surname><given-names>R F</given-names></name><name><surname>Peng</surname><given-names>J</given-names></name><name><surname>Friese</surname><given-names>P</given-names></name><name><surname>Gilmore</surname><given-names>L S</given-names></name><name><surname>Burstein</surname><given-names>S A</given-names></name><name><surname>Dale</surname><given-names>G L</given-names></name></person-group><article-title>Erythropoietin administration increases production and reactivity of platelets in dogs</article-title><source>Thromb Haemost</source><year>1997</year><volume>78</volume><issue>06</issue><fpage>1505</fpage><lpage>1509</lpage><pub-id pub-id-type="pmid">9423803</pub-id>
+</mixed-citation></ref><ref id="JR22080374-48"><label>48</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Fraser</surname><given-names>J K</given-names></name><name><surname>Tan</surname><given-names>A S</given-names></name><name><surname>Lin</surname><given-names>F K</given-names></name><name><surname>Berridge</surname><given-names>M V</given-names></name></person-group><article-title>Expression of specific high-affinity binding sites for erythropoietin on rat and mouse megakaryocytes</article-title><source>Exp Hematol</source><year>1989</year><volume>17</volume><issue>01</issue><fpage>10</fpage><lpage>16</lpage><pub-id pub-id-type="pmid">2535696</pub-id>
+</mixed-citation></ref><ref id="JR22080374-49"><label>49</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Sasaki</surname><given-names>H</given-names></name><name><surname>Hirabayashi</surname><given-names>Y</given-names></name><name><surname>Ishibashi</surname><given-names>T</given-names></name></person-group><etal/><article-title>Effects of erythropoietin, IL-3, IL-6 and LIF on a murine megakaryoblastic cell line: growth enhancement and expression of receptor mRNAs</article-title><source>Leuk Res</source><year>1995</year><volume>19</volume><issue>02</issue><fpage>95</fpage><lpage>102</lpage><pub-id pub-id-type="pmid">7869746</pub-id>
+</mixed-citation></ref><ref id="JR22080374-50"><label>50</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>McBane</surname><given-names>R D</given-names><suffix>II</suffix></name><name><surname>Gonzalez</surname><given-names>C</given-names></name><name><surname>Hodge</surname><given-names>D O</given-names></name><name><surname>Wysokinski</surname><given-names>W E</given-names></name></person-group><article-title>Propensity for young reticulated platelet recruitment into arterial thrombi</article-title><source>J Thromb Thrombolysis</source><year>2014</year><volume>37</volume><issue>02</issue><fpage>148</fpage><lpage>154</lpage><pub-id pub-id-type="pmid">23645473</pub-id>
+</mixed-citation></ref><ref id="JR22080374-51"><label>51</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Buttarello</surname><given-names>M</given-names></name><name><surname>Mezzapelle</surname><given-names>G</given-names></name><name><surname>Freguglia</surname><given-names>F</given-names></name><name><surname>Plebani</surname><given-names>M</given-names></name></person-group><article-title>Reticulated platelets and immature platelet fraction: clinical applications and method limitations</article-title><source>Int J Lab Hematol</source><year>2020</year><volume>42</volume><issue>04</issue><fpage>363</fpage><lpage>370</lpage><pub-id pub-id-type="pmid">32157813</pub-id>
+</mixed-citation></ref><ref id="JR22080374-52"><label>52</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Guthikonda</surname><given-names>S</given-names></name><name><surname>Alviar</surname><given-names>C L</given-names></name><name><surname>Vaduganathan</surname><given-names>M</given-names></name></person-group><etal/><article-title>Role of reticulated platelets and platelet size heterogeneity on platelet activity after dual antiplatelet therapy with aspirin and clopidogrel in patients with stable coronary artery disease</article-title><source>J Am Coll Cardiol</source><year>2008</year><volume>52</volume><issue>09</issue><fpage>743</fpage><lpage>749</lpage><pub-id pub-id-type="pmid">18718422</pub-id>
+</mixed-citation></ref><ref id="JR22080374-53"><label>53</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Goel</surname><given-names>M S</given-names></name><name><surname>Diamond</surname><given-names>S L</given-names></name></person-group><article-title>Adhesion of normal erythrocytes at depressed venous shear rates to activated neutrophils, activated platelets, and fibrin polymerized from plasma</article-title><source>Blood</source><year>2002</year><volume>100</volume><issue>10</issue><fpage>3797</fpage><lpage>3803</lpage><pub-id pub-id-type="pmid">12393714</pub-id>
+</mixed-citation></ref><ref id="JR22080374-54"><label>54</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Hermand</surname><given-names>P</given-names></name><name><surname>Gane</surname><given-names>P</given-names></name><name><surname>Huet</surname><given-names>M</given-names></name></person-group><etal/><article-title>Red cell ICAM-4 is a novel ligand for platelet-activated alpha IIbbeta 3 integrin</article-title><source>J Biol Chem</source><year>2003</year><volume>278</volume><issue>07</issue><fpage>4892</fpage><lpage>4898</lpage><pub-id pub-id-type="pmid">12477717</pub-id>
+</mixed-citation></ref><ref id="JR22080374-55"><label>55</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Orbach</surname><given-names>A</given-names></name><name><surname>Zelig</surname><given-names>O</given-names></name><name><surname>Yedgar</surname><given-names>S</given-names></name><name><surname>Barshtein</surname><given-names>G</given-names></name></person-group><article-title>Biophysical and biochemical markers of red blood cell fragility</article-title><source>Transfus Med Hemother</source><year>2017</year><volume>44</volume><issue>03</issue><fpage>183</fpage><lpage>187</lpage><pub-id pub-id-type="pmid">28626369</pub-id>
+</mixed-citation></ref><ref id="JR22080374-56"><label>56</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Helms</surname><given-names>C C</given-names></name><name><surname>Marvel</surname><given-names>M</given-names></name><name><surname>Zhao</surname><given-names>W</given-names></name></person-group><etal/><article-title>Mechanisms of hemolysis-associated platelet activation</article-title><source>J Thromb Haemost</source><year>2013</year><volume>11</volume><issue>12</issue><fpage>2148</fpage><lpage>2154</lpage><pub-id pub-id-type="pmid">24119131</pub-id>
+</mixed-citation></ref><ref id="JR22080374-57"><label>57</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Villagra</surname><given-names>J</given-names></name><name><surname>Shiva</surname><given-names>S</given-names></name><name><surname>Hunter</surname><given-names>L A</given-names></name><name><surname>Machado</surname><given-names>R F</given-names></name><name><surname>Gladwin</surname><given-names>M T</given-names></name><name><surname>Kato</surname><given-names>G J</given-names></name></person-group><article-title>Platelet activation in patients with sickle disease, hemolysis-associated pulmonary hypertension, and nitric oxide scavenging by cell-free hemoglobin</article-title><source>Blood</source><year>2007</year><volume>110</volume><issue>06</issue><fpage>2166</fpage><lpage>2172</lpage><pub-id pub-id-type="pmid">17536019</pub-id>
+</mixed-citation></ref><ref id="JR22080374-58"><label>58</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Gambaryan</surname><given-names>S</given-names></name><name><surname>Subramanian</surname><given-names>H</given-names></name><name><surname>Kehrer</surname><given-names>L</given-names></name></person-group><etal/><article-title>Erythrocytes do not activate purified and platelet soluble guanylate cyclases even in conditions favourable for NO synthesis</article-title><source>Cell Commun Signal</source><year>2016</year><volume>14</volume><issue>01</issue><fpage>16</fpage><pub-id pub-id-type="pmid">27515066</pub-id>
+</mixed-citation></ref><ref id="JR22080374-59"><label>59</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Krauss</surname><given-names>S</given-names></name></person-group><article-title>Haptoglobin metabolism in polycythemia vera</article-title><source>Blood</source><year>1969</year><volume>33</volume><issue>06</issue><fpage>865</fpage><lpage>876</lpage><pub-id pub-id-type="pmid">5795764</pub-id>
+</mixed-citation></ref><ref id="JR22080374-60"><label>60</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Vignoli</surname><given-names>A</given-names></name><name><surname>Gamba</surname><given-names>S</given-names></name><name><surname>van der Meijden</surname><given-names>P EJ</given-names></name></person-group><etal/><article-title>Increased platelet thrombus formation under flow conditions in whole blood from polycythaemia vera patients</article-title><source>Blood Transfus</source><year>2022</year><volume>20</volume><issue>02</issue><fpage>143</fpage><lpage>151</lpage><pub-id pub-id-type="pmid">33819141</pub-id>
+</mixed-citation></ref><ref id="JR22080374-61"><label>61</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Lawrence</surname><given-names>J H</given-names></name></person-group><article-title>The control of polycythemia by marrow inhibition; a 10-year study of 172 patients</article-title><source>J Am Med Assoc</source><year>1949</year><volume>141</volume><issue>01</issue><fpage>13</fpage><lpage>18</lpage><pub-id pub-id-type="pmid">18138511</pub-id>
+</mixed-citation></ref><ref id="JR22080374-62"><label>62</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Pearson</surname><given-names>T C</given-names></name><name><surname>Wetherley-Mein</surname><given-names>G</given-names></name></person-group><article-title>Vascular occlusive episodes and venous haematocrit in primary proliferative polycythaemia</article-title><source>Lancet</source><year>1978</year><volume>2</volume><issue>8102</issue><fpage>1219</fpage><lpage>1222</lpage><pub-id pub-id-type="pmid">82733</pub-id>
+</mixed-citation></ref><ref id="JR22080374-63"><label>63</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Fazekas</surname><given-names>J F</given-names></name><name><surname>Nelson</surname><given-names>D</given-names></name></person-group><article-title>Cerebral blood flow in polycythemia vera</article-title><source>AMA Arch Intern Med</source><year>1956</year><volume>98</volume><issue>03</issue><fpage>328</fpage><lpage>331</lpage><pub-id pub-id-type="pmid">13354026</pub-id>
+</mixed-citation></ref><ref id="JR22080374-64"><label>64</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Thomas</surname><given-names>D J</given-names></name><name><surname>Marshall</surname><given-names>J</given-names></name><name><surname>Russell</surname><given-names>R W</given-names></name></person-group><etal/><article-title>Effect of haematocrit on cerebral blood-flow in man</article-title><source>Lancet</source><year>1977</year><volume>2</volume><issue>8045</issue><fpage>941</fpage><lpage>943</lpage><pub-id pub-id-type="pmid">72286</pub-id>
+</mixed-citation></ref><ref id="JR22080374-65"><label>65</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>D'Emilio</surname><given-names>A</given-names></name><name><surname>Battista</surname><given-names>R</given-names></name><name><surname>Dini</surname><given-names>E</given-names></name></person-group><article-title>Treatment of primary proliferative polycythaemia by venesection and busulphan</article-title><source>Br J Haematol</source><year>1987</year><volume>65</volume><issue>01</issue><fpage>121</fpage><lpage>122</lpage><pub-id pub-id-type="pmid">3814522</pub-id>
+</mixed-citation></ref><ref id="JR22080374-66"><label>66</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Taylor</surname><given-names>J E</given-names></name><name><surname>Henderson</surname><given-names>I S</given-names></name><name><surname>Stewart</surname><given-names>W K</given-names></name><name><surname>Belch</surname><given-names>J J</given-names></name></person-group><article-title>Erythropoietin and spontaneous platelet aggregation in haemodialysis patients</article-title><source>Lancet</source><year>1991</year><volume>338</volume><issue>8779</issue><fpage>1361</fpage><lpage>1362</lpage><pub-id pub-id-type="pmid">1682739</pub-id>
+</mixed-citation></ref><ref id="JR22080374-67"><label>67</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Zwaginga</surname><given-names>J J</given-names></name><name><surname>IJsseldijk</surname><given-names>M J</given-names></name><name><surname>de Groot</surname><given-names>P G</given-names></name></person-group><etal/><article-title>Treatment of uremic anemia with recombinant erythropoietin also reduces the defects in platelet adhesion and aggregation caused by uremic plasma</article-title><source>Thromb Haemost</source><year>1991</year><volume>66</volume><issue>06</issue><fpage>638</fpage><lpage>647</lpage><pub-id pub-id-type="pmid">1665596</pub-id>
+</mixed-citation></ref><ref id="JR22080374-68"><label>68</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Fabris</surname><given-names>F</given-names></name><name><surname>Cordiano</surname><given-names>I</given-names></name><name><surname>Randi</surname><given-names>M L</given-names></name></person-group><etal/><article-title>Effect of human recombinant erythropoietin on bleeding time, platelet number and function in children with end-stage renal disease maintained by haemodialysis</article-title><source>Pediatr Nephrol</source><year>1991</year><volume>5</volume><issue>02</issue><fpage>225</fpage><lpage>228</lpage><pub-id pub-id-type="pmid">2031840</pub-id>
+</mixed-citation></ref><ref id="JR22080374-69"><label>69</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Akizawa</surname><given-names>T</given-names></name><name><surname>Kinugasa</surname><given-names>E</given-names></name><name><surname>Kitaoka</surname><given-names>T</given-names></name><name><surname>Koshikawa</surname><given-names>S</given-names></name></person-group><article-title>Effects of recombinant human erythropoietin and correction of anemia on platelet function in hemodialysis patients</article-title><source>Nephron J</source><year>1991</year><volume>58</volume><issue>04</issue><fpage>400</fpage><lpage>406</lpage></mixed-citation></ref><ref id="JR22080374-70"><label>70</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Vigan&#x000f2;</surname><given-names>G</given-names></name><name><surname>Benigni</surname><given-names>A</given-names></name><name><surname>Mendogni</surname><given-names>D</given-names></name><name><surname>Mingardi</surname><given-names>G</given-names></name><name><surname>Mecca</surname><given-names>G</given-names></name><name><surname>Remuzzi</surname><given-names>G</given-names></name></person-group><article-title>Recombinant human erythropoietin to correct uremic bleeding</article-title><source>Am J Kidney Dis</source><year>1991</year><volume>18</volume><issue>01</issue><fpage>44</fpage><lpage>49</lpage><pub-id pub-id-type="pmid">2063854</pub-id>
+</mixed-citation></ref><ref id="JR22080374-71"><label>71</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Rios</surname><given-names>J A</given-names></name><name><surname>Hambleton</surname><given-names>J</given-names></name><name><surname>Viele</surname><given-names>M</given-names></name></person-group><etal/><article-title>Viability of red cells prepared with S-303 pathogen inactivation treatment</article-title><source>Transfusion</source><year>2006</year><volume>46</volume><issue>10</issue><fpage>1778</fpage><lpage>1786</lpage><pub-id pub-id-type="pmid">17002635</pub-id>
+</mixed-citation></ref><ref id="JR22080374-72"><label>72</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Khandelwal</surname><given-names>S</given-names></name><name><surname>van Rooijen</surname><given-names>N</given-names></name><name><surname>Saxena</surname><given-names>R K</given-names></name></person-group><article-title>Reduced expression of CD47 during murine red blood cell (RBC) senescence and its role in RBC clearance from the circulation</article-title><source>Transfusion</source><year>2007</year><volume>47</volume><issue>09</issue><fpage>1725</fpage><lpage>1732</lpage><pub-id pub-id-type="pmid">17725740</pub-id>
+</mixed-citation></ref><ref id="JR22080374-73"><label>73</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Bosman</surname><given-names>G J</given-names></name><name><surname>Werre</surname><given-names>J M</given-names></name><name><surname>Willekens</surname><given-names>F L</given-names></name><name><surname>Novotn&#x000fd;</surname><given-names>V M</given-names></name></person-group><article-title>Erythrocyte ageing in vivo and in vitro: structural aspects and implications for transfusion</article-title><source>Transfus Med</source><year>2008</year><volume>18</volume><issue>06</issue><fpage>335</fpage><lpage>347</lpage><pub-id pub-id-type="pmid">19140816</pub-id>
+</mixed-citation></ref><ref id="JR22080374-74"><label>74</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Crosby</surname><given-names>W H</given-names></name></person-group><article-title>Normal functions of the spleen relative to red blood cells: a review</article-title><source>Blood</source><year>1959</year><volume>14</volume><issue>04</issue><fpage>399</fpage><lpage>408</lpage><pub-id pub-id-type="pmid">13638340</pub-id>
+</mixed-citation></ref><ref id="JR22080374-75"><label>75</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Varin</surname><given-names>R</given-names></name><name><surname>Mirshahi</surname><given-names>S</given-names></name><name><surname>Mirshahi</surname><given-names>P</given-names></name></person-group><etal/><article-title>Whole blood clots are more resistant to lysis than plasma clots&#x02013;greater efficacy of rivaroxaban</article-title><source>Thromb Res</source><year>2013</year><volume>131</volume><issue>03</issue><fpage>e100</fpage><lpage>e109</lpage><pub-id pub-id-type="pmid">23313382</pub-id>
+</mixed-citation></ref><ref id="JR22080374-76"><label>76</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Carvalho</surname><given-names>F A</given-names></name><name><surname>Connell</surname><given-names>S</given-names></name><name><surname>Miltenberger-Miltenyi</surname><given-names>G</given-names></name></person-group><etal/><article-title>Atomic force microscopy-based molecular recognition of a fibrinogen receptor on human erythrocytes</article-title><source>ACS Nano</source><year>2010</year><volume>4</volume><issue>08</issue><fpage>4609</fpage><lpage>4620</lpage><pub-id pub-id-type="pmid">20731444</pub-id>
+</mixed-citation></ref><ref id="JR22080374-77"><label>77</label><mixed-citation publication-type="journal"><person-group person-group-type="author"><name><surname>Wohner</surname><given-names>N</given-names></name><name><surname>S&#x000f3;tonyi</surname><given-names>P</given-names></name><name><surname>Machovich</surname><given-names>R</given-names></name></person-group><etal/><article-title>Lytic resistance of fibrin containing red blood cells</article-title><source>Arterioscler Thromb Vasc Biol</source><year>2011</year><volume>31</volume><issue>10</issue><fpage>2306</fpage><lpage>2313</lpage><pub-id pub-id-type="pmid">21737785</pub-id>
+</mixed-citation></ref></ref-list></back></article>

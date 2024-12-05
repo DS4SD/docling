@@ -1,0 +1,77 @@
+item-0 at level 0: unspecified: group _root_
+  item-1 at level 1: title: Exploring Causal Relationships b ... erans: A Mendelian Randomization Study
+  item-2 at level 1: paragraph: Bihui Zhang; Department of Inter ... versity First Hospital, Beijing, China
+  item-3 at level 1: text: Background Thromboangiitis oblit ... ective therapeutic strategies for TAO.
+  item-4 at level 1: section_header: Introduction
+    item-5 at level 2: text: Thromboangiitis obliterans (TAO) ... d 74%, and 19 and 66%, respectively. 4
+    item-6 at level 2: text: An immune-mediated response is i ... ew diagnostic and therapeutic avenues.
+    item-7 at level 2: text: Mendelian randomization (MR) is  ...  levels on the risk of developing TAO.
+  item-8 at level 1: section_header: Study Design
+    item-9 at level 2: text: The current research represents  ... numbers GCST90274758 to GCST90274848).
+    item-10 at level 2: text: Flowchart of the study is shown  ... ), and ICD-10 (I73.1) classifications.
+  item-11 at level 1: section_header: Instrumental Variable Selection
+    item-12 at level 2: text: We employed comprehensive GWAS s ...  (available in the online version). 14
+  item-13 at level 1: section_header: Statistical Analysis
+    item-14 at level 2: text: The random-effects inverse varia ...  overlap with the FinnGen database. 20
+    item-15 at level 2: text: Heterogeneity among individual S ...  packages in R software version 4.3.2.
+  item-16 at level 1: section_header: Selection of Instrumental Variables
+    item-17 at level 2: text: The association between 91 circu ... SNPs, and stem cell factor to 36 SNPs.
+  item-18 at level 1: section_header: The Causal Role of Inflammation-Related Proteins in TAO
+    item-19 at level 2: text: Elevated genetically predicted C ... 9) suggested an increased risk of TAO.
+  item-20 at level 1: section_header: Sensitivity Analysis
+    item-21 at level 2: text: MR–Egger regression intercepts w ... al relationships, as shown in Fig. 5 .
+  item-22 at level 1: section_header: MVMR Analysis
+    item-23 at level 2: text: Fig. 6 reveals that, even after  ... stem cell factor ( p  = 0.159) on TAO.
+  item-24 at level 1: section_header: Discussion
+    item-25 at level 2: text: C–C motif chemokines, a subfamil ...  a biomarker and a therapeutic target.
+    item-26 at level 2: text: CCL23, also known as myeloid pro ... r investigation into its precise role.
+    item-27 at level 2: text: GDNF was first discovered as a p ... athways, akin to its action in IBD. 34
+  item-28 at level 1: section_header: Figures
+  item-30 at level 1: picture
+    item-30 at level 2: caption: Fig. 1 The flowchart of the study. The whole workflow of MR analysis. GWAS, genome-wide association study; TAO, thromboangiitis obliterans; SNP, single nucleotide polymorphism; MR, Mendelian randomization.
+  item-32 at level 1: picture
+    item-32 at level 2: caption: Fig. 2 Causal relationship between circulating inflammatory proteins and TAO. TAO, thromboangiitis obliterans.
+  item-34 at level 1: picture
+    item-34 at level 2: caption: Fig. 3 Scatter plots for the causal association between circulating inflammatory proteins and TAO. TAO, thromboangiitis obliterans.
+  item-36 at level 1: picture
+    item-36 at level 2: caption: Fig. 4 Funnel plots of circulating inflammatory proteins.
+  item-38 at level 1: picture
+    item-38 at level 2: caption: Fig. 5 Leave-one-out plots for the causal association between circulating inflammatory proteins and TAO. TAO, thromboangiitis obliterans.
+  item-40 at level 1: picture
+    item-40 at level 2: caption: Fig. 6 Results from multivariable Mendelian randomization analysis on the impact of circulating inflammatory proteins on TAO, after adjusting for genetically predicted smoking. IVW, inverse variance weighting; TAO, thromboangiitis obliterans.
+  item-41 at level 1: section_header: References
+  item-42 at level 1: list: group list
+    item-43 at level 2: list_item: J W Olin. Thromboangiitis oblite ... uerger's disease). N Engl J Med (2000)
+    item-44 at level 2: list_item: X L Sun; B Y Law; I R de Seabra  ... othelial cells. Atherosclerosis (2017)
+    item-45 at level 2: list_item: J W Olin. Thromboangiitis oblite ... progress made. J Am Heart Assoc (2018)
+    item-46 at level 2: list_item: A Le Joncour; S Soudet; A Dupont ...  224 patients. J Am Heart Assoc (2018)
+    item-47 at level 2: list_item: S S Ketha; L T Cooper. The role  ... er's disease). Ann N Y Acad Sci (2013)
+    item-48 at level 2: list_item: M Kobayashi; M Ito; A Nakagawa;  ... eritis obliterans). J Vasc Surg (1999)
+    item-49 at level 2: list_item: R Dellalibera-Joviliano; E E Jov ... rans patients. Clin Exp Immunol (2012)
+    item-50 at level 2: list_item: G Davey Smith; G Hemani. Mendeli ... ological studies. Hum Mol Genet (2014)
+    item-51 at level 2: list_item: C A Emdin; A V Khera; S Kathiresan. Mendelian randomization. JAMA (2017)
+    item-52 at level 2: list_item: S C Larsson; A S Butterworth; S  ... s and applications. Eur Heart J (2023)
+    item-53 at level 2: list_item: V W Skrivankova; R C Richmond; B ... xplanation and elaboration. BMJ (2021)
+    item-54 at level 2: list_item: J H Zhao; D Stacey; N Eriksson.  ... herapeutic targets. Nat Immunol (2023)
+    item-55 at level 2: list_item: M I Kurki; J Karjalainen; P Palt ... ped isolated population. Nature (2023)
+    item-56 at level 2: list_item: M A Kamat; J A Blackshaw; R Youn ... pe associations. Bioinformatics (2019)
+    item-57 at level 2: list_item: S Burgess; F Dudbridge; S G Thom ... mmarized data methods. Stat Med (2016)
+    item-58 at level 2: list_item: O O Yavorska; S Burgess. Mendeli ... ummarized data. Int J Epidemiol (2017)
+    item-59 at level 2: list_item: J Bowden; G Davey Smith; S Burge ... ger regression. Int J Epidemiol (2015)
+    item-60 at level 2: list_item: J Bowden; G Davey Smith; P C Hay ... dian estimator. Genet Epidemiol (2016)
+    item-61 at level 2: list_item: M Verbanck; C Y Chen; B Neale; R ...  traits and diseases. Nat Genet (2018)
+    item-62 at level 2: list_item: P R Loh; G Kichaev; S Gazal; A P ... obank-scale datasets. Nat Genet (2018)
+    item-63 at level 2: list_item: D Staiger; H James. Stock. 1997. ... eak instruments.”. Econometrica (1997)
+    item-64 at level 2: list_item: C E Hughes; R JB Nibbs. A guide  ... nes and their receptors. FEBS J (2018)
+    item-65 at level 2: list_item: T T Chang; J W Chen. Emerging ro ... s or foes?. Cardiovasc Diabetol (2016)
+    item-66 at level 2: list_item: S G Irving; P F Zipfel; J Balke. ... romosome 17q. Nucleic Acids Res (1990)
+    item-67 at level 2: list_item: W Lim; H Bae; F W Bazer; G Song. ... ernal-fetal interface. Dev Biol (2018)
+    item-68 at level 2: list_item: C H Shih; S F van Eeden; Y Goto; ... om the bone marrow. Exp Hematol (2005)
+    item-69 at level 2: list_item: D Karan. CCL23 in balancing the  ... cellular carcinoma. Front Oncol (2021)
+    item-70 at level 2: list_item: A Simats; T García-Berrocoso; A  ... uman brain damage. J Intern Med (2018)
+    item-71 at level 2: list_item: M Brink; E Berglin; A J Mohammad ... sculitides. Arthritis Rheumatol (2023)
+    item-72 at level 2: list_item: C S Kim; J H Kang; H R Cho. Pote ... ase from monocytes. Inflamm Res (2011)
+    item-73 at level 2: list_item: M Saarma; H Sariola. Other neuro ... factor (GDNF). Microsc Res Tech (1999)
+    item-74 at level 2: list_item: Z Zhang; G Y Sun; S Ding. Glial  ...  ischemic stroke. Neurochem Res (2021)
+    item-75 at level 2: list_item: H Chen; T Han; L Gao; D Zhang. T ... ease. J Interferon Cytokine Res (2022)
+    item-76 at level 2: list_item: M Meir; S Flemming; N Burkard; J ... siol Gastrointest Liver Physiol (2016)

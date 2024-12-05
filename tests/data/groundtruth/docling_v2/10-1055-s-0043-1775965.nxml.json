@@ -1,0 +1,1955 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.0.0",
+  "name": "10-1055-s-0043-1775965",
+  "origin": {
+    "mimetype": "text/xml",
+    "binary_hash": 6626011644007813730,
+    "filename": "10-1055-s-0043-1775965.nxml"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/texts/1"
+      },
+      {
+        "$ref": "#/texts/2"
+      },
+      {
+        "$ref": "#/texts/3"
+      },
+      {
+        "$ref": "#/texts/8"
+      },
+      {
+        "$ref": "#/texts/10"
+      },
+      {
+        "$ref": "#/texts/12"
+      },
+      {
+        "$ref": "#/texts/15"
+      },
+      {
+        "$ref": "#/texts/19"
+      },
+      {
+        "$ref": "#/texts/23"
+      },
+      {
+        "$ref": "#/texts/27"
+      },
+      {
+        "$ref": "#/texts/33"
+      },
+      {
+        "$ref": "#/texts/34"
+      },
+      {
+        "$ref": "#/pictures/0"
+      },
+      {
+        "$ref": "#/texts/35"
+      },
+      {
+        "$ref": "#/pictures/1"
+      },
+      {
+        "$ref": "#/texts/36"
+      },
+      {
+        "$ref": "#/pictures/2"
+      },
+      {
+        "$ref": "#/texts/37"
+      },
+      {
+        "$ref": "#/pictures/3"
+      },
+      {
+        "$ref": "#/texts/38"
+      },
+      {
+        "$ref": "#/pictures/4"
+      },
+      {
+        "$ref": "#/texts/39"
+      },
+      {
+        "$ref": "#/groups/0"
+      }
+    ],
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [
+    {
+      "self_ref": "#/groups/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/40"
+        },
+        {
+          "$ref": "#/texts/41"
+        },
+        {
+          "$ref": "#/texts/42"
+        },
+        {
+          "$ref": "#/texts/43"
+        },
+        {
+          "$ref": "#/texts/44"
+        },
+        {
+          "$ref": "#/texts/45"
+        },
+        {
+          "$ref": "#/texts/46"
+        },
+        {
+          "$ref": "#/texts/47"
+        },
+        {
+          "$ref": "#/texts/48"
+        },
+        {
+          "$ref": "#/texts/49"
+        },
+        {
+          "$ref": "#/texts/50"
+        },
+        {
+          "$ref": "#/texts/51"
+        },
+        {
+          "$ref": "#/texts/52"
+        },
+        {
+          "$ref": "#/texts/53"
+        },
+        {
+          "$ref": "#/texts/54"
+        },
+        {
+          "$ref": "#/texts/55"
+        },
+        {
+          "$ref": "#/texts/56"
+        },
+        {
+          "$ref": "#/texts/57"
+        },
+        {
+          "$ref": "#/texts/58"
+        },
+        {
+          "$ref": "#/texts/59"
+        },
+        {
+          "$ref": "#/texts/60"
+        },
+        {
+          "$ref": "#/texts/61"
+        },
+        {
+          "$ref": "#/texts/62"
+        },
+        {
+          "$ref": "#/texts/63"
+        },
+        {
+          "$ref": "#/texts/64"
+        },
+        {
+          "$ref": "#/texts/65"
+        },
+        {
+          "$ref": "#/texts/66"
+        },
+        {
+          "$ref": "#/texts/67"
+        },
+        {
+          "$ref": "#/texts/68"
+        },
+        {
+          "$ref": "#/texts/69"
+        },
+        {
+          "$ref": "#/texts/70"
+        },
+        {
+          "$ref": "#/texts/71"
+        },
+        {
+          "$ref": "#/texts/72"
+        },
+        {
+          "$ref": "#/texts/73"
+        },
+        {
+          "$ref": "#/texts/74"
+        },
+        {
+          "$ref": "#/texts/75"
+        },
+        {
+          "$ref": "#/texts/76"
+        },
+        {
+          "$ref": "#/texts/77"
+        },
+        {
+          "$ref": "#/texts/78"
+        },
+        {
+          "$ref": "#/texts/79"
+        },
+        {
+          "$ref": "#/texts/80"
+        },
+        {
+          "$ref": "#/texts/81"
+        },
+        {
+          "$ref": "#/texts/82"
+        },
+        {
+          "$ref": "#/texts/83"
+        },
+        {
+          "$ref": "#/texts/84"
+        },
+        {
+          "$ref": "#/texts/85"
+        },
+        {
+          "$ref": "#/texts/86"
+        },
+        {
+          "$ref": "#/texts/87"
+        },
+        {
+          "$ref": "#/texts/88"
+        },
+        {
+          "$ref": "#/texts/89"
+        },
+        {
+          "$ref": "#/texts/90"
+        },
+        {
+          "$ref": "#/texts/91"
+        },
+        {
+          "$ref": "#/texts/92"
+        },
+        {
+          "$ref": "#/texts/93"
+        },
+        {
+          "$ref": "#/texts/94"
+        },
+        {
+          "$ref": "#/texts/95"
+        },
+        {
+          "$ref": "#/texts/96"
+        },
+        {
+          "$ref": "#/texts/97"
+        },
+        {
+          "$ref": "#/texts/98"
+        },
+        {
+          "$ref": "#/texts/99"
+        },
+        {
+          "$ref": "#/texts/100"
+        },
+        {
+          "$ref": "#/texts/101"
+        },
+        {
+          "$ref": "#/texts/102"
+        },
+        {
+          "$ref": "#/texts/103"
+        },
+        {
+          "$ref": "#/texts/104"
+        },
+        {
+          "$ref": "#/texts/105"
+        },
+        {
+          "$ref": "#/texts/106"
+        },
+        {
+          "$ref": "#/texts/107"
+        },
+        {
+          "$ref": "#/texts/108"
+        },
+        {
+          "$ref": "#/texts/109"
+        },
+        {
+          "$ref": "#/texts/110"
+        },
+        {
+          "$ref": "#/texts/111"
+        },
+        {
+          "$ref": "#/texts/112"
+        },
+        {
+          "$ref": "#/texts/113"
+        },
+        {
+          "$ref": "#/texts/114"
+        },
+        {
+          "$ref": "#/texts/115"
+        },
+        {
+          "$ref": "#/texts/116"
+        }
+      ],
+      "name": "list",
+      "label": "list"
+    }
+  ],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "title",
+      "prov": [],
+      "orig": "Differential Effects of Erythropoietin Administration and Overexpression on Venous Thrombosis in Mice",
+      "text": "Differential Effects of Erythropoietin Administration and Overexpression on Venous Thrombosis in Mice"
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "paragraph",
+      "prov": [],
+      "orig": "Sven Stockhausen; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Badr Kilani; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Irene Schubert; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Anna-Lena Steinsiek; Department of cardiology, German Heart Center, Munich, Germany.; Sue Chandraratne; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Franziska Wendler; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Luke Eivers; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Marie-Luise von Br\u00fchl; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Steffen Massberg; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Ilka Ott; Department of cardiology, German Heart Center, Munich, Germany.; Konstantin Stark; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany",
+      "text": "Sven Stockhausen; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Badr Kilani; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Irene Schubert; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Anna-Lena Steinsiek; Department of cardiology, German Heart Center, Munich, Germany.; Sue Chandraratne; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Franziska Wendler; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Luke Eivers; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Marie-Luise von Br\u00fchl; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Steffen Massberg; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; Ilka Ott; Department of cardiology, German Heart Center, Munich, Germany.; Konstantin Stark; Medizinische Klinik und Poliklinik I, Klinikum der Universit\u00e4t M\u00fcnchen, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany; German Center for Cardiovascular Research (DZHK), partner site Munich Heart Alliance, Munich, Germany; Walter-Brendel Center of Experimental Medicine, Ludwig-Maximilians-Universit\u00e4t, Munich, Germany"
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Background Deep vein thrombosis (DVT) is a common condition associated with significant mortality due to pulmonary embolism. Despite advanced prevention and anticoagulation therapy, the incidence of venous thromboembolism remains unchanged. Individuals with elevated hematocrit and/or excessively high erythropoietin (EPO) serum levels are particularly susceptible to DVT formation. We investigated the influence of short-term EPO administration compared to chronic EPO overproduction on DVT development. Additionally, we examined the role of the spleen in this context and assessed its impact on thrombus composition. Methods We induced ligation of the caudal vena cava (VCC) in EPO-overproducing Tg(EPO) mice as well as wildtype mice treated with EPO for two weeks, both with and without splenectomy. The effect on platelet circulation time was evaluated through FACS analysis, and thrombus composition was analyzed using immunohistology. Results We present evidence for an elevated thrombogenic phenotype resulting from chronic EPO overproduction, achieved by combining an EPO-overexpressing mouse model with experimental DVT induction. This increased thrombotic state is largely independent of traditional contributors to DVT, such as neutrophils and platelets. Notably, the pronounced prothrombotic effect of red blood cells (RBCs) only manifests during chronic EPO overproduction and is not influenced by splenic RBC clearance, as demonstrated by splenectomy. In contrast, short-term EPO treatment does not induce thrombogenesis in mice. Consequently, our findings support the existence of a differential thrombogenic effect between chronic enhanced erythropoiesis and exogenous EPO administration. Conclusion Chronic EPO overproduction significantly increases the risk of DVT, while short-term EPO treatment does not. These findings underscore the importance of considering EPO-related factors in DVT risk assessment and potential therapeutic strategies.",
+      "text": "Background Deep vein thrombosis (DVT) is a common condition associated with significant mortality due to pulmonary embolism. Despite advanced prevention and anticoagulation therapy, the incidence of venous thromboembolism remains unchanged. Individuals with elevated hematocrit and/or excessively high erythropoietin (EPO) serum levels are particularly susceptible to DVT formation. We investigated the influence of short-term EPO administration compared to chronic EPO overproduction on DVT development. Additionally, we examined the role of the spleen in this context and assessed its impact on thrombus composition. Methods We induced ligation of the caudal vena cava (VCC) in EPO-overproducing Tg(EPO) mice as well as wildtype mice treated with EPO for two weeks, both with and without splenectomy. The effect on platelet circulation time was evaluated through FACS analysis, and thrombus composition was analyzed using immunohistology. Results We present evidence for an elevated thrombogenic phenotype resulting from chronic EPO overproduction, achieved by combining an EPO-overexpressing mouse model with experimental DVT induction. This increased thrombotic state is largely independent of traditional contributors to DVT, such as neutrophils and platelets. Notably, the pronounced prothrombotic effect of red blood cells (RBCs) only manifests during chronic EPO overproduction and is not influenced by splenic RBC clearance, as demonstrated by splenectomy. In contrast, short-term EPO treatment does not induce thrombogenesis in mice. Consequently, our findings support the existence of a differential thrombogenic effect between chronic enhanced erythropoiesis and exogenous EPO administration. Conclusion Chronic EPO overproduction significantly increases the risk of DVT, while short-term EPO treatment does not. These findings underscore the importance of considering EPO-related factors in DVT risk assessment and potential therapeutic strategies."
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/4"
+        },
+        {
+          "$ref": "#/texts/5"
+        },
+        {
+          "$ref": "#/texts/6"
+        },
+        {
+          "$ref": "#/texts/7"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Introduction",
+      "text": "Introduction",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/texts/3"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Red blood cells (RBCs) are the primary carriers oxygen and carbon dioxide in all mammals. Low hemoglobin concentrations in the blood can cause severe oxygen deficiency, leading to ischemia in organs and tissues. At the same time, numerous clinical observations identified elevated hemoglobin levels as an independent risk factor for deep vein thrombosis (DVT) formation. This applies to overproduction of RBCs due to erythropoietin (EPO) administration, as well as foreign blood transfusions. 1 2 3 4 5 6 7 This is also evident in illnesses which exhibit an excessive RBC production such as polycythemia vera or Chuvash polycythemia where a significant increase in thromboembolic complications has been reported. 8 9 In such cases, oral or parenteral anticoagulants are effective preventive measures. However, their use entails significant drawbacks in the form of elevated bleeding risks, which can lead to severe complications. 10 Therefore, it is crucial to identify patients at risk and to expand our understanding of the pathophysiology to enable a more targeted prevention and treatment of DVT.",
+      "text": "Red blood cells (RBCs) are the primary carriers oxygen and carbon dioxide in all mammals. Low hemoglobin concentrations in the blood can cause severe oxygen deficiency, leading to ischemia in organs and tissues. At the same time, numerous clinical observations identified elevated hemoglobin levels as an independent risk factor for deep vein thrombosis (DVT) formation. This applies to overproduction of RBCs due to erythropoietin (EPO) administration, as well as foreign blood transfusions. 1 2 3 4 5 6 7 This is also evident in illnesses which exhibit an excessive RBC production such as polycythemia vera or Chuvash polycythemia where a significant increase in thromboembolic complications has been reported. 8 9 In such cases, oral or parenteral anticoagulants are effective preventive measures. However, their use entails significant drawbacks in the form of elevated bleeding risks, which can lead to severe complications. 10 Therefore, it is crucial to identify patients at risk and to expand our understanding of the pathophysiology to enable a more targeted prevention and treatment of DVT."
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/texts/3"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "The mechanism of RBC-mediated DVT formation so far is not fully understood. Essentially, DVT formation is triggered by sterile inflammation. 11 Neutrophils and monocytes deliver tissue factor (TF) to the site of thrombus formation creating a procoagulant environment. 11 However, the contribution of leukocytes to DVT formation may vary depending on the underlying disease and a leukocyte-recruiting property of RBCs in DVT has not been conclusively proven.",
+      "text": "The mechanism of RBC-mediated DVT formation so far is not fully understood. Essentially, DVT formation is triggered by sterile inflammation. 11 Neutrophils and monocytes deliver tissue factor (TF) to the site of thrombus formation creating a procoagulant environment. 11 However, the contribution of leukocytes to DVT formation may vary depending on the underlying disease and a leukocyte-recruiting property of RBCs in DVT has not been conclusively proven."
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/texts/3"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "In this project we used a transgenic mouse model overexpressing the human EPO gene in an oxygen-independent manner. In these mice the hematocrit is chronically elevated, which leads to several changes. RBCs represent, volumetrically, the largest cellular component in the peripheral blood, thus influencing the viscosity of the blood, fostering cardiovascular events like stroke or ischemic heart disease. 12 RBCs from Tg(EPO) mice show increased flexibility which in turn reduces the viscosity, and protects from thrombus formation. 13 Additionally, excessive NO production has been described. In Tg(EPO) mice, the vasodilative effect of extensive NO release is partly compensated by endothelin. 14 A reduced lifespan of RBCs was also identified in this mouse strain. 15",
+      "text": "In this project we used a transgenic mouse model overexpressing the human EPO gene in an oxygen-independent manner. In these mice the hematocrit is chronically elevated, which leads to several changes. RBCs represent, volumetrically, the largest cellular component in the peripheral blood, thus influencing the viscosity of the blood, fostering cardiovascular events like stroke or ischemic heart disease. 12 RBCs from Tg(EPO) mice show increased flexibility which in turn reduces the viscosity, and protects from thrombus formation. 13 Additionally, excessive NO production has been described. In Tg(EPO) mice, the vasodilative effect of extensive NO release is partly compensated by endothelin. 14 A reduced lifespan of RBCs was also identified in this mouse strain. 15"
+    },
+    {
+      "self_ref": "#/texts/7",
+      "parent": {
+        "$ref": "#/texts/3"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "The spleen is responsible for RBC clearance, which acts as gatekeeper of the state, age, and number of RBCs. 16 The loss of function of the spleen, due to removal, leads to changes in the blood count, the most striking of which is the transient thrombocytosis observed after splenectomy. 17 Even though the platelet count normalizes within weeks, the risk of thromboembolism remains persistently high; however, the mechanism behind this prothrombotic state is unclear. 18 19 20 Previous studies reveal an increase in platelet- and (to a lesser extent) RBC-derived microvesicles in splenectomized patients, which could indicate changes in their life cycle or activation state. 21 At the same time, the levels of negatively charged prothrombotic phospholipids, like phosphatidylserine, in pulmonary embolism increase after splenectomy. 22 23 24 Among others, RBCs can contribute to phosphatidylserine exposure. 25 Old, rigid RBCs with modified phospholipid exposure promote thrombus formation; however, their relevance for DVT in vivo remains unclear. 20 25 26",
+      "text": "The spleen is responsible for RBC clearance, which acts as gatekeeper of the state, age, and number of RBCs. 16 The loss of function of the spleen, due to removal, leads to changes in the blood count, the most striking of which is the transient thrombocytosis observed after splenectomy. 17 Even though the platelet count normalizes within weeks, the risk of thromboembolism remains persistently high; however, the mechanism behind this prothrombotic state is unclear. 18 19 20 Previous studies reveal an increase in platelet- and (to a lesser extent) RBC-derived microvesicles in splenectomized patients, which could indicate changes in their life cycle or activation state. 21 At the same time, the levels of negatively charged prothrombotic phospholipids, like phosphatidylserine, in pulmonary embolism increase after splenectomy. 22 23 24 Among others, RBCs can contribute to phosphatidylserine exposure. 25 Old, rigid RBCs with modified phospholipid exposure promote thrombus formation; however, their relevance for DVT in vivo remains unclear. 20 25 26"
+    },
+    {
+      "self_ref": "#/texts/8",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/9"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Mouse Model",
+      "text": "Mouse Model",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/9",
+      "parent": {
+        "$ref": "#/texts/8"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "C57BL/6 mice were obtained from Jackson Laboratory. Human EPO-overexpressing mice were generated as previously described. 14 TgN(PDGFBEPO)321Zbz consists of a transgenic mouse line, TgN(PDGFBEPO)321Zbz, expresses human EPO cDNA, and was initially reported by Ruschitzka et al, 14 subsequently named Tg(EPO). The expression is regulated by the platelet-derived growth factor promotor. We used the corresponding WT littermate controls named as WT. 27 Sex- and age-matched groups were used for the experiments with an age limit ranging between 12 and 29 weeks. The mice were housed in a specific-pathogen-free environment in our animal facility. General anesthesia was induced using a mixture of inhaled isoflurane, intravenous fentanyl, medetomidine, and midazolam. All procedures performed on mice were conducted in accordance with local legislation for the protection of animals (Regierung von Oberbayern, Munich) and were authorized accordingly.",
+      "text": "C57BL/6 mice were obtained from Jackson Laboratory. Human EPO-overexpressing mice were generated as previously described. 14 TgN(PDGFBEPO)321Zbz consists of a transgenic mouse line, TgN(PDGFBEPO)321Zbz, expresses human EPO cDNA, and was initially reported by Ruschitzka et al, 14 subsequently named Tg(EPO). The expression is regulated by the platelet-derived growth factor promotor. We used the corresponding WT littermate controls named as WT. 27 Sex- and age-matched groups were used for the experiments with an age limit ranging between 12 and 29 weeks. The mice were housed in a specific-pathogen-free environment in our animal facility. General anesthesia was induced using a mixture of inhaled isoflurane, intravenous fentanyl, medetomidine, and midazolam. All procedures performed on mice were conducted in accordance with local legislation for the protection of animals (Regierung von Oberbayern, Munich) and were authorized accordingly."
+    },
+    {
+      "self_ref": "#/texts/10",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/11"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Statistics",
+      "text": "Statistics",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/11",
+      "parent": {
+        "$ref": "#/texts/10"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Statistical analysis was conducted using GraphPad Prism 5, employing a t -test. Based on clinical observations strongly suggesting an increase in thrombus formation in EPO overproducing mice, a one-sided t -test was performed. 8 9 The normal distribution of the data was confirmed using D'Agostino and Pearson omnibus normality testing. Thrombus incidences between groups were compared using the chi-square test.",
+      "text": "Statistical analysis was conducted using GraphPad Prism 5, employing a t -test. Based on clinical observations strongly suggesting an increase in thrombus formation in EPO overproducing mice, a one-sided t -test was performed. 8 9 The normal distribution of the data was confirmed using D'Agostino and Pearson omnibus normality testing. Thrombus incidences between groups were compared using the chi-square test."
+    },
+    {
+      "self_ref": "#/texts/12",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/13"
+        },
+        {
+          "$ref": "#/texts/14"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Chronic EPO Overproduction Leads to Increased DVT in Mice",
+      "text": "Chronic EPO Overproduction Leads to Increased DVT in Mice",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/13",
+      "parent": {
+        "$ref": "#/texts/12"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "To investigate the impact of chronic erythrocyte overproduction on DVT in mice, we analyzed EPO-overexpressing transgenic Tg(EPO) mice. As expected, this mouse strain exhibited a substantial increase in RBC count ( Fig. 1A ). Additionally, the RBC width coefficient and reticulocyte count were elevated, indicating enhanced RBC production ( Supplementary Fig. S1A, B [available in the online version]). In addition to influencing the RBC lineage, our analyses revealed a significant increase in white blood cell (WBC) count, primarily driven by elevated lymphocyte count ( Supplementary Fig. S1C, E [available in the online version]). However, neutrophils known as major contributors to venous thrombosis showed no significant changes in EPO transgenic mice, while platelet counts were significantly reduced ( Fig. 1B and Supplementary Fig. S1D [available in the online version]). Furthermore, autopsies of the animals confirmed the presence of splenomegaly ( Supplementary Fig. S1F [available in the online version]). 28 29",
+      "text": "To investigate the impact of chronic erythrocyte overproduction on DVT in mice, we analyzed EPO-overexpressing transgenic Tg(EPO) mice. As expected, this mouse strain exhibited a substantial increase in RBC count ( Fig. 1A ). Additionally, the RBC width coefficient and reticulocyte count were elevated, indicating enhanced RBC production ( Supplementary Fig. S1A, B [available in the online version]). In addition to influencing the RBC lineage, our analyses revealed a significant increase in white blood cell (WBC) count, primarily driven by elevated lymphocyte count ( Supplementary Fig. S1C, E [available in the online version]). However, neutrophils known as major contributors to venous thrombosis showed no significant changes in EPO transgenic mice, while platelet counts were significantly reduced ( Fig. 1B and Supplementary Fig. S1D [available in the online version]). Furthermore, autopsies of the animals confirmed the presence of splenomegaly ( Supplementary Fig. S1F [available in the online version]). 28 29"
+    },
+    {
+      "self_ref": "#/texts/14",
+      "parent": {
+        "$ref": "#/texts/12"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Based on clinical observations indicating a correlation between high EPO levels and increased incidence of DVT, we utilized an IVC stenosis model to evaluate venous thrombosis in EPO-overexpressing mice. 6 7 Our findings revealed a significant elevation in both the incidence and thrombus weight in Tg(EPO) mice compared to their WT littermates ( Fig. 1C, D ). To determine whether chronic EPO overproduction in transgenic mice affected cardiac function, we assessed parameters such as the left ventricular ejection fraction, fractional shortening, and heart rate, ruling out any alternations ( Supplementary Fig. S1G, H, J [available in the online version]), which aligns with previous publications. 30 Additionally, morphological parameters including left ventricular mass, left ventricular internal diameter end diastole, and inner ventricular end diastolic septum diameter were similar between Tg(EPO) and WT mice ( Supplementary Fig. S1I, K, L [available in the online version]).",
+      "text": "Based on clinical observations indicating a correlation between high EPO levels and increased incidence of DVT, we utilized an IVC stenosis model to evaluate venous thrombosis in EPO-overexpressing mice. 6 7 Our findings revealed a significant elevation in both the incidence and thrombus weight in Tg(EPO) mice compared to their WT littermates ( Fig. 1C, D ). To determine whether chronic EPO overproduction in transgenic mice affected cardiac function, we assessed parameters such as the left ventricular ejection fraction, fractional shortening, and heart rate, ruling out any alternations ( Supplementary Fig. S1G, H, J [available in the online version]), which aligns with previous publications. 30 Additionally, morphological parameters including left ventricular mass, left ventricular internal diameter end diastole, and inner ventricular end diastolic septum diameter were similar between Tg(EPO) and WT mice ( Supplementary Fig. S1I, K, L [available in the online version])."
+    },
+    {
+      "self_ref": "#/texts/15",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/16"
+        },
+        {
+          "$ref": "#/texts/17"
+        },
+        {
+          "$ref": "#/texts/18"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "High RBC Count Leads to a Decrease in Platelet Accumulation in Venous Thrombosis",
+      "text": "High RBC Count Leads to a Decrease in Platelet Accumulation in Venous Thrombosis",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/16",
+      "parent": {
+        "$ref": "#/texts/15"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Having observed a correlation between high EPO and hematocrit levels with increased thrombus formation, our aim was to investigate the factors involved in triggering thrombus development through histologic analysis of thrombus composition. In Tg(EPO) mice, the elevated hematocrit levels led to enhanced RBC accumulation within the thrombus, as indicated by the Ter119-covered area measurement ( Fig. 2A ). Given the interaction between RBCs and platelets, which can initiate coagulation activation, we examined the distribution of fibrinogen in relation to RBCs and platelets within the thrombi. 31 Our findings revealed a close association between the fibrinogen signal and RBCs, as well as between the platelet signal and RBCs, indicating interactions among these three factors ( Fig. 2E, F ). However, we observed significantly lower fibrinogen coverage in thrombi from EPO transgenic mice ( Fig. 2B ). Furthermore, the structure of the fibrin meshwork exhibited an overall \u201clooser\u201d morphology with significantly thinner fibrin fibers ( Fig. 3A-C ).",
+      "text": "Having observed a correlation between high EPO and hematocrit levels with increased thrombus formation, our aim was to investigate the factors involved in triggering thrombus development through histologic analysis of thrombus composition. In Tg(EPO) mice, the elevated hematocrit levels led to enhanced RBC accumulation within the thrombus, as indicated by the Ter119-covered area measurement ( Fig. 2A ). Given the interaction between RBCs and platelets, which can initiate coagulation activation, we examined the distribution of fibrinogen in relation to RBCs and platelets within the thrombi. 31 Our findings revealed a close association between the fibrinogen signal and RBCs, as well as between the platelet signal and RBCs, indicating interactions among these three factors ( Fig. 2E, F ). However, we observed significantly lower fibrinogen coverage in thrombi from EPO transgenic mice ( Fig. 2B ). Furthermore, the structure of the fibrin meshwork exhibited an overall \u201clooser\u201d morphology with significantly thinner fibrin fibers ( Fig. 3A-C )."
+    },
+    {
+      "self_ref": "#/texts/17",
+      "parent": {
+        "$ref": "#/texts/15"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "To quantify platelet accumulation in thrombi, we analyzed the CD41-covered area in thrombi of both mouse strains. Consistent with the reduced platelet count in peripheral blood, platelet accumulation was also decreased in thrombi from EPO transgenic mice ( Fig. 2C ).",
+      "text": "To quantify platelet accumulation in thrombi, we analyzed the CD41-covered area in thrombi of both mouse strains. Consistent with the reduced platelet count in peripheral blood, platelet accumulation was also decreased in thrombi from EPO transgenic mice ( Fig. 2C )."
+    },
+    {
+      "self_ref": "#/texts/18",
+      "parent": {
+        "$ref": "#/texts/15"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "As mentioned previously, inflammation plays a fundamental role in DVT formation. Therefore, we conducted an analysis to quantify the presence of leukocytes in the thrombus material. Our investigation focused specifically on neutrophils, as they represent the predominant leukocyte population in peripheral blood. Despite observing normal neutrophil counts, we identified a significant reduction in neutrophil recruitment within thrombi from EPO transgenic mice ( Fig. 2D ). In summary, our findings indicate an isolated increase in the number of RBCs within venous thrombi of EPO transgenic mice, while the levels of fibrinogen and platelets were decreased.",
+      "text": "As mentioned previously, inflammation plays a fundamental role in DVT formation. Therefore, we conducted an analysis to quantify the presence of leukocytes in the thrombus material. Our investigation focused specifically on neutrophils, as they represent the predominant leukocyte population in peripheral blood. Despite observing normal neutrophil counts, we identified a significant reduction in neutrophil recruitment within thrombi from EPO transgenic mice ( Fig. 2D ). In summary, our findings indicate an isolated increase in the number of RBCs within venous thrombi of EPO transgenic mice, while the levels of fibrinogen and platelets were decreased."
+    },
+    {
+      "self_ref": "#/texts/19",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/20"
+        },
+        {
+          "$ref": "#/texts/21"
+        },
+        {
+          "$ref": "#/texts/22"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Short-Term Administration of EPO Does Not Foster DVT",
+      "text": "Short-Term Administration of EPO Does Not Foster DVT",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/20",
+      "parent": {
+        "$ref": "#/texts/19"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Due to the significant impact of chronic EPO overproduction in Tg(EPO) mice on peripheral blood count and its detrimental consequences on DVT formation, we proceeded to analyze the effects of 2-week periodic EPO injections on blood count and subsequent DVT formation in WT mice. Within just 2 weeks, a significant increase of RBC and reticulocyte count in peripheral blood was observed ( Fig. 4A and Supplementary Fig. S2A [available in the online version]). Conversely, platelet count exhibited a notable decrease in EPO-treated mice ( Fig. 4B ). Unlike EPO-overexpressing mice, the leukocyte counts and their differentiation into granulocytes, lymphocytes, and monocytes showed no differences between EPO-treated and nontreated mice ( Supplementary Fig. S2B\u2013E [available in the online version]). Autopsy analyses further revealed a significant enlargement and weight increase of the spleen in EPO-treated mice ( Supplementary Fig. S2F, G [available in the online version]).",
+      "text": "Due to the significant impact of chronic EPO overproduction in Tg(EPO) mice on peripheral blood count and its detrimental consequences on DVT formation, we proceeded to analyze the effects of 2-week periodic EPO injections on blood count and subsequent DVT formation in WT mice. Within just 2 weeks, a significant increase of RBC and reticulocyte count in peripheral blood was observed ( Fig. 4A and Supplementary Fig. S2A [available in the online version]). Conversely, platelet count exhibited a notable decrease in EPO-treated mice ( Fig. 4B ). Unlike EPO-overexpressing mice, the leukocyte counts and their differentiation into granulocytes, lymphocytes, and monocytes showed no differences between EPO-treated and nontreated mice ( Supplementary Fig. S2B\u2013E [available in the online version]). Autopsy analyses further revealed a significant enlargement and weight increase of the spleen in EPO-treated mice ( Supplementary Fig. S2F, G [available in the online version])."
+    },
+    {
+      "self_ref": "#/texts/21",
+      "parent": {
+        "$ref": "#/texts/19"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "To further investigate the underlying cause of thrombocytopenia in EPO-treated mice, we examined the bone marrow composition. Previous studies by Shibata et al demonstrated a reduction in megakaryocytes in Tg(EPO) mice. 32 Therefore, we analyzed the bone marrow composition after 2 weeks of EPO treatment. However, we found no difference in the TER119-covered area, indicating no significant alternation ( Fig. 4C, D ). Similarly, the megakaryocyte count in the bone marrow showed no changes compared to the control group ( Fig. 4E, F ,). In terms of platelet morphology, we observed an increased platelet large cell ratio in the EPO-treated group ( Fig. 4G ). This suggests an elevated production potential of megakaryocytes, as immature platelets tend to have larger cell volumes compared to mature platelets. 33 These findings indicate that our EPO administration protocol enhanced the synthesis capacity of bone marrow stem cells, resulting in augmented erythropoiesis. However, the cellular composition of the bone marrow remained unchanged after 2 weeks of treatment.",
+      "text": "To further investigate the underlying cause of thrombocytopenia in EPO-treated mice, we examined the bone marrow composition. Previous studies by Shibata et al demonstrated a reduction in megakaryocytes in Tg(EPO) mice. 32 Therefore, we analyzed the bone marrow composition after 2 weeks of EPO treatment. However, we found no difference in the TER119-covered area, indicating no significant alternation ( Fig. 4C, D ). Similarly, the megakaryocyte count in the bone marrow showed no changes compared to the control group ( Fig. 4E, F ,). In terms of platelet morphology, we observed an increased platelet large cell ratio in the EPO-treated group ( Fig. 4G ). This suggests an elevated production potential of megakaryocytes, as immature platelets tend to have larger cell volumes compared to mature platelets. 33 These findings indicate that our EPO administration protocol enhanced the synthesis capacity of bone marrow stem cells, resulting in augmented erythropoiesis. However, the cellular composition of the bone marrow remained unchanged after 2 weeks of treatment."
+    },
+    {
+      "self_ref": "#/texts/22",
+      "parent": {
+        "$ref": "#/texts/19"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "To analyze the impact of 2-week EPO treatment on DVT formation, we utilized the IVC stenosis model. Despite similar changes in blood count in Tg(EPO) mice or WT mice after EPO administration, we observed comparable venous thrombus formation between mice treated with EPO for 2 weeks and the control group treated with NaCl ( Fig. 4H, I ). Since we previously observed that only long-term elevation of EPO levels with supraphysiologic hematocrit leads to increased thrombus formation, our focus shifted toward identifying the factors triggering thrombus formation. Therefore, we conducted a histological analysis of thrombus composition. Given the significantly thinner fibrin fibers observed in thrombi from Tg(EPO) mice, we investigated whether similar morphological changes occurred in mice treated with EPO for 2 weeks. Interestingly, the histological examination of the thrombi revealed a comparable thinning of fibrin fibers following EPO treatment ( Fig. 3D, E ).",
+      "text": "To analyze the impact of 2-week EPO treatment on DVT formation, we utilized the IVC stenosis model. Despite similar changes in blood count in Tg(EPO) mice or WT mice after EPO administration, we observed comparable venous thrombus formation between mice treated with EPO for 2 weeks and the control group treated with NaCl ( Fig. 4H, I ). Since we previously observed that only long-term elevation of EPO levels with supraphysiologic hematocrit leads to increased thrombus formation, our focus shifted toward identifying the factors triggering thrombus formation. Therefore, we conducted a histological analysis of thrombus composition. Given the significantly thinner fibrin fibers observed in thrombi from Tg(EPO) mice, we investigated whether similar morphological changes occurred in mice treated with EPO for 2 weeks. Interestingly, the histological examination of the thrombi revealed a comparable thinning of fibrin fibers following EPO treatment ( Fig. 3D, E )."
+    },
+    {
+      "self_ref": "#/texts/23",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/24"
+        },
+        {
+          "$ref": "#/texts/25"
+        },
+        {
+          "$ref": "#/texts/26"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Splenectomy Does Not Affect Venous Thrombus Formation",
+      "text": "Splenectomy Does Not Affect Venous Thrombus Formation",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/24",
+      "parent": {
+        "$ref": "#/texts/23"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "As the data suggested a qualitative change in RBCs in the context of EPO overproduction, we investigated whether splenic clearance of aged RBCs plays a critical role in the increased formation of DVT. In the spleen, aged and damaged RBCs are eliminated, ensuring the presence of young and flexible RBCs. 16 We examined the immediate impact of EPO on spleen morphology. Even a single injection of 300\u2009IU EPO s.c. in mice resulted in a significant increase in spleen weight, despite no difference in blood count compared to the control group ( Supplementary Fig. S2F\u2013H [available in the online version]). This striking phenotype was also observed in mice with chronic EPO overexpression ( Supplementary Fig. S1F [available in the online version]). 13",
+      "text": "As the data suggested a qualitative change in RBCs in the context of EPO overproduction, we investigated whether splenic clearance of aged RBCs plays a critical role in the increased formation of DVT. In the spleen, aged and damaged RBCs are eliminated, ensuring the presence of young and flexible RBCs. 16 We examined the immediate impact of EPO on spleen morphology. Even a single injection of 300\u2009IU EPO s.c. in mice resulted in a significant increase in spleen weight, despite no difference in blood count compared to the control group ( Supplementary Fig. S2F\u2013H [available in the online version]). This striking phenotype was also observed in mice with chronic EPO overexpression ( Supplementary Fig. S1F [available in the online version]). 13"
+    },
+    {
+      "self_ref": "#/texts/25",
+      "parent": {
+        "$ref": "#/texts/23"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "To investigate the role of splenic RBC clearance in DVT, we performed splenectomy 5 weeks prior to conducting the IVC stenosis model. Firstly, we analyzed the impact of splenectomy on blood cell counts in WT mice 5 weeks postsurgery. We observed an increase in granulocytes and lymphocytes after splenectomy ( Fig. 5A and Supplementary Fig. S3A, B [available in the online version]). Next, we examined the distribution of blood cells in response to DVT development. Similar to nonsplenectomized mice, we observed an increase in WBC count in the peripheral blood ( Fig. 5A ). Additionally, we noted a significant decrease in platelet count in splenectomized mice in response to thrombus development ( Fig. 5B ), which is consistent with the results obtained from nonsplenectomized mice.",
+      "text": "To investigate the role of splenic RBC clearance in DVT, we performed splenectomy 5 weeks prior to conducting the IVC stenosis model. Firstly, we analyzed the impact of splenectomy on blood cell counts in WT mice 5 weeks postsurgery. We observed an increase in granulocytes and lymphocytes after splenectomy ( Fig. 5A and Supplementary Fig. S3A, B [available in the online version]). Next, we examined the distribution of blood cells in response to DVT development. Similar to nonsplenectomized mice, we observed an increase in WBC count in the peripheral blood ( Fig. 5A ). Additionally, we noted a significant decrease in platelet count in splenectomized mice in response to thrombus development ( Fig. 5B ), which is consistent with the results obtained from nonsplenectomized mice."
+    },
+    {
+      "self_ref": "#/texts/26",
+      "parent": {
+        "$ref": "#/texts/23"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Finally, we analyzed the impact of splenectomy on DVT formation in both WT mice and Tg(EPO) mice. Despite changes in blood cell counts and the effects on platelet removal, there was no difference in the incidence and thrombus weight in C57Bl/6 mice ( Fig. 5D, E ). Next, we examined EPO-overexpressing mice, which have been shown to have an increased risk of DVT formation. Despite significant splenomegaly, the incidence of DVT formation remained statistically unchanged after spleen removal ( Fig. 5F, G ). Therefore, splenectomy does not affect thrombus formation in the context of enhanced or normal erythropoiesis.",
+      "text": "Finally, we analyzed the impact of splenectomy on DVT formation in both WT mice and Tg(EPO) mice. Despite changes in blood cell counts and the effects on platelet removal, there was no difference in the incidence and thrombus weight in C57Bl/6 mice ( Fig. 5D, E ). Next, we examined EPO-overexpressing mice, which have been shown to have an increased risk of DVT formation. Despite significant splenomegaly, the incidence of DVT formation remained statistically unchanged after spleen removal ( Fig. 5F, G ). Therefore, splenectomy does not affect thrombus formation in the context of enhanced or normal erythropoiesis."
+    },
+    {
+      "self_ref": "#/texts/27",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/28"
+        },
+        {
+          "$ref": "#/texts/29"
+        },
+        {
+          "$ref": "#/texts/30"
+        },
+        {
+          "$ref": "#/texts/31"
+        },
+        {
+          "$ref": "#/texts/32"
+        }
+      ],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Discussion",
+      "text": "Discussion",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/28",
+      "parent": {
+        "$ref": "#/texts/27"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Here, we present evidence for a differential thrombotic effect of chronic EPO overproduction and short-term external EPO administration. Consistent with clinical observations, chronic overproduction of EPO is associated with an increased risk of DVT formation. This is similar to Chuvash polycythemia where the von-Hippel\u2013Lindau mutation leads to chronic overproduction of hypoxia-induced factors and high EPO levels. 34 In addition to genetically altered EPO production, factors such as residence at high altitudes and naturally increasing EPO secretion also represent risk factors for venous thrombosis and pulmonary thromboembolism. 35 36 These conditions can be mimicked in a mouse model through chronic hypoxia. 37",
+      "text": "Here, we present evidence for a differential thrombotic effect of chronic EPO overproduction and short-term external EPO administration. Consistent with clinical observations, chronic overproduction of EPO is associated with an increased risk of DVT formation. This is similar to Chuvash polycythemia where the von-Hippel\u2013Lindau mutation leads to chronic overproduction of hypoxia-induced factors and high EPO levels. 34 In addition to genetically altered EPO production, factors such as residence at high altitudes and naturally increasing EPO secretion also represent risk factors for venous thrombosis and pulmonary thromboembolism. 35 36 These conditions can be mimicked in a mouse model through chronic hypoxia. 37"
+    },
+    {
+      "self_ref": "#/texts/29",
+      "parent": {
+        "$ref": "#/texts/27"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "In our analyses, we observed that short-term administration of EPO does not increase the risk of DVT, in contrast to chronic overproduction of EPO. However, changes in peripheral blood count in response to EPO occur relatively quickly, within 2 weeks of initiating therapy in mice. These changes include elevated levels of hemoglobin and thrombocytopenia, which are consistent with previous studies. 17 22 38 39 40 41 42 43 44 45 In the model of transgenic overexpressing EPO mice, there was an age-dependent progressive decrease in megakaryocyte count in the bone marrow. 32 A similar phenomenon can be observed in mice exposed to chronic hypoxia. 46 It is believed that competition between erythroid and platelet precursors in the stem cell population is responsible for this phenomenon. 38 Despite a similar decrease of peripheral platelet counts, we observed normal megakaryocyte counts in the bone marrow of mice injected with EPO for 2 weeks. We speculate that morphological changes in the bone marrow are long-term consequences of EPO administration. In peripheral blood, we observed a significant increase in the platelet large cell ratio in mice treated with EPO for 2 weeks. This is likely due to an elevated count of reticulated platelets, which has been previously observed in response to EPO treatment. 47 The presence of high levels of reticulated platelets indicates a high synthetic potential of megakaryocytes. Indeed, megakaryocytes possess high-affinity binding sites for EPO resulting in an increase in size, ploidy, and number of megakaryocytes in vitro. 48 49 Young, reticulated platelets are known risk factors for thrombosis, which may counterbalance the overall low platelet count in terms of thrombogenicity. 50 51 52 However, the significant increase in DVT observed in chronic EPO-overexpressing mice is likely attributed to qualitative changes in RBCs. There are several ways in which RBCs can interact with platelets and fibrin. The FAS-L-FAS-R interplay between RBCs and platelets has been shown to enhance DVT formation. 31 Additionally, interactions such as ICAM-4\u2013\u03b11b\u03b23 integrin and adhesion between RBCs and platelets mediated by GPIb and CD36 have been described. 53 54 As demonstrated in this study, the pronounced prothrombotic effect of RBCs only manifests after several weeks to months of EPO overproduction. Thus, we propose that RBC aging plays a role in this phenomenon. This is supported by the finding that RBCs in our Tg(EPO) mouse model exhibit characteristics of accelerated aging including decreased CD47 expression, leading to a 70% reduction in lifespan. 15",
+      "text": "In our analyses, we observed that short-term administration of EPO does not increase the risk of DVT, in contrast to chronic overproduction of EPO. However, changes in peripheral blood count in response to EPO occur relatively quickly, within 2 weeks of initiating therapy in mice. These changes include elevated levels of hemoglobin and thrombocytopenia, which are consistent with previous studies. 17 22 38 39 40 41 42 43 44 45 In the model of transgenic overexpressing EPO mice, there was an age-dependent progressive decrease in megakaryocyte count in the bone marrow. 32 A similar phenomenon can be observed in mice exposed to chronic hypoxia. 46 It is believed that competition between erythroid and platelet precursors in the stem cell population is responsible for this phenomenon. 38 Despite a similar decrease of peripheral platelet counts, we observed normal megakaryocyte counts in the bone marrow of mice injected with EPO for 2 weeks. We speculate that morphological changes in the bone marrow are long-term consequences of EPO administration. In peripheral blood, we observed a significant increase in the platelet large cell ratio in mice treated with EPO for 2 weeks. This is likely due to an elevated count of reticulated platelets, which has been previously observed in response to EPO treatment. 47 The presence of high levels of reticulated platelets indicates a high synthetic potential of megakaryocytes. Indeed, megakaryocytes possess high-affinity binding sites for EPO resulting in an increase in size, ploidy, and number of megakaryocytes in vitro. 48 49 Young, reticulated platelets are known risk factors for thrombosis, which may counterbalance the overall low platelet count in terms of thrombogenicity. 50 51 52 However, the significant increase in DVT observed in chronic EPO-overexpressing mice is likely attributed to qualitative changes in RBCs. There are several ways in which RBCs can interact with platelets and fibrin. The FAS-L-FAS-R interplay between RBCs and platelets has been shown to enhance DVT formation. 31 Additionally, interactions such as ICAM-4\u2013\u03b11b\u03b23 integrin and adhesion between RBCs and platelets mediated by GPIb and CD36 have been described. 53 54 As demonstrated in this study, the pronounced prothrombotic effect of RBCs only manifests after several weeks to months of EPO overproduction. Thus, we propose that RBC aging plays a role in this phenomenon. This is supported by the finding that RBCs in our Tg(EPO) mouse model exhibit characteristics of accelerated aging including decreased CD47 expression, leading to a 70% reduction in lifespan. 15"
+    },
+    {
+      "self_ref": "#/texts/30",
+      "parent": {
+        "$ref": "#/texts/27"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "During the ageing process, RBCs not only display increasing amounts of procoagulant phosphatidylserine on their surface but also exhibit heightened osmotic and mechanical fragility, which is also observed in Tg(EPO) mice. 32 55 Fragile RBCs are prone to hemolysis, resulting in the release of ADP and free hemoglobin. Furthermore, hemoglobin directly or indirectly contributes to increased platelet activity, for instance, by forming complexes with nitric oxide (NO). 56 57 58 NO is essential for the survival of Tg(EPO) mice but dispensable for WT mice. 14 Consistent with this, patients with polycythemia vera exhibit platelet hypersensitivity despite normal platelet counts, while plasma haptoglobin concentration, a marker for hemolysis, is decreased. 59 60 61 62 63 64 65 Similarly, chronic subcutaneous EPO administration in hemodialysis patients leads to a prothrombotic phenotype similar to that of polycythemia vera patients. 66 67 68 69 70 Notably, concentrated RBC transfusions result in the rapid clearance of up to 30% of transfused erythrocytes within 24\u2009hours due to their age, thus increasing the risk of DVT formation. 5 71",
+      "text": "During the ageing process, RBCs not only display increasing amounts of procoagulant phosphatidylserine on their surface but also exhibit heightened osmotic and mechanical fragility, which is also observed in Tg(EPO) mice. 32 55 Fragile RBCs are prone to hemolysis, resulting in the release of ADP and free hemoglobin. Furthermore, hemoglobin directly or indirectly contributes to increased platelet activity, for instance, by forming complexes with nitric oxide (NO). 56 57 58 NO is essential for the survival of Tg(EPO) mice but dispensable for WT mice. 14 Consistent with this, patients with polycythemia vera exhibit platelet hypersensitivity despite normal platelet counts, while plasma haptoglobin concentration, a marker for hemolysis, is decreased. 59 60 61 62 63 64 65 Similarly, chronic subcutaneous EPO administration in hemodialysis patients leads to a prothrombotic phenotype similar to that of polycythemia vera patients. 66 67 68 69 70 Notably, concentrated RBC transfusions result in the rapid clearance of up to 30% of transfused erythrocytes within 24\u2009hours due to their age, thus increasing the risk of DVT formation. 5 71"
+    },
+    {
+      "self_ref": "#/texts/31",
+      "parent": {
+        "$ref": "#/texts/27"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Clearance of RBCs primarily occurs in the spleen, where tissue-resident macrophages screen for surface markers such as CD47. 72 Subsequently, RBCs are phagocytosed before reaching day 120 of their lifespan. 73 The spleen plays a crucial role in maintaining the shape and membrane resilience of RBCs, acting as a guardian in this regard. 74 However, shortly after splenectomy, the loss of the organ significantly increases the risk of DVT formation. 20 In the long-term basis, we observed no difference in DVT formation after splenectomy, neither in WT mice nor in chronic EPO-overexpressing mice, despite the dramatic increase in macrophage-mediated RBC clearance in these mice. 15 Since RBC clearance occurs primarily in the spleen and liver in mice, we hypothesize that the liver is capable of adequately compensating for the absence of the spleen after removal. 15",
+      "text": "Clearance of RBCs primarily occurs in the spleen, where tissue-resident macrophages screen for surface markers such as CD47. 72 Subsequently, RBCs are phagocytosed before reaching day 120 of their lifespan. 73 The spleen plays a crucial role in maintaining the shape and membrane resilience of RBCs, acting as a guardian in this regard. 74 However, shortly after splenectomy, the loss of the organ significantly increases the risk of DVT formation. 20 In the long-term basis, we observed no difference in DVT formation after splenectomy, neither in WT mice nor in chronic EPO-overexpressing mice, despite the dramatic increase in macrophage-mediated RBC clearance in these mice. 15 Since RBC clearance occurs primarily in the spleen and liver in mice, we hypothesize that the liver is capable of adequately compensating for the absence of the spleen after removal. 15"
+    },
+    {
+      "self_ref": "#/texts/32",
+      "parent": {
+        "$ref": "#/texts/27"
+      },
+      "children": [],
+      "label": "text",
+      "prov": [],
+      "orig": "Besides their activating effect on platelets, RBCs also directly impact the coagulation system. Previous data demonstrate that following TF activation, RBCs contribute to thrombin generation to a similar extent to platelets. 75 Furthermore, RBCs expose phosphatidylserine, which activates the contact pathway. 31 Notably, the coagulation system in Tg(EPO) mice exhibits normal activity in whole blood adjusted to a physiological hematocrit. 32 Additionally, RBCs express a receptor with properties similar to the \u03b1 IIb \u03b2 3 integrin enabling their interaction with fibrin. 76 This interaction contributes to the formation of a dense fibrin meshwork consisting of thin fibers. 77 Such a structure hinders clot dissolution, leading to slower lysis. 77 In our histological analysis of thrombi, we confirm morphological changes in the fibrin meshwork, resulting in a thinner appearance in both EPO-overexpressing mice and mice subjected to short-term EPO injection.",
+      "text": "Besides their activating effect on platelets, RBCs also directly impact the coagulation system. Previous data demonstrate that following TF activation, RBCs contribute to thrombin generation to a similar extent to platelets. 75 Furthermore, RBCs expose phosphatidylserine, which activates the contact pathway. 31 Notably, the coagulation system in Tg(EPO) mice exhibits normal activity in whole blood adjusted to a physiological hematocrit. 32 Additionally, RBCs express a receptor with properties similar to the \u03b1 IIb \u03b2 3 integrin enabling their interaction with fibrin. 76 This interaction contributes to the formation of a dense fibrin meshwork consisting of thin fibers. 77 Such a structure hinders clot dissolution, leading to slower lysis. 77 In our histological analysis of thrombi, we confirm morphological changes in the fibrin meshwork, resulting in a thinner appearance in both EPO-overexpressing mice and mice subjected to short-term EPO injection."
+    },
+    {
+      "self_ref": "#/texts/33",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "section_header",
+      "prov": [],
+      "orig": "Figures",
+      "text": "Figures",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/34",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "caption",
+      "prov": [],
+      "orig": "Fig. 1 EPO-overexpressing mice experience an increased incidence of DVT formation. (A) Comparison of RBC count between EPO-overexpressing Tg(EPO) mice (n\u2009=\u200912) and control (WT) mice (n\u2009=\u200913). (B) Comparison of platelet count between EPO-overexpressing Tg(EPO) (n\u2009=\u20097) mice and control (WT) mice (n\u2009=\u20095). (C) Comparison of thrombus weight between Tg(EPO) mice (n\u2009=\u20099) and WT (n\u2009=\u200910); mean age in the Tg(EPO) group: 19.8 weeks; mean age in the WT group: 20.1 weeks. (D) Comparison of thrombus incidence between Tg(EPO) mice (n\u2009=\u20099) and WT mice (n\u2009=\u200910); NS\u2009=\u2009nonsignificant, *p\u2009<\u20090.05, **p\u2009<\u20090.01, ***p\u2009<\u20090.001. DVT, deep vein thrombosis; EPO, erythropoietin; RBC, red blood cell; WT, wild type.",
+      "text": "Fig. 1 EPO-overexpressing mice experience an increased incidence of DVT formation. (A) Comparison of RBC count between EPO-overexpressing Tg(EPO) mice (n\u2009=\u200912) and control (WT) mice (n\u2009=\u200913). (B) Comparison of platelet count between EPO-overexpressing Tg(EPO) (n\u2009=\u20097) mice and control (WT) mice (n\u2009=\u20095). (C) Comparison of thrombus weight between Tg(EPO) mice (n\u2009=\u20099) and WT (n\u2009=\u200910); mean age in the Tg(EPO) group: 19.8 weeks; mean age in the WT group: 20.1 weeks. (D) Comparison of thrombus incidence between Tg(EPO) mice (n\u2009=\u20099) and WT mice (n\u2009=\u200910); NS\u2009=\u2009nonsignificant, *p\u2009<\u20090.05, **p\u2009<\u20090.01, ***p\u2009<\u20090.001. DVT, deep vein thrombosis; EPO, erythropoietin; RBC, red blood cell; WT, wild type."
+    },
+    {
+      "self_ref": "#/texts/35",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "caption",
+      "prov": [],
+      "orig": "Fig. 2 Chronic overproduction of EPO in mice leads to a decrease in the accumulation of classical drivers of DVT formation, including platelets, neutrophils, and fibrinogen. (A) The proportion of RBC-covered area in the thrombi of EPO-overexpressing Tg(EPO) mice (n\u2009=\u20094) was compared to control (WT) (n\u2009=\u20093) by immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction. (B) The proportion of fibrinogen-covered area in the thrombi of EPO- overexpressing Tg(EPO) mice (n\u2009=\u20093) was compared to control (WT) (n\u2009=\u20093) using immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction. (C) The proportion of platelet-covered area in the thrombi of EPO-overexpressing Tg(EPO) mice (n\u2009=\u20093) was compared to control (WT) (n\u2009=\u20093) by immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction. (D) Quantification of neutrophils was performed by immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction in EPO-overexpressing Tg(EPO) mice (n\u2009=\u20093) compared to control (WT) (n\u2009=\u20093). (E) Immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction from EPO-overexpressing Tg(EPO) mice (top) was compared to control (WT) (bottom) for TER119 in red (RBC), CD42b in green (platelets), and Hoechst in blue (DNA). The merged image is on the left, and the single channel image is on the right. Scale bar: 50\u2009\u00b5m. (F) Immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction from EPO-overexpressing Tg(EPO) mice (top) was compared to control (WT) (bottom) for TER119 in red (RBC), fibrinogen in green, and Hoechst in blue (DNA); the merged image is on the left, and single-channel images are on the right. Scale bar: 50\u2009\u00b5m.; NS\u2009=\u2009nonsignificant, *p\u2009<\u20090.05, **p\u2009<\u20090.01, ***p\u2009<\u20090.001. DVT, deep vein thrombosis; EPO, erythropoietin; IVC, inferior vena cava; RBC, red blood cell; WT, wild type.",
+      "text": "Fig. 2 Chronic overproduction of EPO in mice leads to a decrease in the accumulation of classical drivers of DVT formation, including platelets, neutrophils, and fibrinogen. (A) The proportion of RBC-covered area in the thrombi of EPO-overexpressing Tg(EPO) mice (n\u2009=\u20094) was compared to control (WT) (n\u2009=\u20093) by immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction. (B) The proportion of fibrinogen-covered area in the thrombi of EPO- overexpressing Tg(EPO) mice (n\u2009=\u20093) was compared to control (WT) (n\u2009=\u20093) using immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction. (C) The proportion of platelet-covered area in the thrombi of EPO-overexpressing Tg(EPO) mice (n\u2009=\u20093) was compared to control (WT) (n\u2009=\u20093) by immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction. (D) Quantification of neutrophils was performed by immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction in EPO-overexpressing Tg(EPO) mice (n\u2009=\u20093) compared to control (WT) (n\u2009=\u20093). (E) Immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction from EPO-overexpressing Tg(EPO) mice (top) was compared to control (WT) (bottom) for TER119 in red (RBC), CD42b in green (platelets), and Hoechst in blue (DNA). The merged image is on the left, and the single channel image is on the right. Scale bar: 50\u2009\u00b5m. (F) Immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction from EPO-overexpressing Tg(EPO) mice (top) was compared to control (WT) (bottom) for TER119 in red (RBC), fibrinogen in green, and Hoechst in blue (DNA); the merged image is on the left, and single-channel images are on the right. Scale bar: 50\u2009\u00b5m.; NS\u2009=\u2009nonsignificant, *p\u2009<\u20090.05, **p\u2009<\u20090.01, ***p\u2009<\u20090.001. DVT, deep vein thrombosis; EPO, erythropoietin; IVC, inferior vena cava; RBC, red blood cell; WT, wild type."
+    },
+    {
+      "self_ref": "#/texts/36",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "caption",
+      "prov": [],
+      "orig": "Fig. 3 The interaction of RBC with fibrinogen leads to the formation of a branched fibrin structure. (A) Immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction from EPO-overexpressing Tg(EPO) mice (left) was compared to control (WT) for fibrinogen (green). Scare bar: 50\u2009\u00b5m. (B) High-resolution confocal images of immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction from EPO-overexpressing Tg(EPO) mice (left) compared to control (WT) for fibrinogen (green), RBC (red), and DNA (blue). Scale bar: 2\u2009\u00b5m. (C) The mean diameter of 2,141 fibrin fibers was measured in cross-sections of thrombi from Tg(EPO) mice (left), and compared to 5,238 fibrin fibers of WT thrombi. (D) The mean diameter of 3,797 fibrin fibers was measured in two cross-sections of thrombi from 2-week EPO-injected mice (left), and compared to 10,920 fibrin fibers of three cross-sections from control (2-week NaCl-injected mice). (E) High-resolution confocal images of immunofluorescence staining of two cross-sections of the IVC 48\u2009hours after flow reduction from 2-week EPO-injected mice (left) were compared to control (2 week NaCl-injected mice) for fibrinogen (green), RBC (red), and DNA (blue). Scale bar: 2\u2009\u00b5m. EPO, erythropoietin; IVC, inferior vena cava; RBC, red blood cell; WT, wild type.",
+      "text": "Fig. 3 The interaction of RBC with fibrinogen leads to the formation of a branched fibrin structure. (A) Immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction from EPO-overexpressing Tg(EPO) mice (left) was compared to control (WT) for fibrinogen (green). Scare bar: 50\u2009\u00b5m. (B) High-resolution confocal images of immunofluorescence staining of cross-sections of the IVC 48\u2009hours after flow reduction from EPO-overexpressing Tg(EPO) mice (left) compared to control (WT) for fibrinogen (green), RBC (red), and DNA (blue). Scale bar: 2\u2009\u00b5m. (C) The mean diameter of 2,141 fibrin fibers was measured in cross-sections of thrombi from Tg(EPO) mice (left), and compared to 5,238 fibrin fibers of WT thrombi. (D) The mean diameter of 3,797 fibrin fibers was measured in two cross-sections of thrombi from 2-week EPO-injected mice (left), and compared to 10,920 fibrin fibers of three cross-sections from control (2-week NaCl-injected mice). (E) High-resolution confocal images of immunofluorescence staining of two cross-sections of the IVC 48\u2009hours after flow reduction from 2-week EPO-injected mice (left) were compared to control (2 week NaCl-injected mice) for fibrinogen (green), RBC (red), and DNA (blue). Scale bar: 2\u2009\u00b5m. EPO, erythropoietin; IVC, inferior vena cava; RBC, red blood cell; WT, wild type."
+    },
+    {
+      "self_ref": "#/texts/37",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "caption",
+      "prov": [],
+      "orig": "Fig. 4 Two-week EPO injection leads to thrombocytopenia without an impact on the bone marrow. (A) RBC count in peripheral blood after 6\u2009\u00d7\u2009300\u2009IU EPO treatment of C57Bl/6J mice (n\u2009=\u200910) was compared to control (6\u2009\u00d7\u200930 \u00b5L NaCl injection) (n\u2009=\u20099). (B) Platelet count in peripheral blood after 6\u2009\u00d7\u2009300\u2009IU EPO treatment of C57Bl/6J mice (n\u2009=\u200910) was compared to control (6\u2009\u00d7\u200930 \u00b5L NaCl injection) (n\u2009=\u200910). (C) Area of RBC-positive area in the bone marrow of 6\u2009\u00d7\u2009300\u2009IU EPO-treated C57Bl/6J mice (n\u2009=\u20094) was compared to control (6\u2009\u00d7\u200930 \u00b5L NaCl injection) (n\u2009=\u20094). (D) Immunofluorescence staining of cross-sections of the bone marrow after 2-week EPO injection (top) was compared to NaCl injection (bottom) stained for TER119 (violet) and Hoechst (white). Scale bar: 100\u2009\u00b5m. (E) Number of megakaryocyte count in the bone marrow of 6\u2009\u00d7\u2009300\u2009IU EPO-treated C57Bl/6J mice (n\u2009=\u20094) was compared to control (6\u2009\u00d7\u200930 \u00b5L NaCl injection) (n\u2009=\u20094). (F) Immunofluorescence staining of cross-sections of the bone marrow after 2-week EPO injection (top) compared to NaCl injection (bottom) stained for CD41 (violet) and Hoechst (white). Scale bar: 100\u2009\u00b5m. (G) Platelet large cell ratio in peripheral blood of 6\u2009\u00d7\u2009300\u2009IU EPO-treated C57Bl/6J mice (n\u2009=\u200910) compared to control (6\u2009\u00d7\u200930 \u00b5L NaCl injection) (n\u2009=\u20099). (H) Thrombus weight of 6\u2009\u00d7\u2009300\u2009IU EPO-treated C57Bl/6J mice (n\u2009=\u200910) and NaCl-injected control mice (n\u2009=\u200910). (I) Thrombus incidence of 6\u2009\u00d7\u2009300\u2009IU EPO-treated C57Bl/6J mice (n\u2009=\u200910) and NaCl-injected control mice (n\u2009=\u200910). NS\u2009=\u2009nonsignificant, *p\u2009<\u20090.05, **p\u2009<\u20090.01, ***p\u2009<\u20090.001. EPO, erythropoietin; RBC, red blood cell.",
+      "text": "Fig. 4 Two-week EPO injection leads to thrombocytopenia without an impact on the bone marrow. (A) RBC count in peripheral blood after 6\u2009\u00d7\u2009300\u2009IU EPO treatment of C57Bl/6J mice (n\u2009=\u200910) was compared to control (6\u2009\u00d7\u200930 \u00b5L NaCl injection) (n\u2009=\u20099). (B) Platelet count in peripheral blood after 6\u2009\u00d7\u2009300\u2009IU EPO treatment of C57Bl/6J mice (n\u2009=\u200910) was compared to control (6\u2009\u00d7\u200930 \u00b5L NaCl injection) (n\u2009=\u200910). (C) Area of RBC-positive area in the bone marrow of 6\u2009\u00d7\u2009300\u2009IU EPO-treated C57Bl/6J mice (n\u2009=\u20094) was compared to control (6\u2009\u00d7\u200930 \u00b5L NaCl injection) (n\u2009=\u20094). (D) Immunofluorescence staining of cross-sections of the bone marrow after 2-week EPO injection (top) was compared to NaCl injection (bottom) stained for TER119 (violet) and Hoechst (white). Scale bar: 100\u2009\u00b5m. (E) Number of megakaryocyte count in the bone marrow of 6\u2009\u00d7\u2009300\u2009IU EPO-treated C57Bl/6J mice (n\u2009=\u20094) was compared to control (6\u2009\u00d7\u200930 \u00b5L NaCl injection) (n\u2009=\u20094). (F) Immunofluorescence staining of cross-sections of the bone marrow after 2-week EPO injection (top) compared to NaCl injection (bottom) stained for CD41 (violet) and Hoechst (white). Scale bar: 100\u2009\u00b5m. (G) Platelet large cell ratio in peripheral blood of 6\u2009\u00d7\u2009300\u2009IU EPO-treated C57Bl/6J mice (n\u2009=\u200910) compared to control (6\u2009\u00d7\u200930 \u00b5L NaCl injection) (n\u2009=\u20099). (H) Thrombus weight of 6\u2009\u00d7\u2009300\u2009IU EPO-treated C57Bl/6J mice (n\u2009=\u200910) and NaCl-injected control mice (n\u2009=\u200910). (I) Thrombus incidence of 6\u2009\u00d7\u2009300\u2009IU EPO-treated C57Bl/6J mice (n\u2009=\u200910) and NaCl-injected control mice (n\u2009=\u200910). NS\u2009=\u2009nonsignificant, *p\u2009<\u20090.05, **p\u2009<\u20090.01, ***p\u2009<\u20090.001. EPO, erythropoietin; RBC, red blood cell."
+    },
+    {
+      "self_ref": "#/texts/38",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "caption",
+      "prov": [],
+      "orig": "Fig. 5 Splenectomy does not affect the blood count as well as DVT formation. (A) WBC count in C57Bl/6J mice without treatment (n\u2009=\u20095), 48\u2009hours after induction of DVT (n\u2009=\u20097), 5 weeks after splenectomy (n\u2009=\u20093), and 5 weeks after splenectomy with an additional 48-hour induction of DVT (n\u2009=\u20099). (B) Platelet count in C57Bl/6J mice without treatment (n\u2009=\u20096), 48\u2009hours after induction of DVT (n\u2009=\u20096), 5 weeks after splenectomy (n\u2009=\u20093), and 5 weeks after splenectomy with an additional 48-hour induction of DVT (n\u2009=\u20099). (C) RBC count in C57Bl/6J mice without treatment (n\u2009=\u20096), 48\u2009hours after induction of DVT (n\u2009=\u20096), 5 weeks after splenectomy (n\u2009=\u20093), and 5 weeks after splenectomy with an additional 48-hour induction of DVT (n\u2009=\u20099). (D) Thrombus weight in C57Bl6 wild-type mice without splenectomy (n\u2009=\u20096) and with splenectomy (n\u2009=\u20096) (E) Thrombus incidence in C57Bl/6J wild-type mice without splenectomy (n\u2009=\u20096) and with splenectomy (n\u2009=\u20096). (F) Thrombus weight in EPO-overexpressing Tg(EPO) mice without splenectomy (n\u2009=\u20099) and with splenectomy (n\u2009=\u20096) compared to control WT mice without splenectomy (n\u2009=\u200910) and with splenectomy (n\u2009=\u200911). (G) Thrombus incidence in EPO-overexpressing Tg(EPO) mice without splenectomy (n\u2009=\u20099) and with splenectomy (n\u2009=\u20096) compared to control WT mice without splenectomy (n\u2009=\u200910) and with splenectomy (n\u2009=\u200911). NS\u2009=\u2009nonsignificant, *p\u2009<\u20090.05, **p\u2009<\u20090.01, ***p\u2009<\u20090.001. DVT, deep vein thrombosis; RBC, red blood cell; WT, wild type.",
+      "text": "Fig. 5 Splenectomy does not affect the blood count as well as DVT formation. (A) WBC count in C57Bl/6J mice without treatment (n\u2009=\u20095), 48\u2009hours after induction of DVT (n\u2009=\u20097), 5 weeks after splenectomy (n\u2009=\u20093), and 5 weeks after splenectomy with an additional 48-hour induction of DVT (n\u2009=\u20099). (B) Platelet count in C57Bl/6J mice without treatment (n\u2009=\u20096), 48\u2009hours after induction of DVT (n\u2009=\u20096), 5 weeks after splenectomy (n\u2009=\u20093), and 5 weeks after splenectomy with an additional 48-hour induction of DVT (n\u2009=\u20099). (C) RBC count in C57Bl/6J mice without treatment (n\u2009=\u20096), 48\u2009hours after induction of DVT (n\u2009=\u20096), 5 weeks after splenectomy (n\u2009=\u20093), and 5 weeks after splenectomy with an additional 48-hour induction of DVT (n\u2009=\u20099). (D) Thrombus weight in C57Bl6 wild-type mice without splenectomy (n\u2009=\u20096) and with splenectomy (n\u2009=\u20096) (E) Thrombus incidence in C57Bl/6J wild-type mice without splenectomy (n\u2009=\u20096) and with splenectomy (n\u2009=\u20096). (F) Thrombus weight in EPO-overexpressing Tg(EPO) mice without splenectomy (n\u2009=\u20099) and with splenectomy (n\u2009=\u20096) compared to control WT mice without splenectomy (n\u2009=\u200910) and with splenectomy (n\u2009=\u200911). (G) Thrombus incidence in EPO-overexpressing Tg(EPO) mice without splenectomy (n\u2009=\u20099) and with splenectomy (n\u2009=\u20096) compared to control WT mice without splenectomy (n\u2009=\u200910) and with splenectomy (n\u2009=\u200911). NS\u2009=\u2009nonsignificant, *p\u2009<\u20090.05, **p\u2009<\u20090.01, ***p\u2009<\u20090.001. DVT, deep vein thrombosis; RBC, red blood cell; WT, wild type."
+    },
+    {
+      "self_ref": "#/texts/39",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "section_header",
+      "prov": [],
+      "orig": "References",
+      "text": "References",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/40",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "G Ramsey; P F Lindholm. Thrombosis risk in cancer patients receiving red blood cell transfusions. Semin Thromb Hemost (2019)",
+      "text": "G Ramsey; P F Lindholm. Thrombosis risk in cancer patients receiving red blood cell transfusions. Semin Thromb Hemost (2019)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/41",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "M A Kumar; T A Boland; M Baiou. Red blood cell transfusion increases the risk of thrombotic events in patients with subarachnoid hemorrhage. Neurocrit Care (2014)",
+      "text": "M A Kumar; T A Boland; M Baiou. Red blood cell transfusion increases the risk of thrombotic events in patients with subarachnoid hemorrhage. Neurocrit Care (2014)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/42",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "R Goel; E U Patel; M M Cushing. Association of perioperative red blood cell transfusions with venous thromboembolism in a North American Registry. JAMA Surg (2018)",
+      "text": "R Goel; E U Patel; M M Cushing. Association of perioperative red blood cell transfusions with venous thromboembolism in a North American Registry. JAMA Surg (2018)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/43",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "C Wang; I Le Ray; B Lee; A Wikman; M Reilly. Association of blood group and red blood cell transfusion with the incidence of antepartum, peripartum and postpartum venous thromboembolism. Sci Rep (2019)",
+      "text": "C Wang; I Le Ray; B Lee; A Wikman; M Reilly. Association of blood group and red blood cell transfusion with the incidence of antepartum, peripartum and postpartum venous thromboembolism. Sci Rep (2019)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/44",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "B S Donahue. Red cell transfusion and thrombotic risk in children. Pediatrics (2020)",
+      "text": "B S Donahue. Red cell transfusion and thrombotic risk in children. Pediatrics (2020)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/45",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "M Dicato. Venous thromboembolic events and erythropoiesis-stimulating agents: an update. Oncologist (2008)",
+      "text": "M Dicato. Venous thromboembolic events and erythropoiesis-stimulating agents: an update. Oncologist (2008)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/46",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "C L Bennett; S M Silver; B Djulbegovic. Venous thromboembolism and mortality associated with recombinant erythropoietin and darbepoetin administration for the treatment of cancer-associated anemia. JAMA (2008)",
+      "text": "C L Bennett; S M Silver; B Djulbegovic. Venous thromboembolism and mortality associated with recombinant erythropoietin and darbepoetin administration for the treatment of cancer-associated anemia. JAMA (2008)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/47",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "E Chievitz; T Thiede. Complications and causes of death in polycythaemia vera. Acta Med Scand (1962)",
+      "text": "E Chievitz; T Thiede. Complications and causes of death in polycythaemia vera. Acta Med Scand (1962)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/48",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "V R Gordeuk; J T Prchal. Vascular complications in Chuvash polycythemia. Semin Thromb Hemost (2006)",
+      "text": "V R Gordeuk; J T Prchal. Vascular complications in Chuvash polycythemia. Semin Thromb Hemost (2006)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/49",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "S Ballestri; E Romagnoli; D Arioli. Risk and management of bleeding complications with direct oral anticoagulants in patients with atrial fibrillation and venous thromboembolism: a narrative review. Adv Ther (2023)",
+      "text": "S Ballestri; E Romagnoli; D Arioli. Risk and management of bleeding complications with direct oral anticoagulants in patients with atrial fibrillation and venous thromboembolism: a narrative review. Adv Ther (2023)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/50",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "M L von Br\u00fchl; K Stark; A Steinhart. Monocytes, neutrophils, and platelets cooperate to initiate and propagate venous thrombosis in mice in vivo. J Exp Med (2012)",
+      "text": "M L von Br\u00fchl; K Stark; A Steinhart. Monocytes, neutrophils, and platelets cooperate to initiate and propagate venous thrombosis in mice in vivo. J Exp Med (2012)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/51",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "G D Lowe; A J Lee; A Rumley; J F Price; F G Fowkes. Blood viscosity and risk of cardiovascular events: the Edinburgh Artery Study. Br J Haematol (1997)",
+      "text": "G D Lowe; A J Lee; A Rumley; J F Price; F G Fowkes. Blood viscosity and risk of cardiovascular events: the Edinburgh Artery Study. Br J Haematol (1997)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/52",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J Vogel; I Kiessling; K Heinicke. Transgenic mice overexpressing erythropoietin adapt to excessive erythrocytosis by regulating blood viscosity. Blood (2003)",
+      "text": "J Vogel; I Kiessling; K Heinicke. Transgenic mice overexpressing erythropoietin adapt to excessive erythrocytosis by regulating blood viscosity. Blood (2003)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/53",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "F T Ruschitzka; R H Wenger; T Stallmach. Nitric oxide prevents cardiovascular disease and determines survival in polyglobulic mice overexpressing erythropoietin. Proc Natl Acad Sci U S A (2000)",
+      "text": "F T Ruschitzka; R H Wenger; T Stallmach. Nitric oxide prevents cardiovascular disease and determines survival in polyglobulic mice overexpressing erythropoietin. Proc Natl Acad Sci U S A (2000)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/54",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "A Bogdanova; D Mihov; H Lutz; B Saam; M Gassmann; J Vogel. Enhanced erythro-phagocytosis in polycythemic mice overexpressing erythropoietin. Blood (2007)",
+      "text": "A Bogdanova; D Mihov; H Lutz; B Saam; M Gassmann; J Vogel. Enhanced erythro-phagocytosis in polycythemic mice overexpressing erythropoietin. Blood (2007)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/55",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "R E Mebius; G Kraal. Structure and function of the spleen. Nat Rev Immunol (2005)",
+      "text": "R E Mebius; G Kraal. Structure and function of the spleen. Nat Rev Immunol (2005)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/56",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "M A Boxer; J Braun; L Ellman. Thromboembolic risk of postsplenectomy thrombocytosis. Arch Surg (1978)",
+      "text": "M A Boxer; J Braun; L Ellman. Thromboembolic risk of postsplenectomy thrombocytosis. Arch Surg (1978)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/57",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "P N Khan; R J Nair; J Olivares; L E Tingle; Z Li. Postsplenectomy reactive thrombocytosis. Proc Bayl Univ Med Cent (2009)",
+      "text": "P N Khan; R J Nair; J Olivares; L E Tingle; Z Li. Postsplenectomy reactive thrombocytosis. Proc Bayl Univ Med Cent (2009)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/58",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "R W Thomsen; W M Schoonen; D K Farkas; A Riis; J P Fryzek; H T S\u00f8rensen. Risk of venous thromboembolism in splenectomized patients compared with the general population and appendectomized patients: a 10-year nationwide cohort study. J Thromb Haemost (2010)",
+      "text": "R W Thomsen; W M Schoonen; D K Farkas; A Riis; J P Fryzek; H T S\u00f8rensen. Risk of venous thromboembolism in splenectomized patients compared with the general population and appendectomized patients: a 10-year nationwide cohort study. J Thromb Haemost (2010)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/59",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "G J Kato. Vascular complications after splenectomy for hematologic disorders. Blood (2009)",
+      "text": "G J Kato. Vascular complications after splenectomy for hematologic disorders. Blood (2009)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/60",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "E M Sewify; D Sayed; R F Abdel Aal; H M Ahmad; M A Abdou. Increased circulating red cell microparticles (RMP) and platelet microparticles (PMP) in immune thrombocytopenic purpura. Thromb Res (2013)",
+      "text": "E M Sewify; D Sayed; R F Abdel Aal; H M Ahmad; M A Abdou. Increased circulating red cell microparticles (RMP) and platelet microparticles (PMP) in immune thrombocytopenic purpura. Thromb Res (2013)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/61",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "M K Frey; S Alias; M P Winter. Splenectomy is modifying the vascular remodeling of thrombosis. J Am Heart Assoc (2014)",
+      "text": "M K Frey; S Alias; M P Winter. Splenectomy is modifying the vascular remodeling of thrombosis. J Am Heart Assoc (2014)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/62",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "D Bratosin; J Mazurier; J P Tissier. Cellular and molecular mechanisms of senescent erythrocyte phagocytosis by macrophages. A review. Biochimie (1998)",
+      "text": "D Bratosin; J Mazurier; J P Tissier. Cellular and molecular mechanisms of senescent erythrocyte phagocytosis by macrophages. A review. Biochimie (1998)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/63",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "A T Taher; K M Musallam; M Karimi. Splenectomy and thrombosis: the case of thalassemia intermedia. J Thromb Haemost (2010)",
+      "text": "A T Taher; K M Musallam; M Karimi. Splenectomy and thrombosis: the case of thalassemia intermedia. J Thromb Haemost (2010)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/64",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "M Seki; N Arashiki; Y Takakuwa; K Nitta; F Nakamura. Reduction in flippase activity contributes to surface presentation of phosphatidylserine in human senescent erythrocytes. J Cell Mol Med (2020)",
+      "text": "M Seki; N Arashiki; Y Takakuwa; K Nitta; F Nakamura. Reduction in flippase activity contributes to surface presentation of phosphatidylserine in human senescent erythrocytes. J Cell Mol Med (2020)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/65",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "M F Whelihan; K G Mann. The role of the red cell membrane in thrombin generation. Thromb Res (2013)",
+      "text": "M F Whelihan; K G Mann. The role of the red cell membrane in thrombin generation. Thromb Res (2013)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/66",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "T Frietsch; M H Maurer; J Vogel; M Gassmann; W Kuschinsky; K F Waschke. Reduced cerebral blood flow but elevated cerebral glucose metabolic rate in erythropoietin overexpressing transgenic mice with excessive erythrocytosis. J Cereb Blood Flow Metab (2007)",
+      "text": "T Frietsch; M H Maurer; J Vogel; M Gassmann; W Kuschinsky; K F Waschke. Reduced cerebral blood flow but elevated cerebral glucose metabolic rate in erythropoietin overexpressing transgenic mice with excessive erythrocytosis. J Cereb Blood Flow Metab (2007)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/67",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "O Mitchell; D M Feldman; M Diakow; S H Sigal. The pathophysiology of thrombocytopenia in chronic liver disease. Hepat Med (2016)",
+      "text": "O Mitchell; D M Feldman; M Diakow; S H Sigal. The pathophysiology of thrombocytopenia in chronic liver disease. Hepat Med (2016)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/68",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Y Lv; W Y Lau; Y Li. Hypersplenism: history and current status. Exp Ther Med (2016)",
+      "text": "Y Lv; W Y Lau; Y Li. Hypersplenism: history and current status. Exp Ther Med (2016)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/69",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "K F Wagner; D M Katschinski; J Hasegawa. Chronic inborn erythrocytosis leads to cardiac dysfunction and premature death in mice overexpressing erythropoietin. Blood (2001)",
+      "text": "K F Wagner; D M Katschinski; J Hasegawa. Chronic inborn erythrocytosis leads to cardiac dysfunction and premature death in mice overexpressing erythropoietin. Blood (2001)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/70",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "C Klatt; I Kr\u00fcger; S Zey. Platelet-RBC interaction mediated by FasL/FasR induces procoagulant activity important for thrombosis. J Clin Invest (2018)",
+      "text": "C Klatt; I Kr\u00fcger; S Zey. Platelet-RBC interaction mediated by FasL/FasR induces procoagulant activity important for thrombosis. J Clin Invest (2018)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/71",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J Shibata; J Hasegawa; H J Siemens. Hemostasis and coagulation at a hematocrit level of 0.85: functional consequences of erythrocytosis. Blood (2003)",
+      "text": "J Shibata; J Hasegawa; H J Siemens. Hemostasis and coagulation at a hematocrit level of 0.85: functional consequences of erythrocytosis. Blood (2003)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/72",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "E Babu; D Basu. Platelet large cell ratio in the differential diagnosis of abnormal platelet counts. Indian J Pathol Microbiol (2004)",
+      "text": "E Babu; D Basu. Platelet large cell ratio in the differential diagnosis of abnormal platelet counts. Indian J Pathol Microbiol (2004)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/73",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "F Formenti; P A Beer; Q P Croft. Cardiopulmonary function in two human disorders of the hypoxia-inducible factor (HIF) pathway: von Hippel-Lindau disease and HIF-2alpha gain-of-function mutation. FASEB J (2011)",
+      "text": "F Formenti; P A Beer; Q P Croft. Cardiopulmonary function in two human disorders of the hypoxia-inducible factor (HIF) pathway: von Hippel-Lindau disease and HIF-2alpha gain-of-function mutation. FASEB J (2011)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/74",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "H M Ashraf; A Javed; S Ashraf. Pulmonary embolism at high altitude and hyperhomocysteinemia. J Coll Physicians Surg Pak (2006)",
+      "text": "H M Ashraf; A Javed; S Ashraf. Pulmonary embolism at high altitude and hyperhomocysteinemia. J Coll Physicians Surg Pak (2006)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/75",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "D P Smallman; C M McBratney; C H Olsen; K M Slogic; C J Henderson. Quantification of the 5-year incidence of thromboembolic events in U.S. Air Force Academy cadets in comparison to the U.S. Naval and Military Academies. Mil Med (2011)",
+      "text": "D P Smallman; C M McBratney; C H Olsen; K M Slogic; C J Henderson. Quantification of the 5-year incidence of thromboembolic events in U.S. Air Force Academy cadets in comparison to the U.S. Naval and Military Academies. Mil Med (2011)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/76",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "M Li; X Tang; Z Liao. Hypoxia and low temperature upregulate transferrin to induce hypercoagulability at high altitude. Blood (2022)",
+      "text": "M Li; X Tang; Z Liao. Hypoxia and low temperature upregulate transferrin to induce hypercoagulability at high altitude. Blood (2022)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/77",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "T P McDonald; R E Clift; M B Cottrell. Large, chronic doses of erythropoietin cause thrombocytopenia in mice. Blood (1992)",
+      "text": "T P McDonald; R E Clift; M B Cottrell. Large, chronic doses of erythropoietin cause thrombocytopenia in mice. Blood (1992)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/78",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "X Ja\u00efs; V Ioos; C Jardim. Splenectomy and chronic thromboembolic pulmonary hypertension. Thorax (2005)",
+      "text": "X Ja\u00efs; V Ioos; C Jardim. Splenectomy and chronic thromboembolic pulmonary hypertension. Thorax (2005)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/79",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J M Watters; C N Sambasivan; K Zink. Splenectomy leads to a persistent hypercoagulable state after trauma. Am J Surg (2010)",
+      "text": "J M Watters; C N Sambasivan; K Zink. Splenectomy leads to a persistent hypercoagulable state after trauma. Am J Surg (2010)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/80",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "S Visudhiphan; K Ketsa-Ard; A Piankijagum; S Tumliang. Blood coagulation and platelet profiles in persistent post-splenectomy thrombocytosis. The relationship to thromboembolism. Biomed Pharmacother (1985)",
+      "text": "S Visudhiphan; K Ketsa-Ard; A Piankijagum; S Tumliang. Blood coagulation and platelet profiles in persistent post-splenectomy thrombocytosis. The relationship to thromboembolism. Biomed Pharmacother (1985)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/81",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "T P McDonald; M B Cottrell; R E Clift; W C Cullen; F K Lin. High doses of recombinant erythropoietin stimulate platelet production in mice. Exp Hematol (1987)",
+      "text": "T P McDonald; M B Cottrell; R E Clift; W C Cullen; F K Lin. High doses of recombinant erythropoietin stimulate platelet production in mice. Exp Hematol (1987)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/82",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Y Shikama; T Ishibashi; H Kimura; M Kawaguchi; T Uchida; Y Maruyama. Transient effect of erythropoietin on thrombocytopoiesis in vivo in mice. Exp Hematol (1992)",
+      "text": "Y Shikama; T Ishibashi; H Kimura; M Kawaguchi; T Uchida; Y Maruyama. Transient effect of erythropoietin on thrombocytopoiesis in vivo in mice. Exp Hematol (1992)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/83",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "C W Jackson; C C Edwards. Biphasic thrombopoietic response to severe hypobaric hypoxia. Br J Haematol (1977)",
+      "text": "C W Jackson; C C Edwards. Biphasic thrombopoietic response to severe hypobaric hypoxia. Br J Haematol (1977)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/84",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "T P McDonald. Platelet production in hypoxic and RBC-transfused mice. Scand J Haematol (1978)",
+      "text": "T P McDonald. Platelet production in hypoxic and RBC-transfused mice. Scand J Haematol (1978)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/85",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "Z Rolovi\u0107; N Basara; L Biljanovi\u0107-Paunovi\u0107; N Stojanovi\u0107; N Suvajdzi\u0107; V Pavlovi\u0107-Kentera. Megakaryocytopoiesis in experimentally induced chronic normobaric hypoxia. Exp Hematol (1990)",
+      "text": "Z Rolovi\u0107; N Basara; L Biljanovi\u0107-Paunovi\u0107; N Stojanovi\u0107; N Suvajdzi\u0107; V Pavlovi\u0107-Kentera. Megakaryocytopoiesis in experimentally induced chronic normobaric hypoxia. Exp Hematol (1990)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/86",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "R F Wolf; J Peng; P Friese; L S Gilmore; S A Burstein; G L Dale. Erythropoietin administration increases production and reactivity of platelets in dogs. Thromb Haemost (1997)",
+      "text": "R F Wolf; J Peng; P Friese; L S Gilmore; S A Burstein; G L Dale. Erythropoietin administration increases production and reactivity of platelets in dogs. Thromb Haemost (1997)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/87",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J K Fraser; A S Tan; F K Lin; M V Berridge. Expression of specific high-affinity binding sites for erythropoietin on rat and mouse megakaryocytes. Exp Hematol (1989)",
+      "text": "J K Fraser; A S Tan; F K Lin; M V Berridge. Expression of specific high-affinity binding sites for erythropoietin on rat and mouse megakaryocytes. Exp Hematol (1989)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/88",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "H Sasaki; Y Hirabayashi; T Ishibashi. Effects of erythropoietin, IL-3, IL-6 and LIF on a murine megakaryoblastic cell line: growth enhancement and expression of receptor mRNAs. Leuk Res (1995)",
+      "text": "H Sasaki; Y Hirabayashi; T Ishibashi. Effects of erythropoietin, IL-3, IL-6 and LIF on a murine megakaryoblastic cell line: growth enhancement and expression of receptor mRNAs. Leuk Res (1995)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/89",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "R D McBane; C Gonzalez; D O Hodge; W E Wysokinski. Propensity for young reticulated platelet recruitment into arterial thrombi. J Thromb Thrombolysis (2014)",
+      "text": "R D McBane; C Gonzalez; D O Hodge; W E Wysokinski. Propensity for young reticulated platelet recruitment into arterial thrombi. J Thromb Thrombolysis (2014)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/90",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "M Buttarello; G Mezzapelle; F Freguglia; M Plebani. Reticulated platelets and immature platelet fraction: clinical applications and method limitations. Int J Lab Hematol (2020)",
+      "text": "M Buttarello; G Mezzapelle; F Freguglia; M Plebani. Reticulated platelets and immature platelet fraction: clinical applications and method limitations. Int J Lab Hematol (2020)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/91",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "S Guthikonda; C L Alviar; M Vaduganathan. Role of reticulated platelets and platelet size heterogeneity on platelet activity after dual antiplatelet therapy with aspirin and clopidogrel in patients with stable coronary artery disease. J Am Coll Cardiol (2008)",
+      "text": "S Guthikonda; C L Alviar; M Vaduganathan. Role of reticulated platelets and platelet size heterogeneity on platelet activity after dual antiplatelet therapy with aspirin and clopidogrel in patients with stable coronary artery disease. J Am Coll Cardiol (2008)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/92",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "M S Goel; S L Diamond. Adhesion of normal erythrocytes at depressed venous shear rates to activated neutrophils, activated platelets, and fibrin polymerized from plasma. Blood (2002)",
+      "text": "M S Goel; S L Diamond. Adhesion of normal erythrocytes at depressed venous shear rates to activated neutrophils, activated platelets, and fibrin polymerized from plasma. Blood (2002)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/93",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "P Hermand; P Gane; M Huet. Red cell ICAM-4 is a novel ligand for platelet-activated alpha IIbbeta 3 integrin. J Biol Chem (2003)",
+      "text": "P Hermand; P Gane; M Huet. Red cell ICAM-4 is a novel ligand for platelet-activated alpha IIbbeta 3 integrin. J Biol Chem (2003)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/94",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "A Orbach; O Zelig; S Yedgar; G Barshtein. Biophysical and biochemical markers of red blood cell fragility. Transfus Med Hemother (2017)",
+      "text": "A Orbach; O Zelig; S Yedgar; G Barshtein. Biophysical and biochemical markers of red blood cell fragility. Transfus Med Hemother (2017)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/95",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "C C Helms; M Marvel; W Zhao. Mechanisms of hemolysis-associated platelet activation. J Thromb Haemost (2013)",
+      "text": "C C Helms; M Marvel; W Zhao. Mechanisms of hemolysis-associated platelet activation. J Thromb Haemost (2013)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/96",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J Villagra; S Shiva; L A Hunter; R F Machado; M T Gladwin; G J Kato. Platelet activation in patients with sickle disease, hemolysis-associated pulmonary hypertension, and nitric oxide scavenging by cell-free hemoglobin. Blood (2007)",
+      "text": "J Villagra; S Shiva; L A Hunter; R F Machado; M T Gladwin; G J Kato. Platelet activation in patients with sickle disease, hemolysis-associated pulmonary hypertension, and nitric oxide scavenging by cell-free hemoglobin. Blood (2007)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/97",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "S Gambaryan; H Subramanian; L Kehrer. Erythrocytes do not activate purified and platelet soluble guanylate cyclases even in conditions favourable for NO synthesis. Cell Commun Signal (2016)",
+      "text": "S Gambaryan; H Subramanian; L Kehrer. Erythrocytes do not activate purified and platelet soluble guanylate cyclases even in conditions favourable for NO synthesis. Cell Commun Signal (2016)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/98",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "S Krauss. Haptoglobin metabolism in polycythemia vera. Blood (1969)",
+      "text": "S Krauss. Haptoglobin metabolism in polycythemia vera. Blood (1969)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/99",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "A Vignoli; S Gamba; P EJ van der Meijden. Increased platelet thrombus formation under flow conditions in whole blood from polycythaemia vera patients. Blood Transfus (2022)",
+      "text": "A Vignoli; S Gamba; P EJ van der Meijden. Increased platelet thrombus formation under flow conditions in whole blood from polycythaemia vera patients. Blood Transfus (2022)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/100",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J H Lawrence. The control of polycythemia by marrow inhibition; a 10-year study of 172 patients. J Am Med Assoc (1949)",
+      "text": "J H Lawrence. The control of polycythemia by marrow inhibition; a 10-year study of 172 patients. J Am Med Assoc (1949)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/101",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "T C Pearson; G Wetherley-Mein. Vascular occlusive episodes and venous haematocrit in primary proliferative polycythaemia. Lancet (1978)",
+      "text": "T C Pearson; G Wetherley-Mein. Vascular occlusive episodes and venous haematocrit in primary proliferative polycythaemia. Lancet (1978)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/102",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J F Fazekas; D Nelson. Cerebral blood flow in polycythemia vera. AMA Arch Intern Med (1956)",
+      "text": "J F Fazekas; D Nelson. Cerebral blood flow in polycythemia vera. AMA Arch Intern Med (1956)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/103",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "D J Thomas; J Marshall; R W Russell. Effect of haematocrit on cerebral blood-flow in man. Lancet (1977)",
+      "text": "D J Thomas; J Marshall; R W Russell. Effect of haematocrit on cerebral blood-flow in man. Lancet (1977)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/104",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "A D'Emilio; R Battista; E Dini. Treatment of primary proliferative polycythaemia by venesection and busulphan. Br J Haematol (1987)",
+      "text": "A D'Emilio; R Battista; E Dini. Treatment of primary proliferative polycythaemia by venesection and busulphan. Br J Haematol (1987)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/105",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J E Taylor; I S Henderson; W K Stewart; J J Belch. Erythropoietin and spontaneous platelet aggregation in haemodialysis patients. Lancet (1991)",
+      "text": "J E Taylor; I S Henderson; W K Stewart; J J Belch. Erythropoietin and spontaneous platelet aggregation in haemodialysis patients. Lancet (1991)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/106",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J J Zwaginga; M J IJsseldijk; P G de Groot. Treatment of uremic anemia with recombinant erythropoietin also reduces the defects in platelet adhesion and aggregation caused by uremic plasma. Thromb Haemost (1991)",
+      "text": "J J Zwaginga; M J IJsseldijk; P G de Groot. Treatment of uremic anemia with recombinant erythropoietin also reduces the defects in platelet adhesion and aggregation caused by uremic plasma. Thromb Haemost (1991)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/107",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "F Fabris; I Cordiano; M L Randi. Effect of human recombinant erythropoietin on bleeding time, platelet number and function in children with end-stage renal disease maintained by haemodialysis. Pediatr Nephrol (1991)",
+      "text": "F Fabris; I Cordiano; M L Randi. Effect of human recombinant erythropoietin on bleeding time, platelet number and function in children with end-stage renal disease maintained by haemodialysis. Pediatr Nephrol (1991)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/108",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "T Akizawa; E Kinugasa; T Kitaoka; S Koshikawa. Effects of recombinant human erythropoietin and correction of anemia on platelet function in hemodialysis patients. Nephron J (1991)",
+      "text": "T Akizawa; E Kinugasa; T Kitaoka; S Koshikawa. Effects of recombinant human erythropoietin and correction of anemia on platelet function in hemodialysis patients. Nephron J (1991)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/109",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "G Vigan\u00f2; A Benigni; D Mendogni; G Mingardi; G Mecca; G Remuzzi. Recombinant human erythropoietin to correct uremic bleeding. Am J Kidney Dis (1991)",
+      "text": "G Vigan\u00f2; A Benigni; D Mendogni; G Mingardi; G Mecca; G Remuzzi. Recombinant human erythropoietin to correct uremic bleeding. Am J Kidney Dis (1991)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/110",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "J A Rios; J Hambleton; M Viele. Viability of red cells prepared with S-303 pathogen inactivation treatment. Transfusion (2006)",
+      "text": "J A Rios; J Hambleton; M Viele. Viability of red cells prepared with S-303 pathogen inactivation treatment. Transfusion (2006)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/111",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "S Khandelwal; N van Rooijen; R K Saxena. Reduced expression of CD47 during murine red blood cell (RBC) senescence and its role in RBC clearance from the circulation. Transfusion (2007)",
+      "text": "S Khandelwal; N van Rooijen; R K Saxena. Reduced expression of CD47 during murine red blood cell (RBC) senescence and its role in RBC clearance from the circulation. Transfusion (2007)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/112",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "G J Bosman; J M Werre; F L Willekens; V M Novotn\u00fd. Erythrocyte ageing in vivo and in vitro: structural aspects and implications for transfusion. Transfus Med (2008)",
+      "text": "G J Bosman; J M Werre; F L Willekens; V M Novotn\u00fd. Erythrocyte ageing in vivo and in vitro: structural aspects and implications for transfusion. Transfus Med (2008)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/113",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "W H Crosby. Normal functions of the spleen relative to red blood cells: a review. Blood (1959)",
+      "text": "W H Crosby. Normal functions of the spleen relative to red blood cells: a review. Blood (1959)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/114",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "R Varin; S Mirshahi; P Mirshahi. Whole blood clots are more resistant to lysis than plasma clots\u2013greater efficacy of rivaroxaban. Thromb Res (2013)",
+      "text": "R Varin; S Mirshahi; P Mirshahi. Whole blood clots are more resistant to lysis than plasma clots\u2013greater efficacy of rivaroxaban. Thromb Res (2013)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/115",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "F A Carvalho; S Connell; G Miltenberger-Miltenyi. Atomic force microscopy-based molecular recognition of a fibrinogen receptor on human erythrocytes. ACS Nano (2010)",
+      "text": "F A Carvalho; S Connell; G Miltenberger-Miltenyi. Atomic force microscopy-based molecular recognition of a fibrinogen receptor on human erythrocytes. ACS Nano (2010)",
+      "enumerated": false,
+      "marker": "-"
+    },
+    {
+      "self_ref": "#/texts/116",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "label": "list_item",
+      "prov": [],
+      "orig": "N Wohner; P S\u00f3tonyi; R Machovich. Lytic resistance of fibrin containing red blood cells. Arterioscler Thromb Vasc Biol (2011)",
+      "text": "N Wohner; P S\u00f3tonyi; R Machovich. Lytic resistance of fibrin containing red blood cells. Arterioscler Thromb Vasc Biol (2011)",
+      "enumerated": false,
+      "marker": "-"
+    }
+  ],
+  "pictures": [
+    {
+      "self_ref": "#/pictures/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [
+        {
+          "$ref": "#/texts/34"
+        }
+      ],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [
+        {
+          "$ref": "#/texts/35"
+        }
+      ],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [
+        {
+          "$ref": "#/texts/36"
+        }
+      ],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [
+        {
+          "$ref": "#/texts/37"
+        }
+      ],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/4",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "label": "picture",
+      "prov": [],
+      "captions": [
+        {
+          "$ref": "#/texts/38"
+        }
+      ],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    }
+  ],
+  "tables": [],
+  "key_value_items": [],
+  "pages": {}
+}
