@@ -180,7 +180,7 @@ def convert(
         ImageRefMode,
         typer.Option(
             ...,
-            help="Image export mode for the document (only in case of Markdown or HTML). In `placeholder`, only the position of the image is returned. In `embedded` mode, the image is contained in base64. In `referenced` mode, the image is exported in PNG format and referenced from the main exported document.",
+            help="Image export mode for the document (only in case of JSON, Markdown or HTML). With `placeholder`, only the position of the image is marked in the output. In `embedded` mode, the image is embedded as base64 encoded string. In `referenced` mode, the image is exported in PNG format and referenced from the main exported document.",
         ),
     ] = ImageRefMode.EMBEDDED,
     ocr: Annotated[
@@ -355,9 +355,11 @@ def convert(
 
         if image_export_mode != ImageRefMode.PLACEHOLDER:
             pipeline_options.generate_page_images = True
-            pipeline_options.generate_picture_images = True #FIXME: to be deprecated in verson 3
+            pipeline_options.generate_picture_images = (
+                True  # FIXME: to be deprecated in verson 3
+            )
             pipeline_options.images_scale = 2
-            
+
         if artifacts_path is not None:
             pipeline_options.artifacts_path = artifacts_path
 
