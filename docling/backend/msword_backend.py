@@ -275,7 +275,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             "Normal",
             "Subtitle",
             "Author",
-            "Default Text",
+            "DefaultText",
             "ListParagraph",
             "ListBullet",
             "Quote",
