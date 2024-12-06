@@ -4,7 +4,7 @@
   </a>
 </p>
 
-# 🦆 Docling
+# Docling
 
 <p align="center">
   <a href="https://trendshift.io/repositories/12132" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12132" alt="DS4SD%2Fdocling | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
@@ -26,7 +26,7 @@ Docling parses documents and exports them to the desired format with ease and sp
 
 ## Features
 
-* 🗂️ Reads popular document formats (PDF, DOCX, PPTX, XLSX, Images, HTML, AsciiDoc & Markdown) and exports to Markdown and JSON
+* 🗂️ Reads popular document formats (PDF, DOCX, PPTX, XLSX, Images, HTML, AsciiDoc & Markdown) and exports to HTML, Markdown and JSON (with embedded and referenced images)
 * 📑 Advanced PDF document understanding including page layout, reading order & table structures
 * 🧩 Unified, expressive [DoclingDocument](https://ds4sd.github.io/docling/concepts/docling_document/) representation format
 * 🤖 Easy integration with 🦙 LlamaIndex & 🦜🔗 LangChain for powerful RAG / QA applications

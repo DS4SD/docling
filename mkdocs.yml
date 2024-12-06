@@ -53,7 +53,7 @@ theme:
     - toc.follow
 nav:
   - Home:
-    - "🦆 Docling": index.md
+    - "Docling": index.md
     - Installation: installation.md
     - Usage: usage.md
     - CLI: cli.md
