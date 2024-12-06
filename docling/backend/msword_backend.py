@@ -1,4 +1,5 @@
 import logging
+import re
 from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
@@ -166,6 +167,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         except ValueError:
             return default
 
+    def split_text_and_number(self, input_string):
+        match = re.match(r"(\D+)(\d+)$|^(\d+)(\D+)", input_string)
+        if match:
+            parts = list(filter(None, match.groups()))
+            return parts
+        else:
+            return [input_string]
+
     def get_numId_and_ilvl(self, paragraph):
         # Access the XML element of the paragraph
         numPr = paragraph._element.find(
@@ -188,7 +197,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def get_label_and_level(self, paragraph):
         if paragraph.style is None:
             return "Normal", None
-        label = paragraph.style.name
+        label = paragraph.style.style_id
         if label is None:
             return "Normal", None
         if ":" in label:
@@ -197,7 +206,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             if len(parts) == 2:
                 return parts[0], int(parts[1])
 
-        parts = label.split(" ")
+        parts = self.split_text_and_number(label)
 
         if "Heading" in label and len(parts) == 2:
             parts.sort()
@@ -225,7 +234,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         # Identify wether list is a numbered list or not
         # is_numbered = "List Bullet" not in paragraph.style.name
         is_numbered = False
-        p_style_name, p_level = self.get_label_and_level(paragraph)
+        p_style_id, p_level = self.get_label_and_level(paragraph)
         numid, ilevel = self.get_numId_and_ilvl(paragraph)
 
         if numid == 0:
@@ -237,14 +246,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 element,
                 docx_obj,
                 doc,
-                p_style_name,
+                p_style_id,
                 p_level,
                 numid,
                 ilevel,
                 text,
                 is_numbered,
             )
-            self.update_history(p_style_name, p_level, numid, ilevel)
+            self.update_history(p_style_id, p_level, numid, ilevel)
             return
         elif numid is None and self.prev_numid() is not None:  # Close list
             for key, val in self.parents.items():
@@ -252,23 +261,23 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     self.parents[key] = None
             self.level = self.level_at_new_list - 1
             self.level_at_new_list = None
-        if p_style_name in ["Title"]:
+        if p_style_id in ["Title"]:
             for key, val in self.parents.items():
                 self.parents[key] = None
             self.parents[0] = doc.add_text(
                 parent=None, label=DocItemLabel.TITLE, text=text
             )
-        elif "Heading" in p_style_name:
-            self.add_header(element, docx_obj, doc, p_style_name, p_level, text)
+        elif "Heading" in p_style_id:
+            self.add_header(element, docx_obj, doc, p_style_id, p_level, text)
 
-        elif p_style_name in [
+        elif p_style_id in [
             "Paragraph",
             "Normal",
             "Subtitle",
             "Author",
             "Default Text",
-            "List Paragraph",
-            "List Bullet",
+            "ListParagraph",
+            "ListBullet",
             "Quote",
         ]:
             level = self.get_level()
@@ -284,7 +293,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 label=DocItemLabel.PARAGRAPH, parent=self.parents[level - 1], text=text
             )
 
-        self.update_history(p_style_name, p_level, numid, ilevel)
+        self.update_history(p_style_id, p_level, numid, ilevel)
         return
 
     def add_header(self, element, docx_obj, doc, curr_name, curr_level, text: str):
@@ -322,7 +331,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         element,
         docx_obj,
         doc,
-        p_style_name,
+        p_style_id,
         p_level,
         numid,
         ilevel,
