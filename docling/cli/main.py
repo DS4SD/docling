@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Annotated, Dict, Iterable, List, Optional, Type
 
 import typer
+from docling_core.types.doc import ImageRefMode
 from docling_core.utils.file import resolve_source_to_path
 from pydantic import TypeAdapter, ValidationError
 
@@ -87,9 +88,11 @@ def export_documents(
     conv_results: Iterable[ConversionResult],
     output_dir: Path,
     export_json: bool,
+    export_html: bool,
     export_md: bool,
     export_txt: bool,
     export_doctags: bool,
+    image_export_mode: ImageRefMode,
 ):
 
     success_count = 0
@@ -100,33 +103,45 @@ def export_documents(
             success_count += 1
             doc_filename = conv_res.input.file.stem
 
-            # Export Deep Search document JSON format:
+            # Export JSON format:
             if export_json:
                 fname = output_dir / f"{doc_filename}.json"
-                with fname.open("w", encoding="utf8") as fp:
-                    _log.info(f"writing JSON output to {fname}")
-                    fp.write(json.dumps(conv_res.document.export_to_dict()))
+                _log.info(f"writing JSON output to {fname}")
+                conv_res.document.save_as_json(
+                    filename=fname, image_mode=image_export_mode
+                )
+
+            # Export HTML format:
+            if export_html:
+                fname = output_dir / f"{doc_filename}.html"
+                _log.info(f"writing HTML output to {fname}")
+                conv_res.document.save_as_html(
+                    filename=fname, image_mode=image_export_mode
+                )
 
             # Export Text format:
             if export_txt:
                 fname = output_dir / f"{doc_filename}.txt"
-                with fname.open("w", encoding="utf8") as fp:
-                    _log.info(f"writing Text output to {fname}")
-                    fp.write(conv_res.document.export_to_markdown(strict_text=True))
+                _log.info(f"writing TXT output to {fname}")
+                conv_res.document.save_as_markdown(
+                    filename=fname,
+                    strict_text=True,
+                    image_mode=ImageRefMode.PLACEHOLDER,
+                )
 
             # Export Markdown format:
             if export_md:
                 fname = output_dir / f"{doc_filename}.md"
-                with fname.open("w", encoding="utf8") as fp:
-                    _log.info(f"writing Markdown output to {fname}")
-                    fp.write(conv_res.document.export_to_markdown())
+                _log.info(f"writing Markdown output to {fname}")
+                conv_res.document.save_as_markdown(
+                    filename=fname, image_mode=image_export_mode
+                )
 
             # Export Document Tags format:
             if export_doctags:
                 fname = output_dir / f"{doc_filename}.doctags"
-                with fname.open("w", encoding="utf8") as fp:
-                    _log.info(f"writing Doc Tags output to {fname}")
-                    fp.write(conv_res.document.export_to_document_tokens())
+                _log.info(f"writing Doc Tags output to {fname}")
+                conv_res.document.save_as_document_tokens(filename=fname)
 
         else:
             _log.warning(f"Document {conv_res.input.file} failed to convert.")
@@ -161,6 +176,13 @@ def convert(
     to_formats: List[OutputFormat] = typer.Option(
         None, "--to", help="Specify output formats. Defaults to Markdown."
     ),
+    image_export_mode: Annotated[
+        ImageRefMode,
+        typer.Option(
+            ...,
+            help="Image export mode for the document (only in case of JSON, Markdown or HTML). With `placeholder`, only the position of the image is marked in the output. In `embedded` mode, the image is embedded as base64 encoded string. In `referenced` mode, the image is exported in PNG format and referenced from the main exported document.",
+        ),
+    ] = ImageRefMode.EMBEDDED,
     ocr: Annotated[
         bool,
         typer.Option(
@@ -299,6 +321,7 @@ def convert(
             to_formats = [OutputFormat.MARKDOWN]
 
         export_json = OutputFormat.JSON in to_formats
+        export_html = OutputFormat.HTML in to_formats
         export_md = OutputFormat.MARKDOWN in to_formats
         export_txt = OutputFormat.TEXT in to_formats
         export_doctags = OutputFormat.DOCTAGS in to_formats
@@ -329,6 +352,13 @@ def convert(
             True  # do_cell_matching
         )
         pipeline_options.table_structure_options.mode = table_mode
+
+        if image_export_mode != ImageRefMode.PLACEHOLDER:
+            pipeline_options.generate_page_images = True
+            pipeline_options.generate_picture_images = (
+                True  # FIXME: to be deprecated in verson 3
+            )
+            pipeline_options.images_scale = 2
 
         if artifacts_path is not None:
             pipeline_options.artifacts_path = artifacts_path
@@ -364,9 +394,11 @@ def convert(
             conv_results,
             output_dir=output,
             export_json=export_json,
+            export_html=export_html,
             export_md=export_md,
             export_txt=export_txt,
             export_doctags=export_doctags,
+            image_export_mode=image_export_mode,
         )
 
         end_time = time.time() - start_time
