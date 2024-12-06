@@ -20,7 +20,7 @@ from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import AcceleratorOptions
 from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
-from docling.utils import accelerator_utils as au
+from docling.utils.accelerator_utils import decide_device
 from docling.utils.layout_postprocessor import LayoutPostprocessor
 from docling.utils.profiling import TimeRecorder
 
@@ -50,7 +50,7 @@ class LayoutModel(BasePageModel):
     CONTAINER_LABELS = [DocItemLabel.FORM, DocItemLabel.KEY_VALUE_REGION]
 
     def __init__(self, artifacts_path: Path, accelerator_options: AcceleratorOptions):
-        device = au.decide_device(accelerator_options.device)
+        device = decide_device(accelerator_options.device)
         self.layout_predictor = LayoutPredictor(
             artifacts_path, device, accelerator_options.num_threads
         )

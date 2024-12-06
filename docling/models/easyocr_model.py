@@ -14,7 +14,7 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
-from docling.utils import accelerator_utils as au
+from docling.utils.accelerator_utils import decide_device
 from docling.utils.profiling import TimeRecorder
 
 _log = logging.getLogger(__name__)
@@ -43,7 +43,7 @@ class EasyOcrModel(BaseOcrModel):
 
             use_gpu = False
             if self.options.use_gpu:
-                device = au.decide_device(accelerator_options.device)
+                device = decide_device(accelerator_options.device)
                 # Enable easyocr GPU if running on CUDA, MPS
                 use_gpu = device in [
                     AcceleratorDevice.CUDA,
