@@ -38,7 +38,7 @@ _log = logging.getLogger(__name__)
 
 
 class StandardPdfPipeline(PaginatedPipeline):
-    _layout_model_path = "model_artifacts/layout/beehive_v0.0.5_pt"
+    _layout_model_path = "model_artifacts/layout"
     _table_model_path = "model_artifacts/tableformer"
 
     def __init__(self, pipeline_options: PdfPipelineOptions):
@@ -102,7 +102,7 @@ class StandardPdfPipeline(PaginatedPipeline):
             repo_id="ds4sd/docling-models",
             force_download=force,
             local_dir=local_dir,
-            revision="v2.0.1",
+            revision="refs/pr/2",
         )
 
         return Path(download_path)
