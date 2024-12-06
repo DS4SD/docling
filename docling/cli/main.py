@@ -355,7 +355,9 @@ def convert(
 
         if image_export_mode != ImageRefMode.PLACEHOLDER:
             pipeline_options.generate_page_images = True
-
+            pipeline_options.generate_picture_images = True #FIXME: to be deprecated in verson 3
+            pipeline_options.images_scale = 2
+            
         if artifacts_path is not None:
             pipeline_options.artifacts_path = artifacts_path
 
