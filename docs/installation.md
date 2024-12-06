@@ -30,6 +30,8 @@ Works on macOS, Linux, and Windows, with support for both x86_64 and arm64 archi
     | [EasyOCR](https://github.com/JaidedAI/EasyOCR) | Default in Docling or via `pip install easyocr`. | `EasyOcrOptions` |
     | Tesseract | System dependency. See description for Tesseract and Tesserocr below.  | `TesseractOcrOptions` |
     | Tesseract CLI | System dependency. See description below. | `TesseractCliOcrOptions` |
+    | OcrMac | System dependency. See description below. | `OcrMacOptions` |
+    | [RapidOCR](https://github.com/RapidAI/RapidOCR) | Extra feature not included in Default Docling installation can be installed via `pip install rapidocr_onnxruntime` | `RapidOcrOptions` |
 
     The Docling `DocumentConverter` allows to choose the OCR engine with the `ocr_options` settings. For example
 
@@ -89,6 +91,17 @@ Works on macOS, Linux, and Windows, with support for both x86_64 and arm64 archi
     ```console
     pip uninstall tesserocr
     pip install --no-binary :all: tesserocr
+    ```
+
+    <h3>ocrmac installation</h3>
+
+    [ocrmac](https://github.com/straussmaximilian/ocrmac) is using
+    Apple's vision(or livetext) framework as OCR backend.
+    For using this engine with Docling, ocrmac must be installed on your system.
+    This only works on macOS systems with newer macOS versions (10.15+).
+
+    ```console
+    pip install ocrmac
     ```
 
 ## Development setup

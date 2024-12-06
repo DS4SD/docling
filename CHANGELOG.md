@@ -1,3 +1,92 @@
+## [v2.8.3](https://github.com/DS4SD/docling/releases/tag/v2.8.3) - 2024-12-03
+
+### Fix
+
+* Improve handling of disallowed formats ([#429](https://github.com/DS4SD/docling/issues/429)) ([`34c7c79`](https://github.com/DS4SD/docling/commit/34c7c798580476a86ce8abec30b1115fbb36fdd8))
+
+## [v2.8.2](https://github.com/DS4SD/docling/releases/tag/v2.8.2) - 2024-12-03
+
+### Fix
+
+* ParserError EOF inside string (#470) ([#472](https://github.com/DS4SD/docling/issues/472)) ([`c90c41c`](https://github.com/DS4SD/docling/commit/c90c41c391de4366db554d7a71ce9a35467c981e))
+* PermissionError when using tesseract_ocr_cli_model ([#496](https://github.com/DS4SD/docling/issues/496)) ([`d3f84b2`](https://github.com/DS4SD/docling/commit/d3f84b2457125feacd0c21d6513e7ae69a308ea5))
+
+### Documentation
+
+* Add styling for faq ([#502](https://github.com/DS4SD/docling/issues/502)) ([`5ba3807`](https://github.com/DS4SD/docling/commit/5ba3807f315a01b1a4e8df9bab40e34a4238205a))
+* Typo in faq ([#484](https://github.com/DS4SD/docling/issues/484)) ([`33cff98`](https://github.com/DS4SD/docling/commit/33cff98d360c02a382a66850c696a0cf511659ac))
+* Add automatic api reference ([#475](https://github.com/DS4SD/docling/issues/475)) ([`d487210`](https://github.com/DS4SD/docling/commit/d4872103b8f24e38b37a8cd3ac414d3e02e7d6e8))
+* Introduce faq section ([#468](https://github.com/DS4SD/docling/issues/468)) ([`8ccb3c6`](https://github.com/DS4SD/docling/commit/8ccb3c6db69318789af7deec26cfa2a3fd71302e))
+
+### Performance
+
+* Prevent temp file leftovers, reuse core type ([#487](https://github.com/DS4SD/docling/issues/487)) ([`051789d`](https://github.com/DS4SD/docling/commit/051789d01706d3823dd6307eca4dc5faacd1b7ce))
+
+## [v2.8.1](https://github.com/DS4SD/docling/releases/tag/v2.8.1) - 2024-11-29
+
+### Fix
+
+* **cli:** Expose debug options ([#467](https://github.com/DS4SD/docling/issues/467)) ([`dd8de46`](https://github.com/DS4SD/docling/commit/dd8de462676993b81926610fd573d51d3272cbaf))
+* Remove unused deps ([#466](https://github.com/DS4SD/docling/issues/466)) ([`af63818`](https://github.com/DS4SD/docling/commit/af63818df5636c4cbe77c0a01e6dcc0d47c4bfdb))
+
+### Documentation
+
+* Extend integration docs & README ([#456](https://github.com/DS4SD/docling/issues/456)) ([`84c46fd`](https://github.com/DS4SD/docling/commit/84c46fdeb344502edf9647c610c4828ab0ffb9dd))
+
+## [v2.8.0](https://github.com/DS4SD/docling/releases/tag/v2.8.0) - 2024-11-27
+
+### Feature
+
+* **ocr:** Added support for RapidOCR engine ([#415](https://github.com/DS4SD/docling/issues/415)) ([`85b2999`](https://github.com/DS4SD/docling/commit/85b29990be6468516b6dbe49f880d9f1f4c11c5a))
+
+### Fix
+
+* Use correct image index in word backend ([#442](https://github.com/DS4SD/docling/issues/442)) ([`767563b`](https://github.com/DS4SD/docling/commit/767563bf8b331304892285c0789bba481acaa1b5))
+* Update tests and examples for docling-core 2.5.1 ([#449](https://github.com/DS4SD/docling/issues/449)) ([`29807a2`](https://github.com/DS4SD/docling/commit/29807a2d687896c67ada934c6a626401f5930e50))
+
+## [v2.7.1](https://github.com/DS4SD/docling/releases/tag/v2.7.1) - 2024-11-26
+
+### Fix
+
+* Fixes for wordx ([#432](https://github.com/DS4SD/docling/issues/432)) ([`d0a1180`](https://github.com/DS4SD/docling/commit/d0a118047804765b1b8532e72e08272e678c0c93))
+* Force pydantic < 2.10.0 ([#407](https://github.com/DS4SD/docling/issues/407)) ([`d7072b4`](https://github.com/DS4SD/docling/commit/d7072b4b56227756eb2c7abd3a6e7387eeefe7c1))
+
+### Documentation
+
+* Add DocETL, Kotaemon, spaCy integrations; minor docs improvements ([#408](https://github.com/DS4SD/docling/issues/408)) ([`7a45b92`](https://github.com/DS4SD/docling/commit/7a45b92078b3a9fdd8f0650002eddc03e9d780af))
+
+## [v2.7.0](https://github.com/DS4SD/docling/releases/tag/v2.7.0) - 2024-11-20
+
+### Feature
+
+* Add support for `ocrmac` OCR engine on macOS ([#276](https://github.com/DS4SD/docling/issues/276)) ([`6efa96c`](https://github.com/DS4SD/docling/commit/6efa96c983fc509b2c7b35a4a25a714284f2f782))
+
+### Fix
+
+* Python3.9 support ([#396](https://github.com/DS4SD/docling/issues/396)) ([`7b013ab`](https://github.com/DS4SD/docling/commit/7b013abcf31ba49e2141dfd408bc8c23e8d87d91))
+* Propagate document limits to converter ([#388](https://github.com/DS4SD/docling/issues/388)) ([`32ebf55`](https://github.com/DS4SD/docling/commit/32ebf55e3338dd22f9a23c55595f15835794d961))
+
+## [v2.6.0](https://github.com/DS4SD/docling/releases/tag/v2.6.0) - 2024-11-19
+
+### Feature
+
+* Added support for exporting DocItem to an image when page image is available ([#379](https://github.com/DS4SD/docling/issues/379)) ([`3f91e7d`](https://github.com/DS4SD/docling/commit/3f91e7d3f166901c139ab036c4d9dad5fa560aa9))
+* Expose ocr-lang in CLI ([#375](https://github.com/DS4SD/docling/issues/375)) ([`ed785ea`](https://github.com/DS4SD/docling/commit/ed785ea122d8d736c2031a38fce81dc5c19e244c))
+* Added excel backend ([#334](https://github.com/DS4SD/docling/issues/334)) ([`926dfd2`](https://github.com/DS4SD/docling/commit/926dfd29d51c52628fe9fe8acb0ad0121c88e58a))
+* Extracting picture data for raster images found in PPTX ([#349](https://github.com/DS4SD/docling/issues/349)) ([`7a97d71`](https://github.com/DS4SD/docling/commit/7a97d7119f69a83042477d4272e8ef93a2252cc8))
+
+### Fix
+
+* Fixing images in the input Word files ([#330](https://github.com/DS4SD/docling/issues/330)) ([`8533039`](https://github.com/DS4SD/docling/commit/8533039b0c0eff131b524da765f15c3279b554c5))
+* Reduce logging by keeping option for more verbose ([#323](https://github.com/DS4SD/docling/issues/323)) ([`8b437ad`](https://github.com/DS4SD/docling/commit/8b437adcde4acc1d309c81c707c264bcca05d394))
+
+### Documentation
+
+* Fixed typo in v2 example v2 ([#378](https://github.com/DS4SD/docling/issues/378)) ([`911c3bd`](https://github.com/DS4SD/docling/commit/911c3bda27c4108167b89fa70ec8204c854c583b))
+* Add automatic generation of CLI reference ([#325](https://github.com/DS4SD/docling/issues/325)) ([`ca8524e`](https://github.com/DS4SD/docling/commit/ca8524ecaea93cca0c808c8e7dee29fda0c1977e))
+* Add architecture outline ([#341](https://github.com/DS4SD/docling/issues/341)) ([`25fd149`](https://github.com/DS4SD/docling/commit/25fd149c3839343f8bd42ae993e35f80acda2a52))
+* Fix parameter in usage.md ([#332](https://github.com/DS4SD/docling/issues/332)) ([`835e077`](https://github.com/DS4SD/docling/commit/835e077b021d0a3615247906dd82ecfa19f3cf98))
+
 ## [v2.5.2](https://github.com/DS4SD/docling/releases/tag/v2.5.2) - 2024-11-13
 
 ### Fix

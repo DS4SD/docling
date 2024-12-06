@@ -38,6 +38,7 @@ theme:
     - content.code.annotate
     - content.code.copy
     - announce.dismiss
+    - navigation.footer
     - navigation.tabs
     - navigation.indexes  # <= if set, each "section" can have its own page, if index.md is used
     - navigation.instant
@@ -51,11 +52,12 @@ theme:
     - search.suggest
     - toc.follow
 nav:
-  - Get started:
-    - Home: index.md
+  - Home:
+    - "Docling": index.md
     - Installation: installation.md
     - Usage: usage.md
     - CLI: cli.md
+    - FAQ: faq.md
     - Docling v2: v2.md
   - Concepts:
     - Concepts: concepts/index.md
@@ -84,11 +86,22 @@ nav:
     #   - CLI: examples/cli.md
   - Integrations:
     - Integrations: integrations/index.md
+    - "🐝 Bee": integrations/bee.md
+    - "Cloudera": integrations/cloudera.md
     - "Data Prep Kit": integrations/data_prep_kit.md
-    - "LlamaIndex 🦙": integrations/llamaindex.md
+    - "DocETL": integrations/docetl.md
+    - "🐶 InstructLab": integrations/instructlab.md
+    - "Kotaemon": integrations/kotaemon.md
+    - "🦙 LlamaIndex": integrations/llamaindex.md
+    - "Prodigy": integrations/prodigy.md
+    - "Red Hat Enterprise Linux AI": integrations/rhel_ai.md
+    - "spaCy": integrations/spacy.md
+    - "txtai": integrations/txtai.md
     # - "LangChain 🦜🔗": integrations/langchain.md
-  # - API reference:
-  #   - API reference: api_reference/index.md
+  - API reference:
+    - Document Converter: api_reference/document_converter.md
+    - Pipeline options: api_reference/pipeline_options.md
+    - Docling Document: api_reference/docling_document.md
 
 markdown_extensions:
   - pymdownx.superfences
@@ -104,12 +117,15 @@ markdown_extensions:
 plugins:
   - search
   - mkdocs-jupyter
-  # - mkdocstrings:
-  #     default_handler: python
-  #     options:
-  #       preload_modules:
-  #       - docling
-  #       - docling_core
+  - mkdocstrings:
+      default_handler: python
+      options:
+        extensions:
+          - griffe_pydantic:
+              schema: true
+        preload_modules:
+          - docling
+          - docling_core
 
 extra_css:
   - stylesheets/extra.css

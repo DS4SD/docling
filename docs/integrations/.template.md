@@ -1,0 +1,9 @@
+Docling is available as a plugin for [EXAMPLE](https://example.com).
+
+- 💻 [GitHub][github]
+- 📖 [Docs][docs]
+- 📦 [PyPI][pypi]
+
+[github]: https://github.com/...
+[docs]: https://...
+[pypi]: https://pypi.org/project/...

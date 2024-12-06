@@ -1,5 +1,4 @@
 from enum import Enum, auto
-from io import BytesIO
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from docling_core.types.doc import (
@@ -8,6 +7,9 @@ from docling_core.types.doc import (
     PictureDataType,
     Size,
     TableCell,
+)
+from docling_core.types.io import (  # DO ΝΟΤ REMOVE; explicitly exposed from this location
+    DocumentStream,
 )
 from PIL.Image import Image
 from pydantic import BaseModel, ConfigDict
@@ -22,6 +24,7 @@ class ConversionStatus(str, Enum):
     FAILURE = auto()
     SUCCESS = auto()
     PARTIAL_SUCCESS = auto()
+    SKIPPED = auto()
 
 
 class InputFormat(str, Enum):
@@ -32,11 +35,13 @@ class InputFormat(str, Enum):
     PDF = "pdf"
     ASCIIDOC = "asciidoc"
     MD = "md"
+    XLSX = "xlsx"
 
 
 class OutputFormat(str, Enum):
     MARKDOWN = "md"
     JSON = "json"
+    HTML = "html"
     TEXT = "text"
     DOCTAGS = "doctags"
     INDENTED_TEXT = "itxt"
@@ -50,6 +55,7 @@ FormatToExtensions: Dict[InputFormat, List[str]] = {
     InputFormat.HTML: ["html", "htm", "xhtml"],
     InputFormat.IMAGE: ["jpg", "jpeg", "png", "tif", "tiff", "bmp"],
     InputFormat.ASCIIDOC: ["adoc", "asciidoc", "asc"],
+    InputFormat.XLSX: ["xlsx"],
 }
 
 FormatToMimeType: Dict[InputFormat, List[str]] = {
@@ -73,7 +79,11 @@ FormatToMimeType: Dict[InputFormat, List[str]] = {
     InputFormat.PDF: ["application/pdf"],
     InputFormat.ASCIIDOC: ["text/asciidoc"],
     InputFormat.MD: ["text/markdown", "text/x-markdown"],
+    InputFormat.XLSX: [
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ],
 }
+
 MimeTypeToFormat = {
     mime: fmt for fmt, mimes in FormatToMimeType.items() for mime in mimes
 }
@@ -88,6 +98,7 @@ class DoclingComponentType(str, Enum):
     DOCUMENT_BACKEND = auto()
     MODEL = auto()
     DOC_ASSEMBLER = auto()
+    USER_INPUT = auto()
 
 
 class ErrorItem(BaseModel):
@@ -202,10 +213,3 @@ class Page(BaseModel):
     @property
     def image(self) -> Optional[Image]:
         return self.get_image(scale=self._default_image_scale)
-
-
-class DocumentStream(BaseModel):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    name: str
-    stream: BytesIO

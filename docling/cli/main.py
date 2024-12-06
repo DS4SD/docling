@@ -1,6 +1,8 @@
 import importlib
 import json
 import logging
+import re
+import tempfile
 import time
 import warnings
 from enum import Enum
@@ -8,7 +10,9 @@ from pathlib import Path
 from typing import Annotated, Dict, Iterable, List, Optional, Type
 
 import typer
-from docling_core.utils.file import resolve_file_source
+from docling_core.types.doc import ImageRefMode
+from docling_core.utils.file import resolve_source_to_path
+from pydantic import TypeAdapter, ValidationError
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.docling_parse_v2_backend import DoclingParseV2DocumentBackend
@@ -23,12 +27,15 @@ from docling.datamodel.base_models import (
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
+    OcrMacOptions,
     OcrOptions,
     PdfPipelineOptions,
+    RapidOcrOptions,
     TableFormerMode,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
 )
+from docling.datamodel.settings import settings
 from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
@@ -73,16 +80,19 @@ class OcrEngine(str, Enum):
     EASYOCR = "easyocr"
     TESSERACT_CLI = "tesseract_cli"
     TESSERACT = "tesseract"
+    OCRMAC = "ocrmac"
+    RAPIDOCR = "rapidocr"
 
 
 def export_documents(
     conv_results: Iterable[ConversionResult],
     output_dir: Path,
     export_json: bool,
+    export_html: bool,
     export_md: bool,
     export_txt: bool,
     export_doctags: bool,
-    export_itxt: bool,
+    image_export_mode: ImageRefMode,
 ):
 
     success_count = 0
@@ -93,40 +103,46 @@ def export_documents(
             success_count += 1
             doc_filename = conv_res.input.file.stem
 
-            # Export Deep Search document JSON format:
+            # Export JSON format:
             if export_json:
                 fname = output_dir / f"{doc_filename}.json"
-                with fname.open("w", encoding="utf8") as fp:
-                    _log.info(f"writing JSON output to {fname}")
-                    fp.write(json.dumps(conv_res.document.export_to_dict()))
+                _log.info(f"writing JSON output to {fname}")
+                conv_res.document.save_as_json(
+                    filename=fname, image_mode=image_export_mode
+                )
+
+            # Export HTML format:
+            if export_html:
+                fname = output_dir / f"{doc_filename}.html"
+                _log.info(f"writing HTML output to {fname}")
+                conv_res.document.save_as_html(
+                    filename=fname, image_mode=image_export_mode
+                )
 
             # Export Text format:
             if export_txt:
                 fname = output_dir / f"{doc_filename}.txt"
-                with fname.open("w", encoding="utf8") as fp:
-                    _log.info(f"writing Text output to {fname}")
-                    fp.write(conv_res.document.export_to_markdown(strict_text=True))
+                _log.info(f"writing TXT output to {fname}")
+                conv_res.document.save_as_markdown(
+                    filename=fname,
+                    strict_text=True,
+                    image_mode=ImageRefMode.PLACEHOLDER,
+                )
 
             # Export Markdown format:
             if export_md:
                 fname = output_dir / f"{doc_filename}.md"
-                with fname.open("w", encoding="utf8") as fp:
-                    _log.info(f"writing Markdown output to {fname}")
-                    fp.write(conv_res.document.export_to_markdown())
+                _log.info(f"writing Markdown output to {fname}")
+                conv_res.document.save_as_markdown(
+                    filename=fname, image_mode=image_export_mode
+                )
 
             # Export Document Tags format:
             if export_doctags:
                 fname = output_dir / f"{doc_filename}.doctags"
-                with fname.open("w", encoding="utf8") as fp:
-                    _log.info(f"writing Doc Tags output to {fname}")
-                    fp.write(conv_res.document.export_to_document_tokens())
+                _log.info(f"writing Doc Tags output to {fname}")
+                conv_res.document.save_as_document_tokens(filename=fname)
 
-            # Export Indented Text format:
-            if export_itxt:
-                fname = output_dir / f"{doc_filename}.itxt"
-                with fname.open("w") as fp:
-                    _log.info(f"writing Indented Text output to {fname}")
-                    fp.write(conv_res.document._export_to_indented_text())
         else:
             _log.warning(f"Document {conv_res.input.file} failed to convert.")
             failure_count += 1
@@ -134,6 +150,12 @@ def export_documents(
     _log.info(
         f"Processed {success_count + failure_count} docs, of which {failure_count} failed"
     )
+
+
+def _split_list(raw: Optional[str]) -> Optional[List[str]]:
+    if raw is None:
+        return None
+    return re.split(r"[;,]", raw)
 
 
 @app.command(no_args_is_help=True)
@@ -154,6 +176,13 @@ def convert(
     to_formats: List[OutputFormat] = typer.Option(
         None, "--to", help="Specify output formats. Defaults to Markdown."
     ),
+    image_export_mode: Annotated[
+        ImageRefMode,
+        typer.Option(
+            ...,
+            help="Image export mode for the document (only in case of JSON, Markdown or HTML). With `placeholder`, only the position of the image is marked in the output. In `embedded` mode, the image is embedded as base64 encoded string. In `referenced` mode, the image is exported in PNG format and referenced from the main exported document.",
+        ),
+    ] = ImageRefMode.EMBEDDED,
     ocr: Annotated[
         bool,
         typer.Option(
@@ -170,6 +199,13 @@ def convert(
     ocr_engine: Annotated[
         OcrEngine, typer.Option(..., help="The OCR engine to use.")
     ] = OcrEngine.EASYOCR,
+    ocr_lang: Annotated[
+        Optional[str],
+        typer.Option(
+            ...,
+            help="Provide a comma-separated list of languages used by the OCR engine. Note that each OCR engine has different values for the language names.",
+        ),
+    ] = None,
     pdf_backend: Annotated[
         PdfBackend, typer.Option(..., help="The PDF backend to use.")
     ] = PdfBackend.DLPARSE_V1,
@@ -201,6 +237,24 @@ def convert(
             help="Set the verbosity level. -v for info logging, -vv for debug logging.",
         ),
     ] = 0,
+    debug_visualize_cells: Annotated[
+        bool,
+        typer.Option(..., help="Enable debug output which visualizes the PDF cells"),
+    ] = False,
+    debug_visualize_ocr: Annotated[
+        bool,
+        typer.Option(..., help="Enable debug output which visualizes the OCR cells"),
+    ] = False,
+    debug_visualize_layout: Annotated[
+        bool,
+        typer.Option(
+            ..., help="Enable debug output which visualizes the layour clusters"
+        ),
+    ] = False,
+    debug_visualize_tables: Annotated[
+        bool,
+        typer.Option(..., help="Enable debug output which visualizes the table cells"),
+    ] = False,
     version: Annotated[
         Optional[bool],
         typer.Option(
@@ -218,95 +272,136 @@ def convert(
     elif verbose == 2:
         logging.basicConfig(level=logging.DEBUG)
 
+    settings.debug.visualize_cells = debug_visualize_cells
+    settings.debug.visualize_layout = debug_visualize_layout
+    settings.debug.visualize_tables = debug_visualize_tables
+    settings.debug.visualize_ocr = debug_visualize_ocr
+
     if from_formats is None:
         from_formats = [e for e in InputFormat]
 
-    input_doc_paths: List[Path] = []
-    for src in input_sources:
-        source = resolve_file_source(source=src)
-        if not source.exists():
-            err_console.print(
-                f"[red]Error: The input file {source} does not exist.[/red]"
-            )
-            raise typer.Abort()
-        elif source.is_dir():
-            for fmt in from_formats:
-                for ext in FormatToExtensions[fmt]:
-                    input_doc_paths.extend(list(source.glob(f"**/*.{ext}")))
-                    input_doc_paths.extend(list(source.glob(f"**/*.{ext.upper()}")))
-        else:
-            input_doc_paths.append(source)
+    with tempfile.TemporaryDirectory() as tempdir:
+        input_doc_paths: List[Path] = []
+        for src in input_sources:
+            try:
+                # check if we can fetch some remote url
+                source = resolve_source_to_path(source=src, workdir=Path(tempdir))
+                input_doc_paths.append(source)
+            except FileNotFoundError:
+                err_console.print(
+                    f"[red]Error: The input file {src} does not exist.[/red]"
+                )
+                raise typer.Abort()
+            except IsADirectoryError:
+                # if the input matches to a file or a folder
+                try:
+                    local_path = TypeAdapter(Path).validate_python(src)
+                    if local_path.exists() and local_path.is_dir():
+                        for fmt in from_formats:
+                            for ext in FormatToExtensions[fmt]:
+                                input_doc_paths.extend(
+                                    list(local_path.glob(f"**/*.{ext}"))
+                                )
+                                input_doc_paths.extend(
+                                    list(local_path.glob(f"**/*.{ext.upper()}"))
+                                )
+                    elif local_path.exists():
+                        input_doc_paths.append(local_path)
+                    else:
+                        err_console.print(
+                            f"[red]Error: The input file {src} does not exist.[/red]"
+                        )
+                        raise typer.Abort()
+                except Exception as err:
+                    err_console.print(f"[red]Error: Cannot read the input {src}.[/red]")
+                    _log.info(err)  # will print more details if verbose is activated
+                    raise typer.Abort()
 
-    if to_formats is None:
-        to_formats = [OutputFormat.MARKDOWN]
+        if to_formats is None:
+            to_formats = [OutputFormat.MARKDOWN]
 
-    export_json = OutputFormat.JSON in to_formats
-    export_md = OutputFormat.MARKDOWN in to_formats
-    export_txt = OutputFormat.TEXT in to_formats
-    export_doctags = OutputFormat.DOCTAGS in to_formats
-    export_itxt = OutputFormat.INDENTED_TEXT in to_formats
+        export_json = OutputFormat.JSON in to_formats
+        export_html = OutputFormat.HTML in to_formats
+        export_md = OutputFormat.MARKDOWN in to_formats
+        export_txt = OutputFormat.TEXT in to_formats
+        export_doctags = OutputFormat.DOCTAGS in to_formats
 
-    match ocr_engine:
-        case OcrEngine.EASYOCR:
+        if ocr_engine == OcrEngine.EASYOCR:
             ocr_options: OcrOptions = EasyOcrOptions(force_full_page_ocr=force_ocr)
-        case OcrEngine.TESSERACT_CLI:
+        elif ocr_engine == OcrEngine.TESSERACT_CLI:
             ocr_options = TesseractCliOcrOptions(force_full_page_ocr=force_ocr)
-        case OcrEngine.TESSERACT:
+        elif ocr_engine == OcrEngine.TESSERACT:
             ocr_options = TesseractOcrOptions(force_full_page_ocr=force_ocr)
-        case _:
+        elif ocr_engine == OcrEngine.OCRMAC:
+            ocr_options = OcrMacOptions(force_full_page_ocr=force_ocr)
+        elif ocr_engine == OcrEngine.RAPIDOCR:
+            ocr_options = RapidOcrOptions(force_full_page_ocr=force_ocr)
+        else:
             raise RuntimeError(f"Unexpected OCR engine type {ocr_engine}")
 
-    pipeline_options = PdfPipelineOptions(
-        do_ocr=ocr,
-        ocr_options=ocr_options,
-        do_table_structure=True,
-    )
-    pipeline_options.table_structure_options.do_cell_matching = True  # do_cell_matching
+        ocr_lang_list = _split_list(ocr_lang)
+        if ocr_lang_list is not None:
+            ocr_options.lang = ocr_lang_list
 
-    pipeline_options.table_structure_options.mode = table_mode
+        pipeline_options = PdfPipelineOptions(
+            do_ocr=ocr,
+            ocr_options=ocr_options,
+            do_table_structure=True,
+        )
+        pipeline_options.table_structure_options.do_cell_matching = (
+            True  # do_cell_matching
+        )
+        pipeline_options.table_structure_options.mode = table_mode
 
-    if artifacts_path is not None:
-        pipeline_options.artifacts_path = artifacts_path
+        if image_export_mode != ImageRefMode.PLACEHOLDER:
+            pipeline_options.generate_page_images = True
+            pipeline_options.generate_picture_images = (
+                True  # FIXME: to be deprecated in verson 3
+            )
+            pipeline_options.images_scale = 2
 
-    match pdf_backend:
-        case PdfBackend.DLPARSE_V1:
+        if artifacts_path is not None:
+            pipeline_options.artifacts_path = artifacts_path
+
+        if pdf_backend == PdfBackend.DLPARSE_V1:
             backend: Type[PdfDocumentBackend] = DoclingParseDocumentBackend
-        case PdfBackend.DLPARSE_V2:
+        elif pdf_backend == PdfBackend.DLPARSE_V2:
             backend = DoclingParseV2DocumentBackend
-        case PdfBackend.PYPDFIUM2:
+        elif pdf_backend == PdfBackend.PYPDFIUM2:
             backend = PyPdfiumDocumentBackend
-        case _:
+        else:
             raise RuntimeError(f"Unexpected PDF backend type {pdf_backend}")
 
-    format_options: Dict[InputFormat, FormatOption] = {
-        InputFormat.PDF: PdfFormatOption(
-            pipeline_options=pipeline_options,
-            backend=backend,  # pdf_backend
+        format_options: Dict[InputFormat, FormatOption] = {
+            InputFormat.PDF: PdfFormatOption(
+                pipeline_options=pipeline_options,
+                backend=backend,  # pdf_backend
+            )
+        }
+        doc_converter = DocumentConverter(
+            allowed_formats=from_formats,
+            format_options=format_options,
         )
-    }
-    doc_converter = DocumentConverter(
-        allowed_formats=from_formats,
-        format_options=format_options,
-    )
 
-    start_time = time.time()
+        start_time = time.time()
 
-    conv_results = doc_converter.convert_all(
-        input_doc_paths, raises_on_error=abort_on_error
-    )
+        conv_results = doc_converter.convert_all(
+            input_doc_paths, raises_on_error=abort_on_error
+        )
 
-    output.mkdir(parents=True, exist_ok=True)
-    export_documents(
-        conv_results,
-        output_dir=output,
-        export_json=export_json,
-        export_md=export_md,
-        export_txt=export_txt,
-        export_doctags=export_doctags,
-        export_itxt=export_itxt,
-    )
+        output.mkdir(parents=True, exist_ok=True)
+        export_documents(
+            conv_results,
+            output_dir=output,
+            export_json=export_json,
+            export_html=export_html,
+            export_md=export_md,
+            export_txt=export_txt,
+            export_doctags=export_doctags,
+            image_export_mode=image_export_mode,
+        )
 
-    end_time = time.time() - start_time
+        end_time = time.time() - start_time
 
     _log.info(f"All documents were converted in {end_time:.2f} seconds.")
 
