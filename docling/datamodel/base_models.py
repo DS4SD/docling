@@ -41,6 +41,7 @@ class InputFormat(str, Enum):
 class OutputFormat(str, Enum):
     MARKDOWN = "md"
     JSON = "json"
+    HTML = "html"
     TEXT = "text"
     DOCTAGS = "doctags"
 
