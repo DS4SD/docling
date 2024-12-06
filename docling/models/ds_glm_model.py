@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import List, Union
 
 from deepsearch_glm.nlp_utils import init_nlp_model
-from deepsearch_glm.utils.doc_utils import to_docling_document
 from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_models
 from docling_core.types.doc import BoundingBox, CoordOrigin, DoclingDocument
 from docling_core.types.legacy_doc.base import BoundingBox as DsBoundingBox
@@ -24,11 +23,18 @@ from docling_core.types.legacy_doc.document import (
 from docling_core.types.legacy_doc.document import CCSFileInfoObject as DsFileInfoObject
 from docling_core.types.legacy_doc.document import ExportedCCSDocument as DsDocument
 from PIL import ImageDraw
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, TypeAdapter
 
-from docling.datamodel.base_models import Cluster, FigureElement, Table, TextElement
+from docling.datamodel.base_models import (
+    Cluster,
+    ContainerElement,
+    FigureElement,
+    Table,
+    TextElement,
+)
 from docling.datamodel.document import ConversionResult, layout_label_to_ds_type
 from docling.datamodel.settings import settings
+from docling.utils.glm_utils import to_docling_document
 from docling.utils.profiling import ProfilingScope, TimeRecorder
 from docling.utils.utils import create_hash
 
@@ -45,7 +51,9 @@ class GlmModel:
 
         if self.options.model_names != "":
             load_pretrained_nlp_models()
-        self.model = init_nlp_model(model_names=self.options.model_names)
+        self.model = init_nlp_model(
+            model_names=self.options.model_names, loglevel="ERROR"
+        )
 
     def _to_legacy_document(self, conv_res) -> DsDocument:
         title = ""
@@ -207,7 +215,31 @@ class GlmModel:
                             )
                         ],
                         obj_type=layout_label_to_ds_type.get(element.label),
-                        # data=[[]],
+                        payload={
+                            "children": TypeAdapter(List[Cluster]).dump_python(
+                                element.cluster.children
+                            )
+                        },  # hack to channel child clusters through GLM
+                    )
+                )
+            elif isinstance(element, ContainerElement):
+                main_text.append(
+                    BaseText(
+                        text="",
+                        payload={
+                            "children": TypeAdapter(List[Cluster]).dump_python(
+                                element.cluster.children
+                            )
+                        },  # hack to channel child clusters through GLM
+                        obj_type=layout_label_to_ds_type.get(element.label),
+                        name=element.label,
+                        prov=[
+                            Prov(
+                                bbox=target_bbox,
+                                page=element.page_no + 1,
+                                span=[0, 0],
+                            )
+                        ],
                     )
                 )
 
@@ -232,7 +264,7 @@ class GlmModel:
     def __call__(self, conv_res: ConversionResult) -> DoclingDocument:
         with TimeRecorder(conv_res, "glm", scope=ProfilingScope.DOCUMENT):
             ds_doc = self._to_legacy_document(conv_res)
-            ds_doc_dict = ds_doc.model_dump(by_alias=True)
+            ds_doc_dict = ds_doc.model_dump(by_alias=True, exclude_none=True)
 
             glm_doc = self.model.apply_on_doc(ds_doc_dict)
 

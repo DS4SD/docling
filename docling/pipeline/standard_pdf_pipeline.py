@@ -40,7 +40,8 @@ _log = logging.getLogger(__name__)
 class StandardPdfPipeline(PaginatedPipeline):
     # TODO: Revise after having the models in HF
     # _layout_model_path = "model_artifacts/layout/beehive_v0.0.5_pt"
-    _layout_model_path = "model_artifacts/layout/"
+
+    _layout_model_path = "model_artifacts/layout"
     _table_model_path = "model_artifacts/tableformer"
 
     def __init__(self, pipeline_options: PdfPipelineOptions):
