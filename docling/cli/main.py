@@ -10,10 +10,9 @@ from pathlib import Path
 from typing import Annotated, Dict, Iterable, List, Optional, Type
 
 import typer
+from docling_core.types.doc import ImageRefMode
 from docling_core.utils.file import resolve_source_to_path
 from pydantic import TypeAdapter, ValidationError
-
-from docling_core.types.doc import ImageRefMode
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.docling_parse_v2_backend import DoclingParseV2DocumentBackend
@@ -93,7 +92,7 @@ def export_documents(
     export_md: bool,
     export_txt: bool,
     export_doctags: bool,
-    image_export_mode: ImageRefMode
+    image_export_mode: ImageRefMode,
 ):
 
     success_count = 0
@@ -107,57 +106,43 @@ def export_documents(
             # Export JSON format:
             if export_json:
                 fname = output_dir / f"{doc_filename}.json"
-                _log.info(f"writing JSON output to {fname}")                
-                conv_res.document.save_as_json(filename=fname, image_mode=image_export_mode)
-                """
-                fname = output_dir / f"{doc_filename}.json"
-                with fname.open("w", encoding="utf8") as fp:
-                    _log.info(f"writing JSON output to {fname}")
-                    fp.write(json.dumps(conv_res.document.export_to_dict()))
-                """
-                
+                _log.info(f"writing JSON output to {fname}")
+                conv_res.document.save_as_json(
+                    filename=fname, image_mode=image_export_mode
+                )
+
             # Export HTML format:
-            if export_html:                
+            if export_html:
                 fname = output_dir / f"{doc_filename}.html"
                 _log.info(f"writing HTML output to {fname}")
-                conv_res.document.save_as_html(filename=fname, image_mode=image_export_mode)
-                """
-                with fname.open("w", encoding="utf8") as fp:
-                    _log.info(f"writing HTML output to {fname}")
-                    fp.write(conv_res.document.export_to_html())
-                """
-                
+                conv_res.document.save_as_html(
+                    filename=fname, image_mode=image_export_mode
+                )
+
             # Export Text format:
             if export_txt:
                 fname = output_dir / f"{doc_filename}.txt"
                 _log.info(f"writing TXT output to {fname}")
-                conv_res.document.save_as_text(filename=fname)
-                """
-                with fname.open("w", encoding="utf8") as fp:
-                    _log.info(f"writing Text output to {fname}")
-                    fp.write(conv_res.document.export_to_markdown(strict_text=True))
-                """
-                
+                conv_res.document.save_as_markdown(
+                    filename=fname,
+                    strict_text=True,
+                    image_mode=ImageRefMode.PLACEHOLDER,
+                )
+
             # Export Markdown format:
             if export_md:
                 fname = output_dir / f"{doc_filename}.md"
                 _log.info(f"writing Markdown output to {fname}")
-                conv_res.document.save_as_md(filename=fname, image_mode=image_export_mode)
-                """
-                with fname.open("w", encoding="utf8") as fp:
-                    _log.info(f"writing Markdown output to {fname}")
-                    fp.write(conv_res.document.export_to_markdown())
-                """
-                
+                conv_res.document.save_as_markdown(
+                    filename=fname, image_mode=image_export_mode
+                )
+
             # Export Document Tags format:
             if export_doctags:
                 fname = output_dir / f"{doc_filename}.doctags"
                 _log.info(f"writing Doc Tags output to {fname}")
                 conv_res.document.save_as_document_tokens(filename=fname)
-                """
-                with fname.open("w", encoding="utf8") as fp:
-                    fp.write(conv_res.document.export_to_document_tokens())
-                """
+
         else:
             _log.warning(f"Document {conv_res.input.file} failed to convert.")
             failure_count += 1
@@ -195,7 +180,7 @@ def convert(
         ImageRefMode,
         typer.Option(
             ...,
-            help="Image export mode for the document (only in case of Markdown or HTML). In `placeholder`, only the position of the image is returned. In `embedded` mode, the image is contained in base64. In `referenced` mode, the image is exported in PNG format and referenced from the main exported document." 
+            help="Image export mode for the document (only in case of Markdown or HTML). In `placeholder`, only the position of the image is returned. In `embedded` mode, the image is contained in base64. In `referenced` mode, the image is exported in PNG format and referenced from the main exported document.",
         ),
     ] = ImageRefMode.EMBEDDED,
     ocr: Annotated[
@@ -357,20 +342,20 @@ def convert(
         ocr_lang_list = _split_list(ocr_lang)
         if ocr_lang_list is not None:
             ocr_options.lang = ocr_lang_list
-            
+
         pipeline_options = PdfPipelineOptions(
             do_ocr=ocr,
             ocr_options=ocr_options,
-            do_table_structure=True,            
+            do_table_structure=True,
         )
         pipeline_options.table_structure_options.do_cell_matching = (
             True  # do_cell_matching
         )
         pipeline_options.table_structure_options.mode = table_mode
 
-        if image_export_mode!=ImageRefMode.PLACEHOLDER:
+        if image_export_mode != ImageRefMode.PLACEHOLDER:
             pipeline_options.generate_page_images = True
-        
+
         if artifacts_path is not None:
             pipeline_options.artifacts_path = artifacts_path
 
@@ -393,7 +378,7 @@ def convert(
             allowed_formats=from_formats,
             format_options=format_options,
         )
-        
+
         start_time = time.time()
 
         conv_results = doc_converter.convert_all(
@@ -409,7 +394,7 @@ def convert(
             export_md=export_md,
             export_txt=export_txt,
             export_doctags=export_doctags,
-            image_export_mode = image_export_mode, 
+            image_export_mode=image_export_mode,
         )
 
         end_time = time.time() - start_time
