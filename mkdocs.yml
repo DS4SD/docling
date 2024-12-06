@@ -87,13 +87,16 @@ nav:
   - Integrations:
     - Integrations: integrations/index.md
     - "🐝 Bee": integrations/bee.md
+    - "Cloudera": integrations/cloudera.md
     - "Data Prep Kit": integrations/data_prep_kit.md
     - "DocETL": integrations/docetl.md
     - "🐶 InstructLab": integrations/instructlab.md
     - "Kotaemon": integrations/kotaemon.md
     - "🦙 LlamaIndex": integrations/llamaindex.md
     - "Prodigy": integrations/prodigy.md
+    - "Red Hat Enterprise Linux AI": integrations/rhel_ai.md
     - "spaCy": integrations/spacy.md
+    - "txtai": integrations/txtai.md
     # - "LangChain 🦜🔗": integrations/langchain.md
   - API reference:
     - Document Converter: api_reference/document_converter.md
