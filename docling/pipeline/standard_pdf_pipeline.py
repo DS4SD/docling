@@ -38,9 +38,6 @@ _log = logging.getLogger(__name__)
 
 
 class StandardPdfPipeline(PaginatedPipeline):
-    # TODO: Revise after having the models in HF
-    # _layout_model_path = "model_artifacts/layout/beehive_v0.0.5_pt"
-
     _layout_model_path = "model_artifacts/layout"
     _table_model_path = "model_artifacts/tableformer"
 
@@ -103,13 +100,6 @@ class StandardPdfPipeline(PaginatedPipeline):
     ) -> Path:
         from huggingface_hub import snapshot_download
 
-        # TODO: Revise after having the models in HF
-        # download_path = snapshot_download(
-        #     repo_id="ds4sd/docling-models",
-        #     force_download=force,
-        #     local_dir=local_dir,
-        #     revision="v2.0.1",
-        # )
         download_path = snapshot_download(
             repo_id="ds4sd/docling-models",
             force_download=force,

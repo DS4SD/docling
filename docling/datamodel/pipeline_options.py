@@ -2,9 +2,9 @@ import logging
 import os
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Optional, Tuple, Type, Union
+from typing import Annotated, Any, Dict, List, Literal, Optional, Tuple, Type, Union
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
@@ -28,11 +28,12 @@ class AcceleratorOptions(BaseSettings):
         env_prefix="DOCLING_", env_nested_delimiter="_", populate_by_name=True
     )
 
-    # num_threads: int = Field(default=4, validation_alias="omp_num_threads")
     num_threads: int = 4
     device: AcceleratorDevice = AcceleratorDevice.AUTO
 
-    def __init__(self, **data):
+    @model_validator(mode="before")
+    @classmethod
+    def check_alternative_envvars(cls, data: Any) -> Any:
         r"""
         Set num_threads from the "alternative" envvar OMP_NUM_THREADS.
         The alternative envvar is used only if it is valid and the regular envvar is not set.
@@ -42,21 +43,22 @@ class AcceleratorOptions(BaseSettings):
         parameter in settings initialization, Pydantic treats the parameter provided in __init__()
         as an extra input instead of simply overwriting the evvar value for that parameter.
         """
-        input_num_threads = data.get("num_threads")
+        if isinstance(data, dict):
+            input_num_threads = data.get("num_threads")
 
-        # Check if to set the num_threads from the alternative envvar
-        if input_num_threads is None:
-            docling_num_threads = os.getenv("DOCLING_NUM_THREADS")
-            omp_num_threads = os.getenv("OMP_NUM_THREADS")
-            if docling_num_threads is None and omp_num_threads is not None:
-                try:
-                    data["num_threads"] = int(omp_num_threads)
-                except ValueError:
-                    _log.error(
-                        "Ignoring misformatted envvar OMP_NUM_THREADS '%s'",
-                        omp_num_threads,
-                    )
-        super().__init__(**data)
+            # Check if to set the num_threads from the alternative envvar
+            if input_num_threads is None:
+                docling_num_threads = os.getenv("DOCLING_NUM_THREADS")
+                omp_num_threads = os.getenv("OMP_NUM_THREADS")
+                if docling_num_threads is None and omp_num_threads is not None:
+                    try:
+                        data["num_threads"] = int(omp_num_threads)
+                    except ValueError:
+                        _log.error(
+                            "Ignoring misformatted envvar OMP_NUM_THREADS '%s'",
+                            omp_num_threads,
+                        )
+        return data
 
 
 class TableFormerMode(str, Enum):
@@ -132,18 +134,17 @@ class EasyOcrOptions(OcrOptions):
 
     kind: Literal["easyocr"] = "easyocr"
     lang: List[str] = ["fr", "de", "es", "en"]
-    use_gpu: bool = Field(
-        default=True,
-        deprecated=(
-            "Field `use_gpu` is deprecated. "
-            "When `use_gpu == True and accelerator_options.device == AcceleratorDevice.CUDA` "
-            "then the GPU is used to run EasyOCR. "
-            "When `use_gpu == False`, EasyOCR runs in CPU"
+    use_gpu: Annotated[
+        int,
+        Field(
+            deprecated="Deprecated field. Better to set the `accelerator_options.device` in `pipeline_options`. "
+            "When `use_gpu and accelerator_options.device == AcceleratorDevice.CUDA` the GPU is used "
+            "to run EasyOCR. Otherwise, EasyOCR runs in CPU."
         ),
-    )
+    ] = True
 
     model_storage_directory: Optional[str] = None
-    download_enabled: bool = True  # same default as easyocr.Reader
+    download_enabled: bool = True
 
     model_config = ConfigDict(
         extra="forbid",

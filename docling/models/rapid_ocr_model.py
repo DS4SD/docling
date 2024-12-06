@@ -13,7 +13,7 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
-from docling.utils import accelerator_utils as au
+from docling.utils.accelerator_utils import decide_device
 from docling.utils.profiling import TimeRecorder
 
 _log = logging.getLogger(__name__)
@@ -41,7 +41,7 @@ class RapidOcrModel(BaseOcrModel):
                 )
 
             # Decide the accelerator devices
-            device = au.decide_device(accelerator_options.device)
+            device = decide_device(accelerator_options.device)
             use_cuda = device == AcceleratorDevice.CUDA
             use_dml = accelerator_options.device == AcceleratorDevice.AUTO
             intra_op_num_threads = accelerator_options.num_threads

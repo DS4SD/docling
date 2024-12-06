@@ -16,7 +16,7 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
-from docling.utils import accelerator_utils as au
+from docling.utils.accelerator_utils import decide_device
 from docling.utils.profiling import TimeRecorder
 
 
@@ -40,7 +40,7 @@ class TableStructureModel(BasePageModel):
             # Third Party
             import docling_ibm_models.tableformer.common as c
 
-            device = au.decide_device(accelerator_options.device)
+            device = decide_device(accelerator_options.device)
 
             self.tm_config = c.read_config(f"{artifacts_path}/tm_config.json")
             self.tm_config["model"]["save_dir"] = artifacts_path
