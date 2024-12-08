@@ -98,6 +98,11 @@ class StandardPdfPipeline(PaginatedPipeline):
     ) -> Path:
         from huggingface_hub import snapshot_download
 
+        # Disable tqdm prints used by HF
+        from tqdm import tqdm
+        from functools import partialmethod
+        tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
+
         download_path = snapshot_download(
             repo_id="ds4sd/docling-models",
             force_download=force,
