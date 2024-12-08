@@ -143,7 +143,11 @@ class PdfPipelineOptions(PipelineOptions):
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
     ocr_options: Union[
-        EasyOcrOptions, TesseractCliOcrOptions, TesseractOcrOptions, OcrMacOptions
+        EasyOcrOptions,
+        TesseractCliOcrOptions,
+        TesseractOcrOptions,
+        OcrMacOptions,
+        RapidOcrOptions,
     ] = Field(EasyOcrOptions(), discriminator="kind")
 
     images_scale: float = 1.0
