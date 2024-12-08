@@ -343,9 +343,9 @@ def convert(
             raise RuntimeError(f"Unexpected PDF backend type {pdf_backend}")
 
         pdf_format_option = PdfFormatOption(
-                pipeline_options=pipeline_options,
-                backend=backend,  # pdf_backend
-            )
+            pipeline_options=pipeline_options,
+            backend=backend,  # pdf_backend
+        )
         format_options: Dict[InputFormat, FormatOption] = {
             InputFormat.PDF: pdf_format_option,
             InputFormat.IMAGE: pdf_format_option,

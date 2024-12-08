@@ -96,11 +96,13 @@ class StandardPdfPipeline(PaginatedPipeline):
     def download_models_hf(
         local_dir: Optional[Path] = None, force: bool = False
     ) -> Path:
+        from functools import partialmethod
+
         from huggingface_hub import snapshot_download
 
         # Disable tqdm prints used by HF
         from tqdm import tqdm
-        from functools import partialmethod
+
         tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
 
         download_path = snapshot_download(
