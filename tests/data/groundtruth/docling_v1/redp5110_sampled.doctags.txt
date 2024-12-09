@@ -256,7 +256,7 @@
 <paragraph><location><page_13><loc_25><loc_58><loc_66><loc_59></location>- -Employees can see only their own unmasked TAX_ID.</paragraph>
 <paragraph><location><page_13><loc_25><loc_55><loc_89><loc_57></location>- -Managers see a masked version of TAX_ID with the first five characters replaced with the X character (for example, XXX-XX-1234).</paragraph>
 <paragraph><location><page_13><loc_25><loc_52><loc_87><loc_54></location>- -Any other person sees the entire TAX_ID as masked, for example, XXX-XX-XXXX.</paragraph>
-<paragraph><location><page_13><loc_25><loc_50><loc_87><loc_51></location>To implement this column mask, run the SQL statement that is shown in Example 3-9.</paragraph>
+<paragraph><location><page_13><loc_25><loc_50><loc_87><loc_51></location>- To implement this column mask, run the SQL statement that is shown in Example 3-9.</paragraph>
 <paragraph><location><page_13><loc_22><loc_48><loc_58><loc_49></location>Example 3-9 Creating a mask on the TAX_ID column</paragraph>
 <paragraph><location><page_13><loc_22><loc_14><loc_86><loc_47></location>CREATE MASK HR_SCHEMA.MASK_TAX_ID_ON_EMPLOYEES ON HR_SCHEMA.EMPLOYEES AS EMPLOYEES FOR COLUMN TAX_ID RETURN CASE WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR' ) = 1 THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER = EMPLOYEES . USER_ID THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER <> EMPLOYEES . USER_ID THEN ( 'XXX-XX-' CONCAT QSYS2 . SUBSTR ( EMPLOYEES . TAX_ID , 8 , 4 ) ) WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'EMP' ) = 1 THEN EMPLOYEES . TAX_ID ELSE 'XXX-XX-XXXX' END ENABLE ;</paragraph>
 <paragraph><location><page_14><loc_22><loc_90><loc_74><loc_91></location>- 3. Figure 3-10 shows the masks that are created in the HR_SCHEMA.</paragraph>
@@ -268,7 +268,7 @@
 <subtitle-level-1><location><page_14><loc_11><loc_73><loc_33><loc_74></location>3.6.6 Activating RCAC</subtitle-level-1>
 <paragraph><location><page_14><loc_22><loc_67><loc_89><loc_71></location>Now that you have created the row permission and the two column masks, RCAC must be activated. The row permission and the two column masks are enabled (last clause in the scripts), but now you must activate RCAC on the table. To do so, complete the following steps:</paragraph>
 <paragraph><location><page_14><loc_22><loc_65><loc_67><loc_66></location>- 1. Run the SQL statements that are shown in Example 3-10.</paragraph>
-<paragraph><location><page_14><loc_22><loc_62><loc_61><loc_63></location>Example 3-10 Activating RCAC on the EMPLOYEES table</paragraph>
+<subtitle-level-1><location><page_14><loc_22><loc_62><loc_61><loc_63></location>Example 3-10 Activating RCAC on the EMPLOYEES table</subtitle-level-1>
 <paragraph><location><page_14><loc_22><loc_60><loc_62><loc_61></location>- /* Active Row Access Control (permissions) */</paragraph>
 <paragraph><location><page_14><loc_22><loc_58><loc_58><loc_60></location>- /* Active Column Access Control (masks)</paragraph>
 <paragraph><location><page_14><loc_60><loc_58><loc_62><loc_60></location>*/</paragraph>

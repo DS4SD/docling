@@ -10,11 +10,15 @@
 <figure>
 <location><page_1><loc_52><loc_62><loc_88><loc_71></location>
 </figure>
-<section_header_level_1><location><page_1><loc_52><loc_58><loc_79><loc_60></location>b. Red-annotation of bounding boxes, Blue-predictions by TableFormer</section_header_level_1>
+<unordered_list>
+<list_item><location><page_1><loc_52><loc_58><loc_79><loc_60></location>b. Red-annotation of bounding boxes, Blue-predictions by TableFormer</list_item>
+</unordered_list>
 <figure>
 <location><page_1><loc_51><loc_48><loc_88><loc_57></location>
 </figure>
-<section_header_level_1><location><page_1><loc_52><loc_46><loc_80><loc_47></location>c. Structure predicted by TableFormer:</section_header_level_1>
+<unordered_list>
+<list_item><location><page_1><loc_52><loc_46><loc_80><loc_47></location>c. Structure predicted by TableFormer:</list_item>
+</unordered_list>
 <figure>
 <location><page_1><loc_52><loc_37><loc_88><loc_45></location>
 <caption>Figure 1: Picture of a table with subtle, complex features such as (1) multi-column headers, (2) cell with multi-row text and (3) cells with no content. Image from PubTabNet evaluation set, filename: 'PMC2944238 004 02'.</caption>
@@ -150,8 +154,8 @@
 </table>
 <unordered_list>
 <list_item><location><page_8><loc_9><loc_89><loc_10><loc_90></location>a.</list_item>
+<list_item><location><page_8><loc_11><loc_89><loc_82><loc_90></location>Red - PDF cells, Green - predicted bounding boxes, Blue - post-processed predictions matched to PDF cells</list_item>
 </unordered_list>
-<text><location><page_8><loc_11><loc_89><loc_82><loc_90></location>Red - PDF cells, Green - predicted bounding boxes, Blue - post-processed predictions matched to PDF cells</text>
 <text><location><page_8><loc_9><loc_87><loc_46><loc_88></location>Japanese language (previously unseen by TableFormer):</text>
 <text><location><page_8><loc_50><loc_87><loc_70><loc_88></location>Example table from FinTabNet:</text>
 <figure>
@@ -297,9 +301,7 @@
 <unordered_list>
 <list_item><location><page_12><loc_50><loc_13><loc_89><loc_16></location>9d. Intersect the orphan's bounding box with the column bands, and map the cell to the closest grid column.</list_item>
 <list_item><location><page_12><loc_8><loc_10><loc_47><loc_13></location>5. Use the alignment computed in step 4, to compute the median x -coordinate for all table columns and the me-</list_item>
-</unordered_list>
-<text><location><page_12><loc_50><loc_10><loc_89><loc_13></location>9e. If the table cell under the identified row and column is not empty, extend its content with the content of the or-</text>
-<unordered_list>
+<list_item><location><page_12><loc_50><loc_10><loc_89><loc_13></location>9e. If the table cell under the identified row and column is not empty, extend its content with the content of the or-</list_item>
 <list_item><location><page_12><loc_50><loc_21><loc_89><loc_23></location>9b. Intersect the orphan's bounding box with the row bands, and map the cell to the closest grid row.</list_item>
 <list_item><location><page_12><loc_50><loc_16><loc_89><loc_20></location>9c. Compute the left and right boundary of the vertical band for each grid column (min/max x coordinates per column).</list_item>
 <list_item><location><page_12><loc_50><loc_42><loc_89><loc_51></location>8. In some rare occasions, we have noticed that TableFormer can confuse a single column as two. When the postprocessing steps are applied, this results with two predicted columns pointing to the same PDF column. In such case we must de-duplicate the columns according to highest total column intersection score.</list_item>
@@ -312,75 +314,19 @@
 <text><location><page_13><loc_8><loc_89><loc_15><loc_91></location>phan cell.</text>
 <text><location><page_13><loc_8><loc_86><loc_47><loc_89></location>9f. Otherwise create a new structural cell and match it wit the orphan cell.</text>
 <text><location><page_13><loc_8><loc_83><loc_47><loc_86></location>Aditional images with examples of TableFormer predictions and post-processing can be found below.</text>
-<section_header_level_1><location><page_13><loc_14><loc_81><loc_18><loc_81></location></section_header_level_1>
-<table>
-<location><page_13><loc_14><loc_73><loc_39><loc_80></location>
-</table>
-<section_header_level_1><location><page_13><loc_14><loc_71><loc_30><loc_72></location></section_header_level_1>
-<table>
-<location><page_13><loc_14><loc_63><loc_39><loc_70></location>
-</table>
-<section_header_level_1><location><page_13><loc_14><loc_61><loc_27><loc_62></location></section_header_level_1>
-<table>
-<location><page_13><loc_14><loc_54><loc_39><loc_61></location>
-</table>
-<section_header_level_1><location><page_13><loc_14><loc_50><loc_27><loc_51></location></section_header_level_1>
-<table>
-<location><page_13><loc_14><loc_38><loc_41><loc_50></location>
-<caption>Figure 8: Example of a table with multi-line header.</caption>
-</table>
-<section_header_level_1><location><page_13><loc_51><loc_87><loc_54><loc_88></location></section_header_level_1>
-<table>
-<location><page_13><loc_51><loc_83><loc_91><loc_87></location>
-</table>
-<section_header_level_1><location><page_13><loc_51><loc_81><loc_62><loc_82></location></section_header_level_1>
-<table>
-<location><page_13><loc_51><loc_77><loc_91><loc_80></location>
-</table>
-<section_header_level_1><location><page_13><loc_51><loc_75><loc_60><loc_76></location></section_header_level_1>
-<table>
-<location><page_13><loc_51><loc_71><loc_91><loc_75></location>
-</table>
-<section_header_level_1><location><page_13><loc_51><loc_68><loc_60><loc_69></location></section_header_level_1>
+<paragraph><location><page_13><loc_10><loc_35><loc_45><loc_37></location>Figure 8: Example of a table with multi-line header.</paragraph>
 <figure>
 <location><page_13><loc_51><loc_63><loc_70><loc_68></location>
 <caption>Figure 9: Example of a table with big empty distance between cells.</caption>
 </figure>
-<section_header_level_1><location><page_13><loc_55><loc_51><loc_58><loc_52></location></section_header_level_1>
-<table>
-<location><page_13><loc_55><loc_45><loc_80><loc_51></location>
-</table>
-<section_header_level_1><location><page_13><loc_55><loc_43><loc_69><loc_44></location></section_header_level_1>
-<table>
-<location><page_13><loc_55><loc_37><loc_80><loc_43></location>
-</table>
-<section_header_level_1><location><page_13><loc_55><loc_35><loc_67><loc_36></location></section_header_level_1>
-<table>
-<location><page_13><loc_55><loc_28><loc_80><loc_34></location>
-</table>
-<section_header_level_1><location><page_13><loc_55><loc_25><loc_66><loc_26></location></section_header_level_1>
 <figure>
 <location><page_13><loc_55><loc_16><loc_85><loc_25></location>
 <caption>Figure 10: Example of a complex table with empty cells.</caption>
 </figure>
-<section_header_level_1><location><page_14><loc_8><loc_86><loc_12><loc_87></location></section_header_level_1>
 <figure>
 <location><page_14><loc_8><loc_56><loc_46><loc_87></location>
 <caption>Figure 11: Simple table with different style and empty cells.</caption>
 </figure>
-<section_header_level_1><location><page_14><loc_8><loc_43><loc_11><loc_44></location></section_header_level_1>
-<table>
-<location><page_14><loc_8><loc_38><loc_51><loc_43></location>
-</table>
-<section_header_level_1><location><page_14><loc_8><loc_37><loc_20><loc_37></location></section_header_level_1>
-<table>
-<location><page_14><loc_8><loc_32><loc_51><loc_36></location>
-</table>
-<section_header_level_1><location><page_14><loc_8><loc_30><loc_18><loc_31></location></section_header_level_1>
-<table>
-<location><page_14><loc_8><loc_25><loc_51><loc_30></location>
-</table>
-<section_header_level_1><location><page_14><loc_8><loc_23><loc_18><loc_24></location></section_header_level_1>
 <figure>
 <location><page_14><loc_8><loc_17><loc_29><loc_23></location>
 <caption>Figure 12: Simple table predictions and post processing.</caption>
@@ -389,30 +335,13 @@
 <location><page_14><loc_52><loc_55><loc_87><loc_89></location>
 <caption>Figure 13: Table predictions example on colorful table.</caption>
 </figure>
-<section_header_level_1><location><page_14><loc_52><loc_46><loc_55><loc_46></location></section_header_level_1>
-<table>
-<location><page_14><loc_52><loc_40><loc_85><loc_46></location>
-</table>
-<section_header_level_1><location><page_14><loc_52><loc_38><loc_63><loc_39></location></section_header_level_1>
-<table>
-<location><page_14><loc_52><loc_32><loc_85><loc_38></location>
-</table>
-<section_header_level_1><location><page_14><loc_52><loc_31><loc_61><loc_32></location></section_header_level_1>
-<table>
-<location><page_14><loc_52><loc_25><loc_85><loc_31></location>
-</table>
-<section_header_level_1><location><page_14><loc_52><loc_23><loc_61><loc_23></location></section_header_level_1>
-<table>
-<location><page_14><loc_52><loc_16><loc_87><loc_23></location>
-<caption>Figure 14: Example with multi-line text.</caption>
-</table>
+<paragraph><location><page_14><loc_56><loc_13><loc_83><loc_14></location>Figure 14: Example with multi-line text.</paragraph>
 <figure>
 <location><page_15><loc_9><loc_69><loc_46><loc_83></location>
 </figure>
 <figure>
 <location><page_15><loc_9><loc_53><loc_46><loc_67></location>
 </figure>
-<section_header_level_1><location><page_15><loc_9><loc_51><loc_18><loc_52></location></section_header_level_1>
 <figure>
 <location><page_15><loc_9><loc_37><loc_46><loc_51></location>
 </figure>
@@ -420,18 +349,9 @@
 <location><page_15><loc_8><loc_20><loc_52><loc_36></location>
 <caption>Figure 15: Example with triangular table.</caption>
 </figure>
-<table>
-<location><page_15><loc_53><loc_72><loc_86><loc_85></location>
-</table>
-<section_header_level_1><location><page_15><loc_53><loc_70><loc_70><loc_71></location></section_header_level_1>
-<table>
-<location><page_15><loc_53><loc_57><loc_86><loc_69></location>
-</table>
-<section_header_level_1><location><page_15><loc_53><loc_55><loc_67><loc_56></location></section_header_level_1>
 <figure>
 <location><page_15><loc_53><loc_41><loc_86><loc_54></location>
 </figure>
-<section_header_level_1><location><page_15><loc_58><loc_39><loc_73><loc_39></location></section_header_level_1>
 <figure>
 <location><page_15><loc_58><loc_20><loc_81><loc_38></location>
 <caption>Figure 16: Example of how post-processing helps to restore mis-aligned bounding boxes prediction artifact.</caption>

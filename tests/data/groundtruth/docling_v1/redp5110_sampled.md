@@ -368,7 +368,7 @@ WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR', 'EMP' ) = 1 THEN EMPLOYEES . D
 
 - -Any other person sees the entire TAX_ID as masked, for example, XXX-XX-XXXX.
 
-To implement this column mask, run the SQL statement that is shown in Example 3-9.
+- To implement this column mask, run the SQL statement that is shown in Example 3-9.
 
 Example 3-9 Creating a mask on the TAX_ID column
 
@@ -385,7 +385,7 @@ Now that you have created the row permission and the two column masks, RCAC must
 
 - 1. Run the SQL statements that are shown in Example 3-10.
 
-Example 3-10 Activating RCAC on the EMPLOYEES table
+## Example 3-10 Activating RCAC on the EMPLOYEES table
 
 - /* Active Row Access Control (permissions) */
 

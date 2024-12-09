@@ -265,8 +265,8 @@
 <list_item><location><page_13><loc_25><loc_58><loc_66><loc_59></location>-Employees can see only their own unmasked TAX_ID.</list_item>
 <list_item><location><page_13><loc_25><loc_55><loc_89><loc_57></location>-Managers see a masked version of TAX_ID with the first five characters replaced with the X character (for example, XXX-XX-1234).</list_item>
 <list_item><location><page_13><loc_25><loc_52><loc_87><loc_54></location>-Any other person sees the entire TAX_ID as masked, for example, XXX-XX-XXXX.</list_item>
+<list_item><location><page_13><loc_25><loc_50><loc_87><loc_51></location>To implement this column mask, run the SQL statement that is shown in Example 3-9.</list_item>
 </unordered_list>
-<text><location><page_13><loc_25><loc_50><loc_87><loc_51></location>To implement this column mask, run the SQL statement that is shown in Example 3-9.</text>
 <paragraph><location><page_13><loc_22><loc_48><loc_58><loc_49></location>Example 3-9 Creating a mask on the TAX_ID column</paragraph>
 <code><location><page_13><loc_22><loc_14><loc_86><loc_47></location>CREATE MASK HR_SCHEMA.MASK_TAX_ID_ON_EMPLOYEES ON HR_SCHEMA.EMPLOYEES AS EMPLOYEES FOR COLUMN TAX_ID RETURN CASE WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR' ) = 1 THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER = EMPLOYEES . USER_ID THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER <> EMPLOYEES . USER_ID THEN ( 'XXX-XX-' CONCAT QSYS2 . SUBSTR ( EMPLOYEES . TAX_ID , 8 , 4 ) ) WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'EMP' ) = 1 THEN EMPLOYEES . TAX_ID ELSE 'XXX-XX-XXXX' END ENABLE ;</code>
 <unordered_list>
@@ -281,7 +281,7 @@
 <unordered_list>
 <list_item><location><page_14><loc_22><loc_65><loc_67><loc_66></location>1. Run the SQL statements that are shown in Example 3-10.</list_item>
 </unordered_list>
-<paragraph><location><page_14><loc_22><loc_62><loc_61><loc_63></location>Example 3-10 Activating RCAC on the EMPLOYEES table</paragraph>
+<section_header_level_1><location><page_14><loc_22><loc_62><loc_61><loc_63></location>Example 3-10 Activating RCAC on the EMPLOYEES table</section_header_level_1>
 <unordered_list>
 <list_item><location><page_14><loc_22><loc_60><loc_62><loc_61></location>/* Active Row Access Control (permissions) */</list_item>
 <list_item><location><page_14><loc_22><loc_58><loc_58><loc_60></location>/* Active Column Access Control (masks)</list_item>
