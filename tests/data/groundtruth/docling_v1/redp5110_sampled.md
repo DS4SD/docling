@@ -5,15 +5,11 @@ Front cover
 
 ## Row and Column Access Control Support in IBM DB2 for i
 
-Implement roles and separation of duties
 
-Leverage row permissions on the database
+<!-- image -->
 
-Protect columns by defining column masks
 
-Jim Bainbridge Hernando Bedoya Rob Bestgen Mike Cain Dan Cruikshank Jim Denton Doug Mack Tom McKinley Kent Milligan
-
-Redpaper
+<!-- image -->
 
 ## Contents
 
@@ -131,10 +127,10 @@ This paper was produced by the IBM DB2 for i Center of Excellence team in partne
 
 <!-- image -->
 
+Jim Bainbridge is a senior DB2 consultant on the DB2 for i Center of Excellence team in the IBM Lab Services and Training organization. His primary role is training and implementation services for IBM DB2 Web Query for i and business analytics. Jim began his career with IBM 30 years ago in the IBM Rochester Development Lab, where he developed cooperative processing products that paired IBM PCs with IBM S/36 and AS/.400 systems. In the years since, Jim has held numerous technical roles, including independent software vendors technical support on a broad range of IBM technologies and products, and supporting customers in the IBM Executive Briefing Center and IBM Project Office.
+
 
 <!-- image -->
-
-Jim Bainbridge is a senior DB2 consultant on the DB2 for i Center of Excellence team in the IBM Lab Services and Training organization. His primary role is training and implementation services for IBM DB2 Web Query for i and business analytics. Jim began his career with IBM 30 years ago in the IBM Rochester Development Lab, where he developed cooperative processing products that paired IBM PCs with IBM S/36 and AS/.400 systems. In the years since, Jim has held numerous technical roles, including independent software vendors technical support on a broad range of IBM technologies and products, and supporting customers in the IBM Executive Briefing Center and IBM Project Office.
 
 Hernando Bedoya is a Senior IT Specialist at STG Lab Services and Training in Rochester, Minnesota. He writes extensively and teaches IBM classes worldwide in all areas of DB2 for i. Before joining STG Lab Services, he worked in the ITSO for nine years writing multiple IBM Redbooksfi publications. He also worked for IBM Colombia as an IBM AS/400fi IT Specialist doing presales support for the Andean countries. He has 28 years of experience in the computing field and has taught database classes in Colombian universities. He holds a Master's degree in Computer Science from EAFIT, Colombia. His areas of expertise are database technology, performance, and data warehousing. Hernando can be contacted at hbedoya@us.ibm.com .
 
@@ -227,7 +223,27 @@ To discover who has authorization to define and manage RCAC, you can use the que
 
 Example 2-1 Query to determine who has authority to define and manage RCAC
 
-SELECT function_id, user_name, usage, user_type FROM function_usage WHERE function_id='QIBM_DB_SECADM' ORDER BY user_name;
+SELECT
+
+function_id,
+
+user_name,
+
+usage,
+
+user_type
+
+FROM
+
+function_usage
+
+WHERE
+
+function_id=’QIBM_DB_SECADM’
+
+ORDER BY
+
+user_name;
 
 ## 2.2 Separation of duties
 
@@ -334,9 +350,11 @@ Here is an example of using the VERIFY_GROUP_FOR_USER function:
 
 - 3. If a user is connected to the server using user profile JANE, all of the following function invocations return a value of 1:
 
-VERIFY_GROUP_FOR_USER (CURRENT_USER, 'MGR') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR', 'STEVE') The following function invocation returns a value of 0: VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JUDY', 'TONY')
+VERIFY_GROUP_FOR_USER (CURRENT_USER, 'MGR') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR') The following function invocation returns a value of 0: VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JUDY', 'TONY') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR', 'STEVE')
 
-RETURN CASE
+RETURN
+
+CASE
 
 WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR', 'EMP' ) = 1 THEN EMPLOYEES . DATE_OF_BIRTH WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER = EMPLOYEES . USER_ID THEN EMPLOYEES . DATE_OF_BIRTH WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER <> EMPLOYEES . USER_ID THEN ( 9999 || '-' || MONTH ( EMPLOYEES . DATE_OF_BIRTH ) || '-' || DAY (EMPLOYEES.DATE_OF_BIRTH )) ELSE NULL END ENABLE ;
 
@@ -350,7 +368,7 @@ WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR', 'EMP' ) = 1 THEN EMPLOYEES . D
 
 - -Any other person sees the entire TAX_ID as masked, for example, XXX-XX-XXXX.
 
-- To implement this column mask, run the SQL statement that is shown in Example 3-9.
+To implement this column mask, run the SQL statement that is shown in Example 3-9.
 
 Example 3-9 Creating a mask on the TAX_ID column
 
@@ -367,13 +385,19 @@ Now that you have created the row permission and the two column masks, RCAC must
 
 - 1. Run the SQL statements that are shown in Example 3-10.
 
-## Example 3-10 Activating RCAC on the EMPLOYEES table
+Example 3-10 Activating RCAC on the EMPLOYEES table
 
 - /* Active Row Access Control (permissions) */
 
-/* Active Column Access Control (masks) ALTER TABLE HR_SCHEMA.EMPLOYEES ACTIVATE ROW ACCESS CONTROL ACTIVATE COLUMN ACCESS CONTROL;
+- /* Active Column Access Control (masks)
 
 */
+
+ALTER TABLE HR_SCHEMA.EMPLOYEES
+
+ACTIVATE ROW ACCESS CONTROL
+
+ACTIVATE COLUMN ACCESS CONTROL;
 
 - 2. Look at the definition of the EMPLOYEE table, as shown in Figure 3-11. To do this, from the main navigation pane of System i Navigator, click Schemas  HR_SCHEMA  Tables , right-click the EMPLOYEES table, and click Definition .
 
