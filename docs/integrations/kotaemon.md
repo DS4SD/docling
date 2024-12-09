@@ -1,8 +1,8 @@
 Docling is available in [Kotaemon](https://cinnamon.github.io/kotaemon/) as the `DoclingReader` loader:
 
 - 💻 [Kotaemon GitHub][github]
-- 📖 [DoclingReader Docs][docs]
-- ⚙️ [Docling Setup in Kotaemon][setup]
+- 📖 [DoclingReader docs][docs]
+- ⚙️ [Docling setup in Kotaemon][setup]
 
 [github]: https://github.com/Cinnamon/kotaemon
 [docs]: https://cinnamon.github.io/kotaemon/reference/loaders/docling_loader/

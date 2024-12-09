@@ -1,7 +1,7 @@
 Docling is available as a file conversion method in [DocETL](https://github.com/ucbepic/docetl):
 
 - 💻 [DocETL GitHub][github]
-- 📖 [DocETL Docs][docs]
+- 📖 [DocETL docs][docs]
 - 📦 [DocETL PyPI][pypi]
 
 [github]: https://github.com/ucbepic/docetl

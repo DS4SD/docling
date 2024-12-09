@@ -1,4 +1,5 @@
 import logging
+import re
 from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
@@ -133,7 +134,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def walk_linear(self, body, docx_obj, doc) -> DoclingDocument:
         for element in body:
             tag_name = etree.QName(element).localname
-
             # Check for Inline Images (blip elements)
             namespaces = {
                 "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
@@ -153,6 +153,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 self.handle_pictures(element, docx_obj, drawing_blip, doc)
             # Check for Text
             elif tag_name in ["p"]:
+                # "tcPr", "sectPr"
                 self.handle_text_elements(element, docx_obj, doc)
             else:
                 _log.debug(f"Ignoring element in DOCX with tag: {tag_name}")
@@ -165,6 +166,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             return int(s)
         except ValueError:
             return default
+
+    def split_text_and_number(self, input_string):
+        match = re.match(r"(\D+)(\d+)$|^(\d+)(\D+)", input_string)
+        if match:
+            parts = list(filter(None, match.groups()))
+            return parts
+        else:
+            return [input_string]
 
     def get_numId_and_ilvl(self, paragraph):
         # Access the XML element of the paragraph
@@ -188,7 +197,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def get_label_and_level(self, paragraph):
         if paragraph.style is None:
             return "Normal", None
-        label = paragraph.style.name
+        label = paragraph.style.style_id
         if label is None:
             return "Normal", None
         if ":" in label:
@@ -197,7 +206,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             if len(parts) == 2:
                 return parts[0], int(parts[1])
 
-        parts = label.split(" ")
+        parts = self.split_text_and_number(label)
 
         if "Heading" in label and len(parts) == 2:
             parts.sort()
@@ -219,14 +228,13 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         if paragraph.text is None:
             return
         text = paragraph.text.strip()
-        # if len(text)==0 # keep empty paragraphs, they seperate adjacent lists!
 
         # Common styles for bullet and numbered lists.
         # "List Bullet", "List Number", "List Paragraph"
         # Identify wether list is a numbered list or not
         # is_numbered = "List Bullet" not in paragraph.style.name
         is_numbered = False
-        p_style_name, p_level = self.get_label_and_level(paragraph)
+        p_style_id, p_level = self.get_label_and_level(paragraph)
         numid, ilevel = self.get_numId_and_ilvl(paragraph)
 
         if numid == 0:
@@ -238,14 +246,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 element,
                 docx_obj,
                 doc,
-                p_style_name,
+                p_style_id,
                 p_level,
                 numid,
                 ilevel,
                 text,
                 is_numbered,
             )
-            self.update_history(p_style_name, p_level, numid, ilevel)
+            self.update_history(p_style_id, p_level, numid, ilevel)
             return
         elif numid is None and self.prev_numid() is not None:  # Close list
             for key, val in self.parents.items():
@@ -253,23 +261,23 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     self.parents[key] = None
             self.level = self.level_at_new_list - 1
             self.level_at_new_list = None
-        if p_style_name in ["Title"]:
+        if p_style_id in ["Title"]:
             for key, val in self.parents.items():
                 self.parents[key] = None
             self.parents[0] = doc.add_text(
                 parent=None, label=DocItemLabel.TITLE, text=text
             )
-        elif "Heading" in p_style_name:
-            self.add_header(element, docx_obj, doc, p_style_name, p_level, text)
+        elif "Heading" in p_style_id:
+            self.add_header(element, docx_obj, doc, p_style_id, p_level, text)
 
-        elif p_style_name in [
+        elif p_style_id in [
             "Paragraph",
             "Normal",
             "Subtitle",
             "Author",
-            "Default Text",
-            "List Paragraph",
-            "List Bullet",
+            "DefaultText",
+            "ListParagraph",
+            "ListBullet",
             "Quote",
         ]:
             level = self.get_level()
@@ -285,15 +293,13 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 label=DocItemLabel.PARAGRAPH, parent=self.parents[level - 1], text=text
             )
 
-        self.update_history(p_style_name, p_level, numid, ilevel)
+        self.update_history(p_style_id, p_level, numid, ilevel)
         return
 
     def add_header(self, element, docx_obj, doc, curr_name, curr_level, text: str):
         level = self.get_level()
         if isinstance(curr_level, int):
-
             if curr_level > level:
-
                 # add invisible group
                 for i in range(level, curr_level):
                     self.parents[i] = doc.add_group(
@@ -301,9 +307,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                         label=GroupLabel.SECTION,
                         name=f"header-{i}",
                     )
-
             elif curr_level < level:
-
                 # remove the tail
                 for key, val in self.parents.items():
                     if key >= curr_level:
@@ -314,7 +318,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 text=text,
                 level=curr_level,
             )
-
         else:
             self.parents[self.level] = doc.add_heading(
                 parent=self.parents[self.level - 1],
@@ -328,7 +331,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         element,
         docx_obj,
         doc,
-        p_style_name,
+        p_style_id,
         p_level,
         numid,
         ilevel,
@@ -346,7 +349,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 label=GroupLabel.LIST, name="list", parent=self.parents[level - 1]
             )
 
-            # TODO: Set marker and enumerated arguments if this is an enumeration element.
+            # Set marker and enumerated arguments if this is an enumeration element.
             self.listIter += 1
             if is_numbered:
                 enum_marker = str(self.listIter) + "."
@@ -365,8 +368,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 self.level_at_new_list + self.prev_indent() + 1,
                 self.level_at_new_list + ilevel + 1,
             ):
-                # TODO: determine if this is an unordered list or an ordered list.
-                #  Set GroupLabel.ORDERED_LIST when it fits.
+                # Determine if this is an unordered list or an ordered list.
+                # Set GroupLabel.ORDERED_LIST when it fits.
                 self.listIter = 0
                 if is_numbered:
                     self.parents[i] = doc.add_group(
@@ -467,6 +470,19 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 row_span = get_rowspan(cell)
                 col_span = get_colspan(cell)
 
+                cell_text = cell.text
+                # In case cell doesn't return text via docx library:
+                if len(cell_text) == 0:
+                    cell_xml = cell._element
+
+                    texts = [""]
+                    for elem in cell_xml.iter():
+                        if elem.tag.endswith("t"):  # <w:t> tags that contain text
+                            if elem.text:
+                                texts.append(elem.text)
+                    # Join the collected text
+                    cell_text = " ".join(texts).strip()
+
                 # Find the next available column in the grid
                 while table_grid[row_idx][col_idx] is not None:
                     col_idx += 1
@@ -477,15 +493,15 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                         table_grid[row_idx + i][col_idx + j] = ""
 
                 cell = TableCell(
-                    text=cell.text,
+                    text=cell_text,
                     row_span=row_span,
                     col_span=col_span,
                     start_row_offset_idx=row_idx,
                     end_row_offset_idx=row_idx + row_span,
                     start_col_offset_idx=col_idx,
                     end_col_offset_idx=col_idx + col_span,
-                    col_header=False,  # col_header,
-                    row_header=False,  # ((not col_header) and html_cell.name=='th')
+                    col_header=False,
+                    row_header=False,
                 )
 
                 data.table_cells.append(cell)
