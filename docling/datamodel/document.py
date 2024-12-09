@@ -77,6 +77,8 @@ layout_label_to_ds_type = {
     DocItemLabel.PICTURE: "figure",
     DocItemLabel.TEXT: "paragraph",
     DocItemLabel.PARAGRAPH: "paragraph",
+    DocItemLabel.FORM: DocItemLabel.FORM.value,
+    DocItemLabel.KEY_VALUE_REGION: DocItemLabel.KEY_VALUE_REGION.value,
 }
 
 _EMPTY_DOCLING_DOC = DoclingDocument(name="dummy")

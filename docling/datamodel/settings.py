@@ -31,6 +31,7 @@ class DebugSettings(BaseModel):
     visualize_cells: bool = False
     visualize_ocr: bool = False
     visualize_layout: bool = False
+    visualize_raw_layout: bool = False
     visualize_tables: bool = False
 
     profile_pipeline_timings: bool = False
