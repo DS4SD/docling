@@ -3,7 +3,7 @@ import re
 from enum import Enum
 from io import BytesIO
 from pathlib import Path, PurePath
-from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Type, Union
+from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Set, Type, Union
 
 import filetype
 from docling_core.types.doc import (
@@ -32,7 +32,7 @@ from docling_core.types.legacy_doc.document import (
 )
 from docling_core.types.legacy_doc.document import CCSFileInfoObject as DsFileInfoObject
 from docling_core.types.legacy_doc.document import ExportedCCSDocument as DsDocument
-from docling_core.utils.file import resolve_file_source
+from docling_core.utils.file import resolve_source_to_stream
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
@@ -164,12 +164,6 @@ class InputDocument(BaseModel):
         backend: Type[AbstractDocumentBackend],
         path_or_stream: Union[BytesIO, Path],
     ) -> None:
-        if backend is None:
-            raise RuntimeError(
-                f"No backend configuration provided for file {self.file.name} with format {self.format}. "
-                f"Please check your format configuration on DocumentConverter."
-            )
-
         self._backend = backend(self, path_or_stream=path_or_stream)
         if not self._backend.is_valid():
             self.valid = False
@@ -450,6 +444,25 @@ class ConversionResult(BaseModel):
         return ds_doc
 
 
+class _DummyBackend(AbstractDocumentBackend):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def is_valid(self) -> bool:
+        return False
+
+    @classmethod
+    def supported_formats(cls) -> Set[InputFormat]:
+        return set()
+
+    @classmethod
+    def supports_pagination(cls) -> bool:
+        return False
+
+    def unload(self):
+        return super().unload()
+
+
 class _DocumentConversionInput(BaseModel):
 
     path_or_stream_iterator: Iterable[Union[Path, str, DocumentStream]]
@@ -459,13 +472,14 @@ class _DocumentConversionInput(BaseModel):
         self, format_options: Dict[InputFormat, "FormatOption"]
     ) -> Iterable[InputDocument]:
         for item in self.path_or_stream_iterator:
-            obj = resolve_file_source(item) if isinstance(item, str) else item
+            obj = resolve_source_to_stream(item) if isinstance(item, str) else item
             format = self._guess_format(obj)
+            backend: Type[AbstractDocumentBackend]
             if format not in format_options.keys():
-                _log.info(
-                    f"Skipping input document {obj.name} because it isn't matching any of the allowed formats."
+                _log.error(
+                    f"Input document {obj.name} does not match any allowed format."
                 )
-                continue
+                backend = _DummyBackend
             else:
                 backend = format_options[format].backend
 

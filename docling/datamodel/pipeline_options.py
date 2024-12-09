@@ -6,11 +6,15 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class TableFormerMode(str, Enum):
+    """Modes for the TableFormer model."""
+
     FAST = "fast"
     ACCURATE = "accurate"
 
 
 class TableStructureOptions(BaseModel):
+    """Options for the table structure."""
+
     do_cell_matching: bool = (
         True
         # True:  Matches predictions back to PDF cells. Can break table output if PDF cells
@@ -21,6 +25,8 @@ class TableStructureOptions(BaseModel):
 
 
 class OcrOptions(BaseModel):
+    """OCR options."""
+
     kind: str
     lang: List[str]
     force_full_page_ocr: bool = False  # If enabled a full page OCR is always applied
@@ -30,6 +36,8 @@ class OcrOptions(BaseModel):
 
 
 class RapidOcrOptions(OcrOptions):
+    """Options for the RapidOCR engine."""
+
     kind: Literal["rapidocr"] = "rapidocr"
 
     # English and chinese are the most commly used models and have been tested with RapidOCR.
@@ -66,6 +74,8 @@ class RapidOcrOptions(OcrOptions):
 
 
 class EasyOcrOptions(OcrOptions):
+    """Options for the EasyOCR engine."""
+
     kind: Literal["easyocr"] = "easyocr"
     lang: List[str] = ["fr", "de", "es", "en"]
     use_gpu: bool = True  # same default as easyocr.Reader
@@ -79,6 +89,8 @@ class EasyOcrOptions(OcrOptions):
 
 
 class TesseractCliOcrOptions(OcrOptions):
+    """Options for the TesseractCli engine."""
+
     kind: Literal["tesseract"] = "tesseract"
     lang: List[str] = ["fra", "deu", "spa", "eng"]
     tesseract_cmd: str = "tesseract"
@@ -90,6 +102,8 @@ class TesseractCliOcrOptions(OcrOptions):
 
 
 class TesseractOcrOptions(OcrOptions):
+    """Options for the Tesseract engine."""
+
     kind: Literal["tesserocr"] = "tesserocr"
     lang: List[str] = ["fra", "deu", "spa", "eng"]
     path: Optional[str] = None
@@ -100,6 +114,8 @@ class TesseractOcrOptions(OcrOptions):
 
 
 class OcrMacOptions(OcrOptions):
+    """Options for the Mac OCR engine."""
+
     kind: Literal["ocrmac"] = "ocrmac"
     lang: List[str] = ["fr-FR", "de-DE", "es-ES", "en-US"]
     recognition: str = "accurate"
@@ -111,12 +127,16 @@ class OcrMacOptions(OcrOptions):
 
 
 class PipelineOptions(BaseModel):
+    """Base pipeline options."""
+
     create_legacy_output: bool = (
         True  # This defautl will be set to False on a future version of docling
     )
 
 
 class PdfPipelineOptions(PipelineOptions):
+    """Options for the PDF pipeline."""
+
     artifacts_path: Optional[Union[Path, str]] = None
     do_table_structure: bool = True  # True: perform table structure extraction
     do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
