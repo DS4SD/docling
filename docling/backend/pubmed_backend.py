@@ -21,7 +21,7 @@ from docling.datamodel.document import InputDocument
 _log = logging.getLogger(__name__)
 
 
-class XMLDocumentBackend(DeclarativeDocumentBackend):
+class PubMedDocumentBackend(DeclarativeDocumentBackend):
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
         self.path_or_stream = path_or_stream
@@ -43,7 +43,7 @@ class XMLDocumentBackend(DeclarativeDocumentBackend):
 
     @classmethod
     def supported_formats(cls) -> Set[InputFormat]:
-        return {InputFormat.XML}
+        return {InputFormat.PUBMED}
 
     def convert(self) -> DoclingDocument:
         # Create empty document
@@ -104,7 +104,7 @@ class XMLDocumentBackend(DeclarativeDocumentBackend):
         return doc
 
     def add_figure_captions(self, doc: DoclingDocument, xml_components: dict) -> None:
-        doc.add_heading(parent=None, text="Figures")
+        doc.add_heading(parent=self.parents["Title"], text="Figures")
         for figure_caption_xml_component in xml_components["figure_captions"]:
             figure_caption_text = (
                 figure_caption_xml_component["fig_label"]
@@ -115,17 +115,17 @@ class XMLDocumentBackend(DeclarativeDocumentBackend):
                 label=DocItemLabel.CAPTION, text=figure_caption_text
             )
             doc.add_picture(
-                parent=None,
+                parent=self.parents["Title"],
                 caption=fig_caption,
             )
         return
 
     def add_title(self, doc: DoclingDocument, xml_components: dict) -> None:
-        doc.add_text(
+        self.parents["Title"] = doc.add_text(
             parent=None,
             text=xml_components["info"]["full_title"],
             label=DocItemLabel.TITLE,
-        )
+        )        
         return
 
     def add_authors(self, doc: DoclingDocument, xml_components: dict) -> None:
@@ -152,7 +152,7 @@ class XMLDocumentBackend(DeclarativeDocumentBackend):
                 authors_affiliations.append(affiliation["name"])
 
         doc.add_text(
-            parent=None,
+            parent=self.parents["Title"],
             text="; ".join(authors_affiliations),
             label=DocItemLabel.PARAGRAPH,
         )
@@ -163,12 +163,16 @@ class XMLDocumentBackend(DeclarativeDocumentBackend):
             xml_components["info"]["abstract"].replace("\n", " ").strip()
         )
         if abstract_text.strip():
-            doc.add_text(text=abstract_text, label=DocItemLabel.TEXT)
+            self.parents["Abstract"] = doc.add_heading(parent=self.parents["Title"], text="Abstract")
+            doc.add_text(
+                parent=self.parents["Abstract"],
+                text=abstract_text, 
+                label=DocItemLabel.TEXT
+            )
         return
 
     def add_main_text(self, doc: DoclingDocument, xml_components: dict) -> None:
         sections: list = []
-        parent = None
         for paragraph in xml_components["paragraphs"]:
             if ("section" in paragraph) and (paragraph["section"] == ""):
                 continue
@@ -179,7 +183,7 @@ class XMLDocumentBackend(DeclarativeDocumentBackend):
                 if section in self.parents:
                     parent = self.parents[section]
                 else:
-                    parent = None
+                    parent = self.parents["Title"]
 
                 self.parents[section] = doc.add_heading(parent=parent, text=section)
 
@@ -189,32 +193,46 @@ class XMLDocumentBackend(DeclarativeDocumentBackend):
                 if paragraph["section"] in self.parents:
                     parent = self.parents[paragraph["section"]]
                 else:
-                    parent = None
+                    parent = self.parents["Title"]
 
                 doc.add_text(parent=parent, label=DocItemLabel.TEXT, text=text)
         return
 
     def add_references(self, doc: DoclingDocument, xml_components: dict) -> None:
-        doc.add_heading(parent=None, text="References")
-        current_list = doc.add_group(label=GroupLabel.LIST, name="list")
+        self.parents["References"] = doc.add_heading(parent=self.parents["Title"], text="References")
+        current_list = doc.add_group(
+            parent=self.parents["References"], 
+            label=GroupLabel.LIST, 
+            name="list"
+        )
         for reference in xml_components["references"]:
-            reference_text: str = (
-                reference["name"]
-                + ". "
-                + reference["article_title"]
-                + ". "
-                + reference["journal"]
-                + " ("
-                + reference["year"]
-                + ")"
-            )
+            reference_text: str = ""            
+            if reference["name"] != "":
+                reference_text += reference["name"] + ". "
+
+            if reference["article_title"] != "":
+                reference_text += reference["article_title"] 
+                if reference["article_title"][-1] != ".":
+                    reference_text += "."
+                reference_text += " "
+
+            if reference["journal"] != "":
+                reference_text += reference["journal"]  
+
+            if reference["year"] != "":
+                reference_text += " (" + reference["year"] + ")"
+
+            if reference_text == "":
+                print(f"Skipping reference for: {str(self.file)}")
+                continue
+
             doc.add_list_item(
                 text=reference_text, enumerated=False, parent=current_list
             )
         return
 
     def add_tables(self, doc: DoclingDocument, xml_components: dict) -> None:
-        doc.add_heading(parent=None, text="Tables")
+        self.parents["Tables"] = doc.add_heading(parent=self.parents["Title"], text="Tables")
         for table_xml_component in xml_components["tables"]:
             try:
                 self.add_table(doc, table_xml_component)
@@ -292,5 +310,9 @@ class XMLDocumentBackend(DeclarativeDocumentBackend):
             label=DocItemLabel.CAPTION,
             text=table_xml_component["label"] + " " + table_xml_component["caption"],
         )
-        doc.add_table(data=data, parent=None, caption=table_caption)
+        doc.add_table(
+            data=data, 
+            parent=self.parents["Tables"], 
+            caption=table_caption
+        )
         return

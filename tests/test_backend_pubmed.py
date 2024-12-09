@@ -8,17 +8,17 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import ConversionResult
 from docling.document_converter import DocumentConverter
 
-GENERATE = False
+GENERATE = True
 
 
 def get_xml_paths():
-    directory = Path(os.path.dirname(__file__) + f"/data/xml/")
+    directory = Path(os.path.dirname(__file__) + f"/data/pubmed/")
     xml_files = sorted(directory.rglob("*.nxml"))
     return xml_files
 
 
 def get_converter():
-    converter = DocumentConverter(allowed_formats=[InputFormat.XML])
+    converter = DocumentConverter(allowed_formats=[InputFormat.PUBMED])
     return converter
 
 

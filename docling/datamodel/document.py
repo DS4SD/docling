@@ -513,6 +513,11 @@ class _DocumentConversionInput(BaseModel):
                 )
                 mime = self._mime_from_extension(ext)
 
+        # Detect PubMed XML documents
+        xml_doctype = re.search(r"<!DOCTYPE [^>]+>", content.decode("utf-8")).group()
+        if "/NLM//DTD JATS" in xml_doctype:
+            return InputFormat.PUBMED
+
         mime = mime or self._detect_html_xhtml(content)
         mime = mime or "text/plain"
 
@@ -525,8 +530,6 @@ class _DocumentConversionInput(BaseModel):
             mime = FormatToMimeType[InputFormat.ASCIIDOC][0]
         elif ext in FormatToExtensions[InputFormat.HTML]:
             mime = FormatToMimeType[InputFormat.HTML][0]
-        elif ext in FormatToExtensions[InputFormat.XML]:
-            mime = FormatToMimeType[InputFormat.XML][0]
         elif ext in FormatToExtensions[InputFormat.MD]:
             mime = FormatToMimeType[InputFormat.MD][0]
 

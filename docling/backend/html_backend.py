@@ -305,7 +305,6 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
     def handle_table(self, element, idx, doc):
         """Handles table tags."""
-
         nested_tables = element.find("table")
         if nested_tables is not None:
             _log.warn("detected nested tables: skipping for now")

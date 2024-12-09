@@ -28,7 +28,7 @@ class InputFormat(str, Enum):
     DOCX = "docx"
     PPTX = "pptx"
     HTML = "html"
-    XML = "xml"
+    PUBMED = "pubmed"
     IMAGE = "image"
     PDF = "pdf"
     ASCIIDOC = "asciidoc"
@@ -49,7 +49,7 @@ FormatToExtensions: Dict[InputFormat, List[str]] = {
     InputFormat.PDF: ["pdf"],
     InputFormat.MD: ["md"],
     InputFormat.HTML: ["html", "htm", "xhtml"],
-    InputFormat.XML: ["xml", "nxml"],
+    InputFormat.PUBMED: ["nxml"],
     InputFormat.IMAGE: ["jpg", "jpeg", "png", "tif", "tiff", "bmp"],
     InputFormat.ASCIIDOC: ["adoc", "asciidoc", "asc"],
     InputFormat.XLSX: ["xlsx"],
@@ -66,7 +66,7 @@ FormatToMimeType: Dict[InputFormat, List[str]] = {
         "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     ],
     InputFormat.HTML: ["text/html", "application/xhtml+xml"],
-    InputFormat.XML: ["text/xml", "text/nxml"],
+    InputFormat.PUBMED: ["application/nxml"],
     InputFormat.IMAGE: [
         "image/png",
         "image/jpeg",
