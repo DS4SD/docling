@@ -97,7 +97,9 @@ class StandardPdfPipeline(PaginatedPipeline):
         local_dir: Optional[Path] = None, force: bool = False
     ) -> Path:
         from huggingface_hub import snapshot_download
+        from huggingface_hub.utils import disable_progress_bars
 
+        disable_progress_bars()
         download_path = snapshot_download(
             repo_id="ds4sd/docling-models",
             force_download=force,
