@@ -80,7 +80,7 @@ class LayoutModel(BasePageModel):
             DocItemLabel.TITLE: (255, 153, 153),  # Light Red (same as Section-Header)
             DocItemLabel.FOOTNOTE: (200, 200, 255),  # Light Blue
             DocItemLabel.DOCUMENT_INDEX: (220, 220, 220),  # Light Gray
-            DocItemLabel.CODE: (255, 223, 186),  # Peach
+            DocItemLabel.CODE: (125, 125, 125),  # Gray
             DocItemLabel.CHECKBOX_SELECTED: (255, 182, 193),  # Pale Green
             DocItemLabel.CHECKBOX_UNSELECTED: (255, 182, 193),  # Light Pink
             DocItemLabel.FORM: (200, 255, 255),  # Light Cyan
