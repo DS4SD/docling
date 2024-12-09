@@ -1,3 +1,23 @@
+## [v2.9.0](https://github.com/DS4SD/docling/releases/tag/v2.9.0) - 2024-12-09
+
+### Feature
+
+* Expose new hybrid chunker, update docs ([#384](https://github.com/DS4SD/docling/issues/384)) ([`c8ecdd9`](https://github.com/DS4SD/docling/commit/c8ecdd987e80227db3850ea729ecb36d2b609040))
+* **MS Word backend:** Make detection of headers and other styles localization agnostic ([#534](https://github.com/DS4SD/docling/issues/534)) ([`3e073df`](https://github.com/DS4SD/docling/commit/3e073dfbebbc65f995d4df946c1650699a26782c))
+
+### Fix
+
+* Correcting DefaultText ID for MS Word backend ([#537](https://github.com/DS4SD/docling/issues/537)) ([`eb7ffcd`](https://github.com/DS4SD/docling/commit/eb7ffcdd1cda1caa8ec8ba2fc313ff1e7d9acd4f))
+* Add `py.typed` marker file ([#531](https://github.com/DS4SD/docling/issues/531)) ([`9102fe1`](https://github.com/DS4SD/docling/commit/9102fe1adcd43432e5fb3f35af704b7442c5d633))
+* Enable HTML export in CLI and add options for image mode ([#513](https://github.com/DS4SD/docling/issues/513)) ([`0d11e30`](https://github.com/DS4SD/docling/commit/0d11e30dd813020c0189de849cd7b2e285d08694))
+* Missing text in docx (t tag) when embedded in a table ([#528](https://github.com/DS4SD/docling/issues/528)) ([`b730b2d`](https://github.com/DS4SD/docling/commit/b730b2d7a04a8773a00ed88889d28b0c476ba052))
+* Restore pydantic version pin after fixes ([#512](https://github.com/DS4SD/docling/issues/512)) ([`c830b92`](https://github.com/DS4SD/docling/commit/c830b92b2e043ea63d216f65b3f9d88d2a8c33f7))
+* Folder input in cli ([#511](https://github.com/DS4SD/docling/issues/511)) ([`8ada0bc`](https://github.com/DS4SD/docling/commit/8ada0bccc744df94f755adf71cf8b163e6304375))
+
+### Documentation
+
+* Document new integrations ([#532](https://github.com/DS4SD/docling/issues/532)) ([`e780333`](https://github.com/DS4SD/docling/commit/e7803334409a343a59c536c529a03d6f5cdbfe15))
+
 ## [v2.8.3](https://github.com/DS4SD/docling/releases/tag/v2.8.3) - 2024-12-03
 
 ### Fix
