@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
 from docling_core.types.doc import BoundingBox, CoordOrigin
-from docling_parse.docling_parse import pdf_parser_v2
+from docling_parse.pdf_parsers import pdf_parser_v2
 from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage
 
@@ -210,12 +210,14 @@ class DoclingParseV2DocumentBackend(PdfDocumentBackend):
         self.parser = pdf_parser_v2("fatal")
 
         success = False
-        if isinstance(path_or_stream, BytesIO):
+        if isinstance(self.path_or_stream, BytesIO):
             success = self.parser.load_document_from_bytesio(
-                self.document_hash, path_or_stream
+                self.document_hash, self.path_or_stream
             )
-        elif isinstance(path_or_stream, Path):
-            success = self.parser.load_document(self.document_hash, str(path_or_stream))
+        elif isinstance(self.path_or_stream, Path):
+            success = self.parser.load_document(
+                self.document_hash, str(self.path_or_stream)
+            )
 
         if not success:
             raise RuntimeError(
