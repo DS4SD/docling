@@ -96,15 +96,10 @@ class StandardPdfPipeline(PaginatedPipeline):
     def download_models_hf(
         local_dir: Optional[Path] = None, force: bool = False
     ) -> Path:
-        from functools import partialmethod
-
         from huggingface_hub import snapshot_download
+        from huggingface_hub.utils import disable_progress_bars
 
-        # Disable tqdm prints used by HF
-        from tqdm import tqdm
-
-        tqdm.__init__ = partialmethod(tqdm.__init__, disable=True)
-
+        disable_progress_bars()
         download_path = snapshot_download(
             repo_id="ds4sd/docling-models",
             force_download=force,
