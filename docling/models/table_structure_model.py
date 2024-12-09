@@ -35,7 +35,9 @@ class TableStructureModel(BasePageModel):
         self.enabled = enabled
         if self.enabled:
             if self.mode == TableFormerMode.ACCURATE:
-                artifacts_path = artifacts_path / "fat"
+                artifacts_path = artifacts_path / "accurate"
+            else:
+                artifacts_path = artifacts_path / "fast"
 
             # Third Party
             import docling_ibm_models.tableformer.common as c
