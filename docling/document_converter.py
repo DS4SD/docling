@@ -9,7 +9,7 @@ from pydantic import BaseModel, ConfigDict, model_validator, validate_call
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.asciidoc_backend import AsciiDocBackend
-from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
+from docling.backend.docling_parse_v2_backend import DoclingParseV2DocumentBackend
 from docling.backend.html_backend import HTMLDocumentBackend
 from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.msexcel_backend import MsExcelDocumentBackend
@@ -90,12 +90,12 @@ class PubMedFormatOption(FormatOption):
 
 class PdfFormatOption(FormatOption):
     pipeline_cls: Type = StandardPdfPipeline
-    backend: Type[AbstractDocumentBackend] = DoclingParseDocumentBackend
+    backend: Type[AbstractDocumentBackend] = DoclingParseV2DocumentBackend
 
 
 class ImageFormatOption(FormatOption):
     pipeline_cls: Type = StandardPdfPipeline
-    backend: Type[AbstractDocumentBackend] = DoclingParseDocumentBackend
+    backend: Type[AbstractDocumentBackend] = DoclingParseV2DocumentBackend
 
 
 def _get_default_option(format: InputFormat) -> FormatOption:
@@ -122,10 +122,10 @@ def _get_default_option(format: InputFormat) -> FormatOption:
             pipeline_cls=SimplePipeline, backend=PubMedDocumentBackend
         ),
         InputFormat.IMAGE: FormatOption(
-            pipeline_cls=StandardPdfPipeline, backend=DoclingParseDocumentBackend
+            pipeline_cls=StandardPdfPipeline, backend=DoclingParseV2DocumentBackend
         ),
         InputFormat.PDF: FormatOption(
-            pipeline_cls=StandardPdfPipeline, backend=DoclingParseDocumentBackend
+            pipeline_cls=StandardPdfPipeline, backend=DoclingParseV2DocumentBackend
         ),
     }
     if (options := format_to_default_options.get(format)) is not None:
