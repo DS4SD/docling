@@ -63,7 +63,7 @@ nav:
     - Concepts: concepts/index.md
     - Architecture: concepts/architecture.md
     - Docling Document: concepts/docling_document.md
-  #   - Chunking: concepts/chunking.md
+    - Chunking: concepts/chunking.md
   - Examples:
     - Examples: examples/index.md
     - Conversion:
@@ -80,7 +80,8 @@ nav:
       - "RAG with LlamaIndex 🦙": examples/rag_llamaindex.ipynb
       - "RAG with LangChain 🦜🔗": examples/rag_langchain.ipynb
       - "Hybrid RAG with Qdrant": examples/hybrid_rag_qdrant.ipynb
-    # - Chunking:
+    - Chunking:
+      - "Hybrid chunking": examples/hybrid_chunking.ipynb
     #   - Chunking: examples/chunking.md
     # - CLI:
     #   - CLI: examples/cli.md
