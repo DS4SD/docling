@@ -42,7 +42,7 @@ def test_heading_levels():
 def get_html_paths():
 
     # Define the directory you want to search
-    directory = Path("./tests/data/html/")
+    directory = Path(os.path.dirname(__file__) + f"/data/html/")
 
     # List all PDF files in the directory and its subdirectories
     html_files = sorted(directory.rglob("*.html"))
@@ -100,3 +100,11 @@ def test_e2e_html_conversions():
 
         pred_json: str = json.dumps(doc.export_to_dict(), indent=2)
         assert verify_export(pred_json, str(gt_path) + ".json"), "export to json"
+
+
+def main():
+    test_e2e_html_conversions()
+
+
+if __name__ == "__main__":
+    main()
