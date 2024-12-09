@@ -1,3 +1,14 @@
+## [v2.10.0](https://github.com/DS4SD/docling/releases/tag/v2.10.0) - 2024-12-09
+
+### Feature
+
+* Docling-parse v2 as default PDF backend ([#549](https://github.com/DS4SD/docling/issues/549)) ([`aca57f0`](https://github.com/DS4SD/docling/commit/aca57f0527dddcc027dc1ee840e2e492ab997170))
+
+### Fix
+
+* Call into docling-core for legacy document transform ([#551](https://github.com/DS4SD/docling/issues/551)) ([`7972d47`](https://github.com/DS4SD/docling/commit/7972d47f88604f02d6a32527116c4d78eb1005e2))
+* Introduce Image format options in CLI. Silence the tqdm downloading messages. ([#544](https://github.com/DS4SD/docling/issues/544)) ([`78f61a8`](https://github.com/DS4SD/docling/commit/78f61a8522d3a19ecc1d605e8441fb543ca0fa96))
+
 ## [v2.9.0](https://github.com/DS4SD/docling/releases/tag/v2.9.0) - 2024-12-09
 
 ### Feature
