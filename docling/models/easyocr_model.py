@@ -48,7 +48,7 @@ class EasyOcrModel(BaseOcrModel):
                 use_gpu = any(
                     filter(
                         lambda x: str(x) in device,
-                        [AcceleratorDevice.CUDA, AcceleratorDevice.MPS],
+                        ["cuda", "mps"],
                     )
                 )
 
