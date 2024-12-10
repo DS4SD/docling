@@ -17,8 +17,10 @@ from docling.datamodel.base_models import (
     Page,
 )
 from docling.datamodel.document import ConversionResult
+from docling.datamodel.pipeline_options import AcceleratorOptions
 from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
+from docling.utils.accelerator_utils import decide_device
 from docling.utils.layout_postprocessor import LayoutPostprocessor
 from docling.utils.profiling import TimeRecorder
 
@@ -45,11 +47,13 @@ class LayoutModel(BasePageModel):
     TABLE_LABEL = DocItemLabel.TABLE
     FIGURE_LABEL = DocItemLabel.PICTURE
     FORMULA_LABEL = DocItemLabel.FORMULA
-
     CONTAINER_LABELS = [DocItemLabel.FORM, DocItemLabel.KEY_VALUE_REGION]
 
-    def __init__(self, artifacts_path: Path):
-        self.layout_predictor = LayoutPredictor(artifacts_path)  # TODO temporary
+    def __init__(self, artifacts_path: Path, accelerator_options: AcceleratorOptions):
+        device = decide_device(accelerator_options.device)
+        self.layout_predictor = LayoutPredictor(
+            artifacts_path, device, accelerator_options.num_threads
+        )
 
     def draw_clusters_and_cells_side_by_side(
         self, conv_res, page, clusters, mode_prefix: str, show: bool = False
