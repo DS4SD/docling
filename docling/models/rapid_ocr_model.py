@@ -6,16 +6,26 @@ from docling_core.types.doc import BoundingBox, CoordOrigin
 
 from docling.datamodel.base_models import OcrCell, Page
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import RapidOcrOptions
+from docling.datamodel.pipeline_options import (
+    AcceleratorDevice,
+    AcceleratorOptions,
+    RapidOcrOptions,
+)
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
+from docling.utils.accelerator_utils import decide_device
 from docling.utils.profiling import TimeRecorder
 
 _log = logging.getLogger(__name__)
 
 
 class RapidOcrModel(BaseOcrModel):
-    def __init__(self, enabled: bool, options: RapidOcrOptions):
+    def __init__(
+        self,
+        enabled: bool,
+        options: RapidOcrOptions,
+        accelerator_options: AcceleratorOptions,
+    ):
         super().__init__(enabled=enabled, options=options)
         self.options: RapidOcrOptions
 
@@ -30,52 +40,21 @@ class RapidOcrModel(BaseOcrModel):
                     "Alternatively, Docling has support for other OCR engines. See the documentation."
                 )
 
-            # This configuration option will be revamped while introducing device settings for all models.
-            # For the moment we will default to auto and let onnx-runtime pick the best.
-            cls_use_cuda = True
-            rec_use_cuda = True
-            det_use_cuda = True
-            det_use_dml = True
-            cls_use_dml = True
-            rec_use_dml = True
-
-            # # Same as Defaults in RapidOCR
-            # cls_use_cuda = False
-            # rec_use_cuda = False
-            # det_use_cuda = False
-            # det_use_dml = False
-            # cls_use_dml = False
-            # rec_use_dml = False
-
-            # # If we set everything to true onnx-runtime would automatically choose the fastest accelerator
-            # if self.options.device == self.options.Device.AUTO:
-            #     cls_use_cuda = True
-            #     rec_use_cuda = True
-            #     det_use_cuda = True
-            #     det_use_dml = True
-            #     cls_use_dml = True
-            #     rec_use_dml = True
-
-            # # If we set use_cuda to true onnx would use the cuda device available in runtime if no cuda device is available it would run on CPU.
-            # elif self.options.device == self.options.Device.CUDA:
-            #     cls_use_cuda = True
-            #     rec_use_cuda = True
-            #     det_use_cuda = True
-
-            # # If we set use_dml to true onnx would use the dml device available in runtime if no dml device is available it would work on CPU.
-            # elif self.options.device == self.options.Device.DIRECTML:
-            #     det_use_dml = True
-            #     cls_use_dml = True
-            #     rec_use_dml = True
+            # Decide the accelerator devices
+            device = decide_device(accelerator_options.device)
+            use_cuda = str(AcceleratorDevice.CUDA.value).lower() in device
+            use_dml = accelerator_options.device == AcceleratorDevice.AUTO
+            intra_op_num_threads = accelerator_options.num_threads
 
             self.reader = RapidOCR(
                 text_score=self.options.text_score,
-                cls_use_cuda=cls_use_cuda,
-                rec_use_cuda=rec_use_cuda,
-                det_use_cuda=det_use_cuda,
-                det_use_dml=det_use_dml,
-                cls_use_dml=cls_use_dml,
-                rec_use_dml=rec_use_dml,
+                cls_use_cuda=use_cuda,
+                rec_use_cuda=use_cuda,
+                det_use_cuda=use_cuda,
+                det_use_dml=use_dml,
+                cls_use_dml=use_dml,
+                rec_use_dml=use_dml,
+                intra_op_num_threads=intra_op_num_threads,
                 print_verbose=self.options.print_verbose,
                 det_model_path=self.options.det_model_path,
                 cls_model_path=self.options.cls_model_path,
