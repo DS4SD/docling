@@ -212,6 +212,25 @@ class _DummyBackend(AbstractDocumentBackend):
         return super().unload()
 
 
+class _DummyBackend(AbstractDocumentBackend):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def is_valid(self) -> bool:
+        return False
+
+    @classmethod
+    def supported_formats(cls) -> Set[InputFormat]:
+        return set()
+
+    @classmethod
+    def supports_pagination(cls) -> bool:
+        return False
+
+    def unload(self):
+        return super().unload()
+
+
 class _DocumentConversionInput(BaseModel):
 
     path_or_stream_iterator: Iterable[Union[Path, str, DocumentStream]]
@@ -280,6 +299,11 @@ class _DocumentConversionInput(BaseModel):
                     else ""
                 )
                 mime = self._mime_from_extension(ext)
+
+        # Detect PubMed XML documents
+        xml_doctype = re.search(r"<!DOCTYPE [^>]+>", content.decode("utf-8")).group()
+        if "/NLM//DTD JATS" in xml_doctype:
+            return InputFormat.PUBMED
 
         mime = mime or self._detect_html_xhtml(content)
         mime = mime or "text/plain"
