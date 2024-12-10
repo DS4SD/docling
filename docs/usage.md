@@ -22,9 +22,7 @@ A simple example would look like this:
 docling https://arxiv.org/pdf/2206.01062
 ```
 
-To see all available options (export formats etc.) run `docling --help`. More details in the [CLI reference page](./cli.md).
-
-
+To see all available options (export formats etc.) run `docling --help`. More details in the [CLI reference page](./reference/cli.md).
 
 ### Advanced options
 

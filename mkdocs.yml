@@ -96,7 +96,6 @@ nav:
     - "txtai": integrations/txtai.md
     # - "LangChain 🦜🔗": integrations/langchain.md
   - Reference:
-    - Reference: reference/index.md
     - Python API:
       - Document Converter: reference/document_converter.md
       - Pipeline options: reference/pipeline_options.md
