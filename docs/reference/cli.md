@@ -1,4 +1,4 @@
-# CLI Reference
+# CLI reference
 
 This page provides documentation for our command line tools.
 

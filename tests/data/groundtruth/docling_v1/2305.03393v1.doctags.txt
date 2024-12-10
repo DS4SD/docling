@@ -1,6 +1,6 @@
 <document>
 <subtitle-level-1><location><page_1><loc_22><loc_82><loc_79><loc_85></location>Optimized Table Tokenization for Table Structure Recognition</subtitle-level-1>
-<paragraph><location><page_1><loc_23><loc_75><loc_78><loc_79></location>Maksym Lysak [0000 - 0002 - 3723 - $^{6960]}$, Ahmed Nassar[0000 - 0002 - 9468 - $^{0822]}$, Nikolaos Livathinos [0000 - 0001 - 8513 - $^{3491]}$, Christoph Auer[0000 - 0001 - 5761 - $^{0422]}$, [0000 - 0002 - 8088 - 0823]</paragraph>
+<paragraph><location><page_1><loc_23><loc_75><loc_78><loc_79></location>Maksym Lysak [0000 − 0002 − 3723 − $^{6960]}$, Ahmed Nassar[0000 − 0002 − 9468 − $^{0822]}$, Nikolaos Livathinos [0000 − 0001 − 8513 − $^{3491]}$, Christoph Auer[0000 − 0001 − 5761 − $^{0422]}$, [0000 − 0002 − 8088 − 0823]</paragraph>
 <paragraph><location><page_1><loc_38><loc_74><loc_49><loc_75></location>and Peter Staar</paragraph>
 <paragraph><location><page_1><loc_46><loc_72><loc_55><loc_73></location>IBM Research</paragraph>
 <paragraph><location><page_1><loc_36><loc_70><loc_64><loc_71></location>{mly,ahn,nli,cau,taa}@zurich.ibm.com</paragraph>
