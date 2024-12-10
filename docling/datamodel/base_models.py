@@ -19,12 +19,12 @@ if TYPE_CHECKING:
 
 
 class ConversionStatus(str, Enum):
-    PENDING = auto()
-    STARTED = auto()
-    FAILURE = auto()
-    SUCCESS = auto()
-    PARTIAL_SUCCESS = auto()
-    SKIPPED = auto()
+    PENDING = "pending"
+    STARTED = "started"
+    FAILURE = "failure"
+    SUCCESS = "success"
+    PARTIAL_SUCCESS = "partial_success"
+    SKIPPED = "skipped"
 
 
 class InputFormat(str, Enum):
@@ -89,15 +89,15 @@ MimeTypeToFormat = {
 
 
 class DocInputType(str, Enum):
-    PATH = auto()
-    STREAM = auto()
+    PATH = "path"
+    STREAM = "stream"
 
 
 class DoclingComponentType(str, Enum):
-    DOCUMENT_BACKEND = auto()
-    MODEL = auto()
-    DOC_ASSEMBLER = auto()
-    USER_INPUT = auto()
+    DOCUMENT_BACKEND = "document_backend"
+    MODEL = "model"
+    DOC_ASSEMBLER = "doc_assembler"
+    USER_INPUT = "user_input"
 
 
 class ErrorItem(BaseModel):
