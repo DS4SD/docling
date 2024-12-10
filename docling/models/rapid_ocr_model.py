@@ -42,7 +42,7 @@ class RapidOcrModel(BaseOcrModel):
 
             # Decide the accelerator devices
             device = decide_device(accelerator_options.device)
-            use_cuda = AcceleratorDevice.CUDA in device
+            use_cuda = "cuda" in device
             use_dml = accelerator_options.device == AcceleratorDevice.AUTO
             intra_op_num_threads = accelerator_options.num_threads
 
