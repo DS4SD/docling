@@ -1,0 +1,105 @@
+item-0 at level 0: unspecified: group _root_
+  item-1 at level 1: title: Risk factors associated with fai ... s: Results of a multi-country analysis
+    item-2 at level 2: paragraph: Clara R. Burgert-Brucker; Global ... shington, DC, United States of America
+    item-3 at level 2: section_header: Abstract
+      item-4 at level 3: text: Achieving elimination of lymphat ... ine prevalence and/or lower elevation.
+    item-5 at level 2: section_header: Introduction
+      item-6 at level 3: text: Lymphatic filariasis (LF), a dis ... 8 countries remain endemic for LF [3].
+      item-7 at level 3: text: The road to elimination as a pub ... t elimination be officially validated.
+      item-8 at level 3: text: Pre-TAS include at least one sen ... me of day that blood can be taken [5].
+    item-9 at level 2: section_header: Methods
+      item-10 at level 3: text: Building on previous work, we de ... available global geospatial data sets.
+    item-11 at level 2: section_header: Data sources
+      item-12 at level 3: text: Information on baseline prevalen ...  publicly available sources (Table 1).
+    item-13 at level 2: section_header: Outcome and covariate variables
+      item-14 at level 3: text: The outcome of interest for this ... r than or equal to 1% Mf or 2% Ag [4].
+      item-15 at level 3: text: Potential covariates were derive ... is and the final categorizations used.
+    item-16 at level 2: section_header: Baseline prevalence
+      item-17 at level 3: text: Baseline prevalence can be assum ... (2) using the cut-off of <10% or ≥10%.
+    item-18 at level 2: section_header: Agent
+      item-19 at level 3: text: In terms of differences in trans ... dazole (DEC-ALB)] from the MDA domain.
+    item-20 at level 2: section_header: Environment
+      item-21 at level 3: text: LF transmission intensity is inf ... dicates a higher level of “greenness.”
+      item-22 at level 3: text: We included the socio-economic v ...  proxy for socio-economic status [33].
+      item-23 at level 3: text: Finally, all or parts of distric ... s were co-endemic with onchocerciasis.
+    item-24 at level 2: section_header: MDA
+      item-25 at level 3: text: Treatment effectiveness depends  ... esent a threat to elimination [41,42].
+    item-26 at level 2: section_header: Statistical analysis and modeling
+      item-27 at level 3: text: Sensitivity analysis was perform ... ot have been truly LF-endemic [43,44].
+    item-28 at level 2: section_header: Results
+      item-29 at level 3: text: The overall pre-TAS pass rate fo ... ts had baseline prevalences below 20%.
+      item-30 at level 3: text: Fig 3 shows the unadjusted analy ... overage, and sufficient rounds of MDA.
+      item-31 at level 3: text: Fig 4 shows the risk ratio resul ... of failing pre-TAS (95% CI 1.95–4.83).
+      item-32 at level 3: text: Sensitivity analyses were conduc ... gnified by large confidence intervals.
+      item-33 at level 3: text: Overall 74 districts in the data ... or 51% of all the failures (38 of 74).
+    item-34 at level 2: section_header: Discussion
+      item-35 at level 3: text: This paper reports for the first ... ctors associated with TAS failure [7].
+      item-36 at level 3: text: Though diagnostic test used was  ...  FTS was more sensitive than ICT [45].
+      item-37 at level 3: text: Elevation was the only environme ... ich impact vector chances of survival.
+      item-38 at level 3: text: The small number of failures ove ... search has shown the opposite [15,16].
+      item-39 at level 3: text: All other variables included in  ... are not necessary to lower prevalence.
+      item-40 at level 3: text: Limitations to this study includ ...  reducing LF prevalence [41,48,51–53].
+    item-41 at level 2: section_header: Tables
+      item-42 at level 3: table with [18x8]
+        item-42 at level 4: caption: Table 1 Categorization of potential factors influencing pre-TAS results.
+      item-43 at level 3: table with [11x6]
+        item-43 at level 4: caption: Table 2 Adjusted risk ratios for pre-TAS failure from log-binomial model sensitivity analysis.
+    item-44 at level 2: section_header: Figures
+    item-45 at level 2: picture
+      item-45 at level 3: caption: Fig 1 Number of pre-TAS by country.
+    item-46 at level 2: picture
+      item-46 at level 3: caption: Fig 2 District-level baseline prevalence by country.
+    item-47 at level 2: picture
+      item-47 at level 3: caption: Fig 3 Percent pre-TAS failure by each characteristic (unadjusted).
+    item-48 at level 2: picture
+      item-48 at level 3: caption: Fig 4 Adjusted risk ratios for pre-TAS failure with 95% Confidence Interval from log-binomial model.
+    item-49 at level 2: picture
+      item-49 at level 3: caption: Fig 5 Analysis of failures by model combinations.
+    item-50 at level 2: section_header: References
+      item-51 at level 3: list: group list
+        item-52 at level 4: list_item: Global programme to eliminate ly ... eport, 2018. Wkly Epidemiol Rec (2019)
+        item-53 at level 4: list_item: D Kyelem; G Biswas; MJ Bockarie; ... search needs. Am J Trop Med Hyg (2008)
+        item-54 at level 4: list_item: EM Goldberg; JD King; D Mupfason ... c filariasis. Am J Trop Med Hyg (2019)
+        item-55 at level 4: list_item: J Cano; MP Rebollo; N Golding; R ...  present. Parasites and Vectors (2014)
+        item-56 at level 4: list_item: C Funk; P Peterson; M Landsfeld; ... r monitoring extremes. Sci Data (2015)
+        item-57 at level 4: list_item: CT Lloyd; A Sorichetta; AJ Tatem ... in population studies. Sci Data (2017)
+        item-58 at level 4: list_item: CD Elvidge; KE Baugh; M Zhizhin; ... hts. Proc Asia-Pacific Adv Netw (2013)
+        item-59 at level 4: list_item: P Jambulingam; S Subramanian; SJ ... dicators. Parasites and Vectors (2016)
+        item-60 at level 4: list_item: E Michael; MN Malecela-Lazaro; P ... c filariasis. Lancet Infect Dis (2004)
+        item-61 at level 4: list_item: WA Stolk; S Swaminathan; GJ van  ...  simulation study. J Infect Dis (2003)
+        item-62 at level 4: list_item: CA Grady; MB De Rochars; AN Dire ... asis programs. Emerg Infect Dis (2007)
+        item-63 at level 4: list_item: D Evans; D McFarland; W Adamani; ... Nigeria. Ann Trop Med Parasitol (2011)
+        item-64 at level 4: list_item: FO Richards; A Eigege; ES Miri;  ...  in Nigeria. PLoS Negl Trop Dis (2011)
+        item-65 at level 4: list_item: NK Biritwum; P Yikpotey; BK Marf ... Ghana. Trans R Soc Trop Med Hyg (2016)
+        item-66 at level 4: list_item: P Moraga; J Cano; RF Baggaley; J ... odelling. Parasites and Vectors (2015)
+        item-67 at level 4: list_item: MA Irvine; SM Njenga; S Gunaward ... ction. Trans R Soc Trop Med Hyg (2016)
+        item-68 at level 4: list_item: EA Ottesen. Efficacy of diethylc ... ariae in humans. Rev Infect Dis (1985)
+        item-69 at level 4: list_item: M Gambhir; M Bockarie; D Tisch;  ...  lymphatic filariasis. BMC Biol (2010)
+        item-70 at level 4: list_item: H Slater; E Michael. Predicting  ... gical niche modelling. PLoS One (2012)
+        item-71 at level 4: list_item: H Slater; E Michael. Mapping, Ba ...  prevalence in Africa. PLoS One (2013)
+        item-72 at level 4: list_item: S Sabesan; KHK Raju; S Subramani ... odel. Vector-Borne Zoonotic Dis (2013)
+        item-73 at level 4: list_item: MC Stanton; DH Molyneux; D Kyele ... in Burkina Faso. Geospat Health (2013)
+        item-74 at level 4: list_item: I Manhenje; M Teresa Galán-Pucha ... hern Mozambique. Geospat Health (2013)
+        item-75 at level 4: list_item: BM Ngwira; P Tambala; M Perez a; ...  infection in Malawi. Filaria J (2007)
+        item-76 at level 4: list_item: PE Simonsen; ME Mwakitalu. Urban ... hatic filariasis. Parasitol Res (2013)
+        item-77 at level 4: list_item: J Proville; D Zavala-Araiza; G W ... socio-economic trends. PLoS One (2017)
+        item-78 at level 4: list_item: T Endeshaw; A Taye; Z Tadesse; M ... st Ethiopia. Pathog Glob Health (2015)
+        item-79 at level 4: list_item: FO Richards; A Eigege; D Pam; A  ... eas of co-endemicity. Filaria J (2005)
+        item-80 at level 4: list_item: D Kyelem; S Sanou; B a Boatin; J ... cations. Ann Trop Med Parasitol (2003)
+        item-81 at level 4: list_item: GJ Weil; PJ Lammie; FO Richards; ... ne and ivermectin. J Infect Dis (1991)
+        item-82 at level 4: list_item: A Kumar; P Sachan. Measuring imp ... rug administration. Trop Biomed (2014)
+        item-83 at level 4: list_item: SM Njenga; CS Mwandawiro; CN Wam ...  control. Parasites and Vectors (2011)
+        item-84 at level 4: list_item: A Boyd; KY Won; SK McClintock; C ... gane, Haiti. PLoS Negl Trop Dis (2010)
+        item-85 at level 4: list_item: MA Irvine; LJ Reimer; SM Njenga; ... mination. Parasites and Vectors (2015)
+        item-86 at level 4: list_item: MA Irvine; WA Stolk; ME Smith; S ... elling study. Lancet Infect Dis (2017)
+        item-87 at level 4: list_item: SD Pion; C Montavon; CB Chesnais ... crofilaremia. Am J Trop Med Hyg (2016)
+        item-88 at level 4: list_item: S Wanji; ME Esum; AJ Njouendou;  ... in Cameroon. PLoS Negl Trop Dis (2018)
+        item-89 at level 4: list_item: CB Chesnais; NP Awaca-Uvon; FK B ... a in Africa. PLoS Negl Trop Dis (2017)
+        item-90 at level 4: list_item: A Silumbwe; JM Zulu; H Halwindi; ... haran Africa. BMC Public Health (2017)
+        item-91 at level 4: list_item: AM Adams; M Vuckovic; E Birch; T ... nistration. Trop Med Infect Dis (2018)
+        item-92 at level 4: list_item: RU Rao; SD Samarasekera; KC Nago ... n Sri Lanka. PLoS Negl Trop Dis (2017)
+        item-93 at level 4: list_item: Z Xu; PM Graves; CL Lau; A Cleme ... is in American Samoa. Epidemics (2018)
+        item-94 at level 4: list_item: CM Id; EJ Tettevi; F Mechan; B I ... rural Ghana. PLoS Negl Trop Dis (2019)
+        item-95 at level 4: list_item: A Eigege; A Kal; E Miri; A Salla ...  in Nigeria. PLoS Negl Trop Dis (2013)
+        item-96 at level 4: list_item: H Van den Berg; LA Kelly-Hope; S ... r management. Lancet Infect Dis (2013)
+        item-97 at level 4: list_item: R. Webber. Eradication of Wucher ... ntrol. Trans R Soc Trop Med Hyg (1979)
