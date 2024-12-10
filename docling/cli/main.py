@@ -27,8 +27,10 @@ from docling.datamodel.base_models import (
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
+    OcrEngine,
     OcrMacOptions,
     OcrOptions,
+    PdfBackend,
     PdfPipelineOptions,
     RapidOcrOptions,
     TableFormerMode,
@@ -66,22 +68,6 @@ def version_callback(value: bool):
         print(f"Docling IBM Models version: {docling_ibm_models_version}")
         print(f"Docling Parse version: {docling_parse_version}")
         raise typer.Exit()
-
-
-# Define an enum for the backend options
-class PdfBackend(str, Enum):
-    PYPDFIUM2 = "pypdfium2"
-    DLPARSE_V1 = "dlparse_v1"
-    DLPARSE_V2 = "dlparse_v2"
-
-
-# Define an enum for the ocr engines
-class OcrEngine(str, Enum):
-    EASYOCR = "easyocr"
-    TESSERACT_CLI = "tesseract_cli"
-    TESSERACT = "tesseract"
-    OCRMAC = "ocrmac"
-    RAPIDOCR = "rapidocr"
 
 
 def export_documents(
