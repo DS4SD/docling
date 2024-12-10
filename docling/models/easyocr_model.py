@@ -47,8 +47,8 @@ class EasyOcrModel(BaseOcrModel):
                 # Enable easyocr GPU if running on CUDA, MPS
                 use_gpu = any(
                     filter(
-                        lambda x: str(x) in device,
-                        ["cuda", "mps"],
+                        lambda x: str(x).lower() in device,
+                        [AcceleratorDevice.CUDA.value, AcceleratorDevice.MPS.value],
                     )
                 )
 
