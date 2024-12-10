@@ -45,10 +45,13 @@ class EasyOcrModel(BaseOcrModel):
             if self.options.use_gpu:
                 device = decide_device(accelerator_options.device)
                 # Enable easyocr GPU if running on CUDA, MPS
-                use_gpu = device in [
-                    AcceleratorDevice.CUDA,
-                    AcceleratorDevice.MPS,
-                ]
+                use_gpu = any(
+                    filter(
+                        lambda x: str(x).lower() in device,
+                        [AcceleratorDevice.CUDA.value, AcceleratorDevice.MPS.value],
+                    )
+                )
+
             self.reader = easyocr.Reader(
                 lang_list=self.options.lang,
                 gpu=use_gpu,
