@@ -162,7 +162,7 @@ class LayoutPostprocessor:
         DocItemLabel.LIST_ITEM: 0.5,
         DocItemLabel.PAGE_FOOTER: 0.5,
         DocItemLabel.PAGE_HEADER: 0.5,
-        DocItemLabel.PICTURE: 0.1,
+        DocItemLabel.PICTURE: 0.5,
         DocItemLabel.SECTION_HEADER: 0.45,
         DocItemLabel.TABLE: 0.35,
         DocItemLabel.TEXT: 0.55,  # 0.45,
@@ -279,6 +279,8 @@ class LayoutPostprocessor:
             if c.confidence >= self.CONFIDENCE_THRESHOLDS[c.label]
         ]
 
+        special_clusters = self._handle_cross_type_overlaps(special_clusters)
+
         for special in special_clusters:
             contained = []
             for cluster in self.regular_clusters:
@@ -289,14 +291,17 @@ class LayoutPostprocessor:
                         contained.append(cluster)
 
             if contained:
-                # Sort contained clusters by minimum cell ID
-                contained.sort(
-                    key=lambda cluster: (
-                        min(cell.id for cell in cluster.cells)
-                        if cluster.cells
-                        else sys.maxsize
-                    )
-                )
+                # # Sort contained clusters by minimum cell ID:
+                # contained.sort(
+                #     key=lambda cluster: (
+                #         min(cell.id for cell in cluster.cells)
+                #         if cluster.cells
+                #         else sys.maxsize
+                #     )
+                # )
+
+                # Sort contained clusters left-to-right, top-to-bottom
+                contained = self._sort_clusters(contained)
                 special.children = contained
 
                 # Adjust bbox only for wrapper types
@@ -323,6 +328,39 @@ class LayoutPostprocessor:
         )
 
         return picture_clusters + wrapper_clusters
+
+    def _handle_cross_type_overlaps(self, special_clusters) -> List[Cluster]:
+        """Handle overlaps between regular and wrapper clusters before child assignment.
+
+        In particular, KEY_VALUE_REGION proposals that are almost identical to a TABLE
+        should be removed.
+        """
+        wrappers_to_remove = set()
+
+        for wrapper in special_clusters:
+            if wrapper.label != DocItemLabel.KEY_VALUE_REGION:
+                continue  # only treat KEY_VALUE_REGION for now.
+
+            for regular in self.regular_clusters:
+                if regular.label == DocItemLabel.TABLE:
+                    # Calculate overlap
+                    overlap = regular.bbox.intersection_area_with(wrapper.bbox)
+                    wrapper_area = wrapper.bbox.area()
+                    overlap_ratio = overlap / wrapper_area
+
+                    # If wrapper is mostly overlapping with a TABLE, remove the wrapper
+                    if overlap_ratio > 0.8:  # 80% overlap threshold
+                        wrappers_to_remove.add(wrapper.id)
+                        break
+
+        # Filter out the identified wrappers
+        special_clusters = [
+            cluster
+            for cluster in special_clusters
+            if cluster.id not in wrappers_to_remove
+        ]
+
+        return special_clusters
 
     def _should_prefer_cluster(
         self, candidate: Cluster, other: Cluster, params: dict
@@ -443,6 +481,7 @@ class LayoutPostprocessor:
                 if cluster != best:
                     best.cells.extend(cluster.cells)
 
+            best.cells = self._deduplicate_cells(best.cells)
             best.cells = self._sort_cells(best.cells)
             result.append(best)
 
@@ -478,6 +517,16 @@ class LayoutPostprocessor:
 
         return current_best if current_best else clusters[0]
 
+    def _deduplicate_cells(self, cells: List[Cell]) -> List[Cell]:
+        """Ensure each cell appears only once, maintaining order of first appearance."""
+        seen_ids = set()
+        unique_cells = []
+        for cell in cells:
+            if cell.id not in seen_ids:
+                seen_ids.add(cell.id)
+                unique_cells.append(cell)
+        return unique_cells
+
     def _assign_cells_to_clusters(
         self, clusters: List[Cluster], min_overlap: float = 0.2
     ) -> List[Cluster]:
@@ -505,6 +554,10 @@ class LayoutPostprocessor:
 
             if best_cluster is not None:
                 best_cluster.cells.append(cell)
+
+        # Deduplicate cells in each cluster after assignment
+        for cluster in clusters:
+            cluster.cells = self._deduplicate_cells(cluster.cells)
 
         return clusters
 
@@ -547,11 +600,4 @@ class LayoutPostprocessor:
 
     def _sort_clusters(self, clusters: List[Cluster]) -> List[Cluster]:
         """Sort clusters in reading order (top-to-bottom, left-to-right)."""
-
-        def reading_order_key(cluster: Cluster) -> Tuple[float, float]:
-            if cluster.cells and cluster.label != DocItemLabel.PICTURE:
-                first_cell = min(cluster.cells, key=lambda c: (c.bbox.t, c.bbox.l))
-                return (first_cell.bbox.t, first_cell.bbox.l)
-            return (cluster.bbox.t, cluster.bbox.l)
-
-        return sorted(clusters, key=reading_order_key)
+        return sorted(clusters, key=lambda cluster: (cluster.bbox.t, cluster.bbox.l))
