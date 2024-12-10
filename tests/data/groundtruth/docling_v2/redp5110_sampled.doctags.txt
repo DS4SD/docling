@@ -5,7 +5,10 @@
 </figure>
 <section_header_level_1><location><page_1><loc_6><loc_79><loc_96><loc_89></location>Row and Column Access Control Support in IBM DB2 for i</section_header_level_1>
 <figure>
-<location><page_1><loc_3><loc_1><loc_96><loc_64></location>
+<location><page_1><loc_5><loc_11><loc_96><loc_63></location>
+</figure>
+<figure>
+<location><page_1><loc_52><loc_2><loc_95><loc_10></location>
 </figure>
 <section_header_level_1><location><page_2><loc_11><loc_88><loc_28><loc_91></location>Contents</section_header_level_1>
 <table>
@@ -106,9 +109,7 @@
 <location><page_5><loc_5><loc_70><loc_39><loc_91></location>
 </figure>
 <text><location><page_5><loc_13><loc_65><loc_19><loc_66></location>Chapter 1.</text>
-<figure>
-<location><page_5><loc_78><loc_82><loc_89><loc_91></location>
-</figure>
+<text><location><page_5><loc_82><loc_84><loc_85><loc_88></location>1</text>
 <section_header_level_1><location><page_5><loc_22><loc_61><loc_89><loc_68></location>Securing and protecting IBM DB2 data</section_header_level_1>
 <text><location><page_5><loc_22><loc_46><loc_89><loc_56></location>Recent news headlines are filled with reports of data breaches and cyber-attacks impacting global businesses of all sizes. The Identity Theft Resource Center$^{1}$ reports that almost 5000 data breaches have occurred since 2005, exposing over 600 million records of data. The financial cost of these data breaches is skyrocketing. Studies from the Ponemon Institute$^{2}$ revealed that the average cost of a data breach increased in 2013 by 15% globally and resulted in a brand equity loss of $9.4 million per attack. The average cost that is incurred for each lost record containing sensitive information increased more than 9% to $145 per record.</text>
 <text><location><page_5><loc_22><loc_38><loc_86><loc_44></location>Businesses must make a serious effort to secure their data and recognize that securing information assets is a cost of doing business. In many parts of the world and in many industries, securing the data is required by law and subject to audits. Data security is no longer an option; it is a requirement.</text>
@@ -163,8 +164,16 @@
 <row_4><col_0><body>USER_TYPE</col_0><col_1><body>VARCHAR(5)</col_1><col_2><body>Type of user profile: GLYPH<SM590000> USER: The user profile is a user. GLYPH<SM590000> GROUP: The user profile is a group.</col_2></row_4>
 </table>
 <text><location><page_8><loc_22><loc_40><loc_89><loc_43></location>To discover who has authorization to define and manage RCAC, you can use the query that is shown in Example 2-1.</text>
-<paragraph><location><page_8><loc_22><loc_38><loc_76><loc_39></location>Example 2-1 Query to determine who has authority to define and manage RCAC</paragraph>
-<table><location><page_8><loc_22><loc_26><loc_89><loc_37></location>SELECT function_id, user_name, usage, user_type FROM function_usage WHERE function_id=’QIBM_DB_SECADM’ ORDER BY user_name;</table>
+<table>
+<location><page_8><loc_22><loc_26><loc_89><loc_37></location>
+<caption>Example 2-1 Query to determine who has authority to define and manage RCAC</caption>
+<row_0><col_0><body>SELECT</col_0><col_1><body>function_id, user_name,</col_1></row_0>
+<row_1><col_0><body></col_0><col_1><body>usage,</col_1></row_1>
+<row_2><col_0><body></col_0><col_1><body>user_type</col_1></row_2>
+<row_3><col_0><body>FROM</col_0><col_1><body>function_usage</col_1></row_3>
+<row_4><col_0><body>WHERE</col_0><col_1><body>function_id='QIBM_DB_SECADM'</col_1></row_4>
+<row_5><col_0><body>ORDER BY</col_0><col_1><body>user_name;</col_1></row_5>
+</table>
 <section_header_level_1><location><page_8><loc_11><loc_20><loc_41><loc_22></location>2.2 Separation of duties</section_header_level_1>
 <text><location><page_8><loc_22><loc_10><loc_89><loc_18></location>Separation of duties helps businesses comply with industry regulations or organizational requirements and simplifies the management of authorities. Separation of duties is commonly used to prevent fraudulent activities or errors by a single person. It provides the ability for administrative functions to be divided across individuals without overlapping responsibilities, so that one user does not possess unlimited authority, such as with the *ALLOBJ authority.</text>
 <text><location><page_9><loc_22><loc_82><loc_89><loc_91></location>For example, assume that a business has assigned the duty to manage security on IBM i to Theresa. Before release IBM i 7.2, to grant privileges, Theresa had to have the same privileges Theresa was granting to others. Therefore, to grant *USE privileges to the PAYROLL table, Theresa had to have *OBJMGT and *USE authority (or a higher level of authority, such as *ALLOBJ). This requirement allowed Theresa to access the data in the PAYROLL table even though Theresa's job description was only to manage its security.</text>
@@ -272,7 +281,14 @@
 </unordered_list>
 <section_header_level_1><location><page_14><loc_22><loc_62><loc_61><loc_63></location>Example 3-10 Activating RCAC on the EMPLOYEES table</section_header_level_1>
 <unordered_list>
-<list_item><location><page_14><loc_22><loc_54><loc_62><loc_61></location>/* Active Row Access Control (permissions) */ /* Active Column Access Control (masks) */ ALTER TABLE HR_SCHEMA.EMPLOYEES ACTIVATE ROW ACCESS CONTROL ACTIVATE COLUMN ACCESS CONTROL;</list_item>
+<list_item><location><page_14><loc_22><loc_60><loc_62><loc_61></location>/* Active Row Access Control (permissions) */</list_item>
+<list_item><location><page_14><loc_22><loc_58><loc_58><loc_60></location>/* Active Column Access Control (masks)</list_item>
+</unordered_list>
+<text><location><page_14><loc_60><loc_58><loc_62><loc_60></location>*/</text>
+<text><location><page_14><loc_22><loc_57><loc_48><loc_58></location>ALTER TABLE HR_SCHEMA.EMPLOYEES</text>
+<text><location><page_14><loc_22><loc_55><loc_44><loc_56></location>ACTIVATE ROW ACCESS CONTROL</text>
+<text><location><page_14><loc_22><loc_54><loc_48><loc_55></location>ACTIVATE COLUMN ACCESS CONTROL;</text>
+<unordered_list>
 <list_item><location><page_14><loc_22><loc_48><loc_88><loc_52></location>2. Look at the definition of the EMPLOYEE table, as shown in Figure 3-11. To do this, from the main navigation pane of System i Navigator, click Schemas  HR_SCHEMA  Tables , right-click the EMPLOYEES table, and click Definition .</list_item>
 </unordered_list>
 <figure>

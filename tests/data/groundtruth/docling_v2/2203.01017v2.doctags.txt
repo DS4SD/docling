@@ -156,17 +156,39 @@
 <list_item><location><page_8><loc_9><loc_89><loc_10><loc_90></location>a.</list_item>
 <list_item><location><page_8><loc_11><loc_89><loc_82><loc_90></location>Red - PDF cells, Green - predicted bounding boxes, Blue - post-processed predictions matched to PDF cells</list_item>
 </unordered_list>
+<section_header_level_1><location><page_8><loc_9><loc_87><loc_46><loc_88></location>Japanese language (previously unseen by TableFormer):</section_header_level_1>
+<section_header_level_1><location><page_8><loc_50><loc_87><loc_70><loc_88></location>Example table from FinTabNet:</section_header_level_1>
 <figure>
 <location><page_8><loc_8><loc_76><loc_49><loc_87></location>
-<caption>Japanese language (previously unseen by TableFormer): Example table from FinTabNet:b. Structure predicted by TableFormer, with superimposed matched PDF cell text:</caption>
 </figure>
 <figure>
+<location><page_8><loc_50><loc_77><loc_91><loc_88></location>
+<caption>b. Structure predicted by TableFormer, with superimposed matched PDF cell text:</caption>
+</figure>
+<table>
 <location><page_8><loc_9><loc_63><loc_49><loc_72></location>
-</figure>
-<figure>
+<row_0><col_0><body></col_0><col_1><body></col_1><col_2><col_header>論文ファイル</col_2><col_3><col_header>論文ファイル</col_3><col_4><col_header>参考文献</col_4><col_5><col_header>参考文献</col_5></row_0>
+<row_1><col_0><col_header>出典</col_0><col_1><col_header>ファイル 数</col_1><col_2><col_header>英語</col_2><col_3><col_header>日本語</col_3><col_4><col_header>英語</col_4><col_5><col_header>日本語</col_5></row_1>
+<row_2><col_0><row_header>Association for Computational Linguistics(ACL2003)</col_0><col_1><body>65</col_1><col_2><body>65</col_2><col_3><body>0</col_3><col_4><body>150</col_4><col_5><body>0</col_5></row_2>
+<row_3><col_0><row_header>Computational Linguistics(COLING2002)</col_0><col_1><body>140</col_1><col_2><body>140</col_2><col_3><body>0</col_3><col_4><body>150</col_4><col_5><body>0</col_5></row_3>
+<row_4><col_0><row_header>電気情報通信学会 2003 年総合大会</col_0><col_1><body>150</col_1><col_2><body>8</col_2><col_3><body>142</col_3><col_4><body>223</col_4><col_5><body>147</col_5></row_4>
+<row_5><col_0><row_header>情報処理学会第 65 回全国大会 (2003)</col_0><col_1><body>177</col_1><col_2><body>1</col_2><col_3><body>176</col_3><col_4><body>150</col_4><col_5><body>236</col_5></row_5>
+<row_6><col_0><row_header>第 17 回人工知能学会全国大会 (2003)</col_0><col_1><body>208</col_1><col_2><body>5</col_2><col_3><body>203</col_3><col_4><body>152</col_4><col_5><body>244</col_5></row_6>
+<row_7><col_0><row_header>自然言語処理研究会第 146 〜 155 回</col_0><col_1><body>98</col_1><col_2><body>2</col_2><col_3><body>96</col_3><col_4><body>150</col_4><col_5><body>232</col_5></row_7>
+<row_8><col_0><row_header>WWW から収集した論文</col_0><col_1><body>107</col_1><col_2><body>73</col_2><col_3><body>34</col_3><col_4><body>147</col_4><col_5><body>96</col_5></row_8>
+<row_9><col_0><body></col_0><col_1><body>945</col_1><col_2><body>294</col_2><col_3><body>651</col_3><col_4><body>1122</col_4><col_5><body>955</col_5></row_9>
+</table>
+<table>
 <location><page_8><loc_50><loc_64><loc_90><loc_72></location>
 <caption>Text is aligned to match original for ease of viewing</caption>
-</figure>
+<row_0><col_0><body></col_0><col_1><col_header>Shares (in millions)</col_1><col_2><col_header>Shares (in millions)</col_2><col_3><col_header>Weighted Average Grant Date Fair Value</col_3><col_4><col_header>Weighted Average Grant Date Fair Value</col_4></row_0>
+<row_1><col_0><body></col_0><col_1><col_header>RS U s</col_1><col_2><col_header>PSUs</col_2><col_3><col_header>RSUs</col_3><col_4><col_header>PSUs</col_4></row_1>
+<row_2><col_0><row_header>Nonvested on Janua ry 1</col_0><col_1><body>1. 1</col_1><col_2><body>0.3</col_2><col_3><body>90.10 $</col_3><col_4><body>$ 91.19</col_4></row_2>
+<row_3><col_0><row_header>Granted</col_0><col_1><body>0. 5</col_1><col_2><body>0.1</col_2><col_3><body>117.44</col_3><col_4><body>122.41</col_4></row_3>
+<row_4><col_0><row_header>Vested</col_0><col_1><body>(0. 5 )</col_1><col_2><body>(0.1)</col_2><col_3><body>87.08</col_3><col_4><body>81.14</col_4></row_4>
+<row_5><col_0><row_header>Canceled or forfeited</col_0><col_1><body>(0. 1 )</col_1><col_2><body>-</col_2><col_3><body>102.01</col_3><col_4><body>92.18</col_4></row_5>
+<row_6><col_0><row_header>Nonvested on December 31</col_0><col_1><body>1.0</col_1><col_2><body>0.3</col_2><col_3><body>104.85 $</col_3><col_4><body>$ 104.51</col_4></row_6>
+</table>
 <figure>
 <location><page_8><loc_8><loc_44><loc_35><loc_52></location>
 <caption>Figure 5: One of the benefits of TableFormer is that it is language agnostic, as an example, the left part of the illustration demonstrates TableFormer predictions on previously unseen language (Japanese). Additionally, we see that TableFormer is robust to variability in style and content, right side of the illustration shows the example of the TableFormer prediction from the FinTabNet dataset.</caption>
@@ -294,7 +316,7 @@
 <text><location><page_13><loc_8><loc_83><loc_47><loc_86></location>Aditional images with examples of TableFormer predictions and post-processing can be found below.</text>
 <paragraph><location><page_13><loc_10><loc_35><loc_45><loc_37></location>Figure 8: Example of a table with multi-line header.</paragraph>
 <figure>
-<location><page_13><loc_51><loc_63><loc_91><loc_87></location>
+<location><page_13><loc_51><loc_63><loc_70><loc_68></location>
 <caption>Figure 9: Example of a table with big empty distance between cells.</caption>
 </figure>
 <figure>
@@ -313,10 +335,7 @@
 <location><page_14><loc_52><loc_55><loc_87><loc_89></location>
 <caption>Figure 13: Table predictions example on colorful table.</caption>
 </figure>
-<figure>
-<location><page_14><loc_52><loc_25><loc_85><loc_31></location>
-<caption>Figure 14: Example with multi-line text.</caption>
-</figure>
+<paragraph><location><page_14><loc_56><loc_13><loc_83><loc_14></location>Figure 14: Example with multi-line text.</paragraph>
 <figure>
 <location><page_15><loc_9><loc_69><loc_46><loc_83></location>
 </figure>
@@ -329,9 +348,6 @@
 <figure>
 <location><page_15><loc_8><loc_20><loc_52><loc_36></location>
 <caption>Figure 15: Example with triangular table.</caption>
-</figure>
-<figure>
-<location><page_15><loc_53><loc_72><loc_86><loc_85></location>
 </figure>
 <figure>
 <location><page_15><loc_53><loc_41><loc_86><loc_54></location>
