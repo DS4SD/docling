@@ -6,6 +6,8 @@ Front cover
 
 <!-- image -->
 
+<!-- image -->
+
 ## Contents
 
 | Notices                                                                                                                                        | . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . vii   |
@@ -118,7 +120,7 @@ Hernando Bedoya is a Senior IT Specialist at STG Lab Services and Training in Ro
 
 Chapter 1.
 
-<!-- image -->
+1
 
 ## Securing and protecting IBM DB2 data
 
@@ -196,7 +198,13 @@ To discover who has authorization to define and manage RCAC, you can use the que
 
 Example 2-1 Query to determine who has authority to define and manage RCAC
 
-SELECT function\_id, user\_name, usage, user\_type FROM function\_usage WHERE function\_id=’QIBM\_DB\_SECADM’ ORDER BY user\_name;
+| SELECT   | function\_id, user\_name,      |
+|----------|------------------------------|
+|          | usage,                       |
+|          | user\_type                    |
+| FROM     | function\_usage               |
+| WHERE    | function\_id='QIBM\_DB\_SECADM' |
+| ORDER BY | user\_name;                   |
 
 ## 2.2 Separation of duties
 
@@ -334,7 +342,17 @@ Now that you have created the row permission and the two column masks, RCAC must
 
 ## Example 3-10 Activating RCAC on the EMPLOYEES table
 
-- /* Active Row Access Control (permissions) */ /* Active Column Access Control (masks) */ ALTER TABLE HR\_SCHEMA.EMPLOYEES ACTIVATE ROW ACCESS CONTROL ACTIVATE COLUMN ACCESS CONTROL;
+- /* Active Row Access Control (permissions) */
+- /* Active Column Access Control (masks)
+
+*/
+
+ALTER TABLE HR\_SCHEMA.EMPLOYEES
+
+ACTIVATE ROW ACCESS CONTROL
+
+ACTIVATE COLUMN ACCESS CONTROL;
+
 - 2. Look at the definition of the EMPLOYEE table, as shown in Figure 3-11. To do this, from the main navigation pane of System i Navigator, click Schemas  HR\_SCHEMA  Tables , right-click the EMPLOYEES table, and click Definition .
 
 Figure 3-11 Selecting the EMPLOYEES table from System i Navigator
