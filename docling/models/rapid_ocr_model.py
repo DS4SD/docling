@@ -118,24 +118,25 @@ class RapidOcrModel(BaseOcrModel):
                         del high_res_image
                         del im
 
-                        cells = [
-                            OcrCell(
-                                id=ix,
-                                text=line[1],
-                                confidence=line[2],
-                                bbox=BoundingBox.from_tuple(
-                                    coord=(
-                                        (line[0][0][0] / self.scale) + ocr_rect.l,
-                                        (line[0][0][1] / self.scale) + ocr_rect.t,
-                                        (line[0][2][0] / self.scale) + ocr_rect.l,
-                                        (line[0][2][1] / self.scale) + ocr_rect.t,
+                        if result is not None:
+                            cells = [
+                                OcrCell(
+                                    id=ix,
+                                    text=line[1],
+                                    confidence=line[2],
+                                    bbox=BoundingBox.from_tuple(
+                                        coord=(
+                                            (line[0][0][0] / self.scale) + ocr_rect.l,
+                                            (line[0][0][1] / self.scale) + ocr_rect.t,
+                                            (line[0][2][0] / self.scale) + ocr_rect.l,
+                                            (line[0][2][1] / self.scale) + ocr_rect.t,
+                                        ),
+                                        origin=CoordOrigin.TOPLEFT,
                                     ),
-                                    origin=CoordOrigin.TOPLEFT,
-                                ),
-                            )
-                            for ix, line in enumerate(result)
-                        ]
-                        all_ocr_cells.extend(cells)
+                                )
+                                for ix, line in enumerate(result)
+                            ]
+                            all_ocr_cells.extend(cells)
 
                     # Post-process the cells
                     page.cells = self.post_process_cells(all_ocr_cells, page.cells)
