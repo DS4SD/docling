@@ -22,9 +22,7 @@ A simple example would look like this:
 docling https://arxiv.org/pdf/2206.01062
 ```
 
-To see all available options (export formats etc.) run `docling --help`. More details in the [CLI reference page](./cli.md).
-
-
+To see all available options (export formats etc.) run `docling --help`. More details in the [CLI reference page](./reference/cli.md).
 
 ### Advanced options
 
@@ -130,29 +128,37 @@ You can limit the CPU threads used by Docling by setting the environment variabl
 
 ## Chunking
 
-You can perform a hierarchy-aware chunking of a Docling document as follows:
+You can chunk a Docling document using a [chunker](concepts/chunking.md), such as a
+`HybridChunker`, as shown below (for more details check out
+[this example](examples/hybrid_chunking.ipynb)):
 
 ```python
 from docling.document_converter import DocumentConverter
-from docling_core.transforms.chunker import HierarchicalChunker
+from docling.chunking import HybridChunker
 
 conv_res = DocumentConverter().convert("https://arxiv.org/pdf/2206.01062")
 doc = conv_res.document
-chunks = list(HierarchicalChunker().chunk(doc))
 
-print(chunks[30])
+chunker = HybridChunker(tokenizer="BAAI/bge-small-en-v1.5")  # set tokenizer as needed
+chunk_iter = chunker.chunk(doc)
+```
+
+An example chunk would look like this:
+
+```python
+print(list(chunk_iter)[11])
 # {
-#   "text": "Lately, new types of ML models for document-layout analysis have emerged [...]",
+#   "text": "In this paper, we present the DocLayNet dataset. [...]",
 #   "meta": {
 #     "doc_items": [{
-#       "self_ref": "#/texts/40",
+#       "self_ref": "#/texts/28",
 #       "label": "text",
 #       "prov": [{
 #         "page_no": 2,
-#         "bbox": {"l": 317.06, "t": 325.81, "r": 559.18, "b": 239.97, ...},
-#       }]
-#     }],
-#     "headings": ["2 RELATED WORK"],
+#         "bbox": {"l": 53.29, "t": 287.14, "r": 295.56, "b": 212.37, ...},
+#       }], ...,
+#     }, ...],
+#     "headings": ["1 INTRODUCTION"],
 #   }
 # }
 ```

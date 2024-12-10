@@ -8,9 +8,6 @@ Front cover
 
 <!-- image -->
 
-
-<!-- image -->
-
 ## Contents
 
 
@@ -141,7 +138,8 @@ Hernando Bedoya is a Senior IT Specialist at STG Lab Services and Training in Ro
 
 Chapter 1.
 
-1
+
+<!-- image -->
 
 ## Securing and protecting IBM DB2 data
 
@@ -223,27 +221,7 @@ To discover who has authorization to define and manage RCAC, you can use the que
 
 Example 2-1 Query to determine who has authority to define and manage RCAC
 
-SELECT
-
-function_id,
-
-user_name,
-
-usage,
-
-user_type
-
-FROM
-
-function_usage
-
-WHERE
-
-function_id=’QIBM_DB_SECADM’
-
-ORDER BY
-
-user_name;
+SELECT function_id, user_name, usage, user_type FROM function_usage WHERE function_id=’QIBM_DB_SECADM’ ORDER BY user_name;
 
 ## 2.2 Separation of duties
 
@@ -350,7 +328,7 @@ Here is an example of using the VERIFY_GROUP_FOR_USER function:
 
 - 3. If a user is connected to the server using user profile JANE, all of the following function invocations return a value of 1:
 
-VERIFY_GROUP_FOR_USER (CURRENT_USER, 'MGR') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR') The following function invocation returns a value of 0: VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JUDY', 'TONY') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR', 'STEVE')
+VERIFY_GROUP_FOR_USER (CURRENT_USER, 'MGR') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR', 'STEVE') The following function invocation returns a value of 0: VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JUDY', 'TONY')
 
 RETURN
 
@@ -387,17 +365,7 @@ Now that you have created the row permission and the two column masks, RCAC must
 
 ## Example 3-10 Activating RCAC on the EMPLOYEES table
 
-- /* Active Row Access Control (permissions) */
-
-- /* Active Column Access Control (masks)
-
-*/
-
-ALTER TABLE HR_SCHEMA.EMPLOYEES
-
-ACTIVATE ROW ACCESS CONTROL
-
-ACTIVATE COLUMN ACCESS CONTROL;
+- /* Active Row Access Control (permissions) */ /* Active Column Access Control (masks) */ ALTER TABLE HR_SCHEMA.EMPLOYEES ACTIVATE ROW ACCESS CONTROL ACTIVATE COLUMN ACCESS CONTROL;
 
 - 2. Look at the definition of the EMPLOYEE table, as shown in Figure 3-11. To do this, from the main navigation pane of System i Navigator, click Schemas  HR_SCHEMA  Tables , right-click the EMPLOYEES table, and click Definition .
 

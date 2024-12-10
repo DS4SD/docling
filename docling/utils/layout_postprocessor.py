@@ -156,16 +156,16 @@ class LayoutPostprocessor:
     SPECIAL_TYPES = WRAPPER_TYPES | {DocItemLabel.PICTURE}
 
     CONFIDENCE_THRESHOLDS = {
-        DocItemLabel.CAPTION: 0.35,
-        DocItemLabel.FOOTNOTE: 0.35,
-        DocItemLabel.FORMULA: 0.35,
-        DocItemLabel.LIST_ITEM: 0.35,
-        DocItemLabel.PAGE_FOOTER: 0.35,
-        DocItemLabel.PAGE_HEADER: 0.35,
-        DocItemLabel.PICTURE: 0.1,
+        DocItemLabel.CAPTION: 0.5,
+        DocItemLabel.FOOTNOTE: 0.5,
+        DocItemLabel.FORMULA: 0.5,
+        DocItemLabel.LIST_ITEM: 0.5,
+        DocItemLabel.PAGE_FOOTER: 0.5,
+        DocItemLabel.PAGE_HEADER: 0.5,
+        DocItemLabel.PICTURE: 0.5,
         DocItemLabel.SECTION_HEADER: 0.45,
         DocItemLabel.TABLE: 0.35,
-        DocItemLabel.TEXT: 0.45,
+        DocItemLabel.TEXT: 0.55,  # 0.45,
         DocItemLabel.TITLE: 0.45,
         DocItemLabel.CODE: 0.45,
         DocItemLabel.CHECKBOX_SELECTED: 0.45,
@@ -218,6 +218,12 @@ class LayoutPostprocessor:
         final_clusters = self._sort_clusters(
             self.regular_clusters + self.special_clusters
         )
+        for cluster in final_clusters:
+            cluster.cells = self._sort_cells(cluster.cells)
+            # Also sort cells in children if any
+            for child in cluster.children:
+                child.cells = self._sort_cells(child.cells)
+
         return final_clusters, self.cells
 
     def _process_regular_clusters(self) -> List[Cluster]:
@@ -273,6 +279,8 @@ class LayoutPostprocessor:
             if c.confidence >= self.CONFIDENCE_THRESHOLDS[c.label]
         ]
 
+        special_clusters = self._handle_cross_type_overlaps(special_clusters)
+
         for special in special_clusters:
             contained = []
             for cluster in self.regular_clusters:
@@ -283,14 +291,17 @@ class LayoutPostprocessor:
                         contained.append(cluster)
 
             if contained:
-                # Sort contained clusters by minimum cell ID
-                contained.sort(
-                    key=lambda cluster: (
-                        min(cell.id for cell in cluster.cells)
-                        if cluster.cells
-                        else sys.maxsize
-                    )
-                )
+                # # Sort contained clusters by minimum cell ID:
+                # contained.sort(
+                #     key=lambda cluster: (
+                #         min(cell.id for cell in cluster.cells)
+                #         if cluster.cells
+                #         else sys.maxsize
+                #     )
+                # )
+
+                # Sort contained clusters left-to-right, top-to-bottom
+                contained = self._sort_clusters(contained)
                 special.children = contained
 
                 # Adjust bbox only for wrapper types
@@ -317,6 +328,109 @@ class LayoutPostprocessor:
         )
 
         return picture_clusters + wrapper_clusters
+
+    def _handle_cross_type_overlaps(self, special_clusters) -> List[Cluster]:
+        """Handle overlaps between regular and wrapper clusters before child assignment.
+
+        In particular, KEY_VALUE_REGION proposals that are almost identical to a TABLE
+        should be removed.
+        """
+        wrappers_to_remove = set()
+
+        for wrapper in special_clusters:
+            if wrapper.label != DocItemLabel.KEY_VALUE_REGION:
+                continue  # only treat KEY_VALUE_REGION for now.
+
+            for regular in self.regular_clusters:
+                if regular.label == DocItemLabel.TABLE:
+                    # Calculate overlap
+                    overlap = regular.bbox.intersection_area_with(wrapper.bbox)
+                    wrapper_area = wrapper.bbox.area()
+                    overlap_ratio = overlap / wrapper_area
+
+                    # If wrapper is mostly overlapping with a TABLE, remove the wrapper
+                    if overlap_ratio > 0.8:  # 80% overlap threshold
+                        wrappers_to_remove.add(wrapper.id)
+                        break
+
+        # Filter out the identified wrappers
+        special_clusters = [
+            cluster
+            for cluster in special_clusters
+            if cluster.id not in wrappers_to_remove
+        ]
+
+        return special_clusters
+
+    def _should_prefer_cluster(
+        self, candidate: Cluster, other: Cluster, params: dict
+    ) -> bool:
+        """Determine if candidate cluster should be preferred over other cluster based on rules.
+        Returns True if candidate should be preferred, False if not."""
+
+        # Rule 1: LIST_ITEM vs TEXT
+        if (
+            candidate.label == DocItemLabel.LIST_ITEM
+            and other.label == DocItemLabel.TEXT
+        ):
+            # Check if areas are similar (within 20% of each other)
+            area_ratio = candidate.bbox.area() / other.bbox.area()
+            area_similarity = abs(1 - area_ratio) < 0.2
+            if area_similarity:
+                return True
+
+        # Rule 2: CODE vs others
+        if candidate.label == DocItemLabel.CODE:
+            # Calculate how much of the other cluster is contained within the CODE cluster
+            overlap = other.bbox.intersection_area_with(candidate.bbox)
+            containment = overlap / other.bbox.area()
+            if containment > 0.8:  # other is 80% contained within CODE
+                return True
+
+        # If no label-based rules matched, fall back to area/confidence thresholds
+        area_ratio = candidate.bbox.area() / other.bbox.area()
+        conf_diff = other.confidence - candidate.confidence
+
+        if (
+            area_ratio <= params["area_threshold"]
+            and conf_diff > params["conf_threshold"]
+        ):
+            return False
+
+        return True  # Default to keeping candidate if no rules triggered rejection
+
+    def _select_best_cluster_from_group(
+        self,
+        group_clusters: List[Cluster],
+        params: dict,
+    ) -> Cluster:
+        """Select best cluster from a group of overlapping clusters based on all rules."""
+        current_best = None
+
+        for candidate in group_clusters:
+            should_select = True
+
+            for other in group_clusters:
+                if other == candidate:
+                    continue
+
+                if not self._should_prefer_cluster(candidate, other, params):
+                    should_select = False
+                    break
+
+            if should_select:
+                if current_best is None:
+                    current_best = candidate
+                else:
+                    # If both clusters pass rules, prefer the larger one unless confidence differs significantly
+                    if (
+                        candidate.bbox.area() > current_best.bbox.area()
+                        and current_best.confidence - candidate.confidence
+                        <= params["conf_threshold"]
+                    ):
+                        current_best = candidate
+
+        return current_best if current_best else group_clusters[0]
 
     def _remove_overlapping_clusters(
         self,
@@ -360,36 +474,15 @@ class LayoutPostprocessor:
                 continue
 
             group_clusters = [valid_clusters[cid] for cid in group]
-            current_best = None
+            best = self._select_best_cluster_from_group(group_clusters, params)
 
-            for candidate in group_clusters:
-                should_select = True
-                for other in group_clusters:
-                    if other == candidate:
-                        continue
-
-                    area_ratio = candidate.bbox.area() / other.bbox.area()
-                    conf_diff = other.confidence - candidate.confidence
-
-                    if (
-                        area_ratio <= params["area_threshold"]
-                        and conf_diff > params["conf_threshold"]
-                    ):
-                        should_select = False
-                        break
-
-                if should_select:
-                    if current_best is None or (
-                        candidate.bbox.area() > current_best.bbox.area()
-                        and current_best.confidence - candidate.confidence
-                        <= params["conf_threshold"]
-                    ):
-                        current_best = candidate
-
-            best = current_best if current_best else group_clusters[0]
+            # Simple cell merging - no special cases
             for cluster in group_clusters:
                 if cluster != best:
                     best.cells.extend(cluster.cells)
+
+            best.cells = self._deduplicate_cells(best.cells)
+            best.cells = self._sort_cells(best.cells)
             result.append(best)
 
         return result
@@ -424,6 +517,16 @@ class LayoutPostprocessor:
 
         return current_best if current_best else clusters[0]
 
+    def _deduplicate_cells(self, cells: List[Cell]) -> List[Cell]:
+        """Ensure each cell appears only once, maintaining order of first appearance."""
+        seen_ids = set()
+        unique_cells = []
+        for cell in cells:
+            if cell.id not in seen_ids:
+                seen_ids.add(cell.id)
+                unique_cells.append(cell)
+        return unique_cells
+
     def _assign_cells_to_clusters(
         self, clusters: List[Cluster], min_overlap: float = 0.2
     ) -> List[Cluster]:
@@ -451,6 +554,10 @@ class LayoutPostprocessor:
 
             if best_cluster is not None:
                 best_cluster.cells.append(cell)
+
+        # Deduplicate cells in each cluster after assignment
+        for cluster in clusters:
+            cluster.cells = self._deduplicate_cells(cluster.cells)
 
         return clusters
 
@@ -487,13 +594,10 @@ class LayoutPostprocessor:
 
         return clusters
 
+    def _sort_cells(self, cells: List[Cell]) -> List[Cell]:
+        """Sort cells in native reading order."""
+        return sorted(cells, key=lambda c: (c.id))
+
     def _sort_clusters(self, clusters: List[Cluster]) -> List[Cluster]:
         """Sort clusters in reading order (top-to-bottom, left-to-right)."""
-
-        def reading_order_key(cluster: Cluster) -> Tuple[float, float]:
-            if cluster.cells and cluster.label != DocItemLabel.PICTURE:
-                first_cell = min(cluster.cells, key=lambda c: (c.bbox.t, c.bbox.l))
-                return (first_cell.bbox.t, first_cell.bbox.l)
-            return (cluster.bbox.t, cluster.bbox.l)
-
-        return sorted(clusters, key=reading_order_key)
+        return sorted(clusters, key=lambda cluster: (cluster.bbox.t, cluster.bbox.l))
