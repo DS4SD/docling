@@ -56,7 +56,6 @@ nav:
     - "Docling": index.md
     - Installation: installation.md
     - Usage: usage.md
-    - CLI: cli.md
     - FAQ: faq.md
     - Docling v2: v2.md
   - Concepts:
@@ -76,15 +75,12 @@ nav:
       - "Table export": examples/export_tables.py
       - "Multimodal export": examples/export_multimodal.py
       - "Force full page OCR": examples/full_page_ocr.py
+    - Chunking:
+      - "Hybrid chunking": examples/hybrid_chunking.ipynb
     - RAG / QA:
       - "RAG with LlamaIndex 🦙": examples/rag_llamaindex.ipynb
       - "RAG with LangChain 🦜🔗": examples/rag_langchain.ipynb
       - "Hybrid RAG with Qdrant": examples/hybrid_rag_qdrant.ipynb
-    - Chunking:
-      - "Hybrid chunking": examples/hybrid_chunking.ipynb
-    #   - Chunking: examples/chunking.md
-    # - CLI:
-    #   - CLI: examples/cli.md
   - Integrations:
     - Integrations: integrations/index.md
     - "🐝 Bee": integrations/bee.md
@@ -99,10 +95,13 @@ nav:
     - "spaCy": integrations/spacy.md
     - "txtai": integrations/txtai.md
     # - "LangChain 🦜🔗": integrations/langchain.md
-  - API reference:
-    - Document Converter: api_reference/document_converter.md
-    - Pipeline options: api_reference/pipeline_options.md
-    - Docling Document: api_reference/docling_document.md
+  - Reference:
+    - Python API:
+      - Document Converter: reference/document_converter.md
+      - Pipeline options: reference/pipeline_options.md
+      - Docling Document: reference/docling_document.md
+    - CLI:
+      - CLI reference: reference/cli.md
 
 markdown_extensions:
   - pymdownx.superfences
