@@ -7,7 +7,7 @@ from typing import Iterable, List
 
 from docling_core.types.doc import CoordOrigin, DocItemLabel
 from docling_ibm_models.layoutmodel.layout_predictor import LayoutPredictor
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 from docling.datamodel.base_models import (
     BoundingBox,
@@ -44,7 +44,7 @@ class LayoutModel(BasePageModel):
     ]
     PAGE_HEADER_LABELS = [DocItemLabel.PAGE_HEADER, DocItemLabel.PAGE_FOOTER]
 
-    TABLE_LABEL = DocItemLabel.TABLE
+    TABLE_LABELS = [DocItemLabel.TABLE, DocItemLabel.DOCUMENT_INDEX]
     FIGURE_LABEL = DocItemLabel.PICTURE
     FORMULA_LABEL = DocItemLabel.FORMULA
     CONTAINER_LABELS = [DocItemLabel.FORM, DocItemLabel.KEY_VALUE_REGION]
@@ -62,6 +62,7 @@ class LayoutModel(BasePageModel):
         Draws a page image side by side with clusters filtered into two categories:
         - Left: Clusters excluding FORM, KEY_VALUE_REGION, and PICTURE.
         - Right: Clusters including FORM, KEY_VALUE_REGION, and PICTURE.
+        Includes label names and confidence scores for each cluster.
         """
         label_to_color = {
             DocItemLabel.TEXT: (255, 255, 153),  # Light Yellow
@@ -103,9 +104,18 @@ class LayoutModel(BasePageModel):
         # Function to draw clusters on an image
         def draw_clusters(image, clusters):
             draw = ImageDraw.Draw(image, "RGBA")
+
+            # Create a smaller font for the labels
+            try:
+                font = ImageFont.truetype("arial.ttf", 12)
+            except OSError:
+                # Fallback to default font if arial is not available
+                font = ImageFont.load_default()
+
             for c_tl in clusters:
                 all_clusters = [c_tl, *c_tl.children]
                 for c in all_clusters:
+                    # Draw cells first (underneath)
                     cell_color = (0, 0, 0, 40)  # Transparent black for cells
                     for tc in c.cells:
                         cx0, cy0, cx1, cy1 = tc.bbox.as_tuple()
@@ -115,19 +125,42 @@ class LayoutModel(BasePageModel):
                             fill=cell_color,
                         )
 
+                    # Draw cluster rectangle
                     x0, y0, x1, y1 = c.bbox.as_tuple()
-                    cluster_fill_color = (
-                        *list(label_to_color.get(c.label)),  # type: ignore
-                        70,
-                    )
-                    cluster_outline_color = (
-                        *list(label_to_color.get(c.label)),  # type: ignore
-                        255,
-                    )
+                    cluster_fill_color = (*list(label_to_color.get(c.label)), 70)
+                    cluster_outline_color = (*list(label_to_color.get(c.label)), 255)
                     draw.rectangle(
                         [(x0, y0), (x1, y1)],
                         outline=cluster_outline_color,
                         fill=cluster_fill_color,
+                    )
+
+                    # Add label name and confidence
+                    label_text = f"{c.label.name} ({c.confidence:.2f})"
+
+                    # Create semi-transparent background for text
+                    text_bbox = draw.textbbox((x0, y0), label_text, font=font)
+                    text_bg_padding = 2
+                    draw.rectangle(
+                        [
+                            (
+                                text_bbox[0] - text_bg_padding,
+                                text_bbox[1] - text_bg_padding,
+                            ),
+                            (
+                                text_bbox[2] + text_bg_padding,
+                                text_bbox[3] + text_bg_padding,
+                            ),
+                        ],
+                        fill=(255, 255, 255, 180),  # Semi-transparent white
+                    )
+
+                    # Draw text
+                    draw.text(
+                        (x0, y0),
+                        label_text,
+                        fill=(0, 0, 0, 255),  # Solid black
+                        font=font,
                     )
 
         # Draw clusters on both images
@@ -277,8 +310,9 @@ class LayoutModel(BasePageModel):
                         )
 
                     # Apply postprocessing
+
                     processed_clusters, processed_cells = LayoutPostprocessor(
-                        page.cells, clusters
+                        page.cells, clusters, page.size
                     ).postprocess()
                     # processed_clusters, processed_cells = clusters, page.cells
 
