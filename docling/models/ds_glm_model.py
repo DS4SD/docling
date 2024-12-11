@@ -3,8 +3,7 @@ import random
 from pathlib import Path
 from typing import List, Union
 
-from deepsearch_glm.nlp_utils import init_nlp_model
-from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_models
+from deepsearch_glm.andromeda_nlp import nlp_model
 from docling_core.types.doc import BoundingBox, CoordOrigin, DoclingDocument
 from docling_core.types.legacy_doc.base import BoundingBox as DsBoundingBox
 from docling_core.types.legacy_doc.base import (
@@ -49,11 +48,7 @@ class GlmModel:
     def __init__(self, options: GlmOptions):
         self.options = options
 
-        if self.options.model_names != "":
-            load_pretrained_nlp_models()
-        self.model = init_nlp_model(
-            model_names=self.options.model_names, loglevel="ERROR"
-        )
+        self.model = nlp_model(loglevel="error", text_ordering=True)
 
     def _to_legacy_document(self, conv_res) -> DsDocument:
         title = ""
