@@ -126,6 +126,7 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
             # conv_res.status = ConversionStatus.FAILURE
             # return conv_res
 
+        total_elapsed_time = 0.0
         with TimeRecorder(conv_res, "doc_build", scope=ProfilingScope.DOCUMENT):
 
             for i in range(0, conv_res.input.page_count):
@@ -136,7 +137,7 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
                 for page_batch in chunkify(
                     conv_res.pages, settings.perf.page_batch_size
                 ):
-                    start_pb_time = time.time()
+                    start_batch_time = time.monotonic()
 
                     # 1. Initialise the page resources
                     init_pages = map(
@@ -149,8 +150,21 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
                     for p in pipeline_pages:  # Must exhaust!
                         pass
 
-                    end_pb_time = time.time() - start_pb_time
-                    _log.debug(f"Finished converting page batch time={end_pb_time:.3f}")
+                    end_batch_time = time.monotonic()
+                    total_elapsed_time += end_batch_time - start_batch_time
+                    if (
+                        self.pipeline_options.document_timeout is not None
+                        and total_elapsed_time > self.pipeline_options.document_timeout
+                    ):
+                        _log.warning(
+                            f"Document processing time ({total_elapsed_time:.3f} seconds) exceeded the specified timeout of {self.pipeline_options.document_timeout:.3f} seconds"
+                        )
+                        conv_res.status = ConversionStatus.PARTIAL_SUCCESS
+                        break
+
+                    _log.debug(
+                        f"Finished converting page batch time={end_batch_time:.3f}"
+                    )
 
             except Exception as e:
                 conv_res.status = ConversionStatus.FAILURE

@@ -150,8 +150,9 @@ class PipelineOptions(BaseModel):
     """Base pipeline options."""
 
     create_legacy_output: bool = (
-        True  # This defautl will be set to False on a future version of docling
+        True  # This default will be set to False on a future version of docling
     )
+    document_timeout: Optional[float] = None
 
 
 class PdfPipelineOptions(PipelineOptions):
