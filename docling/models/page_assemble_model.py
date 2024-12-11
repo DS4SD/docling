@@ -95,7 +95,7 @@ class PageAssembleModel(BasePageModel):
                                 headers.append(text_el)
                             else:
                                 body.append(text_el)
-                        elif cluster.label == LayoutModel.TABLE_LABEL:
+                        elif cluster.label in LayoutModel.TABLE_LABELS:
                             tbl = None
                             if page.predictions.tablestructure:
                                 tbl = page.predictions.tablestructure.table_map.get(

@@ -63,7 +63,7 @@ _log = logging.getLogger(__name__)
 
 layout_label_to_ds_type = {
     DocItemLabel.TITLE: "title",
-    DocItemLabel.DOCUMENT_INDEX: "table-of-contents",
+    DocItemLabel.DOCUMENT_INDEX: "table",
     DocItemLabel.SECTION_HEADER: "subtitle-level-1",
     DocItemLabel.CHECKBOX_SELECTED: "checkbox-selected",
     DocItemLabel.CHECKBOX_UNSELECTED: "checkbox-unselected",

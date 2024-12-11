@@ -133,7 +133,8 @@ class TableStructureModel(BasePageModel):
                             ],
                         )
                         for cluster in page.predictions.layout.clusters
-                        if cluster.label == DocItemLabel.TABLE
+                        if cluster.label
+                        in [DocItemLabel.TABLE, DocItemLabel.DOCUMENT_INDEX]
                     ]
                     if not len(in_tables):
                         yield page
@@ -198,7 +199,7 @@ class TableStructureModel(BasePageModel):
                                 id=table_cluster.id,
                                 page_no=page.page_no,
                                 cluster=table_cluster,
-                                label=DocItemLabel.TABLE,
+                                label=table_cluster.label,
                             )
 
                             page.predictions.tablestructure.table_map[

@@ -4,7 +4,7 @@ import sys
 from collections import defaultdict
 from typing import Dict, List, Set, Tuple
 
-from docling_core.types.doc import DocItemLabel
+from docling_core.types.doc import DocItemLabel, Size
 from rtree import index
 
 from docling.datamodel.base_models import BoundingBox, Cell, Cluster
@@ -152,7 +152,12 @@ class LayoutPostprocessor:
         "wrapper": {"area_threshold": 2.0, "conf_threshold": 0.2},
     }
 
-    WRAPPER_TYPES = {DocItemLabel.FORM, DocItemLabel.KEY_VALUE_REGION}
+    WRAPPER_TYPES = {
+        DocItemLabel.FORM,
+        DocItemLabel.KEY_VALUE_REGION,
+        DocItemLabel.TABLE,
+        DocItemLabel.DOCUMENT_INDEX,
+    }
     SPECIAL_TYPES = WRAPPER_TYPES | {DocItemLabel.PICTURE}
 
     CONFIDENCE_THRESHOLDS = {
@@ -164,7 +169,7 @@ class LayoutPostprocessor:
         DocItemLabel.PAGE_HEADER: 0.5,
         DocItemLabel.PICTURE: 0.5,
         DocItemLabel.SECTION_HEADER: 0.45,
-        DocItemLabel.TABLE: 0.35,
+        DocItemLabel.TABLE: 0.5,
         DocItemLabel.TEXT: 0.55,  # 0.45,
         DocItemLabel.TITLE: 0.45,
         DocItemLabel.CODE: 0.45,
@@ -176,14 +181,15 @@ class LayoutPostprocessor:
     }
 
     LABEL_REMAPPING = {
-        DocItemLabel.DOCUMENT_INDEX: DocItemLabel.TABLE,
+        # DocItemLabel.DOCUMENT_INDEX: DocItemLabel.TABLE,
         DocItemLabel.TITLE: DocItemLabel.SECTION_HEADER,
     }
 
-    def __init__(self, cells: List[Cell], clusters: List[Cluster]):
+    def __init__(self, cells: List[Cell], clusters: List[Cluster], page_size: Size):
         """Initialize processor with cells and clusters."""
         """Initialize processor with cells and spatial indices."""
         self.cells = cells
+        self.page_size = page_size
         self.regular_clusters = [
             c for c in clusters if c.label not in self.SPECIAL_TYPES
         ]
@@ -281,6 +287,19 @@ class LayoutPostprocessor:
 
         special_clusters = self._handle_cross_type_overlaps(special_clusters)
 
+        # Calculate page area from known page size
+        page_area = self.page_size.width * self.page_size.height
+        if page_area > 0:
+            # Filter out full-page pictures
+            special_clusters = [
+                cluster
+                for cluster in special_clusters
+                if not (
+                    cluster.label == DocItemLabel.PICTURE
+                    and cluster.bbox.area() / page_area > 0.90
+                )
+            ]
+
         for special in special_clusters:
             contained = []
             for cluster in self.regular_clusters:
@@ -313,6 +332,13 @@ class LayoutPostprocessor:
                         b=max(c.bbox.b for c in contained),
                     )
 
+                    # Collect all cells from children
+                    all_cells = []
+                    for child in contained:
+                        all_cells.extend(child.cells)
+                    special.cells = self._deduplicate_cells(all_cells)
+                    special.cells = self._sort_cells(special.cells)
+
         picture_clusters = [
             c for c in special_clusters if c.label == DocItemLabel.PICTURE
         ]
@@ -338,7 +364,7 @@ class LayoutPostprocessor:
         wrappers_to_remove = set()
 
         for wrapper in special_clusters:
-            if wrapper.label != DocItemLabel.KEY_VALUE_REGION:
+            if wrapper.label not in self.WRAPPER_TYPES:
                 continue  # only treat KEY_VALUE_REGION for now.
 
             for regular in self.regular_clusters:
@@ -348,8 +374,12 @@ class LayoutPostprocessor:
                     wrapper_area = wrapper.bbox.area()
                     overlap_ratio = overlap / wrapper_area
 
+                    conf_diff = wrapper.confidence - regular.confidence
+
                     # If wrapper is mostly overlapping with a TABLE, remove the wrapper
-                    if overlap_ratio > 0.8:  # 80% overlap threshold
+                    if (
+                        overlap_ratio > 0.9 and conf_diff < 0.1
+                    ):  # self.OVERLAP_PARAMS["wrapper"]["conf_threshold"]):  # 80% overlap threshold
                         wrappers_to_remove.add(wrapper.id)
                         break
 
