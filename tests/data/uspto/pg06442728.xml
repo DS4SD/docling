@@ -1,0 +1,3091 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE PATDOC SYSTEM "ST32-US-Grant-025xml.dtd" [
+<!ENTITY US06442728-20020827-M00001.NB SYSTEM "US06442728-20020827-M00001.NB" NDATA NB>
+<!ENTITY US06442728-20020827-M00001.TIF SYSTEM "US06442728-20020827-M00001.TIF" NDATA TIF>
+<!ENTITY US06442728-20020827-M00002.NB SYSTEM "US06442728-20020827-M00002.NB" NDATA NB>
+<!ENTITY US06442728-20020827-M00002.TIF SYSTEM "US06442728-20020827-M00002.TIF" NDATA TIF>
+<!ENTITY US06442728-20020827-D00000.TIF SYSTEM "US06442728-20020827-D00000.TIF" NDATA TIF>
+<!ENTITY US06442728-20020827-D00001.TIF SYSTEM "US06442728-20020827-D00001.TIF" NDATA TIF>
+<!ENTITY US06442728-20020827-D00002.TIF SYSTEM "US06442728-20020827-D00002.TIF" NDATA TIF>
+<!ENTITY US06442728-20020827-D00003.TIF SYSTEM "US06442728-20020827-D00003.TIF" NDATA TIF>
+<!ENTITY US06442728-20020827-D00004.TIF SYSTEM "US06442728-20020827-D00004.TIF" NDATA TIF>
+<!ENTITY US06442728-20020827-D00005.TIF SYSTEM "US06442728-20020827-D00005.TIF" NDATA TIF>
+]>
+<PATDOC DTD="2.5" STATUS="Build 20020101">
+<SDOBI>
+<B100>
+<B110><DNUM><PDAT>06442728</PDAT></DNUM></B110>
+<B130><PDAT>B1</PDAT></B130>
+<B140><DATE><PDAT>20020827</PDAT></DATE></B140>
+<B190><PDAT>US</PDAT></B190>
+</B100>
+<B200>
+<B210><DNUM><PDAT>09263431</PDAT></DNUM></B210>
+<B211US><PDAT>09</PDAT></B211US>
+<B220><DATE><PDAT>19990304</PDAT></DATE></B220>
+</B200>
+<B500>
+<B510>
+<B511><PDAT>H03M 1300</PDAT></B511>
+<B516><PDAT>7</PDAT></B516>
+</B510>
+<B520>
+<B521><PDAT>714786</PDAT></B521>
+<B522><PDAT>714755</PDAT></B522>
+<B522><PDAT>714790</PDAT></B522>
+</B520>
+<B540><STEXT><PDAT>Methods and apparatus for turbo code</PDAT></STEXT></B540>
+<B560>
+<B561>
+<PCIT>
+<DOC><DNUM><PDAT>4394642</PDAT></DNUM>
+<DATE><PDAT>19830700</PDAT></DATE>
+<KIND><PDAT>A</PDAT></KIND>
+</DOC>
+<PARTY-US>
+<NAM><SNM><STEXT><PDAT>Currie</PDAT></STEXT></SNM></NAM>
+</PARTY-US>
+</PCIT><CITED-BY-OTHER/>
+</B561>
+<B561>
+<PCIT>
+<DOC><DNUM><PDAT>5742612</PDAT></DNUM>
+<DATE><PDAT>19980400</PDAT></DATE>
+<KIND><PDAT>A</PDAT></KIND>
+</DOC>
+<PARTY-US>
+<NAM><SNM><STEXT><PDAT>Gourge</PDAT></STEXT></SNM></NAM>
+</PARTY-US>
+</PCIT><CITED-BY-OTHER/>
+</B561>
+<B562><NCIT><STEXT><PDAT>&ldquo;Computer Dictionary&rdquo; Microsoft Press, Second Edition, 1994, pp. 218-219.* </PDAT></STEXT></NCIT><CITED-BY-OTHER/></B562>
+<B562><NCIT><STEXT><PDAT>Interleaver design for turbo codes with reduced memory requirement, ETSI SMG2 UMTS L1 Expert Group, Tdoc SMG2 UMTS L1 510-98, Nov. 1998. </PDAT></STEXT></NCIT><CITED-BY-OTHER/></B562>
+<B562><NCIT><STEXT><PDAT>Description of the GF Interleaver for Turbo Codes, ETSI SMG2 UMTS L1 Expert Group, Tdoc SMG2 UMTS-L1 765/98, Jan. 1999. </PDAT></STEXT></NCIT><CITED-BY-OTHER/></B562>
+<B562><NCIT><STEXT><PDAT>Algebraic interleavers for turbo codes: Precisions on complexity and interleaver generation, ETSI SMG2 UMTS L1 Expert Group, Tdoc SMG2 UMTS-L1 721-98, Dec. 1998. </PDAT></STEXT></NCIT><CITED-BY-OTHER/></B562>
+<B562><NCIT><STEXT><PDAT>A Proposal for Turbo Code Interleaving, mschaff1&commat;email.mot.com, Motorola, Inc. 1998. </PDAT></STEXT></NCIT><CITED-BY-OTHER/></B562>
+<B562><NCIT><STEXT><PDAT>Turbo Interleaver Performance Evaluation, brownta&commat;cig.mot.com, Motorola, Inc., 1998. </PDAT></STEXT></NCIT><CITED-BY-OTHER/></B562>
+<B562><NCIT><STEXT><PDAT>A new Low-Complexity TurboCode Interleaver Employing Linear Congruential Sequences (Revised), fling&commat;qualcomm.com, Qualcomm, Inc., 1998. </PDAT></STEXT></NCIT><CITED-BY-OTHER/></B562>
+<B562><NCIT><STEXT><PDAT>New Interleaver Proposals from Lucent Technologies.</PDAT></STEXT></NCIT><CITED-BY-OTHER/></B562>
+</B560>
+<B570>
+<B577><PDAT>35</PDAT></B577>
+<B578US><PDAT>1</PDAT></B578US>
+</B570>
+<B580>
+<B582><PDAT>714786</PDAT></B582>
+<B582><PDAT>714790</PDAT></B582>
+<B582><PDAT>714756</PDAT></B582>
+<B582><PDAT>714755</PDAT></B582>
+</B580>
+<B590><B595><PDAT>5</PDAT></B595><B596><PDAT>5</PDAT></B596><B597US/>
+</B590>
+</B500>
+<B600>
+<B680US><DOC><DNUM><PDAT>60/115394</PDAT></DNUM><DATE><PDAT>19990111</PDAT></DATE><KIND><PDAT>00</PDAT></KIND></DOC></B680US>
+</B600>
+<B700>
+<B720>
+<B721>
+<PARTY-US>
+<NAM><FNM><PDAT>Jian</PDAT></FNM><SNM><STEXT><PDAT>Cui</PDAT></STEXT></SNM></NAM>
+<ADR>
+<CITY><PDAT>Nepean</PDAT></CITY>
+<CTRY><PDAT>CA</PDAT></CTRY>
+</ADR>
+</PARTY-US>
+</B721>
+<B721>
+<PARTY-US>
+<NAM><FNM><PDAT>Bin</PDAT></FNM><SNM><STEXT><PDAT>Li</PDAT></STEXT></SNM></NAM>
+<ADR>
+<CITY><PDAT>Ottawa</PDAT></CITY>
+<CTRY><PDAT>CA</PDAT></CTRY>
+</ADR>
+</PARTY-US>
+</B721>
+<B721>
+<PARTY-US>
+<NAM><FNM><PDAT>Weng</PDAT></FNM><SNM><STEXT><PDAT>Tong</PDAT></STEXT></SNM></NAM>
+<ADR>
+<CITY><PDAT>Ottawa</PDAT></CITY>
+<CTRY><PDAT>CA</PDAT></CTRY>
+</ADR>
+</PARTY-US>
+</B721>
+<B721>
+<PARTY-US>
+<NAM><FNM><PDAT>Rui R.</PDAT></FNM><SNM><STEXT><PDAT>Wang</PDAT></STEXT></SNM></NAM>
+<ADR>
+<CITY><PDAT>Ottawa</PDAT></CITY>
+<CTRY><PDAT>CA</PDAT></CTRY>
+</ADR>
+</PARTY-US>
+</B721>
+</B720>
+<B730>
+<B731>
+<PARTY-US>
+<NAM><ONM><STEXT><PDAT>Nortel Networks Limited</PDAT></STEXT></ONM></NAM>
+<ADR><CITY><PDAT>St. Laurent</PDAT></CITY><CTRY><PDAT>CA</PDAT></CTRY></ADR>
+</PARTY-US>
+</B731>
+<B732US>
+<PDAT>03</PDAT>
+</B732US>
+</B730>
+<B740>
+<B741>
+<PARTY-US>
+<NAM><ONM><STEXT><PDAT>Cobrin &amp; Gittes</PDAT></STEXT></ONM></NAM>
+</PARTY-US>
+</B741>
+</B740>
+<B745>
+<B746>
+<PARTY-US>
+<NAM><FNM><PDAT>Phung M.</PDAT></FNM><SNM><STEXT><PDAT>Chung</PDAT></STEXT></SNM></NAM>
+</PARTY-US>
+</B746>
+<B748US><PDAT>2133</PDAT></B748US>
+</B745>
+</B700>
+</SDOBI>
+<SDOAB>
+<BTEXT>
+<PARA ID="P-00001" LVL="0"><PTEXT><PDAT>An interleaver receives incoming data frames of size N. The interleaver indexes the elements of the frame with an N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>&times;N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>index array. The interleaver then effectively rearranges (permutes) the data by permuting the rows of the index array. The interleaver employs the equation I(j,k)&equals;I(j,&agr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>k&plus;&bgr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>)modP) to permute the columns (indexed by k) of each row (indexed by j). P is at least equal to N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>, &bgr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>is a constant which may be different for each row, and each &agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>is a relative prime number relative to P. After permuting, the interleaver outputs the data in a different order than received (e.g., receives sequentially row by row, outputs sequentially each column by column).</PDAT></PTEXT></PARA>
+</BTEXT>
+</SDOAB>
+<SDODE>
+<RELAPP>
+<BTEXT>
+<H LVL="1"><STEXT><PDAT>CROSS-REFERENCE TO RELATED APPLICATIONS</PDAT></STEXT></H>
+<PARA ID="P-00002" LVL="0"><PTEXT><PDAT>This application claims the benefit of U.S. Provisional Application No. 60/115,394 filed Jan. 11, 1999.</PDAT></PTEXT></PARA>
+</BTEXT>
+</RELAPP>
+<BRFSUM>
+<BTEXT>
+<H LVL="1"><STEXT><PDAT>FIELD OF THE INVENTION</PDAT></STEXT></H>
+<PARA ID="P-00003" LVL="0"><PTEXT><PDAT>This invention relates generally to communication systems and, more particularly, to interleavers for performing code modulation.</PDAT></PTEXT></PARA>
+<H LVL="1"><STEXT><PDAT>BACKGROUND OF THE INVENTION</PDAT></STEXT></H>
+<PARA ID="P-00004" LVL="0"><PTEXT><PDAT>Techniques for encoding communication channels, known as coded modulation, have been found to improve the bit error rate (BER) of electronic communication systems such as modem and wireless communication systems. Turbo coded modulation has proven to be a practical, power-efficient, and bandwidth-efficient modulation method for &ldquo;random-error&rdquo; channels characterized by additive white Gaussian noise (AWGN) or fading. These random-error channels can be found, for example, in the code division multiple access (CDMA) environment. Since the capacity of a CDMA environment is dependent upon the operating signal to noise ratio, improved performance translates into higher capacity.</PDAT></PTEXT></PARA>
+<PARA ID="P-00005" LVL="0"><PTEXT><PDAT>An aspect of turbo coders which makes them so effective is an interleaver which permutes the original received or transmitted data frame before it is input to a second encoder. The permuting is accomplished by randomizing portions of the signal based upon one or more randomizing algorithms. Combining the permuted data frames with the original data frames has been shown to achieve low BERs in AWGN and fading channels. The interleaving process increases the diversity in the data such that if the modulated symbol is distorted in transmission the error may be recoverable with the use of error correcting algorithms in the decoder.</PDAT></PTEXT></PARA>
+<PARA ID="P-00006" LVL="0"><PTEXT><PDAT>A conventional interleaver collects, or frames, the signal points to be transmitted into an array, where the array is sequentially filled up row by row. After a predefined number of signal points have been framed, the interleaver is emptied by sequentially reading out the columns of the array for transmission. As a result, signal points in the same row of the array that were near each other in the original signal point flow are separated by a number of signal points equal to the number of rows in the array. Ideally, the number of columns and rows would be picked such that interdependent signal points, after transmission, would be separated by more than the expected length of an error burst for the channel.</PDAT></PTEXT></PARA>
+<PARA ID="P-00007" LVL="0"><PTEXT><PDAT>Non-uniform interleaving achieves &ldquo;maximum scattering&rdquo; of data and &ldquo;maximum disorder&rdquo; of the output sequence. Thus the redundancy introduced by the two convolutional encoders is more equally spread in the output sequence of the turbo encoder. The minimum distance is increased to much higher values than for uniform interleaving. A persistent problem for non-uniform interleaving is how to practically implement the interleaving while achieving sufficient &ldquo;non-uniformity,&rdquo; and minimizing delay compensations which limit the use for applications with real-time requirements.</PDAT></PTEXT></PARA>
+<PARA ID="P-00008" LVL="0"><PTEXT><PDAT>Finding an effective interleaver is a current topic in the third generation CDMA standard activities. It has been determined and generally agreed that, as the frame size approaches infinity, the most effective interleaver is the random interleaver. However, for finite frame sizes, the decision as to the most effective interleaver is still open for discussion.</PDAT></PTEXT></PARA>
+<PARA ID="P-00009" LVL="0"><PTEXT><PDAT>Accordingly there exists a need for systems and methods of interleaving codes that improve non-uniformity for finite frame sizes.</PDAT></PTEXT></PARA>
+<PARA ID="P-00010" LVL="0"><PTEXT><PDAT>There also exists a need for such systems and methods of interleaving codes which are relatively simple to implement.</PDAT></PTEXT></PARA>
+<PARA ID="P-00011" LVL="0"><PTEXT><PDAT>It is thus an object of the present invention to provide systems and methods of interleaving codes that improve non-uniformity for finite frame sizes.</PDAT></PTEXT></PARA>
+<PARA ID="P-00012" LVL="0"><PTEXT><PDAT>It is also an object of the present invention to provide systems and methods of interleaving codes which are relatively simple to implement.</PDAT></PTEXT></PARA>
+<PARA ID="P-00013" LVL="0"><PTEXT><PDAT>These and other objects of the invention will become apparent to those skilled in the art from the following description thereof.</PDAT></PTEXT></PARA>
+<H LVL="1"><STEXT><PDAT>SUMMARY OF THE INVENTION</PDAT></STEXT></H>
+<PARA ID="P-00014" LVL="0"><PTEXT><PDAT>The foregoing objects, and others, may be accomplished by the present invention, which interleaves a data frame, where the data frame has a predetermined size and is made up of portions. An embodiment of the invention includes an interleaver for interleaving these data frames. The interleaver includes an input memory configured to store a received data frame as an array organized into rows and columns, a processor connected to the input memory and configured to permute the received data frame in accordance with the equation D(j,k)&equals;D (j, (&agr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>k&plus;&bgr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>)modP), and a working memory in electrical communication with the processor and configured to store a permuted version of the data frame. The elements of the equation are as follows: D is the data frame, j and k are indexes to the rows and columns, respectively, in the data frame, &agr; and &bgr; are sets of constants selected according to the current row, and P and each &agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>are relative prime numbers. (&ldquo;Relative prime numbers&rdquo; connotes a set of numbers that have no common divisor other than 1. Members of a set of relative prime numbers, considered by themselves, need not be prime numbers.)</PDAT></PTEXT></PARA>
+<PARA ID="P-00015" LVL="0"><PTEXT><PDAT>Another embodiment of the invention includes a method of storing a data frame and indexing it by an N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>&times;N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>index array I, where the product of N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>is at least equal to N. The elements of the index array indicate positions of the elements of the data frame. The data frame elements may be stored in any convenient manner and need not be organized as an array. The method further includes permuting the index array according to I(j,k)&equals;I(j,(&agr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>k&plus;&bgr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>)modP), wherein I is the index array, and as above j and k are indexes to the rows and columns, respectively, in the index array, &agr; and &bgr; are sets of constants selected according to the current row, and P and each &agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>are relative prime numbers. The data frame, as indexed by the permuted index array I, is effectively permuted.</PDAT></PTEXT></PARA>
+<PARA ID="P-00016" LVL="0"><PTEXT><PDAT>Still another embodiment of the invention includes an interleaver which includes a storage device for storing a data frame and for storing an N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>&times;N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>index array I, where the product of N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>is at least equal to N. The elements of the index array indicate positions of the elements of the data frame. The data frame elements may be stored in any convenient manner and need not be organized as an array. The interleaver further includes a permuting device for permuting the index array according to I(j,k)&equals;I(j,(&agr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>k&plus;&bgr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>)modP), wherein I is the index array, and as above j and k are indexes to the rows and columns, respectively, in the index array, &agr; and &bgr; are sets of constants selected according to the current row, and P and each &agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>are relative prime numbers. The data frame, as indexed by the permuted index array I, is effectively permuted.</PDAT></PTEXT></PARA>
+<PARA ID="P-00017" LVL="0"><PTEXT><PDAT>The invention will next be described in connection with certain illustrated embodiments and practices. However, it will be clear to those skilled in the art that various modifications, additions and subtractions can be made without departing from the spirit or scope of the claims.</PDAT></PTEXT></PARA>
+</BTEXT>
+</BRFSUM>
+<DRWDESC>
+<BTEXT>
+<H LVL="1"><STEXT><PDAT>BRIEF DESCRIPTION OF THE DRAWINGS</PDAT></STEXT></H>
+<PARA ID="P-00018" LVL="0"><PTEXT><PDAT>The invention will be more clearly understood by reference to the following detailed description of an exemplary embodiment in conjunction with the accompanying drawings, in which:</PDAT></PTEXT></PARA>
+<PARA ID="P-00019" LVL="0"><PTEXT><FGREF ID="DRAWINGS"><PDAT>FIG. 1</PDAT></FGREF><PDAT> depicts a diagram of a conventional turbo encoder.</PDAT></PTEXT></PARA>
+<PARA ID="P-00020" LVL="0"><PTEXT><FGREF ID="DRAWINGS"><PDAT>FIG. 2</PDAT></FGREF><PDAT> depicts a block diagram of the interleaver illustrated in </PDAT><FGREF ID="DRAWINGS"><PDAT>FIG. 1</PDAT></FGREF><PDAT>;</PDAT></PTEXT></PARA>
+<PARA ID="P-00021" LVL="0"><PTEXT><FGREF ID="DRAWINGS"><PDAT>FIG. 3</PDAT></FGREF><PDAT> depicts an array containing a data frame, and permutation of that array;</PDAT></PTEXT></PARA>
+<PARA ID="P-00022" LVL="0"><PTEXT><FGREF ID="DRAWINGS"><PDAT>FIG. 4</PDAT></FGREF><PDAT> depicts a data frame stored in consecutive storage locations;</PDAT></PTEXT></PARA>
+<PARA ID="P-00023" LVL="0"><PTEXT><FGREF ID="DRAWINGS"><PDAT>FIG. 5</PDAT></FGREF><PDAT> depicts an index array for indexing the data frame shown in </PDAT><FGREF ID="DRAWINGS"><PDAT>FIG. 4</PDAT></FGREF><PDAT>, and permutation of the index array.</PDAT></PTEXT></PARA>
+</BTEXT>
+</DRWDESC>
+<DETDESC>
+<BTEXT>
+<H LVL="1"><STEXT><PDAT>DETAILED DESCRIPTION OF THE INVENTION</PDAT></STEXT></H>
+<PARA ID="P-00024" LVL="0"><PTEXT><FGREF ID="DRAWINGS"><PDAT>FIG. 1</PDAT></FGREF><PDAT> illustrates a conventional turbo encoder. As illustrated, conventional turbo encoders include two encoders </PDAT><HIL><BOLD><PDAT>20</PDAT></BOLD></HIL><PDAT> and an interleaver </PDAT><HIL><BOLD><PDAT>100</PDAT></BOLD></HIL><PDAT>. An interleaver </PDAT><HIL><BOLD><PDAT>100</PDAT></BOLD></HIL><PDAT> in accordance with the present invention receives incoming data frames </PDAT><HIL><BOLD><PDAT>110</PDAT></BOLD></HIL><PDAT> of size N, where N is the number of bits, number of bytes, or the number of some other portion the frame may be separated into, which are regarded as frame elements. The interleaver </PDAT><HIL><BOLD><PDAT>100</PDAT></BOLD></HIL><PDAT> separates the N frame elements into sets of data, such as rows. The interleaver then rearranges (permutes) the data in each set (row) in a pseudo-random fashion. The interleaver </PDAT><HIL><BOLD><PDAT>100</PDAT></BOLD></HIL><PDAT> may employ different methods for rearranging the data of the different sets. However, those skilled in the art will recognize that one or more of the methods could be reused on one or more of the sets without departing from the scope of the invention. After permuting the data in each of the sets, the interleaver outputs the data in a different order than received.</PDAT></PTEXT></PARA>
+<PARA ID="P-00025" LVL="0"><PTEXT><PDAT>The interleaver </PDAT><HIL><BOLD><PDAT>100</PDAT></BOLD></HIL><PDAT> may store the data frame </PDAT><HIL><BOLD><PDAT>110</PDAT></BOLD></HIL><PDAT> in an array of size N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>&times;N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>such that N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>*N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>&equals;N. An example depicted in </PDAT><FGREF ID="DRAWINGS"><PDAT>FIG. 3</PDAT></FGREF><PDAT> shows an array </PDAT><HIL><BOLD><PDAT>350</PDAT></BOLD></HIL><PDAT> having 3 rows (N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>&equals;3) of 6 columns (N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>&equals;6)for storing a data frame </PDAT><HIL><BOLD><PDAT>110</PDAT></BOLD></HIL><PDAT> having 18 elements, denoted Frame Element 00 (FE00) through FE17 (N&equals;18). While this is the preferred method, the array may also be designed such that N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>*N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>is a fraction of N such that one or more of the smaller arrays is/are operated on in accordance with the present invention and the results from each of the smaller arrays are later combined.</PDAT></PTEXT></PARA>
+<PARA ID="P-00026" LVL="0"><PTEXT><PDAT>To permute array </PDAT><HIL><BOLD><PDAT>350</PDAT></BOLD></HIL><PDAT> according to the present invention, each row j of array </PDAT><HIL><BOLD><PDAT>350</PDAT></BOLD></HIL><PDAT> is individually operated on, to permute the columns k of each row according to the equation:</PDAT></PTEXT></PARA>
+<PARA ID="P-00027" LVL="0"><PTEXT><F><PTEXT><PDAT>D</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>(j,k)&equals;D(j,(&agr;k&plus;&bgr;)modP)</PDAT></PTEXT></F></PTEXT></PARA>
+<PARA ID="P-00028" LVL="7"><PTEXT><PDAT>where:</PDAT></PTEXT></PARA>
+<PARA ID="P-00029" LVL="2"><PTEXT><PDAT>j and k are row and column indices, respectively, in array </PDAT><HIL><BOLD><PDAT>350</PDAT></BOLD></HIL><PDAT>;</PDAT></PTEXT></PARA>
+<PARA ID="P-00030" LVL="2"><PTEXT><PDAT>P is a number greater than or equal to N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>;</PDAT></PTEXT></PARA>
+<PARA ID="P-00031" LVL="2"><PTEXT><PDAT>&agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>and P arc relative prime numbers (one or both can be non-prime numbers, but the only divisor that they have in common is 1);</PDAT></PTEXT></PARA>
+<PARA ID="P-00032" LVL="2"><PTEXT><PDAT>&bgr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>is a constant, one value associated with each row.</PDAT></PTEXT></PARA>
+<PARA ID="P-00033" LVL="7"><PTEXT><PDAT>Once the data for all of the rows are permuted, the new array is read out column by column. Also, once the rows have been permuted, it is possible (but not required) to permute the data grouped by column before outputting the data. In the event that both the rows and columns are permuted, the rows, the columns or both may be permuted in accordance with the present invention. It is also possible to transpose rows of array, for example by transposing bits in the binary representation of the row index j. (In a four-row array, for example, the second and third rows would be transposed under this scheme.) It is also possible that either the rows or the columns, but not both may be permuted in accordance with a different method of permuting. Those skilled in the art will recognize that the system could be rearranged to store the data column by column, permute each set of data in a column and read out the results row by row without departing from the scope of the invention.</PDAT></PTEXT></PARA>
+<PARA ID="P-00034" LVL="0"><PTEXT><PDAT>These methods of interleaving are based on number theory and may be implemented in software and/or hardware (i.e. application specific integrated circuits (ASIC), programmable logic arrays (PLA), or any other suitable logic devices). Further, a single pseudo random sequence generator (i.e. m-sequence, M-sequence, Gold sequence, Kasami sequence . . . ) can be employed as the interleaver.</PDAT></PTEXT></PARA>
+<PARA ID="P-00035" LVL="0"><PTEXT><PDAT>In the example depicted in </PDAT><FGREF ID="DRAWINGS"><PDAT>FIG. 3</PDAT></FGREF><PDAT>, the value selected for P is 6, the values of &agr; are 5 for all three rows, and the values of &bgr; are 1, 2, and 3 respectively for the three rows. (These are merely exemplary. Other numbers may be chosen to achieve different permutation results.) The values of &agr; (5) are each relative prime numbers relative to the value of P (6), as stipulated above.</PDAT></PTEXT></PARA>
+<PARA ID="P-00036" LVL="0"><PTEXT><PDAT>Calculating the specified equation with the specified values for permuting row 0 of array D </PDAT><HIL><BOLD><PDAT>350</PDAT></BOLD></HIL><PDAT> into row 0 of array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><HIL><BOLD><PDAT>360</PDAT></BOLD></HIL><PDAT> proceeds as: </PDAT>
+<CWU>
+<MATH-US ID="MATH-US-00001">
+<MATHEMATICA ID="MATHEMATICA-00001" ALT="mathematica file" FILE="US06442728-20020827-M00001.NB"/>
+<MATHML>
+<math>
+  <mtable>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>0</mn>
+                <mo>,</mo>
+                <mn>0</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>0</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>0</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>1</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>0</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>1</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>0</mn>
+                      <mo>,</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE01</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>0</mn>
+                <mo>,</mo>
+                <mn>1</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>0</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>1</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>1</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>0</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>6</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>0</mn>
+                      <mo>,</mo>
+                      <mn>0</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE00</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>0</mn>
+                <mo>,</mo>
+                <mn>2</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>0</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>2</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>1</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>0</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>11</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>0</mn>
+                      <mo>,</mo>
+                      <mn>5</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE05</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>0</mn>
+                <mo>,</mo>
+                <mn>3</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>0</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>3</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>1</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>0</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>16</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>0</mn>
+                      <mo>,</mo>
+                      <mn>4</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE04</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>0</mn>
+                <mo>,</mo>
+                <mn>4</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>0</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>4</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>1</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>0</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>21</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>0</mn>
+                      <mo>,</mo>
+                      <mn>3</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE03</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>0</mn>
+                <mo>,</mo>
+                <mn>5</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>0</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>5</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>1</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>0</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>26</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>0</mn>
+                      <mo>,</mo>
+                      <mn>2</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE02</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+  </mtable>
+</math>
+
+
+<math>
+  <mrow>
+    <mstyle>
+      <mtext>Thus&nbsp;&nbsp;row&nbsp;&nbsp;0&nbsp;&nbsp;becomes:</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE01</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE00</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE05</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE04</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE03</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE02</mi>
+  </mrow>
+</math>
+
+
+<math>
+  <mstyle>
+    <mtext>For&nbsp;&nbsp;row&nbsp;&nbsp;1&nbsp;&nbsp;the&nbsp;&nbsp;equations&nbsp;&nbsp;become:</mtext>
+  </mstyle>
+</math>
+
+
+<math>
+  <mtable>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>1</mn>
+                <mo>,</mo>
+                <mn>0</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>0</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>2</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>2</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>,</mo>
+                      <mn>2</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE08</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>1</mn>
+                <mo>,</mo>
+                <mn>1</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>1</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>2</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>7</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>,</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE07</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>1</mn>
+                <mo>,</mo>
+                <mn>2</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>2</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>2</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>12</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>,</mo>
+                      <mn>0</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE06</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>1</mn>
+                <mo>,</mo>
+                <mn>3</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>3</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>2</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>17</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>,</mo>
+                      <mn>5</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE11</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>1</mn>
+                <mo>,</mo>
+                <mn>4</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>4</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>2</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>22</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>1</mn>
+                      <mo>,</mo>
+                      <mn>4</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE10</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>1</mn>
+                <mo>,</mo>
+                <mn>5</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>5</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>2</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>1</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>27</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>0</mn>
+                      <mo>,</mo>
+                      <mn>3</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE09</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+  </mtable>
+</math>
+
+
+<math>
+  <mrow>
+    <mstyle>
+      <mtext>Thus&nbsp;&nbsp;row&nbsp;&nbsp;1&nbsp;&nbsp;becomes:</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE08</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE07</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE06</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE11</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE10</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE09</mi>
+  </mrow>
+</math>
+
+
+<math>
+  <mstyle>
+    <mtext>For&nbsp;&nbsp;row&nbsp;&nbsp;2&nbsp;&nbsp;the&nbsp;&nbsp;equations&nbsp;&nbsp;become:</mtext>
+  </mstyle>
+</math>
+
+
+<math>
+  <mtable>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mn>0</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>0</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>3</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>3</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>2</mn>
+                      <mo>,</mo>
+                      <mn>3</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE15</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mn>1</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>1</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>3</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>8</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>2</mn>
+                      <mo>,</mo>
+                      <mn>2</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE14</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mn>2</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>2</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>3</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>13</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>2</mn>
+                      <mo>,</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE13</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mn>3</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>3</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>3</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>18</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>2</mn>
+                      <mo>,</mo>
+                      <mn>0</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE12</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mn>4</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>4</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>3</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>23</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>2</mn>
+                      <mo>,</mo>
+                      <mn>5</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE17</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow>
+          <mrow>
+            <msub>
+              <mi>D</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mn>5</mn>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>D</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mrow>
+                        <mrow>
+                          <mn>5</mn>
+                          <mo>*</mo>
+                          <mn>5</mn>
+                        </mrow>
+                        <mo>+</mo>
+                        <mn>3</mn>
+                      </mrow>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod6</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>D</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mrow>
+                      <mrow>
+                        <mo>(</mo>
+                        <mn>28</mn>
+                        <mo>)</mo>
+                      </mrow>
+                      <mo>&it;</mo>
+                      <mi>mod6</mi>
+                    </mrow>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mrow>
+                <mrow>
+                  <mi>D</mi>
+                  <mo>&af;</mo>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>0</mn>
+                      <mo>,</mo>
+                      <mn>4</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mo>=</mo>
+                <mi>FE16</mi>
+              </mrow>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mtd>
+    </mtr>
+  </mtable>
+</math>
+
+
+<math>
+  <mrow>
+    <mstyle>
+      <mtext>Thus&nbsp;&nbsp;row&nbsp;&nbsp;2&nbsp;&nbsp;becomes:</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE15</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE14</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE13</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE12</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE17</mi>
+    <mo>&it;</mo>
+    <mstyle>
+      <mtext>&emsp;</mtext>
+    </mstyle>
+    <mo>&it;</mo>
+    <mi>FE16</mi>
+  </mrow>
+</math>
+</MATHML>
+<EMI ID="EMI-M00001" ALT="embedded image" FILE="US06442728-20020827-M00001.TIF"/>
+</MATH-US>
+</CWU>
+</PTEXT></PARA>
+<PARA ID="P-00037" LVL="7"><PTEXT><PDAT>and the permuted data frame is contained in array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><HIL><BOLD><PDAT>360</PDAT></BOLD></HIL><PDAT> shown in FIG. </PDAT><HIL><BOLD><PDAT>3</PDAT></BOLD></HIL><PDAT>. Outputting the array column by column outputs the frame elements in the order:</PDAT></PTEXT></PARA>
+<PARA ID="P-00038" LVL="2"><PTEXT><PDAT>1,8,15,0,7,14,5,6,13,4,11,12,3,10,17,2,9,16.</PDAT></PTEXT></PARA>
+<PARA ID="P-00039" LVL="0"><PTEXT><PDAT>In an alternative practice of the invention, data frame </PDAT><HIL><BOLD><PDAT>110</PDAT></BOLD></HIL><PDAT> is stored in consecutive storage locations, not as an array or matrix, and a separate index array is stored to index the elements of the data frame, the index array is permuted according to the equations of the present invention, and the data frame is output as indexed by the permuted index array.</PDAT></PTEXT></PARA>
+<PARA ID="P-00040" LVL="0"><PTEXT><FGREF ID="DRAWINGS"><PDAT>FIG. 4</PDAT></FGREF><PDAT> depicts a block </PDAT><HIL><BOLD><PDAT>400</PDAT></BOLD></HIL><PDAT> of storage 32 elements in length (thus having offsets of 0 through 31 from a starting storage location). A data frame </PDAT><HIL><BOLD><PDAT>110</PDAT></BOLD></HIL><PDAT>, taken in this example to be 22 elements long and thus to consist of elements FE00 through FE21, occupies offset locations 00 through 21 within block </PDAT><HIL><BOLD><PDAT>400</PDAT></BOLD></HIL><PDAT>. Offset locations 22 through 31 of block </PDAT><HIL><BOLD><PDAT>400</PDAT></BOLD></HIL><PDAT> contain unknown contents. A frame length of 22 elements is merely exemplary, and other lengths could be chosen. Also, storage of the frame elements in consecutive locations is exemplary, and non-consecutive locations could be employed.</PDAT></PTEXT></PARA>
+<PARA ID="P-00041" LVL="0"><PTEXT><FGREF ID="DRAWINGS"><PDAT>FIG. 5</PDAT></FGREF><PDAT> depicts index array I </PDAT><HIL><BOLD><PDAT>550</PDAT></BOLD></HIL><PDAT> for indexing storage block </PDAT><HIL><BOLD><PDAT>400</PDAT></BOLD></HIL><PDAT>. It is organized as 4 rows of 8 columns each (N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>&equals;4, N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>&equals;8, N&equals;N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>*N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>&equals;32). Initial contents are filled in to array I </PDAT><HIL><BOLD><PDAT>550</PDAT></BOLD></HIL><PDAT> as shown in </PDAT><FGREF ID="DRAWINGS"><PDAT>FIG. 5</PDAT></FGREF><PDAT> sequentially. This sequential initialization yields the same effect as a row-by-row read-in of data frame </PDAT><HIL><BOLD><PDAT>110</PDAT></BOLD></HIL><PDAT>.</PDAT></PTEXT></PARA>
+<PARA ID="P-00042" LVL="0"><PTEXT><PDAT>The index array is permuted according to</PDAT></PTEXT></PARA>
+<PARA ID="P-00043" LVL="0"><PTEXT><F><PTEXT><PDAT>I</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>(j,k)&equals;I(j,(&agr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>*k&plus;&bgr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>)modP)</PDAT></PTEXT></F></PTEXT></PARA>
+<PARA ID="P-00044" LVL="7"><PTEXT><PDAT>where</PDAT></PTEXT></PARA>
+<PARA ID="P-00045" LVL="2"><PTEXT><PDAT>&agr;&equals;1, 3, 5, 7</PDAT></PTEXT></PARA>
+<PARA ID="P-00046" LVL="2"><PTEXT><PDAT>&bgr;&equals;0, 0, 0, 0</PDAT></PTEXT></PARA>
+<PARA ID="P-00047" LVL="2"><PTEXT><PDAT>P&equals;8</PDAT></PTEXT></PARA>
+<PARA ID="P-00048" LVL="7"><PTEXT><PDAT>These numbers are exemplary and other numbers could be chosen, as long as the stipulations are observed that P is at least equal to N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>and that each value of &agr; is a relative prime number relative to the chosen value of P.</PDAT></PTEXT></PARA>
+<PARA ID="P-00049" LVL="0"><PTEXT><PDAT>If the equation is applied to the columns of row 2, for example, it yields: </PDAT>
+<CWU>
+<MATH-US ID="MATH-US-00002">
+<MATHEMATICA ID="MATHEMATICA-00002" ALT="mathematica file" FILE="US06442728-20020827-M00002.NB"/>
+<MATHML>
+<math>
+<mtable>
+  <mtr>
+    <mtd>
+      <mrow>
+        <mrow>
+          <msub>
+            <mi>I</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>&af;</mo>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mn>2</mn>
+              <mo>,</mo>
+              <mn>0</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </mrow>
+        <mo>=</mo>
+        <mrow>
+          <mrow>
+            <mi>I</mi>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>5</mn>
+                      <mo>*</mo>
+                      <mn>0</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>&it;</mo>
+                  <mi>mod8</mi>
+                </mrow>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>I</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mn>0</mn>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod8</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>I</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mn>0</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mn>16</mn>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mrow>
+    </mtd>
+  </mtr>
+  <mtr>
+    <mtd>
+      <mrow>
+        <mrow>
+          <msub>
+            <mi>I</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>&af;</mo>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mn>2</mn>
+              <mo>,</mo>
+              <mn>1</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </mrow>
+        <mo>=</mo>
+        <mrow>
+          <mrow>
+            <mi>I</mi>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>5</mn>
+                      <mo>*</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>&it;</mo>
+                  <mi>mod8</mi>
+                </mrow>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>I</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mn>5</mn>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod8</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>I</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mn>5</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mn>21</mn>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mrow>
+    </mtd>
+  </mtr>
+  <mtr>
+    <mtd>
+      <mrow>
+        <mrow>
+          <msub>
+            <mi>I</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>&af;</mo>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mn>2</mn>
+              <mo>,</mo>
+              <mn>2</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </mrow>
+        <mo>=</mo>
+        <mrow>
+          <mrow>
+            <mi>I</mi>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>5</mn>
+                      <mo>*</mo>
+                      <mn>2</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>&it;</mo>
+                  <mi>mod8</mi>
+                </mrow>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>I</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mn>10</mn>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod8</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>I</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mn>2</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mn>18</mn>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mrow>
+    </mtd>
+  </mtr>
+  <mtr>
+    <mtd>
+      <mrow>
+        <mrow>
+          <msub>
+            <mi>I</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>&af;</mo>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mn>2</mn>
+              <mo>,</mo>
+              <mn>3</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </mrow>
+        <mo>=</mo>
+        <mrow>
+          <mrow>
+            <mi>I</mi>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>5</mn>
+                      <mo>*</mo>
+                      <mn>3</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>&it;</mo>
+                  <mi>mod8</mi>
+                </mrow>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>I</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mn>15</mn>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod8</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>I</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mn>7</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mn>23</mn>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mrow>
+    </mtd>
+  </mtr>
+  <mtr>
+    <mtd>
+      <mrow>
+        <mrow>
+          <msub>
+            <mi>I</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>&af;</mo>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mn>2</mn>
+              <mo>,</mo>
+              <mn>4</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </mrow>
+        <mo>=</mo>
+        <mrow>
+          <mrow>
+            <mi>I</mi>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>5</mn>
+                      <mo>*</mo>
+                      <mn>4</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>&it;</mo>
+                  <mi>mod8</mi>
+                </mrow>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>I</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mn>20</mn>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod8</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>I</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mn>4</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mn>20</mn>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mrow>
+    </mtd>
+  </mtr>
+  <mtr>
+    <mtd>
+      <mrow>
+        <mrow>
+          <msub>
+            <mi>I</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>&af;</mo>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mn>2</mn>
+              <mo>,</mo>
+              <mn>5</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </mrow>
+        <mo>=</mo>
+        <mrow>
+          <mrow>
+            <mi>I</mi>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>5</mn>
+                      <mo>*</mo>
+                      <mn>5</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>&it;</mo>
+                  <mi>mod8</mi>
+                </mrow>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>I</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mn>25</mn>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod8</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>I</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mn>1</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mn>17</mn>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mrow>
+    </mtd>
+  </mtr>
+  <mtr>
+    <mtd>
+      <mrow>
+        <mrow>
+          <msub>
+            <mi>I</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>&af;</mo>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mn>2</mn>
+              <mo>,</mo>
+              <mn>6</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </mrow>
+        <mo>=</mo>
+        <mrow>
+          <mrow>
+            <mi>I</mi>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>5</mn>
+                      <mo>*</mo>
+                      <mn>6</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>&it;</mo>
+                  <mi>mod8</mi>
+                </mrow>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>I</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mn>30</mn>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod8</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>I</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mn>6</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mn>22</mn>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mrow>
+    </mtd>
+  </mtr>
+  <mtr>
+    <mtd>
+      <mrow>
+        <mrow>
+          <msub>
+            <mi>I</mi>
+            <mn>1</mn>
+          </msub>
+          <mo>&af;</mo>
+          <mrow>
+            <mo>(</mo>
+            <mrow>
+              <mn>2</mn>
+              <mo>,</mo>
+              <mn>7</mn>
+            </mrow>
+            <mo>)</mo>
+          </mrow>
+        </mrow>
+        <mo>=</mo>
+        <mrow>
+          <mrow>
+            <mi>I</mi>
+            <mo>&af;</mo>
+            <mrow>
+              <mo>(</mo>
+              <mrow>
+                <mn>2</mn>
+                <mo>,</mo>
+                <mrow>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mn>5</mn>
+                      <mo>*</mo>
+                      <mn>7</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                  <mo>&it;</mo>
+                  <mi>mod8</mi>
+                </mrow>
+              </mrow>
+              <mo>)</mo>
+            </mrow>
+          </mrow>
+          <mo>=</mo>
+          <mrow>
+            <mrow>
+              <mi>I</mi>
+              <mo>&af;</mo>
+              <mrow>
+                <mo>(</mo>
+                <mrow>
+                  <mn>2</mn>
+                  <mo>,</mo>
+                  <mrow>
+                    <mrow>
+                      <mo>(</mo>
+                      <mn>35</mn>
+                      <mo>)</mo>
+                    </mrow>
+                    <mo>&it;</mo>
+                    <mi>mod8</mi>
+                  </mrow>
+                </mrow>
+                <mo>)</mo>
+              </mrow>
+            </mrow>
+            <mo>=</mo>
+            <mrow>
+              <mrow>
+                <mi>I</mi>
+                <mo>&af;</mo>
+                <mrow>
+                  <mo>(</mo>
+                  <mrow>
+                    <mn>2</mn>
+                    <mo>,</mo>
+                    <mn>3</mn>
+                  </mrow>
+                  <mo>)</mo>
+                </mrow>
+              </mrow>
+              <mo>=</mo>
+              <mn>19</mn>
+            </mrow>
+          </mrow>
+        </mrow>
+      </mrow>
+    </mtd>
+  </mtr>
+</mtable>
+</math>
+</MATHML>
+<EMI ID="EMI-M00002" ALT="embedded image" FILE="US06442728-20020827-M00002.TIF"/>
+</MATH-US>
+</CWU>
+</PTEXT></PARA>
+<PARA ID="P-00050" LVL="7"><PTEXT><PDAT>Applying the equation comparably to rows 0, 1, and 3 produces the permuted index array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><HIL><BOLD><PDAT>560</PDAT></BOLD></HIL><PDAT> shown in FIG. </PDAT><HIL><BOLD><PDAT>5</PDAT></BOLD></HIL><PDAT>.</PDAT></PTEXT></PARA>
+<PARA ID="P-00051" LVL="0"><PTEXT><PDAT>The data frame </PDAT><HIL><BOLD><PDAT>110</PDAT></BOLD></HIL><PDAT> is read out of storage block </PDAT><HIL><BOLD><PDAT>400</PDAT></BOLD></HIL><PDAT> and output in the order specified in the permuted index array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><HIL><BOLD><PDAT>560</PDAT></BOLD></HIL><PDAT> taken column by column. This would output storage locations in offset order:</PDAT></PTEXT></PARA>
+<PARA ID="P-00052" LVL="2"><PTEXT><PDAT>0,8,16,24,1,11,21,31,2,14,18,30,3,9,23,29,4,12,20,28,5,15,17,27,6,10,22,26,7,13,19,25.</PDAT></PTEXT></PARA>
+<PARA ID="P-00053" LVL="7"><PTEXT><PDAT>However, the example assumed a frame length of 22 elements, with offset locations 22-31 in block </PDAT><HIL><BOLD><PDAT>400</PDAT></BOLD></HIL><PDAT> not being part of the data frame. Accordingly, when outputting the data frame it would be punctured or pruned to a length of 22; i.e., offset locations greater than 21 are ignored. The data frame is thus output with an element order of 0,8,16,1,11,21,2,14,18,3,9,4,12,20,5,15,17,6,10,7,13,19.</PDAT></PTEXT></PARA>
+<PARA ID="P-00054" LVL="0"><PTEXT><PDAT>In one aspect of the invention, rows of the array may be transposed prior to outputting, for example by reversing the bits in the binary representations of row index j.</PDAT></PTEXT></PARA>
+<PARA ID="P-00055" LVL="0"><PTEXT><PDAT>There are a number of different ways to implement the interleavers </PDAT><HIL><BOLD><PDAT>100</PDAT></BOLD></HIL><PDAT> of the present invention. </PDAT><FGREF ID="DRAWINGS"><PDAT>FIG. 2</PDAT></FGREF><PDAT> illustrates an embodiment of the invention wherein the interleaver </PDAT><HIL><BOLD><PDAT>100</PDAT></BOLD></HIL><PDAT> includes an input memory </PDAT><HIL><BOLD><PDAT>300</PDAT></BOLD></HIL><PDAT> for receiving and storing the data frame </PDAT><HIL><BOLD><PDAT>110</PDAT></BOLD></HIL><PDAT>. This memory </PDAT><HIL><BOLD><PDAT>300</PDAT></BOLD></HIL><PDAT> may include shift registers, RAM or the like. The interleaver </PDAT><HIL><BOLD><PDAT>100</PDAT></BOLD></HIL><PDAT> may also include a working memory </PDAT><HIL><BOLD><PDAT>310</PDAT></BOLD></HIL><PDAT> which may also include RAM, shift registers or the like. The interleaver includes a processor </PDAT><HIL><BOLD><PDAT>320</PDAT></BOLD></HIL><PDAT> (e.g., a microprocessor, ASIC, etc.) which may be configured to process I(j,k) in real time according to the above-identified equation or to access a table which includes the results of I(j,k) already stored therein. Those skilled in the art will recognize that memory </PDAT><HIL><BOLD><PDAT>300</PDAT></BOLD></HIL><PDAT> and memory </PDAT><HIL><BOLD><PDAT>310</PDAT></BOLD></HIL><PDAT> may be the same memory or they may be separate memories.</PDAT></PTEXT></PARA>
+<PARA ID="P-00056" LVL="0"><PTEXT><PDAT>For real-time determinations of I(j,k), the first row of the index array is permuted and the bytes corresponding to the permuted index are stored in the working memory. Then the next row is permuted and stored, etc. until all rows have been permuted and stored. The permutation of rows may be done sequentially or in parallel.</PDAT></PTEXT></PARA>
+<PARA ID="P-00057" LVL="0"><PTEXT><PDAT>Whether the permuted I(j,k) is determined in real time or by lookup, the data may be stored in the working memory in a number of different ways. It can be stored by selecting the data from the input memory in the same order as the I(j,k)s in the permuted index array (i.e., indexing the input memory with the permuting function) and placing them in the working memory in sequential available memory locations. It may also be stored by selecting the bytes in the sequence they were stored in the input memory (i.e., FIFO) and storing them in the working memory directly into the location determined by the permuted I(j,k)s (i.e., indexing the working memory with the permuting function). Once this is done, the data may be read out of the working memory column by column based upon the permuted index array. As stated above, the data could be subjected to another round of permuting after it is stored in the working memory based upon columns rather than on rows to achieve different results.</PDAT></PTEXT></PARA>
+<PARA ID="P-00058" LVL="0"><PTEXT><PDAT>If the system is sufficiently fast, one of the memories could be eliminated and as a data element is received it could be placed into the working memory, in real time or by table lookup, in the order corresponding to the permuted index array.</PDAT></PTEXT></PARA>
+<PARA ID="P-00059" LVL="0"><PTEXT><PDAT>The disclosed interleavers are compatible with existing turbo code structures. These interleavers offer superior performance without increasing system complexity.</PDAT></PTEXT></PARA>
+<PARA ID="P-00060" LVL="0"><PTEXT><PDAT>In addition, those skilled in the art will realize that de-interleavers can be used to decode the interleaved data frames. The construction of de-interleavers used in decoding turbo codes is well known in the art. As such they are not further discussed herein. However, a de-interleaver corresponding to the embodiments can be constructed using the permuted sequences discussed above.</PDAT></PTEXT></PARA>
+<PARA ID="P-00061" LVL="0"><PTEXT><PDAT>Although the embodiment described above is a turbo encoder such as is found in a CDMA system, those skilled in the art realize that the practice of the invention is not limited thereto and that the invention may be practiced for any type of interleaving and de-interleaving in any communication system.</PDAT></PTEXT></PARA>
+<PARA ID="P-00062" LVL="0"><PTEXT><PDAT>It will thus be seen that the invention efficiently attains the objects set forth above, among those made apparent from the preceding description. In particular, the invention provides improved apparatus and methods of interleaving codes of finite length while minimizing the complexity of the implementation.</PDAT></PTEXT></PARA>
+<PARA ID="P-00063" LVL="0"><PTEXT><PDAT>It will be understood that changes may be made in the above construction and in the foregoing sequences of operation without departing from the scope of the invention. It is accordingly intended that all matter contained in the above description or shown in the accompanying drawings be interpreted as illustrative rather than in a limiting sense.</PDAT></PTEXT></PARA>
+<PARA ID="P-00064" LVL="0"><PTEXT><PDAT>It is also to be understood that the following claims are intended to cover all of the generic and specific features of the invention as described herein, and all statements of the scope of the invention which, as a matter of language, might be said to fall therebetween.</PDAT></PTEXT></PARA>
+</BTEXT>
+</DETDESC>
+</SDODE>
+<SDOCL>
+<H LVL="1"><STEXT><PDAT>Having described the invention, what is claimed as new and secured by Letters Patent is: </PDAT></STEXT></H>
+<CL>
+<CLM ID="CLM-00001">
+<PARA ID="P-00065" LVL="0"><PTEXT><PDAT>1. A method of interleaving elements of frames of signal data communication channel, the method comprising;</PDAT></PTEXT></PARA>
+<CLMSTEP LVL="2"><PTEXT><PDAT>storing a frame of signal data comprising a plurality of elements as an array D having </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>rows enumerated as 0, 1, . . . N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>&minus;1; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>columns enumerated as 0, 1, . . . N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>&minus;1, </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>wherein N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>are positive integers greater than 1; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>permuting array D into array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>according to </PDAT></PTEXT></CLMSTEP>
+<PARA ID="P-00066" LVL="0"><PTEXT><F><PTEXT><PDAT>D</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>(</PDAT><HIL><ITALIC><PDAT>j,k</PDAT></ITALIC></HIL><PDAT>)&equals;D(</PDAT><HIL><ITALIC><PDAT>j,</PDAT></ITALIC></HIL><PDAT>(&agr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><HIL><ITALIC><PDAT>k&plus;&bgr;</PDAT></ITALIC></HIL><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>)</PDAT><HIL><ITALIC><PDAT>modP</PDAT></ITALIC></HIL><PDAT>) </PDAT></PTEXT></F></PTEXT></PARA>
+<PARA ID="P-00067" LVL="7"><PTEXT><PDAT>wherein</PDAT></PTEXT></PARA>
+<CLMSTEP LVL="2"><PTEXT><PDAT>j is an index through the rows of arrays D and D</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>k is an index through the columns of arrays D and D</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>&agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>and &bgr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>are integers predetermined for each row j; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>P is an integer at least equal to N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>each &agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>is a relative prime number relative to P. </PDAT></PTEXT></CLMSTEP>
+</CLM>
+<CLM ID="CLM-00002">
+<PARA ID="P-00068" LVL="0"><PTEXT><PDAT>2. The method according to </PDAT><CLREF ID="CLM-00001"><PDAT>claim 1</PDAT></CLREF><PDAT> wherein said elements of array D are stored in accordance with a first order and wherein said elements of array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>are output in accordance with a second order.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00003">
+<PARA ID="P-00069" LVL="0"><PTEXT><PDAT>3. The method according to </PDAT><CLREF ID="CLM-00002"><PDAT>claim 2</PDAT></CLREF><PDAT> wherein elements of array D are stored row by row and elements of array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>are output column by column.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00004">
+<PARA ID="P-00070" LVL="0"><PTEXT><PDAT>4. The method according to </PDAT><CLREF ID="CLM-00001"><PDAT>claim 1</PDAT></CLREF><PDAT> further including outputting of array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and wherein the product of N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>is greater than the number of elements in the frame and the frame is punctured during outputting to the number of elements in the frame.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00005">
+<PARA ID="P-00071" LVL="0"><PTEXT><PDAT>5. A method of interleaving elements of frames of signal data communication channel, the method comprising;</PDAT></PTEXT></PARA>
+<CLMSTEP LVL="2"><PTEXT><PDAT>creating and storing an index array I having </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>rows enumerated as 0, 1, . . . N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>&minus;1; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>columns enumerated as 0, 1, . . . N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>&minus;1, </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>wherein N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>are positive integers greater than 1, </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>storing elements of a frame of signal data in each of a plurality of storage locations; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>storing in row-by-row sequential positions in array I values indicative of corresponding locations of frame elements; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>permuting array I into array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>according to </PDAT></PTEXT></CLMSTEP>
+<PARA ID="P-00072" LVL="0"><PTEXT><F><PTEXT><PDAT>I</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>(</PDAT><HIL><ITALIC><PDAT>j,k</PDAT></ITALIC></HIL><PDAT>)&equals;I(</PDAT><HIL><ITALIC><PDAT>j,</PDAT></ITALIC></HIL><PDAT>(&agr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><HIL><ITALIC><PDAT>k&plus;&bgr;</PDAT></ITALIC></HIL><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>)</PDAT><HIL><ITALIC><PDAT>modP</PDAT></ITALIC></HIL><PDAT>) </PDAT></PTEXT></F></PTEXT></PARA>
+<PARA ID="P-00073" LVL="7"><PTEXT><PDAT>wherein</PDAT></PTEXT></PARA>
+<CLMSTEP LVL="2"><PTEXT><PDAT>j is an index through the rows of arrays I and I</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>k is an index through the columns of arrays I and I</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>&agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>and &bgr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>are integers predetermined for each row j; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>P is an integer at least equal to N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>each &agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>is a relative prime number relative to P, whereby the frame of signal data as indexed by array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>is effectively permuted. </PDAT></PTEXT></CLMSTEP>
+</CLM>
+<CLM ID="CLM-00006">
+<PARA ID="P-00074" LVL="0"><PTEXT><PDAT>6. The method according to </PDAT><CLREF ID="CLM-00005"><PDAT>claim 5</PDAT></CLREF><PDAT> further including permuting said stored elements according to said permuted index array I</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00007">
+<PARA ID="P-00075" LVL="0"><PTEXT><PDAT>7. The method according to </PDAT><CLREF ID="CLM-00005"><PDAT>claim 5</PDAT></CLREF><PDAT> wherein said elements of the frame of data are output as indexed by entries of array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>taken other than row by row.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00008">
+<PARA ID="P-00076" LVL="0"><PTEXT><PDAT>8. The method according to </PDAT><CLREF ID="CLM-00007"><PDAT>claim 7</PDAT></CLREF><PDAT> wherein elements of the frame of data are output as indexed by entries of array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>taken column by column.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00009">
+<PARA ID="P-00077" LVL="0"><PTEXT><PDAT>9. The method according to </PDAT><CLREF ID="CLM-00005"><PDAT>claim 5</PDAT></CLREF><PDAT> including the step of transposing rows of array I prior to the step of permuting array I.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00010">
+<PARA ID="P-00078" LVL="0"><PTEXT><PDAT>10. The method according to </PDAT><CLREF ID="CLM-00005"><PDAT>claim 5</PDAT></CLREF><PDAT> wherein N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>is equal to 4, N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>is equal to 8, P is equal to 8, and the values of &agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>are different for each row and are chosen from a group consisting of 1, 3, 5, and 7.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00011">
+<PARA ID="P-00079" LVL="0"><PTEXT><PDAT>11. The method according to </PDAT><CLREF ID="CLM-00010"><PDAT>claim 10</PDAT></CLREF><PDAT> wherein the values of &agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>are 1, 3, 5, and 7 for j&equals;0, 1, 2, and 3 respectively.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00012">
+<PARA ID="P-00080" LVL="0"><PTEXT><PDAT>12. The method according to </PDAT><CLREF ID="CLM-00011"><PDAT>claim 11</PDAT></CLREF><PDAT> wherein all values of &bgr; are zero.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00013">
+<PARA ID="P-00081" LVL="0"><PTEXT><PDAT>13. The method according to </PDAT><CLREF ID="CLM-00010"><PDAT>claim 10</PDAT></CLREF><PDAT> wherein the values of &agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>are 1, 5, 3, and 7 for j&equals;0, 1, 2, and 3 respectively.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00014">
+<PARA ID="P-00082" LVL="0"><PTEXT><PDAT>14. The method according to </PDAT><CLREF ID="CLM-00013"><PDAT>claim 13</PDAT></CLREF><PDAT> wherein all values of &bgr; are zero.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00015">
+<PARA ID="P-00083" LVL="0"><PTEXT><PDAT>15. The method according to </PDAT><CLREF ID="CLM-00005"><PDAT>claim 5</PDAT></CLREF><PDAT> wherein all values of &bgr; are zero.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00016">
+<PARA ID="P-00084" LVL="0"><PTEXT><PDAT>16. The method according to </PDAT><CLREF ID="CLM-00005"><PDAT>claim 5</PDAT></CLREF><PDAT> wherein at least two values of &bgr; are the same.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00017">
+<PARA ID="P-00085" LVL="0"><PTEXT><PDAT>17. The method according to </PDAT><CLREF ID="CLM-00005"><PDAT>claim 5</PDAT></CLREF><PDAT> further including outputting of the frame of data and wherein the product of N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>is greater than the number of elements in the frame of data and the frame of data is punctured during outputting to the number of elements in the frame of data.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00018">
+<PARA ID="P-00086" LVL="0"><PTEXT><PDAT>18. An interleaver for interleaving elements of frames of data, the interleaver comprising;</PDAT></PTEXT></PARA>
+<CLMSTEP LVL="2"><PTEXT><PDAT>storage means for storing a frame of data comprising a plurality of elements as an array D having </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>rows enumerated as 0, 1, . . . N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>&minus;1; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>columns enumerated as 0, 1, . . . N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>&minus;1, </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>wherein N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>are positive integers greater than 1, and permuting means for permuting array D into array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>according to </PDAT></PTEXT></CLMSTEP>
+<PARA ID="P-00087" LVL="0"><PTEXT><F><PTEXT><PDAT>D</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>(</PDAT><HIL><ITALIC><PDAT>j,k</PDAT></ITALIC></HIL><PDAT>)&equals;D(</PDAT><HIL><ITALIC><PDAT>j,</PDAT></ITALIC></HIL><PDAT>(&agr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><HIL><ITALIC><PDAT>k&plus;&bgr;</PDAT></ITALIC></HIL><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>)</PDAT><HIL><ITALIC><PDAT>modP</PDAT></ITALIC></HIL><PDAT>) </PDAT></PTEXT></F></PTEXT></PARA>
+<PARA ID="P-00088" LVL="7"><PTEXT><PDAT>wherein</PDAT></PTEXT></PARA>
+<CLMSTEP LVL="2"><PTEXT><PDAT>j is an index through the rows of arrays D and D</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>k is an index through the columns of arrays D and D</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>&agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>and &bgr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>are integers predetermined for each row j; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>P is an integer at least equal to N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>each &agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>is a relative prime number relative to P. </PDAT></PTEXT></CLMSTEP>
+</CLM>
+<CLM ID="CLM-00019">
+<PARA ID="P-00089" LVL="0"><PTEXT><PDAT>19. The interleaver according to </PDAT><CLREF ID="CLM-00018"><PDAT>claim 18</PDAT></CLREF><PDAT> including means for storing said elements of array D in accordance with a first order and means for outputting said elements of array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>in accordance with a second order.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00020">
+<PARA ID="P-00090" LVL="0"><PTEXT><PDAT>20. The interleaver according to </PDAT><CLREF ID="CLM-00019"><PDAT>claim 19</PDAT></CLREF><PDAT> wherein said means for storing said elements of array D stores row by row and said means for outputting elements of array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>outputs column by column.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00021">
+<PARA ID="P-00091" LVL="0"><PTEXT><PDAT>21. The interleaver according to </PDAT><CLREF ID="CLM-00018"><PDAT>claim 18</PDAT></CLREF><PDAT> including means for outputting said array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and for puncturing said array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>to the number of elements in the frame when the product of N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>is greater than the number of elements in the frame.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00022">
+<PARA ID="P-00092" LVL="0"><PTEXT><PDAT>22. An interleaver for interleaving elements of frames of data, the interleaver comprising;</PDAT></PTEXT></PARA>
+<CLMSTEP LVL="2"><PTEXT><PDAT>means for storing an index array I having </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>rows enumerated as 0, 1, . . . N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>&minus;1; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>columns enumerated as 0, 1, . . . N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>&minus;1, </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>wherein N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>are positive integers greater than 1, and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>means for receiving a frame of data and storing elements of the frame of data in each of a plurality of storage locations; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>means for storing in row-by-row sequential positions in array I values indicative of corresponding locations of frame elements; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>means for permuting array I into array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>according to: </PDAT></PTEXT></CLMSTEP>
+<PARA ID="P-00093" LVL="0"><PTEXT><F><PTEXT><PDAT>I</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>(</PDAT><HIL><ITALIC><PDAT>j,k</PDAT></ITALIC></HIL><PDAT>)&equals;I(</PDAT><HIL><ITALIC><PDAT>j,</PDAT></ITALIC></HIL><PDAT>(&agr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><HIL><ITALIC><PDAT>k&plus;&bgr;</PDAT></ITALIC></HIL><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>)</PDAT><HIL><ITALIC><PDAT>modP</PDAT></ITALIC></HIL><PDAT>) </PDAT></PTEXT></F></PTEXT></PARA>
+<PARA ID="P-00094" LVL="7"><PTEXT><PDAT>wherein</PDAT></PTEXT></PARA>
+<CLMSTEP LVL="2"><PTEXT><PDAT>j is an index through the rows of arrays I and I</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>k is an index through the columns of arrays I and I</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>&agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>and &bgr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>are integers predetermined for each row j; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>P is an integer at least equal to N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>each &agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>is a relative prime number relative to P, whereby the frame of data as indexed by array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>is effectively permuted. </PDAT></PTEXT></CLMSTEP>
+</CLM>
+<CLM ID="CLM-00023">
+<PARA ID="P-00095" LVL="0"><PTEXT><PDAT>23. The interleaver according to </PDAT><CLREF ID="CLM-00022"><PDAT>claim 22</PDAT></CLREF><PDAT> further including means for permuting said stored elements according to said permuted index array I</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00024">
+<PARA ID="P-00096" LVL="0"><PTEXT><PDAT>24. The interleaver according to </PDAT><CLREF ID="CLM-00022"><PDAT>claim 22</PDAT></CLREF><PDAT> including means for outputting frame elements as indexed by entries of array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>taken other than row by row.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00025">
+<PARA ID="P-00097" LVL="0"><PTEXT><PDAT>25. The interleaver according to </PDAT><CLREF ID="CLM-00024"><PDAT>claim 24</PDAT></CLREF><PDAT> including means for outputting frame elements as indexed by entries of array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>taken column by column.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00026">
+<PARA ID="P-00098" LVL="0"><PTEXT><PDAT>26. The interleaver according to </PDAT><CLREF ID="CLM-00022"><PDAT>claim 22</PDAT></CLREF><PDAT> wherein the product of N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>is greater than the number of elements in the frame and the frame is punctured by the means for outputting to the number of elements in the frame.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00027">
+<PARA ID="P-00099" LVL="0"><PTEXT><PDAT>27. An interleaver for interleaving elements of frames of data, the interleaver comprising;</PDAT></PTEXT></PARA>
+<CLMSTEP LVL="2"><PTEXT><PDAT>an input memory for storing a received frame of data comprising a plurality of elements as an array D having </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>rows enumerated as 0, 1, . . . N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>&minus;1; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>columns enumerated as 0, 1, . . . N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>&minus;1, </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>wherein N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>are positive integers greater than 1; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>a processor coupled to said input memory for permuting array D into array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>according to </PDAT></PTEXT></CLMSTEP>
+<PARA ID="P-00100" LVL="0"><PTEXT><F><PTEXT><PDAT>D</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>(</PDAT><HIL><ITALIC><PDAT>j,k</PDAT></ITALIC></HIL><PDAT>)&equals;D(</PDAT><HIL><ITALIC><PDAT>j,</PDAT></ITALIC></HIL><PDAT>(&agr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><HIL><ITALIC><PDAT>k&plus;&bgr;</PDAT></ITALIC></HIL><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>)</PDAT><HIL><ITALIC><PDAT>modP</PDAT></ITALIC></HIL><PDAT>) </PDAT></PTEXT></F></PTEXT></PARA>
+<PARA ID="P-00101" LVL="7"><PTEXT><PDAT>wherein</PDAT></PTEXT></PARA>
+<CLMSTEP LVL="2"><PTEXT><PDAT>j is an index through the rows of arrays D and D</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>k is an index through the columns of arrays D and D</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>&agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>and &bgr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>are integers predetermined for each row j; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>P is an integer at least equal to N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>each &agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>is a relative prime number relative to P, and a working memory coupled to said processor and configured to store the permuted array D</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>. </PDAT></PTEXT></CLMSTEP>
+</CLM>
+<CLM ID="CLM-00028">
+<PARA ID="P-00102" LVL="0"><PTEXT><PDAT>28. The interlcavcr according to </PDAT><CLREF ID="CLM-00027"><PDAT>claim 27</PDAT></CLREF><PDAT> wherein said input memory stores said elements of array D in accordance with a first order and said working memory outputs said elements of array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>in accordance with a second order.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00029">
+<PARA ID="P-00103" LVL="0"><PTEXT><PDAT>29. The interleaver according to </PDAT><CLREF ID="CLM-00028"><PDAT>claim 28</PDAT></CLREF><PDAT> wherein said input memory stores elements of array D row by row and said working memory outputs elements of array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>column by column.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00030">
+<PARA ID="P-00104" LVL="0"><PTEXT><PDAT>30. The interleaver according to </PDAT><CLREF ID="CLM-00027"><PDAT>claim 27</PDAT></CLREF><PDAT> said working memory punctures said array D</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>to the number of elements in the frame when the product of N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>is greater than the number of elements in the frame.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00031">
+<PARA ID="P-00105" LVL="0"><PTEXT><PDAT>31. An interleaver for interleaving elements of frames of data, the interleaver comprising;</PDAT></PTEXT></PARA>
+<CLMSTEP LVL="2"><PTEXT><PDAT>a memory for storing an index array I having </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>rows enumerated as 0, 1, . . . N</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>&minus;1; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>columns enumerated as 0, 1, . . . N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>&minus;1, </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="3"><PTEXT><PDAT>wherein N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>are positive integers greater than 1, and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>said memory also for storing elements of a received frame of data in each of a plurality of storage locations; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>a processor coupled to said memory for storing in row-by-row sequential positions in array I values indicative of corresponding locations of frame elements; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>said processor also for permuting array I into array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>stored in said memory according to: </PDAT></PTEXT></CLMSTEP>
+<PARA ID="P-00106" LVL="0"><PTEXT><F><PTEXT><PDAT>I</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>(</PDAT><HIL><ITALIC><PDAT>j,k</PDAT></ITALIC></HIL><PDAT>)&equals;I(</PDAT><HIL><ITALIC><PDAT>j,</PDAT></ITALIC></HIL><PDAT>(&agr;</PDAT><HIL><SB><PDAT>j</PDAT></SB></HIL><HIL><ITALIC><PDAT>k&plus;&bgr;</PDAT></ITALIC></HIL><HIL><SB><PDAT>j</PDAT></SB></HIL><PDAT>)</PDAT><HIL><ITALIC><PDAT>modP</PDAT></ITALIC></HIL><PDAT>) </PDAT></PTEXT></F></PTEXT></PARA>
+<PARA ID="P-00107" LVL="7"><PTEXT><PDAT>wherein</PDAT></PTEXT></PARA>
+<CLMSTEP LVL="2"><PTEXT><PDAT>j is an index through the rows of arrays I and I</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>k is an index through the columns of arrays I and I</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>&agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>and &bgr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>are integers predetermined for each row j; </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>P is an integer at least equal to N</PDAT><HIL><SB><PDAT>2</PDAT></SB></HIL><PDAT>; and </PDAT></PTEXT></CLMSTEP>
+<CLMSTEP LVL="2"><PTEXT><PDAT>each &agr;</PDAT><HIL><SB><PDAT>j </PDAT></SB></HIL><PDAT>is a relative prime number relative to P, and whereby the frame of data as indexed by array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>is effectively permuted. </PDAT></PTEXT></CLMSTEP>
+</CLM>
+<CLM ID="CLM-00032">
+<PARA ID="P-00108" LVL="0"><PTEXT><PDAT>32. The interleaver according to </PDAT><CLREF ID="CLM-00031"><PDAT>claim 31</PDAT></CLREF><PDAT> wherein said processor permutes said stored elements according to said permuted index array I</PDAT><HIL><SB><PDAT>1</PDAT></SB></HIL><PDAT>.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00033">
+<PARA ID="P-00109" LVL="0"><PTEXT><PDAT>33. The interleaver according to </PDAT><CLREF ID="CLM-00031"><PDAT>claim 31</PDAT></CLREF><PDAT> wherein said memory outputs frame elements as indexed by entries of array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>taken other than row by row.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00034">
+<PARA ID="P-00110" LVL="0"><PTEXT><PDAT>34. The interleaver according to </PDAT><CLREF ID="CLM-00033"><PDAT>claim 33</PDAT></CLREF><PDAT> wherein said memory outputs frame elements as indexed by entries of array I</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>taken column by column.</PDAT></PTEXT></PARA>
+</CLM>
+<CLM ID="CLM-00035">
+<PARA ID="P-00111" LVL="0"><PTEXT><PDAT>35. The interleaver according to </PDAT><CLREF ID="CLM-00031"><PDAT>claim 31</PDAT></CLREF><PDAT> wherein said memory punctures the frame of data to the number of elements in the frame of data when the product of N</PDAT><HIL><SB><PDAT>1 </PDAT></SB></HIL><PDAT>and N</PDAT><HIL><SB><PDAT>2 </PDAT></SB></HIL><PDAT>is greater than the number of elements in the frame of data.</PDAT></PTEXT></PARA>
+</CLM>
+</CL>
+</SDOCL>
+<SDODR ID="DRAWINGS">
+<EMI ID="EMI-D00000" ALT="embedded image" FILE="US06442728-20020827-D00000.TIF"/>
+<EMI ID="EMI-D00001" ALT="embedded image" FILE="US06442728-20020827-D00001.TIF"/>
+<EMI ID="EMI-D00002" ALT="embedded image" FILE="US06442728-20020827-D00002.TIF"/>
+<EMI ID="EMI-D00003" ALT="embedded image" FILE="US06442728-20020827-D00003.TIF"/>
+<EMI ID="EMI-D00004" ALT="embedded image" FILE="US06442728-20020827-D00004.TIF"/>
+<EMI ID="EMI-D00005" ALT="embedded image" FILE="US06442728-20020827-D00005.TIF"/>
+</SDODR>
+</PATDOC>

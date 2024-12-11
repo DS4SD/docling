@@ -1,0 +1,1151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE us-patent-grant SYSTEM "us-patent-grant-v44-2013-05-16.dtd" [ ]>
+<us-patent-grant lang="EN" dtd-version="v4.4 2013-05-16" file="USD0701016-20140318.XML" status="PRODUCTION" id="us-patent-grant" country="US" date-produced="20140304" date-publ="20140318">
+<us-bibliographic-data-grant>
+<publication-reference>
+<document-id>
+<country>US</country>
+<doc-number>D0701016</doc-number>
+<kind>S1</kind>
+<date>20140318</date>
+</document-id>
+</publication-reference>
+<application-reference appl-type="design">
+<document-id>
+<country>US</country>
+<doc-number>29414573</doc-number>
+<date>20120229</date>
+</document-id>
+</application-reference>
+<us-application-series-code>29</us-application-series-code>
+<priority-claims>
+<priority-claim sequence="01" kind="regional">
+<country>EM</country>
+<doc-number>001184956-0001</doc-number>
+<date>20091210</date>
+</priority-claim>
+</priority-claims>
+<us-term-of-grant>
+<length-of-grant>14</length-of-grant>
+</us-term-of-grant>
+<classification-locarno>
+<edition>10</edition>
+<main-classification>0101</main-classification>
+</classification-locarno>
+<classification-national>
+<country>US</country>
+<main-classification>D 1101</main-classification>
+</classification-national>
+<invention-title id="d2e71">Cheese in form of a triangular pyramid</invention-title>
+<us-references-cited>
+<us-citation>
+<patcit num="00001">
+<document-id>
+<country>US</country>
+<doc-number>D14842</doc-number>
+<kind>S</kind>
+<name>Griscom, Jr.</name>
+<date>18840300</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>D24100</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00002">
+<document-id>
+<country>US</country>
+<doc-number>D94174</doc-number>
+<kind>S</kind>
+<name>Vogt</name>
+<date>19341200</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>D 9714</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00003">
+<document-id>
+<country>US</country>
+<doc-number>2819167</doc-number>
+<kind>A</kind>
+<name>Irmscher</name>
+<date>19580100</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>426 83</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00004">
+<document-id>
+<country>US</country>
+<doc-number>2952394</doc-number>
+<kind>A</kind>
+<name>Schneider</name>
+<date>19600900</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>229113</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00005">
+<document-id>
+<country>US</country>
+<doc-number>2992829</doc-number>
+<kind>A</kind>
+<name>Hopkins</name>
+<date>19610700</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>273157 R</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00006">
+<document-id>
+<country>US</country>
+<doc-number>D192941</doc-number>
+<kind>S</kind>
+<name>Schneider</name>
+<date>19620500</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>D 9707</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00007">
+<document-id>
+<country>US</country>
+<doc-number>3032251</doc-number>
+<kind>A</kind>
+<name>Jarund</name>
+<date>19620500</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>229116</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00008">
+<document-id>
+<country>US</country>
+<doc-number>3074612</doc-number>
+<kind>A</kind>
+<name>Schneider</name>
+<date>19630100</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>426 85</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00009">
+<document-id>
+<country>US</country>
+<doc-number>D199935</doc-number>
+<kind>S</kind>
+<name>Dykes</name>
+<date>19641200</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>D 9707</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00010">
+<document-id>
+<country>US</country>
+<doc-number>3223532</doc-number>
+<kind>A</kind>
+<name>Pinkalla et al.</name>
+<date>19651200</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>426602</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00011">
+<document-id>
+<country>US</country>
+<doc-number>3347363</doc-number>
+<kind>A</kind>
+<name>Dykes et al.</name>
+<date>19671000</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>206436</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00012">
+<document-id>
+<country>US</country>
+<doc-number>3379360</doc-number>
+<kind>A</kind>
+<name>Crossley</name>
+<date>19680400</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>383 66</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00013">
+<document-id>
+<country>US</country>
+<doc-number>3404988</doc-number>
+<kind>A</kind>
+<name>Rausing</name>
+<date>19681000</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>426115</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00014">
+<document-id>
+<country>US</country>
+<doc-number>3420366</doc-number>
+<kind>A</kind>
+<name>Doyle</name>
+<date>19690100</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>206436</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00015">
+<document-id>
+<country>US</country>
+<doc-number>3648319</doc-number>
+<kind>A</kind>
+<name>Mitchell</name>
+<date>19720300</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification> 15118</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00016">
+<document-id>
+<country>US</country>
+<doc-number>3659360</doc-number>
+<kind>A</kind>
+<name>Zeischegg</name>
+<date>19720500</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>434403</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00017">
+<document-id>
+<country>US</country>
+<doc-number>3662486</doc-number>
+<kind>A</kind>
+<name>Freedman</name>
+<date>19720500</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>446120</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00018">
+<document-id>
+<country>US</country>
+<doc-number>3734388</doc-number>
+<kind>A</kind>
+<name>Hopkins</name>
+<date>19730500</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>383210</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00019">
+<document-id>
+<country>US</country>
+<doc-number>3791570</doc-number>
+<kind>A</kind>
+<name>Hopkins</name>
+<date>19740200</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>383210</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00020">
+<document-id>
+<country>US</country>
+<doc-number>3887190</doc-number>
+<kind>A</kind>
+<name>Ameri</name>
+<date>19750600</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>273264</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00021">
+<document-id>
+<country>US</country>
+<doc-number>3923238</doc-number>
+<kind>A</kind>
+<name>Thomas</name>
+<date>19751200</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>2291982</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00022">
+<document-id>
+<country>US</country>
+<doc-number>3925959</doc-number>
+<kind>A</kind>
+<name>Dykes et al.</name>
+<date>19751200</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification> 53451</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00023">
+<document-id>
+<country>US</country>
+<doc-number>4334871</doc-number>
+<kind>A</kind>
+<name>Roane</name>
+<date>19820600</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>434211</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00024">
+<document-id>
+<country>US</country>
+<doc-number>4515370</doc-number>
+<kind>A</kind>
+<name>Garcia</name>
+<date>19850500</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>273258</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00025">
+<document-id>
+<country>US</country>
+<doc-number>4659086</doc-number>
+<kind>A</kind>
+<name>Colborne</name>
+<date>19870400</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>273242</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00026">
+<document-id>
+<country>US</country>
+<doc-number>4723382</doc-number>
+<kind>A</kind>
+<name>Lalvani</name>
+<date>19880200</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification> 52 811</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00027">
+<document-id>
+<country>US</country>
+<doc-number>5026068</doc-number>
+<kind>A</kind>
+<name>Weisser</name>
+<date>19910600</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>273241</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00028">
+<document-id>
+<country>US</country>
+<doc-number>5076793</doc-number>
+<kind>A</kind>
+<name>Aghevli et al.</name>
+<date>19911200</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>434196</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00029">
+<document-id>
+<country>US</country>
+<doc-number>5188285</doc-number>
+<kind>A</kind>
+<name>Nilsson et al.</name>
+<date>19930200</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>229242</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00030">
+<document-id>
+<country>US</country>
+<doc-number>5249966</doc-number>
+<kind>A</kind>
+<name>Hiigli</name>
+<date>19931000</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>434211</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00031">
+<document-id>
+<country>US</country>
+<doc-number>5409235</doc-number>
+<kind>A</kind>
+<name>Ameri</name>
+<date>19950400</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>273242</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00032">
+<document-id>
+<country>US</country>
+<doc-number>D367672</doc-number>
+<kind>S</kind>
+<name>Hahn</name>
+<date>19960300</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>D19 49</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00033">
+<document-id>
+<country>US</country>
+<doc-number>D368152</doc-number>
+<kind>S</kind>
+<name>Cahill et al.</name>
+<date>19960300</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>D 1199</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00034">
+<document-id>
+<country>US</country>
+<doc-number>5690331</doc-number>
+<kind>A</kind>
+<name>Sides</name>
+<date>19971100</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>273146</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00035">
+<document-id>
+<country>US</country>
+<doc-number>D412537</doc-number>
+<kind>S</kind>
+<name>Underwood</name>
+<date>19990800</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>D21373</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00036">
+<document-id>
+<country>US</country>
+<doc-number>D414903</doc-number>
+<kind>S</kind>
+<name>Baiera et al.</name>
+<date>19991000</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>D30160</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00037">
+<document-id>
+<country>US</country>
+<doc-number>D427260</doc-number>
+<kind>S</kind>
+<name>Burr</name>
+<date>20000600</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>D21684</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00038">
+<document-id>
+<country>US</country>
+<doc-number>D432011</doc-number>
+<kind>S</kind>
+<name>Millon</name>
+<date>20001000</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>D 9697</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00039">
+<document-id>
+<country>US</country>
+<doc-number>6214392</doc-number>
+<kind>B1</kind>
+<name>Ramirez</name>
+<date>20010400</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>426106</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00040">
+<document-id>
+<country>US</country>
+<doc-number>6629603</doc-number>
+<kind>B1</kind>
+<name>Fontaine</name>
+<date>20031000</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>206438</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00041">
+<document-id>
+<country>US</country>
+<doc-number>6735809</doc-number>
+<kind>B2</kind>
+<name>Parks</name>
+<date>20040500</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification> 15118</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00042">
+<document-id>
+<country>US</country>
+<doc-number>D497238</doc-number>
+<kind>S</kind>
+<name>Maniak</name>
+<date>20041000</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>D 1129</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00043">
+<document-id>
+<country>US</country>
+<doc-number>7247075</doc-number>
+<kind>B2</kind>
+<name>von Oech</name>
+<date>20070700</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>446 92</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00044">
+<document-id>
+<country>US</country>
+<doc-number>D639016</doc-number>
+<kind>S</kind>
+<name>Rea et al.</name>
+<date>20110600</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>D 1199</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00045">
+<document-id>
+<country>US</country>
+<doc-number>7967510</doc-number>
+<kind>B2</kind>
+<name>Martuch</name>
+<date>20110600</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>383207</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00046">
+<document-id>
+<country>US</country>
+<doc-number>D644101</doc-number>
+<kind>S</kind>
+<name>Caldwell et al.</name>
+<date>20110800</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>D 9430</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00047">
+<document-id>
+<country>US</country>
+<doc-number>8408793</doc-number>
+<kind>B2</kind>
+<name>Martuch</name>
+<date>20130400</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>383207</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00048">
+<document-id>
+<country>US</country>
+<doc-number>2005/0158442</doc-number>
+<kind>A1</kind>
+<name>Westermann et al.</name>
+<date>20050700</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>426582</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00049">
+<document-id>
+<country>US</country>
+<doc-number>2006/0034551</doc-number>
+<kind>A1</kind>
+<name>Linneweil</name>
+<date>20060200</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>383 612</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00050">
+<document-id>
+<country>US</country>
+<doc-number>2008/0037912</doc-number>
+<kind>A1</kind>
+<name>Martuch</name>
+<date>20080200</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>383205</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00051">
+<document-id>
+<country>US</country>
+<doc-number>2009/0263546</doc-number>
+<kind>A1</kind>
+<name>Rea et al.</name>
+<date>20091000</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>426 83</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00052">
+<document-id>
+<country>US</country>
+<doc-number>2010/0176007</doc-number>
+<kind>A1</kind>
+<name>Rea et al.</name>
+<date>20100700</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>206  5</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00053">
+<document-id>
+<country>US</country>
+<doc-number>2012/0273560</doc-number>
+<kind>A1</kind>
+<name>Rupp</name>
+<date>20121100</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>229 8705</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00054">
+<document-id>
+<country>EP</country>
+<doc-number>0482574</doc-number>
+<date>19920400</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+</us-citation>
+<us-citation>
+<patcit num="00055">
+<document-id>
+<country>EP</country>
+<doc-number>0577989</doc-number>
+<date>19940100</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+</us-citation>
+<us-citation>
+<patcit num="00056">
+<document-id>
+<country>JP</country>
+<doc-number>61105664</doc-number>
+<date>19980600</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+</us-citation>
+</us-references-cited>
+<number-of-claims>1</number-of-claims>
+<us-exemplary-claim>1</us-exemplary-claim>
+<us-field-of-classification-search>
+<classification-national>
+<country>US</country>
+<main-classification>D 1100-199</main-classification>
+<additional-info>unstructured</additional-info>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D 7602</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D 7672-677</main-classification>
+<additional-info>unstructured</additional-info>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D28 88</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D28  81</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11 33</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11 63</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11 67</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11 70</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11 84</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11108</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11115</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11103</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11 56</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11 49</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11 82</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11134</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11157</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D11158</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D21803</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D21386</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D24101</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D24104</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D19 42</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>D30160</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>273261</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426 76</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426 87</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426 89</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426 90</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426 91</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426 92</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426100</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426101</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426103</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426104</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426105</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426132</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426134</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426138</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426139</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426421</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426515</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426122</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426144</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426660</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426512</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426393</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426635</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426805</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426 94- 95</main-classification>
+<additional-info>unstructured</additional-info>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426128</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426293</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426383</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426438-439</main-classification>
+<additional-info>unstructured</additional-info>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426446</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426450</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426502-504</main-classification>
+<additional-info>unstructured</additional-info>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426516</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426543</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426549-550</main-classification>
+<additional-info>unstructured</additional-info>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426556</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426249</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426250</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>426802</main-classification>
+</classification-national>
+</us-field-of-classification-search>
+<figures>
+<number-of-drawing-sheets>4</number-of-drawing-sheets>
+<number-of-figures>8</number-of-figures>
+</figures>
+<us-related-documents>
+<division>
+<relation>
+<parent-doc>
+<document-id>
+<country>US</country>
+<doc-number>29363465</doc-number>
+<date>20100609</date>
+</document-id>
+<parent-status>PENDING</parent-status>
+</parent-doc>
+<child-doc>
+<document-id>
+<country>US</country>
+<doc-number>29414573</doc-number>
+</document-id>
+</child-doc>
+</relation>
+</division>
+</us-related-documents>
+<us-parties>
+<us-applicants>
+<us-applicant sequence="001" app-type="applicant" designation="us-only">
+<addressbook>
+<last-name>Rupp</last-name>
+<first-name>Ludwig</first-name>
+<address>
+<city>Lochau</city>
+<country>AT</country>
+</address>
+</addressbook>
+<residence>
+<country>AT</country>
+</residence>
+</us-applicant>
+</us-applicants>
+<inventors>
+<inventor sequence="001" designation="us-only">
+<addressbook>
+<last-name>Rupp</last-name>
+<first-name>Ludwig</first-name>
+<address>
+<city>Lochau</city>
+<country>AT</country>
+</address>
+</addressbook>
+</inventor>
+</inventors>
+<agents>
+<agent sequence="01" rep-type="attorney">
+<addressbook>
+<orgname>Workman Nydegger</orgname>
+<address>
+<country>unknown</country>
+</address>
+</addressbook>
+</agent>
+</agents>
+</us-parties>
+<assignees>
+<assignee>
+<addressbook>
+<orgname>Rupp AG</orgname>
+<role>03</role>
+<address>
+<country>AT</country>
+</address>
+</addressbook>
+</assignee>
+</assignees>
+<examiners>
+<primary-examiner>
+<last-name>Fox</last-name>
+<first-name>Barbara</first-name>
+<department>2911</department>
+</primary-examiner>
+</examiners>
+</us-bibliographic-data-grant>
+<drawings id="DRAWINGS">
+<figure id="Fig-EMI-D00000" num="00000">
+<img id="EMI-D00000" he="130.22mm" wi="99.91mm" file="USD0701016-20140318-D00000.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00001" num="00001">
+<img id="EMI-D00001" he="247.99mm" wi="154.60mm" file="USD0701016-20140318-D00001.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00002" num="00002">
+<img id="EMI-D00002" he="240.71mm" wi="164.68mm" file="USD0701016-20140318-D00002.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00003" num="00003">
+<img id="EMI-D00003" he="238.25mm" wi="158.41mm" file="USD0701016-20140318-D00003.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00004" num="00004">
+<img id="EMI-D00004" he="238.84mm" wi="164.68mm" file="USD0701016-20140318-D00004.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+</drawings>
+<description id="description">
+<?brief-description-of-drawings description="Brief Description of Drawings" end="lead"?>
+<description-of-drawings>
+<p id="p-0001" num="0001"><figref idref="DRAWINGS">FIG. 1</figref> is a perspective view of cheese in form of a triangular pyramid showing the new design;</p>
+<p id="p-0002" num="0002"><figref idref="DRAWINGS">FIG. 2</figref> is another perspective view thereof;</p>
+<p id="p-0003" num="0003"><figref idref="DRAWINGS">FIG. 3</figref> is another perspective view thereof;</p>
+<p id="p-0004" num="0004"><figref idref="DRAWINGS">FIG. 4</figref> is a front elevational view thereof;</p>
+<p id="p-0005" num="0005"><figref idref="DRAWINGS">FIG. 5</figref> is a rear elevational view thereof;</p>
+<p id="p-0006" num="0006"><figref idref="DRAWINGS">FIG. 6</figref> is a top view thereof;</p>
+<p id="p-0007" num="0007"><figref idref="DRAWINGS">FIG. 7</figref> is another front view thereof; and,</p>
+<p id="p-0008" num="0008"><figref idref="DRAWINGS">FIG. 8</figref> is a right side view thereof.</p>
+<p id="p-0009" num="0009">The broken lines shown in the drawings represent portions of the cheese in form of a triangular pyramid which form no part of the claimed design.</p>
+</description-of-drawings>
+<?brief-description-of-drawings description="Brief Description of Drawings" end="tail"?>
+</description>
+<us-claim-statement>CLAIM</us-claim-statement>
+<claims id="claims">
+<claim id="CLM-00001" num="00001">
+<claim-text>The ornamental design for cheese in form of a triangular pyramid, as shown and described.</claim-text>
+</claim>
+</claims>
+</us-patent-grant>
