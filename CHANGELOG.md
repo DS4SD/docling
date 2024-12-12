@@ -1,3 +1,19 @@
+## [v2.11.0](https://github.com/DS4SD/docling/releases/tag/v2.11.0) - 2024-12-12
+
+### Feature
+
+* Add timeout limit to document parsing job. DS4SD#270 ([#552](https://github.com/DS4SD/docling/issues/552)) ([`3da166e`](https://github.com/DS4SD/docling/commit/3da166eafa3c119de961510341cb92397652c222))
+
+### Fix
+
+* Do not import python modules from deepsearch-glm ([#569](https://github.com/DS4SD/docling/issues/569)) ([`aee9c0b`](https://github.com/DS4SD/docling/commit/aee9c0b324a07190ad03ad3a6266e76c465d4cdf))
+* Handle no result from RapidOcr reader ([#558](https://github.com/DS4SD/docling/issues/558)) ([`f45499c`](https://github.com/DS4SD/docling/commit/f45499ce9349fe55538dfb36d74c395e9193d9b1))
+* Make enum serializable with human-readable value ([#555](https://github.com/DS4SD/docling/issues/555)) ([`a7df337`](https://github.com/DS4SD/docling/commit/a7df337654fa5fa7633af8740fb5e4cc4a06f250))
+
+### Documentation
+
+* Update chunking usage docs, minor reorg ([#550](https://github.com/DS4SD/docling/issues/550)) ([`d0c9e8e`](https://github.com/DS4SD/docling/commit/d0c9e8e508d7edef5e733be6cdea2cea0a9a0695))
+
 ## [v2.10.0](https://github.com/DS4SD/docling/releases/tag/v2.10.0) - 2024-12-09
 
 ### Feature
