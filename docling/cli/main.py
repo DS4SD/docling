@@ -256,6 +256,13 @@ def convert(
     device: Annotated[
         AcceleratorDevice, typer.Option(..., help="Accelerator device")
     ] = AcceleratorDevice.AUTO,
+    document_timeout: Annotated[
+        Optional[float],
+        typer.Option(
+            ...,
+            help="The timeout for processing each document, in seconds.",
+        ),
+    ] = None,
 ):
     if verbose == 0:
         logging.basicConfig(level=logging.WARNING)
@@ -341,6 +348,7 @@ def convert(
             do_ocr=ocr,
             ocr_options=ocr_options,
             do_table_structure=True,
+            document_timeout=document_timeout,
         )
         pipeline_options.table_structure_options.do_cell_matching = (
             True  # do_cell_matching
