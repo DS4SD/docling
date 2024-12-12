@@ -13,53 +13,6 @@ Front cover
 
 ## Contents
 
-
-
-| Notices                                                                                                                                        | . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . vii   |
-|------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| Trademarks                                                                                                                                     | . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . viii          |
-| DB2 for i Center of Excellence                                                                                                                 | . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ix                                          |
-| Preface                                                                                                                                        | . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . xi    |
-| Authors . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . xi |                                                                                                                                         |
-| Now you can become a published author, too!                                                                                                    | . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . xiii                                                                |
-| Comments welcome. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                  | xiii                                                                                                                                    |
-| Stay connected to IBM Redbooks                                                                                                                 | . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . xiv                                             |
-| Chapter 1. Securing and protecting IBM DB2 data  . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                     | 1                                                                                                                                       |
-| 1.1 Security fundamentals. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2               |                                                                                                                                         |
-| 1.2 Current state of IBM i security . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                  | 2                                                                                                                                       |
-| 1.3 DB2 for i security controls . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3              |                                                                                                                                         |
-| 1.3.1 Existing row and column control . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                            | 4                                                                                                                                       |
-| 1.3.2 New controls: Row and Column Access Control. . . . . . . . . . . . . . . . . . . . . . . . . . .                                         | 5                                                                                                                                       |
-| Chapter 2. Roles and separation of duties . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                              | 7                                                                                                                                       |
-| 2.1 Roles . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .      | 8                                                                                                                                       |
-| 2.1.1 DDM and DRDA application server access: QIBM_DB_DDMDRDA . . . . . . . . . . .                                                            | 8                                                                                                                                       |
-| 2.1.2 Toolbox application server access: QIBM_DB_ZDA. . . . . . . . . . . . . . . . . . . . . . . .                                            | 8                                                                                                                                       |
-| 2.1.3 Database Administrator function: QIBM_DB_SQLADM . . . . . . . . . . . . . . . . . . . . .                                                | 9                                                                                                                                       |
-| 2.1.4 Database Information function: QIBM_DB_SYSMON                                                                                            | . . . . . . . . . . . . . . . . . . . . . . 9                                                                                           |
-| 2.1.5 Security Administrator function: QIBM_DB_SECADM . . . . . . . . . . . . . . . . . . . . . .                                              | 9                                                                                                                                       |
-| 2.1.6 Change Function Usage CL command . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                       | 10                                                                                                                                      |
-| 2.1.7 Verifying function usage IDs for RCAC with the FUNCTION_USAGE view . . . . .                                                             | 10                                                                                                                                      |
-| 2.2 Separation of duties . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10              |                                                                                                                                         |
-| Chapter 3. Row and Column Access Control . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                     | 13                                                                                                                                      |
-| 3.1 Explanation of RCAC and the concept of access control . . . . . . . . . . . . . . . . . . . . . . .                                        | 14                                                                                                                                      |
-| 3.1.1 Row permission and column mask definitions                                                                                               | . . . . . . . . . . . . . . . . . . . . . . . . . . . 14                                                                                |
-| 3.1.2 Enabling and activating RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                               | 16                                                                                                                                      |
-| 3.2 Special registers and built-in global variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                            | 18                                                                                                                                      |
-| 3.2.1 Special registers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                    | 18                                                                                                                                      |
-| 3.2.2 Built-in global variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                      | 19                                                                                                                                      |
-| 3.3 VERIFY_GROUP_FOR_USER function . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                     | 20                                                                                                                                      |
-| 3.4 Establishing and controlling accessibility by using the RCAC rule text . . . . . . . . . . . . .                                           | 21                                                                                                                                      |
-|                                                                                                                                                | . . . . . . . . . . . . . . . . . . . . . . . . 22                                                                                      |
-| 3.5 SELECT, INSERT, and UPDATE behavior with RCAC                                                                                              |                                                                                                                                         |
-| 3.6.1 Assigning the QIBM_DB_SECADM function ID to the consultants. . . . . . . . . . . .                                                       | 23                                                                                                                                      |
-| 3.6.2 Creating group profiles for the users and their roles . . . . . . . . . . . . . . . . . . . . . . .                                      | 23                                                                                                                                      |
-| 3.6.3 Demonstrating data access without RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                       | 24                                                                                                                                      |
-| 3.6.4 Defining and creating row permissions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                  | 25                                                                                                                                      |
-| 3.6.5 Defining and creating column masks                                                                                                       | . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 26                                                                  |
-| 3.6.6 Activating RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                      | 28                                                                                                                                      |
-| 3.6.7 Demonstrating data access with RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                      | 29                                                                                                                                      |
-| 3.6.8 Demonstrating data access with a view and RCAC . . . . . . . . . . . . . . . . . . . . . . .                                             | 32                                                                                                                                      |
-
 DB2 for i Center of Excellence
 
 Solution Brief IBM Systems Lab Services and Training
@@ -223,13 +176,27 @@ To discover who has authorization to define and manage RCAC, you can use the que
 
 Example 2-1 Query to determine who has authority to define and manage RCAC
 
-| SELECT   | function_id, user_name,      |
-|----------|------------------------------|
-|          | usage,                       |
-|          | user_type                    |
-| FROM     | function_usage               |
-| WHERE    | function_id='QIBM_DB_SECADM' |
-| ORDER BY | user_name;                   |
+SELECT
+
+function_id,
+
+user_name,
+
+usage,
+
+user_type
+
+FROM
+
+function_usage
+
+WHERE
+
+function_id=’QIBM_DB_SECADM’
+
+ORDER BY
+
+user_name;
 
 ## 2.2 Separation of duties
 
@@ -249,20 +216,20 @@ Table 2-2 shows a comparison of the different function usage IDs and *JOBCTL aut
 
 Table 2-2 Comparison of the different function usage IDs and *JOBCTL authority
 
-| User action                                                                    | *JOBCTL   | QIBM_DB_SECADM   | QIBM_DB_SQLADM   | QIBM_DB_SYSMON   | No Authority   |
-|--------------------------------------------------------------------------------|-----------|------------------|------------------|------------------|----------------|
-| SET CURRENT DEGREE  (SQL statement)                                            | X         |                  | X                |                  |                |
-| CHGQRYA  command targeting a different user's job                              | X         |                  | X                |                  |                |
-| STRDBMON  or  ENDDBMON  commands targeting a different user's job              | X         |                  | X                |                  |                |
-| STRDBMON  or  ENDDBMON  commands targeting a job that matches the current user | X         |                  | X                | X                | X              |
-| QUSRJOBI() API format 900 or System i Navigator's SQL Details for Job          | X         |                  | X                | X                |                |
-| Visual Explain within Run SQL scripts                                          | X         |                  | X                | X                | X              |
-| Visual Explain outside of Run SQL scripts                                      | X         |                  | X                |                  |                |
-| ANALYZE PLAN CACHE procedure                                                   | X         |                  | X                |                  |                |
-| DUMP PLAN CACHE procedure                                                      | X         |                  | X                |                  |                |
-| MODIFY PLAN CACHE procedure                                                    | X         |                  | X                |                  |                |
-| MODIFY PLAN CACHE PROPERTIES procedure (currently does not check authority)    | X         |                  | X                |                  |                |
-| CHANGE PLAN CACHE SIZE procedure (currently does not check authority)          | X         |                  | X                |                  |                |
+| User action                                                                    | *JOBCTL   | QIBM_DB_SECADM   | QIBM_DB_SQLADM   | QIBM_DB_SYSMON No Authority   |
+|--------------------------------------------------------------------------------|-----------|------------------|------------------|-------------------------------|
+| SET CURRENT DEGREE  (SQL statement)                                            | X         |                  | X                |                               |
+| CHGQRYA  command targeting a different user's job                              | X         |                  | X                |                               |
+| STRDBMON  or  ENDDBMON  commands targeting a different user's job              | X         |                  | X                |                               |
+| STRDBMON  or  ENDDBMON  commands targeting a job that matches the current user | X         |                  | X                | X X                           |
+| QUSRJOBI() API format 900 or System i Navigator's SQL Details for Job          | X         |                  | X                | X                             |
+| Visual Explain within Run SQL scripts                                          | X         |                  | X                | X X                           |
+| Visual Explain outside of Run SQL scripts                                      | X         |                  | X                |                               |
+| ANALYZE PLAN CACHE procedure                                                   | X         |                  | X                |                               |
+| DUMP PLAN CACHE procedure                                                      | X         |                  | X                |                               |
+| MODIFY PLAN CACHE procedure                                                    | X         |                  | X                |                               |
+| MODIFY PLAN CACHE PROPERTIES procedure (currently does not check authority)    | X         |                  | X                |                               |
+| CHANGE PLAN CACHE SIZE procedure (currently does not check authority)          | X         |                  | X                |                               |
 
 The SQL CREATE PERMISSION statement that is shown in Figure 3-1 is used to define and initially enable or disable the row access rules.
 
