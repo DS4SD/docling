@@ -46,8 +46,8 @@
 <row_30><col_0><body>3.2.2 Built-in global variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>19</col_1></row_30>
 <row_31><col_0><body>3.3 VERIFY_GROUP_FOR_USER function . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>20</col_1></row_31>
 <row_32><col_0><body>3.4 Establishing and controlling accessibility by using the RCAC rule text . . . . . . . . . . . . .</col_0><col_1><body>21</col_1></row_32>
-<row_33><col_0><body></col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . . 22</col_1></row_33>
-<row_34><col_0><body>3.5 SELECT, INSERT, and UPDATE behavior with RCAC</col_0><col_1><body></col_1></row_34>
+<row_33><col_0><body>3.5 SELECT, INSERT, and UPDATE behavior with RCAC</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . . 22</col_1></row_33>
+<row_34><col_0><body>3.6 Human resources example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>22</col_1></row_34>
 <row_35><col_0><body>3.6.1 Assigning the QIBM_DB_SECADM function ID to the consultants. . . . . . . . . . . .</col_0><col_1><body>23</col_1></row_35>
 <row_36><col_0><body>3.6.2 Creating group profiles for the users and their roles . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>23</col_1></row_36>
 <row_37><col_0><body>3.6.3 Demonstrating data access without RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>24</col_1></row_37>
@@ -155,7 +155,7 @@
 <section_header_level_1><location><page_8><loc_11><loc_71><loc_89><loc_72></location>2.1.7 Verifying function usage IDs for RCAC with the FUNCTION_USAGE view</section_header_level_1>
 <text><location><page_8><loc_22><loc_66><loc_85><loc_69></location>The FUNCTION_USAGE view contains function usage configuration details. Table 2-1 describes the columns in the FUNCTION_USAGE view.</text>
 <table>
-<location><page_8><loc_22><loc_44><loc_89><loc_63></location>
+<location><page_8><loc_23><loc_45><loc_88><loc_63></location>
 <caption>Table 2-1 FUNCTION_USAGE view</caption>
 <row_0><col_0><col_header>Column name</col_0><col_1><col_header>Data type</col_1><col_2><col_header>Description</col_2></row_0>
 <row_1><col_0><body>FUNCTION_ID</col_0><col_1><body>VARCHAR(30)</col_1><col_2><body>ID of the function.</col_2></row_1>
@@ -164,16 +164,18 @@
 <row_4><col_0><body>USER_TYPE</col_0><col_1><body>VARCHAR(5)</col_1><col_2><body>Type of user profile: GLYPH<SM590000> USER: The user profile is a user. GLYPH<SM590000> GROUP: The user profile is a group.</col_2></row_4>
 </table>
 <text><location><page_8><loc_22><loc_40><loc_89><loc_43></location>To discover who has authorization to define and manage RCAC, you can use the query that is shown in Example 2-1.</text>
-<table>
-<location><page_8><loc_22><loc_26><loc_89><loc_37></location>
-<caption>Example 2-1 Query to determine who has authority to define and manage RCAC</caption>
-<row_0><col_0><body>SELECT</col_0><col_1><body>function_id, user_name,</col_1></row_0>
-<row_1><col_0><body></col_0><col_1><body>usage,</col_1></row_1>
-<row_2><col_0><body></col_0><col_1><body>user_type</col_1></row_2>
-<row_3><col_0><body>FROM</col_0><col_1><body>function_usage</col_1></row_3>
-<row_4><col_0><body>WHERE</col_0><col_1><body>function_id='QIBM_DB_SECADM'</col_1></row_4>
-<row_5><col_0><body>ORDER BY</col_0><col_1><body>user_name;</col_1></row_5>
-</table>
+<paragraph><location><page_8><loc_22><loc_38><loc_76><loc_39></location>Example 2-1 Query to determine who has authority to define and manage RCAC</paragraph>
+<text><location><page_8><loc_22><loc_35><loc_28><loc_36></location>SELECT</text>
+<text><location><page_8><loc_30><loc_35><loc_41><loc_36></location>function_id,</text>
+<text><location><page_8><loc_27><loc_34><loc_39><loc_35></location>user_name,</text>
+<text><location><page_8><loc_28><loc_32><loc_36><loc_33></location>usage,</text>
+<text><location><page_8><loc_27><loc_31><loc_39><loc_32></location>user_type</text>
+<text><location><page_8><loc_22><loc_29><loc_26><loc_30></location>FROM</text>
+<text><location><page_8><loc_29><loc_29><loc_43><loc_30></location>function_usage</text>
+<text><location><page_8><loc_22><loc_28><loc_27><loc_29></location>WHERE</text>
+<text><location><page_8><loc_29><loc_28><loc_54><loc_29></location>function_id=’QIBM_DB_SECADM’</text>
+<text><location><page_8><loc_22><loc_26><loc_29><loc_27></location>ORDER BY</text>
+<text><location><page_8><loc_31><loc_26><loc_39><loc_27></location>user_name;</text>
 <section_header_level_1><location><page_8><loc_11><loc_20><loc_41><loc_22></location>2.2 Separation of duties</section_header_level_1>
 <text><location><page_8><loc_22><loc_10><loc_89><loc_18></location>Separation of duties helps businesses comply with industry regulations or organizational requirements and simplifies the management of authorities. Separation of duties is commonly used to prevent fraudulent activities or errors by a single person. It provides the ability for administrative functions to be divided across individuals without overlapping responsibilities, so that one user does not possess unlimited authority, such as with the *ALLOBJ authority.</text>
 <text><location><page_9><loc_22><loc_82><loc_89><loc_91></location>For example, assume that a business has assigned the duty to manage security on IBM i to Theresa. Before release IBM i 7.2, to grant privileges, Theresa had to have the same privileges Theresa was granting to others. Therefore, to grant *USE privileges to the PAYROLL table, Theresa had to have *OBJMGT and *USE authority (or a higher level of authority, such as *ALLOBJ). This requirement allowed Theresa to access the data in the PAYROLL table even though Theresa's job description was only to manage its security.</text>
@@ -183,21 +185,21 @@
 <text><location><page_9><loc_22><loc_57><loc_88><loc_63></location>A preferred practice is that the RCAC administrator has the QIBM_DB_SECADM function usage ID, but absolutely no other data privileges. The result is that the RCAC administrator can deploy and maintain the RCAC constructs, but cannot grant themselves unauthorized access to data itself.</text>
 <text><location><page_9><loc_22><loc_53><loc_89><loc_56></location>Table 2-2 shows a comparison of the different function usage IDs and *JOBCTL authority to the different CL commands and DB2 for i tools.</text>
 <table>
-<location><page_9><loc_11><loc_9><loc_89><loc_50></location>
+<location><page_9><loc_12><loc_10><loc_88><loc_49></location>
 <caption>Table 2-2 Comparison of the different function usage IDs and *JOBCTL authority</caption>
-<row_0><col_0><row_header>User action</col_0><col_1><body>*JOBCTL</col_1><col_2><body>QIBM_DB_SECADM</col_2><col_3><body>QIBM_DB_SQLADM</col_3><col_4><body>QIBM_DB_SYSMON</col_4><col_5><body>No Authority</col_5></row_0>
-<row_1><col_0><row_header>SET CURRENT DEGREE  (SQL statement)</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_1>
-<row_2><col_0><row_header>CHGQRYA  command targeting a different user's job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_2>
-<row_3><col_0><row_header>STRDBMON  or  ENDDBMON  commands targeting a different user's job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_3>
-<row_4><col_0><row_header>STRDBMON  or  ENDDBMON  commands targeting a job that matches the current user</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body>X</col_4><col_5><body>X</col_5></row_4>
-<row_5><col_0><row_header>QUSRJOBI() API format 900 or System i Navigator's SQL Details for Job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body>X</col_4><col_5><body></col_5></row_5>
-<row_6><col_0><row_header>Visual Explain within Run SQL scripts</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body>X</col_4><col_5><body>X</col_5></row_6>
-<row_7><col_0><row_header>Visual Explain outside of Run SQL scripts</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_7>
-<row_8><col_0><row_header>ANALYZE PLAN CACHE procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_8>
-<row_9><col_0><row_header>DUMP PLAN CACHE procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_9>
-<row_10><col_0><row_header>MODIFY PLAN CACHE procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_10>
-<row_11><col_0><row_header>MODIFY PLAN CACHE PROPERTIES procedure (currently does not check authority)</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_11>
-<row_12><col_0><row_header>CHANGE PLAN CACHE SIZE procedure (currently does not check authority)</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_12>
+<row_0><col_0><body>User action</col_0><col_1><body>*JOBCTL</col_1><col_2><body>QIBM_DB_SECADM</col_2><col_3><body>QIBM_DB_SQLADM</col_3><col_4><body>QIBM_DB_SYSMON No Authority</col_4></row_0>
+<row_1><col_0><row_header>SET CURRENT DEGREE  (SQL statement)</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4></row_1>
+<row_2><col_0><row_header>CHGQRYA  command targeting a different user's job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4></row_2>
+<row_3><col_0><row_header>STRDBMON  or  ENDDBMON  commands targeting a different user's job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4></row_3>
+<row_4><col_0><row_header>STRDBMON  or  ENDDBMON  commands targeting a job that matches the current user</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body>X X</col_4></row_4>
+<row_5><col_0><row_header>QUSRJOBI() API format 900 or System i Navigator's SQL Details for Job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body>X</col_4></row_5>
+<row_6><col_0><row_header>Visual Explain within Run SQL scripts</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body>X X</col_4></row_6>
+<row_7><col_0><row_header>Visual Explain outside of Run SQL scripts</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4></row_7>
+<row_8><col_0><row_header>ANALYZE PLAN CACHE procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4></row_8>
+<row_9><col_0><row_header>DUMP PLAN CACHE procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4></row_9>
+<row_10><col_0><row_header>MODIFY PLAN CACHE procedure</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4></row_10>
+<row_11><col_0><row_header>MODIFY PLAN CACHE PROPERTIES procedure (currently does not check authority)</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4></row_11>
+<row_12><col_0><row_header>CHANGE PLAN CACHE SIZE procedure (currently does not check authority)</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4></row_12>
 </table>
 <figure>
 <location><page_10><loc_22><loc_48><loc_89><loc_86></location>
@@ -207,7 +209,7 @@
 <text><location><page_10><loc_22><loc_37><loc_89><loc_43></location>A column mask is a database object that manifests a column value access control rule for a specific column in a specific table. It uses a CASE expression that describes what you see when you access the column. For example, a teller can see only the last four digits of a tax identification number.</text>
 <paragraph><location><page_11><loc_22><loc_90><loc_67><loc_91></location>Table 3-1 summarizes these special registers and their values.</paragraph>
 <table>
-<location><page_11><loc_22><loc_74><loc_89><loc_87></location>
+<location><page_11><loc_23><loc_75><loc_88><loc_86></location>
 <caption>Table 3-1 Special registers and their corresponding values</caption>
 <row_0><col_0><col_header>Special register</col_0><col_1><col_header>Corresponding value</col_1></row_0>
 <row_1><col_0><body>USER or SESSION_USER</col_0><col_1><body>The effective user of the thread excluding adopted authority.</col_1></row_1>
@@ -231,7 +233,7 @@
 <text><location><page_11><loc_22><loc_9><loc_87><loc_13></location>IBM DB2 for i supports nine different built-in global variables that are read only and maintained by the system. These global variables can be used to identify attributes of the database connection and used as part of the RCAC logic.</text>
 <text><location><page_12><loc_22><loc_90><loc_56><loc_91></location>Table 3-2 lists the nine built-in global variables.</text>
 <table>
-<location><page_12><loc_10><loc_63><loc_90><loc_87></location>
+<location><page_12><loc_12><loc_63><loc_86><loc_86></location>
 <caption>Table 3-2 Built-in global variables</caption>
 <row_0><col_0><col_header>Global variable</col_0><col_1><col_header>Type</col_1><col_2><col_header>Description</col_2></row_0>
 <row_1><col_0><body>CLIENT_HOST</col_0><col_1><body>VARCHAR(255)</col_1><col_2><body>Host name of the current client as returned by the system</col_2></row_1>

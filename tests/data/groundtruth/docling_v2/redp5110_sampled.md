@@ -44,8 +44,8 @@ Front cover
 | 3.2.2 Built-in global variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                      | 19                                                                                                                                      |
 | 3.3 VERIFY\_GROUP\_FOR\_USER function . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                     | 20                                                                                                                                      |
 | 3.4 Establishing and controlling accessibility by using the RCAC rule text . . . . . . . . . . . . .                                           | 21                                                                                                                                      |
-|                                                                                                                                                | . . . . . . . . . . . . . . . . . . . . . . . . 22                                                                                      |
-| 3.5 SELECT, INSERT, and UPDATE behavior with RCAC                                                                                              |                                                                                                                                         |
+| 3.5 SELECT, INSERT, and UPDATE behavior with RCAC                                                                                              | . . . . . . . . . . . . . . . . . . . . . . . . 22                                                                                      |
+| 3.6 Human resources example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                        | 22                                                                                                                                      |
 | 3.6.1 Assigning the QIBM\_DB\_SECADM function ID to the consultants. . . . . . . . . . . .                                                       | 23                                                                                                                                      |
 | 3.6.2 Creating group profiles for the users and their roles . . . . . . . . . . . . . . . . . . . . . . .                                      | 23                                                                                                                                      |
 | 3.6.3 Demonstrating data access without RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                       | 24                                                                                                                                      |
@@ -198,13 +198,27 @@ To discover who has authorization to define and manage RCAC, you can use the que
 
 Example 2-1 Query to determine who has authority to define and manage RCAC
 
-| SELECT   | function\_id, user\_name,      |
-|----------|------------------------------|
-|          | usage,                       |
-|          | user\_type                    |
-| FROM     | function\_usage               |
-| WHERE    | function\_id='QIBM\_DB\_SECADM' |
-| ORDER BY | user\_name;                   |
+SELECT
+
+function\_id,
+
+user\_name,
+
+usage,
+
+user\_type
+
+FROM
+
+function\_usage
+
+WHERE
+
+function\_id=’QIBM\_DB\_SECADM’
+
+ORDER BY
+
+user\_name;
 
 ## 2.2 Separation of duties
 
@@ -224,20 +238,20 @@ Table 2-2 shows a comparison of the different function usage IDs and *JOBCTL aut
 
 Table 2-2 Comparison of the different function usage IDs and *JOBCTL authority
 
-| User action                                                                    | *JOBCTL   | QIBM\_DB\_SECADM   | QIBM\_DB\_SQLADM   | QIBM\_DB\_SYSMON   | No Authority   |
-|--------------------------------------------------------------------------------|-----------|------------------|------------------|------------------|----------------|
-| SET CURRENT DEGREE  (SQL statement)                                            | X         |                  | X                |                  |                |
-| CHGQRYA  command targeting a different user's job                              | X         |                  | X                |                  |                |
-| STRDBMON  or  ENDDBMON  commands targeting a different user's job              | X         |                  | X                |                  |                |
-| STRDBMON  or  ENDDBMON  commands targeting a job that matches the current user | X         |                  | X                | X                | X              |
-| QUSRJOBI() API format 900 or System i Navigator's SQL Details for Job          | X         |                  | X                | X                |                |
-| Visual Explain within Run SQL scripts                                          | X         |                  | X                | X                | X              |
-| Visual Explain outside of Run SQL scripts                                      | X         |                  | X                |                  |                |
-| ANALYZE PLAN CACHE procedure                                                   | X         |                  | X                |                  |                |
-| DUMP PLAN CACHE procedure                                                      | X         |                  | X                |                  |                |
-| MODIFY PLAN CACHE procedure                                                    | X         |                  | X                |                  |                |
-| MODIFY PLAN CACHE PROPERTIES procedure (currently does not check authority)    | X         |                  | X                |                  |                |
-| CHANGE PLAN CACHE SIZE procedure (currently does not check authority)          | X         |                  | X                |                  |                |
+| User action                                                                    | *JOBCTL   | QIBM\_DB\_SECADM   | QIBM\_DB\_SQLADM   | QIBM\_DB\_SYSMON No Authority   |
+|--------------------------------------------------------------------------------|-----------|------------------|------------------|-------------------------------|
+| SET CURRENT DEGREE  (SQL statement)                                            | X         |                  | X                |                               |
+| CHGQRYA  command targeting a different user's job                              | X         |                  | X                |                               |
+| STRDBMON  or  ENDDBMON  commands targeting a different user's job              | X         |                  | X                |                               |
+| STRDBMON  or  ENDDBMON  commands targeting a job that matches the current user | X         |                  | X                | X X                           |
+| QUSRJOBI() API format 900 or System i Navigator's SQL Details for Job          | X         |                  | X                | X                             |
+| Visual Explain within Run SQL scripts                                          | X         |                  | X                | X X                           |
+| Visual Explain outside of Run SQL scripts                                      | X         |                  | X                |                               |
+| ANALYZE PLAN CACHE procedure                                                   | X         |                  | X                |                               |
+| DUMP PLAN CACHE procedure                                                      | X         |                  | X                |                               |
+| MODIFY PLAN CACHE procedure                                                    | X         |                  | X                |                               |
+| MODIFY PLAN CACHE PROPERTIES procedure (currently does not check authority)    | X         |                  | X                |                               |
+| CHANGE PLAN CACHE SIZE procedure (currently does not check authority)          | X         |                  | X                |                               |
 
 The SQL CREATE PERMISSION statement that is shown in Figure 3-1 is used to define and initially enable or disable the row access rules.Figure 3-1 CREATE PERMISSION SQL statement
 
