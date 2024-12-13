@@ -48,6 +48,7 @@ class LayoutModel(BasePageModel):
 
     def __init__(self, artifacts_path: Path):
         self.layout_predictor = LayoutPredictor(artifacts_path)  # TODO temporary
+        self.layout_predictor._black_classes.add("Picture")  # Use this to disable picture recognition (trying to force to identify only text)
 
     def postprocess(self, clusters_in: List[Cluster], cells: List[Cell], page_height):
         MIN_INTERSECTION = 0.2
