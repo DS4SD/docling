@@ -1,4 +1,5 @@
 import logging
+import warnings
 from typing import Iterable
 
 import numpy
@@ -7,16 +8,26 @@ from docling_core.types.doc import BoundingBox, CoordOrigin
 
 from docling.datamodel.base_models import Cell, OcrCell, Page
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import EasyOcrOptions
+from docling.datamodel.pipeline_options import (
+    AcceleratorDevice,
+    AcceleratorOptions,
+    EasyOcrOptions,
+)
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
+from docling.utils.accelerator_utils import decide_device
 from docling.utils.profiling import TimeRecorder
 
 _log = logging.getLogger(__name__)
 
 
 class EasyOcrModel(BaseOcrModel):
-    def __init__(self, enabled: bool, options: EasyOcrOptions):
+    def __init__(
+        self,
+        enabled: bool,
+        options: EasyOcrOptions,
+        accelerator_options: AcceleratorOptions,
+    ):
         super().__init__(enabled=enabled, options=options)
         self.options: EasyOcrOptions
 
@@ -31,11 +42,32 @@ class EasyOcrModel(BaseOcrModel):
                     "Alternatively, Docling has support for other OCR engines. See the documentation."
                 )
 
+            if self.options.use_gpu is None:
+                device = decide_device(accelerator_options.device)
+                # Enable easyocr GPU if running on CUDA, MPS
+                use_gpu = any(
+                    [
+                        device.startswith(x)
+                        for x in [
+                            AcceleratorDevice.CUDA.value,
+                            AcceleratorDevice.MPS.value,
+                        ]
+                    ]
+                )
+            else:
+                warnings.warn(
+                    "Deprecated field. Better to set the `accelerator_options.device` in `pipeline_options`. "
+                    "When `use_gpu and accelerator_options.device == AcceleratorDevice.CUDA` the GPU is used "
+                    "to run EasyOCR. Otherwise, EasyOCR runs in CPU."
+                )
+                use_gpu = self.options.use_gpu
+
             self.reader = easyocr.Reader(
                 lang_list=self.options.lang,
-                gpu=self.options.use_gpu,
+                gpu=use_gpu,
                 model_storage_directory=self.options.model_storage_directory,
                 download_enabled=self.options.download_enabled,
+                verbose=False,
             )
 
     def __call__(

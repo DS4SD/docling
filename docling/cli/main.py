@@ -26,6 +26,8 @@ from docling.datamodel.base_models import (
 )
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
+    AcceleratorDevice,
+    AcceleratorOptions,
     EasyOcrOptions,
     OcrEngine,
     OcrMacOptions,
@@ -257,6 +259,10 @@ def convert(
             help="The timeout for processing each document, in seconds.",
         ),
     ] = None,
+    num_threads: Annotated[int, typer.Option(..., help="Number of threads")] = 4,
+    device: Annotated[
+        AcceleratorDevice, typer.Option(..., help="Accelerator device")
+    ] = AcceleratorDevice.AUTO,
 ):
     if verbose == 0:
         logging.basicConfig(level=logging.WARNING)
@@ -336,7 +342,9 @@ def convert(
         if ocr_lang_list is not None:
             ocr_options.lang = ocr_lang_list
 
+        accelerator_options = AcceleratorOptions(num_threads=num_threads, device=device)
         pipeline_options = PdfPipelineOptions(
+            accelerator_options=accelerator_options,
             do_ocr=ocr,
             ocr_options=ocr_options,
             do_table_structure=True,
