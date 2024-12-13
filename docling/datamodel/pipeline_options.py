@@ -135,7 +135,7 @@ class EasyOcrOptions(OcrOptions):
     kind: Literal["easyocr"] = "easyocr"
     lang: List[str] = ["fr", "de", "es", "en"]
     use_gpu: Annotated[
-        int,
+        bool,
         Field(
             deprecated="Deprecated field. Better to set the `accelerator_options.device` in `pipeline_options`. "
             "When `use_gpu and accelerator_options.device == AcceleratorDevice.CUDA` the GPU is used "
