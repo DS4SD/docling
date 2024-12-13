@@ -170,7 +170,7 @@ class LayoutPostprocessor:
         DocItemLabel.PICTURE: 0.5,
         DocItemLabel.SECTION_HEADER: 0.45,
         DocItemLabel.TABLE: 0.5,
-        DocItemLabel.TEXT: 0.55,  # 0.45,
+        DocItemLabel.TEXT: 0.5,  # 0.45,
         DocItemLabel.TITLE: 0.45,
         DocItemLabel.CODE: 0.45,
         DocItemLabel.CHECKBOX_SELECTED: 0.45,
@@ -222,7 +222,7 @@ class LayoutPostprocessor:
 
         # Combine and sort final clusters
         final_clusters = self._sort_clusters(
-            self.regular_clusters + self.special_clusters
+            self.regular_clusters + self.special_clusters, mode="id"
         )
         for cluster in final_clusters:
             cluster.cells = self._sort_cells(cluster.cells)
@@ -320,7 +320,7 @@ class LayoutPostprocessor:
                 # )
 
                 # Sort contained clusters left-to-right, top-to-bottom
-                contained = self._sort_clusters(contained)
+                contained = self._sort_clusters(contained, mode="id")
                 special.children = contained
 
                 # Adjust bbox only for Form and Key-Value-Region, not Table or Picture
@@ -628,6 +628,30 @@ class LayoutPostprocessor:
         """Sort cells in native reading order."""
         return sorted(cells, key=lambda c: (c.id))
 
-    def _sort_clusters(self, clusters: List[Cluster]) -> List[Cluster]:
+    def _sort_clusters(
+        self, clusters: List[Cluster], mode: str = "id"
+    ) -> List[Cluster]:
         """Sort clusters in reading order (top-to-bottom, left-to-right)."""
-        return sorted(clusters, key=lambda cluster: (cluster.bbox.t, cluster.bbox.l))
+        if mode == "id":  # sort in the order the cells are printed in the PDF.
+            return sorted(
+                clusters,
+                key=lambda cluster: (
+                    (
+                        min(cell.id for cell in cluster.cells)
+                        if cluster.cells
+                        else sys.maxsize
+                    ),
+                    cluster.bbox.t,
+                    cluster.bbox.l,
+                ),
+            )
+        elif mode == "tblr":  # Sort top-to-bottom, then left-to-right ("row first")
+            return sorted(
+                clusters, key=lambda cluster: (cluster.bbox.t, cluster.bbox.l)
+            )
+        elif mode == "lrtb":  # Sort left-to-right, then top-to-bottom ("column first")
+            return sorted(
+                clusters, key=lambda cluster: (cluster.bbox.l, cluster.bbox.t)
+            )
+        else:
+            return clusters
