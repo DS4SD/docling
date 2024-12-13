@@ -75,6 +75,7 @@ nav:
       - "Table export": examples/export_tables.py
       - "Multimodal export": examples/export_multimodal.py
       - "Force full page OCR": examples/full_page_ocr.py
+      - "Accelerator options": examples/run_with_acclerators.py
     - Chunking:
       - "Hybrid chunking": examples/hybrid_chunking.ipynb
     - RAG / QA:

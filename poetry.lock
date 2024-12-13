@@ -914,13 +914,13 @@ chunking = ["semchunk (>=2.2.0,<3.0.0)", "transformers (>=4.34.0,<5.0.0)"]
 
 [[package]]
 name = "docling-ibm-models"
-version = "2.0.7"
+version = "3.1.0"
 description = "This package contains the AI models used by the Docling PDF conversion package"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "docling_ibm_models-2.0.7-py3-none-any.whl", hash = "sha256:bf362add22e9c526ac56c04bce412d7bb1c331b44a73204abba0b1d90a500c78"},
-    {file = "docling_ibm_models-2.0.7.tar.gz", hash = "sha256:e1372c4f2517d522125fb02a820558f01914926f532bcd0534f1028a25d63667"},
+    {file = "docling_ibm_models-3.1.0-py3-none-any.whl", hash = "sha256:a381a45dff16fdb2246b99c15a2e3d6ba880c573d48a1d6477d3ffb36bab807f"},
+    {file = "docling_ibm_models-3.1.0.tar.gz", hash = "sha256:65d734ffa490edc4e2301d296b6e893afa536c63b7daae7bbda781bd15b3431e"},
 ]
 
 [package.dependencies]
@@ -929,9 +929,11 @@ jsonlines = ">=3.1.0,<4.0.0"
 numpy = ">=1.24.4,<3.0.0"
 opencv-python-headless = ">=4.6.0.66,<5.0.0.0"
 Pillow = ">=10.0.0,<11.0.0"
+safetensors = {version = ">=0.4.3,<1", extras = ["torch"]}
 torch = ">=2.2.2,<3.0.0"
 torchvision = ">=0,<1"
 tqdm = ">=4.64.0,<5.0.0"
+transformers = ">=4.42.0,<5.0.0"
 
 [[package]]
 name = "docling-parse"
@@ -5978,6 +5980,10 @@ files = [
     {file = "safetensors-0.4.5.tar.gz", hash = "sha256:d73de19682deabb02524b3d5d1f8b3aaba94c72f1bbfc7911b9b9d5d391c0310"},
 ]
 
+[package.dependencies]
+numpy = {version = ">=1.21.6", optional = true, markers = "extra == \"numpy\""}
+torch = {version = ">=1.10", optional = true, markers = "extra == \"torch\""}
+
 [package.extras]
 all = ["safetensors[jax]", "safetensors[numpy]", "safetensors[paddlepaddle]", "safetensors[pinned-tf]", "safetensors[quality]", "safetensors[testing]", "safetensors[torch]"]
 dev = ["safetensors[all]"]
@@ -7602,4 +7608,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "3e66a54bd0433581e4909003124e2b79b42bdd1fb90d17c037f3294aeff56aa9"
+content-hash = "5271637a86ae221be362a288546c9fee3e3e25e5b323c997464c032c284716bd"

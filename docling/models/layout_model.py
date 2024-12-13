@@ -9,6 +9,7 @@ from docling_core.types.doc import CoordOrigin, DocItemLabel
 from docling_ibm_models.layoutmodel.layout_predictor import LayoutPredictor
 from PIL import ImageDraw
 
+import docling.utils.layout_utils as lu
 from docling.datamodel.base_models import (
     BoundingBox,
     Cell,
@@ -17,9 +18,10 @@ from docling.datamodel.base_models import (
     Page,
 )
 from docling.datamodel.document import ConversionResult
+from docling.datamodel.pipeline_options import AcceleratorDevice, AcceleratorOptions
 from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
-from docling.utils import layout_utils as lu
+from docling.utils.accelerator_utils import decide_device
 from docling.utils.profiling import TimeRecorder
 
 _log = logging.getLogger(__name__)
@@ -46,8 +48,16 @@ class LayoutModel(BasePageModel):
     FIGURE_LABEL = DocItemLabel.PICTURE
     FORMULA_LABEL = DocItemLabel.FORMULA
 
-    def __init__(self, artifacts_path: Path):
-        self.layout_predictor = LayoutPredictor(artifacts_path)  # TODO temporary
+    def __init__(self, artifacts_path: Path, accelerator_options: AcceleratorOptions):
+        device = decide_device(accelerator_options.device)
+
+        self.layout_predictor = LayoutPredictor(
+            artifact_path=str(artifacts_path),
+            device=device,
+            num_threads=accelerator_options.num_threads,
+            base_threshold=0.6,
+            blacklist_classes={"Form", "Key-Value Region"},
+        )
 
     def postprocess(self, clusters_in: List[Cluster], cells: List[Cell], page_height):
         MIN_INTERSECTION = 0.2

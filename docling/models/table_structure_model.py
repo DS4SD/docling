@@ -9,15 +9,25 @@ from PIL import ImageDraw
 
 from docling.datamodel.base_models import Page, Table, TableStructurePrediction
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import TableFormerMode, TableStructureOptions
+from docling.datamodel.pipeline_options import (
+    AcceleratorDevice,
+    AcceleratorOptions,
+    TableFormerMode,
+    TableStructureOptions,
+)
 from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
+from docling.utils.accelerator_utils import decide_device
 from docling.utils.profiling import TimeRecorder
 
 
 class TableStructureModel(BasePageModel):
     def __init__(
-        self, enabled: bool, artifacts_path: Path, options: TableStructureOptions
+        self,
+        enabled: bool,
+        artifacts_path: Path,
+        options: TableStructureOptions,
+        accelerator_options: AcceleratorOptions,
     ):
         self.options = options
         self.do_cell_matching = self.options.do_cell_matching
@@ -26,16 +36,26 @@ class TableStructureModel(BasePageModel):
         self.enabled = enabled
         if self.enabled:
             if self.mode == TableFormerMode.ACCURATE:
-                artifacts_path = artifacts_path / "fat"
+                artifacts_path = artifacts_path / "accurate"
+            else:
+                artifacts_path = artifacts_path / "fast"
 
             # Third Party
             import docling_ibm_models.tableformer.common as c
+
+            device = decide_device(accelerator_options.device)
+
+            # Disable MPS here, until we know why it makes things slower.
+            if device == AcceleratorDevice.MPS.value:
+                device = AcceleratorDevice.CPU.value
 
             self.tm_config = c.read_config(f"{artifacts_path}/tm_config.json")
             self.tm_config["model"]["save_dir"] = artifacts_path
             self.tm_model_type = self.tm_config["model"]["type"]
 
-            self.tf_predictor = TFPredictor(self.tm_config)
+            self.tf_predictor = TFPredictor(
+                self.tm_config, device, accelerator_options.num_threads
+            )
             self.scale = 2.0  # Scale up table input images to 144 dpi
 
     def draw_table_and_cells(
