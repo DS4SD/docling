@@ -6,34 +6,33 @@
 <subtitle-level-1><location><page_1><loc_52><loc_71><loc_67><loc_72></location>a. Picture of a table:</subtitle-level-1>
 <subtitle-level-1><location><page_1><loc_8><loc_30><loc_21><loc_32></location>1. Introduction</subtitle-level-1>
 <paragraph><location><page_1><loc_8><loc_10><loc_47><loc_29></location>The occurrence of tables in documents is ubiquitous. They often summarise quantitative or factual data, which is cumbersome to describe in verbose text but nevertheless extremely valuable. Unfortunately, this compact representation is often not easy to parse by machines. There are many implicit conventions used to obtain a compact table representation. For example, tables often have complex columnand row-headers in order to reduce duplicated cell content. Lines of different shapes and sizes are leveraged to separate content or indicate a tree structure. Additionally, tables can also have empty/missing table-entries or multi-row textual table-entries. Fig. 1 shows a table which presents all these issues.</paragraph>
-<caption><location><page_1><loc_8><loc_35><loc_47><loc_70></location>Tables organize valuable content in a concise and compact representation. This content is extremely valuable for systems such as search engines, Knowledge Graph's, etc, since they enhance their predictive capabilities. Unfortunately, tables come in a large variety of shapes and sizes. Furthermore, they can have complex column/row-header configurations, multiline rows, different variety of separation lines, missing entries, etc. As such, the correct identification of the table-structure from an image is a nontrivial task. In this paper, we present a new table-structure identification model. The latter improves the latest end-toend deep learning model (i.e. encoder-dual-decoder from PubTabNet) in two significant ways. First, we introduce a new object detection decoder for table-cells. In this way, we can obtain the content of the table-cells from programmatic PDF's directly from the PDF source and avoid the training of the custom OCR decoders. This architectural change leads to more accurate table-content extraction and allows us to tackle non-english tables. Second, we replace the LSTM decoders with transformer based decoders. This upgrade improves significantly the previous state-of-the-art tree-editing-distance-score (TEDS) from 91% to 98.5% on simple tables and from 88.7% to 95% on complex tables.</caption>
-<table>
-<location><page_1><loc_54><loc_65><loc_75><loc_70></location>
-<caption>Tables organize valuable content in a concise and compact representation. This content is extremely valuable for systems such as search engines, Knowledge Graph's, etc, since they enhance their predictive capabilities. Unfortunately, tables come in a large variety of shapes and sizes. Furthermore, they can have complex column/row-header configurations, multiline rows, different variety of separation lines, missing entries, etc. As such, the correct identification of the table-structure from an image is a nontrivial task. In this paper, we present a new table-structure identification model. The latter improves the latest end-toend deep learning model (i.e. encoder-dual-decoder from PubTabNet) in two significant ways. First, we introduce a new object detection decoder for table-cells. In this way, we can obtain the content of the table-cells from programmatic PDF's directly from the PDF source and avoid the training of the custom OCR decoders. This architectural change leads to more accurate table-content extraction and allows us to tackle non-english tables. Second, we replace the LSTM decoders with transformer based decoders. This upgrade improves significantly the previous state-of-the-art tree-editing-distance-score (TEDS) from 91% to 98.5% on simple tables and from 88.7% to 95% on complex tables.</caption>
-<row_0><col_0><body></col_0><col_1><col_header>3</col_1></row_0>
-<row_1><col_0><body>2</col_0><col_1><body></col_1></row_1>
-</table>
 <figure>
 <location><page_1><loc_52><loc_62><loc_88><loc_71></location>
 </figure>
+<caption><location><page_1><loc_8><loc_35><loc_47><loc_70></location>Tables organize valuable content in a concise and compact representation. This content is extremely valuable for systems such as search engines, Knowledge Graph's, etc, since they enhance their predictive capabilities. Unfortunately, tables come in a large variety of shapes and sizes. Furthermore, they can have complex column/row-header configurations, multiline rows, different variety of separation lines, missing entries, etc. As such, the correct identification of the table-structure from an image is a nontrivial task. In this paper, we present a new table-structure identification model. The latter improves the latest end-toend deep learning model (i.e. encoder-dual-decoder from PubTabNet) in two significant ways. First, we introduce a new object detection decoder for table-cells. In this way, we can obtain the content of the table-cells from programmatic PDF's directly from the PDF source and avoid the training of the custom OCR decoders. This architectural change leads to more accurate table-content extraction and allows us to tackle non-english tables. Second, we replace the LSTM decoders with transformer based decoders. This upgrade improves significantly the previous state-of-the-art tree-editing-distance-score (TEDS) from 91% to 98.5% on simple tables and from 88.7% to 95% on complex tables.</caption>
+<table>
+<location><page_1><loc_52><loc_62><loc_88><loc_71></location>
+<caption>Tables organize valuable content in a concise and compact representation. This content is extremely valuable for systems such as search engines, Knowledge Graph's, etc, since they enhance their predictive capabilities. Unfortunately, tables come in a large variety of shapes and sizes. Furthermore, they can have complex column/row-header configurations, multiline rows, different variety of separation lines, missing entries, etc. As such, the correct identification of the table-structure from an image is a nontrivial task. In this paper, we present a new table-structure identification model. The latter improves the latest end-toend deep learning model (i.e. encoder-dual-decoder from PubTabNet) in two significant ways. First, we introduce a new object detection decoder for table-cells. In this way, we can obtain the content of the table-cells from programmatic PDF's directly from the PDF source and avoid the training of the custom OCR decoders. This architectural change leads to more accurate table-content extraction and allows us to tackle non-english tables. Second, we replace the LSTM decoders with transformer based decoders. This upgrade improves significantly the previous state-of-the-art tree-editing-distance-score (TEDS) from 91% to 98.5% on simple tables and from 88.7% to 95% on complex tables.</caption>
+<row_0><col_0><col_header>3</col_0><col_1><col_header>1</col_1></row_0>
+</table>
 <paragraph><location><page_1><loc_52><loc_58><loc_79><loc_60></location>- b. Red-annotation of bounding boxes, Blue-predictions by TableFormer</paragraph>
 <figure>
 <location><page_1><loc_51><loc_48><loc_88><loc_57></location>
 </figure>
 <paragraph><location><page_1><loc_52><loc_46><loc_80><loc_47></location>- c. Structure predicted by TableFormer:</paragraph>
-<table>
-<location><page_1><loc_52><loc_38><loc_81><loc_45></location>
-<row_0><col_0><body>0</col_0><col_1><body>1 2</col_1><col_2><body>1</col_2></row_0>
-<row_1><col_0><body>3 4</col_0><col_1><body>5 3</col_1><col_2><body>6</col_2></row_1>
-<row_2><col_0><body>9</col_0><col_1><body>10</col_1><col_2><body>11</col_2></row_2>
-<row_3><col_0><body>8 13 2</col_0><col_1><body>14</col_1><col_2><body>15</col_2></row_3>
-<row_4><col_0><body>17</col_0><col_1><body>18</col_1><col_2><body>19</col_2></row_4>
-</table>
-<caption><location><page_1><loc_50><loc_29><loc_89><loc_35></location>Figure 1: Picture of a table with subtle, complex features such as (1) multi-column headers, (2) cell with multi-row text and (3) cells with no content. Image from PubTabNet evaluation set, filename: 'PMC2944238 004 02'.</caption>
 <figure>
 <location><page_1><loc_52><loc_37><loc_88><loc_45></location>
-<caption>Figure 1: Picture of a table with subtle, complex features such as (1) multi-column headers, (2) cell with multi-row text and (3) cells with no content. Image from PubTabNet evaluation set, filename: 'PMC2944238 004 02'.</caption>
 </figure>
+<caption><location><page_1><loc_50><loc_29><loc_89><loc_35></location>Figure 1: Picture of a table with subtle, complex features such as (1) multi-column headers, (2) cell with multi-row text and (3) cells with no content. Image from PubTabNet evaluation set, filename: 'PMC2944238 004 02'.</caption>
+<table>
+<location><page_1><loc_52><loc_37><loc_88><loc_45></location>
+<caption>Figure 1: Picture of a table with subtle, complex features such as (1) multi-column headers, (2) cell with multi-row text and (3) cells with no content. Image from PubTabNet evaluation set, filename: 'PMC2944238 004 02'.</caption>
+<row_0><col_0><col_header>0</col_0><col_1><col_header>1</col_1><col_2><col_header>1</col_2><col_3><col_header>2 1</col_3><col_4><col_header>2 1</col_4><col_5><body></col_5></row_0>
+<row_1><col_0><body>3</col_0><col_1><body>4</col_1><col_2><body>5 3</col_2><col_3><body>6</col_3><col_4><body>7</col_4><col_5><body></col_5></row_1>
+<row_2><col_0><body>8</col_0><col_1><body>9</col_1><col_2><body>10</col_2><col_3><body>11</col_3><col_4><body>12</col_4><col_5><body>2</col_5></row_2>
+<row_3><col_0><body></col_0><col_1><body>13</col_1><col_2><body>14</col_2><col_3><body>15</col_3><col_4><body>16</col_4><col_5><body>2</col_5></row_3>
+<row_4><col_0><body></col_0><col_1><body>17</col_1><col_2><body>18</col_2><col_3><body>19</col_3><col_4><body>20</col_4><col_5><body>2</col_5></row_4>
+</table>
 <paragraph><location><page_1><loc_50><loc_16><loc_89><loc_26></location>Recently, significant progress has been made with vision based approaches to extract tables in documents. For the sake of completeness, the issue of table extraction from documents is typically decomposed into two separate challenges, i.e. (1) finding the location of the table(s) on a document-page and (2) finding the structure of a given table in the document.</paragraph>
 <paragraph><location><page_1><loc_50><loc_10><loc_89><loc_16></location>The first problem is called table-location and has been previously addressed [30, 38, 19, 21, 23, 26, 8] with stateof-the-art object-detection networks (e.g. YOLO and later on Mask-RCNN [9]). For all practical purposes, it can be</paragraph>
 <paragraph><location><page_2><loc_8><loc_88><loc_47><loc_91></location>considered as a solved problem, given enough ground-truth data to train on.</paragraph>
@@ -71,7 +70,7 @@
 <paragraph><location><page_4><loc_8><loc_10><loc_47><loc_20></location>In this regard, we have prepared four synthetic datasets, each one containing 150k examples. The corpora to generate the table text consists of the most frequent terms appearing in PubTabNet and FinTabNet together with randomly generated text. The first two synthetic datasets have been fine-tuned to mimic the appearance of the original datasets but encompass more complicated table structures. The third</paragraph>
 <caption><location><page_4><loc_50><loc_72><loc_89><loc_79></location>Table 1: Both "Combined-Tabnet" and "CombinedTabnet" are variations of the following: (*) The CombinedTabnet dataset is the processed combination of PubTabNet and Fintabnet. (**) The combined dataset is the processed combination of PubTabNet, Fintabnet and TableBank.</caption>
 <table>
-<location><page_4><loc_52><loc_80><loc_88><loc_91></location>
+<location><page_4><loc_51><loc_80><loc_89><loc_91></location>
 <caption>Table 1: Both "Combined-Tabnet" and "CombinedTabnet" are variations of the following: (*) The CombinedTabnet dataset is the processed combination of PubTabNet and Fintabnet. (**) The combined dataset is the processed combination of PubTabNet, Fintabnet and TableBank.</caption>
 <row_0><col_0><body></col_0><col_1><col_header>Tags</col_1><col_2><col_header>Bbox</col_2><col_3><col_header>Size</col_3><col_4><col_header>Format</col_4></row_0>
 <row_1><col_0><row_header>PubTabNet</col_0><col_1><body>3</col_1><col_2><body>3</col_2><col_3><body>509k</col_3><col_4><body>PNG</col_4></row_1>
@@ -126,7 +125,7 @@
 <paragraph><location><page_7><loc_8><loc_50><loc_47><loc_69></location>Structure. As shown in Tab. 2, TableFormer outperforms all SOTA methods across different datasets by a large margin for predicting the table structure from an image. All the more, our model outperforms pre-trained methods. During the evaluation we do not apply any table filtering. We also provide our baseline results on the SynthTabNet dataset. It has been observed that large tables (e.g. tables that occupy half of the page or more) yield poor predictions. We attribute this issue to the image resizing during the preprocessing step, that produces downsampled images with indistinguishable features. This problem can be addressed by treating such big tables with a separate model which accepts a large input image size.</paragraph>
 <caption><location><page_7><loc_8><loc_23><loc_47><loc_25></location>Table 2: Structure results on PubTabNet (PTN), FinTabNet (FTN), TableBank (TB) and SynthTabNet (STN).</caption>
 <table>
-<location><page_7><loc_11><loc_27><loc_46><loc_48></location>
+<location><page_7><loc_9><loc_26><loc_46><loc_48></location>
 <caption>Table 2: Structure results on PubTabNet (PTN), FinTabNet (FTN), TableBank (TB) and SynthTabNet (STN).</caption>
 <row_0><col_0><col_header>Model</col_0><col_1><col_header>Dataset</col_1><col_2><col_header>Simple</col_2><col_3><col_header>TEDS Complex</col_3><col_4><col_header>All</col_4></row_0>
 <row_1><col_0><row_header>EDD</col_0><col_1><body>PTN</col_1><col_2><body>91.1</col_2><col_3><body>88.7</col_3><col_4><body>89.9</col_4></row_1>
@@ -145,7 +144,7 @@
 <paragraph><location><page_7><loc_50><loc_71><loc_89><loc_91></location>our Cell BBox Decoder accuracy for cells with a class label of 'content' only using the PASCAL VOC mAP metric for pre-processing and post-processing. Note that we do not have post-processing results for SynthTabNet as images are only provided. To compare the performance of our proposed approach, we've integrated TableFormer's Cell BBox Decoder into EDD architecture. As mentioned previously, the Structure Decoder provides the Cell BBox Decoder with the features needed to predict the bounding box predictions. Therefore, the accuracy of the Structure Decoder directly influences the accuracy of the Cell BBox Decoder . If the Structure Decoder predicts an extra column, this will result in an extra column of predicted bounding boxes.</paragraph>
 <caption><location><page_7><loc_50><loc_57><loc_89><loc_60></location>Table 3: Cell Bounding Box detection results on PubTabNet, and FinTabNet. PP: Post-processing.</caption>
 <table>
-<location><page_7><loc_53><loc_62><loc_86><loc_68></location>
+<location><page_7><loc_50><loc_62><loc_87><loc_69></location>
 <caption>Table 3: Cell Bounding Box detection results on PubTabNet, and FinTabNet. PP: Post-processing.</caption>
 <row_0><col_0><col_header>Model</col_0><col_1><col_header>Dataset</col_1><col_2><col_header>mAP</col_2><col_3><col_header>mAP (PP)</col_3></row_0>
 <row_1><col_0><body>EDD+BBox</col_0><col_1><body>PubTabNet</col_1><col_2><body>79.2</col_2><col_3><body>82.7</col_3></row_1>
@@ -155,9 +154,9 @@
 <paragraph><location><page_7><loc_50><loc_34><loc_89><loc_54></location>Cell Content. In this section, we evaluate the entire pipeline of recovering a table with content. Here we put our approach to test by capitalizing on extracting content from the PDF cells rather than decoding from images. Tab. 4 shows the TEDs score of HTML code representing the structure of the table along with the content inserted in the data cell and compared with the ground-truth. Our method achieved a 5.3% increase over the state-of-the-art, and commercial solutions. We believe our scores would be higher if the HTML ground-truth matched the extracted PDF cell content. Unfortunately, there are small discrepancies such as spacings around words or special characters with various unicode representations.</paragraph>
 <caption><location><page_7><loc_50><loc_13><loc_89><loc_17></location>Table 4: Results of structure with content retrieved using cell detection on PubTabNet. In all cases the input is PDF documents with cropped tables.</caption>
 <table>
-<location><page_7><loc_56><loc_19><loc_84><loc_31></location>
+<location><page_7><loc_54><loc_19><loc_85><loc_32></location>
 <caption>Table 4: Results of structure with content retrieved using cell detection on PubTabNet. In all cases the input is PDF documents with cropped tables.</caption>
-<row_0><col_0><col_header>Model</col_0><col_1><col_header>Simple</col_1><col_2><col_header>TEDS Complex</col_2><col_3><col_header>All</col_3></row_0>
+<row_0><col_0><body>Model</col_0><col_1><col_header>Simple</col_1><col_2><col_header>TEDS Complex</col_2><col_3><col_header>All</col_3></row_0>
 <row_1><col_0><row_header>Tabula</col_0><col_1><body>78.0</col_1><col_2><body>57.8</col_2><col_3><body>67.9</col_3></row_1>
 <row_2><col_0><row_header>Traprange</col_0><col_1><body>60.8</col_1><col_2><body>49.9</col_2><col_3><body>55.4</col_3></row_2>
 <row_3><col_0><row_header>Camelot</col_0><col_1><body>80.0</col_1><col_2><body>66.0</col_2><col_3><body>73.0</col_3></row_3>
@@ -178,9 +177,9 @@
 <caption>b. Structure predicted by TableFormer, with superimposed matched PDF cell text:</caption>
 </figure>
 <table>
-<location><page_8><loc_9><loc_63><loc_48><loc_72></location>
+<location><page_8><loc_9><loc_63><loc_49><loc_72></location>
 <row_0><col_0><body></col_0><col_1><body></col_1><col_2><col_header>論文ファイル</col_2><col_3><col_header>論文ファイル</col_3><col_4><col_header>参考文献</col_4><col_5><col_header>参考文献</col_5></row_0>
-<row_1><col_0><body>出典</col_0><col_1><col_header>ファイル 数</col_1><col_2><col_header>英語</col_2><col_3><col_header>日本語</col_3><col_4><col_header>英語</col_4><col_5><col_header>日本語</col_5></row_1>
+<row_1><col_0><col_header>出典</col_0><col_1><col_header>ファイル 数</col_1><col_2><col_header>英語</col_2><col_3><col_header>日本語</col_3><col_4><col_header>英語</col_4><col_5><col_header>日本語</col_5></row_1>
 <row_2><col_0><row_header>Association for Computational Linguistics(ACL2003)</col_0><col_1><body>65</col_1><col_2><body>65</col_2><col_3><body>0</col_3><col_4><body>150</col_4><col_5><body>0</col_5></row_2>
 <row_3><col_0><row_header>Computational Linguistics(COLING2002)</col_0><col_1><body>140</col_1><col_2><body>140</col_2><col_3><body>0</col_3><col_4><body>150</col_4><col_5><body>0</col_5></row_3>
 <row_4><col_0><row_header>電気情報通信学会 2003 年総合大会</col_0><col_1><body>150</col_1><col_2><body>8</col_2><col_3><body>142</col_3><col_4><body>223</col_4><col_5><body>147</col_5></row_4>
@@ -192,7 +191,7 @@
 </table>
 <caption><location><page_8><loc_62><loc_62><loc_90><loc_63></location>Text is aligned to match original for ease of viewing</caption>
 <table>
-<location><page_8><loc_50><loc_64><loc_89><loc_72></location>
+<location><page_8><loc_50><loc_64><loc_90><loc_72></location>
 <caption>Text is aligned to match original for ease of viewing</caption>
 <row_0><col_0><body></col_0><col_1><col_header>Shares (in millions)</col_1><col_2><col_header>Shares (in millions)</col_2><col_3><col_header>Weighted Average Grant Date Fair Value</col_3><col_4><col_header>Weighted Average Grant Date Fair Value</col_4></row_0>
 <row_1><col_0><body></col_0><col_1><col_header>RS U s</col_1><col_2><col_header>PSUs</col_2><col_3><col_header>RSUs</col_3><col_4><col_header>PSUs</col_4></row_1>

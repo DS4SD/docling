@@ -323,8 +323,8 @@ class LayoutPostprocessor:
                 contained = self._sort_clusters(contained)
                 special.children = contained
 
-                # Adjust bbox only for wrapper types
-                if special.label in self.WRAPPER_TYPES:
+                # Adjust bbox only for Form and Key-Value-Region, not Table or Picture
+                if special.label in [DocItemLabel.FORM, DocItemLabel.KEY_VALUE_REGION]:
                     special.bbox = BoundingBox(
                         l=min(c.bbox.l for c in contained),
                         t=min(c.bbox.t for c in contained),
@@ -332,12 +332,12 @@ class LayoutPostprocessor:
                         b=max(c.bbox.b for c in contained),
                     )
 
-                    # Collect all cells from children
-                    all_cells = []
-                    for child in contained:
-                        all_cells.extend(child.cells)
-                    special.cells = self._deduplicate_cells(all_cells)
-                    special.cells = self._sort_cells(special.cells)
+                # Collect all cells from children
+                all_cells = []
+                for child in contained:
+                    all_cells.extend(child.cells)
+                special.cells = self._deduplicate_cells(all_cells)
+                special.cells = self._sort_cells(special.cells)
 
         picture_clusters = [
             c for c in special_clusters if c.label == DocItemLabel.PICTURE

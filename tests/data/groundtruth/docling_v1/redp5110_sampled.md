@@ -216,20 +216,20 @@ Table 2-2 shows a comparison of the different function usage IDs and *JOBCTL aut
 
 Table 2-2 Comparison of the different function usage IDs and *JOBCTL authority
 
-| User action                                                                    | *JOBCTL   | QIBM_DB_SECADM   | QIBM_DB_SQLADM   | QIBM_DB_SYSMON No Authority   |
-|--------------------------------------------------------------------------------|-----------|------------------|------------------|-------------------------------|
-| SET CURRENT DEGREE  (SQL statement)                                            | X         |                  | X                |                               |
-| CHGQRYA  command targeting a different user's job                              | X         |                  | X                |                               |
-| STRDBMON  or  ENDDBMON  commands targeting a different user's job              | X         |                  | X                |                               |
-| STRDBMON  or  ENDDBMON  commands targeting a job that matches the current user | X         |                  | X                | X X                           |
-| QUSRJOBI() API format 900 or System i Navigator's SQL Details for Job          | X         |                  | X                | X                             |
-| Visual Explain within Run SQL scripts                                          | X         |                  | X                | X X                           |
-| Visual Explain outside of Run SQL scripts                                      | X         |                  | X                |                               |
-| ANALYZE PLAN CACHE procedure                                                   | X         |                  | X                |                               |
-| DUMP PLAN CACHE procedure                                                      | X         |                  | X                |                               |
-| MODIFY PLAN CACHE procedure                                                    | X         |                  | X                |                               |
-| MODIFY PLAN CACHE PROPERTIES procedure (currently does not check authority)    | X         |                  | X                |                               |
-| CHANGE PLAN CACHE SIZE procedure (currently does not check authority)          | X         |                  | X                |                               |
+| User action                                                                    | *JOBCTL   | QIBM_DB_SECADM   | QIBM_DB_SQLADM   | QIBM_DB_SYSMON   | No Authority   |
+|--------------------------------------------------------------------------------|-----------|------------------|------------------|------------------|----------------|
+| SET CURRENT DEGREE  (SQL statement)                                            | X         |                  | X                |                  |                |
+| CHGQRYA  command targeting a different user's job                              | X         |                  | X                |                  |                |
+| STRDBMON  or  ENDDBMON  commands targeting a different user's job              | X         |                  | X                |                  |                |
+| STRDBMON  or  ENDDBMON  commands targeting a job that matches the current user | X         |                  | X                | X                | X              |
+| QUSRJOBI() API format 900 or System i Navigator's SQL Details for Job          | X         |                  | X                | X                |                |
+| Visual Explain within Run SQL scripts                                          | X         |                  | X                | X                | X              |
+| Visual Explain outside of Run SQL scripts                                      | X         |                  | X                |                  |                |
+| ANALYZE PLAN CACHE procedure                                                   | X         |                  | X                |                  |                |
+| DUMP PLAN CACHE procedure                                                      | X         |                  | X                |                  |                |
+| MODIFY PLAN CACHE procedure                                                    | X         |                  | X                |                  |                |
+| MODIFY PLAN CACHE PROPERTIES procedure (currently does not check authority)    | X         |                  | X                |                  |                |
+| CHANGE PLAN CACHE SIZE procedure (currently does not check authority)          | X         |                  | X                |                  |                |
 
 The SQL CREATE PERMISSION statement that is shown in Figure 3-1 is used to define and initially enable or disable the row access rules.
 
