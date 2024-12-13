@@ -89,7 +89,10 @@ class PatentUsptoDocumentBackend(DeclarativeDocumentBackend):
             self.parser = PatentUsptoIce()
         elif "us-grant-025" in doctype_line:
             self.parser = PatentUsptoGrantV2()
-        elif "pap-v1" in doctype_line:
+        elif all(
+            item in doctype_line
+            for item in ("patent-application-publication", "pap-v1")
+        ):
             self.parser = PatentUsptoAppV1()
         else:
             self.parser = None
