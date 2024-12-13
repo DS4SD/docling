@@ -6,7 +6,6 @@ from pydantic import BaseModel
 
 from docling.datamodel.base_models import (
     AssembledUnit,
-    ContainerElement,
     FigureElement,
     Page,
     PageElement,
@@ -160,15 +159,6 @@ class PageAssembleModel(BasePageModel):
                                 )
                             elements.append(equation)
                             body.append(equation)
-                        elif cluster.label in LayoutModel.CONTAINER_LABELS:
-                            container_el = ContainerElement(
-                                label=cluster.label,
-                                id=cluster.id,
-                                page_no=page.page_no,
-                                cluster=cluster,
-                            )
-                            elements.append(container_el)
-                            body.append(container_el)
 
                     page.assembled = AssembledUnit(
                         elements=elements, headers=headers, body=body
