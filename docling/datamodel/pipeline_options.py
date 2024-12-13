@@ -190,12 +190,33 @@ class OcrMacOptions(OcrOptions):
     )
 
 
+# Define an enum for the backend options
+class PdfBackend(str, Enum):
+    """Enum of valid PDF backends."""
+
+    PYPDFIUM2 = "pypdfium2"
+    DLPARSE_V1 = "dlparse_v1"
+    DLPARSE_V2 = "dlparse_v2"
+
+
+# Define an enum for the ocr engines
+class OcrEngine(str, Enum):
+    """Enum of valid OCR engines."""
+
+    EASYOCR = "easyocr"
+    TESSERACT_CLI = "tesseract_cli"
+    TESSERACT = "tesseract"
+    OCRMAC = "ocrmac"
+    RAPIDOCR = "rapidocr"
+
+
 class PipelineOptions(BaseModel):
     """Base pipeline options."""
 
     create_legacy_output: bool = (
-        True  # This defautl will be set to False on a future version of docling
+        True  # This default will be set to False on a future version of docling
     )
+    document_timeout: Optional[float] = None
     accelerator_options: AcceleratorOptions = AcceleratorOptions()
 
 
