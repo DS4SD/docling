@@ -110,7 +110,7 @@ class PatentUsptoDocumentBackend(DeclarativeDocumentBackend):
     @classmethod
     @override
     def supported_formats(cls) -> set[InputFormat]:
-        return {InputFormat.PATENT_USPTO}
+        return {InputFormat.XML_USPTO}
 
     @override
     def convert(self) -> DoclingDocument:

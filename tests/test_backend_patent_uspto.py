@@ -12,7 +12,7 @@ import yaml
 from docling_core.types import DoclingDocument
 from docling_core.types.doc import DocItemLabel, TableData, TextItem
 
-from docling.backend.patent_uspto_backend import PatentUsptoDocumentBackend, XmlTable
+from docling.backend.xml_uspto_backend import PatentUsptoDocumentBackend, XmlTable
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import (
     ConversionResult,
@@ -45,7 +45,7 @@ def patents() -> list[tuple[Path, DoclingDocument]]:
     for in_path in patent_paths:
         in_doc = InputDocument(
             path_or_stream=in_path,
-            format=InputFormat.PATENT_USPTO,
+            format=InputFormat.XML_USPTO,
             backend=PatentUsptoDocumentBackend,
         )
         backend = PatentUsptoDocumentBackend(in_doc=in_doc, path_or_stream=in_path)
