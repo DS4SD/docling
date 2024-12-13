@@ -38,7 +38,7 @@ _log = logging.getLogger(__name__)
 
 
 class StandardPdfPipeline(PaginatedPipeline):
-    _layout_model_path = "model_artifacts/layout/beehive_v0.0.5_pt"
+    _layout_model_path = "model_artifacts/layout"
     _table_model_path = "model_artifacts/tableformer"
 
     def __init__(self, pipeline_options: PdfPipelineOptions):
@@ -75,7 +75,8 @@ class StandardPdfPipeline(PaginatedPipeline):
             # Layout model
             LayoutModel(
                 artifacts_path=self.artifacts_path
-                / StandardPdfPipeline._layout_model_path
+                / StandardPdfPipeline._layout_model_path,
+                accelerator_options=pipeline_options.accelerator_options,
             ),
             # Table structure model
             TableStructureModel(
@@ -83,6 +84,7 @@ class StandardPdfPipeline(PaginatedPipeline):
                 artifacts_path=self.artifacts_path
                 / StandardPdfPipeline._table_model_path,
                 options=pipeline_options.table_structure_options,
+                accelerator_options=pipeline_options.accelerator_options,
             ),
             # Page assemble
             PageAssembleModel(options=PageAssembleOptions(keep_images=keep_images)),
@@ -104,7 +106,7 @@ class StandardPdfPipeline(PaginatedPipeline):
             repo_id="ds4sd/docling-models",
             force_download=force,
             local_dir=local_dir,
-            revision="v2.0.1",
+            revision="v2.1.0",
         )
 
         return Path(download_path)
@@ -114,6 +116,7 @@ class StandardPdfPipeline(PaginatedPipeline):
             return EasyOcrModel(
                 enabled=self.pipeline_options.do_ocr,
                 options=self.pipeline_options.ocr_options,
+                accelerator_options=self.pipeline_options.accelerator_options,
             )
         elif isinstance(self.pipeline_options.ocr_options, TesseractCliOcrOptions):
             return TesseractOcrCliModel(
@@ -129,6 +132,7 @@ class StandardPdfPipeline(PaginatedPipeline):
             return RapidOcrModel(
                 enabled=self.pipeline_options.do_ocr,
                 options=self.pipeline_options.ocr_options,
+                accelerator_options=self.pipeline_options.accelerator_options,
             )
         elif isinstance(self.pipeline_options.ocr_options, OcrMacOptions):
             if "darwin" != sys.platform:
