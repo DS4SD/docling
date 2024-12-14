@@ -48,6 +48,7 @@ class LayoutModel(BasePageModel):
     FIGURE_LABEL = DocItemLabel.PICTURE
     FORMULA_LABEL = DocItemLabel.FORMULA
 
+    
     def __init__(self, artifacts_path: Path, accelerator_options: AcceleratorOptions):
         device = decide_device(accelerator_options.device)
 
@@ -56,7 +57,7 @@ class LayoutModel(BasePageModel):
             device=device,
             num_threads=accelerator_options.num_threads,
             base_threshold=0.6,
-            blacklist_classes={"Form", "Key-Value Region"},
+            blacklist_classes={"Form", "Key-Value Region", "Picture"}, # Use this to disable picture recognition (trying to force to identify only text)
         )
 
     def postprocess(self, clusters_in: List[Cluster], cells: List[Cell], page_height):
