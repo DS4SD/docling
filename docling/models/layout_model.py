@@ -56,8 +56,6 @@ class LayoutModel(BasePageModel):
             artifact_path=str(artifacts_path),
             device=device,
             num_threads=accelerator_options.num_threads,
-            base_threshold=0.6,
-            blacklist_classes={"Form", "Key-Value Region"},
         )
 
     def draw_clusters_and_cells_side_by_side(
