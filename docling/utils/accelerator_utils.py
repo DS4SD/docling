@@ -21,9 +21,11 @@ def decide_device(accelerator_device: AcceleratorDevice) -> str:
     has_mps = torch.backends.mps.is_built() and torch.backends.mps.is_available()
 
     if accelerator_device == AcceleratorDevice.AUTO:
-        # TODO: Enable MPS later
         if has_cuda:
             device = f"cuda:{cuda_index}"
+        elif has_mps:
+            device = "mps"
+
     else:
         if accelerator_device == AcceleratorDevice.CUDA:
             if has_cuda:

@@ -1,4 +1,5 @@
 import logging
+import warnings
 from typing import Iterable
 
 import numpy
@@ -41,16 +42,25 @@ class EasyOcrModel(BaseOcrModel):
                     "Alternatively, Docling has support for other OCR engines. See the documentation."
                 )
 
-            use_gpu = False
-            if self.options.use_gpu:
+            if self.options.use_gpu is None:
                 device = decide_device(accelerator_options.device)
                 # Enable easyocr GPU if running on CUDA, MPS
                 use_gpu = any(
-                    filter(
-                        lambda x: str(x).lower() in device,
-                        [AcceleratorDevice.CUDA.value, AcceleratorDevice.MPS.value],
-                    )
+                    [
+                        device.startswith(x)
+                        for x in [
+                            AcceleratorDevice.CUDA.value,
+                            AcceleratorDevice.MPS.value,
+                        ]
+                    ]
                 )
+            else:
+                warnings.warn(
+                    "Deprecated field. Better to set the `accelerator_options.device` in `pipeline_options`. "
+                    "When `use_gpu and accelerator_options.device == AcceleratorDevice.CUDA` the GPU is used "
+                    "to run EasyOCR. Otherwise, EasyOCR runs in CPU."
+                )
+                use_gpu = self.options.use_gpu
 
             self.reader = easyocr.Reader(
                 lang_list=self.options.lang,

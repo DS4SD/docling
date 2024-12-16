@@ -1,3 +1,9 @@
+## [v2.12.0](https://github.com/DS4SD/docling/releases/tag/v2.12.0) - 2024-12-13
+
+### Feature
+
+* Introduce support for GPU Accelerators ([#593](https://github.com/DS4SD/docling/issues/593)) ([`19fad92`](https://github.com/DS4SD/docling/commit/19fad9261cb61f732a0426393866c8c1a9efbf4f))
+
 ## [v2.11.0](https://github.com/DS4SD/docling/releases/tag/v2.11.0) - 2024-12-12
 
 ### Feature
