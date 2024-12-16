@@ -74,7 +74,7 @@ def main():
     pipeline_options.do_ocr = True
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
-    pipeline_options.ocr_options.lang = "es"
+    pipeline_options.ocr_options.lang = ["es"]
     pipeline_options.accelerator_options = AcceleratorOptions(
         num_threads=4, device=Device.AUTO
     )

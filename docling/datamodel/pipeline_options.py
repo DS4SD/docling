@@ -1,15 +1,17 @@
 import logging
 import os
+import warnings
 from enum import Enum
 from pathlib import Path
 from typing import Annotated, Any, Dict, List, Literal, Optional, Tuple, Type, Union
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
     SettingsConfigDict,
 )
+from typing_extensions import deprecated
 
 _log = logging.getLogger(__name__)
 
@@ -134,14 +136,8 @@ class EasyOcrOptions(OcrOptions):
 
     kind: Literal["easyocr"] = "easyocr"
     lang: List[str] = ["fr", "de", "es", "en"]
-    use_gpu: Annotated[
-        int,
-        Field(
-            deprecated="Deprecated field. Better to set the `accelerator_options.device` in `pipeline_options`. "
-            "When `use_gpu and accelerator_options.device == AcceleratorDevice.CUDA` the GPU is used "
-            "to run EasyOCR. Otherwise, EasyOCR runs in CPU."
-        ),
-    ] = True
+
+    use_gpu: Optional[bool] = None
 
     model_storage_directory: Optional[str] = None
     download_enabled: bool = True
@@ -216,8 +212,8 @@ class PipelineOptions(BaseModel):
     create_legacy_output: bool = (
         True  # This default will be set to False on a future version of docling
     )
-    accelerator_options: AcceleratorOptions = AcceleratorOptions()
     document_timeout: Optional[float] = None
+    accelerator_options: AcceleratorOptions = AcceleratorOptions()
 
 
 class PdfPipelineOptions(PipelineOptions):
