@@ -139,6 +139,8 @@ class EasyOcrOptions(OcrOptions):
 
     use_gpu: Optional[bool] = None
 
+    confidence_threshold: float = 0.75
+
     model_storage_directory: Optional[str] = None
     download_enabled: bool = True
 

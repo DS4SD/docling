@@ -7,7 +7,7 @@ from typing import Dict, List, Set, Tuple
 from docling_core.types.doc import DocItemLabel, Size
 from rtree import index
 
-from docling.datamodel.base_models import BoundingBox, Cell, Cluster
+from docling.datamodel.base_models import BoundingBox, Cell, Cluster, OcrCell
 
 _log = logging.getLogger(__name__)
 
@@ -255,16 +255,21 @@ class LayoutPostprocessor:
         unassigned = self._find_unassigned_cells(clusters)
         if unassigned:
             next_id = max((c.id for c in clusters), default=0) + 1
-            orphan_clusters = [
-                Cluster(
-                    id=next_id + i,
-                    label=DocItemLabel.TEXT,
-                    bbox=cell.bbox,
-                    confidence=0.0,
-                    cells=[cell],
+            orphan_clusters = []
+            for i, cell in enumerate(unassigned):
+                conf = 1.0
+                if isinstance(cell, OcrCell):
+                    conf = cell.confidence
+
+                orphan_clusters.append(
+                    Cluster(
+                        id=next_id + i,
+                        label=DocItemLabel.TEXT,
+                        bbox=cell.bbox,
+                        confidence=conf,
+                        cells=[cell],
+                    )
                 )
-                for i, cell in enumerate(unassigned)
-            ]
             clusters.extend(orphan_clusters)
 
         # Iterative refinement
