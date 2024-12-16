@@ -263,9 +263,9 @@ def to_docling_document(doc_glm, update_name_label=False) -> DoclingDocument:
             label = DocItemLabel(ptype)
             group_label = GroupLabel.UNSPECIFIED
             if label == DocItemLabel.FORM:
-                group_label == GroupLabel.FORM_AREA
+                group_label = GroupLabel.FORM_AREA
             elif label == DocItemLabel.KEY_VALUE_REGION:
-                group_label == GroupLabel.KEY_VALUE_AREA
+                group_label = GroupLabel.KEY_VALUE_AREA
 
             container_el = doc.add_group(label=group_label)
 
