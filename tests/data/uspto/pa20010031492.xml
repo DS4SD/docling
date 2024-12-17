@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE patent-application-publication SYSTEM "pap-v15-2001-01-31.dtd" [
+<!ENTITY US20010031492A1-20011018-M00001.NB SYSTEM "US20010031492A1-20011018-M00001.NB" NDATA NB>
+<!ENTITY US20010031492A1-20011018-M00001.TIF SYSTEM "US20010031492A1-20011018-M00001.TIF" NDATA TIF>
+<!ENTITY US20010031492A1-20011018-D00001.TIF SYSTEM "US20010031492A1-20011018-D00001.TIF" NDATA TIF>
+<!ENTITY US20010031492A1-20011018-D00002.TIF SYSTEM "US20010031492A1-20011018-D00002.TIF" NDATA TIF>
+<!ENTITY US20010031492A1-20011018-D00003.TIF SYSTEM "US20010031492A1-20011018-D00003.TIF" NDATA TIF>
+<!ENTITY US20010031492A1-20011018-D00004.TIF SYSTEM "US20010031492A1-20011018-D00004.TIF" NDATA TIF>
+<!ENTITY US20010031492A1-20011018-D00005.TIF SYSTEM "US20010031492A1-20011018-D00005.TIF" NDATA TIF>
+<!ENTITY US20010031492A1-20011018-D00006.TIF SYSTEM "US20010031492A1-20011018-D00006.TIF" NDATA TIF>
+<!ENTITY US20010031492A1-20011018-D00007.TIF SYSTEM "US20010031492A1-20011018-D00007.TIF" NDATA TIF>
+<!ENTITY US20010031492A1-20011018-D00008.TIF SYSTEM "US20010031492A1-20011018-D00008.TIF" NDATA TIF>
+]>
+<patent-application-publication>
+<subdoc-bibliographic-information>
+<document-id>
+<doc-number>20010031492</doc-number>
+<kind-code>A1</kind-code>
+<document-date>20011018</document-date>
+</document-id>
+<publication-filing-type>new</publication-filing-type>
+<domestic-filing-data>
+<application-number>
+<doc-number>09728320</doc-number>
+</application-number>
+<application-number-series-code>09</application-number-series-code>
+<filing-date>20001201</filing-date>
+</domestic-filing-data>
+<foreign-priority-data>
+<priority-application-number>
+<doc-number>9811845.8</doc-number>
+</priority-application-number>
+<filing-date>19980602</filing-date>
+<country-code>GB</country-code>
+</foreign-priority-data>
+<technical-information>
+<classification-ipc>
+<classification-ipc-primary>
+<ipc>C12N001/20</ipc>
+</classification-ipc-primary>
+<classification-ipc-secondary>
+<ipc>C12N005/06</ipc>
+</classification-ipc-secondary>
+<classification-ipc-edition>07</classification-ipc-edition>
+</classification-ipc>
+<classification-us>
+<classification-us-primary>
+<uspc>
+<class>435</class>
+<subclass>252100</subclass>
+</uspc>
+</classification-us-primary>
+<classification-us-secondary>
+<uspc>
+<class>435</class>
+<subclass>325000</subclass>
+</uspc>
+</classification-us-secondary>
+<classification-us-secondary>
+<uspc>
+<class>435</class>
+<subclass>252330</subclass>
+</uspc>
+</classification-us-secondary>
+</classification-us>
+<title-of-invention>Assay reagent</title-of-invention>
+</technical-information>
+<continuity-data>
+<continuations>
+<continuation-of>
+<parent-child>
+<child>
+<document-id>
+<doc-number>09728320</doc-number>
+<kind-code>A1</kind-code>
+<document-date>20001201</document-date>
+</document-id>
+</child>
+<parent>
+<document-id>
+<doc-number>PCT/GB99/01730</doc-number>
+<document-date>19990601</document-date>
+<country-code>US</country-code>
+</document-id>
+</parent>
+<parent-status>UNKNOWN</parent-status>
+</parent-child>
+</continuation-of>
+</continuations>
+</continuity-data>
+<inventors>
+<first-named-inventor>
+<name>
+<given-name>Jay</given-name>
+<family-name>Lewington</family-name>
+</name>
+<residence>
+<residence-non-us>
+<city>Bisley</city>
+<country-code>GB</country-code>
+</residence-non-us>
+</residence>
+<authority-applicant>INV</authority-applicant>
+</first-named-inventor>
+<inventor>
+<name>
+<given-name>Katherine</given-name>
+<family-name>Isles</family-name>
+</name>
+<residence>
+<residence-non-us>
+<city>Oxon</city>
+<country-code>GB</country-code>
+</residence-non-us>
+</residence>
+<authority-applicant>INV</authority-applicant>
+</inventor>
+<inventor>
+<name>
+<given-name>Sandy</given-name>
+<family-name>Primrose</family-name>
+</name>
+<residence>
+<residence-non-us>
+<city>High Wycombe</city>
+<country-code>GB</country-code>
+</residence-non-us>
+</residence>
+<authority-applicant>INV</authority-applicant>
+</inventor>
+</inventors>
+<assignee>
+<organization-name>Azur Environmental</organization-name>
+<assignee-type>03</assignee-type>
+</assignee>
+<correspondence-address>
+<name-1>FITCH EVEN TABIN AND FLANNERY</name-1>
+<name-2></name-2>
+<address>
+<address-1>120 SOUTH LA SALLE STREET</address-1>
+<address-2>SUITE 1600</address-2>
+<city>CHICAGO</city>
+<state>IL</state>
+<postalcode>606033406</postalcode>
+</address>
+</correspondence-address>
+</subdoc-bibliographic-information>
+<subdoc-abstract>
+<paragraph id="A-0001" lvl="0">A cell-derived assay reagent prepared from cells which have been killed by treatment with an antibiotic selected from the bleomycin-phleomycin family of antibiotics but which retain a signal-generating metabolic activity such as bioluminescence. </paragraph>
+</subdoc-abstract>
+<subdoc-description>
+<summary-of-invention>
+<paragraph id="P-0001" lvl="0"><number>&lsqb;0001&rsqb;</number> This application is a continuation of PCT/GB99/01730, filed Jun. 1, 1999 designating the United States (the disclosure of which is incorporated herein by reference) and claiming priority from British application serial no. 9811845.8, filed Jun. 2, 1998. </paragraph>
+<paragraph id="P-0002" lvl="0"><number>&lsqb;0002&rsqb;</number> The invention relates to a cell-derived assay reagent, in particular to an assay reagent prepared from cells which have been killed but which retain a signal-generating metabolic activity such as bioluminescence and also to assay methods using the cell-derived reagent such as, for example, toxicity testing methods. </paragraph>
+<paragraph id="P-0003" lvl="0"><number>&lsqb;0003&rsqb;</number> The use of bacteria with a signal-generating metabolic activity as indicators of toxicity is well established. UK patent number GB 2005018 describes a method of assaying a liquid sample for toxic substances which involves contacting a suspension of bioluminescent microorganisms with a sample suspected of containing a toxic substance and observing the change in the light output of the bioluminescent organisms as a result of contact with the suspected toxic substance. Furthermore, a toxicity monitoring system embodying the same assay principle, which is manufactured and sold under the Trade Mark Microtox&reg;, is in routine use in both environmental laboratories and for a variety of industrial applications. An improved toxicity assay method using bioluminescent bacteria, which can be used in a wider range of test conditions than the method of GB 2005018, is described in International patent application number WO 95/10767. </paragraph>
+<paragraph id="P-0004" lvl="0"><number>&lsqb;0004&rsqb;</number> The assay methods known in the prior art may utilize naturally occurring bioluminescent organisms, including <highlight><italic>Photobacterium phosphoreum </italic></highlight>and <highlight><italic>Vibrio fischeri. </italic></highlight>However, recent interest has focused on the use of genetically modified microorganisms which have been engineered to express bioluminescence. These genetically modified bioluminescent microorganisms usually express lux genes, encoding the enzyme luciferase, which have been cloned from a naturally occurring bioluminescent microorganism (E. A. Meighen (1994) Genetics of Bacterial Bioluminescence. <highlight><italic>Ann. Rev. Genet. </italic></highlight>28: 117-139; Stewart, G. S. A. B. Jassin, S. A. A. and Denyer, S. P. (1993), Engineering Microbial bioluminescence and biosensor applications. In Molecular Diagnosis. Eds R. Rapley and M. R. Walker Blackwell Scientific Pubs/Oxford). A process for producing genetically modified bioluminescent microorganisms expressing lux genes cloned from <highlight><italic>Vibrio harveyi </italic></highlight>is described in U.S. Pat. No. 4,581,335. </paragraph>
+<paragraph id="P-0005" lvl="0"><number>&lsqb;0005&rsqb;</number> The use of genetically modified bioluminescent microorganisms in toxicity testing applications has several advantages over the use of naturally occurring microorganisms. For example, it is possible to engineer microorganisms with different sensitivities to a range of different toxic substances or to a single toxic substance. However, genetically modified microorganisms are subject to marketing restrictions as a result of government legislation and there is major concern relating to the deliberate release of genetically modified microorganisms into the environment as components of commercial products. This is particularly relevant with regard to toxicity testing which is often performed in the field rather than within the laboratory. The potential risk from release of potentially pathogenic genetically modified microorganisms into the environment where they may continue to grow in an uncontrollable manner has led to the introduction of legal restrictions on the use of genetically modified organisms in the field in many countries. </paragraph>
+<paragraph id="P-0006" lvl="0"><number>&lsqb;0006&rsqb;</number> It has been suggested, to avoid the problems discussed above, to use genetically modified bioluminescent microorganisms which have been treated so that they retain the metabolic function of bioluminescence but an no longer reproduce. The use of radiation (gamma-radiation), X-rays or an electron beam) to kill bioluminescent cells whilst retaining the metabolic function of bioluminescence is demonstrated in International patent application number WO 95/07346. It is an object of the present invention to provide an alternative method of killing bioluminescent cells whilst retaining the metabolic function of bioluminescence which does not require the use of radiation and, as such, can be easily carried out without the need for specialized radiation equipment and containment facilities and without the risk to laboratory personnel associated with the use of radiation. </paragraph>
+<paragraph id="P-0007" lvl="0"><number>&lsqb;0007&rsqb;</number> Accordingly, in a first aspect the invention provides a method of making a non-viable preparation of prokaryotic or eukaryotic cells, which preparation has a signal-generating metabolic activity, which method comprises contacting a viable culture of cells with signal-generating metabolic activity with a member of the bleomycin/phleomycin family of antibiotics. </paragraph>
+<paragraph id="P-0008" lvl="0"><number>&lsqb;0008&rsqb;</number> Bleomycin and phleomycin are closely related glycopeptide antibiotics that are isolated in the form of copper chelates from cultures of <highlight><italic>Streptomyces verticillus. </italic></highlight>They represent a group of proteins with molecular weights ranging from 1000 to 1000 kda that are potent antibiotics and anti-tumour agents. So far more than 200 members of the bleomycin/phleomycin family have been isolated and characterised as complex basic glycopeptides. Family members resemble each other with respect to their physicochemical properties and their structure, indicating that functionally they all behave in the same manner. Furthermore, the chemical structure of the active moiety is conserved between family members and consists of 5 amino acids, L-glucose, 3-O-carbamoyl-D-mannose and a terminal cation. The various different bleomycin/phleomycin family members differ from each other in the nature of the terminal cation moiety, which is usually an amine. A preferred bleomycin/phleomycin antibiotic for use in the method of the invention is phleomycin D<highlight><bold>1</bold></highlight>, sold under the trade name Zeocin&trade;. </paragraph>
+<paragraph id="P-0009" lvl="0"><number>&lsqb;0009&rsqb;</number> Bleomycin and phleomycin are strong, selective inhibitors of DNA synthesis in intact bacteria and in mammalian cells. Bleomycin can be observed to attack purified DNA in vitro when incubated under appropriate conditions and analysis of the bleomycin damaged DNA shows that both single-stranded and double-stranded cleavages occur, the latter being the result of staggered single strand breaks formed approximately two base pairs apart in the complementary strands. </paragraph>
+<paragraph id="P-0010" lvl="0"><number>&lsqb;0010&rsqb;</number> In in vivo systems, after being taken up by the cell, bleomycin enters the cell nucleus, binds to DNA (by virtue of the interaction between its positively charged terminal amine moiety and a negatively charged phosphate group of the DNA backbone) and causes strand scission. Bleomycin causes strand scission of DNA in viruses, bacteria and eukaryotic cell systems. </paragraph>
+<paragraph id="P-0011" lvl="0"><number>&lsqb;0011&rsqb;</number> The present inventors have surprisingly found that treatment of a culture of cells with signal-generating metabolic activity with a bleomycin/phleomycin antibiotic renders the culture non-viable whilst retaining a level of signal-generating metabolic activity suitable for use in toxicity testing applications. In the context of this application the term non-viable is taken to mean that the cells are unable to reproduce. The process of rendering cells non-viable whilst retaining signal-generating metabolic activity may hereinafter be referred to as &lsquo;inactivation&rsquo; and cells which have been rendered non-viable according to the method of the invention may be referred to as &lsquo;inactivated&rsquo;. </paragraph>
+<paragraph id="P-0012" lvl="0"><number>&lsqb;0012&rsqb;</number> Because of the broad spectrum of action of the bleomycin/phleomycin family of antibiotics the method of the invention is equally applicable to bacterial cells and to eukaryotic cells with signal generating metabolic activity. Preferably the signal-generating metabolic activity is bioluminescence but other signal-generating metabolic activities which are reporters of toxic damage could be used with equivalent effect. </paragraph>
+<paragraph id="P-0013" lvl="0"><number>&lsqb;0013&rsqb;</number> The method of the invention is preferred for use with bacteria or eukaryotic cells that have been genetically modified to express a signal-generating metabolic activity. The examples given below relate to <highlight><italic>E. coil </italic></highlight>which have been engineered to express bioluminescence by transformation with a plasmid carrying lux genes. The eukaryotic equivalent would be cells transfected with a vector containing nucleic acid encoding a eukaryotic luciferase enzyme (abbreviated luc) such as, for example, luciferase from the firefly <highlight><italic>Photinus pyralis. </italic></highlight>A suitable plasmid vector containing cDNA encoding firefly luciferase under the control of an SV40 viral promoter is available from Promega Corporation, Madison Wis., USA. However, in connection with the present invention it is advantageous to use recombinant cells containing the entire eukaryotic luc operon so as to avoid the need to add an exogenous substrate ( e.g. luciferin) in order to generate light output. </paragraph>
+<paragraph id="P-0014" lvl="0"><number>&lsqb;0014&rsqb;</number> The optimum concentration of bleomycin/phleomycin antibiotic and contact time required to render a culture of cells non-viable whilst retaining a useful level of signal-generating metabolic activity may vary according to the cell type but can be readily determined by routine experiment. In general, the lower the concentration of antibiotic used the longer the contact time required for cell inactivation. In connection with the production of assay reagents for use in toxicity testing applications, it is generally advantageous to keep the concentration of antibiotic low (e.g. around 1-1.5 mg/ml) and increase the contact time for inactivation. As will be shown in Example 1, treatment with Zeocin&trade; at a concentration of 1.5 mg/ml for 3 to 5 hours is sufficient to completely inactivate a culture of recombinant <highlight><italic>E. coli. </italic></highlight></paragraph>
+<paragraph id="P-0015" lvl="0"><number>&lsqb;0015&rsqb;</number> In the case of bacteria, the contact time required to inactivate a culture of bacterial cells is found to vary according to the stage of growth of the bacterial culture at the time the antibiotic is administered. Although the method of the invention can be used on bacteria at all stages of growth it is generally preferable to perform the method on bacterial cells in an exponential growth phase because the optimum antibiotic contact time has been observed to be shortest when the antibiotic is administered to bacterial cells in an exponential growth phase. </paragraph>
+<paragraph id="P-0016" lvl="0"><number>&lsqb;0016&rsqb;</number> Following treatment with bleomycin/phleomycin antibiotic the non-viable preparation of cells is preferably stabilised for ease of storage or shipment. The cells can be stabilised using known techniques such as, for example, freeze drying (lyophilization) or other cell preservation techniques known in the art. Stabilization by freeze drying has the added advantage that the freeze drying procedure itself can render cells non-viable. Thus, any cells in the preparation which remain viable after treatment of the culture with bleomycin/phleomycin antibiotic will be rendered non-viable by freeze drying. It is thought that freeze drying inactivates any remaining viable cells by enhancing the effect of antibiotic, such that sub-lethally injured cells in the culture are more sensitive to the stresses applied during freeze drying. </paragraph>
+<paragraph id="P-0017" lvl="0"><number>&lsqb;0017&rsqb;</number> Prior to use the stabilised cell preparation is reconstituted using a reconstitution buffer to form an assay reagent. This reconstituted assay reagent may then be used directly in assays for analytes, for example in toxicity testing applications. It is preferable that the stabilised (i.e. freeze dried) assay reagent be reconstituted immediately prior to use, but after reconstitution it is generally necessary to allow sufficient time prior to use for the reconstituted reagent to reach a stable, high level of signal-generating activity. Suitable reconstitution buffers preferably contain an osmotically potent non-salt compound such as sucrose, dextran or polyethylene glycol, although salt based stabilisers may also be used. </paragraph>
+<paragraph id="P-0018" lvl="0"><number>&lsqb;0018&rsqb;</number> Whilst the assay reagent of the invention is particularly suitable for use in toxicity testing applications it is to be understood that the invention is not limited to assay reagents for use in toxicity testing. The cell inactivation method of the invention can be used to inactivate any recombinant cells (prokaryotic or eukaryotic) with a signal generating metabolic activity that is not dependent upon cell viability. </paragraph>
+<paragraph id="P-0019" lvl="0"><number>&lsqb;0019&rsqb;</number> In a further aspect the invention provides a method of assaying a potentially toxic analyte comprising the steps of, </paragraph>
+<paragraph id="P-0020" lvl="2"><number>&lsqb;0020&rsqb;</number> (a) contacting a sample to be assayed for the analyte with a sample of assay reagent comprising a non-viable preparation of cells with a signal-generating metabolic activity; </paragraph>
+<paragraph id="P-0021" lvl="2"><number>&lsqb;0021&rsqb;</number> (b) measuring the level of signal generated; and </paragraph>
+<paragraph id="P-0022" lvl="2"><number>&lsqb;0022&rsqb;</number> (c) using the measurement obtained as an indicator of the toxicity of the analyte. </paragraph>
+<paragraph id="P-0023" lvl="0"><number>&lsqb;0023&rsqb;</number> In a still further aspect, the invention provides a kit for performing the above-stated assay comprising an assay reagent with signal generating metabolic activity and means for contacting the assay reagent with a sample to be assayed for an analyte. </paragraph>
+<paragraph id="P-0024" lvl="0"><number>&lsqb;0024&rsqb;</number> The analytes tested using the assay of the invention are usually toxic substances, but it is to be understood that the precise nature of the analyte to be tested is not material to the invention. </paragraph>
+<paragraph id="P-0025" lvl="0"><number>&lsqb;0025&rsqb;</number> Toxicity is a general term used to describe an adverse effect on biological system and the term &lsquo;toxic substances&rsquo; includes both toxicants (synthetic chemicals that are toxic) and toxins (natural poisons). Toxicity is usually expressed as an effective concentration (EC) or inhibitory concentration (IC) value. The EC/IC value is usually denoted as a percentage response e.g. EC<highlight><subscript>50</subscript></highlight>, EC<highlight><subscript>10 </subscript></highlight>which denotes the concentration (dose) of a particular substance which affects the designated criteria for assessing toxicity (i.e. a behavioural trait or death) in the indicated proportion of the population tested. For example, an EC<highlight><subscript>50 </subscript></highlight>of 10 ppm indicates that 50% of the population will be affected by a concentration of 10 ppm. In the case of a toxicity assay based on the use of a bioluminescent assay reagent, the EC<highlight><subscript>50 </subscript></highlight>value is usually the concentration of sample substance causing a 50% change in light output.</paragraph>
+</summary-of-invention>
+<brief-description-of-drawings>
+<paragraph id="P-0026" lvl="0"><number>&lsqb;0026&rsqb;</number> The present invention will be further understood by way of the following Examples with reference to the accompanying Figures in which: </paragraph>
+<paragraph id="P-0027" lvl="0"><number>&lsqb;0027&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 1</cross-reference> is a graph to show the effect of Zeocin&trade; treatment on viable count and light output of recombinant bioluminescent <highlight><italic>E. coil </italic></highlight>cells. </paragraph>
+<paragraph id="P-0028" lvl="0"><number>&lsqb;0028&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 2</cross-reference> is a graph to show the light output from five separate vials of reconstituted assay reagent. The assay reagent was prepared from recombinant bioluminescent <highlight><italic>E. coil </italic></highlight>exposed to 1.5 mg/ml Zeocin&trade; for 300 minutes. Five vials were used to reduce discrepancies resulting from vial to vial variation. </paragraph>
+<paragraph id="P-0029" lvl="0"><number>&lsqb;0029&rsqb;</number> FIGS. <highlight><bold>3</bold></highlight> to <highlight><bold>8</bold></highlight> are graphs to show the effect of Zeocin&trade; treatment on the sensitivity of bioluminescent assay reagent to toxicant (ZnSO<highlight><subscript>4</subscript></highlight>): </paragraph>
+<paragraph id="P-0030" lvl="0"><number>&lsqb;0030&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 3</cross-reference>: Control cells, lag phase. </paragraph>
+<paragraph id="P-0031" lvl="0"><number>&lsqb;0031&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 4</cross-reference>: Zeocin&trade; treated cells, lag phase. </paragraph>
+<paragraph id="P-0032" lvl="0"><number>&lsqb;0032&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 5</cross-reference>: Control cells, mid-exponential growth. </paragraph>
+<paragraph id="P-0033" lvl="0"><number>&lsqb;0033&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 6</cross-reference>: Zeocin&trade; treated cells, mid-exponential growth. </paragraph>
+<paragraph id="P-0034" lvl="0"><number>&lsqb;0034&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 7</cross-reference>: Control cells, stationary phase. </paragraph>
+<paragraph id="P-0035" lvl="0"><number>&lsqb;0035&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 8</cross-reference>: Zeocin&trade; treated cells, stationary phase.</paragraph>
+</brief-description-of-drawings>
+<detailed-description>
+<section>
+<heading lvl="1">EXAMPLE 1 </heading>
+</section>
+<section>
+<heading lvl="1">(A) Inactivation of Bioluminescent <highlight><italic>E. coil </italic></highlight>Method </heading>
+<paragraph id="P-0036" lvl="0"><number>&lsqb;0036&rsqb;</number> 1. Bioluminescent genetically modified <highlight><italic>E. coil </italic></highlight>strain HB101 (<highlight><italic>E. coli </italic></highlight>HB101 made bioluminescent by transformation with a plasmid carrying the lux operon of <highlight><italic>Vibrio fischeri </italic></highlight>constructed by the method of Shaw and Kado, as described in Biotechnology 4: 560-564) were grown from a frozen stock in 5 ml of low salt medium (LB (5 g/ml NaCl)&plus;glycerol&plus;MgSO<highlight><subscript>4</subscript></highlight>) for 24 hours. </paragraph>
+<paragraph id="P-0037" lvl="0"><number>&lsqb;0037&rsqb;</number> 2. 1 ml of the 5 ml culture was then used to inoculate 200 ml of low salt medium in a shaker flask and the resultant culture grown to an OD<highlight><subscript>630 </subscript></highlight>of 0.407 (exponential growth phase). </paragraph>
+<paragraph id="P-0038" lvl="0"><number>&lsqb;0038&rsqb;</number> 3. 50 ml of this culture was removed to a fresh sterile shaker flask (control cells). </paragraph>
+<paragraph id="P-0039" lvl="0"><number>&lsqb;0039&rsqb;</number> 4. Zeocin&trade; was added to the 150 ml of culture in the original shaker flash, to a final concentration of 1.5 mg/ml. At the same time, an equivalent volume of water was added to the 50 ml culture removed from the original flask (control cells). </paragraph>
+<paragraph id="P-0040" lvl="0"><number>&lsqb;0040&rsqb;</number> 5. The time course of cell inactivation was monitored by removing samples from the culture at 5, 60, 120, 180, 240 and 300 minutes after the addition of Zeocin&trade; and taking measurements of both light output (measured using a Deltatox luminometer) and viable count (per ml, determined using the method given in Example 3 below) for each of the samples. Samples of the control cells were removed at 5 and 300 minutes after the addition of water and measurements of light output and viable count taken as for the Zeocin&trade; treated cells. </paragraph>
+<paragraph id="P-0041" lvl="0"><number>&lsqb;0041&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 1</cross-reference> shows the effect of Zeocin&trade; treatment on the light output and viable count (per ml) of recombinant bioluminescent <highlight><italic>E. coil. </italic></highlight>Zeocin&trade; was added to a final concentration of 1.5 mg/ml at time zero. The number of viable cells in the culture was observed to decrease with increasing contact cells with Zeocin&trade;, the culture being completely inactivated after 3 hours. The light output from the culture was observed to decrease gradually with increasing Zeocin&trade; contact time. </paragraph>
+</section>
+<section>
+<heading lvl="1">(B) Production of Assay Reagent </heading>
+<paragraph id="P-0042" lvl="0"><number>&lsqb;0042&rsqb;</number> Five hours after the addition of Zeocin&trade; or water the remaining bacterial cells in the Zeocin&trade; treated and control cultures were harvested by the centrifugation, washed (to remove traces of Zeocin&trade; from the Zeocin&trade; treated culture), re-centrifuged and resuspended in cryoprotectant to an OD<highlight><subscript>630 </subscript></highlight>of 0.25. 200 &mgr;l aliquots of the cells in cryoprotectant were dispensed into single shot vials, and freeze dried. Freeze dried samples of the Zeocin&trade; treated cells and control cells were reconstituted in 0.2M sucrose to form assay reagents and the light output of the assay reagents measured at various times after reconstitution. </paragraph>
+<paragraph id="P-0043" lvl="0"><number>&lsqb;0043&rsqb;</number> The light output from assay reagent prepared from cells exposed to 1.5 mg/ml Zeocin&trade; for 5 hours was not significantly different to the light output from assay reagent prepared from control (Zeocin&trade; untreated) cells, indicating that Zeocin&trade; treatment does not affect the light output of the reconstituted freeze dried assay reagent. Both Zeocin&trade; treated and Zeocin&trade; untreated assay reagents produced stable light output 15 minutes after reconstitution. </paragraph>
+<paragraph id="P-0044" lvl="0"><number>&lsqb;0044&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 2</cross-reference> shows the light output from five separate vials of reconstituted Zeocin&trade; treated assay reagent inactivated according to the method of Example 1(A) and processed into assay reagent as described in Example 1(B). Reconstitution solution was added at time zero and thereafter light output was observed to increase steadily before stabilising out at around 15 minutes after reconstitution. All five vials were observed to give similar light profiles after reconstitution. </paragraph>
+</section>
+<section>
+<heading lvl="1">EXAMPLE 2 </heading>
+</section>
+<section>
+<heading lvl="1">Sensitivity of Zeocin&trade; Treated Assay Reagent to Toxicant Method </heading>
+<paragraph id="P-0045" lvl="0"><number>&lsqb;0045&rsqb;</number> 1. Bioluminescent genetically modified <highlight><italic>E. coil </italic></highlight>strain HB101 (<highlight><italic>E. coli </italic></highlight>HB101 made bioluminescent by transformation with a plasmid carrying the lux operon of <highlight><italic>vibrio fischeri </italic></highlight>constructed by the method of Shaw and Kado, as described in Biotechnology 4: 560-564) was grown in fermenter as a batch culture in low salt medium (LB(5 g/ml NaCl)&plus;glycerol&plus;MgSO<highlight><subscript>4</subscript></highlight>). </paragraph>
+<paragraph id="P-0046" lvl="0"><number>&lsqb;0046&rsqb;</number> 2. Two aliquots of the culture were removed from the fermenter into separate sterile shaker flasks at each of three different stages of growth i.e. at OD<highlight><subscript>630 </subscript></highlight>values of 0.038 (lag phase growth), 1.31 (mid-exponential phase growth) and 2.468 (stationary phase growth). </paragraph>
+<paragraph id="P-0047" lvl="0"><number>&lsqb;0047&rsqb;</number> 3. One aliquot of culture for each of the three growth stages was inactivated by contact with Zeocin&trade; (1 mg Zeocin&trade; added per 2.5&times;10<highlight><superscript>6 </superscript></highlight>cells, i.e. the concentration of Zeocin&trade; per cell is kept constant) for 300 minutes and then processed into assay reagent by freeze drying and reconstitution, as described in part (B) of Example 1. </paragraph>
+<paragraph id="P-0048" lvl="0"><number>&lsqb;0048&rsqb;</number> 4. An equal volume of water was added to the second aliquot of culture for each of the three growth stages and the cultures processed into assay reagent as described above. </paragraph>
+<paragraph id="P-0049" lvl="0"><number>&lsqb;0049&rsqb;</number> 5. Samples of each of the three Zeocin&trade; treated and three control assay reagents were then evaluated for sensitivity to toxicant (ZnSO<highlight><subscript>4</subscript></highlight>) according to the following assay protocol: </paragraph>
+<paragraph id="P-0050" lvl="0"><number>&lsqb;0050&rsqb;</number> ZnSO<highlight><subscript>4 </subscript></highlight>Sensitivity Assay </paragraph>
+<paragraph id="P-0051" lvl="0"><number>&lsqb;0051&rsqb;</number> 1. ZnSO<highlight><subscript>4 </subscript></highlight>solutions were prepared in pure water at 30, 10, 3, 1, 0.3 and 0.1 ppm. Pure water was also used as a control. </paragraph>
+<paragraph id="P-0052" lvl="0"><number>&lsqb;0052&rsqb;</number> 2. Seven vials of each of the three Zeocin&trade; treated and each of the three control assay reagents (i.e. one for each of the six ZnSO<highlight><subscript>4 </subscript></highlight>solutions and one for the pure water control) were reconstituted using 0.5 ml of reconstitution solution (eg 0.2M sucrose) and then left to stand at room temperature for 15 minutes to allow the light output to stabilize. Base line (time zero) readings of light output were then measured for each of the reconstituted reagents. </paragraph>
+<paragraph id="P-0053" lvl="0"><number>&lsqb;0053&rsqb;</number> 3. 0.5 ml aliquots of each of the six ZnSO<highlight><subscript>4 </subscript></highlight>solutions and the pure water control were added to separate vials of reconstituted assay reagent. This was repeated for each of the different Zeocin&trade; treated and control assay reagents. </paragraph>
+<paragraph id="P-0054" lvl="0"><number>&lsqb;0054&rsqb;</number> 4. The vials were incubated at room temperature and light output readings were taken 5, 10, 15, 20, 25 and 30 minutes after addition of ZnSO<highlight><subscript>4 </subscript></highlight>solution. </paragraph>
+<paragraph id="P-0055" lvl="0"><number>&lsqb;0055&rsqb;</number> 5. The % toxic effect for each sample was calculated as follows:  
+<math-cwu id="MATH-US-00001">
+<number>1</number>
+<math>
+<mrow>
+  <mstyle>
+    <mtext>% toxic effect</mtext>
+  </mstyle>
+  <mo>=</mo>
+  <mrow>
+    <mn>1</mn>
+    <mo>-</mo>
+    <mrow>
+      <mrow>
+        <mo>(</mo>
+        <mfrac>
+          <mrow>
+            <msub>
+              <mi>S</mi>
+              <mi>c</mi>
+            </msub>
+            <mo>&times;</mo>
+            <msub>
+              <mi>C</mi>
+              <mi>o</mi>
+            </msub>
+          </mrow>
+          <mrow>
+            <msub>
+              <mi>S</mi>
+              <mi>o</mi>
+            </msub>
+            <mo>&times;</mo>
+            <msub>
+              <mi>C</mi>
+              <mi>t</mi>
+            </msub>
+          </mrow>
+        </mfrac>
+        <mo>)</mo>
+      </mrow>
+      <mo>&times;</mo>
+      <mn>100</mn>
+    </mrow>
+  </mrow>
+</mrow>
+</math>
+<mathematica-file id="MATHEMATICA-00001" file="US20010031492A1-20011018-M00001.NB"/>
+<image id="EMI-M00001" wi="216.027" he="18.00225" file="US20010031492A1-20011018-M00001.TIF" imf="TIFF" ti="MF"/>
+</math-cwu>
+</paragraph>
+<paragraph id="P-0056" lvl="7"><number>&lsqb;0056&rsqb;</number> where: C<highlight><subscript>o</subscript></highlight>&equals;light in control at time zero </paragraph>
+<paragraph id="P-0057" lvl="2"><number>&lsqb;0057&rsqb;</number> C<highlight><subscript>t</subscript></highlight>&equals;light in control at reading time </paragraph>
+<paragraph id="P-0058" lvl="2"><number>&lsqb;0058&rsqb;</number> S<highlight><subscript>o</subscript></highlight>&equals;light in sample at time zero </paragraph>
+<paragraph id="P-0059" lvl="2"><number>&lsqb;0059&rsqb;</number> S<highlight><subscript>t</subscript></highlight>&equals;light in sample at reading time </paragraph>
+<paragraph id="P-0060" lvl="0"><number>&lsqb;0060&rsqb;</number> The results of toxicity assays for sensitivity to ZnSO<highlight><subscript>4 </subscript></highlight>for all the Zeocin&trade; treated and control assay reagents are shown in FIGS. <highlight><bold>3</bold></highlight> to <highlight><bold>8</bold></highlight>: </paragraph>
+<paragraph id="P-0061" lvl="0"><number>&lsqb;0061&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 3</cross-reference>: Control cells, lag phase. </paragraph>
+<paragraph id="P-0062" lvl="0"><number>&lsqb;0062&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 4</cross-reference>: Zeocin&trade; treated cells, lag phase. </paragraph>
+<paragraph id="P-0063" lvl="0"><number>&lsqb;0063&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 5</cross-reference>: Control cells, mid-exponential growth. </paragraph>
+<paragraph id="P-0064" lvl="0"><number>&lsqb;0064&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 6</cross-reference>: Zeocin&trade; treated cells, mid-exponential growth. </paragraph>
+<paragraph id="P-0065" lvl="0"><number>&lsqb;0065&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 7</cross-reference>: Control cells, stationary phase. </paragraph>
+<paragraph id="P-0066" lvl="0"><number>&lsqb;0066&rsqb;</number> <cross-reference target="DRAWINGS">FIG. 8</cross-reference>: Zeocin&trade; treated cells, stationary phase. </paragraph>
+<paragraph id="P-0067" lvl="0"><number>&lsqb;0067&rsqb;</number> In each case, separate graphs of % toxic effect against log<highlight><subscript>10 </subscript></highlight>concentration of ZnSO<highlight><subscript>4 </subscript></highlight>were plotted on the same axes for each value of time (minutes) after addition of Zeocin&trade; or water. The sensitivities of the various reagents, expressed as an EC<highlight><subscript>50 </subscript></highlight>value for 15 minutes exposed to ZnSO<highlight><subscript>4</subscript></highlight>, are summarised in Table 1 below.  
+<table-cwu id="TABLE-US-00001">
+<number>1</number>
+<table frame="none" colsep="0" rowsep="0">
+<tgroup align="left" colsep="0" rowsep="0" cols="3">
+<colspec colname="OFFSET" colwidth="91PT" align="left"/>
+<colspec colname="1" colwidth="119PT" align="center"/>
+<colspec colname="2" colwidth="7PT" align="left"/>
+<tbody valign="top">
+<row>
+<entry></entry>
+<entry></entry>
+</row>
+<row>
+<entry></entry>
+<entry namest="OFFSET" nameend="2" align="center" rowsep="1"></entry>
+</row>
+<row>
+<entry></entry>
+<entry>SENSITIVITY-EC<highlight><subscript>50 </subscript></highlight>VALUES</entry>
+<entry></entry>
+</row>
+</tbody>
+</tgroup>
+<tgroup align="left" colsep="0" rowsep="0" cols="3">
+<colspec colname="1" colwidth="91PT" align="left"/>
+<colspec colname="2" colwidth="63PT" align="left"/>
+<colspec colname="3" colwidth="63PT" align="left"/>
+<tbody valign="top">
+<row>
+<entry>GROWTH STAGE OF</entry>
+<entry>ZEOCIN&thinsp;&trade;</entry>
+<entry>CONTROL</entry>
+</row>
+<row>
+<entry>ASSAY REAGENT</entry>
+<entry>TREATED</entry>
+<entry>CELLS</entry>
+</row>
+<row><entry namest="1" nameend="3" align="center" rowsep="1"></entry>
+</row>
+<row>
+<entry>Lag Phase</entry>
+<entry>1.445 ppm ZnSO<highlight><subscript>4</subscript></highlight></entry>
+<entry>1.580 ppm ZnSO<highlight><subscript>4</subscript></highlight></entry>
+</row>
+<row>
+<entry>Expotential phase</entry>
+<entry>0.446 ppm ZnSO<highlight><subscript>4</subscript></highlight></entry>
+<entry>0.446 ZnSO<highlight><subscript>4</subscript></highlight></entry>
+</row>
+<row>
+<entry>Stationary phase</entry>
+<entry>0.426 ppm ZnSO<highlight><subscript>4</subscript></highlight></entry>
+<entry>0.457 ppm ZnSO<highlight><subscript>4</subscript></highlight></entry>
+</row>
+<row><entry namest="1" nameend="3" align="center" rowsep="1"></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+</table-cwu>
+</paragraph>
+<paragraph id="P-0068" lvl="7"><number>&lsqb;0068&rsqb;</number> Table 1: Sensitivity of the different assay reagents to ZnSo<highlight><subscript>4 </subscript></highlight>expressed as EC<highlight><subscript>50 </subscript></highlight>values for 15 minutes exposure to ZNSO<highlight><subscript>4</subscript></highlight>. </paragraph>
+<paragraph id="P-0069" lvl="0"><number>&lsqb;0069&rsqb;</number> The results of the toxicity assays indicate that Zeocin&trade; treatment does not significantly affect the sensitivity of a recombinant bioluminescent <highlight><italic>E. coli </italic></highlight>derived assay reagent to ZnSO<highlight><subscript>4</subscript></highlight>. Similar results could be expected with other toxic substances which have an effect on signal-generating metabolic activities. </paragraph>
+</section>
+<section>
+<heading lvl="1">EXAMPLE 3 </heading>
+</section>
+<section>
+<heading lvl="1">Method to Determine Viable Count </heading>
+<paragraph id="P-0070" lvl="0"><number>&lsqb;0070&rsqb;</number> 1. Samples of bacterial culture to be assayed for viable count were centrifuged at 10,000 rpm for 5 minutes to pellet the bacterial cells. </paragraph>
+<paragraph id="P-0071" lvl="0"><number>&lsqb;0071&rsqb;</number> 2. Bacterial cells were washed by resuspending in 1 ml of M9 medium, re-centrifuged at 10,000 rpm for 5 minutes and finally re-suspended in 1 ml of M9 medium. </paragraph>
+<paragraph id="P-0072" lvl="0"><number>&lsqb;0072&rsqb;</number> 3. Serial dilutions of the bacterial cell suspension from 10<highlight><superscript>&minus;1 </superscript></highlight>to 10<highlight><superscript>&minus;7 </superscript></highlight>were prepared in M9 medium. </paragraph>
+<paragraph id="P-0073" lvl="0"><number>&lsqb;0073&rsqb;</number> 4. Three separate 10 &mgr;l aliquots of each of the serial dilutions were plated out on standard agar plates and the plates incubated at 37&deg; C. </paragraph>
+<paragraph id="P-0074" lvl="0"><number>&lsqb;0074&rsqb;</number> 5. The number of bacterial colonies present for each of the three aliquots at each of the serial dilutions were counted and the values averaged. Viable count was calculated per ml of bacterial culture. </paragraph>
+</section>
+</detailed-description>
+</subdoc-description>
+<subdoc-claims>
+<claim id="CLM-00001">
+<claim-text><highlight><bold>1</bold></highlight>. A method of making a non-viable preparation of prokaryotic or eukaryotic cells, which preparation has a signal-generating metabolic activity, which method comprises contacting a viable culture of said cells having signal-generating metabolic activity with an antibiotic selected from the bleomycin/phleomycin family of antibiotics. </claim-text>
+</claim>
+<claim id="CLM-00002">
+<claim-text><highlight><bold>2</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00001"><claim-text>claim 1</claim-text></dependent-claim-reference> wherein following contact with antibiotic, said cells are subjected to a stabilization step. </claim-text>
+</claim>
+<claim id="CLM-00003">
+<claim-text><highlight><bold>3</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00002"><claim-text>claim 2</claim-text></dependent-claim-reference> wherein said stabilization step comprises freeze drying. </claim-text>
+</claim>
+<claim id="CLM-00004">
+<claim-text><highlight><bold>4</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00001"><claim-text>claim 1</claim-text></dependent-claim-reference> wherein said antibiotic is phleomycin D<highlight><bold>1</bold></highlight>. </claim-text>
+</claim>
+<claim id="CLM-00005">
+<claim-text><highlight><bold>5</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00005"><claim-text>claim 5</claim-text></dependent-claim-reference> wherein said signal-generating metabolic activity is bioluminescence. </claim-text>
+</claim>
+<claim id="CLM-00006">
+<claim-text><highlight><bold>6</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00005"><claim-text>claim 5</claim-text></dependent-claim-reference> wherein said cells are bacteria. </claim-text>
+</claim>
+<claim id="CLM-00007">
+<claim-text><highlight><bold>7</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00006"><claim-text>claim 6</claim-text></dependent-claim-reference> wherein said bacteria are in an exponential growth phase when contacted with said antibiotic. </claim-text>
+</claim>
+<claim id="CLM-00008">
+<claim-text><highlight><bold>8</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00006"><claim-text>claim 6</claim-text></dependent-claim-reference> wherein said bacteria are genetically modified. </claim-text>
+</claim>
+<claim id="CLM-00009">
+<claim-text><highlight><bold>9</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00008"><claim-text>claim 8</claim-text></dependent-claim-reference> wherein said genetically modified bacteria contain nucleic acid encoding luciferase. </claim-text>
+</claim>
+<claim id="CLM-00010">
+<claim-text><highlight><bold>10</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00009"><claim-text>claim 9</claim-text></dependent-claim-reference> wherein said bacteria are <highlight><italic>E. coli. </italic></highlight></claim-text>
+</claim>
+<claim id="CLM-00011">
+<claim-text><highlight><bold>11</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00005"><claim-text>claim 5</claim-text></dependent-claim-reference> wherein said cells are eukaryotic cells. </claim-text>
+</claim>
+<claim id="CLM-00012">
+<claim-text><highlight><bold>12</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00011"><claim-text>claim 11</claim-text></dependent-claim-reference> wherein said eukaryotic cells are genetically modified. </claim-text>
+</claim>
+<claim id="CLM-00013">
+<claim-text><highlight><bold>13</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00012"><claim-text>claim 12</claim-text></dependent-claim-reference> wherein said genetically modified eukaryotic cells contain nucleic acid encoding luciferase. </claim-text>
+</claim>
+<claim id="CLM-00014">
+<claim-text><highlight><bold>14</bold></highlight>. A method of making a non-viable preparation of prokaryotic cells, which preparation has a signal-generating metabolic activity, which method comprises contacting a viable culture of a genetically modified <highlight><italic>E. coli </italic></highlight>strain made bioluminescent by transformation with a plasmid carrying the lux operon of <highlight><italic>Vibrio fischeri </italic></highlight>with an antibiotic selected from the bleomycin/phleomycin family of antibiotics. </claim-text>
+</claim>
+<claim id="CLM-00015">
+<claim-text><highlight><bold>15</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00014"><claim-text>claim 14</claim-text></dependent-claim-reference> wherein said cells are contacted with phleomycin D<highlight><bold>1</bold></highlight> at a concentration of at least about 1.5 mg/ml. </claim-text>
+</claim>
+<claim id="CLM-00016">
+<claim-text><highlight><bold>16</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00015"><claim-text>claim 15</claim-text></dependent-claim-reference> wherein said contact is maintained for at least about 3 hours. </claim-text>
+</claim>
+<claim id="CLM-00017">
+<claim-text><highlight><bold>17</bold></highlight>. The method as claimed in <dependent-claim-reference depends_on="CLM-00016"><claim-text>claim 16</claim-text></dependent-claim-reference> wherein said antibiotic-treated cells are harvested, washed and freeze-dried.</claim-text>
+</claim>
+</subdoc-claims>
+<subdoc-drawings id="DRAWINGS">
+<heading lvl="0" align="CENTER">Drawings</heading>
+<representative-figure>NONE</representative-figure>
+<figure id="figure-D00001">
+<image id="EMI-D00001" file="US20010031492A1-20011018-D00001.TIF" imf="TIFF" ti="DR"/>
+</figure>
+<figure id="figure-D00002">
+<image id="EMI-D00002" file="US20010031492A1-20011018-D00002.TIF" imf="TIFF" ti="DR"/>
+</figure>
+<figure id="figure-D00003">
+<image id="EMI-D00003" file="US20010031492A1-20011018-D00003.TIF" imf="TIFF" ti="DR"/>
+</figure>
+<figure id="figure-D00004">
+<image id="EMI-D00004" file="US20010031492A1-20011018-D00004.TIF" imf="TIFF" ti="DR"/>
+</figure>
+<figure id="figure-D00005">
+<image id="EMI-D00005" file="US20010031492A1-20011018-D00005.TIF" imf="TIFF" ti="DR"/>
+</figure>
+<figure id="figure-D00006">
+<image id="EMI-D00006" file="US20010031492A1-20011018-D00006.TIF" imf="TIFF" ti="DR"/>
+</figure>
+<figure id="figure-D00007">
+<image id="EMI-D00007" file="US20010031492A1-20011018-D00007.TIF" imf="TIFF" ti="DR"/>
+</figure>
+<figure id="figure-D00008">
+<image id="EMI-D00008" file="US20010031492A1-20011018-D00008.TIF" imf="TIFF" ti="DR"/>
+</figure>
+</subdoc-drawings>
+</patent-application-publication>

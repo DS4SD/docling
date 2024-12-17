@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE us-patent-application SYSTEM "us-patent-application-v44-2014-04-03.dtd" [ ]>
+<us-patent-application lang="EN" dtd-version="v4.4 2014-04-03" file="US20180000016A1-20180104.XML" status="PRODUCTION" id="us-patent-application" country="US" date-produced="20171219" date-publ="20180104">
+<us-bibliographic-data-application lang="EN" country="US">
+<publication-reference>
+<document-id>
+<country>US</country>
+<doc-number>20180000016</doc-number>
+<kind>A1</kind>
+<date>20180104</date>
+</document-id>
+</publication-reference>
+<application-reference appl-type="utility">
+<document-id>
+<country>US</country>
+<doc-number>15634401</doc-number>
+<date>20170627</date>
+</document-id>
+</application-reference>
+<us-application-series-code>15</us-application-series-code>
+<priority-claims>
+<priority-claim sequence="01" kind="national">
+<country>JP</country>
+<doc-number>2016-128835</doc-number>
+<date>20160629</date>
+</priority-claim>
+</priority-claims>
+<classifications-ipcr>
+<classification-ipcr>
+<ipc-version-indicator><date>20060101</date></ipc-version-indicator>
+<classification-level>A</classification-level>
+<section>A</section>
+<class>01</class>
+<subclass>G</subclass>
+<main-group>7</main-group>
+<subgroup>04</subgroup>
+<symbol-position>F</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20180104</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+</classification-ipcr>
+<classification-ipcr>
+<ipc-version-indicator><date>20060101</date></ipc-version-indicator>
+<classification-level>A</classification-level>
+<section>A</section>
+<class>01</class>
+<subclass>G</subclass>
+<main-group>1</main-group>
+<subgroup>00</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20180104</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+</classification-ipcr>
+<classification-ipcr>
+<ipc-version-indicator><date>20060101</date></ipc-version-indicator>
+<classification-level>A</classification-level>
+<section>A</section>
+<class>01</class>
+<subclass>G</subclass>
+<main-group>31</main-group>
+<subgroup>00</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20180104</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+</classification-ipcr>
+<classification-ipcr>
+<ipc-version-indicator><date>20100101</date></ipc-version-indicator>
+<classification-level>A</classification-level>
+<section>H</section>
+<class>01</class>
+<subclass>L</subclass>
+<main-group>33</main-group>
+<subgroup>50</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20180104</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+</classification-ipcr>
+</classifications-ipcr>
+<classifications-cpc>
+<main-cpc>
+<classification-cpc>
+<cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+<section>A</section>
+<class>01</class>
+<subclass>G</subclass>
+<main-group>7</main-group>
+<subgroup>045</subgroup>
+<symbol-position>F</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20180104</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+<scheme-origination-code>C</scheme-origination-code>
+</classification-cpc>
+</main-cpc>
+<further-cpc>
+<classification-cpc>
+<cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+<section>H</section>
+<class>01</class>
+<subclass>L</subclass>
+<main-group>33</main-group>
+<subgroup>504</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20180104</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+<scheme-origination-code>C</scheme-origination-code>
+</classification-cpc>
+<classification-cpc>
+<cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+<section>A</section>
+<class>01</class>
+<subclass>G</subclass>
+<main-group>1</main-group>
+<subgroup>001</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20180104</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+<scheme-origination-code>C</scheme-origination-code>
+</classification-cpc>
+<classification-cpc>
+<cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+<section>A</section>
+<class>01</class>
+<subclass>G</subclass>
+<main-group>31</main-group>
+<subgroup>00</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20180104</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+<scheme-origination-code>C</scheme-origination-code>
+</classification-cpc>
+</further-cpc>
+</classifications-cpc>
+<invention-title id="d2e61">LIGHT EMITTING DEVICE AND PLANT CULTIVATION METHOD</invention-title>
+<us-parties>
+<us-applicants>
+<us-applicant sequence="00" app-type="applicant" designation="us-only" applicant-authority-category="assignee">
+<addressbook>
+<orgname>NICHIA CORPORATION</orgname>
+<address>
+<city>Anan-shi</city>
+<country>JP</country>
+</address>
+</addressbook>
+<residence>
+<country>JP</country>
+</residence>
+</us-applicant>
+</us-applicants>
+<inventors>
+<inventor sequence="00" designation="us-only">
+<addressbook>
+<last-name>AMIYA</last-name>
+<first-name>Mika</first-name>
+<address>
+<city>Naruto-shi</city>
+<country>JP</country>
+</address>
+</addressbook>
+</inventor>
+<inventor sequence="01" designation="us-only">
+<addressbook>
+<last-name>FUJIO</last-name>
+<first-name>Kazushige</first-name>
+<address>
+<city>Tokushima-shi</city>
+<country>JP</country>
+</address>
+</addressbook>
+</inventor>
+<inventor sequence="02" designation="us-only">
+<addressbook>
+<last-name>SUZUKI</last-name>
+<first-name>Tomokazu</first-name>
+<address>
+<city>Tokushima-shi</city>
+<country>JP</country>
+</address>
+</addressbook>
+</inventor>
+</inventors>
+</us-parties>
+<assignees>
+<assignee>
+<addressbook>
+<orgname>NICHIA CORPORATION</orgname>
+<role>03</role>
+<address>
+<city>Anan-shi, Tokushima</city>
+<country>JP</country>
+</address>
+</addressbook>
+</assignee>
+</assignees>
+</us-bibliographic-data-application>
+<abstract id="abstract">
+<p id="p-0001" num="0000">Provided is a light emitting device that includes a light emitting element having a light emission peak wavelength ranging from 380 nm to 490 nm, and a fluorescent material excited by light from the light emitting element and emitting light having at a light emission peak wavelength ranging from 580 nm or more to less than 680 nm. The light emitting device emits light having a ratio R/B of a photon flux density R to a photon flux density B ranging from 2.0 to 4.0 and a ratio R/FR of the photon flux density R to a photon flux density FR ranging from 0.7 to 13.0, the photon flux density R being in a wavelength range of 620 nm or more and less than 700 nm, the photon flux density B being in a wavelength range of 380 nm or more and 490 nm or less, and the photon flux density FR being in a wavelength range of 700 nm or more and 780 nm or less.</p>
+</abstract>
+<drawings id="DRAWINGS">
+<figure id="Fig-EMI-D00000" num="00000">
+<img id="EMI-D00000" he="111.34mm" wi="122.51mm" file="US20180000016A1-20180104-D00000.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00001" num="00001">
+<img id="EMI-D00001" he="127.85mm" wi="140.89mm" file="US20180000016A1-20180104-D00001.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00002" num="00002">
+<img id="EMI-D00002" he="130.30mm" wi="161.29mm" file="US20180000016A1-20180104-D00002.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00003" num="00003">
+<img id="EMI-D00003" he="104.22mm" wi="171.03mm" file="US20180000016A1-20180104-D00003.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00004" num="00004">
+<img id="EMI-D00004" he="96.94mm" wi="168.66mm" file="US20180000016A1-20180104-D00004.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+</drawings>
+<description id="description">
+<?summary-of-invention description="Summary of Invention" end="lead"?>
+<heading id="h-0001" level="1">CROSS-REFERENCE TO RELATED APPLICATION</heading>
+<p id="p-0002" num="0001">The application claims benefit of Japanese Patent Application No. 2016-128835 filed on Jun. 29, 2016, the entire disclosure of which is hereby incorporated by reference in its entirety.</p>
+<heading id="h-0002" level="1">BACKGROUND</heading>
+<heading id="h-0003" level="1">Technical Field</heading>
+<p id="p-0003" num="0002">The present disclosure relates to a light emitting device and a plant cultivation method.</p>
+<heading id="h-0004" level="1">Description of Related Art</heading>
+<p id="p-0004" num="0003">With environmental changes due to climate change and other artificial disruptions, plant factories are expected to increase production efficiency of vegetables and be capable of adjusting production in order to make it possible to stably supply vegetables. Plant factories that are capable of artificial management can stably supply clean and safe vegetables to markets, and therefore are expected to be the next-generation industries.</p>
+<p id="p-0005" num="0004">Plant factories that are completely isolated from external environment make it possible to artificially control and collect various data such as growth method, growth rate data, yield data, depending on classification of plants. Based on those data, plant factories are able to plan production according to the balance between supply and demand in markets, and supply plants such as vegetables without depending on surrounding conditions such as climatic environment. Particularly, an increase in food production is indispensable with world population growth. If plants can be systematically produced without the influence by surrounding conditions such as climatic environment, vegetables produced in plant factories can be stably supplied within a country, and additionally can be exported abroad as viable products.</p>
+<p id="p-0006" num="0005">In general, vegetables that are grown outdoors get sunlight, grow while conducting photosynthesis, and are gathered. On the other hand, vegetables that are grown in plant factories are required to be harvested in a short period of time, or are required to grow in larger than normal sizes even in an ordinary growth period.</p>
+<p id="p-0007" num="0006">In plant factories, the light source used in place of sunlight affect a growth period, growth of plants. LED lighting is being used in place of conventional fluorescent lamps, from a standpoint of power consumption reduction.</p>
+<p id="p-0008" num="0007">For example, Japanese Unexamined Patent Publication No. 2009-125007 discloses a plant growth method. In this method, the plants is irradiated with light emitted from a first LED light emitting element and/or a second LED light emitting element at predetermined timings using a lighting apparatus including the first LED light emitting element emitting light having a wavelength region of 625 to 690 nm and the second LED light emitting element emitting light having a wavelength region of 420 to 490 nm in order to emit lights having sufficient intensities and different wavelengths from each other.</p>
+<heading id="h-0005" level="1">SUMMARY</heading>
+<p id="p-0009" num="0008">However, even though plants are merely irradiated with lights having different wavelengths as in the plant growth method disclosed in Japanese Unexamined Patent Publication No. 2009-125007, the effect of promoting plant growth is not sufficient. Further improvement is required in promotion of plant growth.</p>
+<p id="p-0010" num="0009">Accordingly, an object of the present disclosure is to provide a light emitting device capable of promoting growth of plants and a plant cultivation method.</p>
+<p id="p-0011" num="0010">Means for solving the above problems are as follows, and the present disclosure includes the following embodiments.</p>
+<p id="p-0012" num="0011">A first embodiment of the present disclosure is a light emitting device including a light emitting element having a light emission peak wavelength in a range of 380 nm or more and 490 nm or less, and a fluorescent material that is excited by light from the light emitting element and emits light having at least one light emission peak wavelength in a range of 580 nm or more and less than 680 nm. The light emitting device emits light having a ratio R/B of a photon flux density R to a photon flux density B within a range of 2.0 or more and 4.0 or less, and a ratio R/FR of a photon flux density R to a photon flux density FR within a range of 0.7 or more and 13.0 or less, where the photon flux density R is the number of light quanta (&#x3bc;mol&#xb7;m<sup>&#x2212;2</sup>&#xb7;g<sup>&#x2212;1</sup>) incident per unit time and unit area in a wavelength range of 620 nm or more and less than 700 nm, the photon flux density B is the number of light quanta (&#x3bc;mol&#xb7;m<sup>&#x2212;2</sup>&#xb7;g<sup>&#x2212;1</sup>) incident per unit time and unit area in a wavelength range of 380 nm or more and 490 nm or less, and the photon flux density FR is the number of light quanta (&#x3bc;mol&#xb7;m<sup>&#x2212;2</sup>&#xb7;g<sup>&#x2212;1</sup>) incident per unit time and unit area in a wavelength range of 700 nm or more and 780 nm or less.</p>
+<p id="p-0013" num="0012">A second embodiment of the present disclosure is a plant cultivation method including irradiating plants with light from the light emitting device.</p>
+<p id="p-0014" num="0013">According to embodiments of the present disclosure, a light emitting device capable of promoting growth of plants and a plant cultivation method can be provided.</p>
+<?summary-of-invention description="Summary of Invention" end="tail"?>
+<?brief-description-of-drawings description="Brief Description of Drawings" end="lead"?>
+<description-of-drawings>
+<heading id="h-0006" level="1">BRIEF DESCRIPTION OF THE DRAWINGS</heading>
+<p id="p-0015" num="0014"><figref idref="DRAWINGS">FIG. 1</figref> is a schematic cross sectional view of a light emitting device according to an embodiment of the present disclosure.</p>
+<p id="p-0016" num="0015"><figref idref="DRAWINGS">FIG. 2</figref> is a diagram showing spectra of wavelengths and relative photon flux densities of exemplary light emitting devices according to embodiments of the present disclosure and a comparative light emitting devices.</p>
+<p id="p-0017" num="0016"><figref idref="DRAWINGS">FIG. 3</figref> is a graph showing fresh weight (edible part) at the harvest time of each plant grown by irradiating the plant with light from exemplary light emitting devices according to embodiments of the present disclosure and a comparative light emitting device.</p>
+<p id="p-0018" num="0017"><figref idref="DRAWINGS">FIG. 4</figref> is a graph showing nitrate nitrogen content in each plant grown by irradiating the plant with light from exemplary light emitting devices according to embodiments of the present disclosure and a comparative light emitting device.</p>
+</description-of-drawings>
+<?brief-description-of-drawings description="Brief Description of Drawings" end="tail"?>
+<?detailed-description description="Detailed Description" end="lead"?>
+<heading id="h-0007" level="1">DETAILED DESCRIPTION</heading>
+<p id="p-0019" num="0018">A light emitting device and a plant cultivation method according to the present invention will be described below based on an embodiment. However, the embodiment described below only exemplifies the technical concept of the present invention, and the present invention is not limited to the light emitting device and plant cultivation method described below. In the present specification, the relationship between the color name and the chromaticity coordinate, the relationship between the wavelength range of light and the color name of monochromatic light follows JIS Z8110.</p>
+<heading id="h-0008" level="2">Light Emitting Device</heading>
+<p id="p-0020" num="0019">An embodiment of the present disclosure is a light emitting device including a light emitting element having a light emission peak wavelength in a range of 380 nm or more and 490 nm or less (hereinafter sometimes referred to as a &#x201c;region of from near ultraviolet to blue color&#x201d;), and a first fluorescent material emitting light having at least one light emission peak wavelength in a range of 580 nm or more and less than 680 nm by being excited by light from the light emitting element. The light emitting device emits light having a ratio R/B of a photon flux density R to a photon flux density B within a range of 2.0 or more and 4.0 or less, and a ratio R/FR of the photon flux density R to a photon flux density FR within a range of 0.7 or more and 13.0 or less, where the photon flux density R is the number of light quanta (&#x3bc;mol&#xb7;m<sup>&#x2212;2</sup>&#xb7;g<sup>&#x2212;1</sup>) incident per unit time and unit area in a wavelength range of 620 nm or more and less than 700 nm, the photon flux density B is the number of light quanta (&#x3bc;mol&#xb7;m<sup>&#x2212;2</sup>&#xb7;g<sup>&#x2212;1</sup>) incident per unit time and unit area in a wavelength range of 380 nm or more and 490 nm or less, and the photon flux density FR is the number of light quanta (&#x3bc;mol&#xb7;m<sup>&#x2212;2</sup>&#xb7;g<sup>&#x2212;1</sup>) incident per unit time and unit area in a wavelength range of 700 nm or more and 780 nm or less.</p>
+<p id="p-0021" num="0020">An example of the light emitting device according to one embodiment of the present disclosure is described below based on the drawings. <figref idref="DRAWINGS">FIG. 1</figref> is a schematic cross sectional view showing a light emitting device <b>100</b> according to an embodiment of the present disclosure.</p>
+<p id="p-0022" num="0021">The light emitting device <b>100</b> includes a molded article <b>40</b>, a light emitting element <b>10</b> and a fluorescent member <b>50</b>, as shown in <figref idref="DRAWINGS">FIG. 1</figref>. The molded article <b>40</b> includes a first lead <b>20</b> and a second lead <b>30</b> that are integrally molded with a resin portion <b>42</b> containing a thermoplastic resin or a thermosetting resin. The molded article <b>40</b> forms a depression having a bottom and sides, and the light emitting element <b>10</b> is placed on the bottom of the depression. The light emitting element <b>10</b> has a pair of an anode and a cathode, and the anode and the cathode are electrically connected to the first lead <b>20</b> and the second lead <b>30</b> respectively through the respective wires <b>60</b>. The light emitting element <b>10</b> is covered with the fluorescent member <b>50</b>. The fluorescent member <b>50</b> includes, for example, a fluorescent material <b>70</b> performing wavelength conversion of light from the light emitting element <b>10</b>, and a resin. The fluorescent material <b>70</b> includes a first fluorescent material <b>71</b> and a second fluorescent material <b>72</b>. A part of the first lead <b>20</b> and the second lead <b>30</b> that are connected to a pair of the anode and the cathode of the light emitting element <b>10</b> is exposed toward outside a package constituting the light emitting element <b>100</b>. The light emitting device <b>100</b> can emit light by receiving electric power supply from the outside through the first lead <b>20</b> and the second lead <b>30</b>.</p>
+<p id="p-0023" num="0022">The fluorescent member <b>50</b> not only performs wavelength conversion of light emitted from the light emitting element <b>10</b>, but functions as a member for protecting the light emitting element <b>10</b> from the external environment. In <figref idref="DRAWINGS">FIG. 1</figref>, the fluorescent material <b>70</b> is localized in the fluorescent member <b>50</b> in the state that the first fluorescent material <b>71</b> and the second fluorescent material <b>72</b> are mixed with each other, and is arranged adjacent to the light emitting element <b>10</b>. This constitution can efficiently perform the wavelength conversion of light from the light emitting element <b>10</b> in the fluorescent material <b>70</b>, and as a result, can provide a light emitting device having excellent light emission efficiency. The arrangement of the fluorescent member <b>50</b> containing the fluorescent material <b>70</b>, and the light emitting element <b>10</b> is not limited to the embodiment that the fluorescent material <b>70</b> is arranged adjacent to the light emitting element <b>10</b> as shown in <figref idref="DRAWINGS">FIG. 1</figref>, and considering the influence of heat generated from the light emitting element <b>10</b>, the fluorescent material <b>70</b> can be arranged separated from the light emitting element <b>10</b> in the fluorescent member <b>50</b>. Furthermore, light having suppressed color unevenness can be emitted from the light emitting device <b>100</b> by arranging the fluorescent material <b>70</b> almost evenly in the fluorescent member <b>50</b>. In <figref idref="DRAWINGS">FIG. 1</figref>, the fluorescent material <b>70</b> is arranged in the state that the first fluorescent material <b>71</b> and the second fluorescent material <b>72</b> are mixed with each other. However, for example, the first fluorescent material <b>71</b> may be arranged in a layer state and the second fluorescent material <b>72</b> may be arranged thereon in another layer state. Alternatively, the second fluorescent material <b>72</b> may be arranged in a layer state and the first fluorescent material <b>71</b> may be arranged thereon in another layer state.</p>
+<p id="p-0024" num="0023">The light emitting device <b>100</b> includes the first fluorescent material <b>71</b> having at least one light emission peak wavelength in a range of 580 nm or more and less than 680 nm by being excited by light from the light emitting element <b>10</b>, and preferably further includes the second fluorescent material <b>72</b> having at least one light emission peak wavelength in a range of 680 nm or more and 800 nm or less by being excited by light from the light emitting element <b>10</b>.</p>
+<p id="p-0025" num="0024">The first fluorescent material <b>71</b> and the second fluorescent material <b>72</b> are contained in, for example, the fluorescent member <b>50</b> covering the light emitting element <b>10</b>. The light emitting device <b>100</b> in which the light emitting element <b>10</b> has been covered with the fluorescent member <b>50</b> containing the first fluorescent material <b>71</b> and the second fluorescent material <b>72</b> emits light having at least one light emission peak wavelength in a range of 580 nm or more and less than 680 nm by a part of light emission of the light emitting element <b>10</b> that is absorbed in the first fluorescent material <b>71</b>. Furthermore, the light emitting device <b>100</b> emits light having at least one light emission peak wavelength in a range of 680 nm or more and 800 nm or less by a part of light emission of the light emitting element <b>10</b> that is absorbed in the second fluorescent material <b>72</b>.</p>
+<p id="p-0026" num="0025">Plants grow when a pigment (chlorophyll a and chlorophyll b) present in chlorophyll thereof absorbs light and additionally takes carbon dioxide gas and water therein, and these are converted to carbohydrates (saccharides) by photosynthesis. Chlorophyll a and chlorophyll b used in growth promotion of plants particularly have absorption peaks in a red region of 625 nm or more and 675 nm or less and a blue region of 425 nm or more and 475 nm or less. The action of photosynthesis by chlorophylls of plants mainly occurs in a wavelength range of 400 nm or more and 700 nm or less, but chlorophyll a and chlorophyll b further have local absorption peaks in a region of 700 nm or more and 800 nm or less.</p>
+<p id="p-0027" num="0026">For example, when plants are irradiated with light having longer wavelength than and absorption peak (in the vicinity of 680 nm) in a red region of chlorophyll a, a phenomenon called red drop, in which activity of photosynthesis rapidly decreases, occurs. However, it is known that when plants are irradiated with light containing near infrared region together with light of red region, photosynthesis is accelerated by a synergistic effect of those two kinds of lights. This phenomenon is called the Emerson effect.</p>
+<p id="p-0028" num="0027">Intensity of light with which plants are irradiated is represented by photon flux density. The photon flux density (&#x3bc;mol&#xb7;m<sup>&#x2212;2</sup>&#xb7;s<sup>&#x2212;1</sup>) is the number of photons reaching a unit area per unit time. The amount of photosynthesis depends on the number of photons, and therefore does not depend on other optical characteristics if the photon flux density is the same. However, wavelength dependency activating photosynthesis differs depending on photosynthetic pigment. Intensity of light necessary for photosynthesis of plants is sometimes represented by Photosynthetic Photon Flux Density (PPFD).</p>
+<p id="p-0029" num="0028">The light emitting device <b>100</b> emits light having a ratio R/B of a photon flux density R to a photon flux density B within a range of 2.0 or more and 4.0 or less, and a ratio R/FR of the photon flux density R to a photon flux density FR within a range of 0.7 or more and 13.0 or less, where the photon flux density R is the number of light quanta (&#x3bc;mol&#xb7;m<sup>&#x2212;2</sup>&#xb7;g<sup>&#x2212;1</sup>) incident per unit time and unit area in a wavelength range of 620 nm or more and less than 700 nm, the photon flux density B is the number of light quanta (&#x3bc;mol&#xb7;m<sup>&#x2212;2</sup>&#xb7;g<sup>&#x2212;1</sup>) incident per unit time and unit area in a wavelength range of 380 nm or more and 490 nm or less, and the photon flux density FR is the number of light quanta (&#x3bc;mol&#xb7;m<sup>&#x2212;2</sup>&#xb7;g<sup>&#x2212;1</sup>) incident per unit time and unit area in a wavelength range of 700 nm or more and 780 nm or less.</p>
+<p id="p-0030" num="0029">It is estimated that in plants, which are irradiated with light containing the photon flux density FR from the light emitting device <b>100</b>, photosynthesis is activated by Emerson effect, and as a result, growth of plants can be promoted. Furthermore, when plants are irradiated with light containing the photon flux density FR, growth of the plants can be promoted by a reversible reaction between red light irradiation, to which chlorophyll as chromoprotein contained in plants has participated, and far infrared light irradiation.</p>
+<p id="p-0031" num="0030">Examples of nutrients necessary for growth of plants include nitrogen, phosphoric acid, and potassium. Of those nutrients, nitrogen is absorbed in plants as nitrate nitrogen (nitrate ion: NO<sub>3</sub><sup>&#x2212;</sup>). The nitrate nitrogen changes into nitrite ion (NO<sub>2</sub><sup>&#x2212;</sup>) by a reduction reaction, and when the nitrite ion is further reacted with fatty acid amine, nitrosoamine is formed. It is known that nitrite ion acts to hemoglobin in blood, and it is known that a nitroso compound sometimes affects health of a human body. Mechanism of converting nitrate nitrogen into nitrite ion in vivo is complicated, and the relationship between the amount of intake of nitrate nitrogen and the influence to health of a human body is not clarified. However, it is desired that the content of nitrate nitrogen having a possibility of affecting health of a human body is smaller.</p>
+<p id="p-0032" num="0031">For the above reasons, nitrogen is one of nutrients necessary for growth of plants, but it is preferred that the content of nitrate nitrogen in food plants be reduced to a range that does not disturb the growth of plants.</p>
+<p id="p-0033" num="0032">It is preferred that the light emitting device <b>100</b> further include the second fluorescent material <b>72</b> having at least one light emission peak wavelength in a range of 680 nm or more and 800 nm or less by being excited by light from the light emitting element <b>10</b>, wherein the R/FR ratio is within a range of 0.7 or more and 5.0 or less. The R/FR ratio is more preferably within a range of 0.7 or more and 2.0 or less.</p>
+<heading id="h-0009" level="2">Light Emitting Element</heading>
+<p id="p-0034" num="0033">The light emitting element <b>10</b> is used as an excitation light source, and is a light emitting element emitting light having a light emission peak wavelength in a range of 380 nm or more and 490 nm or less. As a result, a stable light emitting device having high efficiency, high linearity of output to input and strong mechanical impacts can be obtained.</p>
+<p id="p-0035" num="0034">The range of the light emission peak wavelength of the light emitting element <b>10</b> is preferably in a range of 390 nm or more and 480 nm or less, more preferably in a range of 420 nm or more and 470 nm or less, and still more preferably in a range of 440 nm or more and 460 nm or less, and particularly preferably in a range of 445 nm or more and 455 nm or less. A light emitting element including a nitride semiconductor (In<sub>x</sub>Al<sub>y</sub>Ga<sub>1-x-y</sub>N, 0&#x2266;X, 0&#x2266;Y and X+Y&#x2266;1) is preferably used as the light emitting element <b>10</b>.</p>
+<p id="p-0036" num="0035">The half value width of emission spectrum of the light emitting element <b>10</b> can be, for example, 30 nm or less.</p>
+<heading id="h-0010" level="2">Fluorescent Member</heading>
+<p id="p-0037" num="0036">The fluorescent member <b>50</b> used in the light emitting device <b>100</b> preferably includes the first fluorescent material <b>71</b> and a sealing material, and more preferably further includes the second fluorescent material <b>72</b>. A thermoplastic resin and a thermosetting resin can be used as the sealing material. The fluorescent member <b>50</b> may contain other components such as a filler, a light stabilizer and a colorant, in addition to the fluorescent material and the sealing material. Examples of the filler include silica, barium titanate, titanium oxide and aluminum oxide.</p>
+<p id="p-0038" num="0037">The content of other components other than the fluorescent material <b>70</b> and the sealing material in the fluorescent member <b>50</b> is preferably in a range of 0.01 parts by mass or more and 20 parts by mass or less, per 100 parts by mass of the sealing material.</p>
+<p id="p-0039" num="0038">The total content of the fluorescent material <b>70</b> in the fluorescent member <b>50</b> can be, for example, 5 parts by mass or more and 300 parts by mass or less, per 100 parts by mass of the sealing material. The total content is preferably 10 parts by mass or more and 250 parts by mass or less, more preferably 15 parts by mass or more and 230 parts by mass or less, and still more preferably 15 parts by mass or more and 200 parts by mass or less. When the total content of the fluorescent material <b>70</b> in the fluorescent member <b>50</b> is within the above range, the light emitted from the light emitting element <b>10</b> can be efficiently subjected to wavelength conversion in the fluorescent material <b>70</b>.</p>
+<heading id="h-0011" level="2">First Fluorescent Material</heading>
+<p id="p-0040" num="0039">The first fluorescent material <b>71</b> is a fluorescent material that is excited by light from the light emitting element <b>10</b> and emits light having at least one light emission peak wavelength in a range of 580 nm or more and less than 680 nm. Examples of the first fluorescent material <b>71</b> include an Mn<sup>4+</sup>-activated fluorogermanate fluorescent material, an Eu<sup>2+</sup>-activated nitride fluorescent material, an Eu<sup>2+</sup>-activated alkaline earth sulfide fluorescent material and an Mn<sup>4+</sup>-activated halide fluorescent material. The first fluorescent material <b>71</b> may use one selected from those fluorescent materials and may use a combination of two or more thereof. The first fluorescent material preferably contains an Eu<sup>2+</sup>-activated nitride fluorescent material and an Mn<sup>4+</sup>-activated fluorogermanate fluorescent material.</p>
+<p id="p-0041" num="0040">The Eu<sup>2+</sup>-activated nitride fluorescent material is preferably a fluorescent material that has a composition including at least one element selected from Sr and Ca, and Al and contains silicon nitride that is activated by Eu<sup>2+</sup>, or a fluorescent material that has a composition including at least one element selected from the group consisting of alkaline earth metal elements and at least one element selected from the group consisting of alkali metal elements and contains aluminum nitride that is activated by Eu<sup>2+</sup>.</p>
+<p id="p-0042" num="0041">The halide fluorescent material that is activated by Mn<sup>4+</sup> is preferably a fluorescent material that has a composition including at least one element or ion selected from the group consisting of alkali metal elements and an ammonium ion (NH<sup>4+</sup>) and at least one element selected from the group consisting of Group 4 elements and Group 14 elements and contains a fluoride that is activated by Mn<sup>4+</sup>.</p>
+<p id="p-0043" num="0042">Examples of the first fluorescent material <b>71</b> specifically include fluorescent materials having any one composition of the following formulae (I) to (VI).</p>
+<p id="p-0044" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>(<i>i&#x2212;j</i>)MgO.(<i>j/</i>2)Sc<sub>2</sub>O<sub>3</sub><i>.k</i>MgF<sub>2</sub><i>.m</i>CaF<sub>2</sub>.(1<i>&#x2212;n</i>)GeO<sub>2</sub>.(<i>n/</i>2)M<sup>t</sup><sub>2</sub>O<sub>3</sub><i>:z</i>Mn<sup>4+</sup>&#x2003;&#x2003;(I)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0045" num="0000">wherein M<sup>t </sup>is at least one selected from the group consisting of Al, Ga, and In, and j, k, m, n, and z are numbers satisfying 2&#x2266;i&#x2266;4, 0&#x2266;j&#x3c;0.5, 0&#x3c;k&#x3c;1.5, 0&#x2266;m&#x3c;1.5, 0&#x3c;n&#x3c;0.5, and 0&#x3c;z&#x3c;0.05, respectively.</p>
+<p id="p-0046" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>(Ca<sub>1-p-q</sub>Sr<sub>p</sub>Eu<sub>q</sub>)AlSiN<sub>3</sub>&#x2003;&#x2003;(II)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0047" num="0000">wherein p and q are numbers satisfying 0&#x2266;p&#x2266;1.0, 0&#x3c;q&#x3c;1.0, and p+q&#x3c;1.0.</p>
+<p id="p-0048" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>M<sup>a</sup><sub>v</sub>M<sup>b</sup><sub>w</sub>M<sup>c</sup><sub>f</sub>Al<sub>3-g</sub>Si<sub>g</sub>N<sub>h</sub>&#x2003;&#x2003;(III)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0049" num="0000">wherein M<sup>a </sup>is at least one element selected from the group consisting of Ca, Sr, Ba, and Mg, M<sup>b </sup>is at least one element selected from the group consisting of Li, Na, and K, M<sup>c </sup>is at least one element selected from the group consisting of Eu, Ce, Tb, and Mn, v, w, f, g, and h are numbers satisfying 0.80&#x2266;v&#x2266;1.05, 0.80&#x2266;w&#x2266;1.05, 0.001&#x3c;f&#x2266;0.1, 0&#x2266;g&#x2266;0.5, and 3.0&#x2266;h&#x2266;5.0, respectively.</p>
+<p id="p-0050" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>(Ca<sub>1-r-s-t</sub>Sr<sub>r</sub>Ba<sub>s</sub>Eu<sub>t</sub>)<sub>2</sub>Si<sub>5</sub>N<sub>8</sub>&#x2003;&#x2003;(IV)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0051" num="0000">wherein r, s, and t are numbers satisfying 0&#x2266;r&#x2266;1.0, 0&#x2266;s&#x2266;1.0, 0&#x3c;t&#x3c;1.0, and r+s+t&#x2266;1.0.</p>
+<p id="p-0052" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>(Ca,Sr)S:Eu&#x2003;&#x2003;(V)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0053" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>A<sub>2</sub>[M<sup>1</sup><sub>1-u</sub>Mn<sup>4+</sup><sub>u</sub>F<sub>6</sub>]&#x2003;&#x2003;(VI)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0054" num="0000">wherein A is at least one selected from the group consisting of K, Li, Na, Rb, Cs, and NH<sub>4</sub><sup>+</sup>, M<sup>1 </sup>is at least one element selected from the group consisting of Group 4 elements and Group 14 elements, and u is the number satisfying 0&#x3c;u&#x3c;0.2.</p>
+<p id="p-0055" num="0043">The content of the first fluorescent material <b>71</b> in the fluorescent member <b>50</b> is not particularly limited as long as the R/B ratio is within a range of 2.0 or more and 4.0 or less. The content of the first fluorescent material <b>71</b> in the fluorescent member <b>50</b> is, for example, 1 part by mass or more, preferably 5 parts by mass or more, and more preferably 8 parts by mass or more, per 100 parts by mass of the sealing material, and is preferably 200 parts by mass or less, more preferably 150 parts by mass or less, and still more preferably 100 parts by mass or less, per 100 parts by mass of the sealing material. When the content of the first fluorescent material <b>71</b> in the fluorescent member <b>50</b> is within the aforementioned range, the light emitted from the light emitting element <b>10</b> can be efficiently subjected to wavelength conversion, and light capable of promoting growth of plant can be emitted from the light emitting device <b>100</b>.</p>
+<p id="p-0056" num="0044">The first fluorescent material <b>71</b> preferably contains at least two fluorescent materials, and in the case of containing at least two fluorescent materials, the first fluorescent material preferably contains a fluorogermanate fluorescent material that is activated by Mn<sup>4+</sup> (hereinafter referred to as &#x201c;MGF fluorescent material&#x201d;), and a fluorescent material that has a composition including at least one element selected from Sr and Ca, and Al, and contains silicon nitride that is activated by Eu<sup>2+</sup> (hereinafter referred to as &#x201c;CASN fluorescent material&#x201d;).</p>
+<p id="p-0057" num="0045">In the case where the first fluorescent material <b>71</b> contains at least two fluorescent materials and two fluorescent materials are a MGF fluorescent material and a CASN fluorescent material, where a compounding ratio thereof (MGF fluorescent material:CASN fluorescent material) is preferably in a range of 50:50 or more and 99:1 or less, more preferably in a range of 60:40 or more and 97:3 or less, and still more preferably in a range of 70:30 or more and 96:4 or less, in mass ratio. In the case where the first fluorescent material contains two fluorescent materials, when those fluorescent materials are a MGF fluorescent material and a CASN fluorescent material and the mass ratio thereof is within the aforementioned range, the light emitted from the light emitting element <b>10</b> can be efficiently subjected to wavelength conversion in the first fluorescent material <b>71</b>. In addition, the R/B ratio can be adjusted to within a range of 2.0 or more and 4.0 or less, and the R/FR ratio is easy to be adjusted to within a range of 0.7 or more and 13.0 or less.</p>
+<heading id="h-0012" level="2">Second Fluorescent Material</heading>
+<p id="p-0058" num="0046">The second fluorescent material <b>72</b> is a fluorescent material that is excited by the light from the light emitting element <b>10</b> and emits light having at least one light emission peak wavelength in a range of 680 nm or more and 800 nm or less.</p>
+<p id="p-0059" num="0047">The second fluorescent material <b>72</b> used in the light emitting device according to one embodiment of the present disclosure is a fluorescent material that contains a first element Ln containing at least one element selected from the group consisting of rare earth elements excluding Ce, a second element M containing at least one element selected from the group consisting of Al, Ga, In, Ce, and Cr, and has a composition of an aluminate fluorescent material. When a molar ratio of the second element M is taken as 5, it is preferred that a molar ratio of Ce be a product of a value of a parameter x and 3, and a molar ratio of Cr be a product of a value of a parameter y and 3, wherein the value of the parameter x is in a range of exceeding 0.0002 and less than 0.50, and the value of the parameter y is in a range of exceeding 0.0001 and less than 0.05.</p>
+<p id="p-0060" num="0048">The second fluorescent material <b>72</b> is preferably a fluorescent material having the composition represented by the following formula (1):</p>
+<p id="p-0061" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>(Ln<sub>1-x-y</sub>Ce<sub>x</sub>Cr<sub>y</sub>)<sub>3</sub>M<sub>5</sub>O<sub>12</sub>&#x2003;&#x2003;(1)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0062" num="0000">wherein Ln is at least one rare earth element selected from the group consisting of rare earth elements excluding Ce, M is at least one element selected from the group consisting of Al, Ga, and In, and x and y are numbers satisfying 0.0002&#x3c;x&#x3c;0.50 and 0.0001&#x3c;y&#x3c;0.05, respectively.</p>
+<p id="p-0063" num="0049">In this case, the second fluorescent material <b>72</b> has a composition constituting a garnet structure, and therefore is tough against heat, light, and water, has an absorption peak wavelength of excited absorption spectrum in the vicinity of 420 nm or more and 470 nm or less, and sufficiently absorbs the light from the light emitting element <b>10</b>, thereby enhancing light emitting intensity of the second fluorescent material <b>72</b>, which is preferred. Furthermore, the second fluorescent material <b>72</b> is excited by light having light emission peak wavelength in a range of 380 nm or more and 490 nm or less and emits light having at least one light emission peak wavelength in a range of 680 nm or more and 800 nm or less.</p>
+<p id="p-0064" num="0050">In the second fluorescent material <b>72</b>, from the standpoint of stability of a crystal structure, Ln is preferably at least one rare earth element selected from the group consisting of Y, Gd, Lu, La, Tb, and Pr, and M is preferably Al or Ga.</p>
+<p id="p-0065" num="0051">In the second fluorescent material <b>72</b>, the value of the parameter x is more preferably in a range of 0.0005 or more and 0.400 or less (0.0005&#x2266;x&#x2266;0.400), and still more preferably in a range of 0.001 or more and 0.350 or less (0.001&#x2266;x&#x2266;0.350).</p>
+<p id="p-0066" num="0052">In the second fluorescent material <b>72</b>, the value of the parameter y is preferably in a range of exceeding 0.0005 and less than 0.040 (0.0005&#x3c;y&#x3c;0.040), and more preferably in a range of 0.001 or more and 0.026 or less (0.001&#x2266;y&#x2266;0.026).</p>
+<p id="p-0067" num="0053">The parameter x is an activation amount of Ce and the value of the parameter x is in a range of exceeding 0.0002 and less than 0.50 (0.0002&#x3c;x&#x3c;0.50), and the parameter y is an activation amount of Cr. When the value of the parameter y is in a range of exceeding 0.0001 and less than 0.05 (0.0001&#x3c;y&#x3c;0.05), the activation amount of Ce and the activation amount of Cr that are light emission centers contained in the crystal structure of the fluorescent material are within optimum ranges, the decrease of light emission intensity due to the decrease of light emission center can be suppressed, the decrease of light emission intensity due to concentration quenching caused by the increase of the activation amount can be suppressed, and light emission intensity can be enhanced.</p>
+<heading id="h-0013" level="2">Production Method of Second Fluorescent Material</heading>
+<p id="p-0068" num="0054">A method for producing the second fluorescent material <b>72</b> includes the following method.</p>
+<p id="p-0069" num="0055">A compound containing at least one rare earth element Ln selected from the group consisting of rare earth elements excluding Ce, a compound containing at least one element M selected from the group consisting of Al, Ga, and In, a compound containing Ce and a compound containing Cr are mixed such that, when the total molar composition ratio of the M is taken as 5 as the standard, in the case where the total molar composition ratio of Ln, Ce, and Nd is 3, the molar ratio of Ce is a product of 3 and a value of a parameter x, and the molar ratio of Cr is a product of 3 and a value of a parameter y, the value of the parameter x is in a range of exceeding 0.0002 and less than 0.50 and the value of the parameter y is in a range of exceeding 0.0001 and less than 0.05, thereby obtaining a raw material mixture, the raw material mixture is heat-treated, followed by classification and the like, thereby obtaining the second fluorescent material.</p>
+<heading id="h-0014" level="2">Compound Containing Rare Earth Element Ln</heading>
+<p id="p-0070" num="0056">Examples of the compound containing rare earth element Ln include oxides, hydroxides, nitrides, oxynitrides, fluorides, and chlorides, that contain at least one rare earth element Ln selected from the group consisting of rare earth elements excluding Ce. Those compounds may be hydrates. At least a part of the compounds containing rare earth element may use a metal simple substance or an alloy containing rare earth element. The compound containing rare earth element is preferably a compound containing at least one rare earth element Ln selected from the group consisting of Y, Gd, Lu, La, Tb, and Pr. The compound containing rare earth element may be used alone or may be used as a combination of at least two compounds containing rare earth element.</p>
+<p id="p-0071" num="0057">The compound containing rare earth element is preferably an oxide that does not contain elements other than the target composition, as compared with other materials. Examples of the oxide specifically include Y<sub>2</sub>O<sub>3</sub>, Gd<sub>2</sub>O<sub>3</sub>, Lu<sub>2</sub>O<sub>3</sub>, La<sub>2</sub>O<sub>3</sub>, Tb<sub>4</sub>O<sub>7 </sub>and Pr<sub>6</sub>O<sub>11</sub>.</p>
+<heading id="h-0015" level="2">Compound Containing M</heading>
+<p id="p-0072" num="0058">Examples of the compound containing at least one element M selected from the group consisting of Al, Ga, and In include oxides, hydroxides, nitrides, oxynitrides, fluorides, and chlorides, that contain Al, Ga, or In. Those compounds may be hydrates. Furthermore, Al metal simple substance, Ga metal simple substance, In metal simple substance, Al alloy, Ga alloy or In alloy may be used, and metal simple substance or an alloy may be used in place of at least a part of the compound. The compound containing Al, Ga, or In may be used alone or may be used as a combination of two or more thereof. The compound containing at least one element selected from the group consisting of Al, Ga, and In is preferably an oxide. The reason for this is that an oxide that does not contain elements other than the target composition, as compared with other materials, and a fluorescent material having a target composition are easy to be obtained. When a compound containing elements other than the target composition has been used, residual impurity elements are sometimes present in the fluorescent material obtained. The residual impurity element becomes a killer factor in light emission, leading to the possibility of remarkable decrease of light emission intensity.</p>
+<p id="p-0073" num="0059">Examples of the compound containing Al, Ga, or In specifically include Al<sub>2</sub>O<sub>3</sub>, Ga<sub>2</sub>O<sub>3</sub>, and In<sub>2</sub>O<sub>3</sub>.</p>
+<heading id="h-0016" level="2">Compound Containing Ce and Compound Containing Cr</heading>
+<p id="p-0074" num="0060">Examples of the compound containing Ce or the compound containing Cr include oxides, hydroxides, nitrides, fluorides, and chlorides, that contain cerium (Ce) or chromium (Cr). Those compounds may be hydrates. Ce metal simple substance, Ce alloy, Cr metal simple substance, or Cr alloy may be used, and a metal simple substance or an alloy may be used in place of a part of the compound. The compound containing Ce or the compound containing Cr may be used alone or may be used as a combination of two or more thereof. The compound containing Ce or the compound containing Cr is preferably an oxide. The reason for this is that an oxide that does not contain elements other than the target composition, as compared with other materials, and a fluorescent material having a target composition are easy to be obtained. When a compound containing elements other than the target composition has been used, residual impurity elements are sometimes present in the fluorescent material obtained. The residual impurity element becomes a killer factor in light emission, leading to the possibility of remarkable decrease of light emission intensity.</p>
+<p id="p-0075" num="0061">Example of the compound containing Ce specifically includes CeO<sub>2</sub>, and example of the compound containing Cr specifically includes Cr<sub>2</sub>O<sub>3</sub>.</p>
+<p id="p-0076" num="0062">The raw material mixture may contain a flux such as a halide, as necessary. When a flux is contained in the raw material mixture, reaction of raw materials with each other is accelerated, and a solid phase reaction is easy to proceed further uniformly. It is considered that a temperature for heat-treating the raw material mixture is almost the same as a formation temperature of a liquid phase of a halide used as a flux or is a temperature higher than the formation temperature, and, as a result, the reaction is accelerated.</p>
+<p id="p-0077" num="0063">Examples of the halide include fluorides, chlorides of rare earth metals, alkali earth metals, and alkali metals. When a halide of rare earth metal is used as the flux, the flux can be added as a compound so as to achieve a target composition. Examples of the flux specifically include BaF<sub>2 </sub>and CaF<sub>2</sub>. Of those, BaF<sub>2 </sub>is preferably used. When barium fluoride is used as the flux, a garnet crystal structure is stabilized and a composition of a garnet crystal structure is easy to be formed.</p>
+<p id="p-0078" num="0064">When the raw material mixture contains a flux, the content of the flux is preferably 20 mass % or less, and more preferably 10 mass % or less, and is preferably 0.1 mass % or more, on the basis of the raw material mixture (100 mass %). When the flux content is within the aforementioned range, the problem that it is difficult to form a garnet crystal structure due to the insufficiency of particle growth by small amount of the flux is prevented, and furthermore, the problem that it is difficult to form a garnet crystal structure due to too large amount of the flux is prevented.</p>
+<p id="p-0079" num="0065">The raw material mixture is prepared, for example, as follows. Each of raw materials is weighed so as to be a compounding ratio. Thereafter, the raw materials are subjected to mixed grinding using a dry grinding machine such as ball mill, are subjected to mixed grinding using a mortar and a pestle, are subjected to mixing using a mixing machine such as a ribbon blender, for example, or are subjected to mixed grinding using both a dry grinding machine and a mixing machine. As necessary, the raw material mixture may be classified using a wet separator such as a setting tank generally used industrially, or a dry classifier such as a cyclone. The mixing may be conducted by dry mixing or may be conducted by wet mixing by adding a solvent. The mixing is preferably dry mixing. The reason for this is that dry mixing can shorten a processing time as compared with wet drying, and this leads to the improvement of productivity.</p>
+<p id="p-0080" num="0066">The raw material mixture after mixing each raw material is dissolved in an acid, the resulting solution is co-precipitated in oxalic acid, a product formed by the co-precipitation is baked to obtain an oxide, and the oxide may be used as the raw material mixture.</p>
+<p id="p-0081" num="0067">The raw material mixture can be heat-treated by placing it in a crucible, a boat made of a carbon material (such as graphite), boron nitride (BN), aluminum oxide (alumina), tungsten (W) or molybdenum (Mo).</p>
+<p id="p-0082" num="0068">From the standpoint of stability of a crystal structure, the temperature for heat-treating the raw material mixture is preferably in a range of 1,000&#xb0; C. or higher and 2,100&#xb0; C. or lower, more preferably in a range of 1,100&#xb0; C. or higher and 2,000&#xb0; C. or lower, still more preferably in a range of 1,200&#xb0; C. or higher and 1,900&#xb0; C. or lower, and particularly preferably in a range of 1,300&#xb0; C. or higher and 1,800&#xb0; C. or lower. The heat treatment can use an electric furnace or a gas furnace.</p>
+<p id="p-0083" num="0069">The heat treatment time varies depending on a temperature rising rate, a heat treatment atmosphere. The heat treatment time after reaching the heat treatment temperature is preferably 1 hour or more, more preferably 2 hours or more, and still more preferably 3 hours or more, and is preferably 20 hours or less, more preferably 18 hours or less and still more preferably 15 hours or less.</p>
+<p id="p-0084" num="0070">The atmosphere for heat-treating the raw material mixture is an inert atmosphere such as argon or nitrogen, a reducing atmosphere containing hydrogen, or an oxidizing atmosphere such as the air. The raw material mixture may be subjected to a two-stage heat treatment of a first heat treatment of heat-treating in the air or a weakly reducing atmosphere from the standpoint of, for example, prevention of blackening, and a second heat treatment of heat-treating in a reducing atmosphere from the standpoint of enhancing absorption efficiency of light having a specific light emission peak wavelength. The fluorescent material constituting a garnet structure is that reactivity of the raw material mixture is improved in an atmosphere having high reducing power such as a reducing atmosphere. Therefore, the fluorescent material can be heat-treated under the atmospheric pressure without pressurizing. For example, the heat treatment can be conducted by the method disclosed in Japanese Patent Application No. 2014-260421.</p>
+<p id="p-0085" num="0071">The fluorescent material obtained may be subjected to post-treatment steps such as a solid-liquid separation by a method such as cleaning or filtration, drying by a method such as vacuum drying, and classification by dry sieving. After those post-treatment steps, a fluorescent material having a desired average particle diameter is obtained.</p>
+<heading id="h-0017" level="2">Other Fluorescent Materials</heading>
+<p id="p-0086" num="0072">The light emitting device <b>100</b> may contain other kinds of fluorescent materials, in addition to the first fluorescent material <b>71</b>.</p>
+<p id="p-0087" num="0073">Examples of other kinds of fluorescent materials include a green fluorescent material emitting green color by absorbing a part of the light emitted from the light emitting element <b>10</b>, a yellow fluorescent material emitting yellow color, and a fluorescent material having a light emission peak wavelength in a wavelength range exceeding 680 nm.</p>
+<p id="p-0088" num="0074">Examples of the green fluorescent material specifically include fluorescent materials having any one of compositions represented by the following formulae (i) to (iii).</p>
+<p id="p-0089" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>M<sup>11</sup><sub>8</sub>MgSi<sub>4</sub>O<sub>16</sub>X<sup>11</sup>:Eu&#x2003;&#x2003;(i)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0090" num="0000">wherein M<sup>11 </sup>is at least one selected from the group consisting of Ca, Sr, Ba, and Zn, and X<sup>11 </sup>is at least one selected from the group consisting of F, Cl, Br, and I.</p>
+<p id="p-0091" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>Si<sub>6-b</sub>Al<sub>b</sub>O<sub>b</sub>N<sub>8-b</sub>:Eu&#x2003;&#x2003;(ii)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0092" num="0000">wherein b satisfies 0&#x3c;b&#x3c;4.2.</p>
+<p id="p-0093" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>M<sup>13</sup>Ga<sub>2</sub>S<sub>4</sub>:Eu&#x2003;&#x2003;(iii)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0094" num="0000">wherein M<sup>13 </sup>is at least one selected from the group consisting of Mg, Ca, Sr, and</p>
+<p id="p-0095" num="0075">Ba.</p>
+<p id="p-0096" num="0076">Examples of the yellow fluorescent material specifically include fluorescent materials having any one of compositions represented by the following formulae (iv) to (v).</p>
+<p id="p-0097" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>M<sup>14</sup><sub>c/d</sub>Si<sub>12-(c+d)</sub>Al<sub>(c+d)</sub>O<sub>d</sub>N<sub>(16-d)</sub>:Eu&#x2003;&#x2003;(iv)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0098" num="0000">wherein M<sup>14 </sup>is at least one selected from the group consisting of Sr, Ca, Li, and Y. A value of a parameter c is in a range of 0.5 to 5, a value of a parameter d is in a range of 0 to 2.5, and the parameter d is an electrical charge of M<sup>14</sup>.</p>
+<p id="p-0099" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>M<sup>15</sup><sub>3</sub>Al<sub>5</sub>O<sub>12</sub>:Ce&#x2003;&#x2003;(v)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0100" num="0000">wherein M<sup>15 </sup>is at least one selected from the group consisting of Y and Lu.</p>
+<p id="p-0101" num="0077">Examples of the fluorescent material having light emission peak wavelength in a wavelength range exceeding 680 nm specifically include fluorescent materials having any one of compositions represented by the following formulae (vi) to (x).</p>
+<p id="p-0102" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>Al<sub>2</sub>O<sub>3</sub>:Cr&#x2003;&#x2003;(vi)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0103" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>CaYAlO<sub>4</sub>:Mn&#x2003;&#x2003;(vii)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0104" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>LiAlO<sub>2</sub>:Fe&#x2003;&#x2003;(viii)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0105" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>CdS:Ag&#x2003;&#x2003;(ix)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0106" num="0000">
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>GdAlO<sub>3</sub>:Cr&#x2003;&#x2003;(x)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</p>
+<p id="p-0107" num="0078">The light emitting device <b>100</b> can be utilized as a light emitting device for plant cultivation that can activate photosynthesis of plants and promote growth of plants so as to have favorable form and weight.</p>
+<heading id="h-0018" level="2">Plant Cultivation Method</heading>
+<p id="p-0108" num="0079">The plant cultivation method of one embodiment of the present disclosure is a method for cultivating plants, including irradiating plants with light emitted from the light emitting device <b>100</b>. In the plant cultivation method, plants can be irradiated with light from the light emitting device <b>100</b> in plant factories that are completely isolated from external environment and make it possible for artificial control. The kind of plants is not particularly limited. However, the light emitting device <b>100</b> of one embodiment of the present disclosure can activate photosynthesis of plants and promote growth of plants such that a stem, a leaf, a root, a fruit have favorable form and weight, and therefore is preferably applied to cultivation of vegetables, flowers that contain much chlorophyll performing photosynthesis. Examples of the vegetables include lettuces such as garden lettuce, curl lettuce, Lamb's lettuce, Romaine lettuce, endive, Lollo Rosso, Rucola lettuce, and frill lettuce; Asteraceae vegetables such as &#x201c;shungiku&#x201d; (<i>chrysanthemum coronarium</i>); morning glory vegetables such as spinach; Rosaceae vegetables such as strawberry; and flowers such as <i>chrysanthemum, gerbera</i>, rose, and tulip.</p>
+<heading id="h-0019" level="1">EXAMPLES</heading>
+<p id="p-0109" num="0080">The present invention is further specifically described below by Examples and Comparative Examples.</p>
+<heading id="h-0020" level="1">Examples 1 to 5</heading>
+<heading id="h-0021" level="2">First Fluorescent Material</heading>
+<p id="p-0110" num="0081">Two fluorescent materials of fluorogarmanate fluorescent material that is activated by Mn<sup>4+</sup>, having a light emission peak at 660 nm and fluorescent material containing silicon nitride that are activated by Eu<sup>2+</sup>, having a light emission peak at 660 nm were used as the first fluorescent material <b>71</b>. In the first fluorescent material <b>71</b>, a mass ratio of a MGF fluorescent material to a CASN fluorescent material (MGF:CASN) was 95:5.</p>
+<heading id="h-0022" level="2">Second Fluorescent Material</heading>
+<p id="p-0111" num="0082">Fluorescent material that is obtained by the following production method was used as the second fluorescent material <b>72</b>.</p>
+<p id="p-0112" num="0083">55.73 g of Y<sub>2</sub>O<sub>3 </sub>(Y<sub>2</sub>O<sub>3 </sub>content: 100 mass %), 0.78 g of CeO<sub>2 </sub>(CeO<sub>2 </sub>content: 100 mass %), 0.54 g of Cr<sub>2</sub>O<sub>3 </sub>(Cr<sub>2</sub>O<sub>3 </sub>content: 100 mass %,) and 42.95 g of Al<sub>2</sub>O<sub>3 </sub>(Al<sub>2</sub>O<sub>3 </sub>content: 100 mass %) were weighed as raw materials, and 5.00 g of BaF<sub>2 </sub>as a flux was added to the mixture. The resulting raw materials were dry mixed for 1 hour by a ball mill. Thus, a raw material mixture was obtained.</p>
+<p id="p-0113" num="0084">The raw material mixture obtained was placed in an alumina crucible, and a lid was put on the alumina crucible. The raw material mixture was heat-treated at 1,500&#xb0; C. for 10 hours in a reducing atmosphere of H<sub>2</sub>: 3 vol % and N<sub>2</sub>: 97 vol %. Thus, a calcined product was obtained. The calcined product was passed through a dry sieve to obtain a second fluorescent material. The second fluorescent material obtained was subjected to composition analysis by ICP-AES emission spectrometry using an inductively coupled plasma emission analyzer (manufactured by Perkin Elmer). The composition of the second fluorescent material obtained was (Y<sub>0.977</sub>Ce<sub>0.009</sub>Cr<sub>0.014</sub>)<sub>3</sub>Al<sub>5</sub>O<sub>12 </sub>(hereinafter referred to as &#x201c;YAG: Ce, Cr&#x201d;).</p>
+<heading id="h-0023" level="2">Light Emitting Device</heading>
+<p id="p-0114" num="0085">Nitride semiconductor having a light emission peak wavelength of 450 nm was used as the light emitting element <b>10</b> in the light emitting device <b>100</b>.</p>
+<p id="p-0115" num="0086">Silicone resin was used as a sealing material constituting the fluorescent member <b>50</b>, the first fluorescent material <b>71</b> and/or the second fluorescent material <b>72</b> was added to 100 parts by mass of the silicone resin in the compounding ratio (parts by mass) shown in Table 1, and 15 parts by mass of silica filler were further added thereto, followed by mixing and dispersing. The resulting mixture was degassed to obtain a resin composition constituting a fluorescent member. In each of resin compositions of Examples 1 to 5, the compounding ratio of the first fluorescent material <b>71</b> and the second fluorescent material <b>72</b> was adjusted as shown in Table 1, and those materials are compounded such that the R/B ratio is within a range of 2.0 or more and 2.4 or less, and the R/FR ratio is within a range of 1.4 or more and 6.0 or less.</p>
+<p id="p-0116" num="0087">The resin composition was poured on the light emitting element <b>10</b> of a depressed portion of the molded article <b>40</b> to fill the depressed portion, and heated at 150&#xb0; C. for 4 hours to cure the resin composition, thereby forming the fluorescent member <b>50</b>. Thus, the light emitting device <b>100</b> as shown in <figref idref="DRAWINGS">FIG. 1</figref> was produced in each of Examples 1 to 5.</p>
+<heading id="h-0024" level="1">Comparative Example 1</heading>
+<p id="p-0117" num="0088">A light emitting device X including a semiconductor light emitting element having a light emission peak wavelength of 450 nm and a light emitting device Y including a semiconductor light emitting element having a light emission peak length of 660 nm were used, and the R/B ratio was adjusted to 2.5.</p>
+<heading id="h-0025" level="2">Evaluation</heading>
+<heading id="h-0026" level="2">Photon Flux Density</heading>
+<p id="p-0118" num="0089">Photon flux densities of lights emitted from the light emitting device <b>100</b> used in Examples 1 to 5 and the light emitting devices X and Y used in Comparative Example 1 were measured using a photon measuring device (LI-250A, manufactured by Li-COR). The photon flux density B, the photon flux density R, and the photon flux density FR of lights emitted from the light emitting devices used in each of the Examples and Comparative Example; the R/B ratio; and the R/FR ratio are shown in Table 1. <figref idref="DRAWINGS">FIG. 2</figref> shows spectra showing the relationship between a wavelength and a relative photon flux density, in the light emitting devices used in each Example and Comparative Example.</p>
+<heading id="h-0027" level="2">Plant Cultivation Test</heading>
+<p id="p-0119" num="0090">The plant cultivation method includes a method of conducting by &#x201c;growth period by RGB light source (hereinafter referred to as a first growth period)&#x201d; and &#x201c;growth period by light source for plant growth (hereinafter referred to as a second growth period)&#x201d; using a light emitting device according to an embodiment of the present disclosure as a light source.</p>
+<p id="p-0120" num="0091">The first growth period uses RGB light source, and RGB type LED generally known can be used as the RGB light source. The reason for irradiating plants with RGB type LED in the initial stage of the plant growth is that length of a stem and the number and size of true leaves in the initial stage of plant growth are made equal, thereby clarifying the influence by the difference of light quality in the second growth period.</p>
+<p id="p-0121" num="0092">The first growth period is preferably about 2 weeks. In the case where the first growth period is shorter than 2 weeks, it is necessary to confirm that two true leaves develop and a root reaches length that can surely absorb water in the second growth period. In the case where the first growth period exceeds 2 weeks, variation in the second growth period tends to increase. The variation is easy to be controlled by RGB light source by which stem extension is inhibitory, rather than a fluorescent lamp by which stem extension is easy to occur.</p>
+<p id="p-0122" num="0093">After completion of the first growth period, the second growth period immediately proceeds. It is preferred that plants are irradiated with light emitted from a light emitting device according to an embodiment of the present disclosure. Photosynthesis of plants is activated by irradiating plants with light emitted from the light emitting device according to an embodiment of the present disclosure, and the growth of plants can be promoted so as to have favorable form and weight.</p>
+<p id="p-0123" num="0094">The total growth period of the first growth period and the second growth period is about 4 to 6 weeks, and it is preferred that shippable plants can be obtained within the period.</p>
+<p id="p-0124" num="0095">The cultivation test was specifically conducted by the following method.</p>
+<p id="p-0125" num="0096">Romaine lettuce (green romaine, produced by Nakahara Seed Co., Ltd.) was used as cultivation plant.</p>
+<heading id="h-0028" level="2">First Growth Period</heading>
+<p id="p-0126" num="0097">Urethane sponges (salad urethane, manufactured by M Hydroponic Research Co., Ltd.) having Romaine lettuce seeded therein were placed side by side on a plastic tray, and were irradiated with light from RGB-LED light source (manufactured by Shibasaki Inc.) to cultivate plants. The plants were cultivated for 16 days under the conditions of room temperature: 22 to 23&#xb0; C., humidity: 50 to 60%, photon flux density from light emitting device: 100 &#x3bc;mol&#xb7;m<sup>&#x2212;2</sup>&#xb7;s<sup>&#x2212;1 </sup>and daytime hour: 16 hours/day. Only water was given until germination, and after the germination (about 4 days later), a solution obtained by mixing Otsuka House #1 (manufactured by Otsuka Chemical Co., Ltd.) and Otsuka House #2 (manufactured by Otsuka Chemical Co., Ltd.) in a mass ratio of 3:2 and dissolving the mixture in water was used as a nutrient solution (Otsuka Formulation A). Conductivity of the nutrient was 1.5 ms&#xb7;cm<sup>&#x2212;1</sup>.</p>
+<heading id="h-0029" level="2">Second Growth Period</heading>
+<p id="p-0127" num="0098">After the first growth period, the plants were irradiated with light from the light emitting devices of Examples 1 to 5 and Comparative Example 1, and were subjected to hydroponics.</p>
+<p id="p-0128" num="0099">The plants were cultivated for 19 days under the conditions of room temperature: 22 to 24&#xb0; C., humidity: 60 to 70%, CO<sub>2 </sub>concentration: 600 to 700 ppm, photon flux density from light emitting device: 125 &#x3bc;mol&#xb7;m<sup>&#x2212;2</sup>&#xb7;s<sup>&#x2212;1 </sup>and daytime hour: 16 hours/day. Otsuka Formulation A was used as the nutrient solution. Conductivity of the nutrient was 1.5 ms&#xb7;cm<sup>&#x2212;1</sup>. The values of the R/B and R/FR ratios of light for plant irradiation from each light emitting device in the second growth period are shown in Table 1.</p>
+<heading id="h-0030" level="2">Measurement of Fresh Weight (Edible Part)</heading>
+<p id="p-0129" num="0100">The plants after cultivation were harvested, and wet weights of a terrestrial part and a root were measured. The wet weight of a terrestrial part of each of 6 cultivated plants having been subjected to hydroponics by irradiating with light from the light emitting devices of Examples 1 to 5 and Comparative Example 1 was measured as a fresh weight (edible part) (g). The results obtained are shown in Table 1 and <figref idref="DRAWINGS">FIG. 3</figref>.</p>
+<heading id="h-0031" level="2">Measurement of Nitrate Nitrogen Content</heading>
+<p id="p-0130" num="0101">The edible part (about 20 g) of each of the cultivated plants, from which a foot about 5 cm had been removed, was frozen with liquid nitrogen and crushed with a juice mixer (laboratory mixer LM-PLUS, manufactured by Osaka Chemical Co., Ltd.) for 1 minute. The resulting liquid was filtered with Miracloth (manufactured by Milipore), and the filtrate was centrifuged at 4&#xb0; C. and 15,000 rpm for 5 minutes. The nitrate nitrogen content (mg/100 g) in the cultivated plant in the supernatant was measured using a portable reflection photometer system (product name: RQ flex system, manufactured by Merck) and a test paper (product name: Reflectoquant (registered trade mark), manufactured by Kanto Chemical Co., Inc.). The results are shown in Table 1 and <figref idref="DRAWINGS">FIG. 4</figref>.</p>
+<p id="p-0131" num="0000">
+<tables id="TABLE-US-00001" num="00001">
+<table frame="none" colsep="0" rowsep="0" pgwide="1">
+<tgroup align="left" colsep="0" rowsep="0" cols="5">
+<colspec colname="offset" colwidth="42pt" align="left"/>
+<colspec colname="1" colwidth="133pt" align="center"/>
+<colspec colname="2" colwidth="63pt" align="center"/>
+<colspec colname="3" colwidth="42pt" align="center"/>
+<colspec colname="4" colwidth="91pt" align="center"/>
+<thead>
+<row>
+<entry/>
+<entry namest="offset" nameend="4" rowsep="1">TABLE 1</entry>
+</row>
+</thead>
+<tbody valign="top">
+<row>
+<entry/>
+<entry namest="offset" nameend="4" align="center" rowsep="1"/>
+</row>
+<row>
+<entry/>
+<entry>Fluorescent material</entry>
+<entry/>
+<entry/>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>(parts by mass)</entry>
+<entry>Photon flux</entry>
+<entry>Ratio of</entry>
+</row>
+</tbody>
+</tgroup>
+<tgroup align="left" colsep="0" rowsep="0" cols="7">
+<colspec colname="offset" colwidth="42pt" align="left"/>
+<colspec colname="1" colwidth="70pt" align="center"/>
+<colspec colname="2" colwidth="63pt" align="center"/>
+<colspec colname="3" colwidth="63pt" align="center"/>
+<colspec colname="4" colwidth="42pt" align="center"/>
+<colspec colname="5" colwidth="42pt" align="center"/>
+<colspec colname="6" colwidth="49pt" align="center"/>
+<tbody valign="top">
+<row>
+<entry/>
+<entry>First fluorescent</entry>
+<entry>Second fluorescent</entry>
+<entry>density</entry>
+<entry>photon</entry>
+<entry>Fresh weight</entry>
+<entry>Nitrate nitrogen</entry>
+</row>
+<row>
+<entry/>
+<entry>material</entry>
+<entry>material</entry>
+<entry>(&#x3bc;mol &#xb7; m<sup>&#x2212;2 </sup>&#xb7; s<sup>&#x2212;1</sup>)</entry>
+<entry>flux densities</entry>
+<entry>(Edible part)</entry>
+<entry>content</entry>
+</row>
+</tbody>
+</tgroup>
+<tgroup align="left" colsep="0" rowsep="0" cols="10">
+<colspec colname="offset" colwidth="42pt" align="left"/>
+<colspec colname="1" colwidth="70pt" align="center"/>
+<colspec colname="2" colwidth="63pt" align="center"/>
+<colspec colname="3" colwidth="21pt" align="center"/>
+<colspec colname="4" colwidth="21pt" align="center"/>
+<colspec colname="5" colwidth="21pt" align="center"/>
+<colspec colname="6" colwidth="21pt" align="center"/>
+<colspec colname="7" colwidth="21pt" align="center"/>
+<colspec colname="8" colwidth="42pt" align="center"/>
+<colspec colname="9" colwidth="49pt" align="center"/>
+<tbody valign="top">
+<row>
+<entry/>
+<entry>(MGF/CASN = 95:5)</entry>
+<entry>(YAG: Ce, Cr)</entry>
+<entry>B</entry>
+<entry>R</entry>
+<entry>FR</entry>
+<entry>R/B</entry>
+<entry>R/FR</entry>
+<entry>(g)</entry>
+<entry>(mg/100 g)</entry>
+</row>
+<row>
+<entry/>
+<entry namest="offset" nameend="9" align="center" rowsep="1"/>
+</row>
+</tbody>
+</tgroup>
+<tgroup align="left" colsep="0" rowsep="0" cols="10">
+<colspec colname="1" colwidth="42pt" align="left"/>
+<colspec colname="2" colwidth="70pt" align="center"/>
+<colspec colname="3" colwidth="63pt" align="center"/>
+<colspec colname="4" colwidth="21pt" align="char" char="."/>
+<colspec colname="5" colwidth="21pt" align="char" char="."/>
+<colspec colname="6" colwidth="21pt" align="char" char="."/>
+<colspec colname="7" colwidth="21pt" align="char" char="."/>
+<colspec colname="8" colwidth="21pt" align="center"/>
+<colspec colname="9" colwidth="42pt" align="char" char="."/>
+<colspec colname="10" colwidth="49pt" align="char" char="."/>
+<tbody valign="top">
+<row>
+<entry>Comparative</entry>
+<entry>&#x2014;</entry>
+<entry>&#x2014;</entry>
+<entry>35.5</entry>
+<entry>88.8</entry>
+<entry>0.0</entry>
+<entry>2.5</entry>
+<entry>&#x2014;</entry>
+<entry>26.2</entry>
+<entry>361.2</entry>
+</row>
+<row>
+<entry>Example 1</entry>
+</row>
+<row>
+<entry>Example 1</entry>
+<entry>60</entry>
+<entry>&#x2014;</entry>
+<entry>31.5</entry>
+<entry>74.9</entry>
+<entry>12.6</entry>
+<entry>2.4</entry>
+<entry>6.0</entry>
+<entry>35.4</entry>
+<entry>430.8</entry>
+</row>
+<row>
+<entry>Example 2</entry>
+<entry>50</entry>
+<entry>10</entry>
+<entry>28.5</entry>
+<entry>67.1</entry>
+<entry>21.7</entry>
+<entry>2.4</entry>
+<entry>3.1</entry>
+<entry>34.0</entry>
+<entry>450.0</entry>
+</row>
+<row>
+<entry>Example 3</entry>
+<entry>40</entry>
+<entry>20</entry>
+<entry>25.8</entry>
+<entry>62.0</entry>
+<entry>28.7</entry>
+<entry>2.4</entry>
+<entry>2.2</entry>
+<entry>33.8</entry>
+<entry>452.4</entry>
+</row>
+<row>
+<entry>Example 4</entry>
+<entry>30</entry>
+<entry>30</entry>
+<entry>26.8</entry>
+<entry>54.7</entry>
+<entry>33.5</entry>
+<entry>2.0</entry>
+<entry>1.6</entry>
+<entry>33.8</entry>
+<entry>345.0</entry>
+</row>
+<row>
+<entry>Example 5</entry>
+<entry>25</entry>
+<entry>39</entry>
+<entry>23.4</entry>
+<entry>52.8</entry>
+<entry>38.1</entry>
+<entry>2.3</entry>
+<entry>1.4</entry>
+<entry>28.8</entry>
+<entry>307.2</entry>
+</row>
+<row>
+<entry namest="1" nameend="10" align="center" rowsep="1"/>
+</row>
+</tbody>
+</tgroup>
+</table>
+</tables>
+</p>
+<p id="p-0132" num="0102">As shown in Table 1, for the light emitting devices in Examples 1 to 5, the R/B ratios are within a range of 2.0 or more and 4.0 or less and the R/FR ratios are within the range of 0.7 or more and 13.0 or less. For Romaine lettuce cultivated by irradiating with light from the light emitting device in Examples 1 to 5, the fresh weight (edible part) was increased as compared with Romaine lettuce cultivated by irradiating with light from the light emitting device used in Comparative Example 1. Therefore, cultivation of plants was promoted, as shown in Table 1 and <figref idref="DRAWINGS">FIG. 3</figref>.</p>
+<p id="p-0133" num="0103">As shown in <figref idref="DRAWINGS">FIG. 2</figref>, the light emitting device <b>100</b> in Example 1 had at least one maximum value of the relative photon flux density in a range of 380 nm or more and 490 nm or less and in a range of 580 nm or more and less than 680 nm. The light emitting devices <b>100</b> in Examples 2 to 5 had at least one maximum value of relative photon flux density in a range of 380 nm or more and 490 nm or less, in a range of 580 nm or more and less than 680 nm and in a range of 680 nm or more and 800 nm or less, respectively. The maximum value of the relative photon flux density in a range of 380 nm or more and 490 nm or less is due to the light emission of the light emitting element having light emission peak wavelength in a range of 380 nm or more and 490 nm or less, the maximum value of the relative photon flux density in a range of 580 nm or more and less than 680 nm is due to the first fluorescent material emitting the light having at least one light emission peak wavelength in a range of 580 nm or more and less than 680 nm, and the maximum value of the relative photon flux density in a range of 680 nm or more and 800 nm or less is due to the second fluorescent material emitting the light having at least one light emission peak wavelength in a range of 680 nm or more and 800 nm or less.</p>
+<p id="p-0134" num="0104">As shown in Table 1, for the light emitting devices <b>100</b> in Examples 4 and 5, the R/B ratios are 2.0 and 2.3, respectively, and the R/FR ratios are 1.6 and 1.4, respectively. The R/B ratios are within a range of 2.0 or more and 4.0 or less, and the R/FR ratios are within a range of 0.7 or more and 2.0 or less. For Romaine lettuces cultivated by irradiating with lights from the light emitting devices <b>100</b>, the nitrate nitrogen content is decreased as compared with Comparative Example 1. Plants, in which the nitrate nitrogen content having the possibility of adversely affecting health of human body had been reduced to a range that does not inhibit the cultivation of plants, could be cultivated, as shown in Table 1 and <figref idref="DRAWINGS">FIG. 4</figref>.</p>
+<p id="p-0135" num="0105">The light emitting device according to an embodiment of the present disclosure can be utilized as a light emitting device for plant cultivation that can activate photosynthesis and is capable of promoting growth of plants. Furthermore, the plant cultivation method, in which plants are irradiated with the light emitted from the light emitting device according to an embodiment of the present disclosure, can cultivate plants that can be harvested in a relatively short period of time and can be used in a plant factory.</p>
+<p id="p-0136" num="0106">Although the present disclosure has been described with reference to several exemplary embodiments, it shall be understood that the words that have been used are words of description and illustration, rather than words of limitation. Changes may be made within the purview of the appended claims, as presently stated and as amended, without departing from the scope and spirit of the disclosure in its aspects. Although the disclosure has been described with reference to particular examples, means, and embodiments, the disclosure may be not intended to be limited to the particulars disclosed; rather the disclosure extends to all functionally equivalent structures, methods, and uses such as are within the scope of the appended claims.</p>
+<p id="p-0137" num="0107">One or more examples or embodiments of the disclosure may be referred to herein, individually and/or collectively, by the term &#x201c;disclosure&#x201d; merely for convenience and without intending to voluntarily limit the scope of this application to any particular disclosure or inventive concept. Moreover, although specific examples and embodiments have been illustrated and described herein, it should be appreciated that any subsequent arrangement designed to achieve the same or similar purpose may be substituted for the specific examples or embodiments shown. This disclosure may be intended to cover any and all subsequent adaptations or variations of various examples and embodiments. Combinations of the above examples and embodiments, and other examples and embodiments not specifically described herein, will be apparent to those of skill in the art upon reviewing the description.</p>
+<p id="p-0138" num="0108">In addition, in the foregoing Detailed Description, various features may be grouped together or described in a single embodiment for the purpose of streamlining the disclosure. This disclosure may be not to be interpreted as reflecting an intention that the claimed embodiments require more features than are expressly recited in each claim. Rather, as the following claims reflect, inventive subject matter may be directed to less than all of the features of any of the disclosed embodiments. Thus, the following claims are incorporated into the Detailed Description, with each claim standing on its own as defining separately claimed subject matter.</p>
+<p id="p-0139" num="0109">The above disclosed subject matter shall be considered illustrative, and not restrictive, and the appended claims are intended to cover all such modifications, enhancements, and other embodiments which fall within the true spirit and scope of the present disclosure. Thus, to the maximum extent allowed by law, the scope of the present disclosure may be determined by the broadest permissible interpretation of the following claims and their equivalents, and shall not be restricted or limited by the foregoing detailed description.</p>
+<?detailed-description description="Detailed Description" end="tail"?>
+</description>
+<us-claim-statement>What is claimed is:</us-claim-statement>
+<claims id="claims">
+<claim id="CLM-00001" num="00001">
+<claim-text><b>1</b>. A light emitting device comprising:
+<claim-text>a light emitting element having a light emission peak wavelength in a range of 380 nm or more and 490 nm or less; and</claim-text>
+<claim-text>a fluorescent material that is excited by light from the light emitting element and emits light having at least one light emission peak wavelength in a range of 580 nm or more and less than 680 nm, wherein
+<claim-text>the light emitting device emits light having a ratio R/B of a photon flux density R to a photon flux density B within a range of 2.0 or more and 4.0 or less, and a ratio R/FR of the photon flux density R to a photon flux density FR within a range of 0.7 or more and 13.0 or less, wherein
+<claim-text>the photon flux density R is in a wavelength range of 620 nm or more and less than 700 nm,</claim-text>
+<claim-text>the photon flux density B is in a wavelength range of 380 nm or more and 490 nm or less, and</claim-text>
+<claim-text>the photon flux density FR is in a wavelength range of 700 nm or more and 780 nm or less.</claim-text>
+</claim-text>
+</claim-text>
+</claim-text>
+</claim>
+<claim id="CLM-00002" num="00002">
+<claim-text><b>2</b>. The light emitting device according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, further comprising another fluorescent material that is excited by light from the light emitting element and emits light having at least one light emission peak wavelength in a range of 680 nm or more and 800 nm or less, wherein the ratio R/FR is within a range of 0.7 or more and 5.0 or less.</claim-text>
+</claim>
+<claim id="CLM-00003" num="00003">
+<claim-text><b>3</b>. The light emitting device according to <claim-ref idref="CLM-00002">claim 2</claim-ref>, wherein the ratio R/FR is within a range of 0.7 or more and 2.0 or less.</claim-text>
+</claim>
+<claim id="CLM-00004" num="00004">
+<claim-text><b>4</b>. The light emitting device according to <claim-ref idref="CLM-00002">claim 2</claim-ref>, wherein
+<claim-text>the another fluorescent material contains a first element Ln containing at least one element selected from the group consisting of rare earth elements excluding Ce, a second element M containing at least one element selected from the group consisting of Al, Ga and In, Ce, and Cr, and has a composition of an aluminate fluorescent material, and</claim-text>
+<claim-text>when a molar ratio of the second element M is taken as 5, a molar ratio of Ce is a product of a value of a parameter x and 3, and a molar ratio of Cr is a product of a value of a parameter y and 3, the value of the parameter x being in a range of exceeding 0.0002 and less than 0.50, and the value of the parameter y being in a range of exceeding 0.0001 and less than 0.05.</claim-text>
+</claim-text>
+</claim>
+<claim id="CLM-00005" num="00005">
+<claim-text><b>5</b>. The light emitting device according to <claim-ref idref="CLM-00002">claim 2</claim-ref>, wherein the another fluorescent material has the composition represented by the following formula (I):
+<claim-text>
+<br/>
+<?in-line-formulae description="In-line Formulae" end="lead"?>(Ln<sub>1-x-y</sub>Ce<sub>x</sub>Cr<sub>y</sub>)<sub>3</sub>M<sub>5</sub>O<sub>12</sub>&#x2003;&#x2003;(I)<?in-line-formulae description="In-line Formulae" end="tail"?>
+</claim-text>
+<claim-text>wherein Ln is at least one rare earth element selected from the group consisting of rare earth elements excluding Ce,</claim-text>
+<claim-text>M is at least one element selected from the group consisting of Al, Ga, and In, and</claim-text>
+<claim-text>x and y are numbers satisfying 0.0002&#x3c;x&#x3c;0.50 and 0.0001&#x3c;y&#x3c;0.05.</claim-text>
+</claim-text>
+</claim>
+<claim id="CLM-00006" num="00006">
+<claim-text><b>6</b>. The light emitting device according to <claim-ref idref="CLM-00002">claim 2</claim-ref>, the light emitting device being used in plant cultivation.</claim-text>
+</claim>
+<claim id="CLM-00007" num="00007">
+<claim-text><b>7</b>. The light emitting device according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, wherein the fluorescent material is at least one selected from the group consisting of:
+<claim-text>a fluorogermanate fluorescent material that is activated by Mn<sup>4+</sup>,</claim-text>
+<claim-text>a fluorescent material that has a composition containing at least one element selected from Sr and Ca, and Al, and contains silicon nitride that is activated by Eu<sup>2+</sup>,</claim-text>
+<claim-text>a fluorescent material that has a composition containing at least one element selected from the group consisting of alkaline earth metal elements and at least one element selected from the group consisting of alkali metal elements, and contains aluminum nitride that is activated by Eu<sup>2+</sup>,</claim-text>
+<claim-text>a fluorescent material containing a sulfide of Ca or Sr that is activated by Eu<sup>2+</sup>, and</claim-text>
+<claim-text>a fluorescent material that has a composition containing at least one element or ion selected from the group consisting of alkali metal elements, and an ammonium ion (NH<sub>4</sub><sup>+</sup>), and at least one element selected from the group consisting of Group 4 elements and Group 14 elements, and contains a fluoride that is activated by Mn<sup>4+</sup>.</claim-text>
+</claim-text>
+</claim>
+<claim id="CLM-00008" num="00008">
+<claim-text><b>8</b>. The light emitting device according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, wherein the fluorescent material contains:
+<claim-text>a fluorogermanate fluorescent material that is activated by Mn<sup>4+</sup>, and</claim-text>
+<claim-text>a fluorescent material that has a composition containing at least one element selected from Sr and Ca, and Al, and contains silicon nitride that is activated by Eu<sup>2+</sup>, wherein
+<claim-text>the compounding ratio between the fluorogermanate fluorescent material and the fluorescent material containing silicon nitride (fluorogermanate fluorescent material:fluorescent material containing silicon nitride) is in a range of 50:50 or more and 99:1 or less.</claim-text>
+</claim-text>
+</claim-text>
+</claim>
+<claim id="CLM-00009" num="00009">
+<claim-text><b>9</b>. The light emitting device according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, the light emitting device being used in plant cultivation.</claim-text>
+</claim>
+<claim id="CLM-00010" num="00010">
+<claim-text><b>10</b>. A plant cultivation method comprising irradiating plants with light emitted from the light emitting device according to <claim-ref idref="CLM-00001">claim 1</claim-ref>.</claim-text>
+</claim>
+<claim id="CLM-00011" num="00011">
+<claim-text><b>11</b>. A plant cultivation method comprising irradiating plants with light emitted from the light emitting device according to <claim-ref idref="CLM-00002">claim 2</claim-ref>.</claim-text>
+</claim>
+</claims>
+</us-patent-application>
