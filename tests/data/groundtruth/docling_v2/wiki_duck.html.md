@@ -1,53 +1,3 @@
-- Main page
-- Contents
-- Current events
-- Random article
-- About Wikipedia
-- Contact us
-
-- Help
-- Learn to edit
-- Community portal
-- Recent changes
-- Upload file
-
-<!-- image -->
-
-<!-- image -->
-
-<!-- image -->
-
-    - Donate
-        - Create account
-        - Log in
-        - Create account
-        - Log in
-        - Contributions
-        - Talk
-
-## Contents
-
-        - (Top)
-        - 1 Etymology
-        - 2 Taxonomy
-        - 3 Morphology
-        - 4 Distribution and habitat
-        - 5 Behaviour Toggle Behaviour subsection
-            - 5.1 Feeding
-            - 5.2 Breeding
-            - 5.3 Communication
-            - 5.4 Predators
-    - 6 Relationship with humans Toggle Relationship with humans subsection
-        - 6.1 Hunting
-        - 6.2 Domestication
-        - 6.3 Heraldry
-        - 6.4 Cultural references
-- 7 See also
-- 8 Notes Toggle Notes subsection
-    - 8.1 Citations
-    - 8.2 Sources
-- 9 External links
-
 # Duck
 
 - Acèh
@@ -473,7 +423,6 @@ The 1992 Disney film The Mighty Ducks, starring Emilio Estevez, chose the duck a
 
 - list of books (useful looking abstracts)
 - Ducks on postage stamps Archived 2013-05-13 at the Wayback Machine
-- 
 - Ducks at a Distance, by Rob Hines at Project Gutenberg - A modern illustrated guide to identification of US waterfowl
 
 | Authority control databases    | Authority control databases                  |
@@ -515,8 +464,7 @@ The 1992 Disney film The Mighty Ducks, starring Emilio Estevez, chose the duck a
 - Articles containing video clips
 
 - This page was last edited on 21 September 2024, at 12:11 (UTC).
-- Text is available under the Creative Commons Attribution-ShareAlike License 4.0;
-additional terms may apply. By using this site, you agree to the Terms of Use and Privacy Policy. Wikipedia® is a registered trademark of the Wikimedia Foundation, Inc., a non-profit organization.
+- Text is available under the Creative Commons Attribution-ShareAlike License 4.0; additional terms may apply. By using this site, you agree to the Terms of Use and Privacy Policy. Wikipedia® is a registered trademark of the Wikimedia Foundation, Inc., a non-profit organization.
 
 - Privacy policy
 - About Wikipedia
@@ -527,6 +475,3 @@ additional terms may apply. By using this site, you agree to the Terms of Use an
 - Statistics
 - Cookie statement
 - Mobile view
-
-- 
--

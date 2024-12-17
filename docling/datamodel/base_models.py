@@ -44,6 +44,7 @@ class OutputFormat(str, Enum):
     HTML = "html"
     TEXT = "text"
     DOCTAGS = "doctags"
+    INDENTED_TEXT = "itxt"
 
 
 FormatToExtensions: Dict[InputFormat, List[str]] = {

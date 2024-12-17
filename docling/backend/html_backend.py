@@ -1,14 +1,18 @@
 import logging
+import re
 from io import BytesIO
 from pathlib import Path
 from typing import Set, Union
 
 from bs4 import BeautifulSoup
+from bs4.element import Tag
 from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
+    ImageRef,
+    Size,
     TableCell,
     TableData,
 )
@@ -21,7 +25,12 @@ _log = logging.getLogger(__name__)
 
 
 class HTMLDocumentBackend(DeclarativeDocumentBackend):
-    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+    def __init__(
+        self,
+        in_doc: "InputDocument",
+        path_or_stream: Union[BytesIO, Path],
+        skip_furniture: bool = True,
+    ):
         super().__init__(in_doc, path_or_stream)
         _log.debug("About to init HTML backend...")
         self.soup = None
@@ -35,17 +44,21 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             self.parents[i] = None
         self.labels = {}  # type: ignore
 
+        self.skip_furniture = skip_furniture
+
         try:
             if isinstance(self.path_or_stream, BytesIO):
+                _log.debug("reading from BytesIO")
                 text_stream = self.path_or_stream.getvalue().decode("utf-8")
                 self.soup = BeautifulSoup(text_stream, "html.parser")
             if isinstance(self.path_or_stream, Path):
-                with open(self.path_or_stream, "r", encoding="utf-8") as f:
-                    html_content = f.read()
+                _log.debug("reading from file")
+                with open(self.path_or_stream, "r", encoding="utf-8") as fr:
+                    html_content = fr.read()
                     self.soup = BeautifulSoup(html_content, "html.parser")
         except Exception as e:
             raise RuntimeError(
-                f"Could not initialize HTML backend for file with hash {self.document_hash}."
+                f"Could not initialize HTML backend for file with hash '{self.document_hash}'."
             ) from e
 
     def is_valid(self) -> bool:
@@ -81,6 +94,10 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             # Replace <br> tags with newline characters
             for br in self.soup.body.find_all("br"):
                 br.replace_with("\n")
+
+            self.contains_h1 = bool(self.soup.find("h1")) and self.skip_furniture
+            self.detected_h1 = False
+
             doc = self.walk(self.soup.body, doc)
         else:
             raise RuntimeError(
@@ -90,48 +107,88 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
     def walk(self, element, doc):
         try:
-            # Iterate over elements in the body of the document
-            for idx, element in enumerate(element.children):
-                try:
-                    self.analyse_element(element, idx, doc)
-                except Exception as exc_child:
+            if isinstance(element, Tag) and any(element.children):
+                # Iterate over elements in the body of the document
+                for idx, child in enumerate(element.children):
+                    try:
+                        self.analyse_element(child, idx, doc)
+                    except Exception as exc:
+                        _log.info(f" -> error treating child: {exc}")
+                        raise exc
 
-                    _log.error(" -> error treating child: ", exc_child)
-                    _log.error(" => element: ", element, "\n")
-                    raise exc_child
+            else:
+                _log.debug(f"ignoring element of type {type(element)}")
 
         except Exception as exc:
+            _log.debug(f"error walking element: {type(element)}")
             pass
 
         return doc
 
+    def is_body(self):
+        return (not self.contains_h1) or (self.contains_h1 and self.detected_h1)
+
     def analyse_element(self, element, idx, doc):
-        """
-        if element.name!=None:
-            _log.debug("\t"*self.level, idx, "\t", f"{element.name} ({self.level})")
-        """
+
+        if element.name != None:
+            _log.debug("\t" * self.level, idx, "\t", f"{element.name} ({self.level})")
 
         if element.name in self.labels:
             self.labels[element.name] += 1
         else:
             self.labels[element.name] = 1
 
+        if element.name in ["h1"]:
+            self.detected_h1 = True
+
         if element.name in ["h1", "h2", "h3", "h4", "h5", "h6"]:
-            self.handle_header(element, idx, doc)
+            if self.is_body():
+                self.handle_header(element, idx, doc)
         elif element.name in ["p"]:
-            self.handle_paragraph(element, idx, doc)
+            if self.is_body():
+                self.handle_paragraph(element, idx, doc)
         elif element.name in ["pre"]:
-            self.handle_code(element, idx, doc)
+            if self.is_body():
+                self.handle_code(element, idx, doc)
         elif element.name in ["ul", "ol"]:
-            self.handle_list(element, idx, doc)
+            if self.is_body():
+                self.handle_list(element, idx, doc)
         elif element.name in ["li"]:
-            self.handle_listitem(element, idx, doc)
+            if self.is_body():
+                self.handle_listitem(element, idx, doc)
         elif element.name == "table":
-            self.handle_table(element, idx, doc)
+            if self.is_body():
+                self.handle_table(element, idx, doc)
         elif element.name == "figure":
-            self.handle_figure(element, idx, doc)
+            if self.is_body():
+                self.handle_figure(element, idx, doc)
         elif element.name == "img":
-            self.handle_image(element, idx, doc)
+            if self.is_body():
+                self.handle_image(element, idx, doc)
+        elif element.name == "svg":
+            if self.is_body():
+                self.handle_svg(element, idx, doc)
+
+        elif (
+            isinstance(element, Tag)
+            and element.name in ["section"]
+            and element.has_attr("data-content")
+        ):
+            try:
+                # Decode the data-content attribute
+                # data_content = html.unescape(element['data-content'])
+                data_content = element["data-content"]
+
+                # Parse the decoded HTML content
+                content_soup = BeautifulSoup(data_content, "html.parser")
+
+                for jdx, _ in enumerate(content_soup):
+                    self.analyse_element(_, jdx, doc)
+            except:
+                _log.debug("could not parse the `data-content` attribute")
+
+            self.walk(element, doc)
+
         else:
             self.walk(element, doc)
 
@@ -160,7 +217,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     except:
                         pass
             except:
-                _log.warn("item has no children")
+                _log.warning("item has no children")
                 pass
 
         return "".join(result) + " "
@@ -221,10 +278,12 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         """Handles paragraph tags (p)."""
         if element.text is None:
             return
+
         text = element.text.strip()
-        label = DocItemLabel.PARAGRAPH
         if len(text) == 0:
             return
+
+        label = DocItemLabel.PARAGRAPH
         doc.add_text(parent=self.parents[self.level], label=label, text=text)
 
     def handle_list(self, element, idx, doc):
@@ -262,8 +321,9 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             # we need to extract it recursively
             text = self.extract_text_recursively(element)
             # Flatten text, remove break lines:
-            text = text.replace("\n", "").replace("\r", "")
+            text = text.replace("\n", " ").replace("\r", "")
             text = " ".join(text.split()).strip()
+            text = re.sub(r"\s{2,}", " ", text)
 
             marker = ""
             enumerated = False
@@ -288,27 +348,31 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         elif isinstance(element.text, str):
             text = element.text.strip()
+            text = text.replace("\n", " ").replace("\r", "")
+            text = re.sub(r"\s{2,}", " ", text)
 
             marker = ""
             enumerated = False
             if parent_list_label == GroupLabel.ORDERED_LIST:
                 marker = f"{str(index_in_list)}."
                 enumerated = True
-            doc.add_list_item(
-                text=text,
-                enumerated=enumerated,
-                marker=marker,
-                parent=self.parents[self.level],
-            )
+
+            if len(text) > 0:
+                doc.add_list_item(
+                    text=text,
+                    enumerated=enumerated,
+                    marker=marker,
+                    parent=self.parents[self.level],
+                )
         else:
-            _log.warn("list-item has no text: ", element)
+            _log.debug("list-item has no text: ", element)
 
     def handle_table(self, element, idx, doc):
         """Handles table tags."""
 
         nested_tables = element.find("table")
         if nested_tables is not None:
-            _log.warn("detected nested tables: skipping for now")
+            _log.warning("detected nested tables: skipping for now")
             return
 
         # Count the number of rows (number of <tr> elements)
@@ -347,10 +411,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 try:
                     text = self.extract_table_cell_text(html_cell)
                 except Exception as exc:
-                    _log.warn("exception: ", exc)
-                    exit(-1)
-
-                # label = html_cell.name
+                    _log.warning("exception: ", exc)
 
                 col_span = int(html_cell.get("colspan", 1))
                 row_span = int(html_cell.get("rowspan", 1))
@@ -413,17 +474,63 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             )
             return cell.text
 
-    def handle_figure(self, element, idx, doc):
-        """Handles image tags (img)."""
+    def _get_imageref(self, element):
 
-        # Extract the image URI from the <img> tag
-        # image_uri = root.xpath('//figure//img/@src')[0]
+        fig_ref = None
+
+        img = element.find(["img"])
+
+        if img is not None and img.has_attr("src"):
+            fig_uri = img["src"]
+
+            if fig_uri.startswith("//"):
+                fig_uri = "https:" + fig_uri
+
+            dpi: int = 128
+            try:
+                dpi = int(img["dpi"])
+            except:
+                _log.debug("could not identify `dpi` of image")
+
+            width: float = 128.0
+            try:
+                width = float(img["width"])
+            except:
+                _log.debug("could not identify `width` of image")
+
+            height: float = 128.0
+            try:
+                height = float(img["height"])
+            except:
+                _log.debug("could not identify `height` of image")
+
+            size = Size(width=width, height=height)
+
+            if fig_uri.endswith(".jpg") or fig_uri.endswith(".jpeg"):
+                fig_ref = ImageRef(
+                    mimetype="image/jpeg", dpi=dpi, size=size, uri=fig_uri
+                )
+
+            elif fig_uri.endswith(".png"):
+                fig_ref = ImageRef(
+                    mimetype="image/png", dpi=dpi, size=size, uri=fig_uri
+                )
+
+            elif fig_uri.endswith(".svg"):
+                fig_ref = ImageRef(
+                    mimetype="image/svg", dpi=dpi, size=size, uri=fig_uri
+                )
+            else:
+                _log.debug(f"We do not yet support uri of type: {fig_uri}")
+
+        return fig_ref
+
+    def _get_figcaption(self, element, doc):
+
+        fig_caption = None
 
         contains_captions = element.find(["figcaption"])
-        if contains_captions is None:
-            doc.add_picture(parent=self.parents[self.level], caption=None)
-
-        else:
+        if contains_captions is not None:
             texts = []
             for item in contains_captions:
                 texts.append(item.text)
@@ -431,11 +538,32 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             fig_caption = doc.add_text(
                 label=DocItemLabel.CAPTION, text=("".join(texts)).strip()
             )
-            doc.add_picture(
-                parent=self.parents[self.level],
-                caption=fig_caption,
-            )
+
+        return fig_caption
+
+    def handle_figure(self, element, idx, doc):
+        """Handles image tags (img)."""
+
+        fig_ref = self._get_imageref(element)
+        fig_caption = self._get_figcaption(element, doc)
+
+        doc.add_picture(
+            parent=self.parents[self.level], image=fig_ref, caption=fig_caption
+        )
 
     def handle_image(self, element, idx, doc):
         """Handles image tags (img)."""
-        doc.add_picture(parent=self.parents[self.level], caption=None)
+
+        fig_ref = self._get_imageref(element)
+
+        doc.add_picture(parent=self.parents[self.level], image=fig_ref, caption=None)
+
+    def handle_svg(self, element, idx, doc):
+        """Handles svg tags."""
+
+        fig_ref = self._get_imageref(element)
+        fig_caption = self._get_figcaption(element, doc)
+
+        doc.add_picture(
+            parent=self.parents[self.level], image=fig_ref, caption=fig_caption
+        )
