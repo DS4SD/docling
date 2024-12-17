@@ -292,8 +292,7 @@ class _DocumentConversionInput(BaseModel):
         mime = mime or "text/plain"
         formats = MimeTypeToFormat.get(mime, [])
         if formats:
-            # TODO: remove application/xml case after adding another XML parse
-            if len(formats) == 1 and mime not in ("text/plain", "application/xml"):
+            if len(formats) == 1 and mime not in ("text/plain"):
                 return formats[0]
             else:  # ambiguity in formats
                 return _DocumentConversionInput._guess_from_content(
@@ -325,6 +324,12 @@ class _DocumentConversionInput(BaseModel):
                 ):
                     input_format = InputFormat.XML_USPTO
 
+                if (
+                    InputFormat.XML_PUBMED in formats
+                    and "/NLM//DTD JATS" in xml_doctype
+                ):
+                    input_format = InputFormat.XML_PUBMED
+
         elif mime == "text/plain":
             if InputFormat.XML_USPTO in formats and content_str.startswith("PATN\r\n"):
                 input_format = InputFormat.XML_USPTO
@@ -340,7 +345,6 @@ class _DocumentConversionInput(BaseModel):
             mime = FormatToMimeType[InputFormat.HTML][0]
         elif ext in FormatToExtensions[InputFormat.MD]:
             mime = FormatToMimeType[InputFormat.MD][0]
-
         return mime
 
     @staticmethod
@@ -369,5 +373,11 @@ class _DocumentConversionInput(BaseModel):
 
         if re.match(r"<!doctype\s+html|<html|<head|<body", content_str):
             return "text/html"
+
+        p = re.compile(
+            r"<!doctype\s+(?P<root>[a-zA-Z_:][a-zA-Z0-9_:.-]*)\s+.*>\s*<(?P=root)\b"
+        )
+        if p.search(content_str):
+            return "application/xml"
 
         return None

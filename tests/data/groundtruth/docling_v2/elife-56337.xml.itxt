@@ -1,0 +1,165 @@
+item-0 at level 0: unspecified: group _root_
+  item-1 at level 1: title: KRAB-zinc finger protein gene ex ... retrotransposons in the murine lineage
+    item-2 at level 2: paragraph: Wolf Gernot; 1: The Eunice Kenne ... tes of Health: Bethesda: United States
+    item-3 at level 2: section_header: Abstract
+      item-4 at level 3: text: The Krüppel-associated box zinc  ... edundant role restricting TE activity.
+    item-5 at level 2: section_header: Introduction
+      item-6 at level 3: text: Nearly half of the human and mou ... s are active beyond early development.
+      item-7 at level 3: text: TEs, especially long terminal re ... f evolutionarily young KRAB-ZFP genes.
+    item-8 at level 2: section_header: Results
+      item-9 at level 3: section_header: Mouse KRAB-ZFPs target retrotransposons
+        item-10 at level 4: text: We analyzed the RNA expression p ... duplications (Kauzlaric et al., 2017).
+        item-11 at level 4: text: To determine the binding sites o ... ctive in the early embryo (Figure 1A).
+        item-12 at level 4: text: We generally observed that KRAB- ... responsible for this silencing effect.
+        item-13 at level 4: text: To further test the hypothesis t ... t easily evade repression by mutation.
+        item-14 at level 4: text: Our KRAB-ZFP ChIP-seq dataset al ... ntirely shift the mode of DNA binding.
+      item-15 at level 3: section_header: Genetic deletion of KRAB-ZFP gen ...  leads to retrotransposon reactivation
+        item-16 at level 4: text: The majority of KRAB-ZFP genes a ... ung et al., 2014; Deniz et al., 2018).
+      item-17 at level 3: section_header: KRAB-ZFP cluster deletions license TE-borne enhancers
+        item-18 at level 4: text: We next used our RNA-seq dataset ... vating effects of TEs on nearby genes.
+        item-19 at level 4: text: While we generally observed that ... he internal region and not on the LTR.
+      item-20 at level 3: section_header: ETn retrotransposition in Chr4-cl KO and WT mice
+        item-21 at level 4: text: IAP, ETn/ETnERV and MuLV/RLTR4 r ... s may contribute to reduced viability.
+        item-22 at level 4: text: We reasoned that retrotransposon ... Tn insertions at a high recovery rate.
+        item-23 at level 4: text: Using this dataset, we first con ... nsertions in our pedigree (Figure 4A).
+        item-24 at level 4: text: To validate some of the novel ET ... ess might have truncated this element.
+        item-25 at level 4: text: Besides novel ETn insertions tha ... tions (Figure 4—figure supplement 3D).
+        item-26 at level 4: text: Finally, we asked whether there  ... s clearly also play an important role.
+    item-27 at level 2: section_header: Discussion
+      item-28 at level 3: text: C2H2 zinc finger proteins, about ... ) depending upon their insertion site.
+      item-29 at level 3: text: Despite a lack of widespread ETn ... ion of the majority of KRAB-ZFP genes.
+    item-30 at level 2: section_header: Materials and methods
+      item-31 at level 3: section_header: Cell lines and transgenic mice
+        item-32 at level 4: text: Mouse ES cells and F9 EC cells w ... KO/KO and KO/WT (B6/129 F2) offspring.
+      item-33 at level 3: section_header: Generation of KRAB-ZFP expressing cell lines
+        item-34 at level 4: text: KRAB-ZFP ORFs were PCR-amplified ... led and further expanded for ChIP-seq.
+      item-35 at level 3: section_header: CRISPR/Cas9 mediated deletion of KRAB-ZFP clusters and an MMETn insertion
+        item-36 at level 4: text: All gRNAs were expressed from th ... PCR genotyping (Supplementary file 3).
+      item-37 at level 3: section_header: ChIP-seq analysis
+        item-38 at level 4: text: For ChIP-seq analysis of KRAB-ZF ... 010 or Khil et al., 2012 respectively.
+        item-39 at level 4: text: ChIP-seq libraries were construc ...  were re-mapped using Bowtie (--best).
+      item-40 at level 3: section_header: Luciferase reporter assays
+        item-41 at level 4: text: For KRAB-ZFP repression assays,  ... after transfection as described above.
+      item-42 at level 3: section_header: RNA-seq analysis
+        item-43 at level 4: text: Whole RNA was purified using RNe ... lemented in the R function p.adjust().
+      item-44 at level 3: section_header: Reduced representation bisulfite sequencing (RRBS-seq)
+        item-45 at level 4: text: For RRBS-seq analysis, Chr4-cl W ... h sample were considered for analysis.
+      item-46 at level 3: section_header: Retrotransposition assay
+        item-47 at level 4: text: The retrotransposition vectors p ... were stained with Amido Black (Sigma).
+      item-48 at level 3: section_header: Capture-seq screen
+        item-49 at level 4: text: To identify novel retrotransposo ... assembly using the Unicycler software.
+    item-50 at level 2: section_header: Tables
+      item-51 at level 3: table with [9x5]
+        item-51 at level 4: caption: Table 1.: * Number of protein-coding KRAB-ZFP genes identified in a previously published screen (Imbeault et al., 2017) and the ChIP-seq data column indicates the number of KRAB-ZFPs for which ChIP-seq was performed in this study.
+      item-52 at level 3: table with [31x5]
+        item-52 at level 4: caption: Key resources table: 
+    item-53 at level 2: section_header: Figures
+      item-54 at level 3: picture
+        item-54 at level 4: caption: Figure 1.: Genome-wide binding patterns of mouse KRAB-ZFPs.
+(A) Probability heatmap of KRAB-ZFP binding to TEs. Blue color intensity (main field) corresponds to -log10 (adjusted p-value) enrichment of ChIP-seq peak overlap with TE groups (Fisher’s exact test). The green/red color intensity (top panel) represents mean KAP1 (GEO accession: GSM1406445) and H3K9me3 (GEO accession: GSM1327148) enrichment (respectively) at peaks overlapping significantly targeted TEs (adjusted p-value<1e-5) in WT ES cells. (B) Summarized ChIP-seq signal for indicated KRAB-ZFPs and previously published KAP1 and H3K9me3 in WT ES cells across 127 intact ETn elements. (C) Heatmaps of KRAB-ZFP ChIP-seq signal at ChIP-seq peaks. For better comparison, peaks for all three KRAB-ZFPs were called with the same parameters (p<1e-10, peak enrichment >20). The top panel shows a schematic of the arrangement of the contact amino acid composition of each zinc finger. Zinc fingers are grouped and colored according to similarity, with amino acid differences relative to the five consensus fingers highlighted in white.
+Figure 1—source data 1.KRAB-ZFP expression in 40 mouse tissues and cell lines (ENCODE).Mean values of replicates are shown as log2 transcripts per million.
+Figure 1—source data 2.Probability heatmap of KRAB-ZFP binding to TEs.Values corresponds to -log10 (adjusted p-value) enrichment of ChIP-seq peak overlap with TE groups (Fisher’s exact test).
+      item-55 at level 3: picture
+        item-55 at level 4: caption: Figure 1—figure supplement 1.: ES cell-specific expression of KRAB-ZFP gene clusters.
+(A) Heatmap showing expression patterns of mouse KRAB-ZFPs in 40 mouse tissues and cell lines (ENCODE). Heatmap colors indicate gene expression levels in log2 transcripts per million (TPM). The asterisk indicates a group of 30 KRAB-ZFPs that are exclusively expressed in ES cells. (B) Physical location of the genes encoding for the 30 KRAB-ZFPs that are exclusively expressed in ES cells. (C) Phylogenetic (Maximum likelihood) tree of the KRAB domains of mouse KRAB-ZFPs. KRAB-ZFPs encoded on the gene clusters on chromosome 2 and 4 are highlighted. The scale bar at the bottom indicates amino acid substitutions per site.
+      item-56 at level 3: picture
+        item-56 at level 4: caption: Figure 1—figure supplement 2.: KRAB-ZFP binding motifs and their repression activity.
+(A) Comparison of computationally predicted (bottom) and experimentally determined (top) KRAB-ZFP binding motifs. Only significant pairs are shown (FDR < 0.1). (B) Luciferase reporter assays to confirm KRAB-ZFP repression of the identified target sites. Bars show the luciferase activity (normalized to Renilla luciferase) of reporter plasmids containing the indicated target sites cloned upstream of the SV40 promoter. Reporter plasmids were co-transfected into 293 T cells with a Renilla luciferase plasmid for normalization and plasmids expressing the targeting KRAB-ZFP. Normalized mean luciferase activity (from three replicates) is shown relative to luciferase activity of the reporter plasmid co-transfected with an empty pcDNA3.1 vector.
+      item-57 at level 3: picture
+        item-57 at level 4: caption: Figure 1—figure supplement 3.: KRAB-ZFP binding to ETn retrotransposons.
+(A) Comparison of the PBSLys1,2 sequence with Zfp961 binding motifs in nonrepetitive peaks (Nonrep) and peaks at ETn elements. (B) Retrotransposition assays of original (ETnI1-neoTNF and MusD2-neoTNF Ribet et al., 2004) and modified reporter vectors where the Rex2 or Gm13051 binding motifs where removed. Schematic of reporter vectors are displayed at the top. HeLa cells were transfected as described in the Materials and Methods section and neo-resistant colonies, indicating retrotransposition events, were selected and stained. (C) Stem-loop structure of the ETn RNA export signal, the Gm13051 motif on the corresponding DNA is marked with red circles, the part of the motif that was deleted is indicated with grey crosses (adapted from Legiewicz et al., 2010).
+      item-58 at level 3: picture
+        item-58 at level 4: caption: Figure 2.: Retrotransposon reactivation in KRAB-ZFP cluster KO ES cells.
+(A) RNA-seq analysis of TE expression in five KRAB-ZFP cluster KO ES cells. Green and grey squares on top of the panel represent KRAB-ZFPs with or without ChIP-seq data, respectively, within each deleted gene cluster. Reactivated TEs that are bound by one or several KRAB-ZFPs are indicated by green squares in the panel. Significantly up- and downregulated elements (adjusted p-value<0.05) are highlighted in red and green, respectively. (B) Differential KAP1 binding and H3K9me3 enrichment at TE groups (summarized across all insertions) in Chr2-cl and Chr4-cl KO ES cells. TE groups targeted by one or several KRAB-ZFPs encoded within the deleted clusters are highlighted in blue (differential enrichment over the entire TE sequences) and red (differential enrichment at TE regions that overlap with KRAB-ZFP ChIP-seq peaks). (C) DNA methylation status of CpG sites at indicated TE groups in WT and Chr4-cl KO ES cells grown in serum containing media or in hypomethylation-inducing media (2i + Vitamin C). P-values were calculated using paired t-test.
+Figure 2—source data 1.Differential H3K9me3 and KAP1 distribution in WT and KRAB-ZFP cluster KO ES cells at TE families and KRAB-ZFP bound TE insertions.Differential read counts and statistical testing were determined by DESeq2.
+      item-59 at level 3: picture
+        item-59 at level 4: caption: Figure 2—figure supplement 1.: Epigenetic changes at TEs and TE-borne enhancers in KRAB-ZFP cluster KO ES cells.
+(A) Differential analysis of summative (all individual insertions combined) H3K9me3 enrichment at TE groups in Chr10-cl, Chr13.1-cl and Chr13.2-cl KO ES cells. TE groups targeted by one or several KRAB-ZFPs encoded within the deleted clusters are highlighted in orange (differential enrichment over the entire TE sequences) and red (differential enrichment at TE regions that overlap with KRAB-ZFP ChIP-seq peaks). (B) Top: Schematic view of the Cd59a/Cd59b locus with a 5’ truncated ETn insertion. ChIP-seq (Input subtracted from ChIP) data for overexpressed epitope-tagged Gm13051 (a Chr4-cl KRAB-ZFP) in F9 EC cells, and re-mapped KAP1 (GEO accession: GSM1406445) and H3K9me3 (GEO accession: GSM1327148) in WT ES cells are shown together with RNA-seq data from Chr4-cl WT and KO ES cells (mapped using Bowtie (-a -m 1 --strata -v 2) to exclude reads that cannot be uniquely mapped). Bottom: Transcriptional activity of a 5 kb fragment with or without fragments of the ETn insertion was tested by luciferase reporter assay in Chr4-cl WT and KO ES cells.
+      item-60 at level 3: picture
+        item-60 at level 4: caption: Figure 3.: TE-dependent gene activation in KRAB-ZFP cluster KO ES cells.
+(A) Differential gene expression in Chr2-cl and Chr4-cl KO ES cells. Significantly up- and downregulated genes (adjusted p-value<0.05) are highlighted in red and green, respectively, KRAB-ZFP genes within the deleted clusters are shown in blue. (B) Correlation of TEs and gene deregulation. Plots show enrichment of TE groups within 100 kb of up- and downregulated genes relative to all genes. Significantly overrepresented LTR and LINE groups (adjusted p-value<0.1) are highlighted in blue and red, respectively. (C) Schematic view of the downstream region of Chst1 where a 5’ truncated ETn insertion is located. ChIP-seq (Input subtracted from ChIP) data for overexpressed epitope-tagged Gm13051 (a Chr4-cl KRAB-ZFP) in F9 EC cells, and re-mapped KAP1 (GEO accession: GSM1406445) and H3K9me3 (GEO accession: GSM1327148) in WT ES cells are shown together with RNA-seq data from Chr4-cl WT and KO ES cells (mapped using Bowtie (-a -m 1 --strata -v 2) to exclude reads that cannot be uniquely mapped). (D) RT-qPCR analysis of Chst1 mRNA expression in Chr4-cl WT and KO ES cells with or without the CRISPR/Cas9 deleted ETn insertion near Chst1. Values represent mean expression (normalized to Gapdh) from three biological replicates per sample (each performed in three technical replicates) in arbitrary units. Error bars represent standard deviation and asterisks indicate significance (p<0.01, Student’s t-test). n.s.: not significant. (E) Mean coverage of ChIP-seq data (Input subtracted from ChIP) in Chr4-cl WT and KO ES cells over 127 full-length ETn insertions. The binding sites of the Chr4-cl KRAB-ZFPs Rex2 and Gm13051 are indicated by dashed lines.
+      item-61 at level 3: picture
+        item-61 at level 4: caption: Figure 4.: ETn retrotransposition in Chr4-cl KO mice.
+(A) Pedigree of mice used for transposon insertion screening by capture-seq in mice of different strain backgrounds. The number of novel ETn insertions (only present in one animal) are indicated. For animals whose direct ancestors have not been screened, the ETn insertions are shown in parentheses since parental inheritance cannot be excluded in that case. Germ line insertions are indicated by asterisks. All DNA samples were prepared from tail tissues unless noted (-S: spleen, -E: ear, -B:Blood) (B) Statistical analysis of ETn insertion frequency in tail tissue from 30 Chr4-cl KO, KO/WT and WT mice that were derived from one Chr4-c KO x KO/WT and two Chr4-cl KO/WT x KO/WT matings. Only DNA samples that were collected from juvenile tails were considered for this analysis. P-values were calculated using one-sided Wilcoxon Rank Sum Test. In the last panel, KO, WT and KO/WT mice derived from all matings were combined for the statistical analysis.
+Figure 4—source data 1.Coordinates of identified novel ETn insertions and supporting capture-seq read counts.Genomic regions indicate cluster of supporting reads.
+Figure 4—source data 2.Sequences of capture-seq probes used to enrich genomic DNA for ETn and MuLV (RLTR4) insertions.
+      item-62 at level 3: picture
+        item-62 at level 4: caption: Figure 4—figure supplement 1.: Birth statistics of KRAB-ZFP cluster KO mice and TE reactivation in adult tissues.
+(A) Birth statistics of Chr4- and Chr2-cl mice derived from KO/WT x KO/WT matings in different strain backgrounds. (B) RNA-seq analysis of TE expression in Chr2- (left) and Chr4-cl (right) KO tissues. TE groups with the highest reactivation phenotype in ES cells are shown separately. Significantly up- and downregulated elements (adjusted p-value<0.05) are highlighted in red and green, respectively. Experiments were performed in at least two biological replicates.
+      item-63 at level 3: picture
+        item-63 at level 4: caption: Figure 4—figure supplement 2.: Identification of polymorphic ETn and MuLV retrotransposon insertions in Chr4-cl KO and WT mice.
+Heatmaps show normalized capture-seq read counts in RPM (Read Per Million) for identified polymorphic ETn (A) and MuLV (B) loci in different mouse strains. Only loci with strong support for germ line ETn or MuLV insertions (at least 100 or 3000 ETn or MuLV RPM, respectively) in at least two animals are shown. Non-polymorphic insertion loci with high read counts in all screened mice were excluded for better visibility. The sample information (sample name and cell type/tissue) is annotated at the bottom, with the strain information indicated by color at the top. The color gradient indicates log10(RPM+1).
+      item-64 at level 3: picture
+        item-64 at level 4: caption: Figure 4—figure supplement 3.: Confirmation of novel ETn insertions identified by capture-seq.
+(A) PCR validation of novel ETn insertions in genomic DNA of three littermates (IDs: T09673, T09674 and T00436) and their parents (T3913 and T3921). Primer sequences are shown in Supplementary file 3. (B) ETn capture-seq read counts (RPM) at putative novel somatic (loci identified exclusively in one single animal), novel germ line (loci identified in several littermates) insertions, and at B6 reference ETn elements. (C) Heatmap shows capture-seq read counts (RPM) of a Chr4-cl KO mouse (ID: C6733) as determined in different tissues. Each row represents a novel ETn locus that was identified in at least one tissue. The color gradient indicates log10(RPM+1). (D) Heatmap shows the capture-seq RPM in technical replicates using the same Chr4-cl KO DNA sample (rep1/rep2) or replicates with DNA samples prepared from different sections of the tail from the same mouse at different ages (tail1/tail2). Each row represents a novel ETn locus that was identified in at least one of the displayed samples. The color gradient indicates log10(RPM+1).
+    item-65 at level 2: section_header: References
+      item-66 at level 3: list: group list
+        item-67 at level 4: list_item: TL Bailey; M Boden; FA Buske; M  ... arching. Nucleic Acids Research (2009)
+        item-68 at level 4: list_item: C Baust; L Gagnier; GJ Baillie;  ...  the mouse. Journal of Virology (2003)
+        item-69 at level 4: list_item: K Blaschke; KT Ebata; MM Karimi; ... -like state in ES cells. Nature (2013)
+        item-70 at level 4: list_item: A Brodziak; E Ziółko; M Muc-Wier ... erimental and Clinical Research (2012)
+        item-71 at level 4: list_item: N Castro-Diaz; G Ecco; A Colucci ... stem cells. Genes & Development (2014)
+        item-72 at level 4: list_item: EB Chuong; NC Elde; C Feschotte. ... ndogenous retroviruses. Science (2016)
+        item-73 at level 4: list_item: J Dan; Y Liu; N Liu; M Chiourea; ... n silencing. Developmental Cell (2014)
+        item-74 at level 4: list_item: A De Iaco; E Planet; A Coluccio; ... cental mammals. Nature Genetics (2017)
+        item-75 at level 4: list_item: Ö Deniz; L de la Rica; KCL Cheng ... onic stem cells. Genome Biology (2018)
+        item-76 at level 4: list_item: M Dewannieux; T Heidmann. Endoge ... rs. Current Opinion in Virology (2013)
+        item-77 at level 4: list_item: G Ecco; M Cassano; A Kauzlaric;  ... ult tissues. Developmental Cell (2016)
+        item-78 at level 4: list_item: G Ecco; M Imbeault; D Trono. KRAB zinc finger proteins. Development (2017)
+        item-79 at level 4: list_item: JA Frank; C Feschotte. Co-option ... on. Current Opinion in Virology (2017)
+        item-80 at level 4: list_item: L Gagnier; VP Belancio; DL Mager ... ansposon insertions. Mobile DNA (2019)
+        item-81 at level 4: list_item: AC Groner; S Meylan; A Ciuffi; N ... omatin spreading. PLOS Genetics (2010)
+        item-82 at level 4: list_item: DC Hancks; HH Kazazian. Roles fo ... ns in human disease. Mobile DNA (2016)
+        item-83 at level 4: list_item: M Imbeault; PY Helleboid; D Tron ... ene regulatory networks. Nature (2017)
+        item-84 at level 4: list_item: FM Jacobs; D Greenberg; N Nguyen ... SVA/L1 retrotransposons. Nature (2014)
+        item-85 at level 4: list_item: H Kano; H Kurahashi; T Toda. Gen ... e dactylaplasia phenotype. PNAS (2007)
+        item-86 at level 4: list_item: MM Karimi; P Goyal; IA Maksakova ... cripts in mESCs. Cell Stem Cell (2011)
+        item-87 at level 4: list_item: A Kauzlaric; G Ecco; M Cassano;  ... related genetic units. PLOS ONE (2017)
+        item-88 at level 4: list_item: PP Khil; F Smagulova; KM Brick;  ... ction of ssDNA. Genome Research (2012)
+        item-89 at level 4: list_item: F Krueger; SR Andrews. Bismark:  ... eq applications. Bioinformatics (2011)
+        item-90 at level 4: list_item: B Langmead; SL Salzberg. Fast ga ... t with bowtie 2. Nature Methods (2012)
+        item-91 at level 4: list_item: M Legiewicz; AS Zolotukhin; GR P ... Journal of Biological Chemistry (2010)
+        item-92 at level 4: list_item: JA Lehoczky; PE Thomas; KM Patri ... n Polypodia mice. PLOS Genetics (2013)
+        item-93 at level 4: list_item: D Leung; T Du; U Wagner; W Xie;  ...  methyltransferase Setdb1. PNAS (2014)
+        item-94 at level 4: list_item: J Lilue; AG Doran; IT Fiddes; M  ... unctional loci. Nature Genetics (2018)
+        item-95 at level 4: list_item: S Liu; J Brind'Amour; MM Karimi; ... germ cells. Genes & Development (2014)
+        item-96 at level 4: list_item: MI Love; W Huber; S Anders. Mode ... ata with DESeq2. Genome Biology (2014)
+        item-97 at level 4: list_item: F Lugani; R Arora; N Papeta; A P ... short tail mouse. PLOS Genetics (2013)
+        item-98 at level 4: list_item: TS Macfarlan; WD Gifford; S Dris ... ous retrovirus activity. Nature (2012)
+        item-99 at level 4: list_item: IA Maksakova; MT Romanish; L Gag ...  mouse germ line. PLOS Genetics (2006)
+        item-100 at level 4: list_item: T Matsui; D Leung; H Miyashita;  ...  methyltransferase ESET. Nature (2010)
+        item-101 at level 4: list_item: HS Najafabadi; S Mnaimneh; FW Sc ... y lexicon. Nature Biotechnology (2015)
+        item-102 at level 4: list_item: C Nellåker; TM Keane; B Yalcin;  ... 8 mouse strains. Genome Biology (2012)
+        item-103 at level 4: list_item: H O'Geen; S Frietze; PJ Farnham. ... s. Methods in Molecular Biology (2010)
+        item-104 at level 4: list_item: A Patel; P Yang; M Tinkham; M Pr ... ndem zinc finger proteins. Cell (2018)
+        item-105 at level 4: list_item: D Ribet; M Dewannieux; T Heidman ... s-mobilization. Genome Research (2004)
+        item-106 at level 4: list_item: SR Richardson; P Gerdes; DJ Gerh ... d early embryo. Genome Research (2017)
+        item-107 at level 4: list_item: HM Rowe; J Jakobsson; D Mesnard; ... in embryonic stem cells. Nature (2010)
+        item-108 at level 4: list_item: HM Rowe; A Kapopoulou; A Corsino ... nic stem cells. Genome Research (2013)
+        item-109 at level 4: list_item: SN Schauer; PE Carreira; R Shukl ... carcinogenesis. Genome Research (2018)
+        item-110 at level 4: list_item: DC Schultz; K Ayyanathan; D Nego ... r proteins. Genes & Development (2002)
+        item-111 at level 4: list_item: K Semba; K Araki; K Matsumoto; H ...  short tail mice. PLOS Genetics (2013)
+        item-112 at level 4: list_item: SP Sripathy; J Stevens; DC Schul ...  Molecular and Cellular Biology (2006)
+        item-113 at level 4: list_item: JH Thomas; S Schneider. Coevolut ... c finger genes. Genome Research (2011)
+        item-114 at level 4: list_item: PJ Thompson; TS Macfarlan; MC Lo ... tory repertoire. Molecular Cell (2016)
+        item-115 at level 4: list_item: RS Treger; SD Pope; Y Kong; M To ... irus expression SNERV. Immunity (2019)
+        item-116 at level 4: list_item: CN Vlangos; AN Siuniak; D Robins ... Ptf1a expression. PLOS Genetics (2013)
+        item-117 at level 4: list_item: J Wang; G Xie; M Singh; AT Ghanb ... s naive-like stem cells. Nature (2014)
+        item-118 at level 4: list_item: D Wolf; K Hug; SP Goff. TRIM28 m ... iruses in embryonic cells. PNAS (2008)
+        item-119 at level 4: list_item: G Wolf; D Greenberg; TS Macfarla ... ger protein family. Mobile DNA (2015a)
+        item-120 at level 4: list_item: G Wolf; P Yang; AC Füchtbauer; E ... roviruses. Genes & Development (2015b)
+        item-121 at level 4: list_item: M Yamauchi; B Freitag; C Khan; B ...  silencers. Journal of Virology (1995)
+        item-122 at level 4: list_item: Y Zhang; T Liu; CA Meyer; J Eeck ... ChIP-Seq (MACS). Genome Biology (2008)
+  item-123 at level 1: caption: Table 1.: * Number of protein-co ...  ChIP-seq was performed in this study.
+  item-124 at level 1: caption: Key resources table: 
+  item-125 at level 1: caption: Figure 1.: Genome-wide binding p ...  with TE groups (Fisher’s exact test).
+  item-126 at level 1: caption: Figure 1—figure supplement 1.: E ... tes amino acid substitutions per site.
+  item-127 at level 1: caption: Figure 1—figure supplement 2.: K ... sfected with an empty pcDNA3.1 vector.
+  item-128 at level 1: caption: Figure 1—figure supplement 3.: K ... (adapted from Legiewicz et al., 2010).
+  item-129 at level 1: caption: Figure 2.: Retrotransposon react ... cal testing were determined by DESeq2.
+  item-130 at level 1: caption: Figure 2—figure supplement 1.: E ... r assay in Chr4-cl WT and KO ES cells.
+  item-131 at level 1: caption: Figure 3.: TE-dependent gene act ... Gm13051 are indicated by dashed lines.
+  item-132 at level 1: caption: Figure 4.: ETn retrotranspositio ... A for ETn and MuLV (RLTR4) insertions.
+  item-133 at level 1: caption: Figure 4—figure supplement 1.: B ... in at least two biological replicates.
+  item-134 at level 1: caption: Figure 4—figure supplement 2.: I ... color gradient indicates log10(RPM+1).
+  item-135 at level 1: caption: Figure 4—figure supplement 3.: C ... color gradient indicates log10(RPM+1).
