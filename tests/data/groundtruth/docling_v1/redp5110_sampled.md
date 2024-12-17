@@ -1,13 +1,10 @@
 Front cover
 
-
 <!-- image -->
 
 ## Row and Column Access Control Support in IBM DB2 for i
 
-
 <!-- image -->
-
 
 <!-- image -->
 
@@ -16,7 +13,6 @@ Front cover
 DB2 for i Center of Excellence
 
 Solution Brief IBM Systems Lab Services and Training
-
 
 <!-- image -->
 
@@ -29,7 +25,6 @@ Solution Brief IBM Systems Lab Services and Training
 - GLYPH<g115>GLYPH<g3> GLYPH<g53>GLYPH<g72>GLYPH<g79>GLYPH<g92>GLYPH<g3> GLYPH<g82>GLYPH<g81>GLYPH<g3> GLYPH<g44>GLYPH<g37>GLYPH<g48>GLYPH<g3> GLYPH<g72>GLYPH<g91>GLYPH<g83>GLYPH<g72>GLYPH<g85>GLYPH<g87>GLYPH<g3> GLYPH<g70>GLYPH<g82>GLYPH<g81>GLYPH<g86>GLYPH<g88>GLYPH<g79>GLYPH<g87>GLYPH<g76>GLYPH<g81>GLYPH<g74>GLYPH<g15>GLYPH<g3> GLYPH<g86>GLYPH<g78>GLYPH<g76>GLYPH<g79>GLYPH<g79>GLYPH<g86> GLYPH<g3> GLYPH<g86>GLYPH<g75>GLYPH<g68>GLYPH<g85>GLYPH<g76>GLYPH<g81>GLYPH<g74>GLYPH<g3> GLYPH<g68>GLYPH<g81>GLYPH<g71>GLYPH<g3> GLYPH<g85>GLYPH<g72>GLYPH<g81>GLYPH<g82>GLYPH<g90>GLYPH<g81>GLYPH<g3> GLYPH<g86>GLYPH<g72>GLYPH<g85>GLYPH<g89>GLYPH<g76>GLYPH<g70>GLYPH<g72>GLYPH<g86>
 
 - GLYPH<g115>GLYPH<g3> GLYPH<g55> GLYPH<g68>GLYPH<g78>GLYPH<g72>GLYPH<g3> GLYPH<g68>GLYPH<g71>GLYPH<g89>GLYPH<g68>GLYPH<g81>GLYPH<g87>GLYPH<g68>GLYPH<g74>GLYPH<g72>GLYPH<g3> GLYPH<g82>GLYPH<g73>GLYPH<g3> GLYPH<g68>GLYPH<g70>GLYPH<g70>GLYPH<g72>GLYPH<g86>GLYPH<g86>GLYPH<g3> GLYPH<g87>GLYPH<g82>GLYPH<g3> GLYPH<g68> GLYPH<g3> GLYPH<g90>GLYPH<g82>GLYPH<g85>GLYPH<g79>GLYPH<g71>GLYPH<g90>GLYPH<g76>GLYPH<g71>GLYPH<g72>GLYPH<g3> GLYPH<g86>GLYPH<g82>GLYPH<g88>GLYPH<g85>GLYPH<g70>GLYPH<g72>GLYPH<g3> GLYPH<g82>GLYPH<g73>GLYPH<g3> GLYPH<g72>GLYPH<g91>GLYPH<g83>GLYPH<g72>GLYPH<g85>GLYPH<g87>GLYPH<g76>GLYPH<g86>GLYPH<g72>
-
 
 <!-- image -->
 
@@ -77,9 +72,7 @@ This paper is intended for database engineers, data-centric application develope
 
 This paper was produced by the IBM DB2 for i Center of Excellence team in partnership with the International Technical Support Organization (ITSO), Rochester, Minnesota US.
 
-
 <!-- image -->
-
 
 <!-- image -->
 
@@ -88,7 +81,6 @@ Jim Bainbridge is a senior DB2 consultant on the DB2 for i Center of Excellence 
 Hernando Bedoya is a Senior IT Specialist at STG Lab Services and Training in Rochester, Minnesota. He writes extensively and teaches IBM classes worldwide in all areas of DB2 for i. Before joining STG Lab Services, he worked in the ITSO for nine years writing multiple IBM Redbooksfi publications. He also worked for IBM Colombia as an IBM AS/400fi IT Specialist doing presales support for the Andean countries. He has 28 years of experience in the computing field and has taught database classes in Colombian universities. He holds a Master's degree in Computer Science from EAFIT, Colombia. His areas of expertise are database technology, performance, and data warehousing. Hernando can be contacted at hbedoya@us.ibm.com .
 
 ## Authors
-
 
 <!-- image -->
 
@@ -383,9 +375,7 @@ This IBM Redpaper publication provides information about the IBM i 7.2 feature o
 
 This paper is intended for database engineers, data-centric application developers, and security officers who want to design and implement RCAC as a part of their data control and governance policy. A solid background in IBM i object level security, DB2 for i relational database concepts, and SQL is assumed.
 
-
 <!-- image -->
-
 
 <!-- image -->
 
