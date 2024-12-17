@@ -79,7 +79,7 @@ class SpatialClusterIndex:
         y_candidates = self.y_intervals.find_containing(
             bbox.t
         ) | self.y_intervals.find_containing(bbox.b)
-        return spatial | x_candidates | y_candidates
+        return spatial.union(x_candidates).union(y_candidates)
 
     def check_overlap(
         self,
@@ -108,34 +108,47 @@ class SpatialClusterIndex:
         )
 
 
+class Interval:
+    """Helper class for sortable intervals."""
+
+    def __init__(self, min_val: float, max_val: float, id: int):
+        self.min_val = min_val
+        self.max_val = max_val
+        self.id = id
+
+    def __lt__(self, other):
+        if isinstance(other, Interval):
+            return self.min_val < other.min_val
+        return self.min_val < other
+
+
 class IntervalTree:
     """Memory-efficient interval tree for 1D overlap queries."""
 
     def __init__(self):
-        self.intervals: List[Tuple[float, float, int]] = (
-            []
-        )  # (min, max, id) sorted by min
+        self.intervals: List[Interval] = []  # Sorted by min_val
 
     def insert(self, min_val: float, max_val: float, id: int):
-        bisect.insort(self.intervals, (min_val, max_val, id), key=lambda x: x[0])
+        interval = Interval(min_val, max_val, id)
+        bisect.insort(self.intervals, interval)
 
     def find_containing(self, point: float) -> Set[int]:
         """Find all intervals containing the point."""
-        pos = bisect.bisect_left(self.intervals, (point, float("-inf"), -1))
+        pos = bisect.bisect_left(self.intervals, point)
         result = set()
 
         # Check intervals starting before point
-        for min_val, max_val, id in reversed(self.intervals[:pos]):
-            if min_val <= point <= max_val:
-                result.add(id)
+        for interval in reversed(self.intervals[:pos]):
+            if interval.min_val <= point <= interval.max_val:
+                result.add(interval.id)
             else:
                 break
 
         # Check intervals starting at/after point
-        for min_val, max_val, id in self.intervals[pos:]:
-            if point <= max_val:
-                if min_val <= point:
-                    result.add(id)
+        for interval in self.intervals[pos:]:
+            if point <= interval.max_val:
+                if interval.min_val <= point:
+                    result.add(interval.id)
             else:
                 break
 
@@ -158,7 +171,7 @@ class LayoutPostprocessor:
         DocItemLabel.TABLE,
         DocItemLabel.DOCUMENT_INDEX,
     }
-    SPECIAL_TYPES = WRAPPER_TYPES | {DocItemLabel.PICTURE}
+    SPECIAL_TYPES = WRAPPER_TYPES.union({DocItemLabel.PICTURE})
 
     CONFIDENCE_THRESHOLDS = {
         DocItemLabel.CAPTION: 0.5,
