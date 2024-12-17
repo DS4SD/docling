@@ -3,7 +3,17 @@ import re
 from enum import Enum
 from io import BytesIO
 from pathlib import Path, PurePath
-from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Set, Type, Union
+from typing import (
+    TYPE_CHECKING,
+    Dict,
+    Iterable,
+    List,
+    Literal,
+    Optional,
+    Set,
+    Type,
+    Union,
+)
 
 import filetype
 from docling_core.types.doc import (
@@ -235,7 +245,7 @@ class _DocumentConversionInput(BaseModel):
             if isinstance(obj, Path):
                 yield InputDocument(
                     path_or_stream=obj,
-                    format=format,
+                    format=format,  # type: ignore[arg-type]
                     filename=obj.name,
                     limits=self.limits,
                     backend=backend,
@@ -243,7 +253,7 @@ class _DocumentConversionInput(BaseModel):
             elif isinstance(obj, DocumentStream):
                 yield InputDocument(
                     path_or_stream=obj.stream,
-                    format=format,
+                    format=format,  # type: ignore[arg-type]
                     filename=obj.name,
                     limits=self.limits,
                     backend=backend,
@@ -251,15 +261,15 @@ class _DocumentConversionInput(BaseModel):
             else:
                 raise RuntimeError(f"Unexpected obj type in iterator: {type(obj)}")
 
-    def _guess_format(self, obj: Union[Path, DocumentStream]):
+    def _guess_format(self, obj: Union[Path, DocumentStream]) -> Optional[InputFormat]:
         content = b""  # empty binary blob
-        format = None
+        formats: list[InputFormat] = []
 
         if isinstance(obj, Path):
             mime = filetype.guess_mime(str(obj))
             if mime is None:
                 ext = obj.suffix[1:]
-                mime = self._mime_from_extension(ext)
+                mime = _DocumentConversionInput._mime_from_extension(ext)
             if mime is None:  # must guess from
                 with obj.open("rb") as f:
                     content = f.read(1024)  # Read first 1KB
@@ -274,15 +284,53 @@ class _DocumentConversionInput(BaseModel):
                     if ("." in obj.name and not obj.name.startswith("."))
                     else ""
                 )
-                mime = self._mime_from_extension(ext)
+                mime = _DocumentConversionInput._mime_from_extension(ext)
 
-        mime = mime or self._detect_html_xhtml(content)
+        mime = mime or _DocumentConversionInput._detect_html_xhtml(content)
         mime = mime or "text/plain"
+        formats = MimeTypeToFormat.get(mime, [])
+        if formats:
+            # TODO: remove application/xml case after adding another XML parse
+            if len(formats) == 1 and mime not in ("text/plain", "application/xml"):
+                return formats[0]
+            else:  # ambiguity in formats
+                return _DocumentConversionInput._guess_from_content(
+                    content, mime, formats
+                )
+        else:
+            return None
 
-        format = MimeTypeToFormat.get(mime)
-        return format
+    @staticmethod
+    def _guess_from_content(
+        content: bytes, mime: str, formats: list[InputFormat]
+    ) -> Optional[InputFormat]:
+        """Guess the input format of a document by checking part of its content."""
+        input_format: Optional[InputFormat] = None
+        content_str = content.decode("utf-8")
 
-    def _mime_from_extension(self, ext):
+        if mime == "application/xml":
+            match_doctype = re.search(r"<!DOCTYPE [^>]+>", content_str)
+            if match_doctype:
+                xml_doctype = match_doctype.group()
+                if InputFormat.XML_USPTO in formats and any(
+                    item in xml_doctype
+                    for item in (
+                        "us-patent-application-v4",
+                        "us-patent-grant-v4",
+                        "us-grant-025",
+                        "patent-application-publication",
+                    )
+                ):
+                    input_format = InputFormat.XML_USPTO
+
+        elif mime == "text/plain":
+            if InputFormat.XML_USPTO in formats and content_str.startswith("PATN\r\n"):
+                input_format = InputFormat.XML_USPTO
+
+        return input_format
+
+    @staticmethod
+    def _mime_from_extension(ext):
         mime = None
         if ext in FormatToExtensions[InputFormat.ASCIIDOC]:
             mime = FormatToMimeType[InputFormat.ASCIIDOC][0]
@@ -293,7 +341,19 @@ class _DocumentConversionInput(BaseModel):
 
         return mime
 
-    def _detect_html_xhtml(self, content):
+    @staticmethod
+    def _detect_html_xhtml(
+        content: bytes,
+    ) -> Optional[Literal["application/xhtml+xml", "application/xml", "text/html"]]:
+        """Guess the mime type of an XHTML, HTML, or XML file from its content.
+
+        Args:
+            content: A short piece of a document from its beginning.
+
+        Returns:
+            The mime type of an XHTML, HTML, or XML file, or None if the content does
+              not match any of these formats.
+        """
         content_str = content.decode("ascii", errors="ignore").lower()
         # Remove XML comments
         content_str = re.sub(r"<!--(.*?)-->", "", content_str, flags=re.DOTALL)
@@ -302,6 +362,8 @@ class _DocumentConversionInput(BaseModel):
         if re.match(r"<\?xml", content_str):
             if "xhtml" in content_str[:1000]:
                 return "application/xhtml+xml"
+            else:
+                return "application/xml"
 
         if re.match(r"<!doctype\s+html|<html|<head|<body", content_str):
             return "text/html"

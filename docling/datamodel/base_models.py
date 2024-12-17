@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from docling_core.types.doc import (
@@ -28,6 +28,8 @@ class ConversionStatus(str, Enum):
 
 
 class InputFormat(str, Enum):
+    """A document format supported by document backend parsers."""
+
     DOCX = "docx"
     PPTX = "pptx"
     HTML = "html"
@@ -36,6 +38,7 @@ class InputFormat(str, Enum):
     ASCIIDOC = "asciidoc"
     MD = "md"
     XLSX = "xlsx"
+    XML_USPTO = "xml_uspto"
 
 
 class OutputFormat(str, Enum):
@@ -55,6 +58,7 @@ FormatToExtensions: Dict[InputFormat, List[str]] = {
     InputFormat.IMAGE: ["jpg", "jpeg", "png", "tif", "tiff", "bmp"],
     InputFormat.ASCIIDOC: ["adoc", "asciidoc", "asc"],
     InputFormat.XLSX: ["xlsx"],
+    InputFormat.XML_USPTO: ["xml", "txt"],
 }
 
 FormatToMimeType: Dict[InputFormat, List[str]] = {
@@ -81,10 +85,13 @@ FormatToMimeType: Dict[InputFormat, List[str]] = {
     InputFormat.XLSX: [
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ],
+    InputFormat.XML_USPTO: ["application/xml", "text/plain"],
 }
 
-MimeTypeToFormat = {
-    mime: fmt for fmt, mimes in FormatToMimeType.items() for mime in mimes
+MimeTypeToFormat: dict[str, list[InputFormat]] = {
+    mime: [fmt for fmt in FormatToMimeType if mime in FormatToMimeType[fmt]]
+    for value in FormatToMimeType.values()
+    for mime in value
 }
 
 
