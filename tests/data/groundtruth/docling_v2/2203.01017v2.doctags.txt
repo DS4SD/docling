@@ -206,10 +206,10 @@
 <caption>Figure 5: One of the benefits of TableFormer is that it is language agnostic, as an example, the left part of the illustration demonstrates TableFormer predictions on previously unseen language (Japanese). Additionally, we see that TableFormer is robust to variability in style and content, right side of the illustration shows the example of the TableFormer prediction from the FinTabNet dataset.</caption>
 </figure>
 <figure>
-<location><page_8><loc_35><loc_44><loc_61><loc_52></location>
+<location><page_8><loc_63><loc_44><loc_89><loc_52></location>
 </figure>
 <figure>
-<location><page_8><loc_63><loc_44><loc_89><loc_52></location>
+<location><page_8><loc_35><loc_44><loc_61><loc_52></location>
 <caption>Figure 6: An example of TableFormer predictions (bounding boxes and structure) from generated SynthTabNet table.</caption>
 </figure>
 <section_header_level_1><location><page_8><loc_8><loc_37><loc_27><loc_38></location>5.5. Qualitative Analysis</section_header_level_1>
@@ -296,9 +296,6 @@
 <list_item><location><page_12><loc_10><loc_67><loc_47><loc_69></location>· There are occasional inaccuracies in the predictions of the bounding boxes.</list_item>
 </unordered_list>
 <text><location><page_12><loc_8><loc_50><loc_47><loc_65></location>However, it is possible to mitigate those limitations by combining the TableFormer predictions with the information already present inside a programmatic PDF document. More specifically, PDF documents can be seen as a sequence of PDF cells where each cell is described by its content and bounding box. If we are able to associate the PDF cells with the predicted table cells, we can directly link the PDF cell content to the table cell structure and use the PDF bounding boxes to correct misalignments in the predicted table cell bounding boxes.</text>
-<unordered_list>
-<list_item><location><page_12><loc_50><loc_51><loc_89><loc_64></location>7. Generate a new set of pair-wise matches between the corrected bounding boxes and PDF cells. This time use a modified version of the IOU metric, where the area of the intersection between the predicted and PDF cells is divided by the PDF cell area. In case there are multiple matches for the same PDF cell, the prediction with the higher score is preferred. This covers the cases where the PDF cells are smaller than the area of predicted or corrected prediction cells.</list_item>
-</unordered_list>
 <text><location><page_12><loc_8><loc_47><loc_47><loc_50></location>Here is a step-by-step description of the prediction postprocessing:</text>
 <unordered_list>
 <list_item><location><page_12><loc_8><loc_42><loc_47><loc_47></location>1. Get the minimal grid dimensions - number of rows and columns for the predicted table structure. This represents the most granular grid for the underlying table structure.</list_item>
@@ -307,21 +304,24 @@
 <list_item><location><page_12><loc_8><loc_29><loc_47><loc_33></location>3.a. If all IOU scores in a column are below the threshold, discard all predictions (structure and bounding boxes) for that column.</list_item>
 <list_item><location><page_12><loc_8><loc_24><loc_47><loc_28></location>4. Find the best-fitting content alignment for the predicted cells with good IOU per each column. The alignment of the column can be identified by the following formula:</list_item>
 </unordered_list>
-<text><location><page_12><loc_50><loc_24><loc_89><loc_28></location>9a. Compute the top and bottom boundary of the horizontal band for each grid row (min/max y coordinates per row).</text>
 <formula><location><page_12><loc_18><loc_17><loc_47><loc_21></location>alignment = arg min c { D$_{c}$ } D$_{c}$ = max { x$_{c}$ } - min { x$_{c}$ } (4)</formula>
 <text><location><page_12><loc_8><loc_13><loc_47><loc_16></location>where c is one of { left, centroid, right } and x$_{c}$ is the xcoordinate for the corresponding point.</text>
 <unordered_list>
-<list_item><location><page_12><loc_50><loc_13><loc_89><loc_16></location>9d. Intersect the orphan's bounding box with the column bands, and map the cell to the closest grid column.</list_item>
 <list_item><location><page_12><loc_8><loc_10><loc_47><loc_13></location>5. Use the alignment computed in step 4, to compute the median x -coordinate for all table columns and the me-</list_item>
-<list_item><location><page_12><loc_50><loc_10><loc_89><loc_13></location>9e. If the table cell under the identified row and column is not empty, extend its content with the content of the or-</list_item>
-<list_item><location><page_12><loc_50><loc_21><loc_89><loc_23></location>9b. Intersect the orphan's bounding box with the row bands, and map the cell to the closest grid row.</list_item>
-<list_item><location><page_12><loc_50><loc_16><loc_89><loc_20></location>9c. Compute the left and right boundary of the vertical band for each grid column (min/max x coordinates per column).</list_item>
-<list_item><location><page_12><loc_50><loc_42><loc_89><loc_51></location>8. In some rare occasions, we have noticed that TableFormer can confuse a single column as two. When the postprocessing steps are applied, this results with two predicted columns pointing to the same PDF column. In such case we must de-duplicate the columns according to highest total column intersection score.</list_item>
-<list_item><location><page_12><loc_50><loc_28><loc_89><loc_41></location>9. Pick up the remaining orphan cells. There could be cases, when after applying all the previous post-processing steps, some PDF cells could still remain without any match to predicted cells. However, it is still possible to deduce the correct matching for an orphan PDF cell by mapping its bounding box on the geometry of the grid. This mapping decides if the content of the orphan cell will be appended to an already matched table cell, or a new table cell should be created to match with the orphan.</list_item>
 </unordered_list>
 <text><location><page_12><loc_50><loc_68><loc_89><loc_73></location>dian cell size for all table cells. The usage of median during the computations, helps to eliminate outliers caused by occasional column spans which are usually wider than the normal.</text>
 <unordered_list>
 <list_item><location><page_12><loc_50><loc_65><loc_89><loc_67></location>6. Snap all cells with bad IOU to their corresponding median x -coordinates and cell sizes.</list_item>
+<list_item><location><page_12><loc_50><loc_51><loc_89><loc_64></location>7. Generate a new set of pair-wise matches between the corrected bounding boxes and PDF cells. This time use a modified version of the IOU metric, where the area of the intersection between the predicted and PDF cells is divided by the PDF cell area. In case there are multiple matches for the same PDF cell, the prediction with the higher score is preferred. This covers the cases where the PDF cells are smaller than the area of predicted or corrected prediction cells.</list_item>
+<list_item><location><page_12><loc_50><loc_42><loc_89><loc_51></location>8. In some rare occasions, we have noticed that TableFormer can confuse a single column as two. When the postprocessing steps are applied, this results with two predicted columns pointing to the same PDF column. In such case we must de-duplicate the columns according to highest total column intersection score.</list_item>
+<list_item><location><page_12><loc_50><loc_28><loc_89><loc_41></location>9. Pick up the remaining orphan cells. There could be cases, when after applying all the previous post-processing steps, some PDF cells could still remain without any match to predicted cells. However, it is still possible to deduce the correct matching for an orphan PDF cell by mapping its bounding box on the geometry of the grid. This mapping decides if the content of the orphan cell will be appended to an already matched table cell, or a new table cell should be created to match with the orphan.</list_item>
+</unordered_list>
+<text><location><page_12><loc_50><loc_24><loc_89><loc_28></location>9a. Compute the top and bottom boundary of the horizontal band for each grid row (min/max y coordinates per row).</text>
+<unordered_list>
+<list_item><location><page_12><loc_50><loc_21><loc_89><loc_23></location>9b. Intersect the orphan's bounding box with the row bands, and map the cell to the closest grid row.</list_item>
+<list_item><location><page_12><loc_50><loc_16><loc_89><loc_20></location>9c. Compute the left and right boundary of the vertical band for each grid column (min/max x coordinates per column).</list_item>
+<list_item><location><page_12><loc_50><loc_13><loc_89><loc_16></location>9d. Intersect the orphan's bounding box with the column bands, and map the cell to the closest grid column.</list_item>
+<list_item><location><page_12><loc_50><loc_10><loc_89><loc_13></location>9e. If the table cell under the identified row and column is not empty, extend its content with the content of the or-</list_item>
 </unordered_list>
 <text><location><page_13><loc_8><loc_89><loc_15><loc_91></location>phan cell.</text>
 <text><location><page_13><loc_8><loc_86><loc_47><loc_89></location>9f. Otherwise create a new structural cell and match it wit the orphan cell.</text>
