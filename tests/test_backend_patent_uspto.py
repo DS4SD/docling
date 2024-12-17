@@ -12,7 +12,7 @@ import yaml
 from docling_core.types import DoclingDocument
 from docling_core.types.doc import DocItemLabel, TableData, TextItem
 
-from docling.backend.xml_uspto_backend import PatentUsptoDocumentBackend, XmlTable
+from docling.backend.xml.uspto_backend import PatentUsptoDocumentBackend, XmlTable
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import (
     ConversionResult,

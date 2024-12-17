@@ -43,7 +43,7 @@ class InputFormat(str, Enum):
     ASCIIDOC = "asciidoc", False
     MD = "md", False
     XLSX = "xlsx", False
-    XML_USPTO = "uspto", True
+    XML_USPTO = "xml_uspto", True
 
     @override
     def __new__(cls, value: str, _) -> Self:
