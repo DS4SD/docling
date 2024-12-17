@@ -1,3 +1,16 @@
+## [v2.13.0](https://github.com/DS4SD/docling/releases/tag/v2.13.0) - 2024-12-17
+
+### Feature
+
+* Updated Layout processing with forms and key-value areas ([#530](https://github.com/DS4SD/docling/issues/530)) ([`60dc852`](https://github.com/DS4SD/docling/commit/60dc852f16dc1adbb5e9284c81a146043a301ec1))
+* Create a backend to parse USPTO patents into DoclingDocument ([#606](https://github.com/DS4SD/docling/issues/606)) ([`4e08750`](https://github.com/DS4SD/docling/commit/4e087504cc4b04210574e69f616badcddfa1f8e5))
+* Add Easyocr parameter recog_network ([#613](https://github.com/DS4SD/docling/issues/613)) ([`3b53bd3`](https://github.com/DS4SD/docling/commit/3b53bd38c8efcc5ba54421fbfa90d047f1a61f82))
+
+### Documentation
+
+* Add Haystack RAG example ([#615](https://github.com/DS4SD/docling/issues/615)) ([`3e599c7`](https://github.com/DS4SD/docling/commit/3e599c7bbeef211dc346e9bc1d3a249113fcc4e4))
+* Fix the path to the run_with_accelerator.py example ([#608](https://github.com/DS4SD/docling/issues/608)) ([`3bb3bf5`](https://github.com/DS4SD/docling/commit/3bb3bf57150c9705a055982e6fb0cc8d1408f161))
+
 ## [v2.12.0](https://github.com/DS4SD/docling/releases/tag/v2.12.0) - 2024-12-13
 
 ### Feature
