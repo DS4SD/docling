@@ -67,17 +67,22 @@ class PatentUsptoDocumentBackend(DeclarativeDocumentBackend):
         self.patent_content: str = ""
         self.parser: Optional[PatentUspto] = None
 
-        if isinstance(self.path_or_stream, BytesIO):
-            while line := self.path_or_stream.readline().decode("utf-8"):
-                if line.startswith("<!DOCTYPE") or line == "PATN\n":
-                    self._set_parser(line)
-                self.patent_content += line
-        elif isinstance(self.path_or_stream, Path):
-            with open(self.path_or_stream, encoding="utf-8") as file_obj:
-                while line := file_obj.readline():
+        try:
+            if isinstance(self.path_or_stream, BytesIO):
+                while line := self.path_or_stream.readline().decode("utf-8"):
                     if line.startswith("<!DOCTYPE") or line == "PATN\n":
                         self._set_parser(line)
                     self.patent_content += line
+            elif isinstance(self.path_or_stream, Path):
+                with open(self.path_or_stream, encoding="utf-8") as file_obj:
+                    while line := file_obj.readline():
+                        if line.startswith("<!DOCTYPE") or line == "PATN\n":
+                            self._set_parser(line)
+                        self.patent_content += line
+        except Exception as exc:
+            raise RuntimeError(
+                f"Could not initialize USPTO backend for file with hash {self.document_hash}."
+            ) from exc
 
     def _set_parser(self, doctype: str) -> None:
         doctype_line = doctype.lower()

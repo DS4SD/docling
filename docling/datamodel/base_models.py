@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from docling_core.types.doc import (
@@ -13,7 +13,6 @@ from docling_core.types.io import (  # DO ΝΟΤ REMOVE; explicitly exposed from
 )
 from PIL.Image import Image
 from pydantic import BaseModel, ConfigDict
-from typing_extensions import Self, override
 
 if TYPE_CHECKING:
     from docling.backend.pdf_backend import PdfPageBackend
@@ -29,31 +28,17 @@ class ConversionStatus(str, Enum):
 
 
 class InputFormat(str, Enum):
-    """A document format supported by document backend parsers.
+    """A document format supported by document backend parsers."""
 
-    The field `is_custom` indicates whether the document format is more specific than
-    the standard and content formats, typically defined by MIME types.
-    """
-
-    DOCX = "docx", False
-    PPTX = "pptx", False
-    HTML = "html", False
-    IMAGE = "image", False
-    PDF = "pdf", False
-    ASCIIDOC = "asciidoc", False
-    MD = "md", False
-    XLSX = "xlsx", False
-    XML_USPTO = "xml_uspto", True
-
-    @override
-    def __new__(cls, value: str, _) -> Self:
-        obj = str.__new__(cls, [value])
-        obj._value_ = value
-        return obj
-
-    @override
-    def __init__(self, _, is_custom: bool) -> None:
-        self.is_custom: bool = is_custom
+    DOCX = "docx"
+    PPTX = "pptx"
+    HTML = "html"
+    IMAGE = "image"
+    PDF = "pdf"
+    ASCIIDOC = "asciidoc"
+    MD = "md"
+    XLSX = "xlsx"
+    XML_USPTO = "xml_uspto"
 
 
 class OutputFormat(str, Enum):

@@ -290,9 +290,10 @@ class _DocumentConversionInput(BaseModel):
         mime = mime or "text/plain"
         formats = MimeTypeToFormat.get(mime, [])
         if formats:
-            if len(formats) == 1 and not formats[0].is_custom:
+            # TODO: remove application/xml case after adding another XML parse
+            if len(formats) == 1 and mime not in ("text/plain", "application/xml"):
                 return formats[0]
-            else:  # ambiguity or custom cases
+            else:  # ambiguity in formats
                 return _DocumentConversionInput._guess_from_content(
                     content, mime, formats
                 )
