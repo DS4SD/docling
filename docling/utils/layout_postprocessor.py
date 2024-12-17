@@ -328,16 +328,7 @@ class LayoutPostprocessor:
                         contained.append(cluster)
 
             if contained:
-                # # Sort contained clusters by minimum cell ID:
-                # contained.sort(
-                #     key=lambda cluster: (
-                #         min(cell.id for cell in cluster.cells)
-                #         if cluster.cells
-                #         else sys.maxsize
-                #     )
-                # )
-
-                # Sort contained clusters left-to-right, top-to-bottom
+                # Sort contained clusters by minimum cell ID:
                 contained = self._sort_clusters(contained, mode="id")
                 special.children = contained
 
