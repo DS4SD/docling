@@ -76,6 +76,10 @@ class TableStructureModel(BasePageModel):
             x0, y0, x1, y1 = table_element.cluster.bbox.as_tuple()
             draw.rectangle([(x0, y0), (x1, y1)], outline="red")
 
+            for cell in table_element.cluster.cells:
+                x0, y0, x1, y1 = cell.bbox.as_tuple()
+                draw.rectangle([(x0, y0), (x1, y1)], outline="green")
+
             for tc in table_element.table_cells:
                 if tc.bbox is not None:
                     x0, y0, x1, y1 = tc.bbox.as_tuple()
@@ -89,7 +93,6 @@ class TableStructureModel(BasePageModel):
                         text=f"{tc.start_row_offset_idx}, {tc.start_col_offset_idx}",
                         fill="black",
                     )
-
         if show:
             image.show()
         else:
@@ -135,47 +138,40 @@ class TableStructureModel(BasePageModel):
                             ],
                         )
                         for cluster in page.predictions.layout.clusters
-                        if cluster.label == DocItemLabel.TABLE
+                        if cluster.label
+                        in [DocItemLabel.TABLE, DocItemLabel.DOCUMENT_INDEX]
                     ]
                     if not len(in_tables):
                         yield page
                         continue
 
-                    tokens = []
-                    for c in page.cells:
-                        for cluster, _ in in_tables:
-                            if c.bbox.area() > 0:
-                                if (
-                                    c.bbox.intersection_area_with(cluster.bbox)
-                                    / c.bbox.area()
-                                    > 0.2
-                                ):
-                                    # Only allow non empty stings (spaces) into the cells of a table
-                                    if len(c.text.strip()) > 0:
-                                        new_cell = copy.deepcopy(c)
-                                        new_cell.bbox = new_cell.bbox.scaled(
-                                            scale=self.scale
-                                        )
-
-                                        tokens.append(new_cell.model_dump())
-
                     page_input = {
-                        "tokens": tokens,
                         "width": page.size.width * self.scale,
                         "height": page.size.height * self.scale,
+                        "image": numpy.asarray(page.get_image(scale=self.scale)),
                     }
-                    page_input["image"] = numpy.asarray(
-                        page.get_image(scale=self.scale)
-                    )
 
                     table_clusters, table_bboxes = zip(*in_tables)
 
                     if len(table_bboxes):
-                        tf_output = self.tf_predictor.multi_table_predict(
-                            page_input, table_bboxes, do_matching=self.do_cell_matching
-                        )
+                        for table_cluster, tbl_box in in_tables:
 
-                        for table_cluster, table_out in zip(table_clusters, tf_output):
+                            tokens = []
+                            for c in table_cluster.cells:
+                                # Only allow non empty stings (spaces) into the cells of a table
+                                if len(c.text.strip()) > 0:
+                                    new_cell = copy.deepcopy(c)
+                                    new_cell.bbox = new_cell.bbox.scaled(
+                                        scale=self.scale
+                                    )
+
+                                    tokens.append(new_cell.model_dump())
+                            page_input["tokens"] = tokens
+
+                            tf_output = self.tf_predictor.multi_table_predict(
+                                page_input, [tbl_box], do_matching=self.do_cell_matching
+                            )
+                            table_out = tf_output[0]
                             table_cells = []
                             for element in table_out["tf_responses"]:
 
@@ -208,7 +204,7 @@ class TableStructureModel(BasePageModel):
                                 id=table_cluster.id,
                                 page_no=page.page_no,
                                 cluster=table_cluster,
-                                label=DocItemLabel.TABLE,
+                                label=table_cluster.label,
                             )
 
                             page.predictions.tablestructure.table_map[

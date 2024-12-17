@@ -129,6 +129,7 @@ class Cluster(BaseModel):
     bbox: BoundingBox
     confidence: float = 1.0
     cells: List[Cell] = []
+    children: List["Cluster"] = []  # Add child cluster support
 
 
 class BasePageElement(BaseModel):
@@ -141,6 +142,12 @@ class BasePageElement(BaseModel):
 
 class LayoutPrediction(BaseModel):
     clusters: List[Cluster] = []
+
+
+class ContainerElement(
+    BasePageElement
+):  # Used for Form and Key-Value-Regions, only for typing.
+    pass
 
 
 class Table(BasePageElement):
@@ -182,7 +189,7 @@ class PagePredictions(BaseModel):
     equations_prediction: Optional[EquationPrediction] = None
 
 
-PageElement = Union[TextElement, Table, FigureElement]
+PageElement = Union[TextElement, Table, FigureElement, ContainerElement]
 
 
 class AssembledUnit(BaseModel):

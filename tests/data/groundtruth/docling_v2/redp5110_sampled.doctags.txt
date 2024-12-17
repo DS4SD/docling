@@ -3,15 +3,16 @@
 <figure>
 <location><page_1><loc_84><loc_93><loc_96><loc_97></location>
 </figure>
-<section_header_level_1><location><page_1><loc_6><loc_79><loc_96><loc_90></location>Row and Column Access Control Support in IBM DB2 for i</section_header_level_1>
-<text><location><page_1><loc_6><loc_59><loc_35><loc_63></location>Implement roles and separation of duties</text>
-<text><location><page_1><loc_6><loc_52><loc_33><loc_56></location>Leverage row permissions on the database</text>
-<text><location><page_1><loc_6><loc_45><loc_32><loc_49></location>Protect columns by defining column masks</text>
-<text><location><page_1><loc_81><loc_12><loc_95><loc_28></location>Jim Bainbridge Hernando Bedoya Rob Bestgen Mike Cain Dan Cruikshank Jim Denton Doug Mack Tom McKinley Kent Milligan</text>
-<text><location><page_1><loc_51><loc_2><loc_95><loc_10></location>Redpaper</text>
+<section_header_level_1><location><page_1><loc_6><loc_79><loc_96><loc_89></location>Row and Column Access Control Support in IBM DB2 for i</section_header_level_1>
+<figure>
+<location><page_1><loc_5><loc_11><loc_96><loc_63></location>
+</figure>
+<figure>
+<location><page_1><loc_52><loc_2><loc_95><loc_10></location>
+</figure>
 <section_header_level_1><location><page_2><loc_11><loc_88><loc_28><loc_91></location>Contents</section_header_level_1>
 <table>
-<location><page_2><loc_22><loc_10><loc_90><loc_83></location>
+<location><page_2><loc_22><loc_10><loc_89><loc_83></location>
 <row_0><col_0><body>Notices</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . vii</col_1></row_0>
 <row_1><col_0><body>Trademarks</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . viii</col_1></row_1>
 <row_2><col_0><body>DB2 for i Center of Excellence</col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ix</col_1></row_2>
@@ -45,8 +46,8 @@
 <row_30><col_0><body>3.2.2 Built-in global variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>19</col_1></row_30>
 <row_31><col_0><body>3.3 VERIFY_GROUP_FOR_USER function . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>20</col_1></row_31>
 <row_32><col_0><body>3.4 Establishing and controlling accessibility by using the RCAC rule text . . . . . . . . . . . . .</col_0><col_1><body>21</col_1></row_32>
-<row_33><col_0><body></col_0><col_1><body>. . . . . . . . . . . . . . . . . . . . . . . . 22</col_1></row_33>
-<row_34><col_0><body>3.5 SELECT, INSERT, and UPDATE behavior with RCAC</col_0><col_1><body></col_1></row_34>
+<row_33><col_0><body>. . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>22</col_1></row_33>
+<row_34><col_0><body>3.5 SELECT, INSERT, and UPDATE behavior with RCAC 3.6 Human resources example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>22</col_1></row_34>
 <row_35><col_0><body>3.6.1 Assigning the QIBM_DB_SECADM function ID to the consultants. . . . . . . . . . . .</col_0><col_1><body>23</col_1></row_35>
 <row_36><col_0><body>3.6.2 Creating group profiles for the users and their roles . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>23</col_1></row_36>
 <row_37><col_0><body>3.6.3 Demonstrating data access without RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .</col_0><col_1><body>24</col_1></row_37>
@@ -63,7 +64,7 @@
 </figure>
 <section_header_level_1><location><page_3><loc_24><loc_57><loc_31><loc_59></location>Highlights</section_header_level_1>
 <unordered_list>
-<list_item><location><page_3><loc_24><loc_55><loc_40><loc_57></location>GLYPH<g115>GLYPH<g3> GLYPH<g40>GLYPH<g81>GLYPH<g75>GLYPH<g68>GLYPH<g81>GLYPH<g70>GLYPH<g72>GLYPH<g3> GLYPH<g87>GLYPH<g75>GLYPH<g72>GLYPH<g3> GLYPH<g83>GLYPH<g72>GLYPH<g85>GLYPH<g73>GLYPH<g82>GLYPH<g85>GLYPH<g80>GLYPH<g68>GLYPH<g81>GLYPH<g70>GLYPH<g72>GLYPH<g3> GLYPH<g82>GLYPH<g73>GLYPH<g3> GLYPH<g92>GLYPH<g82>GLYPH<g88>GLYPH<g85> GLYPH<g3> GLYPH<g71>GLYPH<g68>GLYPH<g87>GLYPH<g68>GLYPH<g69>GLYPH<g68>GLYPH<g86>GLYPH<g72>GLYPH<g3> GLYPH<g82>GLYPH<g83>GLYPH<g72>GLYPH<g85>GLYPH<g68>GLYPH<g87>GLYPH<g76>GLYPH<g82>GLYPH<g81>GLYPH<g86></list_item>
+<list_item><location><page_3><loc_24><loc_55><loc_40><loc_56></location>GLYPH<g115>GLYPH<g3> GLYPH<g40>GLYPH<g81>GLYPH<g75>GLYPH<g68>GLYPH<g81>GLYPH<g70>GLYPH<g72>GLYPH<g3> GLYPH<g87>GLYPH<g75>GLYPH<g72>GLYPH<g3> GLYPH<g83>GLYPH<g72>GLYPH<g85>GLYPH<g73>GLYPH<g82>GLYPH<g85>GLYPH<g80>GLYPH<g68>GLYPH<g81>GLYPH<g70>GLYPH<g72>GLYPH<g3> GLYPH<g82>GLYPH<g73>GLYPH<g3> GLYPH<g92>GLYPH<g82>GLYPH<g88>GLYPH<g85> GLYPH<g3> GLYPH<g71>GLYPH<g68>GLYPH<g87>GLYPH<g68>GLYPH<g69>GLYPH<g68>GLYPH<g86>GLYPH<g72>GLYPH<g3> GLYPH<g82>GLYPH<g83>GLYPH<g72>GLYPH<g85>GLYPH<g68>GLYPH<g87>GLYPH<g76>GLYPH<g82>GLYPH<g81>GLYPH<g86></list_item>
 <list_item><location><page_3><loc_24><loc_51><loc_42><loc_54></location>GLYPH<g115>GLYPH<g3> GLYPH<g40>GLYPH<g68>GLYPH<g85> GLYPH<g81>GLYPH<g3> GLYPH<g74>GLYPH<g85>GLYPH<g72>GLYPH<g68>GLYPH<g87>GLYPH<g72>GLYPH<g85>GLYPH<g3> GLYPH<g85>GLYPH<g72>GLYPH<g87>GLYPH<g88>GLYPH<g85> GLYPH<g81>GLYPH<g3> GLYPH<g82>GLYPH<g81>GLYPH<g3> GLYPH<g44>GLYPH<g55>GLYPH<g3> GLYPH<g83>GLYPH<g85>GLYPH<g82>GLYPH<g77>GLYPH<g72>GLYPH<g70>GLYPH<g87>GLYPH<g86> GLYPH<g3> GLYPH<g87>GLYPH<g75>GLYPH<g85>GLYPH<g82>GLYPH<g88>GLYPH<g74>GLYPH<g75>GLYPH<g3> GLYPH<g80>GLYPH<g82>GLYPH<g71>GLYPH<g72>GLYPH<g85> GLYPH<g81>GLYPH<g76>GLYPH<g93>GLYPH<g68>GLYPH<g87>GLYPH<g76>GLYPH<g82>GLYPH<g81>GLYPH<g3> GLYPH<g82>GLYPH<g73>GLYPH<g3> GLYPH<g71>GLYPH<g68>GLYPH<g87>GLYPH<g68>GLYPH<g69>GLYPH<g68>GLYPH<g86>GLYPH<g72>GLYPH<g3> GLYPH<g68>GLYPH<g81>GLYPH<g71> GLYPH<g3> GLYPH<g68>GLYPH<g83>GLYPH<g83>GLYPH<g79>GLYPH<g76>GLYPH<g70>GLYPH<g68>GLYPH<g87>GLYPH<g76>GLYPH<g82>GLYPH<g81>GLYPH<g86></list_item>
 <list_item><location><page_3><loc_24><loc_48><loc_41><loc_50></location>GLYPH<g115>GLYPH<g3> GLYPH<g53>GLYPH<g72>GLYPH<g79>GLYPH<g92>GLYPH<g3> GLYPH<g82>GLYPH<g81>GLYPH<g3> GLYPH<g44>GLYPH<g37>GLYPH<g48>GLYPH<g3> GLYPH<g72>GLYPH<g91>GLYPH<g83>GLYPH<g72>GLYPH<g85>GLYPH<g87>GLYPH<g3> GLYPH<g70>GLYPH<g82>GLYPH<g81>GLYPH<g86>GLYPH<g88>GLYPH<g79>GLYPH<g87>GLYPH<g76>GLYPH<g81>GLYPH<g74>GLYPH<g15>GLYPH<g3> GLYPH<g86>GLYPH<g78>GLYPH<g76>GLYPH<g79>GLYPH<g79>GLYPH<g86> GLYPH<g3> GLYPH<g86>GLYPH<g75>GLYPH<g68>GLYPH<g85>GLYPH<g76>GLYPH<g81>GLYPH<g74>GLYPH<g3> GLYPH<g68>GLYPH<g81>GLYPH<g71>GLYPH<g3> GLYPH<g85>GLYPH<g72>GLYPH<g81>GLYPH<g82>GLYPH<g90>GLYPH<g81>GLYPH<g3> GLYPH<g86>GLYPH<g72>GLYPH<g85>GLYPH<g89>GLYPH<g76>GLYPH<g70>GLYPH<g72>GLYPH<g86></list_item>
 <list_item><location><page_3><loc_24><loc_45><loc_38><loc_47></location>GLYPH<g115>GLYPH<g3> GLYPH<g55> GLYPH<g68>GLYPH<g78>GLYPH<g72>GLYPH<g3> GLYPH<g68>GLYPH<g71>GLYPH<g89>GLYPH<g68>GLYPH<g81>GLYPH<g87>GLYPH<g68>GLYPH<g74>GLYPH<g72>GLYPH<g3> GLYPH<g82>GLYPH<g73>GLYPH<g3> GLYPH<g68>GLYPH<g70>GLYPH<g70>GLYPH<g72>GLYPH<g86>GLYPH<g86>GLYPH<g3> GLYPH<g87>GLYPH<g82>GLYPH<g3> GLYPH<g68> GLYPH<g3> GLYPH<g90>GLYPH<g82>GLYPH<g85>GLYPH<g79>GLYPH<g71>GLYPH<g90>GLYPH<g76>GLYPH<g71>GLYPH<g72>GLYPH<g3> GLYPH<g86>GLYPH<g82>GLYPH<g88>GLYPH<g85>GLYPH<g70>GLYPH<g72>GLYPH<g3> GLYPH<g82>GLYPH<g73>GLYPH<g3> GLYPH<g72>GLYPH<g91>GLYPH<g83>GLYPH<g72>GLYPH<g85>GLYPH<g87>GLYPH<g76>GLYPH<g86>GLYPH<g72></list_item>
@@ -82,14 +83,14 @@
 <text><location><page_3><loc_46><loc_42><loc_71><loc_43></location>Global CoE engagements cover topics including:</text>
 <unordered_list>
 <list_item><location><page_3><loc_46><loc_40><loc_66><loc_41></location>r Database performance and scalability</list_item>
-<list_item><location><page_3><loc_46><loc_39><loc_69><loc_40></location>r Advanced SQL knowledge and skills transfer</list_item>
+<list_item><location><page_3><loc_46><loc_39><loc_69><loc_39></location>r Advanced SQL knowledge and skills transfer</list_item>
 <list_item><location><page_3><loc_46><loc_37><loc_64><loc_38></location>r Business intelligence and analytics</list_item>
 <list_item><location><page_3><loc_46><loc_36><loc_56><loc_37></location>r DB2 Web Query</list_item>
 <list_item><location><page_3><loc_46><loc_35><loc_82><loc_36></location>r Query/400 modernization for better reporting and analysis capabilities</list_item>
 <list_item><location><page_3><loc_46><loc_33><loc_69><loc_34></location>r Database modernization and re-engineering</list_item>
 <list_item><location><page_3><loc_46><loc_32><loc_65><loc_33></location>r Data-centric architecture and design</list_item>
 <list_item><location><page_3><loc_46><loc_31><loc_76><loc_32></location>r Extremely large database and overcoming limits to growth</list_item>
-<list_item><location><page_3><loc_46><loc_30><loc_62><loc_31></location>r ISV education and enablement</list_item>
+<list_item><location><page_3><loc_46><loc_30><loc_62><loc_30></location>r ISV education and enablement</list_item>
 </unordered_list>
 <section_header_level_1><location><page_4><loc_11><loc_88><loc_25><loc_91></location>Preface</section_header_level_1>
 <text><location><page_4><loc_22><loc_75><loc_89><loc_83></location>This IBMfi Redpaper™ publication provides information about the IBM i 7.2 feature of IBM DB2fi for i Row and Column Access Control (RCAC). It offers a broad description of the function and advantages of controlling access to data in a comprehensive and transparent way. This publication helps you understand the capabilities of RCAC and provides examples of defining, creating, and implementing the row permissions and column masks in a relational database environment.</text>
@@ -102,8 +103,8 @@
 <location><page_4><loc_24><loc_20><loc_41><loc_33></location>
 </figure>
 <text><location><page_4><loc_43><loc_35><loc_88><loc_53></location>Jim Bainbridge is a senior DB2 consultant on the DB2 for i Center of Excellence team in the IBM Lab Services and Training organization. His primary role is training and implementation services for IBM DB2 Web Query for i and business analytics. Jim began his career with IBM 30 years ago in the IBM Rochester Development Lab, where he developed cooperative processing products that paired IBM PCs with IBM S/36 and AS/.400 systems. In the years since, Jim has held numerous technical roles, including independent software vendors technical support on a broad range of IBM technologies and products, and supporting customers in the IBM Executive Briefing Center and IBM Project Office.</text>
-<text><location><page_4><loc_43><loc_14><loc_88><loc_34></location>Hernando Bedoya is a Senior IT Specialist at STG Lab Services and Training in Rochester, Minnesota. He writes extensively and teaches IBM classes worldwide in all areas of DB2 for i. Before joining STG Lab Services, he worked in the ITSO for nine years writing multiple IBM Redbooksfi publications. He also worked for IBM Colombia as an IBM AS/400fi IT Specialist doing presales support for the Andean countries. He has 28 years of experience in the computing field and has taught database classes in Colombian universities. He holds a Master's degree in Computer Science from EAFIT, Colombia. His areas of expertise are database technology, performance, and data warehousing. Hernando can be contacted at hbedoya@us.ibm.com .</text>
-<section_header_level_1><location><page_4><loc_10><loc_62><loc_20><loc_64></location>Authors</section_header_level_1>
+<text><location><page_4><loc_43><loc_14><loc_88><loc_33></location>Hernando Bedoya is a Senior IT Specialist at STG Lab Services and Training in Rochester, Minnesota. He writes extensively and teaches IBM classes worldwide in all areas of DB2 for i. Before joining STG Lab Services, he worked in the ITSO for nine years writing multiple IBM Redbooksfi publications. He also worked for IBM Colombia as an IBM AS/400fi IT Specialist doing presales support for the Andean countries. He has 28 years of experience in the computing field and has taught database classes in Colombian universities. He holds a Master's degree in Computer Science from EAFIT, Colombia. His areas of expertise are database technology, performance, and data warehousing. Hernando can be contacted at hbedoya@us.ibm.com .</text>
+<section_header_level_1><location><page_4><loc_11><loc_62><loc_20><loc_64></location>Authors</section_header_level_1>
 <figure>
 <location><page_5><loc_5><loc_70><loc_39><loc_91></location>
 </figure>
@@ -126,7 +127,7 @@
 </unordered_list>
 <text><location><page_6><loc_25><loc_64><loc_89><loc_65></location>A security policy is what defines whether the system and its settings are secure (or not).</text>
 <unordered_list>
-<list_item><location><page_6><loc_22><loc_52><loc_89><loc_63></location>GLYPH<SM590000> The second fundamental in securing data assets is the use of resource security . If implemented properly, resource security prevents data breaches from both internal and external intrusions. Resource security controls are closely tied to the part of the security policy that defines who should have access to what information resources. A hacker might be good enough to get through your company firewalls and sift his way through to your system, but if they do not have explicit access to your database, the hacker cannot compromise your information assets.</list_item>
+<list_item><location><page_6><loc_22><loc_53><loc_89><loc_63></location>GLYPH<SM590000> The second fundamental in securing data assets is the use of resource security . If implemented properly, resource security prevents data breaches from both internal and external intrusions. Resource security controls are closely tied to the part of the security policy that defines who should have access to what information resources. A hacker might be good enough to get through your company firewalls and sift his way through to your system, but if they do not have explicit access to your database, the hacker cannot compromise your information assets.</list_item>
 </unordered_list>
 <text><location><page_6><loc_22><loc_48><loc_87><loc_51></location>With your eyes now open to the importance of securing information assets, the rest of this chapter reviews the methods that are available for securing database resources on IBM i.</text>
 <section_header_level_1><location><page_6><loc_11><loc_43><loc_53><loc_45></location>1.2 Current state of IBM i security</section_header_level_1>
@@ -142,8 +143,8 @@
 <location><page_7><loc_22><loc_13><loc_89><loc_53></location>
 <caption>Figure 1-2 Existing row and column controls</caption>
 </figure>
-<section_header_level_1><location><page_8><loc_10><loc_89><loc_55><loc_91></location>2.1.6 Change Function Usage CL command</section_header_level_1>
-<text><location><page_8><loc_22><loc_86><loc_89><loc_88></location>The following CL commands can be used to work with, display, or change function usage IDs:</text>
+<section_header_level_1><location><page_8><loc_11><loc_89><loc_55><loc_91></location>2.1.6 Change Function Usage CL command</section_header_level_1>
+<text><location><page_8><loc_22><loc_87><loc_89><loc_88></location>The following CL commands can be used to work with, display, or change function usage IDs:</text>
 <unordered_list>
 <list_item><location><page_8><loc_22><loc_84><loc_49><loc_86></location>GLYPH<SM590000> Work Function Usage ( WRKFCNUSG )</list_item>
 <list_item><location><page_8><loc_22><loc_83><loc_51><loc_84></location>GLYPH<SM590000> Change Function Usage ( CHGFCNUSG )</list_item>
@@ -151,7 +152,7 @@
 </unordered_list>
 <text><location><page_8><loc_22><loc_77><loc_84><loc_80></location>For example, the following CHGFCNUSG command shows granting authorization to user HBEDOYA to administer and manage RCAC rules:</text>
 <text><location><page_8><loc_22><loc_75><loc_72><loc_76></location>CHGFCNUSG FCNID(QIBM_DB_SECADM) USER(HBEDOYA) USAGE(*ALLOWED)</text>
-<section_header_level_1><location><page_8><loc_10><loc_71><loc_89><loc_72></location>2.1.7 Verifying function usage IDs for RCAC with the FUNCTION_USAGE view</section_header_level_1>
+<section_header_level_1><location><page_8><loc_11><loc_71><loc_89><loc_72></location>2.1.7 Verifying function usage IDs for RCAC with the FUNCTION_USAGE view</section_header_level_1>
 <text><location><page_8><loc_22><loc_66><loc_85><loc_69></location>The FUNCTION_USAGE view contains function usage configuration details. Table 2-1 describes the columns in the FUNCTION_USAGE view.</text>
 <table>
 <location><page_8><loc_22><loc_44><loc_89><loc_63></location>
@@ -163,9 +164,19 @@
 <row_4><col_0><body>USER_TYPE</col_0><col_1><body>VARCHAR(5)</col_1><col_2><body>Type of user profile: GLYPH<SM590000> USER: The user profile is a user. GLYPH<SM590000> GROUP: The user profile is a group.</col_2></row_4>
 </table>
 <text><location><page_8><loc_22><loc_40><loc_89><loc_43></location>To discover who has authorization to define and manage RCAC, you can use the query that is shown in Example 2-1.</text>
-<paragraph><location><page_8><loc_22><loc_37><loc_76><loc_39></location>Example 2-1 Query to determine who has authority to define and manage RCAC</paragraph>
-<text><location><page_8><loc_22><loc_26><loc_54><loc_36></location>SELECT function_id, user_name, usage, user_type FROM function_usage WHERE function_id='QIBM_DB_SECADM' ORDER BY user_name;</text>
-<section_header_level_1><location><page_8><loc_10><loc_20><loc_41><loc_22></location>2.2 Separation of duties</section_header_level_1>
+<paragraph><location><page_8><loc_22><loc_38><loc_76><loc_39></location>Example 2-1 Query to determine who has authority to define and manage RCAC</paragraph>
+<text><location><page_8><loc_22><loc_35><loc_28><loc_36></location>SELECT</text>
+<text><location><page_8><loc_30><loc_35><loc_41><loc_36></location>function_id,</text>
+<text><location><page_8><loc_27><loc_34><loc_39><loc_35></location>user_name,</text>
+<text><location><page_8><loc_28><loc_32><loc_36><loc_33></location>usage,</text>
+<text><location><page_8><loc_27><loc_31><loc_39><loc_32></location>user_type</text>
+<text><location><page_8><loc_22><loc_29><loc_26><loc_30></location>FROM</text>
+<text><location><page_8><loc_29><loc_29><loc_43><loc_30></location>function_usage</text>
+<text><location><page_8><loc_22><loc_28><loc_27><loc_29></location>WHERE</text>
+<text><location><page_8><loc_29><loc_28><loc_54><loc_29></location>function_id=’QIBM_DB_SECADM’</text>
+<text><location><page_8><loc_22><loc_26><loc_29><loc_27></location>ORDER BY</text>
+<text><location><page_8><loc_31><loc_26><loc_39><loc_27></location>user_name;</text>
+<section_header_level_1><location><page_8><loc_11><loc_20><loc_41><loc_22></location>2.2 Separation of duties</section_header_level_1>
 <text><location><page_8><loc_22><loc_10><loc_89><loc_18></location>Separation of duties helps businesses comply with industry regulations or organizational requirements and simplifies the management of authorities. Separation of duties is commonly used to prevent fraudulent activities or errors by a single person. It provides the ability for administrative functions to be divided across individuals without overlapping responsibilities, so that one user does not possess unlimited authority, such as with the *ALLOBJ authority.</text>
 <text><location><page_9><loc_22><loc_82><loc_89><loc_91></location>For example, assume that a business has assigned the duty to manage security on IBM i to Theresa. Before release IBM i 7.2, to grant privileges, Theresa had to have the same privileges Theresa was granting to others. Therefore, to grant *USE privileges to the PAYROLL table, Theresa had to have *OBJMGT and *USE authority (or a higher level of authority, such as *ALLOBJ). This requirement allowed Theresa to access the data in the PAYROLL table even though Theresa's job description was only to manage its security.</text>
 <text><location><page_9><loc_22><loc_75><loc_89><loc_81></location>In IBM i 7.2, the QIBM_DB_SECADM function usage grants authorities, revokes authorities, changes ownership, or changes the primary group without giving access to the object or, in the case of a database table, to the data that is in the table or allowing other operations on the table.</text>
@@ -194,7 +205,7 @@
 <location><page_10><loc_22><loc_48><loc_89><loc_86></location>
 <caption>The SQL CREATE PERMISSION statement that is shown in Figure 3-1 is used to define and initially enable or disable the row access rules.Figure 3-1 CREATE PERMISSION SQL statement</caption>
 </figure>
-<section_header_level_1><location><page_10><loc_22><loc_43><loc_35><loc_45></location>Column mask</section_header_level_1>
+<section_header_level_1><location><page_10><loc_22><loc_43><loc_35><loc_44></location>Column mask</section_header_level_1>
 <text><location><page_10><loc_22><loc_37><loc_89><loc_43></location>A column mask is a database object that manifests a column value access control rule for a specific column in a specific table. It uses a CASE expression that describes what you see when you access the column. For example, a teller can see only the last four digits of a tax identification number.</text>
 <paragraph><location><page_11><loc_22><loc_90><loc_67><loc_91></location>Table 3-1 summarizes these special registers and their values.</paragraph>
 <table>
@@ -217,9 +228,9 @@
 <location><page_11><loc_22><loc_25><loc_49><loc_51></location>
 <caption>Figure 3-5 Special registers and adopted authority</caption>
 </figure>
-<section_header_level_1><location><page_11><loc_10><loc_19><loc_40><loc_21></location>3.2.2 Built-in global variables</section_header_level_1>
+<section_header_level_1><location><page_11><loc_11><loc_20><loc_40><loc_21></location>3.2.2 Built-in global variables</section_header_level_1>
 <text><location><page_11><loc_22><loc_15><loc_85><loc_18></location>Built-in global variables are provided with the database manager and are used in SQL statements to retrieve scalar values that are associated with the variables.</text>
-<text><location><page_11><loc_22><loc_9><loc_87><loc_14></location>IBM DB2 for i supports nine different built-in global variables that are read only and maintained by the system. These global variables can be used to identify attributes of the database connection and used as part of the RCAC logic.</text>
+<text><location><page_11><loc_22><loc_9><loc_87><loc_13></location>IBM DB2 for i supports nine different built-in global variables that are read only and maintained by the system. These global variables can be used to identify attributes of the database connection and used as part of the RCAC logic.</text>
 <text><location><page_12><loc_22><loc_90><loc_56><loc_91></location>Table 3-2 lists the nine built-in global variables.</text>
 <table>
 <location><page_12><loc_10><loc_63><loc_90><loc_87></location>
@@ -235,28 +246,29 @@
 <row_8><col_0><body>ROUTINE_SPECIFIC_NAME</col_0><col_1><body>VARCHAR(128)</col_1><col_2><body>Name of the currently running routine</col_2></row_8>
 <row_9><col_0><body>ROUTINE_TYPE</col_0><col_1><body>CHAR(1)</col_1><col_2><body>Type of the currently running routine</col_2></row_9>
 </table>
-<section_header_level_1><location><page_12><loc_11><loc_57><loc_63><loc_60></location>3.3 VERIFY_GROUP_FOR_USER function</section_header_level_1>
+<section_header_level_1><location><page_12><loc_11><loc_57><loc_63><loc_59></location>3.3 VERIFY_GROUP_FOR_USER function</section_header_level_1>
 <text><location><page_12><loc_22><loc_45><loc_89><loc_55></location>The VERIFY_GROUP_FOR_USER function was added in IBM i 7.2. Although it is primarily intended for use with RCAC permissions and masks, it can be used in other SQL statements. The first parameter must be one of these three special registers: SESSION_USER, USER, or CURRENT_USER. The second and subsequent parameters are a list of user or group profiles. Each of these values must be 1 - 10 characters in length. These values are not validated for their existence, which means that you can specify the names of user profiles that do not exist without receiving any kind of error.</text>
-<text><location><page_12><loc_22><loc_39><loc_89><loc_44></location>If a special register value is in the list of user profiles or it is a member of a group profile included in the list, the function returns a long integer value of 1. Otherwise, it returns a value of 0. It never returns the null value.</text>
+<text><location><page_12><loc_22><loc_39><loc_89><loc_43></location>If a special register value is in the list of user profiles or it is a member of a group profile included in the list, the function returns a long integer value of 1. Otherwise, it returns a value of 0. It never returns the null value.</text>
 <text><location><page_12><loc_22><loc_36><loc_75><loc_38></location>Here is an example of using the VERIFY_GROUP_FOR_USER function:</text>
 <unordered_list>
-<list_item><location><page_12><loc_22><loc_34><loc_66><loc_36></location>1. There are user profiles for MGR, JANE, JUDY, and TONY.</list_item>
+<list_item><location><page_12><loc_22><loc_34><loc_66><loc_35></location>1. There are user profiles for MGR, JANE, JUDY, and TONY.</list_item>
 <list_item><location><page_12><loc_22><loc_32><loc_65><loc_33></location>2. The user profile JANE specifies a group profile of MGR.</list_item>
 <list_item><location><page_12><loc_22><loc_28><loc_88><loc_31></location>3. If a user is connected to the server using user profile JANE, all of the following function invocations return a value of 1:</list_item>
 </unordered_list>
-<code><location><page_12><loc_24><loc_19><loc_74><loc_27></location>VERIFY_GROUP_FOR_USER (CURRENT_USER, 'MGR') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR', 'STEVE') The following function invocation returns a value of 0: VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JUDY', 'TONY')</code>
-<text><location><page_13><loc_22><loc_88><loc_27><loc_91></location>RETURN CASE</text>
+<code><location><page_12><loc_25><loc_19><loc_74><loc_27></location>VERIFY_GROUP_FOR_USER (CURRENT_USER, 'MGR') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR', 'STEVE') The following function invocation returns a value of 0: VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JUDY', 'TONY')</code>
+<text><location><page_13><loc_22><loc_90><loc_27><loc_91></location>RETURN</text>
+<text><location><page_13><loc_22><loc_88><loc_26><loc_89></location>CASE</text>
 <code><location><page_13><loc_22><loc_67><loc_85><loc_88></location>WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR', 'EMP' ) = 1 THEN EMPLOYEES . DATE_OF_BIRTH WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER = EMPLOYEES . USER_ID THEN EMPLOYEES . DATE_OF_BIRTH WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER <> EMPLOYEES . USER_ID THEN ( 9999 || '-' || MONTH ( EMPLOYEES . DATE_OF_BIRTH ) || '-' || DAY (EMPLOYEES.DATE_OF_BIRTH )) ELSE NULL END ENABLE ;</code>
 <unordered_list>
 <list_item><location><page_13><loc_22><loc_63><loc_89><loc_65></location>2. The other column to mask in this example is the TAX_ID information. In this example, the rules to enforce include the following ones:</list_item>
 <list_item><location><page_13><loc_25><loc_60><loc_77><loc_62></location>-Human Resources can see the unmasked TAX_ID of the employees.</list_item>
-<list_item><location><page_13><loc_25><loc_58><loc_66><loc_60></location>-Employees can see only their own unmasked TAX_ID.</list_item>
+<list_item><location><page_13><loc_25><loc_58><loc_66><loc_59></location>-Employees can see only their own unmasked TAX_ID.</list_item>
 <list_item><location><page_13><loc_25><loc_55><loc_89><loc_57></location>-Managers see a masked version of TAX_ID with the first five characters replaced with the X character (for example, XXX-XX-1234).</list_item>
 <list_item><location><page_13><loc_25><loc_52><loc_87><loc_54></location>-Any other person sees the entire TAX_ID as masked, for example, XXX-XX-XXXX.</list_item>
-<list_item><location><page_13><loc_25><loc_50><loc_87><loc_52></location>To implement this column mask, run the SQL statement that is shown in Example 3-9.</list_item>
+<list_item><location><page_13><loc_25><loc_50><loc_87><loc_51></location>To implement this column mask, run the SQL statement that is shown in Example 3-9.</list_item>
 </unordered_list>
 <paragraph><location><page_13><loc_22><loc_48><loc_58><loc_49></location>Example 3-9 Creating a mask on the TAX_ID column</paragraph>
-<code><location><page_13><loc_22><loc_13><loc_88><loc_47></location>CREATE MASK HR_SCHEMA.MASK_TAX_ID_ON_EMPLOYEES ON HR_SCHEMA.EMPLOYEES AS EMPLOYEES FOR COLUMN TAX_ID RETURN CASE WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR' ) = 1 THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER = EMPLOYEES . USER_ID THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER <> EMPLOYEES . USER_ID THEN ( 'XXX-XX-' CONCAT QSYS2 . SUBSTR ( EMPLOYEES . TAX_ID , 8 , 4 ) ) WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'EMP' ) = 1 THEN EMPLOYEES . TAX_ID ELSE 'XXX-XX-XXXX' END ENABLE ;</code>
+<code><location><page_13><loc_22><loc_14><loc_86><loc_47></location>CREATE MASK HR_SCHEMA.MASK_TAX_ID_ON_EMPLOYEES ON HR_SCHEMA.EMPLOYEES AS EMPLOYEES FOR COLUMN TAX_ID RETURN CASE WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR' ) = 1 THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER = EMPLOYEES . USER_ID THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER <> EMPLOYEES . USER_ID THEN ( 'XXX-XX-' CONCAT QSYS2 . SUBSTR ( EMPLOYEES . TAX_ID , 8 , 4 ) ) WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'EMP' ) = 1 THEN EMPLOYEES . TAX_ID ELSE 'XXX-XX-XXXX' END ENABLE ;</code>
 <unordered_list>
 <list_item><location><page_14><loc_22><loc_90><loc_74><loc_91></location>3. Figure 3-10 shows the masks that are created in the HR_SCHEMA.</list_item>
 </unordered_list>
@@ -264,7 +276,7 @@
 <location><page_14><loc_10><loc_79><loc_89><loc_88></location>
 <caption>Figure 3-10 Column masks shown in System i Navigator</caption>
 </figure>
-<section_header_level_1><location><page_14><loc_11><loc_73><loc_33><loc_75></location>3.6.6 Activating RCAC</section_header_level_1>
+<section_header_level_1><location><page_14><loc_11><loc_73><loc_33><loc_74></location>3.6.6 Activating RCAC</section_header_level_1>
 <text><location><page_14><loc_22><loc_67><loc_89><loc_71></location>Now that you have created the row permission and the two column masks, RCAC must be activated. The row permission and the two column masks are enabled (last clause in the scripts), but now you must activate RCAC on the table. To do so, complete the following steps:</text>
 <unordered_list>
 <list_item><location><page_14><loc_22><loc_65><loc_67><loc_66></location>1. Run the SQL statements that are shown in Example 3-10.</list_item>
@@ -272,9 +284,12 @@
 <section_header_level_1><location><page_14><loc_22><loc_62><loc_61><loc_63></location>Example 3-10 Activating RCAC on the EMPLOYEES table</section_header_level_1>
 <unordered_list>
 <list_item><location><page_14><loc_22><loc_60><loc_62><loc_61></location>/* Active Row Access Control (permissions) */</list_item>
+<list_item><location><page_14><loc_22><loc_58><loc_58><loc_60></location>/* Active Column Access Control (masks)</list_item>
 </unordered_list>
-<text><location><page_14><loc_22><loc_54><loc_58><loc_60></location>/* Active Column Access Control (masks) ALTER TABLE HR_SCHEMA.EMPLOYEES ACTIVATE ROW ACCESS CONTROL ACTIVATE COLUMN ACCESS CONTROL;</text>
 <text><location><page_14><loc_60><loc_58><loc_62><loc_60></location>*/</text>
+<text><location><page_14><loc_22><loc_57><loc_48><loc_58></location>ALTER TABLE HR_SCHEMA.EMPLOYEES</text>
+<text><location><page_14><loc_22><loc_55><loc_44><loc_56></location>ACTIVATE ROW ACCESS CONTROL</text>
+<text><location><page_14><loc_22><loc_54><loc_48><loc_55></location>ACTIVATE COLUMN ACCESS CONTROL;</text>
 <unordered_list>
 <list_item><location><page_14><loc_22><loc_48><loc_88><loc_52></location>2. Look at the definition of the EMPLOYEE table, as shown in Figure 3-11. To do this, from the main navigation pane of System i Navigator, click Schemas  HR_SCHEMA  Tables , right-click the EMPLOYEES table, and click Definition .</list_item>
 </unordered_list>
@@ -296,10 +311,10 @@
 <location><page_15><loc_11><loc_16><loc_83><loc_30></location>
 <caption>Figure 4-69 Index advice with no RCAC</caption>
 </figure>
-<code><location><page_16><loc_10><loc_11><loc_82><loc_91></location>THEN C . CUSTOMER_TAX_ID WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'TELLER' ) = 1 THEN ( 'XXX-XX-' CONCAT QSYS2 . SUBSTR ( C . CUSTOMER_TAX_ID , 8 , 4 ) ) WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_TAX_ID ELSE 'XXX-XX-XXXX' END ENABLE ; CREATE MASK BANK_SCHEMA.MASK_DRIVERS_LICENSE_ON_CUSTOMERS ON BANK_SCHEMA.CUSTOMERS AS C FOR COLUMN CUSTOMER_DRIVERS_LICENSE_NUMBER RETURN CASE WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'ADMIN' ) = 1 THEN C . CUSTOMER_DRIVERS_LICENSE_NUMBER WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'TELLER' ) = 1 THEN C . CUSTOMER_DRIVERS_LICENSE_NUMBER WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_DRIVERS_LICENSE_NUMBER ELSE '*************' END ENABLE ; CREATE MASK BANK_SCHEMA.MASK_LOGIN_ID_ON_CUSTOMERS ON BANK_SCHEMA.CUSTOMERS AS C FOR COLUMN CUSTOMER_LOGIN_ID RETURN CASE WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'ADMIN' ) = 1 THEN C . CUSTOMER_LOGIN_ID WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_LOGIN_ID ELSE '*****' END ENABLE ; CREATE MASK BANK_SCHEMA.MASK_SECURITY_QUESTION_ON_CUSTOMERS ON BANK_SCHEMA.CUSTOMERS AS C FOR COLUMN CUSTOMER_SECURITY_QUESTION RETURN CASE WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'ADMIN' ) = 1 THEN C . CUSTOMER_SECURITY_QUESTION WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_SECURITY_QUESTION ELSE '*****' END ENABLE ; CREATE MASK BANK_SCHEMA.MASK_SECURITY_QUESTION_ANSWER_ON_CUSTOMERS ON BANK_SCHEMA.CUSTOMERS AS C FOR COLUMN CUSTOMER_SECURITY_QUESTION_ANSWER RETURN CASE WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'ADMIN' ) = 1 THEN C . CUSTOMER_SECURITY_QUESTION_ANSWER WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_SECURITY_QUESTION_ANSWER ELSE '*****' END ENABLE ; ALTER TABLE BANK_SCHEMA.CUSTOMERS ACTIVATE ROW ACCESS CONTROL ACTIVATE COLUMN ACCESS CONTROL ;</code>
+<code><location><page_16><loc_11><loc_11><loc_82><loc_91></location>THEN C . CUSTOMER_TAX_ID WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'TELLER' ) = 1 THEN ( 'XXX-XX-' CONCAT QSYS2 . SUBSTR ( C . CUSTOMER_TAX_ID , 8 , 4 ) ) WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_TAX_ID ELSE 'XXX-XX-XXXX' END ENABLE ; CREATE MASK BANK_SCHEMA.MASK_DRIVERS_LICENSE_ON_CUSTOMERS ON BANK_SCHEMA.CUSTOMERS AS C FOR COLUMN CUSTOMER_DRIVERS_LICENSE_NUMBER RETURN CASE WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'ADMIN' ) = 1 THEN C . CUSTOMER_DRIVERS_LICENSE_NUMBER WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'TELLER' ) = 1 THEN C . CUSTOMER_DRIVERS_LICENSE_NUMBER WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_DRIVERS_LICENSE_NUMBER ELSE '*************' END ENABLE ; CREATE MASK BANK_SCHEMA.MASK_LOGIN_ID_ON_CUSTOMERS ON BANK_SCHEMA.CUSTOMERS AS C FOR COLUMN CUSTOMER_LOGIN_ID RETURN CASE WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'ADMIN' ) = 1 THEN C . CUSTOMER_LOGIN_ID WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_LOGIN_ID ELSE '*****' END ENABLE ; CREATE MASK BANK_SCHEMA.MASK_SECURITY_QUESTION_ON_CUSTOMERS ON BANK_SCHEMA.CUSTOMERS AS C FOR COLUMN CUSTOMER_SECURITY_QUESTION RETURN CASE WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'ADMIN' ) = 1 THEN C . CUSTOMER_SECURITY_QUESTION WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_SECURITY_QUESTION ELSE '*****' END ENABLE ; CREATE MASK BANK_SCHEMA.MASK_SECURITY_QUESTION_ANSWER_ON_CUSTOMERS ON BANK_SCHEMA.CUSTOMERS AS C FOR COLUMN CUSTOMER_SECURITY_QUESTION_ANSWER RETURN CASE WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'ADMIN' ) = 1 THEN C . CUSTOMER_SECURITY_QUESTION_ANSWER WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_SECURITY_QUESTION_ANSWER ELSE '*****' END ENABLE ; ALTER TABLE BANK_SCHEMA.CUSTOMERS ACTIVATE ROW ACCESS CONTROL ACTIVATE COLUMN ACCESS CONTROL ;</code>
 <text><location><page_18><loc_47><loc_94><loc_68><loc_96></location>Back cover</text>
 <section_header_level_1><location><page_18><loc_4><loc_82><loc_73><loc_91></location>Row and Column Access Control Support in IBM DB2 for i</section_header_level_1>
-<text><location><page_18><loc_4><loc_66><loc_21><loc_70></location>Implement roles and separation of duties</text>
+<text><location><page_18><loc_4><loc_66><loc_21><loc_69></location>Implement roles and separation of duties</text>
 <text><location><page_18><loc_4><loc_59><loc_20><loc_64></location>Leverage row permissions on the database</text>
 <text><location><page_18><loc_4><loc_52><loc_20><loc_57></location>Protect columns by defining column masks</text>
 <text><location><page_18><loc_25><loc_59><loc_68><loc_69></location>This IBM Redpaper publication provides information about the IBM i 7.2 feature of IBM DB2 for i Row and Column Access Control (RCAC). It offers a broad description of the function and advantages of controlling access to data in a comprehensive and transparent way. This publication helps you understand the capabilities of RCAC and provides examples of defining, creating, and implementing the row permissions and column masks in a relational database environment.</text>

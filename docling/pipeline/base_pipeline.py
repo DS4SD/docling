@@ -168,7 +168,9 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
 
             except Exception as e:
                 conv_res.status = ConversionStatus.FAILURE
-                trace = "\n".join(traceback.format_exception(e))
+                trace = "\n".join(
+                    traceback.format_exception(type(e), e, e.__traceback__)
+                )
                 _log.warning(
                     f"Encountered an error during conversion of document {conv_res.input.document_hash}:\n"
                     f"{trace}"

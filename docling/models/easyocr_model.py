@@ -118,6 +118,7 @@ class EasyOcrModel(BaseOcrModel):
                                 ),
                             )
                             for ix, line in enumerate(result)
+                            if line[2] >= self.options.confidence_threshold
                         ]
                         all_ocr_cells.extend(cells)
 
