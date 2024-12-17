@@ -140,6 +140,7 @@ class EasyOcrOptions(OcrOptions):
     use_gpu: Optional[bool] = None
 
     model_storage_directory: Optional[str] = None
+    recog_network: Optional[str] = "standard"
     download_enabled: bool = True
 
     model_config = ConfigDict(
