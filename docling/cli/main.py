@@ -252,10 +252,6 @@ def convert(
             help="Show version information.",
         ),
     ] = None,
-    num_threads: Annotated[int, typer.Option(..., help="Number of threads")] = 4,
-    device: Annotated[
-        AcceleratorDevice, typer.Option(..., help="Accelerator device")
-    ] = AcceleratorDevice.AUTO,
     document_timeout: Annotated[
         Optional[float],
         typer.Option(
@@ -263,6 +259,10 @@ def convert(
             help="The timeout for processing each document, in seconds.",
         ),
     ] = None,
+    num_threads: Annotated[int, typer.Option(..., help="Number of threads")] = 4,
+    device: Annotated[
+        AcceleratorDevice, typer.Option(..., help="Accelerator device")
+    ] = AcceleratorDevice.AUTO,
 ):
     if verbose == 0:
         logging.basicConfig(level=logging.WARNING)
