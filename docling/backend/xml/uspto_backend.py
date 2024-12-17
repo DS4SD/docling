@@ -389,7 +389,7 @@ class PatentUsptoIce(PatentUspto):
             if name == self.Element.TITLE.value:
                 if text:
                     self.parents[self.level + 1] = self.doc.add_title(
-                        parent=self.parents[self.level],  # type: ignore[arg-type]
+                        parent=self.parents[self.level],
                         text=text,
                     )
                     self.level += 1
@@ -406,7 +406,7 @@ class PatentUsptoIce(PatentUspto):
                     abstract_item = self.doc.add_heading(
                         heading_text,
                         level=heading_level,
-                        parent=self.parents[heading_level],  # type: ignore[arg-type]
+                        parent=self.parents[heading_level],
                     )
                     self.doc.add_text(
                         label=DocItemLabel.PARAGRAPH,
@@ -434,7 +434,7 @@ class PatentUsptoIce(PatentUspto):
                 claims_item = self.doc.add_heading(
                     heading_text,
                     level=heading_level,
-                    parent=self.parents[heading_level],  # type: ignore[arg-type]
+                    parent=self.parents[heading_level],
                 )
                 for text in self.claims:
                     self.doc.add_text(
@@ -452,7 +452,7 @@ class PatentUsptoIce(PatentUspto):
                     self.doc.add_text(
                         label=DocItemLabel.PARAGRAPH,
                         text=text,
-                        parent=self.parents[self.level],  # type: ignore[arg-type]
+                        parent=self.parents[self.level],
                     )
                 self.text = ""
 
@@ -460,7 +460,7 @@ class PatentUsptoIce(PatentUspto):
                 self.parents[self.level + 1] = self.doc.add_heading(
                     text=text,
                     level=self.level,
-                    parent=self.parents[self.level],  # type: ignore[arg-type]
+                    parent=self.parents[self.level],
                 )
                 self.level += 1
                 self.text = ""
@@ -470,7 +470,7 @@ class PatentUsptoIce(PatentUspto):
                 empty_table = TableData(num_rows=0, num_cols=0, table_cells=[])
                 self.doc.add_table(
                     data=empty_table,
-                    parent=self.parents[self.level],  # type: ignore[arg-type]
+                    parent=self.parents[self.level],
                 )
 
         def _apply_style(self, text: str, style_tag: str) -> str:
@@ -721,7 +721,7 @@ class PatentUsptoGrantV2(PatentUspto):
                 if self.Element.TITLE.value in self.property and text.strip():
                     title = text.strip()
                     self.parents[self.level + 1] = self.doc.add_title(
-                        parent=self.parents[self.level],  # type: ignore[arg-type]
+                        parent=self.parents[self.level],
                         text=title,
                     )
                     self.level += 1
@@ -749,7 +749,7 @@ class PatentUsptoGrantV2(PatentUspto):
                     self.parents[self.level + 1] = self.doc.add_heading(
                         text=text.strip(),
                         level=self.level,
-                        parent=self.parents[self.level],  # type: ignore[arg-type]
+                        parent=self.parents[self.level],
                     )
                     self.level += 1
 
@@ -769,7 +769,7 @@ class PatentUsptoGrantV2(PatentUspto):
                 claims_item = self.doc.add_heading(
                     heading_text,
                     level=heading_level,
-                    parent=self.parents[heading_level],  # type: ignore[arg-type]
+                    parent=self.parents[heading_level],
                 )
                 for text in self.claims:
                     self.doc.add_text(
@@ -787,7 +787,7 @@ class PatentUsptoGrantV2(PatentUspto):
                 abstract_item = self.doc.add_heading(
                     heading_text,
                     level=heading_level,
-                    parent=self.parents[heading_level],  # type: ignore[arg-type]
+                    parent=self.parents[heading_level],
                 )
                 self.doc.add_text(
                     label=DocItemLabel.PARAGRAPH, text=abstract, parent=abstract_item
@@ -799,7 +799,7 @@ class PatentUsptoGrantV2(PatentUspto):
                     self.doc.add_text(
                         label=DocItemLabel.PARAGRAPH,
                         text=paragraph,
-                        parent=self.parents[self.level],  # type: ignore[arg-type]
+                        parent=self.parents[self.level],
                     )
                 elif self.Element.CLAIM.value in self.property:
                     # we may need a space after a paragraph in claim text
@@ -811,7 +811,7 @@ class PatentUsptoGrantV2(PatentUspto):
                 empty_table = TableData(num_rows=0, num_cols=0, table_cells=[])
                 self.doc.add_table(
                     data=empty_table,
-                    parent=self.parents[self.level],  # type: ignore[arg-type]
+                    parent=self.parents[self.level],
                 )
 
         def _apply_style(self, text: str, style_tag: str) -> str:
@@ -938,7 +938,7 @@ class PatentUsptoGrantAps(PatentUspto):
         self.parents[self.level + 1] = self.doc.add_heading(
             heading.value,
             level=self.level,
-            parent=self.parents[self.level],  # type: ignore[arg-type]
+            parent=self.parents[self.level],
         )
         self.level += 1
 
@@ -959,7 +959,7 @@ class PatentUsptoGrantAps(PatentUspto):
 
         if field == self.Field.TITLE.value:
             self.parents[self.level + 1] = self.doc.add_title(
-                parent=self.parents[self.level], text=value  # type: ignore[arg-type]
+                parent=self.parents[self.level], text=value
             )
             self.level += 1
 
@@ -971,14 +971,14 @@ class PatentUsptoGrantAps(PatentUspto):
                 self.doc.add_text(
                     label=DocItemLabel.PARAGRAPH,
                     text=value,
-                    parent=self.parents[self.level],  # type: ignore[arg-type]
+                    parent=self.parents[self.level],
                 )
 
         elif field == self.Field.NUMBER.value and section == self.Section.CLAIMS.value:
             self.doc.add_text(
                 label=DocItemLabel.PARAGRAPH,
                 text="",
-                parent=self.parents[self.level],  # type: ignore[arg-type]
+                parent=self.parents[self.level],
             )
 
         elif (
@@ -996,7 +996,7 @@ class PatentUsptoGrantAps(PatentUspto):
                 last_claim = self.doc.add_text(
                     label=DocItemLabel.PARAGRAPH,
                     text="",
-                    parent=self.parents[self.level],  # type: ignore[arg-type]
+                    parent=self.parents[self.level],
                 )
 
             last_claim.text += f" {value}" if last_claim.text else value
@@ -1012,7 +1012,7 @@ class PatentUsptoGrantAps(PatentUspto):
             self.parents[self.level + 1] = self.doc.add_heading(
                 value,
                 level=self.level,
-                parent=self.parents[self.level],  # type: ignore[arg-type]
+                parent=self.parents[self.level],
             )
             self.level += 1
 
@@ -1029,7 +1029,7 @@ class PatentUsptoGrantAps(PatentUspto):
             self.doc.add_text(
                 label=DocItemLabel.PARAGRAPH,
                 text=value,
-                parent=self.parents[self.level],  # type: ignore[arg-type]
+                parent=self.parents[self.level],
             )
 
     def parse(self, patent_content: str) -> Optional[DoclingDocument]:
@@ -1283,7 +1283,7 @@ class PatentUsptoAppV1(PatentUspto):
                 title = text.strip()
                 if title:
                     self.parents[self.level + 1] = self.doc.add_text(
-                        parent=self.parents[self.level],  # type: ignore[arg-type]
+                        parent=self.parents[self.level],
                         label=DocItemLabel.TITLE,
                         text=title,
                     )
@@ -1301,7 +1301,7 @@ class PatentUsptoAppV1(PatentUspto):
                     abstract_item = self.doc.add_heading(
                         heading_text,
                         level=heading_level,
-                        parent=self.parents[heading_level],  # type: ignore[arg-type]
+                        parent=self.parents[heading_level],
                     )
                     self.doc.add_text(
                         label=DocItemLabel.PARAGRAPH,
@@ -1331,7 +1331,7 @@ class PatentUsptoAppV1(PatentUspto):
                 claims_item = self.doc.add_heading(
                     heading_text,
                     level=heading_level,
-                    parent=self.parents[heading_level],  # type: ignore[arg-type]
+                    parent=self.parents[heading_level],
                 )
                 for text in self.claims:
                     self.doc.add_text(
@@ -1350,14 +1350,14 @@ class PatentUsptoAppV1(PatentUspto):
                         self.parents[self.level + 1] = self.doc.add_heading(
                             text=text,
                             level=self.level,
-                            parent=self.parents[self.level],  # type: ignore[arg-type]
+                            parent=self.parents[self.level],
                         )
                         self.level += 1
                     else:
                         self.doc.add_text(
                             label=DocItemLabel.PARAGRAPH,
                             text=text,
-                            parent=self.parents[self.level],  # type: ignore[arg-type]
+                            parent=self.parents[self.level],
                         )
                 self.text = ""
 
@@ -1366,7 +1366,7 @@ class PatentUsptoAppV1(PatentUspto):
                 empty_table = TableData(num_rows=0, num_cols=0, table_cells=[])
                 self.doc.add_table(
                     data=empty_table,
-                    parent=self.parents[self.level],  # type: ignore[arg-type]
+                    parent=self.parents[self.level],
                 )
 
         def _apply_style(self, text: str, style_tag: str) -> str:
