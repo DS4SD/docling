@@ -1,3 +1,9 @@
+## [v2.14.0](https://github.com/DS4SD/docling/releases/tag/v2.14.0) - 2024-12-18
+
+### Feature
+
+* Create a backend to transform PubMed XML files to DoclingDocument ([#557](https://github.com/DS4SD/docling/issues/557)) ([`fd03480`](https://github.com/DS4SD/docling/commit/fd034802b65a0e567531b8ecc9a283aaf030e050))
+
 ## [v2.13.0](https://github.com/DS4SD/docling/releases/tag/v2.13.0) - 2024-12-17
 
 ### Feature
