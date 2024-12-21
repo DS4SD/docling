@@ -234,7 +234,11 @@ class _DocumentConversionInput(BaseModel):
         self, format_options: Dict[InputFormat, "FormatOption"]
     ) -> Iterable[InputDocument]:
         for item in self.path_or_stream_iterator:
-            obj = resolve_source_to_stream(item, self.headers) if isinstance(item, str) else item
+            obj = (
+                resolve_source_to_stream(item, self.headers)
+                if isinstance(item, str)
+                else item
+            )
             format = self._guess_format(obj)
             backend: Type[AbstractDocumentBackend]
             if format not in format_options.keys():

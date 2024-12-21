@@ -165,7 +165,9 @@ def convert(
         None, "--to", help="Specify output formats. Defaults to Markdown."
     ),
     headers: str = typer.Option(
-        None, "--headers", help="Specify http request headers used when fetching url input sources in the form of a JSON string"
+        None,
+        "--headers",
+        help="Specify http request headers used when fetching url input sources in the form of a JSON string",
     ),
     image_export_mode: Annotated[
         ImageRefMode,
@@ -265,7 +267,7 @@ def convert(
     num_threads: Annotated[int, typer.Option(..., help="Number of threads")] = 4,
     device: Annotated[
         AcceleratorDevice, typer.Option(..., help="Accelerator device")
-    ] = AcceleratorDevice.AUTO
+    ] = AcceleratorDevice.AUTO,
 ):
     if verbose == 0:
         logging.basicConfig(level=logging.WARNING)
@@ -282,15 +284,18 @@ def convert(
     if from_formats is None:
         from_formats = [e for e in InputFormat]
 
+    parsed_headers: Optional[Dict[str, str]] = None
     if headers is not None:
-        headers = json.loads(headers)
+        parsed_headers = json.loads(headers)
 
     with tempfile.TemporaryDirectory() as tempdir:
         input_doc_paths: List[Path] = []
         for src in input_sources:
             try:
                 # check if we can fetch some remote url
-                source = resolve_source_to_path(source=src, headers=headers, workdir=Path(tempdir))
+                source = resolve_source_to_path(
+                    source=src, headers=parsed_headers, workdir=Path(tempdir)
+                )
                 input_doc_paths.append(source)
             except FileNotFoundError:
                 err_console.print(
@@ -396,7 +401,7 @@ def convert(
         start_time = time.time()
 
         conv_results = doc_converter.convert_all(
-            input_doc_paths, headers=headers, raises_on_error=abort_on_error
+            input_doc_paths, headers=parsed_headers, raises_on_error=abort_on_error
         )
 
         output.mkdir(parents=True, exist_ok=True)

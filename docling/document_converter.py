@@ -186,7 +186,7 @@ class DocumentConverter:
             raises_on_error=raises_on_error,
             max_num_pages=max_num_pages,
             max_file_size=max_file_size,
-            headers=headers
+            headers=headers,
         )
         return next(all_res)
 
@@ -204,9 +204,7 @@ class DocumentConverter:
             max_file_size=max_file_size,
         )
         conv_input = _DocumentConversionInput(
-            path_or_stream_iterator=source,
-            limits=limits,
-            headers=headers
+            path_or_stream_iterator=source, limits=limits, headers=headers
         )
         conv_res_iter = self._convert(conv_input, raises_on_error=raises_on_error)
 
