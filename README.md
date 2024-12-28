@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/ds4sd/docling">
-    <img loading="lazy" alt="Docling" src="https://github.com/mouraworks/docowling/blob/main/docs/assets/docowling_readme.png" width="80%"/>
+    <img loading="lazy" alt="Docling" src="https://github.com/mouraworks/docowling/blob/main/docs/assets/docowling.png" width="80%"/>
   </a>
 </p>
 
