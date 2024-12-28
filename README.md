@@ -16,7 +16,7 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![License MIT](https://img.shields.io/github/license/DS4SD/docling)](https://opensource.org/licenses/MIT)
 
-**Docowling**  is a fork of the [Docling](https://github.com/DS4SD/docling) project, developed to enhance functionalities and add new document processing capabilities.
+**Docowling**  is a fork of the [Docling](https://github.com/DS4SD/docling), an IBM project, developed to enhance functionalities and add new document processing capabilities.
 
 ## License
 
