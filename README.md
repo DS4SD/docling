@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/ds4sd/docling">
-    <img loading="lazy" alt="Docling" src="https://github.com/mouraworks/docowling/blob/main/docs/assets/docowling_readme.png" width="100%"/>
+    <img loading="lazy" alt="Docling" src="https://github.com/mouraworks/docowling/blob/main/docs/assets/docowling_readme.png" width="80%"/>
   </a>
 </p>
 
@@ -15,7 +15,6 @@
 [![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://pydantic.dev)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![License MIT](https://img.shields.io/github/license/DS4SD/docling)](https://opensource.org/licenses/MIT)
-[![PyPI Downloads](https://static.pepy.tech/badge/docling/month)](https://pepy.tech/projects/docling)
 
 **Docowling**  is a fork of the Docling project, developed to enhance functionalities and add new document processing capabilities.
 
