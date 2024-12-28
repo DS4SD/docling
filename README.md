@@ -20,5 +20,5 @@
 
 ## License
 
-The Docowing codebase is under MIT license.
+The Docowling codebase is under MIT license.
 For individual model usage, please refer to the model licenses found in the original packages.
