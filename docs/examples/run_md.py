@@ -5,9 +5,9 @@ from pathlib import Path
 
 import yaml
 
-from docling.backend.md_backend import MarkdownDocumentBackend
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import InputDocument
+from docowling.backend.md_backend import MarkdownDocumentBackend
+from docowling.datamodel.base_models import InputFormat
+from docowling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
 

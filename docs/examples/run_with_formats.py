@@ -4,15 +4,15 @@ from pathlib import Path
 
 import yaml
 
-from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import InputFormat
-from docling.document_converter import (
+from docowling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
+from docowling.datamodel.base_models import InputFormat
+from docowling.document_converter import (
     DocumentConverter,
     PdfFormatOption,
     WordFormatOption,
 )
-from docling.pipeline.simple_pipeline import SimplePipeline
-from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
+from docowling.pipeline.simple_pipeline import SimplePipeline
+from docowling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
 
 _log = logging.getLogger(__name__)
 

@@ -2,7 +2,7 @@
 
 This is an automatic generated API reference of the main components of Docling.
 
-::: docling.document_converter
+::: docowling.document_converter
     handler: python
     options:
         members:

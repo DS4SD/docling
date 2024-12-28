@@ -2,7 +2,7 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from docling.cli.main import app
+from docowling.cli.main import app
 
 runner = CliRunner()
 

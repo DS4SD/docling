@@ -10,11 +10,11 @@ from docling_core.types.doc import (
     PictureItem,
 )
 
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.document_converter import DocumentConverter, PdfFormatOption
-from docling.models.base_model import BaseEnrichmentModel
-from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
+from docowling.datamodel.base_models import InputFormat
+from docowling.datamodel.pipeline_options import PdfPipelineOptions
+from docowling.document_converter import DocumentConverter, PdfFormatOption
+from docowling.models.base_model import BaseEnrichmentModel
+from docowling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
 
 
 class ExamplePictureClassifierPipelineOptions(PdfPipelineOptions):

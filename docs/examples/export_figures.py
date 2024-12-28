@@ -4,9 +4,9 @@ from pathlib import Path
 
 from docling_core.types.doc import ImageRefMode, PictureItem, TableItem
 
-from docling.datamodel.base_models import FigureElement, InputFormat, Table
-from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.document_converter import DocumentConverter, PdfFormatOption
+from docowling.datamodel.base_models import FigureElement, InputFormat, Table
+from docowling.datamodel.pipeline_options import PdfPipelineOptions
+from docowling.document_converter import DocumentConverter, PdfFormatOption
 
 _log = logging.getLogger(__name__)
 

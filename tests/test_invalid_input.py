@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pytest
 
-from docling.datamodel.base_models import ConversionStatus, DocumentStream
-from docling.document_converter import ConversionError, DocumentConverter
+from docowling.datamodel.base_models import ConversionStatus, DocumentStream
+from docowling.document_converter import ConversionError, DocumentConverter
 
 
 def get_pdf_path():

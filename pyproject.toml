@@ -118,7 +118,7 @@ ocrmac = ["ocrmac"]
 rapidocr = ["rapidocr-onnxruntime", "onnxruntime"]
 
 [tool.poetry.scripts]
-docling = "docling.cli.main:app"
+docling = "docowling.cli.main:app"
 
 [build-system]
 requires = ["poetry-core"]

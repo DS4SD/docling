@@ -8,8 +8,8 @@ from docling_core.types.legacy_doc.document import ExportedCCSDocument as DsDocu
 from pydantic import TypeAdapter
 from pydantic.json import pydantic_encoder
 
-from docling.datamodel.base_models import ConversionStatus, Page
-from docling.datamodel.document import ConversionResult
+from docowling.datamodel.base_models import ConversionStatus, Page
+from docowling.datamodel.document import ConversionResult
 
 
 def levenshtein(str1: str, str2: str) -> int:

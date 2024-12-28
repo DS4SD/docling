@@ -3,16 +3,16 @@ from pathlib import Path
 
 import pytest
 
-from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
-from docling.datamodel.base_models import ConversionStatus, InputFormat
-from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import (
+from docowling.backend.docling_parse_backend import DoclingParseDocumentBackend
+from docowling.datamodel.base_models import ConversionStatus, InputFormat
+from docowling.datamodel.document import ConversionResult
+from docowling.datamodel.pipeline_options import (
     AcceleratorDevice,
     AcceleratorOptions,
     PdfPipelineOptions,
     TableFormerMode,
 )
-from docling.document_converter import DocumentConverter, PdfFormatOption
+from docowling.document_converter import DocumentConverter, PdfFormatOption
 
 
 @pytest.fixture

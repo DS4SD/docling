@@ -3,9 +3,9 @@ from pathlib import Path
 
 import pytest
 
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.document_converter import DocumentConverter, PdfFormatOption
+from docowling.datamodel.base_models import InputFormat
+from docowling.datamodel.pipeline_options import PdfPipelineOptions
+from docowling.document_converter import DocumentConverter, PdfFormatOption
 
 
 @pytest.fixture

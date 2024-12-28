@@ -8,7 +8,7 @@ can be enabled with `do_xyz = True`.
 This is an automatic generated API reference of the all the pipeline options available in Docling.
 
 
-::: docling.datamodel.pipeline_options
+::: docowling.datamodel.pipeline_options
     handler: python
     options:
         show_if_no_docstring: true
@@ -28,7 +28,7 @@ This is an automatic generated API reference of the all the pipeline options ava
         signature_crossrefs: true
         summary: true
 
-<!-- ::: docling.document_converter.DocumentConverter
+<!-- ::: docowling.document_converter.DocumentConverter
     handler: python
     options:
         show_if_no_docstring: true

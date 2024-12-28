@@ -3,10 +3,10 @@ from pathlib import Path
 
 import pytest
 
-from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
-from docling.datamodel.base_models import DocumentStream, InputFormat
-from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.document_converter import DocumentConverter, PdfFormatOption
+from docowling.backend.docling_parse_backend import DoclingParseDocumentBackend
+from docowling.datamodel.base_models import DocumentStream, InputFormat
+from docowling.datamodel.pipeline_options import PdfPipelineOptions
+from docowling.document_converter import DocumentConverter, PdfFormatOption
 
 from .verify_utils import verify_conversion_result_v1, verify_conversion_result_v2
 

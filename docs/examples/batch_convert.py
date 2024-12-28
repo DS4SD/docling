@@ -6,10 +6,10 @@ from typing import Iterable
 
 import yaml
 
-from docling.datamodel.base_models import ConversionStatus
-from docling.datamodel.document import ConversionResult
-from docling.datamodel.settings import settings
-from docling.document_converter import DocumentConverter
+from docowling.datamodel.base_models import ConversionStatus
+from docowling.datamodel.document import ConversionResult
+from docowling.datamodel.settings import settings
+from docowling.document_converter import DocumentConverter
 
 _log = logging.getLogger(__name__)
 

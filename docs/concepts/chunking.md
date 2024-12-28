@@ -28,7 +28,7 @@ The `BaseChunker` base class API defines that any chunker should provide the fol
 
     - If you are using the `docling` package, you can import as follows:
         ```python
-        from docling.chunking import HybridChunker
+        from docowling.chunking import HybridChunker
         ```
     - If you are only using the `docling-core` package, you must ensure to install
         the `chunking` extra, e.g.

@@ -1,4 +1,4 @@
-from docling.document_converter import DocumentConverter
+from docowling.document_converter import DocumentConverter
 
 source = "https://arxiv.org/pdf/2408.09869"  # document per local path or URL
 converter = DocumentConverter()

@@ -5,11 +5,11 @@ from pathlib import Path
 
 import pandas as pd
 
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.document_converter import DocumentConverter, PdfFormatOption
-from docling.utils.export import generate_multimodal_pages
-from docling.utils.utils import create_hash
+from docowling.datamodel.base_models import InputFormat
+from docowling.datamodel.pipeline_options import PdfPipelineOptions
+from docowling.document_converter import DocumentConverter, PdfFormatOption
+from docowling.utils.export import generate_multimodal_pages
+from docowling.utils.utils import create_hash
 
 _log = logging.getLogger(__name__)
 

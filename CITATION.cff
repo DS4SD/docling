@@ -2,14 +2,9 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
-title: Docling
-message: 'If you use Docling, please consider citing as below.'
+title: Dockowling
+message: 'If you use Dockowling, please consider citing as below.'
 type: software
 authors:
-  - name: Docling Team
-identifiers:
-  - type: url
-    value: 'https://arxiv.org/abs/2408.09869'
-    description: 'arXiv:2408.09869'
-repository-code: 'https://github.com/DS4SD/docling'
+  - name: Docowling
 license: MIT

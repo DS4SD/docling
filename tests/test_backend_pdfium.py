@@ -3,12 +3,12 @@ from pathlib import Path
 import pytest
 from docling_core.types.doc import BoundingBox
 
-from docling.backend.pypdfium2_backend import (
+from docowling.backend.pypdfium2_backend import (
     PyPdfiumDocumentBackend,
     PyPdfiumPageBackend,
 )
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import InputDocument
+from docowling.datamodel.base_models import InputFormat
+from docowling.datamodel.document import InputDocument
 
 
 @pytest.fixture

@@ -36,9 +36,9 @@ Works on macOS, Linux, and Windows, with support for both x86_64 and arm64 archi
     The Docling `DocumentConverter` allows to choose the OCR engine with the `ocr_options` settings. For example
 
     ```python
-    from docling.datamodel.base_models import ConversionStatus, PipelineOptions
-    from docling.datamodel.pipeline_options import PipelineOptions, EasyOcrOptions, TesseractOcrOptions
-    from docling.document_converter import DocumentConverter
+    from docowling.datamodel.base_models import ConversionStatus, PipelineOptions
+    from docowling.datamodel.pipeline_options import PipelineOptions, EasyOcrOptions, TesseractOcrOptions
+    from docowling.document_converter import DocumentConverter
 
     pipeline_options = PipelineOptions()
     pipeline_options.do_ocr = True

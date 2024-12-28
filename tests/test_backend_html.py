@@ -2,14 +2,14 @@ import json
 import os
 from pathlib import Path
 
-from docling.backend.html_backend import HTMLDocumentBackend
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import (
+from docowling.backend.html_backend import HTMLDocumentBackend
+from docowling.datamodel.base_models import InputFormat
+from docowling.datamodel.document import (
     ConversionResult,
     InputDocument,
     SectionHeaderItem,
 )
-from docling.document_converter import DocumentConverter
+from docowling.document_converter import DocumentConverter
 
 GENERATE = False
 

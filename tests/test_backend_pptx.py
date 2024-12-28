@@ -2,9 +2,9 @@ import json
 import os
 from pathlib import Path
 
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import ConversionResult
-from docling.document_converter import DocumentConverter
+from docowling.datamodel.base_models import InputFormat
+from docowling.datamodel.document import ConversionResult
+from docowling.document_converter import DocumentConverter
 
 GENERATE = False
 

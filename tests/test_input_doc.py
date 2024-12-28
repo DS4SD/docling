@@ -1,9 +1,9 @@
 from io import BytesIO
 from pathlib import Path
 
-from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import DocumentStream, InputFormat
-from docling.datamodel.document import InputDocument, _DocumentConversionInput
+from docowling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
+from docowling.datamodel.base_models import DocumentStream, InputFormat
+from docowling.datamodel.document import InputDocument, _DocumentConversionInput
 
 
 def test_in_doc_from_valid_path():
@@ -40,7 +40,7 @@ def test_in_doc_from_invalid_buf():
 
 
 def test_guess_format(tmp_path):
-    """Test docling.datamodel.document._DocumentConversionInput.__guess_format"""
+    """Test docowling.datamodel.document._DocumentConversionInput.__guess_format"""
     dci = _DocumentConversionInput(path_or_stream_iterator=[])
     temp_dir = tmp_path / "test_guess_format"
     temp_dir.mkdir()

@@ -140,7 +140,7 @@ This is a collection of FAQ collected from the user questions on <https://github
     Setting the OCR language in Docling is done via the OCR pipeline options:
 
     ```py
-    from docling.datamodel.pipeline_options import PdfPipelineOptions
+    from docowling.datamodel.pipeline_options import PdfPipelineOptions
 
     pipeline_options = PdfPipelineOptions()
     pipeline_options.ocr_options.lang = ["fr", "de", "es", "en"]  # example of languages for EasyOCR

@@ -1,10 +1,10 @@
 from pathlib import Path
 
-from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.document_converter import DocumentConverter, PdfFormatOption
+from docowling.backend.docling_parse_backend import DoclingParseDocumentBackend
+from docowling.datamodel.base_models import InputFormat
+from docowling.datamodel.document import ConversionResult
+from docowling.datamodel.pipeline_options import PdfPipelineOptions
+from docowling.document_converter import DocumentConverter, PdfFormatOption
 
 from .verify_utils import verify_conversion_result_v1, verify_conversion_result_v2
 

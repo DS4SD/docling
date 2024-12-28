@@ -1,4 +1,4 @@
-"""Test methods in module docling.backend.patent_uspto_backend.py."""
+"""Test methods in module docowling.backend.patent_uspto_backend.py."""
 
 import json
 import logging
@@ -12,14 +12,14 @@ import yaml
 from docling_core.types import DoclingDocument
 from docling_core.types.doc import DocItemLabel, TableData, TextItem
 
-from docling.backend.xml.uspto_backend import PatentUsptoDocumentBackend, XmlTable
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import (
+from docowling.backend.xml.uspto_backend import PatentUsptoDocumentBackend, XmlTable
+from docowling.datamodel.base_models import InputFormat
+from docowling.datamodel.document import (
     ConversionResult,
     InputDocument,
     SectionHeaderItem,
 )
-from docling.document_converter import DocumentConverter
+from docowling.document_converter import DocumentConverter
 
 GENERATE: bool = True
 DATA_PATH: Path = Path("./tests/data/uspto/")

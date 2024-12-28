@@ -3,13 +3,13 @@ import logging
 import time
 from pathlib import Path
 
-from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.document_converter import DocumentConverter, PdfFormatOption
-from docling.models.ocr_mac_model import OcrMacOptions
-from docling.models.tesseract_ocr_cli_model import TesseractCliOcrOptions
-from docling.models.tesseract_ocr_model import TesseractOcrOptions
+from docowling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
+from docowling.datamodel.base_models import InputFormat
+from docowling.datamodel.pipeline_options import PdfPipelineOptions
+from docowling.document_converter import DocumentConverter, PdfFormatOption
+from docowling.models.ocr_mac_model import OcrMacOptions
+from docowling.models.tesseract_ocr_cli_model import TesseractCliOcrOptions
+from docowling.models.tesseract_ocr_model import TesseractOcrOptions
 
 _log = logging.getLogger(__name__)
 

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from docling.document_converter import DocumentConverter
+from docowling.document_converter import DocumentConverter
 
 _log = logging.getLogger(__name__)
 

@@ -2,12 +2,12 @@ from pathlib import Path
 
 import pytest
 
-from docling.backend.docling_parse_v2_backend import (
+from docowling.backend.docling_parse_v2_backend import (
     DoclingParseV2DocumentBackend,
     DoclingParseV2PageBackend,
 )
-from docling.datamodel.base_models import BoundingBox, InputFormat
-from docling.datamodel.document import InputDocument
+from docowling.datamodel.base_models import BoundingBox, InputFormat
+from docowling.datamodel.document import InputDocument
 
 
 @pytest.fixture

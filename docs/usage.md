@@ -5,7 +5,7 @@
 To convert individual PDF documents, use `convert()`, for example:
 
 ```python
-from docling.document_converter import DocumentConverter
+from docowling.document_converter import DocumentConverter
 
 source = "https://arxiv.org/pdf/2408.09869"  # PDF path or URL
 converter = DocumentConverter()
@@ -39,9 +39,9 @@ This can improve output quality if you find that multiple columns in extracted t
 
 
 ```python
-from docling.datamodel.base_models import InputFormat
-from docling.document_converter import DocumentConverter, PdfFormatOption
-from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docowling.datamodel.base_models import InputFormat
+from docowling.document_converter import DocumentConverter, PdfFormatOption
+from docowling.datamodel.pipeline_options import PdfPipelineOptions
 
 pipeline_options = PdfPipelineOptions(do_table_structure=True)
 pipeline_options.table_structure_options.do_cell_matching = False  # uses text cells predicted from table structure model
@@ -56,9 +56,9 @@ doc_converter = DocumentConverter(
 Since docling 1.16.0: You can control which TableFormer mode you want to use. Choose between `TableFormerMode.FAST` (default) and `TableFormerMode.ACCURATE` (better, but slower) to receive better quality with difficult table structures.
 
 ```python
-from docling.datamodel.base_models import InputFormat
-from docling.document_converter import DocumentConverter, PdfFormatOption
-from docling.datamodel.pipeline_options import PdfPipelineOptions, TableFormerMode
+from docowling.datamodel.base_models import InputFormat
+from docowling.document_converter import DocumentConverter, PdfFormatOption
+from docowling.datamodel.pipeline_options import PdfPipelineOptions, TableFormerMode
 
 pipeline_options = PdfPipelineOptions(do_table_structure=True)
 pipeline_options.table_structure_options.mode = TableFormerMode.ACCURATE  # use more accurate TableFormer model
@@ -75,10 +75,10 @@ doc_converter = DocumentConverter(
 By default, artifacts such as models are downloaded automatically upon first usage. If you would prefer to use a local path where the artifacts have been explicitly prefetched, you can do that as follows:
 
 ```python
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.document_converter import DocumentConverter, PdfFormatOption
-from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
+from docowling.datamodel.base_models import InputFormat
+from docowling.datamodel.pipeline_options import PdfPipelineOptions
+from docowling.document_converter import DocumentConverter, PdfFormatOption
+from docowling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
 
 # # to explicitly prefetch:
 # artifacts_path = StandardPdfPipeline.download_models_hf()
@@ -99,7 +99,7 @@ You can limit the file size and number of pages which should be allowed to proce
 
 ```python
 from pathlib import Path
-from docling.document_converter import DocumentConverter
+from docowling.document_converter import DocumentConverter
 
 source = "https://arxiv.org/pdf/2408.09869"
 converter = DocumentConverter()
@@ -112,8 +112,8 @@ You can convert PDFs from a binary stream instead of from the filesystem as foll
 
 ```python
 from io import BytesIO
-from docling.datamodel.base_models import DocumentStream
-from docling.document_converter import DocumentConverter
+from docowling.datamodel.base_models import DocumentStream
+from docowling.document_converter import DocumentConverter
 
 buf = BytesIO(your_binary_stream)
 source = DocumentStream(name="my_doc.pdf", stream=buf)
@@ -133,8 +133,8 @@ You can chunk a Docling document using a [chunker](concepts/chunking.md), such a
 [this example](examples/hybrid_chunking.ipynb)):
 
 ```python
-from docling.document_converter import DocumentConverter
-from docling.chunking import HybridChunker
+from docowling.document_converter import DocumentConverter
+from docowling.chunking import HybridChunker
 
 conv_res = DocumentConverter().convert("https://arxiv.org/pdf/2206.01062")
 doc = conv_res.document

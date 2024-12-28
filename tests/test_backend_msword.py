@@ -2,14 +2,14 @@ import json
 import os
 from pathlib import Path
 
-from docling.backend.msword_backend import MsWordDocumentBackend
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import (
+from docowling.backend.msword_backend import MsWordDocumentBackend
+from docowling.datamodel.base_models import InputFormat
+from docowling.datamodel.document import (
     ConversionResult,
     InputDocument,
     SectionHeaderItem,
 )
-from docling.document_converter import DocumentConverter
+from docowling.document_converter import DocumentConverter
 
 GENERATE = False
 

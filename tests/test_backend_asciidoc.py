@@ -2,9 +2,9 @@ import glob
 import os
 from pathlib import Path
 
-from docling.backend.asciidoc_backend import AsciiDocBackend
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import InputDocument
+from docowling.backend.asciidoc_backend import AsciiDocBackend
+from docowling.datamodel.base_models import InputFormat
+from docowling.datamodel.document import InputDocument
 
 
 def _get_backend(fname):
