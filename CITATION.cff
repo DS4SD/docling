@@ -2,8 +2,8 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
-title: Dockowling
-message: 'If you use Dockowling, please consider citing as below.'
+title: Docowling
+message: 'If you use Docowling, please consider citing as below.'
 type: software
 authors:
   - name: Docowling
