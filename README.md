@@ -6,4 +6,9 @@
 
 # Docowling
 
-**Docowling** é um fork do projeto [Docling](https://github.com/DS4SD/docling), desenvolvido para aprimorar funcionalidades e adicionar novas capacidades de processamento de documentos.
+**Docowling**  is a fork of the Docling project, developed to enhance functionalities and add new document processing capabilities.
+
+## License
+
+The Docowing codebase is under MIT license.
+For individual model usage, please refer to the model licenses found in the original packages.
