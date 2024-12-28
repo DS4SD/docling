@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "docling"
-version = "2.14.0"  # DO NOT EDIT, updated automatically
+name = "docowling"
+version = "1.0.0"  # DO NOT EDIT, updated automatically
 description = "SDK and CLI for parsing PDF, DOCX, HTML, and more, to a unified document representation for powering downstream workflows such as gen AI applications."
 authors = ["Christoph Auer <cau@zurich.ibm.com>", "Michele Dolfi <dol@zurich.ibm.com>", "Maxim Lysak <mly@zurich.ibm.com>", "Nikos Livathinos <nli@zurich.ibm.com>", "Ahmed Nassar <ahn@zurich.ibm.com>", "Panos Vagenas <pva@zurich.ibm.com>", "Peter Staar <taa@zurich.ibm.com>"]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/DS4SD/docling"
-homepage = "https://github.com/DS4SD/docling"
-keywords= ["docling", "convert", "document", "pdf", "docx", "html", "markdown", "layout model", "segmentation", "table structure", "table former"]
+repository = "https://github.com/mouraworks/docowling"
+homepage = "https://github.com/mouraworks/docowling"
+keywords= ["docowling", "convert", "document", "pdf", "docx", "html", "markdown", "layout model", "segmentation", "table structure", "table former"]
  classifiers = [
      "License :: OSI Approved :: MIT License",
      "Operating System :: MacOS :: MacOS X",
@@ -18,7 +18,7 @@ keywords= ["docling", "convert", "document", "pdf", "docx", "html", "markdown", 
      "Topic :: Scientific/Engineering :: Artificial Intelligence",
      "Programming Language :: Python :: 3"
  ]
-packages = [{include = "docling"}]
+packages = [{include = "docowling"}]
 
 [tool.poetry.dependencies]
 ######################
@@ -118,7 +118,7 @@ ocrmac = ["ocrmac"]
 rapidocr = ["rapidocr-onnxruntime", "onnxruntime"]
 
 [tool.poetry.scripts]
-docling = "docowling.cli.main:app"
+docowling = "docowling.cli.main:app"
 
 [build-system]
 requires = ["poetry-core"]
