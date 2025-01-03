@@ -30,6 +30,11 @@ def main():
     #     num_threads=8, device=AcceleratorDevice.CUDA
     # )
 
+    # easyocr doesnt support cuda:N allocation
+    # accelerator_options = AcceleratorOptions(
+    #     num_threads=8, device="cuda:1"
+    # )
+
     pipeline_options = PdfPipelineOptions()
     pipeline_options.accelerator_options = accelerator_options
     pipeline_options.do_ocr = True

@@ -1,11 +1,25 @@
 import logging
 import os
+import re
+import warnings
 from enum import Enum
 from pathlib import Path
 from typing import Annotated, Any, Dict, List, Literal, Optional, Union
 
-from pydantic import AnyUrl, BaseModel, ConfigDict, Field, model_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_validator,
+    validator,
+)
+from pydantic_settings import (
+    BaseSettings,
+    PydanticBaseSettingsSource,
+    SettingsConfigDict,
+)
+from typing_extensions import deprecated
 
 _log = logging.getLogger(__name__)
 
@@ -26,6 +40,20 @@ class AcceleratorOptions(BaseSettings):
 
     num_threads: int = 4
     device: AcceleratorDevice = AcceleratorDevice.AUTO
+
+    @validator("device")
+    def validate_device(cls, value):
+        # Allow both Enum and str inputs
+        if isinstance(value, AcceleratorDevice):
+            return value
+        # Validate as a string
+        if value in {d.value for d in AcceleratorDevice} or re.match(
+            r"^cuda(:\d+)?$", value
+        ):
+            return AcceleratorDevice(value)
+        raise ValueError(
+            "Invalid device option. Use 'auto', 'cpu', 'mps', 'cuda', or 'cuda:N'."
+        )
 
     @model_validator(mode="before")
     @classmethod
