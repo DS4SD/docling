@@ -286,7 +286,8 @@ def convert(
 
     parsed_headers: Optional[Dict[str, str]] = None
     if headers is not None:
-        parsed_headers = json.loads(headers)
+        headers_t = TypeAdapter(Dict[str, str])
+        parsed_headers = headers_t.validate_json(headers)
 
     with tempfile.TemporaryDirectory() as tempdir:
         input_doc_paths: List[Path] = []
