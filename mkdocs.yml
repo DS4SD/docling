@@ -94,6 +94,7 @@ nav:
     - "🐶 InstructLab": integrations/instructlab.md
     - "Kotaemon": integrations/kotaemon.md
     - "🦙 LlamaIndex": integrations/llamaindex.md
+    - "OpenContracts": integrations/opencontracts.md
     - "Prodigy": integrations/prodigy.md
     - "RHEL AI": integrations/rhel_ai.md
     - "spaCy": integrations/spacy.md
