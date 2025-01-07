@@ -83,6 +83,7 @@ nav:
       - examples/rag_llamaindex.ipynb
       - examples/rag_langchain.ipynb
       - examples/rag_weaviate.ipynb
+      - RAG with Granite [↗]: https://github.com/ibm-granite-community/granite-snack-cookbook/blob/main/recipes/RAG/Granite_Docling_RAG.ipynb
       - examples/retrieval_qdrant.ipynb
   - Integrations:
     - Integrations: integrations/index.md
