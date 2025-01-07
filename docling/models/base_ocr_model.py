@@ -12,7 +12,7 @@ from scipy.ndimage import find_objects, label
 
 from docling.datamodel.base_models import Cell, OcrCell, Page
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import EasyOcrOptions, OcrOptions
+from docling.datamodel.pipeline_options import OcrOptions
 from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
 
