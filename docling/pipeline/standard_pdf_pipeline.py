@@ -11,6 +11,7 @@ from docling.datamodel.base_models import AssembledUnit, Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
+    GoogleOcrOptions,
     OcrMacOptions,
     PdfPipelineOptions,
     RapidOcrOptions,
@@ -20,6 +21,7 @@ from docling.datamodel.pipeline_options import (
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.ds_glm_model import GlmModel, GlmOptions
 from docling.models.easyocr_model import EasyOcrModel
+from docling.models.google_ocr_model import GoogleOcrModel
 from docling.models.layout_model import LayoutModel
 from docling.models.ocr_mac_model import OcrMacModel
 from docling.models.page_assemble_model import PageAssembleModel, PageAssembleOptions
@@ -140,6 +142,11 @@ class StandardPdfPipeline(PaginatedPipeline):
                     f"The specified OCR type is only supported on Mac: {self.pipeline_options.ocr_options.kind}."
                 )
             return OcrMacModel(
+                enabled=self.pipeline_options.do_ocr,
+                options=self.pipeline_options.ocr_options,
+            )
+        elif isinstance(self.pipeline_options.ocr_options, GoogleOcrOptions):
+            return GoogleOcrModel(
                 enabled=self.pipeline_options.do_ocr,
                 options=self.pipeline_options.ocr_options,
             )

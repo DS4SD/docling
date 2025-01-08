@@ -151,6 +151,19 @@ class EasyOcrOptions(OcrOptions):
     )
 
 
+class GoogleOcrOptions(OcrOptions):
+    """Options for the dense GoogleOcr engine."""
+
+    kind: Literal["googleocr"] = "googleocr"
+    lang: List[str] = ["en", "de"]
+    google_ocr_config_file_path: Optional[str] = os.getenv("GOOGLE_CONFIG_FILE_PATH")
+    google_ocr_region: Optional[str] = "eu-vision.googleapis.com"
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+
+
 class TesseractCliOcrOptions(OcrOptions):
     """Options for the TesseractCli engine."""
 
@@ -207,6 +220,7 @@ class OcrEngine(str, Enum):
     TESSERACT = "tesseract"
     OCRMAC = "ocrmac"
     RAPIDOCR = "rapidocr"
+    GOOGLEOCR = "googleocr"
 
 
 class PipelineOptions(BaseModel):
@@ -233,6 +247,7 @@ class PdfPipelineOptions(PipelineOptions):
         TesseractOcrOptions,
         OcrMacOptions,
         RapidOcrOptions,
+        GoogleOcrOptions,
     ] = Field(EasyOcrOptions(), discriminator="kind")
 
     images_scale: float = 1.0

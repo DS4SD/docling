@@ -29,6 +29,7 @@ from docling.datamodel.pipeline_options import (
     AcceleratorDevice,
     AcceleratorOptions,
     EasyOcrOptions,
+    GoogleOcrOptions,
     OcrEngine,
     OcrMacOptions,
     OcrOptions,
@@ -347,6 +348,8 @@ def convert(
             ocr_options = OcrMacOptions(force_full_page_ocr=force_ocr)
         elif ocr_engine == OcrEngine.RAPIDOCR:
             ocr_options = RapidOcrOptions(force_full_page_ocr=force_ocr)
+        elif ocr_engine == OcrEngine.GOOGLEOCR:
+            ocr_options = GoogleOcrOptions(force_full_page_ocr=force_ocr)
         else:
             raise RuntimeError(f"Unexpected OCR engine type {ocr_engine}")
 
