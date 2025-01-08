@@ -138,18 +138,31 @@ class BaseOcrModel(BasePageModel):
 
     def draw_ocr_rects_and_cells(self, conv_res, page, ocr_rects, show: bool = False):
         image = copy.deepcopy(page.image)
+        scale_x = image.width / page.size.width
+        scale_y = image.height / page.size.height
+
         draw = ImageDraw.Draw(image, "RGBA")
 
         # Draw OCR rectangles as yellow filled rect
         for rect in ocr_rects:
             x0, y0, x1, y1 = rect.as_tuple()
+            y0 *= scale_x
+            y1 *= scale_y
+            x0 *= scale_x
+            x1 *= scale_x
+
             shade_color = (255, 255, 0, 40)  # transparent yellow
             draw.rectangle([(x0, y0), (x1, y1)], fill=shade_color, outline=None)
 
         # Draw OCR and programmatic cells
         for tc in page.cells:
             x0, y0, x1, y1 = tc.bbox.as_tuple()
-            color = "red"
+            y0 *= scale_x
+            y1 *= scale_y
+            x0 *= scale_x
+            x1 *= scale_x
+
+            color = "gray"
             if isinstance(tc, OcrCell):
                 color = "magenta"
             draw.rectangle([(x0, y0), (x1, y1)], outline=color)

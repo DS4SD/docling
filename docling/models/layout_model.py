@@ -67,29 +67,9 @@ class LayoutModel(BasePageModel):
         - Right: Clusters including FORM, KEY_VALUE_REGION, and PICTURE.
         Includes label names and confidence scores for each cluster.
         """
-        label_to_color = {
-            DocItemLabel.TEXT: (255, 255, 153),  # Light Yellow
-            DocItemLabel.CAPTION: (255, 204, 153),  # Light Orange
-            DocItemLabel.LIST_ITEM: (153, 153, 255),  # Light Purple
-            DocItemLabel.FORMULA: (192, 192, 192),  # Gray
-            DocItemLabel.TABLE: (255, 204, 204),  # Light Pink
-            DocItemLabel.PICTURE: (255, 204, 164),  # Light Beige
-            DocItemLabel.SECTION_HEADER: (255, 153, 153),  # Light Red
-            DocItemLabel.PAGE_HEADER: (204, 255, 204),  # Light Green
-            DocItemLabel.PAGE_FOOTER: (
-                204,
-                255,
-                204,
-            ),  # Light Green (same as Page-Header)
-            DocItemLabel.TITLE: (255, 153, 153),  # Light Red (same as Section-Header)
-            DocItemLabel.FOOTNOTE: (200, 200, 255),  # Light Blue
-            DocItemLabel.DOCUMENT_INDEX: (220, 220, 220),  # Light Gray
-            DocItemLabel.CODE: (125, 125, 125),  # Gray
-            DocItemLabel.CHECKBOX_SELECTED: (255, 182, 193),  # Pale Green
-            DocItemLabel.CHECKBOX_UNSELECTED: (255, 182, 193),  # Light Pink
-            DocItemLabel.FORM: (200, 255, 255),  # Light Cyan
-            DocItemLabel.KEY_VALUE_REGION: (183, 65, 14),  # Rusty orange
-        }
+        scale_x = page.image.width / page.size.width
+        scale_y = page.image.height / page.size.height
+
         # Filter clusters for left and right images
         exclude_labels = {
             DocItemLabel.FORM,
@@ -118,6 +98,11 @@ class LayoutModel(BasePageModel):
                     cell_color = (0, 0, 0, 40)  # Transparent black for cells
                     for tc in c.cells:
                         cx0, cy0, cx1, cy1 = tc.bbox.as_tuple()
+                        cx0 *= scale_x
+                        cx1 *= scale_x
+                        cy0 *= scale_x
+                        cy1 *= scale_y
+
                         draw.rectangle(
                             [(cx0, cy0), (cx1, cy1)],
                             outline=None,
@@ -125,8 +110,16 @@ class LayoutModel(BasePageModel):
                         )
                     # Draw cluster rectangle
                     x0, y0, x1, y1 = c.bbox.as_tuple()
-                    cluster_fill_color = (*list(label_to_color.get(c.label)), 70)
-                    cluster_outline_color = (*list(label_to_color.get(c.label)), 255)
+                    x0 *= scale_x
+                    x1 *= scale_x
+                    y0 *= scale_x
+                    y1 *= scale_y
+
+                    cluster_fill_color = (*list(DocItemLabel.get_color(c.label)), 70)
+                    cluster_outline_color = (
+                        *list(DocItemLabel.get_color(c.label)),
+                        255,
+                    )
                     draw.rectangle(
                         [(x0, y0), (x1, y1)],
                         outline=cluster_outline_color,
