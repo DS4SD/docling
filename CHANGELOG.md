@@ -1,3 +1,24 @@
+## [v2.15.0](https://github.com/DS4SD/docling/releases/tag/v2.15.0) - 2025-01-08
+
+### Feature
+
+* Added http header support for document converter and cli ([#642](https://github.com/DS4SD/docling/issues/642)) ([`0ee849e`](https://github.com/DS4SD/docling/commit/0ee849e8bc8cf24d1c5597af3fe20a7fa19a29e0))
+
+### Fix
+
+* Correct scaling of debug visualizations, tune OCR ([#700](https://github.com/DS4SD/docling/issues/700)) ([`5cb4cf6`](https://github.com/DS4SD/docling/commit/5cb4cf6f19f91e6c87141e93400c4b54b93aa5d7))
+* Let BeautifulSoup detect the HTML encoding ([#695](https://github.com/DS4SD/docling/issues/695)) ([`42856fd`](https://github.com/DS4SD/docling/commit/42856fdf79559188ec4617bc5d3a007286f114d2))
+* **mspowerpoint:** Handle invalid images in PowerPoint slides ([#650](https://github.com/DS4SD/docling/issues/650)) ([`d49650c`](https://github.com/DS4SD/docling/commit/d49650c54ffa60bc6d6106970e104071689bc7b0))
+
+### Documentation
+
+* Specify docstring types ([#702](https://github.com/DS4SD/docling/issues/702)) ([`ead396a`](https://github.com/DS4SD/docling/commit/ead396ab407f6bbd43176abd6ed2bed7ed8c7c43))
+* Add link to rag with granite ([#698](https://github.com/DS4SD/docling/issues/698)) ([`6701f34`](https://github.com/DS4SD/docling/commit/6701f34c855992c52918b210c65a2edb1c827c01))
+* Add integrations, revamp docs ([#693](https://github.com/DS4SD/docling/issues/693)) ([`2d24fae`](https://github.com/DS4SD/docling/commit/2d24faecd96bfa656b2b8c80f25cdf251a50526a))
+* Add OpenContracts as an integration ([#679](https://github.com/DS4SD/docling/issues/679)) ([`569038d`](https://github.com/DS4SD/docling/commit/569038df4205703f87517ea58da7902d143e7699))
+* Add Weaviate RAG recipe notebook ([#451](https://github.com/DS4SD/docling/issues/451)) ([`2b591f9`](https://github.com/DS4SD/docling/commit/2b591f98726ed0d883236dd0550201b95203eebb))
+* Document Haystack & Vectara support ([#628](https://github.com/DS4SD/docling/issues/628)) ([`fc645ea`](https://github.com/DS4SD/docling/commit/fc645ea531ddc67959640b428007851d641c923e))
+
 ## [v2.14.0](https://github.com/DS4SD/docling/releases/tag/v2.14.0) - 2024-12-18
 
 ### Feature
