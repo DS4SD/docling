@@ -7,6 +7,7 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
+    GoogleOcrOptions,
     OcrMacOptions,
     OcrOptions,
     PdfPipelineOptions,
@@ -62,6 +63,7 @@ def test_e2e_conversions():
         TesseractOcrOptions(force_full_page_ocr=True),
         TesseractCliOcrOptions(force_full_page_ocr=True),
         RapidOcrOptions(force_full_page_ocr=True),
+        GoogleOcrOptions(force_full_page_ocr=True),
     ]
 
     # only works on mac
