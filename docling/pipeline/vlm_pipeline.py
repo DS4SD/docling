@@ -1,3 +1,4 @@
+import itertools
 import logging
 import re
 from io import BytesIO
@@ -19,7 +20,7 @@ from docling_core.types.doc import (
     TableData,
     TableItem,
 )
-from PIL import Image, ImageDraw
+from PIL.Image import Image
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
@@ -38,6 +39,7 @@ class VlmPipeline(PaginatedPipeline):
 
     def __init__(self, pipeline_options: PdfPipelineOptions):
         super().__init__(pipeline_options)
+        print("------> Init VLM Pipeline!")
         self.pipeline_options: PdfPipelineOptions
 
         if pipeline_options.artifacts_path is None:
@@ -98,13 +100,15 @@ class VlmPipeline(PaginatedPipeline):
                 if page.predictions.doctags is not None:
                     document_tags += page.predictions.doctags.tag_string
 
-            image_bytes = BytesIO()
-            if page.image:
-                page.image.save(image_bytes, format="PNG")
-                # TODO implement this function
-                conv_res.document = self._turn_tags_into_doc(
-                    document_tags, image_bytes.getvalue()
-                )
+            conv_res.document = self._turn_tags_into_doc(document_tags, None)
+            """
+                image_bytes = BytesIO()
+                if page.image:
+                    page.image.save(image_bytes, format="PNG")
+                    # TODO implement this function
+                    conv_res.document = self._turn_tags_into_doc(
+                        document_tags, image_bytes.getvalue()
+                    )
 
             # Generate page images in the output
             if self.pipeline_options.generate_page_images:
@@ -114,7 +118,7 @@ class VlmPipeline(PaginatedPipeline):
                     conv_res.document.pages[page_no].image = ImageRef.from_pil(
                         page.image, dpi=int(72 * self.pipeline_options.images_scale)
                     )
-
+            """
             # Generate images of the requested element types
             if (
                 self.pipeline_options.generate_picture_images
@@ -151,7 +155,7 @@ class VlmPipeline(PaginatedPipeline):
 
     # def _turn_tags_into_doc(self, xml_content: str, image_bytes: bytes) -> (DoclingDocument, list):
     def _turn_tags_into_doc(
-        self, xml_content: str, image_bytes: bytes
+        self, xml_content: str, input_image: Optional[Image] = None
     ) -> DoclingDocument:
         def extract_text(tag_content: str) -> str:
             return re.sub(r"<.*?>", "", tag_content).strip()
@@ -332,7 +336,7 @@ class VlmPipeline(PaginatedPipeline):
         doc = DoclingDocument(name="Example Document")
         current_group = None
         lines = xml_content.split("\n")
-        pil_image = Image.open(BytesIO(image_bytes))
+        # pil_image = input_image #Image.open(BytesIO(image_bytes))
         bounding_boxes = []
 
         for line in lines:
@@ -454,6 +458,7 @@ class VlmPipeline(PaginatedPipeline):
                 if bbox:
                     bounding_boxes.append((bbox, "yellow"))
                     # Convert bounding box normalized to 0-100 into pixel coordinates for cropping
+                    """
                     width, height = pil_image.size
                     crop_box = (
                         int(bbox.l * width),
@@ -461,13 +466,14 @@ class VlmPipeline(PaginatedPipeline):
                         int(bbox.r * width),
                         int(bbox.b * height),
                     )
+                    
                     cropped_image = pil_image.crop(crop_box)
                     doc.add_picture(
                         parent=current_group,
                         image=ImageRef.from_pil(image=cropped_image, dpi=300),
-                        # prov=[ProvenanceItem(bbox=bbox, charspan=(0, 0), page_no=1)],
                         prov=ProvenanceItem(bbox=bbox, charspan=(0, 0), page_no=1),
                     )
+                    """
             elif line.startswith("<list>"):
                 content = extract_text(line)
                 prov_item_inst = None
