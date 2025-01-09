@@ -165,7 +165,7 @@ def to_docling_document(doc_glm, update_name_label=False) -> DoclingDocument:
             pic.captions.extend(caption_refs)
             _add_child_elements(pic, doc, obj, pelem)
 
-        elif ptype == "table":
+        elif ptype in ["table", "table-of-contents"]:
             current_list = None
             text = ""
             caption_refs = []
