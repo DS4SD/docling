@@ -15,6 +15,8 @@ from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.msexcel_backend import MsExcelDocumentBackend
 from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
+from docling.backend.xml.pubmed_backend import PubMedDocumentBackend
+from docling.backend.xml.uspto_backend import PatentUsptoDocumentBackend
 from docling.datamodel.base_models import (
     ConversionStatus,
     DoclingComponentType,
@@ -82,12 +84,22 @@ class HTMLFormatOption(FormatOption):
     backend: Type[AbstractDocumentBackend] = HTMLDocumentBackend
 
 
-class PdfFormatOption(FormatOption):
+class PatentUsptoFormatOption(FormatOption):
+    pipeline_cls: Type = SimplePipeline
+    backend: Type[PatentUsptoDocumentBackend] = PatentUsptoDocumentBackend
+
+
+class XMLPubMedFormatOption(FormatOption):
+    pipeline_cls: Type = SimplePipeline
+    backend: Type[AbstractDocumentBackend] = PubMedDocumentBackend
+
+
+class ImageFormatOption(FormatOption):
     pipeline_cls: Type = StandardPdfPipeline
     backend: Type[AbstractDocumentBackend] = DoclingParseV2DocumentBackend
 
 
-class ImageFormatOption(FormatOption):
+class PdfFormatOption(FormatOption):
     pipeline_cls: Type = StandardPdfPipeline
     backend: Type[AbstractDocumentBackend] = DoclingParseV2DocumentBackend
 
@@ -111,6 +123,12 @@ def _get_default_option(format: InputFormat) -> FormatOption:
         ),
         InputFormat.HTML: FormatOption(
             pipeline_cls=SimplePipeline, backend=HTMLDocumentBackend
+        ),
+        InputFormat.XML_USPTO: FormatOption(
+            pipeline_cls=SimplePipeline, backend=PatentUsptoDocumentBackend
+        ),
+        InputFormat.XML_PUBMED: FormatOption(
+            pipeline_cls=SimplePipeline, backend=PubMedDocumentBackend
         ),
         InputFormat.IMAGE: FormatOption(
             pipeline_cls=StandardPdfPipeline, backend=DoclingParseV2DocumentBackend
@@ -158,16 +176,17 @@ class DocumentConverter:
     def convert(
         self,
         source: Union[Path, str, DocumentStream],  # TODO review naming
+        headers: Optional[Dict[str, str]] = None,
         raises_on_error: bool = True,
         max_num_pages: int = sys.maxsize,
         max_file_size: int = sys.maxsize,
     ) -> ConversionResult:
-
         all_res = self.convert_all(
             source=[source],
             raises_on_error=raises_on_error,
             max_num_pages=max_num_pages,
             max_file_size=max_file_size,
+            headers=headers,
         )
         return next(all_res)
 
@@ -175,6 +194,7 @@ class DocumentConverter:
     def convert_all(
         self,
         source: Iterable[Union[Path, str, DocumentStream]],  # TODO review naming
+        headers: Optional[Dict[str, str]] = None,
         raises_on_error: bool = True,  # True: raises on first conversion error; False: does not raise on conv error
         max_num_pages: int = sys.maxsize,
         max_file_size: int = sys.maxsize,
@@ -184,8 +204,7 @@ class DocumentConverter:
             max_file_size=max_file_size,
         )
         conv_input = _DocumentConversionInput(
-            path_or_stream_iterator=source,
-            limits=limits,
+            path_or_stream_iterator=source, limits=limits, headers=headers
         )
         conv_res_iter = self._convert(conv_input, raises_on_error=raises_on_error)
 

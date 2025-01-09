@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from docling_core.types.doc import (
@@ -28,14 +28,18 @@ class ConversionStatus(str, Enum):
 
 
 class InputFormat(str, Enum):
+    """A document format supported by document backend parsers."""
+
     DOCX = "docx"
     PPTX = "pptx"
     HTML = "html"
+    XML_PUBMED = "xml_pubmed"
     IMAGE = "image"
     PDF = "pdf"
     ASCIIDOC = "asciidoc"
     MD = "md"
     XLSX = "xlsx"
+    XML_USPTO = "xml_uspto"
 
 
 class OutputFormat(str, Enum):
@@ -52,9 +56,11 @@ FormatToExtensions: Dict[InputFormat, List[str]] = {
     InputFormat.PDF: ["pdf"],
     InputFormat.MD: ["md"],
     InputFormat.HTML: ["html", "htm", "xhtml"],
+    InputFormat.XML_PUBMED: ["xml", "nxml"],
     InputFormat.IMAGE: ["jpg", "jpeg", "png", "tif", "tiff", "bmp"],
     InputFormat.ASCIIDOC: ["adoc", "asciidoc", "asc"],
     InputFormat.XLSX: ["xlsx"],
+    InputFormat.XML_USPTO: ["xml", "txt"],
 }
 
 FormatToMimeType: Dict[InputFormat, List[str]] = {
@@ -68,6 +74,7 @@ FormatToMimeType: Dict[InputFormat, List[str]] = {
         "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     ],
     InputFormat.HTML: ["text/html", "application/xhtml+xml"],
+    InputFormat.XML_PUBMED: ["application/xml"],
     InputFormat.IMAGE: [
         "image/png",
         "image/jpeg",
@@ -81,10 +88,13 @@ FormatToMimeType: Dict[InputFormat, List[str]] = {
     InputFormat.XLSX: [
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ],
+    InputFormat.XML_USPTO: ["application/xml", "text/plain"],
 }
 
-MimeTypeToFormat = {
-    mime: fmt for fmt, mimes in FormatToMimeType.items() for mime in mimes
+MimeTypeToFormat: dict[str, list[InputFormat]] = {
+    mime: [fmt for fmt in FormatToMimeType if mime in FormatToMimeType[fmt]]
+    for value in FormatToMimeType.values()
+    for mime in value
 }
 
 
@@ -122,6 +132,7 @@ class Cluster(BaseModel):
     bbox: BoundingBox
     confidence: float = 1.0
     cells: List[Cell] = []
+    children: List["Cluster"] = []  # Add child cluster support
 
 
 class BasePageElement(BaseModel):
@@ -134,6 +145,12 @@ class BasePageElement(BaseModel):
 
 class LayoutPrediction(BaseModel):
     clusters: List[Cluster] = []
+
+
+class ContainerElement(
+    BasePageElement
+):  # Used for Form and Key-Value-Regions, only for typing.
+    pass
 
 
 class Table(BasePageElement):
@@ -175,7 +192,7 @@ class PagePredictions(BaseModel):
     equations_prediction: Optional[EquationPrediction] = None
 
 
-PageElement = Union[TextElement, Table, FigureElement]
+PageElement = Union[TextElement, Table, FigureElement, ContainerElement]
 
 
 class AssembledUnit(BaseModel):

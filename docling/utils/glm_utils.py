@@ -169,6 +169,8 @@ def to_docling_document(doc_glm, update_name_label=False) -> DoclingDocument:
             current_list = None
             text = ""
             caption_refs = []
+            item_label = DocItemLabel(pelem["name"])
+
             for caption in obj["captions"]:
                 text += caption["text"]
 
@@ -254,12 +256,18 @@ def to_docling_document(doc_glm, update_name_label=False) -> DoclingDocument:
                 ),
             )
 
-            tbl = doc.add_table(data=tbl_data, prov=prov)
+            tbl = doc.add_table(data=tbl_data, prov=prov, label=item_label)
             tbl.captions.extend(caption_refs)
 
-        elif ptype in ["form", "key_value_region"]:
+        elif ptype in [DocItemLabel.FORM.value, DocItemLabel.KEY_VALUE_REGION.value]:
             label = DocItemLabel(ptype)
-            container_el = doc.add_group(label=GroupLabel.UNSPECIFIED, name=label)
+            group_label = GroupLabel.UNSPECIFIED
+            if label == DocItemLabel.FORM:
+                group_label = GroupLabel.FORM_AREA
+            elif label == DocItemLabel.KEY_VALUE_REGION:
+                group_label = GroupLabel.KEY_VALUE_AREA
+
+            container_el = doc.add_group(label=group_label)
 
             _add_child_elements(container_el, doc, obj, pelem)
 

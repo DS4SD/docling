@@ -66,6 +66,7 @@ class EasyOcrModel(BaseOcrModel):
                 lang_list=self.options.lang,
                 gpu=use_gpu,
                 model_storage_directory=self.options.model_storage_directory,
+                recog_network=self.options.recog_network,
                 download_enabled=self.options.download_enabled,
                 verbose=False,
             )
@@ -117,6 +118,7 @@ class EasyOcrModel(BaseOcrModel):
                                 ),
                             )
                             for ix, line in enumerate(result)
+                            if line[2] >= self.options.confidence_threshold
                         ]
                         all_ocr_cells.extend(cells)
 

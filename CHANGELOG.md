@@ -1,3 +1,43 @@
+## [v2.15.0](https://github.com/DS4SD/docling/releases/tag/v2.15.0) - 2025-01-08
+
+### Feature
+
+* Added http header support for document converter and cli ([#642](https://github.com/DS4SD/docling/issues/642)) ([`0ee849e`](https://github.com/DS4SD/docling/commit/0ee849e8bc8cf24d1c5597af3fe20a7fa19a29e0))
+
+### Fix
+
+* Correct scaling of debug visualizations, tune OCR ([#700](https://github.com/DS4SD/docling/issues/700)) ([`5cb4cf6`](https://github.com/DS4SD/docling/commit/5cb4cf6f19f91e6c87141e93400c4b54b93aa5d7))
+* Let BeautifulSoup detect the HTML encoding ([#695](https://github.com/DS4SD/docling/issues/695)) ([`42856fd`](https://github.com/DS4SD/docling/commit/42856fdf79559188ec4617bc5d3a007286f114d2))
+* **mspowerpoint:** Handle invalid images in PowerPoint slides ([#650](https://github.com/DS4SD/docling/issues/650)) ([`d49650c`](https://github.com/DS4SD/docling/commit/d49650c54ffa60bc6d6106970e104071689bc7b0))
+
+### Documentation
+
+* Specify docstring types ([#702](https://github.com/DS4SD/docling/issues/702)) ([`ead396a`](https://github.com/DS4SD/docling/commit/ead396ab407f6bbd43176abd6ed2bed7ed8c7c43))
+* Add link to rag with granite ([#698](https://github.com/DS4SD/docling/issues/698)) ([`6701f34`](https://github.com/DS4SD/docling/commit/6701f34c855992c52918b210c65a2edb1c827c01))
+* Add integrations, revamp docs ([#693](https://github.com/DS4SD/docling/issues/693)) ([`2d24fae`](https://github.com/DS4SD/docling/commit/2d24faecd96bfa656b2b8c80f25cdf251a50526a))
+* Add OpenContracts as an integration ([#679](https://github.com/DS4SD/docling/issues/679)) ([`569038d`](https://github.com/DS4SD/docling/commit/569038df4205703f87517ea58da7902d143e7699))
+* Add Weaviate RAG recipe notebook ([#451](https://github.com/DS4SD/docling/issues/451)) ([`2b591f9`](https://github.com/DS4SD/docling/commit/2b591f98726ed0d883236dd0550201b95203eebb))
+* Document Haystack & Vectara support ([#628](https://github.com/DS4SD/docling/issues/628)) ([`fc645ea`](https://github.com/DS4SD/docling/commit/fc645ea531ddc67959640b428007851d641c923e))
+
+## [v2.14.0](https://github.com/DS4SD/docling/releases/tag/v2.14.0) - 2024-12-18
+
+### Feature
+
+* Create a backend to transform PubMed XML files to DoclingDocument ([#557](https://github.com/DS4SD/docling/issues/557)) ([`fd03480`](https://github.com/DS4SD/docling/commit/fd034802b65a0e567531b8ecc9a283aaf030e050))
+
+## [v2.13.0](https://github.com/DS4SD/docling/releases/tag/v2.13.0) - 2024-12-17
+
+### Feature
+
+* Updated Layout processing with forms and key-value areas ([#530](https://github.com/DS4SD/docling/issues/530)) ([`60dc852`](https://github.com/DS4SD/docling/commit/60dc852f16dc1adbb5e9284c81a146043a301ec1))
+* Create a backend to parse USPTO patents into DoclingDocument ([#606](https://github.com/DS4SD/docling/issues/606)) ([`4e08750`](https://github.com/DS4SD/docling/commit/4e087504cc4b04210574e69f616badcddfa1f8e5))
+* Add Easyocr parameter recog_network ([#613](https://github.com/DS4SD/docling/issues/613)) ([`3b53bd3`](https://github.com/DS4SD/docling/commit/3b53bd38c8efcc5ba54421fbfa90d047f1a61f82))
+
+### Documentation
+
+* Add Haystack RAG example ([#615](https://github.com/DS4SD/docling/issues/615)) ([`3e599c7`](https://github.com/DS4SD/docling/commit/3e599c7bbeef211dc346e9bc1d3a249113fcc4e4))
+* Fix the path to the run_with_accelerator.py example ([#608](https://github.com/DS4SD/docling/issues/608)) ([`3bb3bf5`](https://github.com/DS4SD/docling/commit/3bb3bf57150c9705a055982e6fb0cc8d1408f161))
+
 ## [v2.12.0](https://github.com/DS4SD/docling/releases/tag/v2.12.0) - 2024-12-13
 
 ### Feature

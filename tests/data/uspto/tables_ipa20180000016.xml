@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table frame="none" colsep="0" rowsep="0" pgwide="1">
+<tgroup align="left" colsep="0" rowsep="0" cols="5">
+<colspec colname="offset" colwidth="42pt" align="left"/>
+<colspec colname="1" colwidth="133pt" align="center"/>
+<colspec colname="2" colwidth="63pt" align="center"/>
+<colspec colname="3" colwidth="42pt" align="center"/>
+<colspec colname="4" colwidth="91pt" align="center"/>
+<thead>
+<row>
+<entry/>
+<entry namest="offset" nameend="4" rowsep="1">TABLE 1</entry>
+</row>
+</thead>
+<tbody valign="top">
+<row>
+<entry/>
+<entry namest="offset" nameend="4" align="center" rowsep="1"/>
+</row>
+<row>
+<entry/>
+<entry>Fluorescent material</entry>
+<entry/>
+<entry/>
+<entry/>
+</row>
+<row>
+<entry/>
+<entry>(parts by mass)</entry>
+<entry>Photon flux</entry>
+<entry>Ratio of</entry>
+</row>
+</tbody>
+</tgroup>
+<tgroup align="left" colsep="0" rowsep="0" cols="7">
+<colspec colname="offset" colwidth="42pt" align="left"/>
+<colspec colname="1" colwidth="70pt" align="center"/>
+<colspec colname="2" colwidth="63pt" align="center"/>
+<colspec colname="3" colwidth="63pt" align="center"/>
+<colspec colname="4" colwidth="42pt" align="center"/>
+<colspec colname="5" colwidth="42pt" align="center"/>
+<colspec colname="6" colwidth="49pt" align="center"/>
+<tbody valign="top">
+<row>
+<entry/>
+<entry>First fluorescent</entry>
+<entry>Second fluorescent</entry>
+<entry>density</entry>
+<entry>photon</entry>
+<entry>Fresh weight</entry>
+<entry>Nitrate nitrogen</entry>
+</row>
+<row>
+<entry/>
+<entry>material</entry>
+<entry>material</entry>
+<entry>(&#x3bc;mol &#xb7; m<sup>&#x2212;2 </sup>&#xb7; s<sup>&#x2212;1</sup>)</entry>
+<entry>flux densities</entry>
+<entry>(Edible part)</entry>
+<entry>content</entry>
+</row>
+</tbody>
+</tgroup>
+<tgroup align="left" colsep="0" rowsep="0" cols="10">
+<colspec colname="offset" colwidth="42pt" align="left"/>
+<colspec colname="1" colwidth="70pt" align="center"/>
+<colspec colname="2" colwidth="63pt" align="center"/>
+<colspec colname="3" colwidth="21pt" align="center"/>
+<colspec colname="4" colwidth="21pt" align="center"/>
+<colspec colname="5" colwidth="21pt" align="center"/>
+<colspec colname="6" colwidth="21pt" align="center"/>
+<colspec colname="7" colwidth="21pt" align="center"/>
+<colspec colname="8" colwidth="42pt" align="center"/>
+<colspec colname="9" colwidth="49pt" align="center"/>
+<tbody valign="top">
+<row>
+<entry/>
+<entry>(MGF/CASN = 95:5)</entry>
+<entry>(YAG: Ce, Cr)</entry>
+<entry>B</entry>
+<entry>R</entry>
+<entry>FR</entry>
+<entry>R/B</entry>
+<entry>R/FR</entry>
+<entry>(g)</entry>
+<entry>(mg/100 g)</entry>
+</row>
+<row>
+<entry/>
+<entry namest="offset" nameend="9" align="center" rowsep="1"/>
+</row>
+</tbody>
+</tgroup>
+<tgroup align="left" colsep="0" rowsep="0" cols="10">
+<colspec colname="1" colwidth="42pt" align="left"/>
+<colspec colname="2" colwidth="70pt" align="center"/>
+<colspec colname="3" colwidth="63pt" align="center"/>
+<colspec colname="4" colwidth="21pt" align="char" char="."/>
+<colspec colname="5" colwidth="21pt" align="char" char="."/>
+<colspec colname="6" colwidth="21pt" align="char" char="."/>
+<colspec colname="7" colwidth="21pt" align="char" char="."/>
+<colspec colname="8" colwidth="21pt" align="center"/>
+<colspec colname="9" colwidth="42pt" align="char" char="."/>
+<colspec colname="10" colwidth="49pt" align="char" char="."/>
+<tbody valign="top">
+<row>
+<entry>Comparative</entry>
+<entry>&#x2014;</entry>
+<entry>&#x2014;</entry>
+<entry>35.5</entry>
+<entry>88.8</entry>
+<entry>0.0</entry>
+<entry>2.5</entry>
+<entry>&#x2014;</entry>
+<entry>26.2</entry>
+<entry>361.2</entry>
+</row>
+<row>
+<entry>Example 1</entry>
+</row>
+<row>
+<entry>Example 1</entry>
+<entry>60</entry>
+<entry>&#x2014;</entry>
+<entry>31.5</entry>
+<entry>74.9</entry>
+<entry>12.6</entry>
+<entry>2.4</entry>
+<entry>6.0</entry>
+<entry>35.4</entry>
+<entry>430.8</entry>
+</row>
+<row>
+<entry>Example 2</entry>
+<entry>50</entry>
+<entry>10</entry>
+<entry>28.5</entry>
+<entry>67.1</entry>
+<entry>21.7</entry>
+<entry>2.4</entry>
+<entry>3.1</entry>
+<entry>34.0</entry>
+<entry>450.0</entry>
+</row>
+<row>
+<entry>Example 3</entry>
+<entry>40</entry>
+<entry>20</entry>
+<entry>25.8</entry>
+<entry>62.0</entry>
+<entry>28.7</entry>
+<entry>2.4</entry>
+<entry>2.2</entry>
+<entry>33.8</entry>
+<entry>452.4</entry>
+</row>
+<row>
+<entry>Example 4</entry>
+<entry>30</entry>
+<entry>30</entry>
+<entry>26.8</entry>
+<entry>54.7</entry>
+<entry>33.5</entry>
+<entry>2.0</entry>
+<entry>1.6</entry>
+<entry>33.8</entry>
+<entry>345.0</entry>
+</row>
+<row>
+<entry>Example 5</entry>
+<entry>25</entry>
+<entry>39</entry>
+<entry>23.4</entry>
+<entry>52.8</entry>
+<entry>38.1</entry>
+<entry>2.3</entry>
+<entry>1.4</entry>
+<entry>28.8</entry>
+<entry>307.2</entry>
+</row>
+<row>
+<entry namest="1" nameend="10" align="center" rowsep="1"/>
+</row>
+</tbody>
+</tgroup>
+</table>
