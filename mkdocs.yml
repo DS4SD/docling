@@ -91,7 +91,7 @@ nav:
       - "Bee Agent Framework": integrations/bee.md
       - "Crew AI": integrations/crewai.md
       - "Haystack": integrations/haystack.md
-      # - "LangChain": integrations/langchain.md
+      - "LangChain": integrations/langchain.md
       - "LlamaIndex": integrations/llamaindex.md
       - "txtai": integrations/txtai.md
     - ⭐️ Featured:
