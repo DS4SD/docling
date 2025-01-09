@@ -273,7 +273,8 @@ class _DocumentConversionInput(BaseModel):
         formats: list[InputFormat] = []
 
         if isinstance(obj, Path):
-            mime = filetype.guess_mime(str(obj))
+            # mime = filetype.guess_mime(str(obj))  # We're having too much conflicts with documents being worngly classified as ZIP
+            mime = None
             if mime is None:
                 ext = obj.suffix[1:]
                 mime = _DocumentConversionInput._mime_from_extension(ext)
@@ -359,7 +360,7 @@ class _DocumentConversionInput(BaseModel):
             mime = FormatToMimeType[InputFormat.PPTX][0]
         elif ext in FormatToExtensions[InputFormat.XLSX]:
             mime = FormatToMimeType[InputFormat.XLSX][0]
-            
+
         return mime
 
     @staticmethod
