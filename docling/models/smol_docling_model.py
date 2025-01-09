@@ -1,23 +1,9 @@
-import argparse
-import itertools
 import logging
-import os
-import re
-import time
-from io import BytesIO
-
-# import copy
-# import random
-# import time
 from pathlib import Path
 from typing import Iterable, List, Optional
 
 import torch
 from docling_core.types.doc.document import DEFAULT_EXPORT_LABELS
-
-# from docling_core.types.doc import CoordOrigin, DocItemLabel
-from docling_ibm_models.layoutmodel.layout_predictor import LayoutPredictor
-from PIL import Image, ImageDraw, ImageFont
 from transformers import (  # type: ignore
     AutoProcessor,
     BitsAndBytesConfig,
@@ -129,6 +115,8 @@ class SmolDoclingModel(BasePageModel):
                     )[0]
                     generated_texts = generated_texts.replace("Assistant: ", "")
                     page_tags = generated_texts
+                    print("Page predictions:")
+                    print(page_tags)
 
                     page.predictions.doctags = DocTagsPrediction(tag_string=page_tags)
 

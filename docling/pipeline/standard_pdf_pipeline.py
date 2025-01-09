@@ -43,6 +43,7 @@ class StandardPdfPipeline(PaginatedPipeline):
 
     def __init__(self, pipeline_options: PdfPipelineOptions):
         super().__init__(pipeline_options)
+        print("------> Init Standard PDF Pipeline!")
         self.pipeline_options: PdfPipelineOptions
 
         if pipeline_options.artifacts_path is None:
