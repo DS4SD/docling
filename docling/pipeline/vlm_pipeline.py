@@ -100,7 +100,7 @@ class VlmPipeline(PaginatedPipeline):
                 if page.predictions.doctags is not None:
                     document_tags += page.predictions.doctags.tag_string
 
-            conv_res.document = self._turn_tags_into_doc(document_tags, None)
+            conv_res.document = self._turn_tags_into_doc(document_tags, page.image)
             """
                 image_bytes = BytesIO()
                 if page.image:

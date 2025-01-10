@@ -23,7 +23,6 @@ from docling.datamodel.pipeline_options import AcceleratorDevice, AcceleratorOpt
 from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
 from docling.utils.accelerator_utils import decide_device
-from docling.utils.layout_postprocessor import LayoutPostprocessor
 from docling.utils.profiling import TimeRecorder
 
 _log = logging.getLogger(__name__)
@@ -44,7 +43,6 @@ class SmolDoclingModel(BasePageModel):
         )
         self.param_quantized = False
 
-        # self.your_vlm_predictor(..., device) = None # TODO
         self.processor = AutoProcessor.from_pretrained(artifacts_path)
         if not self.param_quantized:
             self.vlm_model = Idefics3ForConditionalGeneration.from_pretrained(

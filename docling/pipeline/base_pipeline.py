@@ -177,10 +177,10 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
                 )
                 raise e
 
-            finally:
-                # Always unload the PDF backend, even in case of failure
-                if conv_res.input._backend:
-                    conv_res.input._backend.unload()
+            # finally:
+            # Always unload the PDF backend, even in case of failure
+            # if conv_res.input._backend:
+            #     conv_res.input._backend.unload()
 
         return conv_res
 
