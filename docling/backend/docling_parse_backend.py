@@ -132,7 +132,7 @@ class DoclingParsePageBackend(PdfPageBackend):
         return cells
 
     def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:
-        AREA_THRESHOLD = 32 * 32
+        AREA_THRESHOLD = 0  # 32 * 32
 
         for i in range(len(self._dpage["images"])):
             bitmap = self._dpage["images"][i]
