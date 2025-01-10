@@ -139,7 +139,7 @@ class EasyOcrOptions(OcrOptions):
 
     use_gpu: Optional[bool] = None
 
-    confidence_threshold: float = 0.65
+    confidence_threshold: float = 0.5
 
     model_storage_directory: Optional[str] = None
     recog_network: Optional[str] = "standard"

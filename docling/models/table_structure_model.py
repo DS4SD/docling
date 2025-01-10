@@ -66,23 +66,43 @@ class TableStructureModel(BasePageModel):
         show: bool = False,
     ):
         assert page._backend is not None
+        assert page.size is not None
 
         image = (
             page._backend.get_page_image()
         )  # make new image to avoid drawing on the saved ones
+
+        scale_x = image.width / page.size.width
+        scale_y = image.height / page.size.height
+
         draw = ImageDraw.Draw(image)
 
         for table_element in tbl_list:
             x0, y0, x1, y1 = table_element.cluster.bbox.as_tuple()
+            y0 *= scale_x
+            y1 *= scale_y
+            x0 *= scale_x
+            x1 *= scale_x
+
             draw.rectangle([(x0, y0), (x1, y1)], outline="red")
 
             for cell in table_element.cluster.cells:
                 x0, y0, x1, y1 = cell.bbox.as_tuple()
+                x0 *= scale_x
+                x1 *= scale_x
+                y0 *= scale_x
+                y1 *= scale_y
+
                 draw.rectangle([(x0, y0), (x1, y1)], outline="green")
 
             for tc in table_element.table_cells:
                 if tc.bbox is not None:
                     x0, y0, x1, y1 = tc.bbox.as_tuple()
+                    x0 *= scale_x
+                    x1 *= scale_x
+                    y0 *= scale_x
+                    y1 *= scale_y
+
                     if tc.column_header:
                         width = 3
                     else:

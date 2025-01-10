@@ -8,7 +8,7 @@ import numpy as np
 from docling_core.types.doc import BoundingBox, CoordOrigin
 from PIL import Image, ImageDraw
 from rtree import index
-from scipy.ndimage import find_objects, label
+from scipy.ndimage import binary_dilation, find_objects, label
 
 from docling.datamodel.base_models import Cell, OcrCell, Page
 from docling.datamodel.document import ConversionResult
@@ -43,6 +43,12 @@ class BaseOcrModel(BasePageModel):
 
             np_image = np.array(image)
 
+            # Dilate the image by 10 pixels to merge nearby bitmap rectangles
+            structure = np.ones(
+                (20, 20)
+            )  # Create a 20x20 structure element (10 pixels in all directions)
+            np_image = binary_dilation(np_image > 0, structure=structure)
+
             # Find the connected components
             labeled_image, num_features = label(
                 np_image > 0
@@ -72,7 +78,7 @@ class BaseOcrModel(BasePageModel):
             bitmap_rects = []
         coverage, ocr_rects = find_ocr_rects(page.size, bitmap_rects)
 
-        # return full-page rectangle if sufficiently covered with bitmaps
+        # return full-page rectangle if page is dominantly covered with bitmaps
         if self.options.force_full_page_ocr or coverage > max(
             BITMAP_COVERAGE_TRESHOLD, self.options.bitmap_area_threshold
         ):
@@ -85,17 +91,11 @@ class BaseOcrModel(BasePageModel):
                     coord_origin=CoordOrigin.TOPLEFT,
                 )
             ]
-        # return individual rectangles if the bitmap coverage is smaller
-        else:  # coverage <= BITMAP_COVERAGE_TRESHOLD:
-
-            # skip OCR if the bitmap area on the page is smaller than the options threshold
-            ocr_rects = [
-                rect
-                for rect in ocr_rects
-                if rect.area() / (page.size.width * page.size.height)
-                > self.options.bitmap_area_threshold
-            ]
+        # return individual rectangles if the bitmap coverage is above the threshold
+        elif coverage > self.options.bitmap_area_threshold:
             return ocr_rects
+        else:  # overall coverage of bitmaps is too low, drop all bitmap rectangles.
+            return []
 
     # Filters OCR cells by dropping any OCR cell that intersects with an existing programmatic cell.
     def _filter_ocr_cells(self, ocr_cells, programmatic_cells):
@@ -138,18 +138,34 @@ class BaseOcrModel(BasePageModel):
 
     def draw_ocr_rects_and_cells(self, conv_res, page, ocr_rects, show: bool = False):
         image = copy.deepcopy(page.image)
+        scale_x = image.width / page.size.width
+        scale_y = image.height / page.size.height
+
         draw = ImageDraw.Draw(image, "RGBA")
 
         # Draw OCR rectangles as yellow filled rect
         for rect in ocr_rects:
             x0, y0, x1, y1 = rect.as_tuple()
+            y0 *= scale_x
+            y1 *= scale_y
+            x0 *= scale_x
+            x1 *= scale_x
+
             shade_color = (255, 255, 0, 40)  # transparent yellow
             draw.rectangle([(x0, y0), (x1, y1)], fill=shade_color, outline=None)
 
         # Draw OCR and programmatic cells
         for tc in page.cells:
             x0, y0, x1, y1 = tc.bbox.as_tuple()
-            color = "red"
+            y0 *= scale_x
+            y1 *= scale_y
+            x0 *= scale_x
+            x1 *= scale_x
+
+            if y1 <= y0:
+                y1, y0 = y0, y1
+
+            color = "gray"
             if isinstance(tc, OcrCell):
                 color = "magenta"
             draw.rectangle([(x0, y0), (x1, y1)], outline=color)
