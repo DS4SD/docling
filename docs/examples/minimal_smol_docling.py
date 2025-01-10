@@ -9,6 +9,7 @@ from docling.pipeline.vlm_pipeline import VlmPipeline
 # source = "https://arxiv.org/pdf/2408.09869"  # document per local path or URL
 # source = "tests/data/2305.03393v1-pg9-img.png"
 source = "tests/data/2305.03393v1-pg9.pdf"
+# source = "page.png"
 
 pipeline_options = PdfPipelineOptions()
 pipeline_options.generate_page_images = True

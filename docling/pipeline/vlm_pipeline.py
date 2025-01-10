@@ -221,25 +221,23 @@ class VlmPipeline(PaginatedPipeline):
             c_idx = 0
 
             def count_right(tokens, c_idx, r_idx, which_tokens):
-                # for t in tokens:
-                #     print(t)
-                span = 1
+                span = 0
                 c_idx_iter = c_idx
                 while tokens[r_idx][c_idx_iter] in which_tokens:
                     c_idx_iter += 1
-                    if c_idx_iter >= len(tokens[r_idx]):
-                        break
                     span += 1
+                    if c_idx_iter >= len(tokens[r_idx]):
+                        return span
                 return span
 
             def count_down(tokens, c_idx, r_idx, which_tokens):
-                span = 1
+                span = 0
                 r_idx_iter = r_idx
                 while tokens[r_idx_iter][c_idx] in which_tokens:
                     r_idx_iter += 1
-                    if r_idx_iter >= len(tokens):
-                        break
                     span += 1
+                    if r_idx_iter >= len(tokens):
+                        return span
                 return span
 
             for i, text in enumerate(texts):
