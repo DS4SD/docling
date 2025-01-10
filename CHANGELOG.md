@@ -1,3 +1,15 @@
+## [v2.15.1](https://github.com/DS4SD/docling/releases/tag/v2.15.1) - 2025-01-10
+
+### Fix
+
+* Improve OCR results, stricten criteria before dropping bitmap areas ([#719](https://github.com/DS4SD/docling/issues/719)) ([`5a060f2`](https://github.com/DS4SD/docling/commit/5a060f237d1decd0ff9db9e73478978419315778))
+* Allow earlier requests versions ([#716](https://github.com/DS4SD/docling/issues/716)) ([`e64b5a2`](https://github.com/DS4SD/docling/commit/e64b5a2f628acc340a6d94ee6f1ada2aa267cecc))
+
+### Documentation
+
+* Add pointers to LangChain-side docs ([#718](https://github.com/DS4SD/docling/issues/718)) ([`9a6b5c8`](https://github.com/DS4SD/docling/commit/9a6b5c8c8debc81e0ddcbe91df6afbbeb29e97e6))
+* Add LangChain docs ([#717](https://github.com/DS4SD/docling/issues/717)) ([`4fa8028`](https://github.com/DS4SD/docling/commit/4fa8028bd8120d7557e1d45ba31e200e130af698))
+
 ## [v2.15.0](https://github.com/DS4SD/docling/releases/tag/v2.15.0) - 2025-01-08
 
 ### Feature
