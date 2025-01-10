@@ -155,7 +155,7 @@ class VlmPipeline(PaginatedPipeline):
 
     # def _turn_tags_into_doc(self, xml_content: str, image_bytes: bytes) -> (DoclingDocument, list):
     def _turn_tags_into_doc(
-        self, xml_content: str, input_image: Optional[Image] = None
+        self, xml_content: str, pil_image: Optional[Image] = None
     ) -> DoclingDocument:
         def extract_text(tag_content: str) -> str:
             return re.sub(r"<.*?>", "", tag_content).strip()
@@ -457,23 +457,27 @@ class VlmPipeline(PaginatedPipeline):
                 bbox = extract_bounding_box(line)
                 if bbox:
                     bounding_boxes.append((bbox, "yellow"))
-                    # Convert bounding box normalized to 0-100 into pixel coordinates for cropping
-                    """
-                    width, height = pil_image.size
-                    crop_box = (
-                        int(bbox.l * width),
-                        int(bbox.t * height),
-                        int(bbox.r * width),
-                        int(bbox.b * height),
-                    )
-                    
-                    cropped_image = pil_image.crop(crop_box)
-                    doc.add_picture(
-                        parent=current_group,
-                        image=ImageRef.from_pil(image=cropped_image, dpi=300),
-                        prov=ProvenanceItem(bbox=bbox, charspan=(0, 0), page_no=1),
-                    )
-                    """
+                    if pil_image:
+                        # Convert bounding box normalized to 0-100 into pixel coordinates for cropping
+                        width, height = pil_image.size
+                        crop_box = (
+                            int(bbox.l * width),
+                            int(bbox.t * height),
+                            int(bbox.r * width),
+                            int(bbox.b * height),
+                        )
+
+                        cropped_image = pil_image.crop(crop_box)
+                        doc.add_picture(
+                            parent=current_group,
+                            image=ImageRef.from_pil(image=cropped_image, dpi=300),
+                            prov=ProvenanceItem(bbox=bbox, charspan=(0, 0), page_no=1),
+                        )
+                    else:
+                        doc.add_picture(
+                            parent=current_group,
+                            prov=ProvenanceItem(bbox=bbox, charspan=(0, 0), page_no=1),
+                        )
             elif line.startswith("<list>"):
                 content = extract_text(line)
                 prov_item_inst = None
