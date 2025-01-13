@@ -1,5 +1,11 @@
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
 .git
 .gitignore
-*.pyc
-__pycache__
-*.log.git
+.env
+.venv
+*.log
+.pytest_cache
+.coverage
