@@ -73,7 +73,7 @@ class VlmPipeline(PaginatedPipeline):
 
         disable_progress_bars()
 
-        # TODO download the correct model (private repo)
+        # TODO: download the correct model (private repo)
         download_path = snapshot_download(
             repo_id="ds4sd/xxx",
             force_download=force,
@@ -95,30 +95,17 @@ class VlmPipeline(PaginatedPipeline):
         with TimeRecorder(conv_res, "doc_assemble", scope=ProfilingScope.DOCUMENT):
 
             # Read and concatenate the page doctags:
-            document_tags = ""
+            # document_tags = ""
+            page_tags = []
+            page_images = []
+
             for page in conv_res.pages:
                 if page.predictions.doctags is not None:
-                    document_tags += page.predictions.doctags.tag_string
+                    page_tags.append(page.predictions.doctags.tag_string)
+                    page_images.append(page.image)
 
-            conv_res.document = self._turn_tags_into_doc(document_tags, page.image)
-            """
-                image_bytes = BytesIO()
-                if page.image:
-                    page.image.save(image_bytes, format="PNG")
-                    # TODO implement this function
-                    conv_res.document = self._turn_tags_into_doc(
-                        document_tags, image_bytes.getvalue()
-                    )
+            conv_res.document = self._turn_tags_into_doc(page_tags, page_images)
 
-            # Generate page images in the output
-            if self.pipeline_options.generate_page_images:
-                for page in conv_res.pages:
-                    assert page.image is not None
-                    page_no = page.page_no + 1
-                    conv_res.document.pages[page_no].image = ImageRef.from_pil(
-                        page.image, dpi=int(72 * self.pipeline_options.images_scale)
-                    )
-            """
             # Generate images of the requested element types
             if (
                 self.pipeline_options.generate_picture_images
@@ -153,9 +140,8 @@ class VlmPipeline(PaginatedPipeline):
 
         return conv_res
 
-    # def _turn_tags_into_doc(self, xml_content: str, image_bytes: bytes) -> (DoclingDocument, list):
     def _turn_tags_into_doc(
-        self, xml_content: str, pil_image: Optional[Image] = None
+        self, full_doc_xml_content: list[str], pil_images: list[Image | None]
     ) -> DoclingDocument:
         def extract_text(tag_content: str) -> str:
             return re.sub(r"<.*?>", "", tag_content).strip()
@@ -251,7 +237,7 @@ class VlmPipeline(PaginatedPipeline):
                         cell_text = texts[i + 1]
                         right_offset = 2
 
-                    # TODO: Check next element(s) for lcel / ucel / xcel, set properly row_span, col_span
+                    # Check next element(s) for lcel / ucel / xcel, set properly row_span, col_span
                     next_right_cell = texts[i + right_offset]
 
                     next_bottom_cell = ""
@@ -333,212 +319,236 @@ class VlmPipeline(PaginatedPipeline):
 
         doc = DoclingDocument(name="Example Document")
         current_group = None
-        lines = xml_content.split("\n")
-        # pil_image = input_image #Image.open(BytesIO(image_bytes))
-        bounding_boxes = []
 
-        for line in lines:
-            line = line.strip()
-            line = line.replace("<doc_tag>", "")
-            if line.startswith("<paragraph>"):
-                content = extract_text(line)
-                prov_item = extract_bounding_box(line)
-                if prov_item:
-                    bounding_boxes.append((prov_item, "red"))
-                doc.add_text(
-                    label=DocItemLabel.PARAGRAPH,
-                    text=content,
-                    parent=current_group,
-                    prov=(
-                        # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
-                        ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)
-                        if prov_item
-                        else None
-                    ),
-                )
-            elif line.startswith("<title>"):
-                content = extract_text(line)
-                prov_item = extract_bounding_box(line)
-                if prov_item:
-                    bounding_boxes.append((prov_item, "blue"))
-                current_group = doc.add_group(label=GroupLabel.SECTION, name=content)
-                doc.add_text(
-                    label=DocItemLabel.TITLE,
-                    text=content,
-                    parent=current_group,
-                    prov=(
-                        # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
-                        ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)
-                        if prov_item
-                        else None
-                    ),
-                )
+        for pg_idx, xml_content in enumerate(full_doc_xml_content):
+            pil_image = pil_images[pg_idx]
+            page_no = pg_idx + 1
+            lines = xml_content.split("\n")
+            # pil_image = input_image #Image.open(BytesIO(image_bytes))
+            bounding_boxes = []
 
-            elif line.startswith("<section-header>"):
-                content = extract_text(line)
-                prov_item = extract_bounding_box(line)
-                if prov_item:
-                    bounding_boxes.append((prov_item, "green"))
-                current_group = doc.add_group(label=GroupLabel.SECTION, name=content)
-                doc.add_text(
-                    label=DocItemLabel.SECTION_HEADER,
-                    text=content,
-                    parent=current_group,
-                    prov=(
-                        # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
-                        ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)
-                        if prov_item
-                        else None
-                    ),
-                )
+            for line in lines:
+                line = line.strip()
+                line = line.replace("<doc_tag>", "")
+                if line.startswith("<paragraph>"):
+                    content = extract_text(line)
+                    prov_item = extract_bounding_box(line)
+                    if prov_item:
+                        bounding_boxes.append((prov_item, "red"))
+                    doc.add_text(
+                        label=DocItemLabel.PARAGRAPH,
+                        text=content,
+                        parent=current_group,
+                        prov=(
+                            # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
+                            ProvenanceItem(
+                                bbox=prov_item, charspan=(0, 0), page_no=page_no
+                            )
+                            if prov_item
+                            else None
+                        ),
+                    )
+                elif line.startswith("<title>"):
+                    content = extract_text(line)
+                    prov_item = extract_bounding_box(line)
+                    if prov_item:
+                        bounding_boxes.append((prov_item, "blue"))
+                    current_group = doc.add_group(
+                        label=GroupLabel.SECTION, name=content
+                    )
+                    doc.add_text(
+                        label=DocItemLabel.TITLE,
+                        text=content,
+                        parent=current_group,
+                        prov=(
+                            # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
+                            ProvenanceItem(
+                                bbox=prov_item, charspan=(0, 0), page_no=page_no
+                            )
+                            if prov_item
+                            else None
+                        ),
+                    )
 
-            elif line.startswith("<otsl>"):
-                prov_item = extract_bounding_box(line)
-                if prov_item:
-                    bounding_boxes.append((prov_item, "aquamarine"))
+                elif line.startswith("<section-header>"):
+                    content = extract_text(line)
+                    prov_item = extract_bounding_box(line)
+                    if prov_item:
+                        bounding_boxes.append((prov_item, "green"))
+                    current_group = doc.add_group(
+                        label=GroupLabel.SECTION, name=content
+                    )
+                    doc.add_text(
+                        label=DocItemLabel.SECTION_HEADER,
+                        text=content,
+                        parent=current_group,
+                        prov=(
+                            # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
+                            ProvenanceItem(
+                                bbox=prov_item, charspan=(0, 0), page_no=page_no
+                            )
+                            if prov_item
+                            else None
+                        ),
+                    )
 
-                table_data = parse_table_content(line)
-                doc.add_table(data=table_data, parent=current_group)
+                elif line.startswith("<otsl>"):
+                    prov_item = extract_bounding_box(line)
+                    if prov_item:
+                        bounding_boxes.append((prov_item, "aquamarine"))
 
-            elif line.startswith("<footnote>"):
-                content = extract_text(line)
-                prov_item = extract_bounding_box(line)
-                if prov_item:
-                    bounding_boxes.append((prov_item, "orange"))
-                doc.add_text(
-                    label=DocItemLabel.FOOTNOTE,
-                    text=content,
-                    parent=current_group,
-                    prov=(
-                        # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
-                        ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)
-                        if prov_item
-                        else None
-                    ),
-                )
+                    table_data = parse_table_content(line)
+                    doc.add_table(data=table_data, parent=current_group)
 
-            elif line.startswith("<page-header>"):
-                content = extract_text(line)
-                prov_item = extract_bounding_box(line)
-                if prov_item:
-                    bounding_boxes.append((prov_item, "purple"))
-                doc.add_text(
-                    label=DocItemLabel.PAGE_HEADER,
-                    text=content,
-                    parent=current_group,
-                    prov=(
-                        # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
-                        ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)
-                        if prov_item
-                        else None
-                    ),
-                )
+                elif line.startswith("<footnote>"):
+                    content = extract_text(line)
+                    prov_item = extract_bounding_box(line)
+                    if prov_item:
+                        bounding_boxes.append((prov_item, "orange"))
+                    doc.add_text(
+                        label=DocItemLabel.FOOTNOTE,
+                        text=content,
+                        parent=current_group,
+                        prov=(
+                            # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
+                            ProvenanceItem(
+                                bbox=prov_item, charspan=(0, 0), page_no=page_no
+                            )
+                            if prov_item
+                            else None
+                        ),
+                    )
 
-            elif line.startswith("<page-footer>"):
-                content = extract_text(line)
-                prov_item = extract_bounding_box(line)
-                if prov_item:
-                    bounding_boxes.append((prov_item, "cyan"))
-                doc.add_text(
-                    label=DocItemLabel.PAGE_FOOTER,
-                    text=content,
-                    parent=current_group,
-                    prov=(
-                        # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
-                        ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)
-                        if prov_item
-                        else None
-                    ),
-                )
+                elif line.startswith("<page-header>"):
+                    content = extract_text(line)
+                    prov_item = extract_bounding_box(line)
+                    if prov_item:
+                        bounding_boxes.append((prov_item, "purple"))
+                    doc.add_text(
+                        label=DocItemLabel.PAGE_HEADER,
+                        text=content,
+                        parent=current_group,
+                        prov=(
+                            # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
+                            ProvenanceItem(
+                                bbox=prov_item, charspan=(0, 0), page_no=page_no
+                            )
+                            if prov_item
+                            else None
+                        ),
+                    )
 
-            elif line.startswith("<figure>"):
-                bbox = extract_bounding_box(line)
-                if bbox:
-                    bounding_boxes.append((bbox, "yellow"))
-                    if pil_image:
-                        # Convert bounding box normalized to 0-100 into pixel coordinates for cropping
-                        width, height = pil_image.size
-                        crop_box = (
-                            int(bbox.l * width),
-                            int(bbox.t * height),
-                            int(bbox.r * width),
-                            int(bbox.b * height),
+                elif line.startswith("<page-footer>"):
+                    content = extract_text(line)
+                    prov_item = extract_bounding_box(line)
+                    if prov_item:
+                        bounding_boxes.append((prov_item, "cyan"))
+                    doc.add_text(
+                        label=DocItemLabel.PAGE_FOOTER,
+                        text=content,
+                        parent=current_group,
+                        prov=(
+                            # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
+                            ProvenanceItem(
+                                bbox=prov_item, charspan=(0, 0), page_no=page_no
+                            )
+                            if prov_item
+                            else None
+                        ),
+                    )
+
+                elif line.startswith("<figure>"):
+                    bbox = extract_bounding_box(line)
+                    if bbox:
+                        bounding_boxes.append((bbox, "yellow"))
+                        if pil_image:
+                            # Convert bounding box normalized to 0-100 into pixel coordinates for cropping
+                            width, height = pil_image.size
+                            crop_box = (
+                                int(bbox.l * width),
+                                int(bbox.t * height),
+                                int(bbox.r * width),
+                                int(bbox.b * height),
+                            )
+
+                            cropped_image = pil_image.crop(crop_box)
+                            doc.add_picture(
+                                parent=current_group,
+                                image=ImageRef.from_pil(image=cropped_image, dpi=300),
+                                prov=ProvenanceItem(
+                                    bbox=bbox, charspan=(0, 0), page_no=page_no
+                                ),
+                            )
+                        else:
+                            doc.add_picture(
+                                parent=current_group,
+                                prov=ProvenanceItem(
+                                    bbox=bbox, charspan=(0, 0), page_no=page_no
+                                ),
+                            )
+                elif line.startswith("<list>"):
+                    content = extract_text(line)
+                    prov_item_inst = None
+                    prov_item = extract_bounding_box(line)
+                    if prov_item:
+                        bounding_boxes.append((prov_item, "brown"))
+                        prov_item_inst = ProvenanceItem(
+                            bbox=prov_item, charspan=(0, 0), page_no=page_no
                         )
+                    doc.add_text(
+                        label=DocItemLabel.LIST_ITEM,
+                        text=content,
+                        parent=current_group,
+                        prov=prov_item_inst if prov_item_inst else None,
+                    )
 
-                        cropped_image = pil_image.crop(crop_box)
-                        doc.add_picture(
-                            parent=current_group,
-                            image=ImageRef.from_pil(image=cropped_image, dpi=300),
-                            prov=ProvenanceItem(bbox=bbox, charspan=(0, 0), page_no=1),
+                elif line.startswith("<caption>"):
+                    content = extract_text(line)
+                    prov_item_inst = None
+                    prov_item = extract_bounding_box(line)
+                    if prov_item:
+                        bounding_boxes.append((prov_item, "magenta"))
+                        prov_item_inst = ProvenanceItem(
+                            bbox=prov_item, charspan=(0, 0), page_no=page_no
                         )
-                    else:
-                        doc.add_picture(
-                            parent=current_group,
-                            prov=ProvenanceItem(bbox=bbox, charspan=(0, 0), page_no=1),
+                    doc.add_text(
+                        label=DocItemLabel.PARAGRAPH,
+                        text=content,
+                        parent=current_group,
+                        prov=prov_item_inst if prov_item_inst else None,
+                    )
+                elif line.startswith("<checkbox-unselected>"):
+                    content = extract_text(line)
+                    prov_item_inst = None
+                    prov_item = extract_bounding_box(line)
+                    if prov_item:
+                        bounding_boxes.append((prov_item, "gray"))
+                        prov_item_inst = ProvenanceItem(
+                            bbox=prov_item, charspan=(0, 0), page_no=page_no
                         )
-            elif line.startswith("<list>"):
-                content = extract_text(line)
-                prov_item_inst = None
-                prov_item = extract_bounding_box(line)
-                if prov_item:
-                    bounding_boxes.append((prov_item, "brown"))
-                    prov_item_inst = ProvenanceItem(
-                        bbox=prov_item, charspan=(0, 0), page_no=1
+                    doc.add_text(
+                        label=DocItemLabel.CHECKBOX_UNSELECTED,
+                        text=content,
+                        parent=current_group,
+                        prov=prov_item_inst if prov_item_inst else None,
                     )
-                doc.add_text(
-                    label=DocItemLabel.LIST_ITEM,
-                    text=content,
-                    parent=current_group,
-                    prov=prov_item_inst if prov_item_inst else None,
-                )
 
-            elif line.startswith("<caption>"):
-                content = extract_text(line)
-                prov_item_inst = None
-                prov_item = extract_bounding_box(line)
-                if prov_item:
-                    bounding_boxes.append((prov_item, "magenta"))
-                    prov_item_inst = ProvenanceItem(
-                        bbox=prov_item, charspan=(0, 0), page_no=1
+                elif line.startswith("<checkbox-selected>"):
+                    content = extract_text(line)
+                    prov_item_inst = None
+                    prov_item = extract_bounding_box(line)
+                    if prov_item:
+                        bounding_boxes.append((prov_item, "black"))
+                        prov_item_inst = ProvenanceItem(
+                            bbox=prov_item, charspan=(0, 0), page_no=page_no
+                        )
+                    doc.add_text(
+                        label=DocItemLabel.CHECKBOX_SELECTED,
+                        text=content,
+                        parent=current_group,
+                        prov=prov_item_inst if prov_item_inst else None,
                     )
-                doc.add_text(
-                    label=DocItemLabel.PARAGRAPH,
-                    text=content,
-                    parent=current_group,
-                    prov=prov_item_inst if prov_item_inst else None,
-                )
-            elif line.startswith("<checkbox-unselected>"):
-                content = extract_text(line)
-                prov_item_inst = None
-                prov_item = extract_bounding_box(line)
-                if prov_item:
-                    bounding_boxes.append((prov_item, "gray"))
-                    prov_item_inst = ProvenanceItem(
-                        bbox=prov_item, charspan=(0, 0), page_no=1
-                    )
-                doc.add_text(
-                    label=DocItemLabel.CHECKBOX_UNSELECTED,
-                    text=content,
-                    parent=current_group,
-                    prov=prov_item_inst if prov_item_inst else None,
-                )
-
-            elif line.startswith("<checkbox-selected>"):
-                content = extract_text(line)
-                prov_item_inst = None
-                prov_item = extract_bounding_box(line)
-                if prov_item:
-                    bounding_boxes.append((prov_item, "black"))
-                    prov_item_inst = ProvenanceItem(
-                        bbox=prov_item, charspan=(0, 0), page_no=1
-                    )
-                doc.add_text(
-                    label=DocItemLabel.CHECKBOX_SELECTED,
-                    text=content,
-                    parent=current_group,
-                    prov=prov_item_inst if prov_item_inst else None,
-                )
-        # return doc, bounding_boxes
+            # return doc, bounding_boxes
         return doc
 
     @classmethod
