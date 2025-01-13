@@ -1,0 +1,30 @@
+{
+  "title": "Docling Actor Input",
+  "description": "Options for running Docling CLI on the Apify platform.",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "documentUrl": {
+      "title": "Document URL",
+      "type": "string",
+      "description": "URL of the document to process with Docling. Supported formats: images, 'pdf', 'docx', 'pptx', 'xlsx, 'html', 'md', 'xml_pubmed', 'asciidoc', 'xml_uspto'.",
+      "prefill": "https://vancura.dev/assets/actor-test/facial-hairstyles-and-filtering-facepiece-respirators.pdf",
+      "editor": "textfield"
+    },
+    "outputFormat": {
+      "title": "Output Format",
+      "type": "string",
+      "description": "Specifies the desired output format after processing the document. Supported formats: 'md', 'json', 'html', 'text', 'doctags'.",
+      "enum": ["md", "json", "html", "text", "doctags"],
+      "default": "md",
+      "editor": "select"
+    },
+    "ocr": {
+      "title": "Enable OCR",
+      "type": "boolean",
+      "description": "If true, OCR will be applied to scanned PDFs for text recognition.",
+      "default": true
+    }
+  },
+  "required": ["documentUrl"]
+}
