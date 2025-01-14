@@ -22,7 +22,6 @@ class ExamplePictureClassifierPipelineOptions(PdfPipelineOptions):
 
 
 class ExamplePictureClassifierEnrichmentModel(BaseEnrichmentModel):
-
     def __init__(self, enabled: bool):
         self.enabled = enabled
 
@@ -54,7 +53,6 @@ class ExamplePictureClassifierEnrichmentModel(BaseEnrichmentModel):
 
 
 class ExamplePictureClassifierPipeline(StandardPdfPipeline):
-
     def __init__(self, pipeline_options: ExamplePictureClassifierPipelineOptions):
         super().__init__(pipeline_options)
         self.pipeline_options: ExamplePictureClassifierPipeline

@@ -44,7 +44,6 @@ class ExcelTable(BaseModel):
 
 
 class MsExcelDocumentBackend(DeclarativeDocumentBackend):
-
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
 

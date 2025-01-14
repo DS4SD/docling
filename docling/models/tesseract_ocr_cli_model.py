@@ -20,7 +20,6 @@ _log = logging.getLogger(__name__)
 
 
 class TesseractOcrCliModel(BaseOcrModel):
-
     def __init__(self, enabled: bool, options: TesseractCliOcrOptions):
         super().__init__(enabled=enabled, options=options)
         self.options: TesseractCliOcrOptions
