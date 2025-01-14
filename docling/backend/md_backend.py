@@ -27,7 +27,6 @@ _log = logging.getLogger(__name__)
 
 
 class MarkdownDocumentBackend(DeclarativeDocumentBackend):
-
     def shorten_underscore_sequences(self, markdown_text, max_length=10):
         # This regex will match any sequence of underscores
         pattern = r"_+"
