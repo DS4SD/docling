@@ -69,7 +69,7 @@ def main():
         elif isinstance(element, TableItem):
             for cell in element.data.table_cells:
                 cell.text = translate(text=element.text)
-            
+
     # Save markdown with embedded pictures in translated text
     md_filename = output_dir / f"{doc_filename}-with-images-translated.md"
     conv_doc.save_as_markdown(md_filename, image_mode=ImageRefMode.EMBEDDED)
