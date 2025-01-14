@@ -7,6 +7,7 @@ from docling_core.types.doc import (
     PictureDataType,
     Size,
     TableCell,
+    TextItem,
 )
 from docling_core.types.io import (  # DO ΝΟΤ REMOVE; explicitly exposed from this location
     DocumentStream,
@@ -199,6 +200,13 @@ class AssembledUnit(BaseModel):
     elements: List[PageElement] = []
     body: List[PageElement] = []
     headers: List[PageElement] = []
+
+
+class TextImageEnrichmentElement(BaseModel):
+    element: TextItem
+    image: Image
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
 class Page(BaseModel):

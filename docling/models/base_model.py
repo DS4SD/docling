@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Any, Generic, Iterable, Optional
 
-from docling_core.types.doc import DoclingDocument, NodeItem
+from docling_core.types.doc import DoclingDocument, NodeItem, TextItem
 from typing_extensions import TypeVar
 
-from docling.datamodel.base_models import Page
+from docling.datamodel.base_models import Page, TextImageEnrichmentElement
 from docling.datamodel.document import ConversionResult
 
 
@@ -46,3 +46,22 @@ class BaseEnrichmentModel(GenericEnrichmentModel[NodeItem]):
         if self.is_processable(doc=conv_res.document, element=element):
             return element
         return None
+
+
+class BaseTextImageEnrichmentModel(GenericEnrichmentModel[TextImageEnrichmentElement]):
+
+    images_scale: float
+
+    def prepare_element(
+        self, conv_res: ConversionResult, element: NodeItem
+    ) -> Optional[TextImageEnrichmentElement]:
+        if not self.is_processable(doc=conv_res.document, element=element):
+            return None
+
+        assert isinstance(element, TextItem)
+        element_prov = element.prov[0]
+        page_ix = element_prov.page_no - 1
+        cropped_image = conv_res.pages[page_ix].get_image(
+            scale=self.images_scale, cropbox=element_prov.bbox
+        )
+        return TextImageEnrichmentElement(element=element, image=cropped_image)

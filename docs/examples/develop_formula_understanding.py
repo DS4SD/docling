@@ -3,14 +3,11 @@ from pathlib import Path
 from typing import Iterable
 
 from docling_core.types.doc import DocItemLabel, DoclingDocument, NodeItem, TextItem
-from PIL import Image as PILImage
-from pydantic import BaseModel, ConfigDict
 
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import ConversionResult
+from docling.datamodel.base_models import InputFormat, TextImageEnrichmentElement
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
-from docling.models.base_model import BaseEnrichmentModel, GenericEnrichmentModel
+from docling.models.base_model import BaseTextImageEnrichmentModel
 from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
 
 
@@ -18,16 +15,9 @@ class ExampleFormulaUPipelineOptions(PdfPipelineOptions):
     do_formula_understanding: bool = True
 
 
-class FormulaEnrichmentElement(BaseModel):
-    element: TextItem
-    image: PILImage.Image
-
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-
-class ExampleFormulaUEnrichmentModel(GenericEnrichmentModel[FormulaEnrichmentElement]):
-
-    images_scale: float = 2.6
+# A new enrichment model using both the document element and its image as input
+class ExampleFormulaUEnrichmentModel(BaseTextImageEnrichmentModel):
+    images_scale = 2.6
 
     def __init__(self, enabled: bool):
         self.enabled = enabled
@@ -39,21 +29,8 @@ class ExampleFormulaUEnrichmentModel(GenericEnrichmentModel[FormulaEnrichmentEle
             and element.label == DocItemLabel.FORMULA
         )
 
-    def prepare_element(
-        self, conv_res: ConversionResult, element: NodeItem
-    ) -> FormulaEnrichmentElement:
-        if self.is_processable(doc=conv_res.document, element=element):
-            assert isinstance(element, TextItem)
-            element_prov = element.prov[0]
-            page_ix = element_prov.page_no - 1
-            cropped_image = conv_res.pages[page_ix].get_image(
-                scale=self.images_scale, cropbox=element_prov.bbox
-            )
-
-            return FormulaEnrichmentElement(element=element, image=cropped_image)
-
     def __call__(
-        self, doc: DoclingDocument, element_batch: Iterable[FormulaEnrichmentElement]
+        self, doc: DoclingDocument, element_batch: Iterable[TextImageEnrichmentElement]
     ) -> Iterable[NodeItem]:
         if not self.enabled:
             return
