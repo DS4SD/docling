@@ -154,48 +154,8 @@ class VlmPipeline(PaginatedPipeline):
                 return BoundingBox(l=l, t=t, r=r, b=b)
             return None
 
-        def parse_table_content_old(otsl_content: str) -> TableData:
-            rows = []
-            table_cells = []
-
-            for row_content in otsl_content.split("<nl>"):
-                row_content = row_content.strip()
-                if not row_content:
-                    continue
-
-                current_row = []
-                cells = re.findall(r"<(fcel|ecel)>([^<]*)", row_content)
-                for cell_type, cell_content in cells:
-                    if cell_type == "fcel":
-                        current_row.append(cell_content.strip())
-                    elif cell_type == "ecel":
-                        current_row.append("")
-
-                if current_row:
-                    rows.append(current_row)
-
-            for r_idx, row in enumerate(rows):
-                for c_idx, cell_text in enumerate(row):
-                    table_cells.append(
-                        TableCell(
-                            text=cell_text.strip(),
-                            row_span=1,
-                            col_span=1,
-                            start_row_offset_idx=r_idx,
-                            end_row_offset_idx=r_idx + 1,
-                            start_col_offset_idx=c_idx,
-                            end_col_offset_idx=c_idx + 1,
-                        )
-                    )
-
-            return TableData(
-                num_rows=len(rows),
-                num_cols=max(len(row) for row in rows) if rows else 0,
-                table_cells=table_cells,
-            )
-
         def parse_texts(texts, tokens):
-            split_word = "<nl>"
+            split_word = TableToken.OTSL_NL.value
             split_row_tokens = [
                 list(y)
                 for x, y in itertools.groupby(tokens, lambda z: z == split_word)
@@ -227,11 +187,17 @@ class VlmPipeline(PaginatedPipeline):
 
             for i, text in enumerate(texts):
                 cell_text = ""
-                if text in ["<fcel>", "<ecel>", "<ched>", "<rhed>", "<srow>"]:
+                if text in [
+                    TableToken.OTSL_FCEL.value,
+                    TableToken.OTSL_ECEL.value,
+                    TableToken.OTSL_CHED.value,
+                    TableToken.OTSL_RHED.value,
+                    TableToken.OTSL_SROW.value,
+                ]:
                     row_span = 1
                     col_span = 1
                     right_offset = 1
-                    if text != "<ecel>":
+                    if text != TableToken.OTSL_ECEL.value:
                         cell_text = texts[i + 1]
                         right_offset = 2
 
@@ -242,15 +208,27 @@ class VlmPipeline(PaginatedPipeline):
                     if r_idx + 1 < len(split_row_tokens):
                         next_bottom_cell = split_row_tokens[r_idx + 1][c_idx]
 
-                    if next_right_cell in ["<lcel>", "<xcel>"]:
+                    if next_right_cell in [
+                        TableToken.OTSL_LCEL.value,
+                        TableToken.OTSL_XCEL.value,
+                    ]:
                         # we have horisontal spanning cell or 2d spanning cell
                         col_span += count_right(
-                            split_row_tokens, c_idx + 1, r_idx, ["<lcel>", "<xcel>"]
+                            split_row_tokens,
+                            c_idx + 1,
+                            r_idx,
+                            [TableToken.OTSL_LCEL.value, TableToken.OTSL_XCEL.value],
                         )
-                    if next_bottom_cell in ["<ucel>", "<xcel>"]:
+                    if next_bottom_cell in [
+                        TableToken.OTSL_UCEL.value,
+                        TableToken.OTSL_XCEL.value,
+                    ]:
                         # we have a vertical spanning cell or 2d spanning cell
                         row_span += count_down(
-                            split_row_tokens, c_idx, r_idx + 1, ["<lcel>", "<xcel>"]
+                            split_row_tokens,
+                            c_idx,
+                            r_idx + 1,
+                            [TableToken.OTSL_UCEL.value, TableToken.OTSL_XCEL.value],
                         )
 
                     table_cells.append(
@@ -265,17 +243,17 @@ class VlmPipeline(PaginatedPipeline):
                         )
                     )
                 if text in [
-                    "<fcel>",
-                    "<ecel>",
-                    "<ched>",
-                    "<rhed>",
-                    "<srow>",
-                    "<lcel>",
-                    "<ucel>",
-                    "<xcel>",
+                    TableToken.OTSL_FCEL.value,
+                    TableToken.OTSL_ECEL.value,
+                    TableToken.OTSL_CHED.value,
+                    TableToken.OTSL_RHED.value,
+                    TableToken.OTSL_SROW.value,
+                    TableToken.OTSL_LCEL.value,
+                    TableToken.OTSL_UCEL.value,
+                    TableToken.OTSL_XCEL.value,
                 ]:
                     c_idx += 1
-                if text == "<nl>":
+                if text == TableToken.OTSL_NL.value:
                     r_idx += 1
                     c_idx = 0
             return table_cells, split_row_tokens
