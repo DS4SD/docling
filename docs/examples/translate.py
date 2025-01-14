@@ -2,7 +2,7 @@ import logging
 import time
 from pathlib import Path
 
-from docling_core.types.doc import ImageRefMode, PictureItem, TableItem
+from docling_core.types.doc import ImageRefMode, PictureItem, TableItem, TextItem
 
 from docling.datamodel.base_models import FigureElement, InputFormat, Table
 from docling.datamodel.pipeline_options import PdfPipelineOptions
@@ -16,6 +16,7 @@ IMAGE_RESOLUTION_SCALE = 2.0
 # FIXME: put in your favorite translation code ....
 def translate(text: str, src: str = "en", dest: str = "de"):
 
+    _log.warning("!!! IMPLEMENT HERE YOUR FAVORITE TRANSLATION CODE!!!")
     # from googletrans import Translator
 
     # Initialize the translator
@@ -65,6 +66,10 @@ def main():
             element.orig = element.text
             element.text = translate(text=element.text)
 
+        elif isinstance(element, TableItem):
+            for cell in element.data.table_cells:
+                cell.text = translate(text=element.text)
+            
     # Save markdown with embedded pictures in translated text
     md_filename = output_dir / f"{doc_filename}-with-images-translated.md"
     conv_doc.save_as_markdown(md_filename, image_mode=ImageRefMode.EMBEDDED)
