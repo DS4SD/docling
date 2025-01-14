@@ -40,7 +40,7 @@ class LayoutModel(BasePageModel):
         DocItemLabel.PAGE_FOOTER,
         DocItemLabel.CODE,
         DocItemLabel.LIST_ITEM,
-        # "Formula",
+        DocItemLabel.FORMULA,
     ]
     PAGE_HEADER_LABELS = [DocItemLabel.PAGE_HEADER, DocItemLabel.PAGE_FOOTER]
 
