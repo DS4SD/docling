@@ -16,10 +16,12 @@ from docling_core.types.doc import (
     ImageRefMode,
     PictureItem,
     ProvenanceItem,
+    Size,
     TableCell,
     TableData,
     TableItem,
 )
+from docling_core.types.doc.tokens import DocumentToken, TableToken
 from PIL.Image import Image
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
@@ -39,7 +41,6 @@ class VlmPipeline(PaginatedPipeline):
 
     def __init__(self, pipeline_options: PdfPipelineOptions):
         super().__init__(pipeline_options)
-        print("------> Init VLM Pipeline!")
         self.pipeline_options: PdfPipelineOptions
 
         if pipeline_options.artifacts_path is None:
@@ -91,7 +92,6 @@ class VlmPipeline(PaginatedPipeline):
         return page
 
     def _assemble_document(self, conv_res: ConversionResult) -> ConversionResult:
-        print("VLM, assembling document...")
         with TimeRecorder(conv_res, "doc_assemble", scope=ProfilingScope.DOCUMENT):
 
             # Read and concatenate the page doctags:
@@ -202,7 +202,6 @@ class VlmPipeline(PaginatedPipeline):
                 if not x
             ]
             table_cells = []
-            # print("\nText parts:")
             r_idx = 0
             c_idx = 0
 
@@ -227,7 +226,6 @@ class VlmPipeline(PaginatedPipeline):
                 return span
 
             for i, text in enumerate(texts):
-                # print(f"  {text}")
                 cell_text = ""
                 if text in ["<fcel>", "<ecel>", "<ched>", "<rhed>", "<srow>"]:
                     row_span = 1
@@ -323,8 +321,13 @@ class VlmPipeline(PaginatedPipeline):
         for pg_idx, xml_content in enumerate(full_doc_xml_content):
             pil_image = pil_images[pg_idx]
             page_no = pg_idx + 1
+
+            if pil_image:
+                pg_width, pg_height = pil_image.size
+                size = Size(width=pg_width, height=pg_height)
+                parent_page = doc.add_page(page_no=page_no, size=size)
+
             lines = xml_content.split("\n")
-            # pil_image = input_image #Image.open(BytesIO(image_bytes))
             bounding_boxes = []
 
             for line in lines:

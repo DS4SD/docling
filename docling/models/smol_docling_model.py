@@ -1,4 +1,5 @@
 import logging
+import time
 from pathlib import Path
 from typing import Iterable, List, Optional
 
@@ -10,14 +11,7 @@ from transformers import (  # type: ignore
     Idefics3ForConditionalGeneration,
 )
 
-from docling.datamodel.base_models import (
-    BoundingBox,
-    Cell,
-    Cluster,
-    DocTagsPrediction,
-    LayoutPrediction,
-    Page,
-)
+from docling.datamodel.base_models import DocTagsPrediction, Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import AcceleratorDevice, AcceleratorOptions
 from docling.datamodel.settings import settings
@@ -31,7 +25,6 @@ _log = logging.getLogger(__name__)
 class SmolDoclingModel(BasePageModel):
 
     def __init__(self, artifacts_path: Path, accelerator_options: AcceleratorOptions):
-        print("SmolDocling, init...")
         device = decide_device(accelerator_options.device)
         self.device = device
         _log.info("Available device for SmolDocling: {}".format(device))
@@ -59,12 +52,10 @@ class SmolDoclingModel(BasePageModel):
                 torch_dtype="auto",
                 quantization_config=self.param_quantization_config,
             )
-        print("SmolDocling, init... done!")
 
     def __call__(
         self, conv_res: ConversionResult, page_batch: Iterable[Page]
     ) -> Iterable[Page]:
-        print("SmolDocling, processing...")
         for page in page_batch:
             assert page._backend is not None
             if not page._backend.is_valid():
@@ -72,6 +63,7 @@ class SmolDoclingModel(BasePageModel):
             else:
                 with TimeRecorder(conv_res, "smolvlm"):
                     assert page.size is not None
+                    start_time = time.time()
 
                     hi_res_image = page.get_image(scale=2.0)  # 144dpi
                     # populate page_tags with predicted doc tags
@@ -113,6 +105,9 @@ class SmolDoclingModel(BasePageModel):
                     )[0]
                     generated_texts = generated_texts.replace("Assistant: ", "")
                     page_tags = generated_texts
+
+                    inference_time = time.time() - start_time
+                    print(f"Page Inference Time: {inference_time:.2f} seconds")
                     print("Page predictions:")
                     print(page_tags)
 
