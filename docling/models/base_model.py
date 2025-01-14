@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import Any, Iterable
+from typing import Any, Generic, Iterable, Optional
 
 from docling_core.types.doc import DoclingDocument, NodeItem
+from typing_extensions import TypeVar
 
 from docling.datamodel.base_models import Page
 from docling.datamodel.document import ConversionResult
@@ -15,14 +16,33 @@ class BasePageModel(ABC):
         pass
 
 
-class BaseEnrichmentModel(ABC):
+EnrichElementT = TypeVar("EnrichElementT", default=NodeItem)
+
+
+class GenericEnrichmentModel(ABC, Generic[EnrichElementT]):
 
     @abstractmethod
     def is_processable(self, doc: DoclingDocument, element: NodeItem) -> bool:
         pass
 
     @abstractmethod
-    def __call__(
-        self, doc: DoclingDocument, element_batch: Iterable[NodeItem]
-    ) -> Iterable[Any]:
+    def prepare_element(
+        self, conv_res: ConversionResult, element: NodeItem
+    ) -> Optional[EnrichElementT]:
         pass
+
+    @abstractmethod
+    def __call__(
+        self, doc: DoclingDocument, element_batch: Iterable[EnrichElementT]
+    ) -> Iterable[NodeItem]:
+        pass
+
+
+class BaseEnrichmentModel(GenericEnrichmentModel[NodeItem]):
+
+    def prepare_element(
+        self, conv_res: ConversionResult, element: NodeItem
+    ) -> Optional[NodeItem]:
+        if self.is_processable(doc=conv_res.document, element=element):
+            return element
+        return None

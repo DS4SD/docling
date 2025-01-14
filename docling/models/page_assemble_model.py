@@ -21,7 +21,7 @@ from docling.utils.profiling import TimeRecorder
 _log = logging.getLogger(__name__)
 
 
-class PageAssembleOptions(BaseModel):
+class PageAssembleOptions(BaseModel):  # could be removed entirely or just make empty
     keep_images: bool = False
 
 
@@ -173,12 +173,5 @@ class PageAssembleModel(BasePageModel):
                     page.assembled = AssembledUnit(
                         elements=elements, headers=headers, body=body
                     )
-
-                    # Remove page images (can be disabled)
-                    if not self.options.keep_images:
-                        page._image_cache = {}
-
-                    # Unload backend
-                    page._backend.unload()
 
                 yield page

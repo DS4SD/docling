@@ -219,12 +219,28 @@ class Page(BaseModel):
         {}
     )  # Cache of images in different scales. By default it is cleared during assembling.
 
-    def get_image(self, scale: float = 1.0) -> Optional[Image]:
+    def get_image(
+        self, scale: float = 1.0, cropbox: Optional[BoundingBox] = None
+    ) -> Optional[Image]:
         if self._backend is None:
             return self._image_cache.get(scale, None)
+
         if not scale in self._image_cache:
-            self._image_cache[scale] = self._backend.get_page_image(scale=scale)
-        return self._image_cache[scale]
+            if cropbox is None:
+                self._image_cache[scale] = self._backend.get_page_image(scale=scale)
+            else:
+                return self._backend.get_page_image(scale=scale, cropbox=cropbox)
+
+        if cropbox is None:
+            return self._image_cache[scale]
+        else:
+            page_im = self._image_cache[scale]
+            assert self.size is not None
+            return page_im.crop(
+                cropbox.to_top_left_origin(page_height=self.size.height)
+                .scaled(scale=scale)
+                .as_tuple()
+            )
 
     @property
     def image(self) -> Optional[Image]:
