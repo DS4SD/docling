@@ -178,7 +178,7 @@ class DoclingParseV2PageBackend(PdfPageBackend):
                 l=0, r=0, t=0, b=0, coord_origin=CoordOrigin.BOTTOMLEFT
             )
         else:
-            padbox = cropbox.to_bottom_left_origin(page_size.height)
+            padbox = cropbox.to_bottom_left_origin(page_size.height).model_copy()
             padbox.r = page_size.width - padbox.r
             padbox.t = page_size.height - padbox.t
 
