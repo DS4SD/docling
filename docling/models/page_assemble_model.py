@@ -21,8 +21,8 @@ from docling.utils.profiling import TimeRecorder
 _log = logging.getLogger(__name__)
 
 
-class PageAssembleOptions(BaseModel):  # could be removed entirely or just make empty
-    keep_images: bool = False
+class PageAssembleOptions(BaseModel):
+    pass
 
 
 class PageAssembleModel(BasePageModel):

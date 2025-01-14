@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING, Dict, List, Optional, Union
 from docling_core.types.doc import (
     BoundingBox,
     DocItemLabel,
+    NodeItem,
     PictureDataType,
     Size,
     TableCell,
-    TextItem,
 )
 from docling_core.types.io import (  # DO ΝΟΤ REMOVE; explicitly exposed from this location
     DocumentStream,
@@ -202,11 +202,11 @@ class AssembledUnit(BaseModel):
     headers: List[PageElement] = []
 
 
-class TextImageEnrichmentElement(BaseModel):
-    element: TextItem
-    image: Image
-
+class ItemAndImageEnrichmentElement(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    item: NodeItem
+    image: Image
 
 
 class Page(BaseModel):

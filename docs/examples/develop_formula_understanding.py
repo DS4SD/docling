@@ -4,19 +4,19 @@ from typing import Iterable
 
 from docling_core.types.doc import DocItemLabel, DoclingDocument, NodeItem, TextItem
 
-from docling.datamodel.base_models import InputFormat, TextImageEnrichmentElement
+from docling.datamodel.base_models import InputFormat, ItemAndImageEnrichmentElement
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
-from docling.models.base_model import BaseTextImageEnrichmentModel
+from docling.models.base_model import BaseItemAndImageEnrichmentModel
 from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
 
 
-class ExampleFormulaUPipelineOptions(PdfPipelineOptions):
+class ExampleFormulaUnderstandingPipelineOptions(PdfPipelineOptions):
     do_formula_understanding: bool = True
 
 
 # A new enrichment model using both the document element and its image as input
-class ExampleFormulaUEnrichmentModel(BaseTextImageEnrichmentModel):
+class ExampleFormulaUnderstandingEnrichmentModel(BaseItemAndImageEnrichmentModel):
     images_scale = 2.6
 
     def __init__(self, enabled: bool):
@@ -30,7 +30,9 @@ class ExampleFormulaUEnrichmentModel(BaseTextImageEnrichmentModel):
         )
 
     def __call__(
-        self, doc: DoclingDocument, element_batch: Iterable[TextImageEnrichmentElement]
+        self,
+        doc: DoclingDocument,
+        element_batch: Iterable[ItemAndImageEnrichmentElement],
     ) -> Iterable[NodeItem]:
         if not self.enabled:
             return
@@ -38,18 +40,18 @@ class ExampleFormulaUEnrichmentModel(BaseTextImageEnrichmentModel):
         for enrich_element in element_batch:
             enrich_element.image.show()
 
-            yield enrich_element.element
+            yield enrich_element.item
 
 
 # How the pipeline can be extended.
-class ExampleFormulaUPipeline(StandardPdfPipeline):
+class ExampleFormulaUnderstandingPipeline(StandardPdfPipeline):
 
-    def __init__(self, pipeline_options: ExampleFormulaUPipelineOptions):
+    def __init__(self, pipeline_options: ExampleFormulaUnderstandingPipelineOptions):
         super().__init__(pipeline_options)
-        self.pipeline_options: ExampleFormulaUPipelineOptions
+        self.pipeline_options: ExampleFormulaUnderstandingPipelineOptions
 
         self.enrichment_pipe = [
-            ExampleFormulaUEnrichmentModel(
+            ExampleFormulaUnderstandingEnrichmentModel(
                 enabled=self.pipeline_options.do_formula_understanding
             )
         ]
@@ -58,8 +60,8 @@ class ExampleFormulaUPipeline(StandardPdfPipeline):
             self.keep_backend = True
 
     @classmethod
-    def get_default_options(cls) -> ExampleFormulaUPipelineOptions:
-        return ExampleFormulaUPipelineOptions()
+    def get_default_options(cls) -> ExampleFormulaUnderstandingPipelineOptions:
+        return ExampleFormulaUnderstandingPipelineOptions()
 
 
 # Example main. In the final version, we simply have to set do_formula_understanding to true.
@@ -68,13 +70,13 @@ def main():
 
     input_doc_path = Path("./tests/data/2203.01017v2.pdf")
 
-    pipeline_options = ExampleFormulaUPipelineOptions()
+    pipeline_options = ExampleFormulaUnderstandingPipelineOptions()
     pipeline_options.do_formula_understanding = True
 
     doc_converter = DocumentConverter(
         format_options={
             InputFormat.PDF: PdfFormatOption(
-                pipeline_cls=ExampleFormulaUPipeline,
+                pipeline_cls=ExampleFormulaUnderstandingPipeline,
                 pipeline_options=pipeline_options,
             )
         }

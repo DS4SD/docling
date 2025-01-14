@@ -4,7 +4,7 @@ from typing import Any, Generic, Iterable, Optional
 from docling_core.types.doc import DoclingDocument, NodeItem, TextItem
 from typing_extensions import TypeVar
 
-from docling.datamodel.base_models import Page, TextImageEnrichmentElement
+from docling.datamodel.base_models import ItemAndImageEnrichmentElement, Page
 from docling.datamodel.document import ConversionResult
 
 
@@ -48,13 +48,15 @@ class BaseEnrichmentModel(GenericEnrichmentModel[NodeItem]):
         return None
 
 
-class BaseTextImageEnrichmentModel(GenericEnrichmentModel[TextImageEnrichmentElement]):
+class BaseItemAndImageEnrichmentModel(
+    GenericEnrichmentModel[ItemAndImageEnrichmentElement]
+):
 
     images_scale: float
 
     def prepare_element(
         self, conv_res: ConversionResult, element: NodeItem
-    ) -> Optional[TextImageEnrichmentElement]:
+    ) -> Optional[ItemAndImageEnrichmentElement]:
         if not self.is_processable(doc=conv_res.document, element=element):
             return None
 
@@ -64,4 +66,4 @@ class BaseTextImageEnrichmentModel(GenericEnrichmentModel[TextImageEnrichmentEle
         cropped_image = conv_res.pages[page_ix].get_image(
             scale=self.images_scale, cropbox=element_prov.bbox
         )
-        return TextImageEnrichmentElement(element=element, image=cropped_image)
+        return ItemAndImageEnrichmentElement(item=element, image=cropped_image)
