@@ -14,7 +14,10 @@ jobs:
         - uses: ./.github/actions/setup-poetry
         - name: Build docs
           run: poetry run mkdocs build --verbose --clean
+        - name: Make docs LLM ready
+          if: inputs.deploy
+          uses: demodrive-ai/llms-txt-action@ad720693843126e6a73910a667d0eba37c1dea4b
         - name: Build and push docs
           if: inputs.deploy
-          run: poetry run mkdocs gh-deploy --force
+          run: poetry run mkdocs gh-deploy --force --dirty
  
