@@ -80,6 +80,7 @@ nav:
     - ✂️ Chunking:
       - "Hybrid chunking": examples/hybrid_chunking.ipynb
     - 💬 RAG / QA:
+      - examples/rag_azuresearch.ipynb
       - examples/rag_haystack.ipynb
       - examples/rag_llamaindex.ipynb
       - examples/rag_langchain.ipynb
