@@ -63,7 +63,6 @@ class SmolDoclingModel(BasePageModel):
             else:
                 with TimeRecorder(conv_res, "smolvlm"):
                     assert page.size is not None
-                    start_time = time.time()
 
                     hi_res_image = page.get_image(scale=2.0)  # 144dpi
                     # populate page_tags with predicted doc tags
@@ -95,19 +94,27 @@ class SmolDoclingModel(BasePageModel):
                     inputs = {k: v.to(self.device) for k, v in inputs.items()}
                     prompt = prompt.replace("<end_of_utterance>", "")
 
+                    start_time = time.time()
                     # Call model to generate:
                     generated_ids = self.vlm_model.generate(
                         **inputs, max_new_tokens=4096
                     )
 
+                    generation_time = time.time() - start_time
+
                     generated_texts = self.processor.batch_decode(
                         generated_ids, skip_special_tokens=True
                     )[0]
+                    num_tokens = len(generated_ids[0])
                     generated_texts = generated_texts.replace("Assistant: ", "")
                     page_tags = generated_texts
 
                     inference_time = time.time() - start_time
+                    tokens_per_second = num_tokens / generation_time
+                    print("")
                     print(f"Page Inference Time: {inference_time:.2f} seconds")
+                    print(f"Tokens/sec: {tokens_per_second:.2f}")
+                    print("")
                     print("Page predictions:")
                     print(page_tags)
 

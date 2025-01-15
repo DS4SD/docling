@@ -1,7 +1,10 @@
+import json
 import os
 import time
 from pathlib import Path
 from urllib.parse import urlparse
+
+import yaml
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.datamodel.base_models import InputFormat
@@ -11,15 +14,16 @@ from docling.pipeline.vlm_pipeline import VlmPipeline
 
 # source = "https://arxiv.org/pdf/2408.09869"  # document per local path or URL
 # source = "tests/data/2305.03393v1-pg9-img.png"
-source = "tests/data/2305.03393v1-pg9.pdf"
+# source = "tests/data/2305.03393v1-pg9.pdf"
 # source = "demo_data/page.png"
 # source = "demo_data/original_tables.pdf"
 
-parsed = urlparse(source)
-if parsed.scheme in ("http", "https"):
-    out_name = os.path.basename(parsed.path)
-else:
-    out_name = os.path.basename(source)
+sources = [
+    "tests/data/2305.03393v1-pg9-img.png",
+    # "tests/data/2305.03393v1-pg9.pdf",
+    # "demo_data/page.png",
+    # "demo_data/original_tables.pdf",
+]
 
 pipeline_options = PdfPipelineOptions()
 pipeline_options.generate_page_images = True
@@ -41,34 +45,41 @@ converter = DocumentConverter(
     }
 )
 
-start_time = time.time()
-print("============")
-print("starting...")
-print("============")
-print("")
+out_path = Path("scratch")
+out_path.mkdir(parents=True, exist_ok=True)
 
-result = converter.convert(source)
+for source in sources:
+    start_time = time.time()
+    print("================================================")
+    print("Processing... {}".format(source))
+    print("================================================")
+    print("")
 
-print("------------")
-print("MD:")
-print("------------")
-print("")
-print(result.document.export_to_markdown())
+    res = converter.convert(source)
 
-Path("scratch").mkdir(parents=True, exist_ok=True)
-result.document.save_as_html(
-    filename=Path("scratch/{}.html".format(out_name)),
-    image_mode=ImageRefMode.REFERENCED,
-    labels=[*DEFAULT_EXPORT_LABELS, DocItemLabel.FOOTNOTE],
-)
+    print("------------------------------------------------")
+    print("MD:")
+    print("------------------------------------------------")
+    print("")
+    print(res.document.export_to_markdown())
 
-pg_num = result.document.num_pages()
+    with (out_path / f"{res.input.file.stem}.html").open("w") as fp:
+        fp.write(res.document.export_to_html())
 
-print("")
-inference_time = time.time() - start_time
-print(f"Total document prediction time: {inference_time:.2f} seconds, pages: {pg_num}")
-print("============")
+    with (out_path / f"{res.input.file.stem}.json").open("w") as fp:
+        fp.write(json.dumps(res.document.export_to_dict()))
+
+    with (out_path / f"{res.input.file.stem}.yaml").open("w") as fp:
+        fp.write(yaml.safe_dump(res.document.export_to_dict()))
+
+    pg_num = res.document.num_pages()
+
+    print("")
+    inference_time = time.time() - start_time
+    print(
+        f"Total document prediction time: {inference_time:.2f} seconds, pages: {pg_num}"
+    )
+
+print("================================================")
 print("done!")
-print("============")
-
-# output: ## Docling Technical Report [...]"
+print("================================================")
