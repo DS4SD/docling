@@ -270,7 +270,6 @@ def to_docling_document(doc_glm, update_name_label=False) -> DoclingDocument:
             container_el = doc.add_group(label=group_label)
 
             _add_child_elements(container_el, doc, obj, pelem)
-
         elif "text" in obj:
             text = obj["text"][span_i:span_j]
 
@@ -304,6 +303,10 @@ def to_docling_document(doc_glm, update_name_label=False) -> DoclingDocument:
                 current_list = None
 
                 doc.add_heading(text=text, prov=prov)
+            elif label == DocItemLabel.CODE:
+                current_list = None
+
+                doc.add_code(text=text, prov=prov)
             else:
                 current_list = None
 
