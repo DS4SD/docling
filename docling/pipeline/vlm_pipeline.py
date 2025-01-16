@@ -22,7 +22,6 @@ from docling_core.types.doc import (
     TableItem,
 )
 from docling_core.types.doc.tokens import DocumentToken, TableToken
-from PIL.Image import Image
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
@@ -42,6 +41,11 @@ class VlmPipeline(PaginatedPipeline):
     def __init__(self, pipeline_options: PdfPipelineOptions):
         super().__init__(pipeline_options)
         self.pipeline_options: PdfPipelineOptions
+
+        # TODO: Move "use_backend_text" to pipeline parameters!
+        # use_backend_text = False - use text that is coming from SmolDocling
+        # use_backend_text = True - get text from backend using bounding boxes predicted by SmolDoclingss
+        self.use_backend_text = False
 
         if pipeline_options.artifacts_path is None:
             self.artifacts_path = self.download_models_hf()
@@ -94,17 +98,7 @@ class VlmPipeline(PaginatedPipeline):
     def _assemble_document(self, conv_res: ConversionResult) -> ConversionResult:
         with TimeRecorder(conv_res, "doc_assemble", scope=ProfilingScope.DOCUMENT):
 
-            # Read and concatenate the page doctags:
-            # document_tags = ""
-            page_tags = []
-            page_images = []
-
-            for page in conv_res.pages:
-                if page.predictions.doctags is not None:
-                    page_tags.append(page.predictions.doctags.tag_string)
-                    page_images.append(page.image)
-
-            conv_res.document = self._turn_tags_into_doc(page_tags, page_images)
+            conv_res.document = self._turn_tags_into_doc(conv_res.pages)
 
             # Generate images of the requested element types
             if (
@@ -140,9 +134,21 @@ class VlmPipeline(PaginatedPipeline):
 
         return conv_res
 
-    def _turn_tags_into_doc(
-        self, full_doc_xml_content: list[str], pil_images: list[Image | None]
-    ) -> DoclingDocument:
+    def _turn_tags_into_doc(self, pages: list[Page]) -> DoclingDocument:
+
+        def extract_text_from_backend(page: Page, bbox: BoundingBox | None) -> str:
+            # Convert bounding box normalized to 0-100 into page coordinates for cropping
+            text = ""
+            if bbox:
+                if page.size:
+                    bbox.l = bbox.l * page.size.width
+                    bbox.t = bbox.t * page.size.height
+                    bbox.r = bbox.r * page.size.width
+                    bbox.b = bbox.b * page.size.height
+                    if page._backend:
+                        text = page._backend.get_text_in_rect(bbox)
+            return text
+
         def extract_text(tag_content: str) -> str:
             return re.sub(r"<.*?>", "", tag_content).strip()
 
@@ -206,7 +212,8 @@ class VlmPipeline(PaginatedPipeline):
 
                     next_bottom_cell = ""
                     if r_idx + 1 < len(split_row_tokens):
-                        next_bottom_cell = split_row_tokens[r_idx + 1][c_idx]
+                        if c_idx < len(split_row_tokens[r_idx + 1]):
+                            next_bottom_cell = split_row_tokens[r_idx + 1][c_idx]
 
                     if next_right_cell in [
                         TableToken.OTSL_LCEL.value,
@@ -296,12 +303,16 @@ class VlmPipeline(PaginatedPipeline):
         doc = DoclingDocument(name="Example Document")
         current_group = None
 
-        for pg_idx, xml_content in enumerate(full_doc_xml_content):
-            pil_image = pil_images[pg_idx]
+        for pg_idx, page in enumerate(pages):
+            xml_content = ""
+            if page.predictions.doctags:
+                xml_content = page.predictions.doctags.tag_string
+            pil_image = page.image
             page_no = pg_idx + 1
 
-            if pil_image:
-                pg_width, pg_height = pil_image.size
+            if page.size:
+                pg_width = page.size.width
+                pg_height = page.size.height
                 size = Size(width=pg_width, height=pg_height)
                 parent_page = doc.add_page(page_no=page_no, size=size)
 
@@ -312,8 +323,12 @@ class VlmPipeline(PaginatedPipeline):
                 line = line.strip()
                 line = line.replace("<doc_tag>", "")
                 if line.startswith("<paragraph>"):
-                    content = extract_text(line)
                     prov_item = extract_bounding_box(line)
+                    if self.use_backend_text:
+                        content = extract_text_from_backend(page, prov_item)
+                    else:
+                        content = extract_text(line)
+
                     if prov_item:
                         bounding_boxes.append((prov_item, "red"))
                     doc.add_text(
@@ -321,7 +336,6 @@ class VlmPipeline(PaginatedPipeline):
                         text=content,
                         parent=current_group,
                         prov=(
-                            # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
                             ProvenanceItem(
                                 bbox=prov_item, charspan=(0, 0), page_no=page_no
                             )
@@ -330,8 +344,12 @@ class VlmPipeline(PaginatedPipeline):
                         ),
                     )
                 elif line.startswith("<title>"):
-                    content = extract_text(line)
                     prov_item = extract_bounding_box(line)
+                    if self.use_backend_text:
+                        content = extract_text_from_backend(page, prov_item)
+                    else:
+                        content = extract_text(line)
+
                     if prov_item:
                         bounding_boxes.append((prov_item, "blue"))
                     current_group = doc.add_group(
@@ -342,7 +360,6 @@ class VlmPipeline(PaginatedPipeline):
                         text=content,
                         parent=current_group,
                         prov=(
-                            # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
                             ProvenanceItem(
                                 bbox=prov_item, charspan=(0, 0), page_no=page_no
                             )
@@ -352,8 +369,12 @@ class VlmPipeline(PaginatedPipeline):
                     )
 
                 elif line.startswith("<section-header>"):
-                    content = extract_text(line)
                     prov_item = extract_bounding_box(line)
+                    if self.use_backend_text:
+                        content = extract_text_from_backend(page, prov_item)
+                    else:
+                        content = extract_text(line)
+
                     if prov_item:
                         bounding_boxes.append((prov_item, "green"))
                     current_group = doc.add_group(
@@ -364,7 +385,6 @@ class VlmPipeline(PaginatedPipeline):
                         text=content,
                         parent=current_group,
                         prov=(
-                            # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
                             ProvenanceItem(
                                 bbox=prov_item, charspan=(0, 0), page_no=page_no
                             )
@@ -382,8 +402,11 @@ class VlmPipeline(PaginatedPipeline):
                     doc.add_table(data=table_data, parent=current_group)
 
                 elif line.startswith("<footnote>"):
-                    content = extract_text(line)
                     prov_item = extract_bounding_box(line)
+                    if self.use_backend_text:
+                        content = extract_text_from_backend(page, prov_item)
+                    else:
+                        content = extract_text(line)
                     if prov_item:
                         bounding_boxes.append((prov_item, "orange"))
                     doc.add_text(
@@ -391,7 +414,6 @@ class VlmPipeline(PaginatedPipeline):
                         text=content,
                         parent=current_group,
                         prov=(
-                            # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
                             ProvenanceItem(
                                 bbox=prov_item, charspan=(0, 0), page_no=page_no
                             )
@@ -401,8 +423,11 @@ class VlmPipeline(PaginatedPipeline):
                     )
 
                 elif line.startswith("<page-header>"):
-                    content = extract_text(line)
                     prov_item = extract_bounding_box(line)
+                    if self.use_backend_text:
+                        content = extract_text_from_backend(page, prov_item)
+                    else:
+                        content = extract_text(line)
                     if prov_item:
                         bounding_boxes.append((prov_item, "purple"))
                     doc.add_text(
@@ -410,7 +435,6 @@ class VlmPipeline(PaginatedPipeline):
                         text=content,
                         parent=current_group,
                         prov=(
-                            # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
                             ProvenanceItem(
                                 bbox=prov_item, charspan=(0, 0), page_no=page_no
                             )
@@ -420,8 +444,11 @@ class VlmPipeline(PaginatedPipeline):
                     )
 
                 elif line.startswith("<page-footer>"):
-                    content = extract_text(line)
                     prov_item = extract_bounding_box(line)
+                    if self.use_backend_text:
+                        content = extract_text_from_backend(page, prov_item)
+                    else:
+                        content = extract_text(line)
                     if prov_item:
                         bounding_boxes.append((prov_item, "cyan"))
                     doc.add_text(
@@ -429,7 +456,6 @@ class VlmPipeline(PaginatedPipeline):
                         text=content,
                         parent=current_group,
                         prov=(
-                            # [ProvenanceItem(bbox=prov_item, charspan=(0, 0), page_no=1)]
                             ProvenanceItem(
                                 bbox=prov_item, charspan=(0, 0), page_no=page_no
                             )
@@ -468,9 +494,12 @@ class VlmPipeline(PaginatedPipeline):
                                 ),
                             )
                 elif line.startswith("<list>"):
-                    content = extract_text(line)
                     prov_item_inst = None
                     prov_item = extract_bounding_box(line)
+                    if self.use_backend_text:
+                        content = extract_text_from_backend(page, prov_item)
+                    else:
+                        content = extract_text(line)
                     if prov_item:
                         bounding_boxes.append((prov_item, "brown"))
                         prov_item_inst = ProvenanceItem(
@@ -484,9 +513,12 @@ class VlmPipeline(PaginatedPipeline):
                     )
 
                 elif line.startswith("<caption>"):
-                    content = extract_text(line)
                     prov_item_inst = None
                     prov_item = extract_bounding_box(line)
+                    if self.use_backend_text:
+                        content = extract_text_from_backend(page, prov_item)
+                    else:
+                        content = extract_text(line)
                     if prov_item:
                         bounding_boxes.append((prov_item, "magenta"))
                         prov_item_inst = ProvenanceItem(
@@ -499,9 +531,12 @@ class VlmPipeline(PaginatedPipeline):
                         prov=prov_item_inst if prov_item_inst else None,
                     )
                 elif line.startswith("<checkbox-unselected>"):
-                    content = extract_text(line)
                     prov_item_inst = None
                     prov_item = extract_bounding_box(line)
+                    if self.use_backend_text:
+                        content = extract_text_from_backend(page, prov_item)
+                    else:
+                        content = extract_text(line)
                     if prov_item:
                         bounding_boxes.append((prov_item, "gray"))
                         prov_item_inst = ProvenanceItem(
@@ -515,9 +550,12 @@ class VlmPipeline(PaginatedPipeline):
                     )
 
                 elif line.startswith("<checkbox-selected>"):
-                    content = extract_text(line)
                     prov_item_inst = None
                     prov_item = extract_bounding_box(line)
+                    if self.use_backend_text:
+                        content = extract_text_from_backend(page, prov_item)
+                    else:
+                        content = extract_text(line)
                     if prov_item:
                         bounding_boxes.append((prov_item, "black"))
                         prov_item_inst = ProvenanceItem(
