@@ -116,7 +116,7 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
 
     def __init__(self, pipeline_options: PipelineOptions):
         super().__init__(pipeline_options)
-        self.keep_backend = False
+        self.keep_backend = True
 
     def _apply_on_pages(
         self, conv_res: ConversionResult, page_batch: Iterable[Page]
@@ -200,12 +200,12 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
         return conv_res
 
     def _unload(self, conv_res: ConversionResult) -> ConversionResult:
-        # for page in conv_res.pages:
-        #     if page._backend is not None:
-        #         page._backend.unload()
+        for page in conv_res.pages:
+            if page._backend is not None:
+                page._backend.unload()
 
-        # if conv_res.input._backend:
-        #     conv_res.input._backend.unload()
+        if conv_res.input._backend:
+            conv_res.input._backend.unload()
         return conv_res
 
     def _determine_status(self, conv_res: ConversionResult) -> ConversionStatus:
