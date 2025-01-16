@@ -21,6 +21,9 @@ sources = [
 
 pipeline_options = PdfPipelineOptions()
 pipeline_options.generate_page_images = True
+pipeline_options.force_backend_text = (
+    False  # If True, text from backend will be used instead of generated text
+)
 pipeline_options.artifacts_path = "model_artifacts"
 
 from docling_core.types.doc import DocItemLabel, ImageRefMode

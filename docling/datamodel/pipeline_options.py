@@ -295,6 +295,10 @@ class PdfPipelineOptions(PipelineOptions):
     do_formula_enrichment: bool = False  # True: perform formula OCR, return Latex code
     do_picture_classification: bool = False  # True: classify pictures in documents
     do_picture_description: bool = False  # True: run describe pictures in documents
+    force_backend_text: bool = (
+        False  # (To be used with vlms, or other generative models)
+    )
+    # If True, text from backend will be used instead of generated text
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
     ocr_options: Union[
