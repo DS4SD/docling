@@ -20,6 +20,7 @@ class TesseractOcrModel(BaseOcrModel):
 
         self.scale = 3  # multiplier for 72 dpi == 216 dpi.
         self.reader = None
+        self.script_readers = None
 
         if self.enabled:
             install_errmsg = (
@@ -54,21 +55,33 @@ class TesseractOcrModel(BaseOcrModel):
             # Initialize the tesseractAPI
             _log.debug("Initializing TesserOCR: %s", tesseract_version)
             lang = "+".join(self.options.lang)
+
+            tesserocr_kwargs = {
+                "psm": tesserocr.PSM.AUTO,
+                "init": True,
+                "oem": tesserocr.OEM.DEFAULT,
+            }
+
             if self.options.path is not None:
+                tesserocr_kwargs["path"] = self.options.path
+
+            if lang == "auto":
                 self.reader = tesserocr.PyTessBaseAPI(
-                    path=self.options.path,
-                    lang=lang,
-                    psm=tesserocr.PSM.AUTO,
-                    init=True,
-                    oem=tesserocr.OEM.DEFAULT,
+                    **{"lang": "osd", "psm": tesserocr.PSM.OSD_ONLY} | tesserocr_kwargs
                 )
+
+                self.script_readers = {}
+                scripts = [l for l in tesserocr_languages if l.startswith("script")]
+
+                for script in scripts:
+                    self.script_readers[script] = tesserocr.PyTessBaseAPI(
+                        **{"lang": script} | tesserocr_kwargs,
+                    )
             else:
                 self.reader = tesserocr.PyTessBaseAPI(
-                    lang=lang,
-                    psm=tesserocr.PSM.AUTO,
-                    init=True,
-                    oem=tesserocr.OEM.DEFAULT,
+                    **{"lang": lang} | tesserocr_kwargs,
                 )
+
             self.reader_RIL = tesserocr.RIL
 
     def __del__(self):
@@ -106,20 +119,51 @@ class TesseractOcrModel(BaseOcrModel):
 
                         # Retrieve text snippets with their bounding boxes
                         self.reader.SetImage(high_res_image)
-                        boxes = self.reader.GetComponentImages(
+
+                        if self.script_readers is not None:
+                            osd = self.reader.DetectOrientationScript()
+
+                            # No text, probably
+                            if osd is None:
+                                continue
+
+                            script = osd["script_name"]
+
+                            if script == "Katakana" or script == "Hiragana":
+                                script = "Japanese"
+                            elif script == "Han":
+                                script = "HanS"
+                            elif script == "Korean":
+                                script = "Hangul"
+
+                            if f"script/{script}" in self.script_readers:
+                                _log.debug(
+                                    f'Using model for the detected script "{script}"'
+                                )
+                                local_reader = self.script_readers[f"script/{script}"]
+                                local_reader.SetImage(high_res_image)
+                            else:
+                                _log.warning(
+                                    f'No model for the detected script "{script}"'
+                                )
+                                continue
+                        else:
+                            local_reader = self.reader
+
+                        boxes = local_reader.GetComponentImages(
                             self.reader_RIL.TEXTLINE, True
                         )
 
                         cells = []
                         for ix, (im, box, _, _) in enumerate(boxes):
                             # Set the area of interest. Tesseract uses Bottom-Left for the origin
-                            self.reader.SetRectangle(
+                            local_reader.SetRectangle(
                                 box["x"], box["y"], box["w"], box["h"]
                             )
 
                             # Extract text within the bounding box
-                            text = self.reader.GetUTF8Text().strip()
-                            confidence = self.reader.MeanTextConf()
+                            text = local_reader.GetUTF8Text().strip()
+                            confidence = local_reader.MeanTextConf()
                             left = box["x"] / self.scale
                             bottom = box["y"] / self.scale
                             right = (box["x"] + box["w"]) / self.scale

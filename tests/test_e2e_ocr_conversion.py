@@ -60,6 +60,7 @@ def test_e2e_conversions():
         RapidOcrOptions(),
         EasyOcrOptions(force_full_page_ocr=True),
         TesseractOcrOptions(force_full_page_ocr=True),
+        TesseractOcrOptions(force_full_page_ocr=True, lang=["auto"]),
         TesseractCliOcrOptions(force_full_page_ocr=True),
         RapidOcrOptions(force_full_page_ocr=True),
     ]
@@ -70,7 +71,9 @@ def test_e2e_conversions():
         engines.append(OcrMacOptions(force_full_page_ocr=True))
 
     for ocr_options in engines:
-        print(f"Converting with ocr_engine: {ocr_options.kind}")
+        print(
+            f"Converting with ocr_engine: {ocr_options.kind}, language: {ocr_options.lang}"
+        )
         converter = get_converter(ocr_options=ocr_options)
         for pdf_path in pdf_paths:
             print(f"converting {pdf_path}")
