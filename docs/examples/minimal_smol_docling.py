@@ -13,6 +13,7 @@ from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.pipeline.vlm_pipeline import VlmPipeline
 
 sources = [
+    # "https://arxiv.org/pdf/2408.09869"
     # "tests/data/2305.03393v1-pg9-img.png",
     "tests/data/2305.03393v1-pg9.pdf",
     # "demo_data/page.png",
@@ -60,8 +61,14 @@ for source in sources:
     print("")
     print(res.document.export_to_markdown())
 
-    with (out_path / f"{res.input.file.stem}.html").open("w") as fp:
-        fp.write(res.document.export_to_html())
+    # with (out_path / f"{res.input.file.stem}.html").open("w") as fp:
+    #     fp.write(res.document.export_to_html())
+
+    res.document.save_as_html(
+        filename=Path("{}/{}.html".format(out_path, res.input.file.stem)),
+        image_mode=ImageRefMode.REFERENCED,
+        labels=[*DEFAULT_EXPORT_LABELS, DocItemLabel.FOOTNOTE],
+    )
 
     with (out_path / f"{res.input.file.stem}.json").open("w") as fp:
         fp.write(json.dumps(res.document.export_to_dict()))

@@ -97,16 +97,21 @@ class SmolDoclingModel(BasePageModel):
                     start_time = time.time()
                     # Call model to generate:
                     generated_ids = self.vlm_model.generate(
-                        **inputs, max_new_tokens=4096
+                        **inputs, max_new_tokens=4096, use_cache=True
                     )
 
                     generation_time = time.time() - start_time
 
                     generated_texts = self.processor.batch_decode(
-                        generated_ids, skip_special_tokens=True
+                        generated_ids, skip_special_tokens=False
                     )[0]
                     num_tokens = len(generated_ids[0])
-                    generated_texts = generated_texts.replace("Assistant: ", "")
+                    # DELETE NOISE BEFORE "Assistant: "
+                    starting_point = "Assistant: "
+                    generated_texts = generated_texts[
+                        generated_texts.index(starting_point) + len(starting_point) :
+                    ]
+                    # generated_texts = generated_texts.replace("Assistant: ", "")
                     page_tags = generated_texts
 
                     inference_time = time.time() - start_time

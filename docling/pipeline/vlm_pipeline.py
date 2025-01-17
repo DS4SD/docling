@@ -36,7 +36,8 @@ _log = logging.getLogger(__name__)
 
 
 class VlmPipeline(PaginatedPipeline):
-    _smol_vlm_path = "SmolDocling-0.0.2"
+    # _smol_vlm_path = "SmolDocling-0.0.2"
+    _smol_vlm_path = "SmolDocling_2.7_DT_0.7"
 
     def __init__(self, pipeline_options: PdfPipelineOptions):
         super().__init__(pipeline_options)
@@ -207,7 +208,9 @@ class VlmPipeline(PaginatedPipeline):
                         right_offset = 2
 
                     # Check next element(s) for lcel / ucel / xcel, set properly row_span, col_span
-                    next_right_cell = texts[i + right_offset]
+                    next_right_cell = ""
+                    if i + right_offset < len(texts):
+                        next_right_cell = texts[i + right_offset]
 
                     next_bottom_cell = ""
                     if r_idx + 1 < len(split_row_tokens):
@@ -367,7 +370,7 @@ class VlmPipeline(PaginatedPipeline):
                         ),
                     )
 
-                elif line.startswith("<section-header>"):
+                elif line.startswith("<section_header_level_1>"):
                     prov_item = extract_bounding_box(line)
                     if self.force_backend_text:
                         content = extract_text_from_backend(page, prov_item)
@@ -421,7 +424,7 @@ class VlmPipeline(PaginatedPipeline):
                         ),
                     )
 
-                elif line.startswith("<page-header>"):
+                elif line.startswith("<page_header>"):
                     prov_item = extract_bounding_box(line)
                     if self.force_backend_text:
                         content = extract_text_from_backend(page, prov_item)
@@ -442,7 +445,7 @@ class VlmPipeline(PaginatedPipeline):
                         ),
                     )
 
-                elif line.startswith("<page-footer>"):
+                elif line.startswith("<page_footer>"):
                     prov_item = extract_bounding_box(line)
                     if self.force_backend_text:
                         content = extract_text_from_backend(page, prov_item)
@@ -463,7 +466,7 @@ class VlmPipeline(PaginatedPipeline):
                         ),
                     )
 
-                elif line.startswith("<figure>"):
+                elif line.startswith("<picture>"):
                     bbox = extract_bounding_box(line)
                     if bbox:
                         bounding_boxes.append((bbox, "yellow"))
@@ -492,7 +495,7 @@ class VlmPipeline(PaginatedPipeline):
                                     bbox=bbox, charspan=(0, 0), page_no=page_no
                                 ),
                             )
-                elif line.startswith("<list>"):
+                elif line.startswith("<list_item>"):
                     prov_item_inst = None
                     prov_item = extract_bounding_box(line)
                     if self.force_backend_text:
@@ -529,7 +532,7 @@ class VlmPipeline(PaginatedPipeline):
                         parent=current_group,
                         prov=prov_item_inst if prov_item_inst else None,
                     )
-                elif line.startswith("<checkbox-unselected>"):
+                elif line.startswith("<checkbox_unselected>"):
                     prov_item_inst = None
                     prov_item = extract_bounding_box(line)
                     if self.force_backend_text:
@@ -548,7 +551,7 @@ class VlmPipeline(PaginatedPipeline):
                         prov=prov_item_inst if prov_item_inst else None,
                     )
 
-                elif line.startswith("<checkbox-selected>"):
+                elif line.startswith("<checkbox_selected>"):
                     prov_item_inst = None
                     prov_item = extract_bounding_box(line)
                     if self.force_backend_text:
