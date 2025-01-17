@@ -22,7 +22,7 @@ _log = logging.getLogger(__name__)
 
 
 class PageAssembleOptions(BaseModel):
-    keep_images: bool = False
+    pass
 
 
 class PageAssembleModel(BasePageModel):
@@ -173,12 +173,5 @@ class PageAssembleModel(BasePageModel):
                     page.assembled = AssembledUnit(
                         elements=elements, headers=headers, body=body
                     )
-
-                    # Remove page images (can be disabled)
-                    if not self.options.keep_images:
-                        page._image_cache = {}
-
-                    # Unload backend
-                    page._backend.unload()
 
                 yield page

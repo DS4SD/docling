@@ -1,7 +1,7 @@
 import logging
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import Iterable, Optional
 
 from docling_core.types.doc import DocItem, ImageRef, PictureItem, TableItem
 
@@ -17,6 +17,7 @@ from docling.datamodel.pipeline_options import (
     TesseractCliOcrOptions,
     TesseractOcrOptions,
 )
+from docling.models.base_model import BasePageModel
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.ds_glm_model import GlmModel, GlmOptions
 from docling.models.easyocr_model import EasyOcrModel
@@ -50,7 +51,7 @@ class StandardPdfPipeline(PaginatedPipeline):
         else:
             self.artifacts_path = Path(pipeline_options.artifacts_path)
 
-        keep_images = (
+        self.keep_images = (
             self.pipeline_options.generate_page_images
             or self.pipeline_options.generate_picture_images
             or self.pipeline_options.generate_table_images
@@ -87,7 +88,7 @@ class StandardPdfPipeline(PaginatedPipeline):
                 accelerator_options=pipeline_options.accelerator_options,
             ),
             # Page assemble
-            PageAssembleModel(options=PageAssembleOptions(keep_images=keep_images)),
+            PageAssembleModel(options=PageAssembleOptions()),
         ]
 
         self.enrichment_pipe = [
