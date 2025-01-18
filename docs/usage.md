@@ -162,3 +162,90 @@ print(list(chunk_iter)[11])
 #   }
 # }
 ```
+
+## Plugins
+
+Docling supports plugins that can modify documents during preprocessing (before conversion) and conversion results during postprocessing (after conversion). Plugins can be used to add custom metadata, modify text content, or implement custom processing logic.
+
+### Creating custom plugins
+
+Create custom plugins by subclassing `DoclingPlugin` and implementing `preprocess` and/or `postprocess` methods:
+
+```python
+from docling.plugins import DoclingPlugin, PluginMetadata
+from docling.datamodel.document import InputDocument, ConversionResult
+
+class MyCustomPlugin(DoclingPlugin):
+    def __init__(self):
+        super().__init__(
+            name="MyCustomPlugin", # Must contain only letters, numbers, underscores, or hyphens
+            metadata=PluginMetadata(
+                version="0.1.0", # Must adhere to semantic versioning
+                description="A custom plugin example",
+                author="Your Name",
+                preprocess={},
+                postprocess={}
+            )
+        )
+    
+    def preprocess(self, input_doc: InputDocument) -> InputDocument:
+        # Modify input document before conversion
+        return input_doc
+    
+    def postprocess(self, result: ConversionResult) -> ConversionResult:
+        # Modify conversion result after conversion
+        return result
+```
+
+### Using plugins in Python
+
+To use plugins with Docling, create a plugin instance and pass it to the DocumentConverter:
+
+```python
+from docling.document_converter import DocumentConverter
+from docling.plugins import DoclingPlugin, PluginMetadata
+
+# Create plugin instance
+my_custom_plugin = MyCustomPlugin()
+
+# Initialize converter with plugins
+converter = DocumentConverter(plugins=[my_custom_plugin])
+
+# Convert as usual
+result = converter.convert("path/to/document.pdf")
+```
+
+Enriched plugin metadata are accessible through the `plugins` attribute of the conversion result:
+
+```python
+result = converter.convert("path/to/document.pdf")
+plugin_metadata = result.plugins["MyCustomPlugin"]
+```
+
+Since plugins transform the document and conversion result, you can access the modified document and results through the `result` object just like you would without plugins. For example:
+
+```python
+print(result.document.texts[0].text)
+```
+
+For a complete example of plugin implementation, see [plugin_basic.py](./examples/plugins/plugin_basic.py).
+
+### Using plugins with CLI
+
+You can use plugins through the CLI by specifying the module path and plugin class using the `--plugin` (or `-p`) option:
+
+```console
+docling input.pdf --plugin "myapp.plugins:MyCustomPlugin"
+```
+
+Multiple plugins can be used by repeating the option:
+
+```console
+docling input.pdf -p "myapp.plugins:FirstPlugin" -p "other.module:SecondPlugin"
+```
+
+The plugin specification must be in the format `module.path:PluginClass`. For example:
+- `myapp.plugins:MyCustomPlugin` - loads the MyCustomPlugin class from myapp.plugins module
+- `docling.plugins.examples:BasicPlugin` - loads the BasicPlugin from docling.plugins.examples
+
+Note: The specified plugin module must be importable from your Python environment (i.e., installed or in the Python path).

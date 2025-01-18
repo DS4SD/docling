@@ -36,6 +36,7 @@ from docling.pipeline.base_pipeline import BasePipeline
 from docling.pipeline.simple_pipeline import SimplePipeline
 from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
 from docling.utils.utils import chunkify
+from docling.plugins import PluginManager, DoclingPlugin
 
 _log = logging.getLogger(__name__)
 
@@ -148,8 +149,9 @@ class DocumentConverter:
 
     def __init__(
         self,
-        allowed_formats: Optional[List[InputFormat]] = None,
         format_options: Optional[Dict[InputFormat, FormatOption]] = None,
+        allowed_formats: Optional[List[InputFormat]] = None,
+        plugins: Optional[List[DoclingPlugin]] = None,
     ):
         self.allowed_formats = (
             allowed_formats if allowed_formats is not None else [e for e in InputFormat]
@@ -163,6 +165,11 @@ class DocumentConverter:
             for format in self.allowed_formats
         }
         self.initialized_pipelines: Dict[Type[BasePipeline], BasePipeline] = {}
+        self.plugin_manager = PluginManager()
+        
+        if plugins:
+            for plugin in plugins:
+                self.plugin_manager.register_plugin(plugin)
 
     def initialize_pipeline(self, format: InputFormat):
         """Initialize the conversion pipeline for the selected format."""
@@ -280,6 +287,14 @@ class DocumentConverter:
     def _process_document(
         self, in_doc: InputDocument, raises_on_error: bool
     ) -> ConversionResult:
+        conv_res = ConversionResult(input=in_doc)
+        
+        try:
+            in_doc = self.plugin_manager.execute_preprocessors(in_doc)
+        except Exception as e:
+            if raises_on_error:
+                raise e
+            _log.error(f"Plugin preprocessing failed: {str(e)}")
 
         valid = (
             self.allowed_formats is not None and in_doc.format in self.allowed_formats
@@ -296,9 +311,15 @@ class DocumentConverter:
                     module_name="",
                     error_message=error_message,
                 )
-                conv_res = ConversionResult(
-                    input=in_doc, status=ConversionStatus.SKIPPED, errors=[error_item]
-                )
+                conv_res.status = ConversionStatus.SKIPPED
+                conv_res.errors.append(error_item)
+
+        try:
+            conv_res = self.plugin_manager.execute_postprocessors(conv_res)
+        except Exception as e:
+            if raises_on_error:
+                raise e
+            _log.error(f"Plugin postprocessing failed: {str(e)}")
 
         return conv_res
 

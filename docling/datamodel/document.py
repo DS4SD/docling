@@ -5,6 +5,7 @@ from io import BytesIO
 from pathlib import Path, PurePath
 from typing import (
     TYPE_CHECKING,
+    Any,
     Dict,
     Iterable,
     List,
@@ -44,7 +45,7 @@ from docling_core.types.legacy_doc.document import CCSFileInfoObject as DsFileIn
 from docling_core.types.legacy_doc.document import ExportedCCSDocument as DsDocument
 from docling_core.utils.file import resolve_source_to_stream
 from docling_core.utils.legacy import docling_document_to_legacy
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing_extensions import deprecated
 
 from docling.backend.abstract_backend import (
@@ -104,7 +105,7 @@ class InputDocument(BaseModel):
 
     filesize: Optional[int] = None
     page_count: int = 0
-
+    
     _backend: AbstractDocumentBackend  # Internal PDF backend used
 
     def __init__(
@@ -198,6 +199,9 @@ class ConversionResult(BaseModel):
     timings: Dict[str, ProfilingItem] = {}
 
     document: DoclingDocument = _EMPTY_DOCLING_DOC
+    
+    # Metadata object for tracking plugins details and pre/post processing related data
+    plugins: Dict[str, Any] = Field(default_factory=dict)
 
     @property
     @deprecated("Use document instead.")
