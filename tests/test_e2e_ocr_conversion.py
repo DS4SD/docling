@@ -6,6 +6,7 @@ from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
+    AcceleratorDevice,
     EasyOcrOptions,
     OcrMacOptions,
     OcrOptions,
@@ -37,6 +38,7 @@ def get_converter(ocr_options: OcrOptions):
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
     pipeline_options.ocr_options = ocr_options
+    pipeline_options.accelerator_options.device = AcceleratorDevice.CPU
 
     converter = DocumentConverter(
         format_options={
