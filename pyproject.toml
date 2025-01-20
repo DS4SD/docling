@@ -29,7 +29,7 @@ docling-core = { version = "^2.13.1", extras = ["chunking"] }
 pydantic = "^2.0.0"
 docling-ibm-models = "^3.1.0"
 deepsearch-glm = "^1.0.0"
-docling-parse = "^3.0.0"
+docling-parse = "^3.1.0"
 filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"
 pydantic-settings = "^2.3.0"
