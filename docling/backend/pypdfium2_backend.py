@@ -39,7 +39,7 @@ class PyPdfiumPageBackend(PdfPageBackend):
         return self.valid
 
     def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:
-        AREA_THRESHOLD = 32 * 32
+        AREA_THRESHOLD = 0  # 32 * 32
         for obj in self._ppage.get_objects(filter=[pdfium_c.FPDF_PAGEOBJ_IMAGE]):
             pos = obj.get_pos()
             cropbox = BoundingBox.from_tuple(
@@ -210,7 +210,7 @@ class PyPdfiumPageBackend(PdfPageBackend):
                 l=0, r=0, t=0, b=0, coord_origin=CoordOrigin.BOTTOMLEFT
             )
         else:
-            padbox = cropbox.to_bottom_left_origin(page_size.height)
+            padbox = cropbox.to_bottom_left_origin(page_size.height).model_copy()
             padbox.r = page_size.width - padbox.r
             padbox.t = page_size.height - padbox.t
 
