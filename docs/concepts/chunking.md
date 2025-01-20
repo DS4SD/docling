@@ -54,12 +54,12 @@ tokens), &
 chunks with same headings & captions) — users can opt out of this step via param
 `merge_peers` (by default `True`)
 
-👉 Example: see  [here](../../examples/hybrid_chunking).
+👉 Example: see  [here](../examples/hybrid_chunking.ipynb).
 
 ## Hierarchical Chunker
 
 The `HierarchicalChunker` implementation uses the document structure information from
-the [`DoclingDocument`](../docling_document) to create one chunk for each individual
+the [`DoclingDocument`](./docling_document.md) to create one chunk for each individual
 detected document element, by default only merging together list items (can be opted out
 via param `merge_list_items`). It also takes care of attaching all relevant document
 metadata, including headers and captions.
