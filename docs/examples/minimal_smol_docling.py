@@ -8,24 +8,31 @@ import yaml
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.datamodel.pipeline_options import PdfPipelineOptions, SmolDoclingOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.pipeline.vlm_pipeline import VlmPipeline
 
 sources = [
-    # "https://arxiv.org/pdf/2408.09869"
+    # "https://arxiv.org/pdf/2408.09869",
     # "tests/data/2305.03393v1-pg9-img.png",
     "tests/data/2305.03393v1-pg9.pdf",
-    # "demo_data/page.png",
-    # "demo_data/original_tables.pdf",
 ]
 
 pipeline_options = PdfPipelineOptions()
 pipeline_options.generate_page_images = True
-pipeline_options.force_backend_text = (
-    False  # If True, text from backend will be used instead of generated text
+# If force_backend_text = True, text from backend will be used instead of generated text
+pipeline_options.force_backend_text = False
+pipeline_options.artifacts_path = "model_artifacts/SmolDocling_2.7_DT_0.7"
+
+vlm_options = SmolDoclingOptions(
+    artifacts_path="model_artifacts/SmolDocling_2.7_DT_0.7",
+    question="Perform Layout Analysis.",
+    load_in_8bit=True,
+    llm_int8_threshold=6.0,
+    quantized=False,
 )
-pipeline_options.artifacts_path = "model_artifacts"
+
+pipeline_options.vlm_options = vlm_options
 
 from docling_core.types.doc import DocItemLabel, ImageRefMode
 from docling_core.types.doc.document import DEFAULT_EXPORT_LABELS

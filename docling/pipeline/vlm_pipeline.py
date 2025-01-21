@@ -36,8 +36,6 @@ _log = logging.getLogger(__name__)
 
 
 class VlmPipeline(PaginatedPipeline):
-    # _smol_vlm_path = "SmolDocling-0.0.2"
-    _smol_vlm_path = "SmolDocling_2.7_DT_0.7"
 
     def __init__(self, pipeline_options: PdfPipelineOptions):
         super().__init__(pipeline_options)
@@ -60,8 +58,9 @@ class VlmPipeline(PaginatedPipeline):
 
         self.build_pipe = [
             SmolDoclingModel(
-                artifacts_path=self.artifacts_path / VlmPipeline._smol_vlm_path,
+                artifacts_path=self.artifacts_path,
                 accelerator_options=pipeline_options.accelerator_options,
+                vlm_options=self.pipeline_options.vlm_options,
             ),
         ]
 

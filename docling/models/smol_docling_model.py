@@ -13,7 +13,11 @@ from transformers import (  # type: ignore
 
 from docling.datamodel.base_models import DocTagsPrediction, Page
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import AcceleratorDevice, AcceleratorOptions
+from docling.datamodel.pipeline_options import (
+    AcceleratorDevice,
+    AcceleratorOptions,
+    SmolDoclingOptions,
+)
 from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
 from docling.utils.accelerator_utils import decide_device
@@ -24,17 +28,23 @@ _log = logging.getLogger(__name__)
 
 class SmolDoclingModel(BasePageModel):
 
-    def __init__(self, artifacts_path: Path, accelerator_options: AcceleratorOptions):
+    def __init__(
+        self,
+        artifacts_path: Path,
+        accelerator_options: AcceleratorOptions,
+        vlm_options: SmolDoclingOptions,
+    ):
         device = decide_device(accelerator_options.device)
         self.device = device
         _log.info("Available device for SmolDocling: {}".format(device))
 
         # PARAMETERS:
-        self.param_question = "Perform Layout Analysis."
+        self.param_question = vlm_options.question  # "Perform Layout Analysis."
         self.param_quantization_config = BitsAndBytesConfig(
-            load_in_8bit=True, llm_int8_threshold=6.0
+            load_in_8bit=vlm_options.load_in_8bit,  # True,
+            llm_int8_threshold=vlm_options.llm_int8_threshold,  # 6.0
         )
-        self.param_quantized = False
+        self.param_quantized = vlm_options.quantized  # False
 
         self.processor = AutoProcessor.from_pretrained(artifacts_path)
         if not self.param_quantized:
