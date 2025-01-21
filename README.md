@@ -1,3 +1,5 @@
+[![Docling Actor](https://apify.com/actor-badge?actor=vancura/docling)](https://apify.com/vancura/docling)
+
 <p align="center">
   <a href="https://github.com/ds4sd/docling">
     <img loading="lazy" alt="Docling" src="https://github.com/DS4SD/docling/raw/main/docs/assets/docling_processing.png" width="100%"/>
