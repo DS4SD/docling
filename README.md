@@ -1,5 +1,3 @@
-[![Docling Actor](https://apify.com/actor-badge?actor=vancura/docling)](https://apify.com/vancura/docling)
-
 <p align="center">
   <a href="https://github.com/ds4sd/docling">
     <img loading="lazy" alt="Docling" src="https://github.com/DS4SD/docling/raw/main/docs/assets/docling_processing.png" width="100%"/>
@@ -23,6 +21,7 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![License MIT](https://img.shields.io/github/license/DS4SD/docling)](https://opensource.org/licenses/MIT)
 [![PyPI Downloads](https://static.pepy.tech/badge/docling/month)](https://pepy.tech/projects/docling)
+[![Docling Actor](https://apify.com/actor-badge?actor=vancura/docling)](https://apify.com/vancura/docling)
 
 Docling parses documents and exports them to the desired format with ease and speed.
 
