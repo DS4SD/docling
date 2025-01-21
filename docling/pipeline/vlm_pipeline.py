@@ -45,10 +45,12 @@ class VlmPipeline(PaginatedPipeline):
         # force_backend_text = True - get text from backend using bounding boxes predicted by SmolDoclingss
         self.force_backend_text = pipeline_options.force_backend_text
 
+        """
         if pipeline_options.artifacts_path is None:
             self.artifacts_path = self.download_models_hf()
         else:
             self.artifacts_path = Path(pipeline_options.artifacts_path)
+        """
 
         keep_images = (
             self.pipeline_options.generate_page_images
@@ -58,7 +60,6 @@ class VlmPipeline(PaginatedPipeline):
 
         self.build_pipe = [
             SmolDoclingModel(
-                artifacts_path=self.artifacts_path,
                 accelerator_options=pipeline_options.accelerator_options,
                 vlm_options=self.pipeline_options.vlm_options,
             ),

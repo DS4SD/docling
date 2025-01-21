@@ -30,7 +30,7 @@ class SmolDoclingModel(BasePageModel):
 
     def __init__(
         self,
-        artifacts_path: Path,
+        # artifacts_path: Path,
         accelerator_options: AcceleratorOptions,
         vlm_options: SmolDoclingOptions,
     ):
@@ -39,6 +39,7 @@ class SmolDoclingModel(BasePageModel):
         _log.info("Available device for SmolDocling: {}".format(device))
 
         # PARAMETERS:
+        artifacts_path = Path(vlm_options.artifacts_path)
         self.param_question = vlm_options.question  # "Perform Layout Analysis."
         self.param_quantization_config = BitsAndBytesConfig(
             load_in_8bit=vlm_options.load_in_8bit,  # True,
