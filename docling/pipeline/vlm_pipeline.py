@@ -323,7 +323,7 @@ class VlmPipeline(PaginatedPipeline):
 
             for line in lines:
                 line = line.strip()
-                line = line.replace("<doc_tag>", "")
+                line = line.replace("<doctag>", "")
                 if line.startswith("<paragraph>"):
                     prov_item = extract_bounding_box(line)
                     if self.force_backend_text:
