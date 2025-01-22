@@ -21,9 +21,9 @@ RUN groupadd -r appuser && useradd -r -g appuser -s /sbin/nologin appuser && \
 
 WORKDIR /app
 
-RUN mkdir -p /tmp/runtime-root && \
+RUN mkdir -p /tmp/runtime-root /home/appuser/.apify && \
     chmod 0700 /tmp/runtime-root && \
-    chown appuser:appuser /tmp/runtime-root
+    chown -R appuser:appuser /tmp/runtime-root /home/appuser/.apify
 
 COPY --chown=appuser:appuser .actor/ .actor/
 COPY --chown=appuser:appuser . .
