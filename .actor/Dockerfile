@@ -1,5 +1,8 @@
 FROM python:3.11-slim-bookworm
 
+LABEL maintainer="Vaclav Vancura <@vancura>"
+LABEL description="Apify Actor for document processing using Docling"
+LABEL version="1.0.0"
 
 RUN groupadd -r appuser && useradd -r -g appuser -s /sbin/nologin appuser && \
     \
