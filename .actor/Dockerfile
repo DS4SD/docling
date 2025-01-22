@@ -13,8 +13,10 @@ RUN groupadd -r appuser && useradd -r -g appuser -s /sbin/nologin appuser && \
     apt-get update && apt-get install -y nodejs && apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     \
-    pip install --no-cache-dir docling && \
-    npm install -g apify-cli && \
+    pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir docling==2.15.1 && \
+    npm install -g npm@latest && \
+    npm install -g apify-cli@2.7.1 && \
     npm cache clean --force
 
 WORKDIR /app
