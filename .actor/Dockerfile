@@ -14,9 +14,13 @@ RUN npm install -g apify-cli && npm cache clean --force
 
 WORKDIR /app
 
-RUN mkdir -p /tmp/runtime-root && chmod 0700 /tmp/runtime-root
+RUN mkdir -p /tmp/runtime-root && \
+    chmod 0700 /tmp/runtime-root && \
+    chown appuser:appuser /tmp/runtime-root
 
-COPY .actor/ .actor/
-COPY . .
+COPY --chown=appuser:appuser .actor/ .actor/
+COPY --chown=appuser:appuser . .
+
+USER appuser
 
 ENTRYPOINT [".actor/actor.sh"]
