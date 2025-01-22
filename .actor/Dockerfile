@@ -16,7 +16,7 @@ RUN groupadd -r appuser && useradd -r -g appuser -s /sbin/nologin appuser && \
     pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir docling==2.15.1 && \
     npm install -g npm@latest && \
-    npm install -g apify-cli@2.7.1 && \
+    npm install -g apify-cli && \
     npm cache clean --force
 
 WORKDIR /app
