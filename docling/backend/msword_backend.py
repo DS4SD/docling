@@ -22,6 +22,8 @@ from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
+from docling.backend.docx_latex.omml import oMath2Latex
+
 _log = logging.getLogger(__name__)
 
 
@@ -134,6 +136,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def walk_linear(self, body, docx_obj, doc) -> DoclingDocument:
         for element in body:
             tag_name = etree.QName(element).localname
+
             # Check for Inline Images (blip elements)
             namespaces = {
                 "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
@@ -222,12 +225,29 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         else:
             return label, None
 
+    def handle_equations_in_text(self, element, text):
+        only_texts = []
+        texts_and_equations = []
+        for subt in element.iter():
+            if subt.tag.endswith("t") and "math" not in subt.tag:
+                only_texts.append(subt.text)
+                texts_and_equations.append(subt.text)
+            if "oMath" in subt.tag and "oMathPara" not in subt.tag:
+                texts_and_equations.append(f"${str(oMath2Latex(subt))}$")
+
+        assert "".join(only_texts) == text
+        return "".join(texts_and_equations)
+
     def handle_text_elements(self, element, docx_obj, doc):
         paragraph = docx.text.paragraph.Paragraph(element, docx_obj)
 
+        text = paragraph.text
+        text = self.handle_equations_in_text(element=element, text=text)
+
         if paragraph.text is None:
             return
-        text = paragraph.text.strip()
+        text = text.strip()
+        print(text)
 
         # Common styles for bullet and numbered lists.
         # "List Bullet", "List Number", "List Paragraph"
@@ -292,7 +312,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             doc.add_text(
                 label=DocItemLabel.PARAGRAPH, parent=self.parents[level - 1], text=text
             )
-
         self.update_history(p_style_id, p_level, numid, ilevel)
         return
 
