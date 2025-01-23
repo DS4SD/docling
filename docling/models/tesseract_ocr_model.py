@@ -57,6 +57,11 @@ class TesseractOcrModel(BaseOcrModel):
 
             self.script_readers: dict[str, tesserocr.PyTessBaseAPI] = {}
 
+            if any([l.startswith("script/") for l in tesserocr_languages]):
+                self.script_prefix = "script/"
+            else:
+                self.script_prefix = ""
+
             tesserocr_kwargs = {
                 "psm": tesserocr.PSM.AUTO,
                 "init": True,
@@ -138,7 +143,7 @@ class TesseractOcrModel(BaseOcrModel):
                             if script not in self.script_readers:
                                 self.script_readers[script] = tesserocr.PyTessBaseAPI(
                                     path=self.reader.GetDatapath(),
-                                    lang=f"script/{script}",
+                                    lang=f"{self.script_prefix}{script}",
                                     psm=tesserocr.PSM.AUTO,
                                     init=True,
                                     oem=tesserocr.OEM.DEFAULT,
