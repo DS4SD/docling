@@ -18,7 +18,7 @@ from docling.datamodel.base_models import (
 from docling.datamodel.document import ConversionResult, InputDocument
 from docling.datamodel.pipeline_options import PipelineOptions
 from docling.datamodel.settings import settings
-from docling.models.base_model import BaseEnrichmentModel, GenericEnrichmentModel
+from docling.models.base_model import GenericEnrichmentModel
 from docling.utils.profiling import ProfilingScope, TimeRecorder
 from docling.utils.utils import chunkify
 
