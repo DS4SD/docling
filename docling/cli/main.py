@@ -41,6 +41,7 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.datamodel.settings import settings
 from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
+from docling.plugins import DoclingPlugin
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
 warnings.filterwarnings(action="ignore", category=FutureWarning, module="easyocr")
@@ -144,6 +145,26 @@ def _split_list(raw: Optional[str]) -> Optional[List[str]]:
     if raw is None:
         return None
     return re.split(r"[;,]", raw)
+
+
+def _load_plugin(plugin_spec: str) -> DoclingPlugin:
+    """Load a plugin from a module path specification.
+    
+    Format: 'module.path:PluginClass'
+    Example: 'myapp.plugins:CustomPlugin'
+    """
+    try:
+        module_path, class_name = plugin_spec.split(":")
+        module = importlib.import_module(module_path)
+        plugin_class = getattr(module, class_name)
+        
+        if not issubclass(plugin_class, DoclingPlugin):
+            raise ValueError(f"Class {class_name} is not a DoclingPlugin subclass")
+            
+        return plugin_class()
+    except Exception as e:
+        err_console.print(f"[red]Error loading plugin {plugin_spec}: {str(e)}[/red]")
+        raise typer.Abort()
 
 
 @app.command(no_args_is_help=True)
@@ -268,6 +289,14 @@ def convert(
     device: Annotated[
         AcceleratorDevice, typer.Option(..., help="Accelerator device")
     ] = AcceleratorDevice.AUTO,
+    plugins: Annotated[
+        Optional[List[str]],
+        typer.Option(
+            None,
+            "--plugin", "-p",
+            help="Names of plugins to use during conversion. Must be in the format 'module.path:PluginClass'",
+        ),
+    ] = None,
 ):
     if verbose == 0:
         logging.basicConfig(level=logging.WARNING)
@@ -394,9 +423,23 @@ def convert(
             InputFormat.PDF: pdf_format_option,
             InputFormat.IMAGE: pdf_format_option,
         }
+
+        loaded_plugins = []
+        if plugins:
+            for plugin_spec in plugins:
+                try:
+                    plugin = _load_plugin(plugin_spec)
+                    loaded_plugins.append(plugin)
+                except Exception as e:
+                    if abort_on_error:
+                        raise
+                    _log.warning(f"Failed to load plugin {plugin_spec}: {e}")
+                    continue
+
         doc_converter = DocumentConverter(
             allowed_formats=from_formats,
             format_options=format_options,
+            plugins=loaded_plugins,
         )
 
         start_time = time.time()
