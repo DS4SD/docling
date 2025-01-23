@@ -81,6 +81,8 @@ class TesseractOcrModel(BaseOcrModel):
         if self.reader is not None:
             # Finalize the tesseractAPI
             self.reader.End()
+        for script in self.script_readers:
+            self.script_readers[script].End()
 
     def __call__(
         self, conv_res: ConversionResult, page_batch: Iterable[Page]
