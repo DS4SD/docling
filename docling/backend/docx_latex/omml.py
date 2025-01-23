@@ -37,7 +37,6 @@ from docling.backend.docx_latex.latex_dict import (
 )
 
 OMML_NS = "{http://schemas.openxmlformats.org/officeDocument/2006/math}"
-PY2 = False
 
 
 def load(stream):
@@ -156,8 +155,6 @@ class Pr(Tag2Method):
         stag = elm.tag.replace(OMML_NS, "")
         if stag in self.__val_tags:
             t = elm.get("{0}val".format(OMML_NS))
-            if PY2 and (t != None):
-                t = t if isinstance(t, unicode) else unicode(t, "utf-8")
             self.__innerdict[stag] = t
         return None
 
@@ -204,7 +201,7 @@ class oMath2Latex(Tag2Method):
 
     @property
     def latex(self):
-        return self._latex if not PY2 else self._latex.encode("utf-8")
+        return self._latex
 
     def do_acc(self, elm):
         """
