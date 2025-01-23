@@ -247,7 +247,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         if paragraph.text is None:
             return
         text = text.strip()
-        print(text)
 
         # Common styles for bullet and numbered lists.
         # "List Bullet", "List Number", "List Paragraph"
