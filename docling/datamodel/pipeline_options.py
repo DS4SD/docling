@@ -1,17 +1,11 @@
 import logging
 import os
-import warnings
 from enum import Enum
 from pathlib import Path
-from typing import Annotated, Any, Dict, List, Literal, Optional, Tuple, Type, Union
+from typing import Any, List, Literal, Optional, Union
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
-from pydantic_settings import (
-    BaseSettings,
-    PydanticBaseSettingsSource,
-    SettingsConfigDict,
-)
-from typing_extensions import deprecated
+from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _log = logging.getLogger(__name__)
 
@@ -225,6 +219,8 @@ class PdfPipelineOptions(PipelineOptions):
     artifacts_path: Optional[Union[Path, str]] = None
     do_table_structure: bool = True  # True: perform table structure extraction
     do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
+    do_code_enrichment: bool = False  # True: perform code OCR
+    do_formula_enrichment: bool = False  # True: perform formula OCR, return Latex code
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
     ocr_options: Union[
