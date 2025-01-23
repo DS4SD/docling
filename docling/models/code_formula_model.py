@@ -142,7 +142,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
         )
 
     def _extract_code_language(self, input_string: str) -> Tuple[str, Optional[str]]:
-        """Extracts a programming language from the beginning of a (possibly multi-line) string.
+        """Extracts a programming language from the beginning of a string.
 
         This function checks if the input string starts with a pattern of the form
         ``<_some_language_>``. If it does, it extracts the language string and returns
@@ -162,12 +162,6 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
                 - The second element is the extracted language if a match is found;
                 otherwise, `None`.
         """
-        # Explanation of the regex:
-        #  ^<_([^>]+)> : match "<_something>" at the start, capturing "something" (Group 1)
-        #  \s*         : optional whitespace
-        #  (.*)        : capture everything after that in Group 2
-        #
-        #  We also use re.DOTALL so that the (.*) part can include newlines.
         pattern = r"^<_([^>]+)_>\s*(.*)"
         match = re.match(pattern, input_string, flags=re.DOTALL)
         if match:
@@ -209,18 +203,17 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
 
         element_prov = element.prov[0]
 
-        expansion_factor = 0.03  # Adjust the expansion percentage as needed
+        expansion_factor = 0.03
         bbox = element_prov.bbox
         width = bbox.r - bbox.l
         height = bbox.t - bbox.b
 
-        # Create the expanded bounding box
         expanded_bbox = BoundingBox(
-            l=bbox.l - width * expansion_factor,  # Expand left
-            t=bbox.t + height * expansion_factor,  # Expand top
-            r=bbox.r + width * expansion_factor,  # Expand right
-            b=bbox.b - height * expansion_factor,  # Expand bottom
-            coord_origin=bbox.coord_origin,  # Preserve coordinate origin
+            l=bbox.l - width * expansion_factor,
+            t=bbox.t + height * expansion_factor,
+            r=bbox.r + width * expansion_factor,
+            b=bbox.b - height * expansion_factor,
+            coord_origin=bbox.coord_origin,
         )
 
         page_ix = element_prov.page_no - 1

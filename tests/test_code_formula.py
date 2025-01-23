@@ -49,7 +49,6 @@ def test_code_and_formula_conversion():
     assert len(code_blocks) == 1
 
     gt = 'public static void print() {\n    System.out.println("Java Code");\n}'
-    print(gt)
 
     predicted = code_blocks[0].text.strip()
     assert predicted == gt, f"mismatch in text {predicted=}, {gt=}"
