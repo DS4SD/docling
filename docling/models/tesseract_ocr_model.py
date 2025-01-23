@@ -20,7 +20,6 @@ class TesseractOcrModel(BaseOcrModel):
 
         self.scale = 3  # multiplier for 72 dpi == 216 dpi.
         self.reader = None
-        self.script_readers = None
 
         if self.enabled:
             install_errmsg = (
@@ -56,6 +55,8 @@ class TesseractOcrModel(BaseOcrModel):
             _log.debug("Initializing TesserOCR: %s", tesseract_version)
             lang = "+".join(self.options.lang)
 
+            self.script_readers: dict[str, tesserocr.PyTessBaseAPI] = {}
+
             tesserocr_kwargs = {
                 "psm": tesserocr.PSM.AUTO,
                 "init": True,
@@ -69,14 +70,6 @@ class TesseractOcrModel(BaseOcrModel):
                 self.reader = tesserocr.PyTessBaseAPI(
                     **{"lang": "osd", "psm": tesserocr.PSM.OSD_ONLY} | tesserocr_kwargs
                 )
-
-                self.script_readers = {}
-                scripts = [l for l in tesserocr_languages if l.startswith("script")]
-
-                for script in scripts:
-                    self.script_readers[script] = tesserocr.PyTessBaseAPI(
-                        **{"lang": script} | tesserocr_kwargs,
-                    )
             else:
                 self.reader = tesserocr.PyTessBaseAPI(
                     **{"lang": lang} | tesserocr_kwargs,
@@ -92,10 +85,11 @@ class TesseractOcrModel(BaseOcrModel):
     def __call__(
         self, conv_res: ConversionResult, page_batch: Iterable[Page]
     ) -> Iterable[Page]:
-
         if not self.enabled:
             yield from page_batch
             return
+
+        import tesserocr
 
         for page in page_batch:
             assert page._backend is not None
@@ -103,7 +97,6 @@ class TesseractOcrModel(BaseOcrModel):
                 yield page
             else:
                 with TimeRecorder(conv_res, "ocr"):
-
                     assert self.reader is not None
 
                     ocr_rects = self.get_ocr_rects(page)
@@ -120,7 +113,7 @@ class TesseractOcrModel(BaseOcrModel):
                         # Retrieve text snippets with their bounding boxes
                         self.reader.SetImage(high_res_image)
 
-                        if self.script_readers is not None:
+                        if self.options.lang == ["auto"]:
                             osd = self.reader.DetectOrientationScript()
 
                             # No text, probably
@@ -136,17 +129,21 @@ class TesseractOcrModel(BaseOcrModel):
                             elif script == "Korean":
                                 script = "Hangul"
 
-                            if f"script/{script}" in self.script_readers:
-                                _log.debug(
-                                    f'Using model for the detected script "{script}"'
+                            _log.debug(
+                                f'Using model for the detected script "{script}"'
+                            )
+
+                            if script not in self.script_readers:
+                                self.script_readers[script] = tesserocr.PyTessBaseAPI(
+                                    path=self.reader.GetDatapath(),
+                                    lang=f"script/{script}",
+                                    psm=tesserocr.PSM.AUTO,
+                                    init=True,
+                                    oem=tesserocr.OEM.DEFAULT,
                                 )
-                                local_reader = self.script_readers[f"script/{script}"]
-                                local_reader.SetImage(high_res_image)
-                            else:
-                                _log.warning(
-                                    f'No model for the detected script "{script}"'
-                                )
-                                continue
+
+                            local_reader = self.script_readers[script]
+                            local_reader.SetImage(high_res_image)
                         else:
                             local_reader = self.reader
 
