@@ -332,7 +332,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
 
             try:
                 pil_image = PILImage.open(image.ref)
-                
+
                 doc.add_picture(
                     parent=self.parents[0],
                     image=ImageRef.from_pil(image=pil_image, dpi=72),
@@ -383,5 +383,5 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
                 print(exc)
                 continue
         """
-        
+
         return doc
