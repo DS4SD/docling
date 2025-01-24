@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Iterable, List, Literal, Optional, Tuple, Union
 
 from docling_core.types.doc import (
-    BoundingBox,
     CodeItem,
     DocItemLabel,
     DoclingDocument,
@@ -15,7 +14,6 @@ from PIL import Image
 from pydantic import BaseModel
 
 from docling.datamodel.base_models import ItemAndImageEnrichmentElement
-from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import AcceleratorOptions
 from docling.models.base_model import BaseItemAndImageEnrichmentModel
 from docling.utils.accelerator_utils import decide_device
@@ -64,6 +62,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
     """
 
     images_scale = 1.66  # = 120 dpi, aligned with training data resolution
+    expansion_factor = 0.03
 
     def __init__(
         self,
@@ -200,35 +199,6 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
             return CodeLanguageLabel(value)
         except ValueError:
             return CodeLanguageLabel.UNKNOWN
-
-    def prepare_element(
-        self, conv_res: ConversionResult, element: NodeItem
-    ) -> Optional[ItemAndImageEnrichmentElement]:
-        if not self.is_processable(doc=conv_res.document, element=element):
-            return None
-
-        assert isinstance(element, TextItem)
-
-        element_prov = element.prov[0]
-
-        expansion_factor = 0.03
-        bbox = element_prov.bbox
-        width = bbox.r - bbox.l
-        height = bbox.t - bbox.b
-
-        expanded_bbox = BoundingBox(
-            l=bbox.l - width * expansion_factor,
-            t=bbox.t + height * expansion_factor,
-            r=bbox.r + width * expansion_factor,
-            b=bbox.b - height * expansion_factor,
-            coord_origin=bbox.coord_origin,
-        )
-
-        page_ix = element_prov.page_no - 1
-        cropped_image = conv_res.pages[page_ix].get_image(
-            scale=self.images_scale, cropbox=expanded_bbox
-        )
-        return ItemAndImageEnrichmentElement(item=element, image=cropped_image)
 
     def __call__(
         self,
