@@ -97,7 +97,7 @@ class StandardPdfPipeline(PaginatedPipeline):
             CodeFormulaModel(
                 enabled=pipeline_options.do_code_enrichment
                 or pipeline_options.do_formula_enrichment,
-                artifacts_path=None,
+                artifacts_path=pipeline_options.artifacts_path,
                 options=CodeFormulaModelOptions(
                     do_code_enrichment=pipeline_options.do_code_enrichment,
                     do_formula_enrichment=pipeline_options.do_formula_enrichment,
