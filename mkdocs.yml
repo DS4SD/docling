@@ -76,15 +76,17 @@ nav:
       - "Multimodal export": examples/export_multimodal.py
       - "Force full page OCR": examples/full_page_ocr.py
       - "Accelerator options": examples/run_with_accelerator.py
-      - "Simple translation": examples/translate.py      
+      - "Simple translation": examples/translate.py
     - ✂️ Chunking:
-      - "Hybrid chunking": examples/hybrid_chunking.ipynb
-    - 💬 RAG / QA:
+      - examples/hybrid_chunking.ipynb
+    - 🤖 RAG with AI dev frameworks:
       - examples/rag_haystack.ipynb
-      - examples/rag_llamaindex.ipynb
       - examples/rag_langchain.ipynb
+      - examples/rag_llamaindex.ipynb
+    - 🗂️ More examples:
       - examples/rag_weaviate.ipynb
       - RAG with Granite [↗]: https://github.com/ibm-granite-community/granite-snack-cookbook/blob/main/recipes/RAG/Granite_Docling_RAG.ipynb
+      - examples/rag_azuresearch.ipynb
       - examples/retrieval_qdrant.ipynb
   - Integrations:
     - Integrations: integrations/index.md
