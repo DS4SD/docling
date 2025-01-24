@@ -297,7 +297,7 @@ class _DocumentConversionInput(BaseModel):
         mime = mime or "text/plain"
         formats = MimeTypeToFormat.get(mime, [])
         if formats:
-            if len(formats) == 1 and mime not in ("text/plain", "application/json"):
+            if len(formats) == 1 and mime not in ("text/plain"):
                 return formats[0]
             else:  # ambiguity in formats
                 return _DocumentConversionInput._guess_from_content(
@@ -338,13 +338,6 @@ class _DocumentConversionInput(BaseModel):
         elif mime == "text/plain":
             if InputFormat.XML_USPTO in formats and content_str.startswith("PATN\r\n"):
                 input_format = InputFormat.XML_USPTO
-
-        elif mime == "application/json":
-            if (
-                InputFormat.JSON_DOCLING in formats
-                and '"schema_name": "DoclingDocument"' in content_str
-            ):
-                input_format = InputFormat.JSON_DOCLING
 
         return input_format
 
