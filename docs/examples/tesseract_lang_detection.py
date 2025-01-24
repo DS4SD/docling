@@ -16,7 +16,9 @@ def main():
     # ocr_options = TesseractOcrOptions(lang=["auto"])
     ocr_options = TesseractCliOcrOptions(lang=["auto"])
 
-    pipeline_options = PdfPipelineOptions(do_ocr=True, ocr_options=ocr_options)
+    pipeline_options = PdfPipelineOptions(
+        do_ocr=True, force_full_page_ocr=True, ocr_options=ocr_options
+    )
 
     converter = DocumentConverter(
         format_options={

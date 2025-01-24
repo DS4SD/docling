@@ -30,11 +30,13 @@ class TesseractOcrCliModel(BaseOcrModel):
 
         self._name: Optional[str] = None
         self._version: Optional[str] = None
-        self._script_prefix = None
+        self._tesseract_languages: Optional[List[str]] = None
+        self._script_prefix: Optional[str] = None
 
         if self.enabled:
             try:
                 self._get_name_and_version()
+                self._set_languages_and_prefix()
 
             except Exception as exc:
                 raise RuntimeError(
@@ -119,8 +121,10 @@ class TesseractOcrCliModel(BaseOcrModel):
 
     def _detect_language(self, ifilename: str):
         r"""
-        Run tesseract in PSM 0 mode to detect the document language
+        Run tesseract in PSM 0 mode to detect the language
         """
+        assert self._tesseract_languages is not None
+
         cmd = [self.options.tesseract_cmd]
         cmd.extend(["--psm", "0", "-l", "osd", ifilename, "stdout"])
         _log.info("command: {}".format(" ".join(cmd)))
@@ -134,36 +138,43 @@ class TesseractOcrCliModel(BaseOcrModel):
         if len(scripts) == 0:
             _log.warning("Tesseract cannot detect the script of the page")
             return None
+
         script = map_tesseract_script(scripts[0].strip())
+        lang = f"{self._script_prefix}{script}"
 
-        # Translate the script into language
-        script_prefix = self._get_script_prefix()
-        lang = f"{script_prefix}{script}"
+        # Check if the detected language has been installed
+        if lang not in self._tesseract_languages:
+            msg = f"Tesseract detected the script '{script}' and language '{lang}'."
+            msg += " However this language is not installed in your system and will be ignored."
+            _log.warning(msg)
+            return None
+
         _log.debug(
-            f'Using tesseract model for the detected script "{script}" and language "{lang}"'
+            f"Using tesseract model for the detected script '{script}' and language '{lang}'"
         )
-
         return lang
 
-    def _get_script_prefix(self) -> str:
-        if self._script_prefix is not None:
-            return self._script_prefix
-
+    def _set_languages_and_prefix(self):
+        r"""
+        Read and set the languages installed in tesseract and decide the script prefix
+        """
         # Get all languages
         cmd = [self.options.tesseract_cmd]
         cmd.append("--list-langs")
+        _log.info("command: {}".format(" ".join(cmd)))
         proc = Popen(cmd, stdout=PIPE, stderr=DEVNULL)
         output, _ = proc.communicate()
         decoded_data = output.decode("utf-8")
         df = pd.read_csv(io.StringIO(decoded_data), header=None)
-        all_languages = df[0].tolist()[1:]
+        self._tesseract_languages = df[0].tolist()[1:]
 
         # Decide the script prefix
-        if any([l.startswith("script/") for l in all_languages]):
+        if any([l.startswith("script/") for l in self._tesseract_languages]):
             script_prefix = "script/"
         else:
             script_prefix = ""
-        return script_prefix
+
+        self._script_prefix = script_prefix
 
     def __call__(
         self, conv_res: ConversionResult, page_batch: Iterable[Page]
@@ -179,7 +190,6 @@ class TesseractOcrCliModel(BaseOcrModel):
                 yield page
             else:
                 with TimeRecorder(conv_res, "ocr"):
-
                     ocr_rects = self.get_ocr_rects(page)
 
                     all_ocr_cells = []
