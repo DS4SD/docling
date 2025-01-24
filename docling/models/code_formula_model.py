@@ -1,6 +1,6 @@
 import re
 from pathlib import Path
-from typing import Iterable, List, Literal, Optional, Tuple
+from typing import Iterable, List, Literal, Optional, Tuple, Union
 
 from docling_core.types.doc import CodeItem, DoclingDocument, NodeItem, TextItem
 from docling_core.types.doc.base import BoundingBox
@@ -62,7 +62,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
     def __init__(
         self,
         enabled: bool,
-        artifacts_path: Optional[Path],
+        artifacts_path: Optional[Union[Path, str]],
         options: CodeFormulaModelOptions,
         accelerator_options: AcceleratorOptions,
     ):
@@ -92,6 +92,8 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
 
             if artifacts_path is None:
                 artifacts_path = self.download_models_hf()
+            else:
+                artifacts_path = Path(artifacts_path)
 
             self.code_formula_model = CodeFormulaPredictor(
                 artifacts_path=artifacts_path,
