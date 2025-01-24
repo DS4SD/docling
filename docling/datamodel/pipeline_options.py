@@ -221,6 +221,7 @@ class PdfPipelineOptions(PipelineOptions):
     do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
     do_code_enrichment: bool = False  # True: perform code OCR
     do_formula_enrichment: bool = False  # True: perform formula OCR, return Latex code
+    do_picture_classification: bool = False  # True: classify pictures in documents
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
     ocr_options: Union[

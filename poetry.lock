@@ -888,13 +888,13 @@ chunking = ["semchunk (>=2.2.0,<3.0.0)", "transformers (>=4.34.0,<5.0.0)"]
 
 [[package]]
 name = "docling-ibm-models"
-version = "3.2.1"
+version = "3.3.0"
 description = "This package contains the AI models used by the Docling PDF conversion package"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "docling_ibm_models-3.2.1-py3-none-any.whl", hash = "sha256:55bca5673381cc5862f4de584345020d071414c46bc1b9f6436d674e3610ec97"},
-    {file = "docling_ibm_models-3.2.1.tar.gz", hash = "sha256:abd1bdc58f00600065eedbfbd34876704d5004cd20884a2c0a61ca2ee5a927dd"},
+    {file = "docling_ibm_models-3.3.0-py3-none-any.whl", hash = "sha256:f1c99d345cb524239c7a2090969920e4311fd2fe22dad9bd609bc38039ec56eb"},
+    {file = "docling_ibm_models-3.3.0.tar.gz", hash = "sha256:5a7497053871179d59870c830945aa8664a34aac48b7e68edf602720ee7f6c49"},
 ]
 
 [package.dependencies]
@@ -1046,13 +1046,13 @@ testing = ["hatch", "pre-commit", "pytest", "tox"]
 
 [[package]]
 name = "executing"
-version = "2.1.0"
+version = "2.2.0"
 description = "Get the currently executing AST node of a frame, and other information"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "executing-2.1.0-py2.py3-none-any.whl", hash = "sha256:8d63781349375b5ebccc3142f4b30350c0cd9c79f921cde38be2be4637e98eaf"},
-    {file = "executing-2.1.0.tar.gz", hash = "sha256:8ea27ddd260da8150fa5a708269c4a10e76161e2496ec3e587da9e3c0fe4b9ab"},
+    {file = "executing-2.2.0-py2.py3-none-any.whl", hash = "sha256:11387150cad388d62750327a53d3339fad4888b39a6fe233c3afbb54ecffd3aa"},
+    {file = "executing-2.2.0.tar.gz", hash = "sha256:5d108c028108fe2551d1a7b2e8b713341e2cb4fc0aa7dcf966fa4327a5226755"},
 ]
 
 [package.extras]
@@ -3674,14 +3674,14 @@ files = [
 
 [[package]]
 name = "nvidia-nvjitlink-cu12"
-version = "12.6.85"
+version = "12.8.61"
 description = "Nvidia JIT LTO Library"
 optional = false
 python-versions = ">=3"
 files = [
-    {file = "nvidia_nvjitlink_cu12-12.6.85-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl", hash = "sha256:eedc36df9e88b682efe4309aa16b5b4e78c2407eac59e8c10a6a47535164369a"},
-    {file = "nvidia_nvjitlink_cu12-12.6.85-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:cf4eaa7d4b6b543ffd69d6abfb11efdeb2db48270d94dfd3a452c24150829e41"},
-    {file = "nvidia_nvjitlink_cu12-12.6.85-py3-none-win_amd64.whl", hash = "sha256:e61120e52ed675747825cdd16febc6a0730537451d867ee58bee3853b1b13d1c"},
+    {file = "nvidia_nvjitlink_cu12-12.8.61-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl", hash = "sha256:45fd79f2ae20bd67e8bc411055939049873bfd8fac70ff13bd4865e0b9bdab17"},
+    {file = "nvidia_nvjitlink_cu12-12.8.61-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:9b80ecab31085dda3ce3b41d043be0ec739216c3fc633b8abe212d5a30026df0"},
+    {file = "nvidia_nvjitlink_cu12-12.8.61-py3-none-win_amd64.whl", hash = "sha256:1166a964d25fdc0eae497574d38824305195a5283324a21ccb0ce0c802cbf41c"},
 ]
 
 [[package]]
@@ -4612,13 +4612,13 @@ files = [
 
 [[package]]
 name = "pydantic"
-version = "2.10.5"
+version = "2.10.6"
 description = "Data validation using Python type hints"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pydantic-2.10.5-py3-none-any.whl", hash = "sha256:4dd4e322dbe55472cb7ca7e73f4b63574eecccf2835ffa2af9021ce113c83c53"},
-    {file = "pydantic-2.10.5.tar.gz", hash = "sha256:278b38dbbaec562011d659ee05f63346951b3a248a6f3642e1bc68894ea2b4ff"},
+    {file = "pydantic-2.10.6-py3-none-any.whl", hash = "sha256:427d664bf0b8a2b34ff5dd0f5a18df00591adcee7198fbd71981054cef37b584"},
+    {file = "pydantic-2.10.6.tar.gz", hash = "sha256:ca5daa827cce33de7a42be142548b0096bf05a7e7b365aebfa5f8eeec7128236"},
 ]
 
 [package.dependencies]
@@ -6124,13 +6124,13 @@ files = [
 
 [[package]]
 name = "sentence-transformers"
-version = "3.3.1"
+version = "3.4.0"
 description = "State-of-the-Art Text Embeddings"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "sentence_transformers-3.3.1-py3-none-any.whl", hash = "sha256:abffcc79dab37b7d18d21a26d5914223dd42239cfe18cb5e111c66c54b658ae7"},
-    {file = "sentence_transformers-3.3.1.tar.gz", hash = "sha256:9635dbfb11c6b01d036b9cfcee29f7716ab64cf2407ad9f403a2e607da2ac48b"},
+    {file = "sentence_transformers-3.4.0-py3-none-any.whl", hash = "sha256:f7d4ad81260149172a98108a3481d8e82c11d31f40d41885f43d481149237743"},
+    {file = "sentence_transformers-3.4.0.tar.gz", hash = "sha256:334288062d4b888cdd7b75913fead46b1e42bfe836f8343d23478d17f799e650"},
 ]
 
 [package.dependencies]
@@ -7487,13 +7487,13 @@ files = [
 
 [[package]]
 name = "xlsxwriter"
-version = "3.2.0"
+version = "3.2.1"
 description = "A Python module for creating Excel XLSX files."
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "XlsxWriter-3.2.0-py3-none-any.whl", hash = "sha256:ecfd5405b3e0e228219bcaf24c2ca0915e012ca9464a14048021d21a995d490e"},
-    {file = "XlsxWriter-3.2.0.tar.gz", hash = "sha256:9977d0c661a72866a61f9f7a809e25ebbb0fb7036baa3b9fe74afcfca6b3cb8c"},
+    {file = "XlsxWriter-3.2.1-py3-none-any.whl", hash = "sha256:7e8f7c60b7a1660ef791d46ab5de78469cb978b991ca841af61f5832d2f9f4fe"},
+    {file = "XlsxWriter-3.2.1.tar.gz", hash = "sha256:97618759cb264fb6a93397f660cca156ffa9561743b1823dafb60dc4474e1902"},
 ]
 
 [[package]]
@@ -7751,4 +7751,4 @@ tesserocr = ["tesserocr"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "8bb0b67294a50c0340c5cc02ce60d3608ef4d1968ae50f7e0b8b4c8a26c34734"
+content-hash = "7fcfc061454f229745d6f305e1fa593468a684059717195c6ae4174bec13d362"
