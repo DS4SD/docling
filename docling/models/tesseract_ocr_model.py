@@ -8,6 +8,7 @@ from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import TesseractOcrOptions
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
+from docling.utils.ocr_utils import map_tesseract_script
 from docling.utils.profiling import TimeRecorder
 
 _log = logging.getLogger(__name__)
@@ -128,14 +129,7 @@ class TesseractOcrModel(BaseOcrModel):
                                 continue
 
                             script = osd["script_name"]
-
-                            if script == "Katakana" or script == "Hiragana":
-                                script = "Japanese"
-                            elif script == "Han":
-                                script = "HanS"
-                            elif script == "Korean":
-                                script = "Hangul"
-
+                            script = map_tesseract_script(script)
                             _log.debug(
                                 f'Using model for the detected script "{script}"'
                             )
