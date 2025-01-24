@@ -2,9 +2,15 @@ import re
 from pathlib import Path
 from typing import Iterable, List, Literal, Optional, Tuple, Union
 
-from docling_core.types.doc import CodeItem, DoclingDocument, NodeItem, TextItem
-from docling_core.types.doc.base import BoundingBox
-from docling_core.types.doc.labels import CodeLanguageLabel, DocItemLabel
+from docling_core.types.doc import (
+    BoundingBox,
+    CodeItem,
+    DocItemLabel,
+    DoclingDocument,
+    NodeItem,
+    TextItem,
+)
+from docling_core.types.doc.labels import CodeLanguageLabel
 from PIL import Image
 from pydantic import BaseModel
 
