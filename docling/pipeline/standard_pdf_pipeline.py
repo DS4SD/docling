@@ -1,7 +1,7 @@
 import logging
 import sys
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Optional
 
 from docling_core.types.doc import DocItem, ImageRef, PictureItem, TableItem
 
@@ -17,8 +17,8 @@ from docling.datamodel.pipeline_options import (
     TesseractCliOcrOptions,
     TesseractOcrOptions,
 )
-from docling.models.base_model import BasePageModel
 from docling.models.base_ocr_model import BaseOcrModel
+from docling.models.code_formula_model import CodeFormulaModel, CodeFormulaModelOptions
 from docling.models.ds_glm_model import GlmModel, GlmOptions
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
@@ -93,7 +93,24 @@ class StandardPdfPipeline(PaginatedPipeline):
 
         self.enrichment_pipe = [
             # Other models working on `NodeItem` elements in the DoclingDocument
+            # Code Formula Enrichment Model
+            CodeFormulaModel(
+                enabled=pipeline_options.do_code_enrichment
+                or pipeline_options.do_formula_enrichment,
+                artifacts_path=pipeline_options.artifacts_path,
+                options=CodeFormulaModelOptions(
+                    do_code_enrichment=pipeline_options.do_code_enrichment,
+                    do_formula_enrichment=pipeline_options.do_formula_enrichment,
+                ),
+                accelerator_options=pipeline_options.accelerator_options,
+            ),
         ]
+
+        if (
+            self.pipeline_options.do_formula_enrichment
+            or self.pipeline_options.do_code_enrichment
+        ):
+            self.keep_backend = True
 
     @staticmethod
     def download_models_hf(

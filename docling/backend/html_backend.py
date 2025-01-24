@@ -215,7 +215,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         label = DocItemLabel.CODE
         if len(text) == 0:
             return
-        doc.add_text(parent=self.parents[self.level], label=label, text=text)
+        doc.add_code(parent=self.parents[self.level], label=label, text=text)
 
     def handle_paragraph(self, element, idx, doc):
         """Handles paragraph tags (p)."""
