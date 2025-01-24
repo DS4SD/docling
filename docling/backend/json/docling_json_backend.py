@@ -51,7 +51,7 @@ class DoclingJSONBackend(DeclarativeDocumentBackend):
             return e
 
     @override
-    def convert(self):
+    def convert(self) -> DoclingDocument:
         if isinstance(self._doc_or_err, DoclingDocument):
             return self._doc_or_err
         else:
