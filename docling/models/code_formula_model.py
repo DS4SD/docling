@@ -234,7 +234,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
         ----------
         doc : DoclingDocument
             The document being processed.
-        element_batch : Iterable[NodeItem]
+        element_batch : Iterable[ItemAndImageEnrichmentElement]
             A batch of elements to be processed.
 
         Returns
