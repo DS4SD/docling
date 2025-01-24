@@ -19,6 +19,10 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.code_formula_model import CodeFormulaModel, CodeFormulaModelOptions
+from docling.models.document_picture_classifier import (
+    DocumentPictureClassifier,
+    DocumentPictureClassifierOptions,
+)
 from docling.models.ds_glm_model import GlmModel, GlmOptions
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
@@ -102,6 +106,13 @@ class StandardPdfPipeline(PaginatedPipeline):
                     do_code_enrichment=pipeline_options.do_code_enrichment,
                     do_formula_enrichment=pipeline_options.do_formula_enrichment,
                 ),
+                accelerator_options=pipeline_options.accelerator_options,
+            ),
+            # Document Picture Classifier
+            DocumentPictureClassifier(
+                enabled=pipeline_options.do_picture_classification,
+                artifacts_path=pipeline_options.artifacts_path,
+                options=DocumentPictureClassifierOptions(),
                 accelerator_options=pipeline_options.accelerator_options,
             ),
         ]
