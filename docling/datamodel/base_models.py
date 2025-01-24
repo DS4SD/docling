@@ -41,6 +41,7 @@ class InputFormat(str, Enum):
     MD = "md"
     XLSX = "xlsx"
     XML_USPTO = "xml_uspto"
+    JSON_DOCLING = "json_docling"
 
 
 class OutputFormat(str, Enum):
@@ -62,6 +63,7 @@ FormatToExtensions: Dict[InputFormat, List[str]] = {
     InputFormat.ASCIIDOC: ["adoc", "asciidoc", "asc"],
     InputFormat.XLSX: ["xlsx"],
     InputFormat.XML_USPTO: ["xml", "txt"],
+    InputFormat.JSON_DOCLING: ["json"],
 }
 
 FormatToMimeType: Dict[InputFormat, List[str]] = {
@@ -90,6 +92,7 @@ FormatToMimeType: Dict[InputFormat, List[str]] = {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ],
     InputFormat.XML_USPTO: ["application/xml", "text/plain"],
+    InputFormat.JSON_DOCLING: ["application/json"],
 }
 
 MimeTypeToFormat: dict[str, list[InputFormat]] = {

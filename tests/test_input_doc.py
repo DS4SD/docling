@@ -124,6 +124,25 @@ def test_guess_format(tmp_path):
     doc_path.write_text("xyz", encoding="utf-8")
     assert dci._guess_format(doc_path) == None
 
+    # Valid Docling JSON
+    test_str = '{"name": ""}'
+    stream = DocumentStream(name="test.json", stream=BytesIO(f"{test_str}".encode()))
+    assert dci._guess_format(stream) == InputFormat.JSON_DOCLING
+    doc_path = temp_dir / "test.json"
+    doc_path.write_text(test_str, encoding="utf-8")
+    assert dci._guess_format(doc_path) == InputFormat.JSON_DOCLING
+
+    # Non-Docling JSON
+    # TODO: Docling JSON is currently the single supported JSON flavor and the pipeline
+    # will try to validate *any* JSON (based on suffix/MIME) as Docling JSON; proper
+    # disambiguation seen as part of https://github.com/DS4SD/docling/issues/802
+    test_str = "{}"
+    stream = DocumentStream(name="test.json", stream=BytesIO(f"{test_str}".encode()))
+    assert dci._guess_format(stream) == InputFormat.JSON_DOCLING
+    doc_path = temp_dir / "test.json"
+    doc_path.write_text(test_str, encoding="utf-8")
+    assert dci._guess_format(doc_path) == InputFormat.JSON_DOCLING
+
 
 def _make_input_doc(path):
     in_doc = InputDocument(
