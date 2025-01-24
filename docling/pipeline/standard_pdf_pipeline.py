@@ -18,6 +18,7 @@ from docling.datamodel.pipeline_options import (
     TesseractOcrOptions,
 )
 from docling.models.base_ocr_model import BaseOcrModel
+from docling.models.code_formula_model import CodeFormulaModel, CodeFormulaModelOptions
 from docling.models.ds_glm_model import GlmModel, GlmOptions
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
@@ -50,7 +51,7 @@ class StandardPdfPipeline(PaginatedPipeline):
         else:
             self.artifacts_path = Path(pipeline_options.artifacts_path)
 
-        keep_images = (
+        self.keep_images = (
             self.pipeline_options.generate_page_images
             or self.pipeline_options.generate_picture_images
             or self.pipeline_options.generate_table_images
@@ -87,12 +88,29 @@ class StandardPdfPipeline(PaginatedPipeline):
                 accelerator_options=pipeline_options.accelerator_options,
             ),
             # Page assemble
-            PageAssembleModel(options=PageAssembleOptions(keep_images=keep_images)),
+            PageAssembleModel(options=PageAssembleOptions()),
         ]
 
         self.enrichment_pipe = [
             # Other models working on `NodeItem` elements in the DoclingDocument
+            # Code Formula Enrichment Model
+            CodeFormulaModel(
+                enabled=pipeline_options.do_code_enrichment
+                or pipeline_options.do_formula_enrichment,
+                artifacts_path=pipeline_options.artifacts_path,
+                options=CodeFormulaModelOptions(
+                    do_code_enrichment=pipeline_options.do_code_enrichment,
+                    do_formula_enrichment=pipeline_options.do_formula_enrichment,
+                ),
+                accelerator_options=pipeline_options.accelerator_options,
+            ),
         ]
+
+        if (
+            self.pipeline_options.do_formula_enrichment
+            or self.pipeline_options.do_code_enrichment
+        ):
+            self.keep_backend = True
 
     @staticmethod
     def download_models_hf(

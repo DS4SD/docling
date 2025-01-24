@@ -1,28 +1,21 @@
 import copy
 import logging
-import random
-import time
 from pathlib import Path
-from typing import Iterable, List
+from typing import Iterable
 
-from docling_core.types.doc import CoordOrigin, DocItemLabel
+from docling_core.types.doc import DocItemLabel
 from docling_ibm_models.layoutmodel.layout_predictor import LayoutPredictor
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
-from docling.datamodel.base_models import (
-    BoundingBox,
-    Cell,
-    Cluster,
-    LayoutPrediction,
-    Page,
-)
+from docling.datamodel.base_models import BoundingBox, Cluster, LayoutPrediction, Page
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import AcceleratorDevice, AcceleratorOptions
+from docling.datamodel.pipeline_options import AcceleratorOptions
 from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
 from docling.utils.accelerator_utils import decide_device
 from docling.utils.layout_postprocessor import LayoutPostprocessor
 from docling.utils.profiling import TimeRecorder
+from docling.utils.visualization import draw_clusters
 
 _log = logging.getLogger(__name__)
 
@@ -40,7 +33,7 @@ class LayoutModel(BasePageModel):
         DocItemLabel.PAGE_FOOTER,
         DocItemLabel.CODE,
         DocItemLabel.LIST_ITEM,
-        # "Formula",
+        DocItemLabel.FORMULA,
     ]
     PAGE_HEADER_LABELS = [DocItemLabel.PAGE_HEADER, DocItemLabel.PAGE_FOOTER]
 
@@ -67,29 +60,9 @@ class LayoutModel(BasePageModel):
         - Right: Clusters including FORM, KEY_VALUE_REGION, and PICTURE.
         Includes label names and confidence scores for each cluster.
         """
-        label_to_color = {
-            DocItemLabel.TEXT: (255, 255, 153),  # Light Yellow
-            DocItemLabel.CAPTION: (255, 204, 153),  # Light Orange
-            DocItemLabel.LIST_ITEM: (153, 153, 255),  # Light Purple
-            DocItemLabel.FORMULA: (192, 192, 192),  # Gray
-            DocItemLabel.TABLE: (255, 204, 204),  # Light Pink
-            DocItemLabel.PICTURE: (255, 204, 164),  # Light Beige
-            DocItemLabel.SECTION_HEADER: (255, 153, 153),  # Light Red
-            DocItemLabel.PAGE_HEADER: (204, 255, 204),  # Light Green
-            DocItemLabel.PAGE_FOOTER: (
-                204,
-                255,
-                204,
-            ),  # Light Green (same as Page-Header)
-            DocItemLabel.TITLE: (255, 153, 153),  # Light Red (same as Section-Header)
-            DocItemLabel.FOOTNOTE: (200, 200, 255),  # Light Blue
-            DocItemLabel.DOCUMENT_INDEX: (220, 220, 220),  # Light Gray
-            DocItemLabel.CODE: (125, 125, 125),  # Gray
-            DocItemLabel.CHECKBOX_SELECTED: (255, 182, 193),  # Pale Green
-            DocItemLabel.CHECKBOX_UNSELECTED: (255, 182, 193),  # Light Pink
-            DocItemLabel.FORM: (200, 255, 255),  # Light Cyan
-            DocItemLabel.KEY_VALUE_REGION: (183, 65, 14),  # Rusty orange
-        }
+        scale_x = page.image.width / page.size.width
+        scale_y = page.image.height / page.size.height
+
         # Filter clusters for left and right images
         exclude_labels = {
             DocItemLabel.FORM,
@@ -102,65 +75,9 @@ class LayoutModel(BasePageModel):
         left_image = copy.deepcopy(page.image)
         right_image = copy.deepcopy(page.image)
 
-        # Function to draw clusters on an image
-        def draw_clusters(image, clusters):
-            draw = ImageDraw.Draw(image, "RGBA")
-            # Create a smaller font for the labels
-            try:
-                font = ImageFont.truetype("arial.ttf", 12)
-            except OSError:
-                # Fallback to default font if arial is not available
-                font = ImageFont.load_default()
-            for c_tl in clusters:
-                all_clusters = [c_tl, *c_tl.children]
-                for c in all_clusters:
-                    # Draw cells first (underneath)
-                    cell_color = (0, 0, 0, 40)  # Transparent black for cells
-                    for tc in c.cells:
-                        cx0, cy0, cx1, cy1 = tc.bbox.as_tuple()
-                        draw.rectangle(
-                            [(cx0, cy0), (cx1, cy1)],
-                            outline=None,
-                            fill=cell_color,
-                        )
-                    # Draw cluster rectangle
-                    x0, y0, x1, y1 = c.bbox.as_tuple()
-                    cluster_fill_color = (*list(label_to_color.get(c.label)), 70)
-                    cluster_outline_color = (*list(label_to_color.get(c.label)), 255)
-                    draw.rectangle(
-                        [(x0, y0), (x1, y1)],
-                        outline=cluster_outline_color,
-                        fill=cluster_fill_color,
-                    )
-                    # Add label name and confidence
-                    label_text = f"{c.label.name} ({c.confidence:.2f})"
-                    # Create semi-transparent background for text
-                    text_bbox = draw.textbbox((x0, y0), label_text, font=font)
-                    text_bg_padding = 2
-                    draw.rectangle(
-                        [
-                            (
-                                text_bbox[0] - text_bg_padding,
-                                text_bbox[1] - text_bg_padding,
-                            ),
-                            (
-                                text_bbox[2] + text_bg_padding,
-                                text_bbox[3] + text_bg_padding,
-                            ),
-                        ],
-                        fill=(255, 255, 255, 180),  # Semi-transparent white
-                    )
-                    # Draw text
-                    draw.text(
-                        (x0, y0),
-                        label_text,
-                        fill=(0, 0, 0, 255),  # Solid black
-                        font=font,
-                    )
-
         # Draw clusters on both images
-        draw_clusters(left_image, left_clusters)
-        draw_clusters(right_image, right_clusters)
+        draw_clusters(left_image, left_clusters, scale_x, scale_y)
+        draw_clusters(right_image, right_clusters, scale_x, scale_y)
         # Combine the images side by side
         combined_width = left_image.width * 2
         combined_height = left_image.height
