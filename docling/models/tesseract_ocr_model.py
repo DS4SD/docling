@@ -8,6 +8,7 @@ from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import TesseractOcrOptions
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
+from docling.utils.ocr_utils import map_tesseract_script
 from docling.utils.profiling import TimeRecorder
 
 _log = logging.getLogger(__name__)
@@ -20,6 +21,7 @@ class TesseractOcrModel(BaseOcrModel):
 
         self.scale = 3  # multiplier for 72 dpi == 216 dpi.
         self.reader = None
+        self.osd_reader = None
 
         if self.enabled:
             install_errmsg = (
@@ -47,8 +49,8 @@ class TesseractOcrModel(BaseOcrModel):
             except:
                 raise ImportError(install_errmsg)
 
-            _, tesserocr_languages = tesserocr.get_languages()
-            if not tesserocr_languages:
+            _, self._tesserocr_languages = tesserocr.get_languages()
+            if not self._tesserocr_languages:
                 raise ImportError(missing_langs_errmsg)
 
             # Initialize the tesseractAPI
@@ -57,7 +59,7 @@ class TesseractOcrModel(BaseOcrModel):
 
             self.script_readers: dict[str, tesserocr.PyTessBaseAPI] = {}
 
-            if any([l.startswith("script/") for l in tesserocr_languages]):
+            if any([l.startswith("script/") for l in self._tesserocr_languages]):
                 self.script_prefix = "script/"
             else:
                 self.script_prefix = ""
@@ -72,14 +74,14 @@ class TesseractOcrModel(BaseOcrModel):
                 tesserocr_kwargs["path"] = self.options.path
 
             if lang == "auto":
-                self.reader = tesserocr.PyTessBaseAPI(
+                self.reader = tesserocr.PyTessBaseAPI(**tesserocr_kwargs)
+                self.osd_reader = tesserocr.PyTessBaseAPI(
                     **{"lang": "osd", "psm": tesserocr.PSM.OSD_ONLY} | tesserocr_kwargs
                 )
             else:
                 self.reader = tesserocr.PyTessBaseAPI(
                     **{"lang": lang} | tesserocr_kwargs,
                 )
-
             self.reader_RIL = tesserocr.RIL
 
     def __del__(self):
@@ -96,8 +98,6 @@ class TesseractOcrModel(BaseOcrModel):
             yield from page_batch
             return
 
-        import tesserocr
-
         for page in page_batch:
             assert page._backend is not None
             if not page._backend.is_valid():
@@ -105,6 +105,7 @@ class TesseractOcrModel(BaseOcrModel):
             else:
                 with TimeRecorder(conv_res, "ocr"):
                     assert self.reader is not None
+                    assert self._tesserocr_languages is not None
 
                     ocr_rects = self.get_ocr_rects(page)
 
@@ -117,43 +118,42 @@ class TesseractOcrModel(BaseOcrModel):
                             scale=self.scale, cropbox=ocr_rect
                         )
 
-                        # Retrieve text snippets with their bounding boxes
-                        self.reader.SetImage(high_res_image)
+                        local_reader = self.reader
+                        if "auto" in self.options.lang:
+                            assert self.osd_reader is not None
 
-                        if self.options.lang == ["auto"]:
-                            osd = self.reader.DetectOrientationScript()
+                            self.osd_reader.SetImage(high_res_image)
+                            osd = self.osd_reader.DetectOrientationScript()
 
                             # No text, probably
                             if osd is None:
                                 continue
 
                             script = osd["script_name"]
+                            script = map_tesseract_script(script)
+                            lang = f"{self.script_prefix}{script}"
 
-                            if script == "Katakana" or script == "Hiragana":
-                                script = "Japanese"
-                            elif script == "Han":
-                                script = "HanS"
-                            elif script == "Korean":
-                                script = "Hangul"
+                            # Check if the detected languge is present in the system
+                            if lang not in self._tesserocr_languages:
+                                msg = f"Tesseract detected the script '{script}' and language '{lang}'."
+                                msg += " However this language is not installed in your system and will be ignored."
+                                _log.warning(msg)
+                            else:
+                                if script not in self.script_readers:
+                                    import tesserocr
 
-                            _log.debug(
-                                f'Using model for the detected script "{script}"'
-                            )
+                                    self.script_readers[script] = (
+                                        tesserocr.PyTessBaseAPI(
+                                            path=self.reader.GetDatapath(),
+                                            lang=lang,
+                                            psm=tesserocr.PSM.AUTO,
+                                            init=True,
+                                            oem=tesserocr.OEM.DEFAULT,
+                                        )
+                                    )
+                                local_reader = self.script_readers[script]
 
-                            if script not in self.script_readers:
-                                self.script_readers[script] = tesserocr.PyTessBaseAPI(
-                                    path=self.reader.GetDatapath(),
-                                    lang=f"{self.script_prefix}{script}",
-                                    psm=tesserocr.PSM.AUTO,
-                                    init=True,
-                                    oem=tesserocr.OEM.DEFAULT,
-                                )
-
-                            local_reader = self.script_readers[script]
-                            local_reader.SetImage(high_res_image)
-                        else:
-                            local_reader = self.reader
-
+                        local_reader.SetImage(high_res_image)
                         boxes = local_reader.GetComponentImages(
                             self.reader_RIL.TEXTLINE, True
                         )

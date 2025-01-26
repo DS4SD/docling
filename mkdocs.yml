@@ -75,6 +75,7 @@ nav:
       - "Table export": examples/export_tables.py
       - "Multimodal export": examples/export_multimodal.py
       - "Force full page OCR": examples/full_page_ocr.py
+      - "Automatic OCR language detection with tesseract": examples/tesseract_lang_detection.py
       - "Accelerator options": examples/run_with_accelerator.py
       - "Simple translation": examples/translate.py
     - ✂️ Chunking:
