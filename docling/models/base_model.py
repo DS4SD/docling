@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Generic, Iterable, Optional
 
-from docling_core.types.doc import DoclingDocument, NodeItem, TextItem
+from docling_core.types.doc import BoundingBox, DoclingDocument, NodeItem, TextItem
 from typing_extensions import TypeVar
 
 from docling.datamodel.base_models import ItemAndImageEnrichmentElement, Page
@@ -53,6 +53,7 @@ class BaseItemAndImageEnrichmentModel(
 ):
 
     images_scale: float
+    expansion_factor: float = 0.0
 
     def prepare_element(
         self, conv_res: ConversionResult, element: NodeItem
@@ -62,8 +63,22 @@ class BaseItemAndImageEnrichmentModel(
 
         assert isinstance(element, TextItem)
         element_prov = element.prov[0]
+
+        bbox = element_prov.bbox
+        width = bbox.r - bbox.l
+        height = bbox.t - bbox.b
+
+        # TODO: move to a utility in the BoundingBox class
+        expanded_bbox = BoundingBox(
+            l=bbox.l - width * self.expansion_factor,
+            t=bbox.t + height * self.expansion_factor,
+            r=bbox.r + width * self.expansion_factor,
+            b=bbox.b - height * self.expansion_factor,
+            coord_origin=bbox.coord_origin,
+        )
+
         page_ix = element_prov.page_no - 1
         cropped_image = conv_res.pages[page_ix].get_image(
-            scale=self.images_scale, cropbox=element_prov.bbox
+            scale=self.images_scale, cropbox=expanded_bbox
         )
         return ItemAndImageEnrichmentElement(item=element, image=cropped_image)

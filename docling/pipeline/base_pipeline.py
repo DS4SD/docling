@@ -3,7 +3,7 @@ import logging
 import time
 import traceback
 from abc import ABC, abstractmethod
-from typing import Callable, Iterable, List
+from typing import Any, Callable, Iterable, List
 
 from docling_core.types.doc import DoclingDocument, NodeItem
 
@@ -18,7 +18,7 @@ from docling.datamodel.base_models import (
 from docling.datamodel.document import ConversionResult, InputDocument
 from docling.datamodel.pipeline_options import PipelineOptions
 from docling.datamodel.settings import settings
-from docling.models.base_model import BaseEnrichmentModel
+from docling.models.base_model import GenericEnrichmentModel
 from docling.utils.profiling import ProfilingScope, TimeRecorder
 from docling.utils.utils import chunkify
 
@@ -30,7 +30,7 @@ class BasePipeline(ABC):
         self.pipeline_options = pipeline_options
         self.keep_images = False
         self.build_pipe: List[Callable] = []
-        self.enrichment_pipe: List[BaseEnrichmentModel] = []
+        self.enrichment_pipe: List[GenericEnrichmentModel[Any]] = []
 
     def execute(self, in_doc: InputDocument, raises_on_error: bool) -> ConversionResult:
         conv_res = ConversionResult(input=in_doc)
@@ -66,7 +66,7 @@ class BasePipeline(ABC):
     def _enrich_document(self, conv_res: ConversionResult) -> ConversionResult:
 
         def _prepare_elements(
-            conv_res: ConversionResult, model: BaseEnrichmentModel
+            conv_res: ConversionResult, model: GenericEnrichmentModel[Any]
         ) -> Iterable[NodeItem]:
             for doc_element, _level in conv_res.document.iterate_items():
                 prepared_element = model.prepare_element(

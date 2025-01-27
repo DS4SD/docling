@@ -1,3 +1,25 @@
+## [v2.16.0](https://github.com/DS4SD/docling/releases/tag/v2.16.0) - 2025-01-24
+
+### Feature
+
+* New document picture classifier ([#805](https://github.com/DS4SD/docling/issues/805)) ([`16a218d`](https://github.com/DS4SD/docling/commit/16a218d871c48fd9cc636b77f7b597dc40cbeeec))
+* Add Docling JSON ingestion ([#783](https://github.com/DS4SD/docling/issues/783)) ([`88a0e66`](https://github.com/DS4SD/docling/commit/88a0e66adc19238f57a942b0504926cdaeacd8cc))
+* Code and equation model for PDF and code blocks in markdown ([#752](https://github.com/DS4SD/docling/issues/752)) ([`3213b24`](https://github.com/DS4SD/docling/commit/3213b247ad6870ff984271f09f7720be68d9479b))
+* Add "auto" language for TesseractOcr ([#759](https://github.com/DS4SD/docling/issues/759)) ([`8543c22`](https://github.com/DS4SD/docling/commit/8543c22687fee40459d393bf4adcfc059712de02))
+
+### Fix
+
+* Added extraction of byte-images in excel ([#804](https://github.com/DS4SD/docling/issues/804)) ([`a458e29`](https://github.com/DS4SD/docling/commit/a458e298ca64da2c6df29d953e95645525817bed))
+* Update docling-parse-v2 backend version with new parsing fixes ([#769](https://github.com/DS4SD/docling/issues/769)) ([`670a08b`](https://github.com/DS4SD/docling/commit/670a08bdedda847ff3b6942bcaa1a2adef79afe2))
+
+### Documentation
+
+* Fix minor typos ([#801](https://github.com/DS4SD/docling/issues/801)) ([`c58f75d`](https://github.com/DS4SD/docling/commit/c58f75d0f75040e32820cc2915ec00755211c02f))
+* Add Azure RAG example ([#675](https://github.com/DS4SD/docling/issues/675)) ([`9020a93`](https://github.com/DS4SD/docling/commit/9020a934be35b0798c972eb77a22fb62ce654ca5))
+* Fix links between docs pages ([#697](https://github.com/DS4SD/docling/issues/697)) ([`c49b352`](https://github.com/DS4SD/docling/commit/c49b3526fb7b72e8007f785b1fcfdf58c2457756))
+* Fix correct Accelerator pipeline options in docs/examples/custom_convert.py ([#733](https://github.com/DS4SD/docling/issues/733)) ([`7686083`](https://github.com/DS4SD/docling/commit/768608351d40376c3504546f52e967195536b3d5))
+* Example to translate documents ([#739](https://github.com/DS4SD/docling/issues/739)) ([`f7e1cbf`](https://github.com/DS4SD/docling/commit/f7e1cbf629ae5f3e279296e72f656b7a453ab7a3))
+
 ## [v2.15.1](https://github.com/DS4SD/docling/releases/tag/v2.15.1) - 2025-01-10
 
 ### Fix
