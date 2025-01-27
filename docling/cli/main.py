@@ -2,6 +2,7 @@ import importlib
 import logging
 import platform
 import re
+import sys
 import tempfile
 import time
 import warnings
@@ -65,10 +66,13 @@ def version_callback(value: bool):
         docling_ibm_models_version = importlib.metadata.version("docling-ibm-models")
         docling_parse_version = importlib.metadata.version("docling-parse")
         platform_str = platform.platform()
+        py_impl_version = sys.implementation.cache_tag
+        py_lang_version = platform.python_version()
         print(f"Docling version: {docling_version}")
         print(f"Docling Core version: {docling_core_version}")
         print(f"Docling IBM Models version: {docling_ibm_models_version}")
         print(f"Docling Parse version: {docling_parse_version}")
+        print(f"Python: {py_impl_version} ({py_lang_version})")
         print(f"Platform: {platform_str}")
         raise typer.Exit()
 
