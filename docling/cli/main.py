@@ -1,12 +1,12 @@
 import importlib
 import logging
+import platform
 import re
 import tempfile
 import time
 import warnings
 from pathlib import Path
 from typing import Annotated, Dict, Iterable, List, Optional, Type
-import platform
 
 import typer
 from docling_core.types.doc import ImageRefMode
