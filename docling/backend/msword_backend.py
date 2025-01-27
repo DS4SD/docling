@@ -19,10 +19,9 @@ from lxml.etree import XPath
 from PIL import Image, UnidentifiedImageError
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
+from docling.backend.docx_latex.omml import oMath2Latex
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
-
-from docling.backend.docx_latex.omml import oMath2Latex
 
 _log = logging.getLogger(__name__)
 

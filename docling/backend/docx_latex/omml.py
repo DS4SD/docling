@@ -5,35 +5,36 @@ Adapted from https://github.com/xiilei/dwml/blob/master/dwml/omml.py
 On 23/01/2025
 """
 
-from pylatexenc.latexencode import UnicodeToLatexEncoder
 import lxml.etree as ET
+import pylatexenc  # type: ignore
+
 from docling.backend.docx_latex.latex_dict import (
+    ALN,
+    ARR,
+    BACKSLASH,
+    BLANK,
+    BRK,
     CHARS,
     CHR,
     CHR_BO,
     CHR_DEFAULT,
-    POS,
-    POS_DEFAULT,
-    SUB,
-    SUP,
-    F,
-    F_DEFAULT,
-    T,
-    FUNC,
-    D,
     D_DEFAULT,
-    RAD,
-    RAD_DEFAULT,
-    ARR,
+    F_DEFAULT,
+    FUNC,
+    FUNC_PLACE,
     LIM_FUNC,
     LIM_TO,
     LIM_UPP,
+    POS,
+    POS_DEFAULT,
+    RAD,
+    RAD_DEFAULT,
+    SUB,
+    SUP,
+    D,
+    F,
     M,
-    BRK,
-    BLANK,
-    BACKSLASH,
-    ALN,
-    FUNC_PLACE,
+    T,
 )
 
 OMML_NS = "{http://schemas.openxmlformats.org/officeDocument/2006/math}"
@@ -176,7 +177,7 @@ class oMath2Latex(Tag2Method):
     _t_dict = T
 
     __direct_tags = ("box", "sSub", "sSup", "sSubSup", "num", "den", "deg", "e")
-    u = UnicodeToLatexEncoder(
+    u = pylatexenc.latexencode.UnicodeToLatexEncoder(
         replacement_latex_protection="braces-all",
         unknown_char_policy="keep",
         unknown_char_warning=False,
@@ -229,13 +230,22 @@ class oMath2Latex(Tag2Method):
         c_dict = self.process_children_dict(elm)
         pr = c_dict["dPr"]
         null = D_DEFAULT.get("null")
+
+        print(pr.text)
         s_val = get_val(pr.begChr, default=D_DEFAULT.get("left"), store=T)
+        print(pr.begChr, D_DEFAULT.get("left"), s_val)
+
         e_val = get_val(pr.endChr, default=D_DEFAULT.get("right"), store=T)
-        return pr.text + D.format(
+        print(pr.endChr, D_DEFAULT.get("right"), s_val)
+
+        delim = pr.text + D.format(
             left=null if not s_val else escape_latex(s_val),
             text=c_dict["e"],
             right=null if not e_val else escape_latex(e_val),
         )
+        print(delim)
+        print()
+        return delim
 
     def do_spre(self, elm):
         """
