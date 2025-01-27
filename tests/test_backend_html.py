@@ -6,6 +6,7 @@ from docling.backend.html_backend import HTMLDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import (
     ConversionResult,
+    DoclingDocument,
     InputDocument,
     SectionHeaderItem,
 )
@@ -44,7 +45,7 @@ def get_html_paths():
     # Define the directory you want to search
     directory = Path("./tests/data/html/")
 
-    # List all PDF files in the directory and its subdirectories
+    # List all HTML files in the directory and its subdirectories
     html_files = sorted(directory.rglob("*.html"))
     return html_files
 
