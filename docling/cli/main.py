@@ -1,18 +1,17 @@
 import importlib
-import json
 import logging
 import re
 import tempfile
 import time
 import warnings
-from enum import Enum
 from pathlib import Path
 from typing import Annotated, Dict, Iterable, List, Optional, Type
+import platform
 
 import typer
 from docling_core.types.doc import ImageRefMode
 from docling_core.utils.file import resolve_source_to_path
-from pydantic import TypeAdapter, ValidationError
+from pydantic import TypeAdapter
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.docling_parse_v2_backend import DoclingParseV2DocumentBackend
@@ -65,10 +64,12 @@ def version_callback(value: bool):
         docling_core_version = importlib.metadata.version("docling-core")
         docling_ibm_models_version = importlib.metadata.version("docling-ibm-models")
         docling_parse_version = importlib.metadata.version("docling-parse")
+        platform_str = platform.platform()
         print(f"Docling version: {docling_version}")
         print(f"Docling Core version: {docling_core_version}")
         print(f"Docling IBM Models version: {docling_ibm_models_version}")
         print(f"Docling Parse version: {docling_parse_version}")
+        print(f"Platform: {platform_str}")
         raise typer.Exit()
 
 
