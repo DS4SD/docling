@@ -56,6 +56,7 @@ nav:
     - "Docling": index.md
     - Installation: installation.md
     - Usage: usage.md
+    - Supported formats: supported_formats.md
     - FAQ: faq.md
     - Docling v2: v2.md
   - Concepts:
@@ -77,7 +78,7 @@ nav:
       - "Force full page OCR": examples/full_page_ocr.py
       - "Automatic OCR language detection with tesseract": examples/tesseract_lang_detection.py
       - "Accelerator options": examples/run_with_accelerator.py
-      - "Simple translation": examples/translate.py   
+      - "Simple translation": examples/translate.py
       - examples/backend_xml_rag.ipynb
     - ✂️ Chunking:
       - examples/hybrid_chunking.ipynb

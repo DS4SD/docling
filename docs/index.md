@@ -18,11 +18,13 @@ Docling parses documents and exports them to the desired format with ease and sp
 
 ## Features
 
-* 🗂️ Reads popular document formats (PDF, DOCX, PPTX, XLSX, Images, HTML, AsciiDoc & Markdown) and exports to HTML, Markdown and JSON (with embedded and referenced images)
-* 📑 Advanced PDF document understanding incl. page layout, reading order & table structures
-* 🧩 Unified, expressive [DoclingDocument](./concepts/docling_document.md) representation format
-* 🤖 Plug-and-play [integrations](https://ds4sd.github.io/docling/integrations/) incl. LangChain, LlamaIndex, Crew AI & Haystack for agentic AI
-* 🔍 OCR support for scanned PDFs
+* 🗂️ Parsing of [multiple documents formats][supported_formats] incl. PDF, DOCX, XLSX, HTML, images, & more
+* 📑 Advanced PDF understanding including page layout, reading order & table structure
+* 🧬 Unified, expressive [DoclingDocument][docling_document] representation format
+* ↪️ Various [export formats][supported_formats] and options, including Markdown, HTML, and lossless JSON
+* 🔒 Local execution capabilities for sensitive data and air-gapped environments
+* 🤖 Plug-and-play [integrations][integrations] incl. LangChain, LlamaIndex, Crew AI & Haystack for agentic AI
+* 🔍 OCR support for scanned PDFs and images
 * 💻 Simple and convenient CLI
 
 ### Coming soon
@@ -42,3 +44,7 @@ Docling parses documents and exports them to the desired format with ease and sp
 ## IBM ❤️ Open Source AI
 
 Docling has been brought to you by IBM.
+
+[supported_formats]: ./supported_formats.md
+[docling_document]: ./concepts/docling_document.md
+[integrations]: ./integrations/index.md

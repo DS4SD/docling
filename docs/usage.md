@@ -24,20 +24,6 @@ docling https://arxiv.org/pdf/2206.01062
 
 To see all available options (export formats etc.) run `docling --help`. More details in the [CLI reference page](./reference/cli.md).
 
-### Supported formats
-
-The document conversion in Docling supports several popular formats, including:
-
-- **PDF** (Portable Document Format): the format developed by Adobe to present documents compatible across application software, hardware, and operating systems.
-- **.docx**, **.xlsx**, **.pptx** (Word, Excel, and PowerPoint): the Open XML formats suppored by Microsof Office.
-- **Markdown**:  a lightweight markup language to add formatting elements to plain text documents.
-- **AsciiDoc**: a plain text markup language for writing technical content.
-- **HTML** (Hypertext Markup Language): the standard markup language for creating web pages.
-- **XHTML** (Extensible Hypertext Markup Language): the XML-based version of HTML.
-- **XML** (Extensible Markup Language): a markup format for storing and transmitting data. Due to its flexibility, Docling requires custom implementations to identify the
-semantics of the data. Currently, Docling supports the parsing of [USPTO](https://www.uspto.gov/patents) patents and [PubMed Central® (PMC)](https://pmc.ncbi.nlm.nih.gov/) articles.
-
-
 ### Advanced options
 
 #### Adjust pipeline features
