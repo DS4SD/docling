@@ -119,6 +119,7 @@ class RapidOcrOptions(OcrOptions):
     det_model_path: Optional[str] = None  # same default as rapidocr
     cls_model_path: Optional[str] = None  # same default as rapidocr
     rec_model_path: Optional[str] = None  # same default as rapidocr
+    rec_keys_path: Optional[str] = None  # same default as rapidocr
 
     model_config = ConfigDict(
         extra="forbid",
