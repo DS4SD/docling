@@ -78,10 +78,11 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         if self.is_valid():
             assert self.soup is not None
+            content = self.soup.body or self.soup
             # Replace <br> tags with newline characters
-            for br in self.soup.body.find_all("br"):
+            for br in content.find_all("br"):
                 br.replace_with("\n")
-            doc = self.walk(self.soup.body, doc)
+            doc = self.walk(content, doc)
         else:
             raise RuntimeError(
                 f"Cannot convert doc with {self.document_hash} because the backend failed to init."
