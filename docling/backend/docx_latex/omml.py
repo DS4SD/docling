@@ -6,7 +6,7 @@ On 23/01/2025
 """
 
 import lxml.etree as ET
-import pylatexenc  # type: ignore
+from pylatexenc.latexencode import UnicodeToLatexEncoder
 
 from docling.backend.docx_latex.latex_dict import (
     ALN,
@@ -177,7 +177,7 @@ class oMath2Latex(Tag2Method):
     _t_dict = T
 
     __direct_tags = ("box", "sSub", "sSup", "sSubSup", "num", "den", "deg", "e")
-    u = pylatexenc.latexencode.UnicodeToLatexEncoder(
+    u = UnicodeToLatexEncoder(
         replacement_latex_protection="braces-all",
         unknown_char_policy="keep",
         unknown_char_warning=False,
