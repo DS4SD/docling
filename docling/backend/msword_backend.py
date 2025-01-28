@@ -27,7 +27,12 @@ _log = logging.getLogger(__name__)
 
 
 class MsWordDocumentBackend(DeclarativeDocumentBackend):
-    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+    def __init__(
+        self,
+        in_doc: "InputDocument",
+        path_or_stream: Union[BytesIO, Path],
+        get_latex=False,
+    ):
         super().__init__(in_doc, path_or_stream)
         self.XML_KEY = (
             "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val"
@@ -48,6 +53,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         self.level = 0
         self.listIter = 0
+
+        # Transform MSWord equations to latex
+        self.get_latex = get_latex
 
         self.history = {
             "names": [None],
@@ -240,9 +248,10 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         paragraph = docx.text.paragraph.Paragraph(element, docx_obj)
 
         text = paragraph.text
-        text = self.handle_equations_in_text(element=element, text=text)
+        if self.get_latex:
+            text = self.handle_equations_in_text(element=element, text=text)
 
-        if paragraph.text is None:
+        if text is None:
             return
         text = text.strip()
 

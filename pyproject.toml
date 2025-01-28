@@ -157,7 +157,8 @@ module = [
     "deepsearch_glm.*",
     "lxml.*",
     "bs4.*",
-    "huggingface_hub.*"
+    "huggingface_hub.*",
+    "pylatexenc.*"
 ]
 ignore_missing_imports = true
 
