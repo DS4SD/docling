@@ -2,8 +2,19 @@
 
 # --- Setup Error Handling ---
 
+# Initialize log file first
+LOG_FILE="/tmp/docling.log"
+touch "$LOG_FILE" || {
+    echo "Fatal: Cannot create log file at $LOG_FILE"
+    exit 1
+}
+
+# Ensure all output is logged
+exec 1> >(tee -a "$LOG_FILE")
+exec 2> >(tee -a "$LOG_FILE" >&2)
+
 # Exit the script if any command fails.
-trap 'echo "Error on line $LINENO"; exit 1' ERR
+trap 'echo "Error on line $LINENO"' ERR
 set -e
 
 # --- Validate Docling installation ---
@@ -62,19 +73,25 @@ echo "Processing document with Docling CLI..."
 echo "Running: $DOC_CONVERT_CMD"
 
 # Create a timestamp file to ensure the document is processed only once.
-touch docling.timestamp || {
+TIMESTAMP_FILE="/tmp/docling.timestamp"
+touch "$TIMESTAMP_FILE" || {
     echo "Error: Failed to create timestamp file"
     exit 1
 }
 
-# Execute the command and capture both stdout and stderr.
-eval "$DOC_CONVERT_CMD" >docling.log 2>&1 || {
-    cat docling.log
-    echo "Error: Docling command failed"
-    exit 1
-}
+# Execute the command
+set +e # Temporarily disable exit on error to handle the error ourselves
+eval "$DOC_CONVERT_CMD"
+DOCLING_EXIT_CODE=$?
+set -e # Re-enable exit on error
 
-GENERATED_FILE="$(find . -type f -name "*.${OUTPUT_FORMAT}" -newer docling.timestamp)"
+# Check if the command failed and handle the error
+if [ $DOCLING_EXIT_CODE -ne 0 ]; then
+    echo "Error: Docling command failed with exit code $DOCLING_EXIT_CODE"
+    exit 1
+fi
+
+GENERATED_FILE="$(find . -type f -name "*.${OUTPUT_FORMAT}" -newer "$TIMESTAMP_FILE")"
 
 # If no generated file is found, exit with an error.
 if [ -z "$GENERATED_FILE" ]; then
@@ -108,10 +125,10 @@ apify actor:set-value "OUTPUT_RESULT" --contentType "application/$OUTPUT_FORMAT"
     exit 1
 }
 
-if [ -f "docling.log" ]; then
-    if [ -s "docling.log" ]; then
+if [ -f "$LOG_FILE" ]; then
+    if [ -s "$LOG_FILE" ]; then
         echo "Log file is not empty, pushing to Key-Value Store (record key: DOCLING_LOG)..."
-        apify actor:set-value "DOCLING_LOG" --contentType "text/plain" <"docling.log" || {
+        apify actor:set-value "DOCLING_LOG" --contentType "text/plain" <"$LOG_FILE" || {
             echo "Warning: Failed to push the log file to the Key-Value Store"
         }
     else
@@ -125,7 +142,7 @@ fi
 
 cleanup() {
     local exit_code=$?
-    rm -f docling.timestamp docling.log || true
+    rm -f "$TIMESTAMP_FILE" || true
     exit $exit_code
 }
 
