@@ -24,20 +24,6 @@ docling https://arxiv.org/pdf/2206.01062
 
 To see all available options (export formats etc.) run `docling --help`. More details in the [CLI reference page](./reference/cli.md).
 
-### Supported formats
-
-The document conversion in Docling supports several popular formats, including:
-
-- **PDF** (Portable Document Format): the format developed by Adobe to present documents compatible across application software, hardware, and operating systems.
-- **.docx**, **.xlsx**, **.pptx** (Word, Excel, and PowerPoint): the Open XML formats suppored by Microsof Office.
-- **Markdown**:  a lightweight markup language to add formatting elements to plain text documents.
-- **AsciiDoc**: a plain text markup language for writing technical content.
-- **HTML** (Hypertext Markup Language): the standard markup language for creating web pages.
-- **XHTML** (Extensible Hypertext Markup Language): the XML-based version of HTML.
-- **XML** (Extensible Markup Language): a markup format for storing and transmitting data. Due to its flexibility, Docling requires custom implementations to identify the
-semantics of the data. Currently, Docling supports the parsing of [USPTO](https://www.uspto.gov/patents) patents and [PubMed Central® (PMC)](https://pmc.ncbi.nlm.nih.gov/) articles.
-
-
 ### Advanced options
 
 #### Adjust pipeline features
@@ -142,7 +128,14 @@ You can limit the CPU threads used by Docling by setting the environment variabl
 
 #### Use specific backend converters
 
-By default, Docling will try to identify the document format to apply the appropriate conversion backend (see the list of [supported formats](#supported-formats)).
+!!! note
+
+    This section discusses directly invoking a [backend](./concepts/architecture.md),
+    i.e. using a low-level API. This should only be done when necessary. For most cases,
+    using a `DocumentConverter` (high-level API) as discussed in the sections above
+    should suffice — and is the recommended way.
+
+By default, Docling will try to identify the document format to apply the appropriate conversion backend (see the list of [supported formats](./supported_formats.md)).
 You can restrict the `DocumentConverter` to a set of allowed document formats, as shown in the [Multi-format conversion](./examples/run_with_formats.py) example.
 Alternatively, you can also use the specific backend that matches your document content. For instance, you can use `HTMLDocumentBackend` for HTML pages:
 
@@ -162,8 +155,8 @@ in_doc = InputDocument(
     filename="duck.html",
 )
 backend = HTMLDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(text))
-result = backend.convert()
-print(result.export_to_markdown())
+dl_doc = backend.convert()
+print(dl_doc.export_to_markdown())
 ```
 
 ## Chunking
