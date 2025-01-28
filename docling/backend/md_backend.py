@@ -65,7 +65,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         self.in_table = False
         self.md_table_buffer: list[str] = []
-        self.inline_text_buffer = ""
+        self.inline_texts: list[str] = []
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
@@ -152,15 +152,14 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
     def process_inline_text(
         self, parent_element: Optional[NodeItem], doc: DoclingDocument
     ):
-        # self.inline_text_buffer += str(text_in)
-        txt = self.inline_text_buffer.strip()
+        txt = " ".join(self.inline_texts)
         if len(txt) > 0:
             doc.add_text(
                 label=DocItemLabel.PARAGRAPH,
                 parent=parent_element,
                 text=txt,
             )
-        self.inline_text_buffer = ""
+        self.inline_texts = []
 
     def iterate_elements(
         self,
@@ -266,9 +265,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 self.close_table(doc)
                 self.in_table = False
                 # most likely just inline text
-                self.inline_text_buffer += str(
-                    element.children
-                )  # do not strip an inline text, as it may contain important spaces
+                self.inline_texts.append(str(element.children))
 
         elif isinstance(element, marko.inline.CodeSpan):
             self.close_table(doc)
@@ -292,7 +289,6 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             doc.add_code(parent=parent_element, text=snippet_text)
 
         elif isinstance(element, marko.inline.LineBreak):
-            self.process_inline_text(parent_element, doc)
             if self.in_table:
                 _log.debug("Line break in a table")
                 self.md_table_buffer.append("")
