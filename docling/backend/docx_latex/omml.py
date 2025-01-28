@@ -187,7 +187,7 @@ class oMath2Latex(Tag2Method):
         self._latex = self.process_children(element)
 
     def __str__(self):
-        return self.latex
+        return self.latex.replace("  ", " ")
 
     def __unicode__(self):
         return self.__str__(self)
@@ -231,20 +231,13 @@ class oMath2Latex(Tag2Method):
         pr = c_dict["dPr"]
         null = D_DEFAULT.get("null")
 
-        print(pr.text)
         s_val = get_val(pr.begChr, default=D_DEFAULT.get("left"), store=T)
-        print(pr.begChr, D_DEFAULT.get("left"), s_val)
-
         e_val = get_val(pr.endChr, default=D_DEFAULT.get("right"), store=T)
-        print(pr.endChr, D_DEFAULT.get("right"), s_val)
-
         delim = pr.text + D.format(
             left=null if not s_val else escape_latex(s_val),
             text=c_dict["e"],
             right=null if not e_val else escape_latex(e_val),
         )
-        print(delim)
-        print()
         return delim
 
     def do_spre(self, elm):
@@ -355,7 +348,7 @@ class oMath2Latex(Tag2Method):
         """
         rows = []
         for stag, t, e in self.process_children_list(elm):
-            if stag is "mPr":
+            if stag == "mPr":
                 pass
             elif stag == "mr":
                 rows.append(t)
