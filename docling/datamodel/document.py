@@ -352,6 +352,8 @@ class _DocumentConversionInput(BaseModel):
             mime = FormatToMimeType[InputFormat.MD][0]
         elif ext in FormatToExtensions[InputFormat.JSON_DOCLING]:
             mime = FormatToMimeType[InputFormat.JSON_DOCLING][0]
+        elif ext in FormatToExtensions[InputFormat.PDF]:
+            mime = FormatToMimeType[InputFormat.PDF][0]
         return mime
 
     @staticmethod
