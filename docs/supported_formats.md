@@ -1,5 +1,5 @@
 Docling can parse various documents formats into a unified representation (Docling
-document), which it can export to different formats too — check out
+Document), which it can export to different formats too — check out
 [Architecture](./concepts/architecture.md) for more details.
 
 Below you can find a listing of all supported input and output formats.
@@ -27,7 +27,8 @@ Schema-specific support:
 
 | Format | Description |
 |--------|-------------|
-| HTML | Docling supports both image embedding and referencing |
+| HTML | Both image embedding and referencing are supported |
 | Markdown | |
 | JSON | Lossless serialization of Docling Document |
+| Text | Plain text, i.e. without Markdown markers |
 | Doctags | |

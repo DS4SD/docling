@@ -22,24 +22,21 @@
 [![License MIT](https://img.shields.io/github/license/DS4SD/docling)](https://opensource.org/licenses/MIT)
 [![PyPI Downloads](https://static.pepy.tech/badge/docling/month)](https://pepy.tech/projects/docling)
 
-Docling parses documents and exports them to the desired format with ease and speed.
+Docling simplifies document processing, parsing diverse formats — including advanced PDF understanding — and providing seamless integrations with the gen AI ecosystem.
 
 ## Features
 
-* 🗂️ Parsing of [multiple documents formats][supported_formats] incl. PDF, DOCX, XLSX, HTML, images, & more
-* 📑 Advanced PDF understanding including page layout, reading order & table structure
+* 🗂️ Parsing of [multiple document formats][supported_formats] incl. PDF, DOCX, XLSX, HTML, images, and more
+* 📑 Advanced PDF understanding incl. page layout, reading order, table structure, code, formulas, image classification, and more
 * 🧬 Unified, expressive [DoclingDocument][docling_document] representation format
 * ↪️ Various [export formats][supported_formats] and options, including Markdown, HTML, and lossless JSON
 * 🔒 Local execution capabilities for sensitive data and air-gapped environments
 * 🤖 Plug-and-play [integrations][integrations] incl. LangChain, LlamaIndex, Crew AI & Haystack for agentic AI
-* 🔍 OCR support for scanned PDFs and images
+* 🔍 Extensive OCR support for scanned PDFs and images
 * 💻 Simple and convenient CLI
-
-Explore the [documentation](https://ds4sd.github.io/docling/) to discover plenty examples and unlock the full power of Docling!
 
 ### Coming soon
 
-* ♾️ Equation & code extraction
 * 📝 Metadata extraction, including title, authors, references & language
 
 ## Installation

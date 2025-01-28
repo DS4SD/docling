@@ -128,7 +128,14 @@ You can limit the CPU threads used by Docling by setting the environment variabl
 
 #### Use specific backend converters
 
-By default, Docling will try to identify the document format to apply the appropriate conversion backend (see the list of [supported formats](#supported-formats)).
+!!! note
+
+    This section discusses directly invoking a [backend](./concepts/architecture.md),
+    i.e. using a low-level API. This should only be done when necessary. For most cases,
+    using a `DocumentConverter` (high-level API) as discussed in the sections above
+    should suffice — and is the recommended way.
+
+By default, Docling will try to identify the document format to apply the appropriate conversion backend (see the list of [supported formats](./supported_formats.md)).
 You can restrict the `DocumentConverter` to a set of allowed document formats, as shown in the [Multi-format conversion](./examples/run_with_formats.py) example.
 Alternatively, you can also use the specific backend that matches your document content. For instance, you can use `HTMLDocumentBackend` for HTML pages:
 
@@ -148,8 +155,8 @@ in_doc = InputDocument(
     filename="duck.html",
 )
 backend = HTMLDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(text))
-result = backend.convert()
-print(result.export_to_markdown())
+dl_doc = backend.convert()
+print(dl_doc.export_to_markdown())
 ```
 
 ## Chunking
