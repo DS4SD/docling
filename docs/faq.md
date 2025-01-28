@@ -123,6 +123,12 @@ This is a collection of FAQ collected from the user questions on <https://github
 
     - Update to the latest version of [certifi](https://pypi.org/project/certifi/), i.e. `pip install --upgrade certifi`
     - Use [pip-system-certs](https://pypi.org/project/pip-system-certs/) to use the latest trusted certificates on your system.
+    - Set environment variables `SSL_CERT_FILE` and `REQUESTS_CA_BUNDLE` to the value of `python -m certifi`:
+        ```
+        CERT_PATH=$(python -m certifi)
+        export SSL_CERT_FILE=${CERT_PATH}
+        export REQUESTS_CA_BUNDLE=${CERT_PATH}
+        ```
 
 
 ??? question "Which OCR languages are supported?"
