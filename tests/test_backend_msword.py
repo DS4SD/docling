@@ -6,6 +6,7 @@ from docling.backend.msword_backend import MsWordDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import (
     ConversionResult,
+    DoclingDocument,
     InputDocument,
     SectionHeaderItem,
 )

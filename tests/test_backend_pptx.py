@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import ConversionResult
+from docling.datamodel.document import ConversionResult, DoclingDocument
 from docling.document_converter import DocumentConverter
 
 GENERATE = False
