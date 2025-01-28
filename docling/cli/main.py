@@ -211,6 +211,14 @@ def convert(
         TableFormerMode,
         typer.Option(..., help="The mode to use in the table structure model."),
     ] = TableFormerMode.FAST,
+    enrich_code: Annotated[
+        bool,
+        typer.Option(..., help="Enable the code enrichment model in the pipeline."),
+    ] = False,
+    enrich_formula: Annotated[
+        bool,
+        typer.Option(..., help="Enable the formula enrichment model in the pipeline."),
+    ] = False,
     artifacts_path: Annotated[
         Optional[Path],
         typer.Option(..., help="If provided, the location of the model artifacts."),
@@ -365,6 +373,8 @@ def convert(
             do_ocr=ocr,
             ocr_options=ocr_options,
             do_table_structure=True,
+            do_code_enrichment=enrich_code,
+            do_formula_enrichment=enrich_formula,
             document_timeout=document_timeout,
         )
         pipeline_options.table_structure_options.do_cell_matching = (
