@@ -227,13 +227,16 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         only_texts = []
         texts_and_equations = []
         for subt in element.iter():
-            if subt.tag.endswith("t") and "math" not in subt.tag:
+            tag_name = etree.QName(subt).localname
+            if tag_name == "t" and "math" not in subt.tag:
                 only_texts.append(subt.text)
                 texts_and_equations.append(subt.text)
-            if "oMath" in subt.tag and "oMathPara" not in subt.tag:
+            elif "oMath" in subt.tag and "oMathPara" not in subt.tag:
                 texts_and_equations.append(f"${str(oMath2Latex(subt))}$")
 
-        assert "".join(only_texts) == text
+        if "".join(only_texts) != text:
+            return text
+
         return "".join(texts_and_equations)
 
     def handle_text_elements(self, element, docx_obj, doc):
