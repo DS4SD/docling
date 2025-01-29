@@ -38,6 +38,9 @@ Docling simplifies document processing, parsing diverse formats — including ad
 ### Coming soon
 
 * 📝 Metadata extraction, including title, authors, references & language
+* 📝 Inclusion of Visual Language Models ([SmolDocling](https://huggingface.co/blog/smolervlm#smoldocling))
+* 📝 Chart understanding (Barchart, Piechart, LinePlot, etc)
+* 📝 Complex chemistry understanding (Molecular structures)
 
 ## Installation
 
