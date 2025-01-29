@@ -242,8 +242,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def handle_text_elements(self, element, docx_obj, doc):
         paragraph = docx.text.paragraph.Paragraph(element, docx_obj)
 
-        text = paragraph.text
-        text = self.handle_equations_in_text(element=element, text=text)
+        raw_text = paragraph.text
+        text = self.handle_equations_in_text(element=element, text=raw_text)
 
         if text is None:
             return
@@ -281,24 +281,43 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     self.parents[key] = None
             self.level = self.level_at_new_list - 1
             self.level_at_new_list = None
+
         if p_style_id in ["Title"]:
             for key, val in self.parents.items():
                 self.parents[key] = None
             self.parents[0] = doc.add_text(
                 parent=None, label=DocItemLabel.TITLE, text=text
             )
+
         elif "Heading" in p_style_id:
             self.add_header(element, docx_obj, doc, p_style_id, p_level, text)
 
         elif p_style_id in [
-            "Paragraph",
-            "Normal",
             "Subtitle",
             "Author",
-            "DefaultText",
             "ListParagraph",
             "ListBullet",
             "Quote",
+        ]:
+            level = self.get_level()
+            doc.add_text(
+                label=DocItemLabel.PARAGRAPH, parent=self.parents[level - 1], text=text
+            )
+
+        elif (raw_text is None or len(raw_text) == 0) and len(text) > 0:
+            # Standalone equation
+            # Entities in which all text comes from equations
+            level = self.get_level()
+            if text.strip().startswith("$") and text.strip().endswith("$"):
+                text = text.strip()[1:-1]
+            doc.add_text(
+                label=DocItemLabel.FORMULA, parent=self.parents[level - 1], text=text
+            )
+
+        elif p_style_id in [
+            "Paragraph",
+            "Normal",
+            "DefaultText",
         ]:
             level = self.get_level()
             doc.add_text(
@@ -310,7 +329,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # hence we treat all other labels as pure text
             level = self.get_level()
             doc.add_text(
-                label=DocItemLabel.PARAGRAPH, parent=self.parents[level - 1], text=text
+                label=DocItemLabel.TEXT, parent=self.parents[level - 1], text=text
             )
         self.update_history(p_style_id, p_level, numid, ilevel)
         return
