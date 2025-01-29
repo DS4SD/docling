@@ -309,7 +309,22 @@
         }
       ],
       "label": "section_header",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            13
+          ]
+        }
+      ],
       "orig": "Test Document",
       "text": "Test Document",
       "level": 1
@@ -321,7 +336,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "orig": "",
       "text": ""
     },
@@ -332,7 +362,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "orig": "",
       "text": ""
     },
@@ -343,7 +388,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            15
+          ]
+        }
+      ],
       "orig": "Paragraph 2.1.1",
       "text": "Paragraph 2.1.1"
     },
@@ -354,7 +414,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "orig": "",
       "text": ""
     },
@@ -365,7 +440,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            15
+          ]
+        }
+      ],
       "orig": "Paragraph 2.1.2",
       "text": "Paragraph 2.1.2"
     },
@@ -376,7 +466,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "orig": "",
       "text": ""
     },
@@ -394,7 +499,22 @@
         }
       ],
       "label": "section_header",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            7
+          ]
+        }
+      ],
       "orig": "Test 1:",
       "text": "Test 1:",
       "level": 3
@@ -406,7 +526,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item 1",
       "text": "List item 1",
       "enumerated": false,
@@ -419,7 +554,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item 2",
       "text": "List item 2",
       "enumerated": false,
@@ -432,7 +582,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item 3",
       "text": "List item 3",
       "enumerated": false,
@@ -445,7 +610,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "orig": "",
       "text": ""
     },
@@ -463,7 +643,22 @@
         }
       ],
       "label": "section_header",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            7
+          ]
+        }
+      ],
       "orig": "Test 2:",
       "text": "Test 2:",
       "level": 3
@@ -475,7 +670,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item a",
       "text": "List item a",
       "enumerated": false,
@@ -488,7 +698,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item b",
       "text": "List item b",
       "enumerated": false,
@@ -501,7 +726,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item c",
       "text": "List item c",
       "enumerated": false,
@@ -514,7 +754,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "orig": "",
       "text": ""
     },
@@ -532,7 +787,22 @@
         }
       ],
       "label": "section_header",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            7
+          ]
+        }
+      ],
       "orig": "Test 3:",
       "text": "Test 3:",
       "level": 3
@@ -544,7 +814,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item 1",
       "text": "List item 1",
       "enumerated": false,
@@ -557,7 +842,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item 2",
       "text": "List item 2",
       "enumerated": false,
@@ -570,7 +870,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            13
+          ]
+        }
+      ],
       "orig": "List item 1.1",
       "text": "List item 1.1",
       "enumerated": false,
@@ -583,7 +898,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            13
+          ]
+        }
+      ],
       "orig": "List item 1.2",
       "text": "List item 1.2",
       "enumerated": false,
@@ -596,7 +926,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            13
+          ]
+        }
+      ],
       "orig": "List item 1.3",
       "text": "List item 1.3",
       "enumerated": false,
@@ -609,7 +954,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item 3",
       "text": "List item 3",
       "enumerated": false,
@@ -622,7 +982,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "orig": "",
       "text": ""
     },
@@ -640,7 +1015,22 @@
         }
       ],
       "label": "section_header",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            7
+          ]
+        }
+      ],
       "orig": "Test 4:",
       "text": "Test 4:",
       "level": 3
@@ -652,7 +1042,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item 1",
       "text": "List item 1",
       "enumerated": false,
@@ -665,7 +1070,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            13
+          ]
+        }
+      ],
       "orig": "List item 1.1",
       "text": "List item 1.1",
       "enumerated": false,
@@ -678,7 +1098,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item 2",
       "text": "List item 2",
       "enumerated": false,
@@ -691,7 +1126,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "orig": "",
       "text": ""
     },
@@ -709,7 +1159,22 @@
         }
       ],
       "label": "section_header",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            7
+          ]
+        }
+      ],
       "orig": "Test 5:",
       "text": "Test 5:",
       "level": 3
@@ -721,7 +1186,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item 1",
       "text": "List item 1",
       "enumerated": false,
@@ -734,7 +1214,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            13
+          ]
+        }
+      ],
       "orig": "List item 1.1",
       "text": "List item 1.1",
       "enumerated": false,
@@ -747,7 +1242,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            15
+          ]
+        }
+      ],
       "orig": "List item 1.1.1",
       "text": "List item 1.1.1",
       "enumerated": false,
@@ -760,7 +1270,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item 3",
       "text": "List item 3",
       "enumerated": false,
@@ -773,7 +1298,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "orig": "",
       "text": ""
     },
@@ -797,7 +1337,22 @@
         }
       ],
       "label": "section_header",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            7
+          ]
+        }
+      ],
       "orig": "Test 6:",
       "text": "Test 6:",
       "level": 3
@@ -809,7 +1364,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item 1",
       "text": "List item 1",
       "enumerated": false,
@@ -822,7 +1392,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item 2",
       "text": "List item 2",
       "enumerated": false,
@@ -835,7 +1420,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            13
+          ]
+        }
+      ],
       "orig": "List item 1.1",
       "text": "List item 1.1",
       "enumerated": false,
@@ -848,7 +1448,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            13
+          ]
+        }
+      ],
       "orig": "List item 1.2",
       "text": "List item 1.2",
       "enumerated": false,
@@ -861,7 +1476,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            15
+          ]
+        }
+      ],
       "orig": "List item 1.2.1",
       "text": "List item 1.2.1",
       "enumerated": false,
@@ -874,7 +1504,22 @@
       },
       "children": [],
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "List item 3",
       "text": "List item 3",
       "enumerated": false,
@@ -887,7 +1532,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "orig": "",
       "text": ""
     },
@@ -898,7 +1558,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "orig": "",
       "text": ""
     },
@@ -909,7 +1584,22 @@
       },
       "children": [],
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "orig": "",
       "text": ""
     }
@@ -917,5 +1607,20 @@
   "pictures": [],
   "tables": [],
   "key_value_items": [],
-  "pages": {}
+  "pages": {
+    "1": {
+      "size": {
+        "width": 612.0,
+        "height": 792.0
+      },
+      "page_no": 1
+    },
+    "2": {
+      "size": {
+        "width": 612.0,
+        "height": 792.0
+      },
+      "page_no": 2
+    }
+  }
 }
