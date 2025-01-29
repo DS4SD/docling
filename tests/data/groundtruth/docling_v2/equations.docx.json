@@ -140,10 +140,10 @@
         "$ref": "#/body"
       },
       "children": [],
-      "label": "paragraph",
+      "label": "formula",
       "prov": [],
-      "orig": "$a^{2}+b^{2}=c^{2} \\text{ \\texttimes } 23$",
-      "text": "$a^{2}+b^{2}=c^{2} \\text{ \\texttimes } 23$"
+      "orig": "a^{2}+b^{2}=c^{2} \\text{ \\texttimes } 23",
+      "text": "a^{2}+b^{2}=c^{2} \\text{ \\texttimes } 23"
     },
     {
       "self_ref": "#/texts/3",
@@ -184,10 +184,10 @@
         "$ref": "#/body"
       },
       "children": [],
-      "label": "paragraph",
+      "label": "formula",
       "prov": [],
-      "orig": "$f\\left(x\\right)=a_{0}+\\sum_{n=1}^{ \\infty }\\left(a_{n}\\cos(\\frac{n \\pi x}{L})+b_{n}\\sin(\\frac{n \\pi x}{L})\\right)$",
-      "text": "$f\\left(x\\right)=a_{0}+\\sum_{n=1}^{ \\infty }\\left(a_{n}\\cos(\\frac{n \\pi x}{L})+b_{n}\\sin(\\frac{n \\pi x}{L})\\right)$"
+      "orig": "f\\left(x\\right)=a_{0}+\\sum_{n=1}^{ \\infty }\\left(a_{n}\\cos(\\frac{n \\pi x}{L})+b_{n}\\sin(\\frac{n \\pi x}{L})\\right)",
+      "text": "f\\left(x\\right)=a_{0}+\\sum_{n=1}^{ \\infty }\\left(a_{n}\\cos(\\frac{n \\pi x}{L})+b_{n}\\sin(\\frac{n \\pi x}{L})\\right)"
     },
     {
       "self_ref": "#/texts/7",
@@ -261,10 +261,10 @@
         "$ref": "#/body"
       },
       "children": [],
-      "label": "paragraph",
+      "label": "formula",
       "prov": [],
-      "orig": "$\\left(x+a\\right)^{n}=\\sum_{k=0}^{n}\\left(\\genfrac{}{}{0pt}{}{n}{k}\\right)x^{k}a^{n-k}$",
-      "text": "$\\left(x+a\\right)^{n}=\\sum_{k=0}^{n}\\left(\\genfrac{}{}{0pt}{}{n}{k}\\right)x^{k}a^{n-k}$"
+      "orig": "\\left(x+a\\right)^{n}=\\sum_{k=0}^{n}\\left(\\genfrac{}{}{0pt}{}{n}{k}\\right)x^{k}a^{n-k}",
+      "text": "\\left(x+a\\right)^{n}=\\sum_{k=0}^{n}\\left(\\genfrac{}{}{0pt}{}{n}{k}\\right)x^{k}a^{n-k}"
     },
     {
       "self_ref": "#/texts/14",
@@ -327,10 +327,10 @@
         "$ref": "#/body"
       },
       "children": [],
-      "label": "paragraph",
+      "label": "formula",
       "prov": [],
-      "orig": "$\\left(1+x\\right)^{n}=1+\\frac{nx}{1!}+\\frac{n\\left(n-1\\right)x^{2}}{2!}+ \\text{ \\textellipsis } $",
-      "text": "$\\left(1+x\\right)^{n}=1+\\frac{nx}{1!}+\\frac{n\\left(n-1\\right)x^{2}}{2!}+ \\text{ \\textellipsis } $"
+      "orig": "\\left(1+x\\right)^{n}=1+\\frac{nx}{1!}+\\frac{n\\left(n-1\\right)x^{2}}{2!}+ \\text{ \\textellipsis } ",
+      "text": "\\left(1+x\\right)^{n}=1+\\frac{nx}{1!}+\\frac{n\\left(n-1\\right)x^{2}}{2!}+ \\text{ \\textellipsis } "
     },
     {
       "self_ref": "#/texts/20",
@@ -404,10 +404,10 @@
         "$ref": "#/body"
       },
       "children": [],
-      "label": "paragraph",
+      "label": "formula",
       "prov": [],
-      "orig": "$e^{x}=1+\\frac{x}{1!}+\\frac{x^{2}}{2!}+\\frac{x^{3}}{3!}+ \\text{ \\textellipsis } , - \\infty  < x <  \\infty $",
-      "text": "$e^{x}=1+\\frac{x}{1!}+\\frac{x^{2}}{2!}+\\frac{x^{3}}{3!}+ \\text{ \\textellipsis } , - \\infty  < x <  \\infty $"
+      "orig": "e^{x}=1+\\frac{x}{1!}+\\frac{x^{2}}{2!}+\\frac{x^{3}}{3!}+ \\text{ \\textellipsis } , - \\infty  < x <  \\infty ",
+      "text": "e^{x}=1+\\frac{x}{1!}+\\frac{x^{2}}{2!}+\\frac{x^{3}}{3!}+ \\text{ \\textellipsis } , - \\infty  < x <  \\infty "
     },
     {
       "self_ref": "#/texts/27",

@@ -138,7 +138,7 @@
         "$ref": "#/texts/1"
       },
       "children": [],
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Figure 1: This is a cute duckling",
       "text": "Figure 1: This is a cute duckling"
