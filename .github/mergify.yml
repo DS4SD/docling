@@ -1,0 +1,18 @@
+merge_protections:
+  - name: Enforce conventional commit
+    description: Make sure that we follow https://www.conventionalcommits.org/en/v1.0.0/
+    if:
+      - base = main
+    success_conditions:
+      - "title ~=
+        ^(fix|feat|docs|style|refactor|perf|test|build|ci|chore|revert)(?:\\(.+\
+        \\))?(!)?:"
+  - name: Require two reviewer for test updates
+    description: When test data is updated, we require two reviewers
+    if:
+      - base = main
+      - or:
+          - files ~= ^tests/data
+          - files ~= ^tests/data_scanned
+    success_conditions:
+      - "#approved-reviews-by >= 2"

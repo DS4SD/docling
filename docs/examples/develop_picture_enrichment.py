@@ -22,7 +22,6 @@ class ExamplePictureClassifierPipelineOptions(PdfPipelineOptions):
 
 
 class ExamplePictureClassifierEnrichmentModel(BaseEnrichmentModel):
-
     def __init__(self, enabled: bool):
         self.enabled = enabled
 
@@ -39,7 +38,7 @@ class ExamplePictureClassifierEnrichmentModel(BaseEnrichmentModel):
             assert isinstance(element, PictureItem)
 
             # uncomment this to interactively visualize the image
-            # element.image.pil_image.show()
+            # element.get_image(doc).show()
 
             element.annotations.append(
                 PictureClassificationData(
@@ -54,7 +53,6 @@ class ExamplePictureClassifierEnrichmentModel(BaseEnrichmentModel):
 
 
 class ExamplePictureClassifierPipeline(StandardPdfPipeline):
-
     def __init__(self, pipeline_options: ExamplePictureClassifierPipelineOptions):
         super().__init__(pipeline_options)
         self.pipeline_options: ExamplePictureClassifierPipeline

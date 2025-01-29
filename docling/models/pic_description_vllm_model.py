@@ -17,7 +17,7 @@ class PictureDescriptionVllmModel(PictureDescriptionBaseModel):
         self.options: PicDescVllmOptions
 
         if self.enabled:
-            raise NotImplemented
+            raise NotImplementedError
 
         if self.enabled:
             try:

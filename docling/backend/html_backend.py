@@ -37,10 +37,10 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
-                text_stream = self.path_or_stream.getvalue().decode("utf-8")
+                text_stream = self.path_or_stream.getvalue()
                 self.soup = BeautifulSoup(text_stream, "html.parser")
             if isinstance(self.path_or_stream, Path):
-                with open(self.path_or_stream, "r", encoding="utf-8") as f:
+                with open(self.path_or_stream, "rb") as f:
                     html_content = f.read()
                     self.soup = BeautifulSoup(html_content, "html.parser")
         except Exception as e:
@@ -78,10 +78,11 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         if self.is_valid():
             assert self.soup is not None
+            content = self.soup.body or self.soup
             # Replace <br> tags with newline characters
-            for br in self.soup.body.find_all("br"):
+            for br in content.find_all("br"):
                 br.replace_with("\n")
-            doc = self.walk(self.soup.body, doc)
+            doc = self.walk(content, doc)
         else:
             raise RuntimeError(
                 f"Cannot convert doc with {self.document_hash} because the backend failed to init."
@@ -120,6 +121,8 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             self.handle_header(element, idx, doc)
         elif element.name in ["p"]:
             self.handle_paragraph(element, idx, doc)
+        elif element.name in ["pre"]:
+            self.handle_code(element, idx, doc)
         elif element.name in ["ul", "ol"]:
             self.handle_list(element, idx, doc)
         elif element.name in ["li"]:
@@ -204,6 +207,16 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 text=text,
                 level=hlevel,
             )
+
+    def handle_code(self, element, idx, doc):
+        """Handles monospace code snippets (pre)."""
+        if element.text is None:
+            return
+        text = element.text.strip()
+        label = DocItemLabel.CODE
+        if len(text) == 0:
+            return
+        doc.add_code(parent=self.parents[self.level], label=label, text=text)
 
     def handle_paragraph(self, element, idx, doc):
         """Handles paragraph tags (p)."""

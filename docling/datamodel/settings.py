@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 from pydantic import BaseModel
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class DocumentLimits(BaseModel):
@@ -31,6 +31,7 @@ class DebugSettings(BaseModel):
     visualize_cells: bool = False
     visualize_ocr: bool = False
     visualize_layout: bool = False
+    visualize_raw_layout: bool = False
     visualize_tables: bool = False
 
     profile_pipeline_timings: bool = False
@@ -40,6 +41,8 @@ class DebugSettings(BaseModel):
 
 
 class AppSettings(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="DOCLING_", env_nested_delimiter="_")
+
     perf: BatchConcurrencySettings
     debug: DebugSettings
 

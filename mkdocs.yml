@@ -38,8 +38,9 @@ theme:
     - content.code.annotate
     - content.code.copy
     - announce.dismiss
+    - navigation.footer
     - navigation.tabs
-    # - navigation.indexes  # <= if set, each "section" can have its own page, if index.md is used
+    - navigation.indexes  # <= if set, each "section" can have its own page, if index.md is used
     - navigation.instant
     - navigation.instant.prefetch
     # - navigation.instant.preview
@@ -51,16 +52,21 @@ theme:
     - search.suggest
     - toc.follow
 nav:
-  - Get started:
-    - Home: index.md
+  - Home:
+    - "Docling": index.md
     - Installation: installation.md
     - Usage: usage.md
+    - Supported formats: supported_formats.md
+    - FAQ: faq.md
     - Docling v2: v2.md
   - Concepts:
+    - Concepts: concepts/index.md
+    - Architecture: concepts/architecture.md
     - Docling Document: concepts/docling_document.md
-  #   - Chunking: concepts/chunking.md
+    - Chunking: concepts/chunking.md
   - Examples:
-    - Conversion:
+    - Examples: examples/index.md
+    - 🔀 Conversion:
       - "Simple conversion": examples/minimal.py
       - "Custom conversion": examples/custom_convert.py
       - "Batch conversion": examples/batch_convert.py
@@ -69,18 +75,51 @@ nav:
       - "Figure enrichment": examples/develop_picture_enrichment.py
       - "Table export": examples/export_tables.py
       - "Multimodal export": examples/export_multimodal.py
-    - RAG / QA:
-      - "RAG with LlamaIndex 🦙": examples/rag_llamaindex.ipynb
-      - "RAG with LangChain 🦜🔗": examples/rag_langchain.ipynb
-    # - Chunking:
-    #   - Chunking: examples/chunking.md
-    # - CLI:
-    #   - CLI: examples/cli.md
+      - "Force full page OCR": examples/full_page_ocr.py
+      - "Automatic OCR language detection with tesseract": examples/tesseract_lang_detection.py
+      - "Accelerator options": examples/run_with_accelerator.py
+      - "Simple translation": examples/translate.py
+      - examples/backend_xml_rag.ipynb
+    - ✂️ Chunking:
+      - examples/hybrid_chunking.ipynb
+    - 🤖 RAG with AI dev frameworks:
+      - examples/rag_haystack.ipynb
+      - examples/rag_langchain.ipynb
+      - examples/rag_llamaindex.ipynb
+    - 🗂️ More examples:
+      - examples/rag_weaviate.ipynb
+      - RAG with Granite [↗]: https://github.com/ibm-granite-community/granite-snack-cookbook/blob/main/recipes/RAG/Granite_Docling_RAG.ipynb
+      - examples/rag_azuresearch.ipynb
+      - examples/retrieval_qdrant.ipynb
   - Integrations:
-    - "LlamaIndex 🦙 extension": integrations/llamaindex.md
-    # - "LangChain 🦜🔗 extension": integrations/langchain.md
-  # - API reference:
-  #   - API reference: api_reference/index.md
+    - Integrations: integrations/index.md
+    - 🤖 Agentic / AI dev frameworks:
+      - "Bee Agent Framework": integrations/bee.md
+      - "Crew AI": integrations/crewai.md
+      - "Haystack": integrations/haystack.md
+      - "LangChain": integrations/langchain.md
+      - "LlamaIndex": integrations/llamaindex.md
+      - "txtai": integrations/txtai.md
+    - ⭐️ Featured:
+      - "Data Prep Kit": integrations/data_prep_kit.md
+      - "InstructLab": integrations/instructlab.md
+      - "NVIDIA": integrations/nvidia.md
+      - "Prodigy": integrations/prodigy.md
+      - "RHEL AI": integrations/rhel_ai.md
+      - "spaCy": integrations/spacy.md
+    - 🗂️ More integrations:
+      - "Cloudera": integrations/cloudera.md
+      - "DocETL": integrations/docetl.md
+      - "Kotaemon": integrations/kotaemon.md
+      - "OpenContracts": integrations/opencontracts.md
+      - "Vectara": integrations/vectara.md
+  - Reference:
+    - Python API:
+      - Document Converter: reference/document_converter.md
+      - Pipeline options: reference/pipeline_options.md
+      - Docling Document: reference/docling_document.md
+    - CLI:
+      - CLI reference: reference/cli.md
 
 markdown_extensions:
   - pymdownx.superfences
@@ -92,9 +131,19 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - attr_list
+  - mkdocs-click
 plugins:
   - search
   - mkdocs-jupyter
+  - mkdocstrings:
+      default_handler: python
+      options:
+        extensions:
+          - griffe_pydantic:
+              schema: true
+        preload_modules:
+          - docling
+          - docling_core
 
 extra_css:
   - stylesheets/extra.css

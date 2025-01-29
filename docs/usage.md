@@ -22,56 +22,7 @@ A simple example would look like this:
 docling https://arxiv.org/pdf/2206.01062
 ```
 
-To see all available options (export formats etc.) run `docling --help`.
-
-<details>
-  <summary><b>CLI reference</b></summary>
-
-Here are the available options as of this writing (for an up-to-date listing, run `docling --help`):
-
-```console
-$ docling --help
-
- Usage: docling [OPTIONS] source                                                                                             
-                                                                                                                             
-╭─ Arguments ───────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    input_sources      source  PDF files to convert. Can be local file / directory paths or URL. [default: None]         │
-│                                 [required]                                                                                │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --from                                     [docx|pptx|html|image|pdf|asciidoc|md]  Specify input formats to convert from. │
-│                                                                                    Defaults to all formats.               │
-│                                                                                    [default: None]                        │
-│ --to                                       [md|json|text|doctags]                  Specify output formats. Defaults to    │
-│                                                                                    Markdown.                              │
-│                                                                                    [default: None]                        │
-│ --ocr               --no-ocr                                                       If enabled, the bitmap content will be │
-│                                                                                    processed using OCR.                   │
-│                                                                                    [default: ocr]                         │
-│ --ocr-engine                               [easyocr|tesseract_cli|tesseract]       The OCR engine to use.                 │
-│                                                                                    [default: easyocr]                     │
-│ --pdf-backend                              [pypdfium2|dlparse_v1|dlparse_v2]       The PDF backend to use.                │
-│                                                                                    [default: dlparse_v1]                  │
-│ --table-mode                               [fast|accurate]                         The mode to use in the table structure │
-│                                                                                    model.                                 │
-│                                                                                    [default: fast]                        │
-│ --artifacts-path                           PATH                                    If provided, the location of the model │
-│                                                                                    artifacts.                             │
-│                                                                                    [default: None]                        │
-│ --abort-on-error    --no-abort-on-error                                            If enabled, the bitmap content will be │
-│                                                                                    processed using OCR.                   │
-│                                                                                    [default: no-abort-on-error]           │
-│ --output                                   PATH                                    Output directory where results are     │
-│                                                                                    saved.                                 │
-│                                                                                    [default: .]                           │
-│ --version                                                                          Show version information.              │
-│ --help                                                                             Show this message and exit.            │
-╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-
-```
-</details>
-
-
+To see all available options (export formats etc.) run `docling --help`. More details in the [CLI reference page](./reference/cli.md).
 
 ### Advanced options
 
@@ -165,7 +116,7 @@ from docling.datamodel.base_models import DocumentStream
 from docling.document_converter import DocumentConverter
 
 buf = BytesIO(your_binary_stream)
-source = DocumentStream(filename="my_doc.pdf", stream=buf)
+source = DocumentStream(name="my_doc.pdf", stream=buf)
 converter = DocumentConverter()
 result = converter.convert(source)
 ```
@@ -175,31 +126,72 @@ result = converter.convert(source)
 You can limit the CPU threads used by Docling by setting the environment variable `OMP_NUM_THREADS` accordingly. The default setting is using 4 CPU threads.
 
 
+#### Use specific backend converters
+
+!!! note
+
+    This section discusses directly invoking a [backend](./concepts/architecture.md),
+    i.e. using a low-level API. This should only be done when necessary. For most cases,
+    using a `DocumentConverter` (high-level API) as discussed in the sections above
+    should suffice — and is the recommended way.
+
+By default, Docling will try to identify the document format to apply the appropriate conversion backend (see the list of [supported formats](./supported_formats.md)).
+You can restrict the `DocumentConverter` to a set of allowed document formats, as shown in the [Multi-format conversion](./examples/run_with_formats.py) example.
+Alternatively, you can also use the specific backend that matches your document content. For instance, you can use `HTMLDocumentBackend` for HTML pages:
+
+```python
+import urllib.request
+from io import BytesIO
+from docling.backend.html_backend import HTMLDocumentBackend
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.document import InputDocument
+
+url = "https://en.wikipedia.org/wiki/Duck"
+text = urllib.request.urlopen(url).read()
+in_doc = InputDocument(
+    path_or_stream=BytesIO(text),
+    format=InputFormat.HTML,
+    backend=HTMLDocumentBackend,
+    filename="duck.html",
+)
+backend = HTMLDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(text))
+dl_doc = backend.convert()
+print(dl_doc.export_to_markdown())
+```
+
 ## Chunking
 
-You can perform a hierarchy-aware chunking of a Docling document as follows:
+You can chunk a Docling document using a [chunker](concepts/chunking.md), such as a
+`HybridChunker`, as shown below (for more details check out
+[this example](examples/hybrid_chunking.ipynb)):
 
 ```python
 from docling.document_converter import DocumentConverter
-from docling_core.transforms.chunker import HierarchicalChunker
+from docling.chunking import HybridChunker
 
 conv_res = DocumentConverter().convert("https://arxiv.org/pdf/2206.01062")
 doc = conv_res.document
-chunks = list(HierarchicalChunker().chunk(doc))
 
-print(chunks[30])
+chunker = HybridChunker(tokenizer="BAAI/bge-small-en-v1.5")  # set tokenizer as needed
+chunk_iter = chunker.chunk(doc)
+```
+
+An example chunk would look like this:
+
+```python
+print(list(chunk_iter)[11])
 # {
-#   "text": "Lately, new types of ML models for document-layout analysis have emerged [...]",
+#   "text": "In this paper, we present the DocLayNet dataset. [...]",
 #   "meta": {
 #     "doc_items": [{
-#       "self_ref": "#/texts/40",
+#       "self_ref": "#/texts/28",
 #       "label": "text",
 #       "prov": [{
 #         "page_no": 2,
-#         "bbox": {"l": 317.06, "t": 325.81, "r": 559.18, "b": 239.97, ...},
-#       }]
-#     }],
-#     "headings": ["2 RELATED WORK"],
+#         "bbox": {"l": 53.29, "t": 287.14, "r": 295.56, "b": 212.37, ...},
+#       }], ...,
+#     }, ...],
+#     "headings": ["1 INTRODUCTION"],
 #   }
 # }
 ```

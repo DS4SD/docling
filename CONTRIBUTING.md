@@ -71,6 +71,10 @@ local git repository using the following command:
 git commit -s
 ```
 
+### New dependencies
+
+This project strictly adheres to using dependencies that are compatible with the MIT license to ensure maximum flexibility and permissiveness in its usage and distribution. As a result, dependencies licensed under restrictive terms such as GPL, LGPL, AGPL, or similar are explicitly excluded. These licenses impose additional requirements and limitations that are incompatible with the MIT license's minimal restrictions, potentially affecting derivative works and redistribution. By maintaining this policy, the project ensures simplicity and freedom for both developers and users, avoiding conflicts with stricter copyleft provisions.
+
 
 ## Communication
 

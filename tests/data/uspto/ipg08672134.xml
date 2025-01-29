@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE us-patent-grant SYSTEM "us-patent-grant-v44-2013-05-16.dtd" [ ]>
+<us-patent-grant lang="EN" dtd-version="v4.4 2013-05-16" file="US08672134-20140318.XML" status="PRODUCTION" id="us-patent-grant" country="US" date-produced="20140304" date-publ="20140318">
+<us-bibliographic-data-grant>
+<publication-reference>
+<document-id>
+<country>US</country>
+<doc-number>08672134</doc-number>
+<kind>B2</kind>
+<date>20140318</date>
+</document-id>
+</publication-reference>
+<application-reference appl-type="utility">
+<document-id>
+<country>US</country>
+<doc-number>12936568</doc-number>
+<date>20090331</date>
+</document-id>
+</application-reference>
+<us-application-series-code>12</us-application-series-code>
+<priority-claims>
+<priority-claim sequence="01" kind="regional">
+<country>EP</country>
+<doc-number>08007030</doc-number>
+<date>20080409</date>
+</priority-claim>
+</priority-claims>
+<us-term-of-grant>
+<us-term-extension>476</us-term-extension>
+</us-term-of-grant>
+<classifications-ipcr>
+<classification-ipcr>
+<ipc-version-indicator><date>20060101</date></ipc-version-indicator>
+<classification-level>A</classification-level>
+<section>B</section>
+<class>65</class>
+<subclass>D</subclass>
+<main-group>83</main-group>
+<subgroup>04</subgroup>
+<symbol-position>F</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20140318</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+</classification-ipcr>
+<classification-ipcr>
+<ipc-version-indicator><date>20060101</date></ipc-version-indicator>
+<classification-level>A</classification-level>
+<section>B</section>
+<class>65</class>
+<subclass>D</subclass>
+<main-group>85</main-group>
+<subgroup>42</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20140318</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+</classification-ipcr>
+</classifications-ipcr>
+<classification-national>
+<country>US</country>
+<main-classification>206531</main-classification>
+<further-classification>206  15</further-classification>
+<further-classification>220 2391</further-classification>
+</classification-national>
+<invention-title id="d2e71">Child-resistant medication container</invention-title>
+<us-references-cited>
+<us-citation>
+<patcit num="00001">
+<document-id>
+<country>US</country>
+<doc-number>6460693</doc-number>
+<kind>B1</kind>
+<name>Harrold</name>
+<date>20021000</date>
+</document-id>
+</patcit>
+<category>cited by applicant</category>
+</us-citation>
+<us-citation>
+<patcit num="00002">
+<document-id>
+<country>US</country>
+<doc-number>6848577</doc-number>
+<kind>B2</kind>
+<name>Kawamura et al.</name>
+<date>20050200</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>206449</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00003">
+<document-id>
+<country>US</country>
+<doc-number>7549541</doc-number>
+<kind>B2</kind>
+<name>Brozell et al.</name>
+<date>20090600</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>206531</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00004">
+<document-id>
+<country>US</country>
+<doc-number>2004/0045858</doc-number>
+<kind>A1</kind>
+<name>Harrold</name>
+<date>20040300</date>
+</document-id>
+</patcit>
+<category>cited by applicant</category>
+</us-citation>
+<us-citation>
+<patcit num="00005">
+<document-id>
+<country>US</country>
+<doc-number>2004/0256277</doc-number>
+<kind>A1</kind>
+<name>Gedanke</name>
+<date>20041200</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>206538</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00006">
+<document-id>
+<country>US</country>
+<doc-number>2007/0045150</doc-number>
+<kind>A1</kind>
+<name>Huffer et al.</name>
+<date>20070300</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>206538</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00007">
+<document-id>
+<country>US</country>
+<doc-number>2007/0284277</doc-number>
+<kind>A1</kind>
+<name>Gnepper</name>
+<date>20071200</date>
+</document-id>
+</patcit>
+<category>cited by applicant</category>
+</us-citation>
+<us-citation>
+<patcit num="00008">
+<document-id>
+<country>US</country>
+<doc-number>2008/0023475</doc-number>
+<kind>A1</kind>
+<name>Escobar et al.</name>
+<date>20080100</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>220 2391</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00009">
+<document-id>
+<country>US</country>
+<doc-number>2009/0178948</doc-number>
+<kind>A1</kind>
+<name>Reilley et al.</name>
+<date>20090700</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>206531</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00010">
+<document-id>
+<country>US</country>
+<doc-number>2009/0184022</doc-number>
+<kind>A1</kind>
+<name>Coe et al.</name>
+<date>20090700</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>206531</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00011">
+<document-id>
+<country>US</country>
+<doc-number>2009/0255842</doc-number>
+<kind>A1</kind>
+<name>Brozell et al.</name>
+<date>20091000</date>
+</document-id>
+</patcit>
+<category>cited by examiner</category>
+<classification-national><country>US</country><main-classification>206531</main-classification></classification-national>
+</us-citation>
+<us-citation>
+<patcit num="00012">
+<document-id>
+<country>CA</country>
+<doc-number>2428862</doc-number>
+<kind>A1</kind>
+<date>20041100</date>
+</document-id>
+</patcit>
+<category>cited by applicant</category>
+</us-citation>
+<us-citation>
+<patcit num="00013">
+<document-id>
+<country>WO</country>
+<doc-number>2004037657</doc-number>
+<kind>A2</kind>
+<date>20040500</date>
+</document-id>
+</patcit>
+<category>cited by applicant</category>
+</us-citation>
+<us-citation>
+<patcit num="00014">
+<document-id>
+<country>WO</country>
+<doc-number>2005030606</doc-number>
+<kind>A1</kind>
+<date>20050400</date>
+</document-id>
+</patcit>
+<category>cited by applicant</category>
+</us-citation>
+<us-citation>
+<patcit num="00015">
+<document-id>
+<country>WO</country>
+<doc-number>2007030067</doc-number>
+<kind>A1</kind>
+<date>20070300</date>
+</document-id>
+</patcit>
+<category>cited by applicant</category>
+</us-citation>
+<us-citation>
+<nplcit num="00016">
+<othercit>International Search Report, dated May 28, 2009, from corresponding PCT application.</othercit>
+</nplcit>
+<category>cited by applicant</category>
+</us-citation>
+</us-references-cited>
+<number-of-claims>43</number-of-claims>
+<us-exemplary-claim>1</us-exemplary-claim>
+<us-field-of-classification-search>
+<classification-national>
+<country>US</country>
+<main-classification>206531</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>206  15</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>206223</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>206539</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>206538</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification> 53492</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification> 53169</main-classification>
+</classification-national>
+<classification-national>
+<country>US</country>
+<main-classification>220 2391</main-classification>
+</classification-national>
+</us-field-of-classification-search>
+<figures>
+<number-of-drawing-sheets>9</number-of-drawing-sheets>
+<number-of-figures>19</number-of-figures>
+</figures>
+<us-related-documents>
+<related-publication>
+<document-id>
+<country>US</country>
+<doc-number>20110067363</doc-number>
+<kind>A1</kind>
+<date>20110324</date>
+</document-id>
+</related-publication>
+</us-related-documents>
+<us-parties>
+<us-applicants>
+<us-applicant sequence="001" app-type="applicant" designation="us-only">
+<addressbook>
+<last-name>Sprada</last-name>
+<first-name>Peter John</first-name>
+<address>
+<city>London</city>
+<country>GB</country>
+</address>
+</addressbook>
+<residence>
+<country>GB</country>
+</residence>
+</us-applicant>
+<us-applicant sequence="002" app-type="applicant" designation="us-only">
+<addressbook>
+<last-name>Prasser</last-name>
+<first-name>Robert</first-name>
+<address>
+<city>Guttaring</city>
+<country>AT</country>
+</address>
+</addressbook>
+<residence>
+<country>AT</country>
+</residence>
+</us-applicant>
+</us-applicants>
+<inventors>
+<inventor sequence="001" designation="us-only">
+<addressbook>
+<last-name>Sprada</last-name>
+<first-name>Peter John</first-name>
+<address>
+<city>London</city>
+<country>GB</country>
+</address>
+</addressbook>
+</inventor>
+<inventor sequence="002" designation="us-only">
+<addressbook>
+<last-name>Prasser</last-name>
+<first-name>Robert</first-name>
+<address>
+<city>Guttaring</city>
+<country>AT</country>
+</address>
+</addressbook>
+</inventor>
+</inventors>
+<agents>
+<agent sequence="01" rep-type="attorney">
+<addressbook>
+<orgname>Young &#x26; Thompson</orgname>
+<address>
+<country>unknown</country>
+</address>
+</addressbook>
+</agent>
+</agents>
+</us-parties>
+<assignees>
+<assignee>
+<addressbook>
+<orgname>Merck Serono SA</orgname>
+<role>03</role>
+<address>
+<city>Coinsins</city>
+<country>CH</country>
+</address>
+</addressbook>
+</assignee>
+</assignees>
+<examiners>
+<primary-examiner>
+<last-name>Yu</last-name>
+<first-name>Mickey</first-name>
+<department>3728</department>
+</primary-examiner>
+<assistant-examiner>
+<last-name>Ortiz</last-name>
+<first-name>Rafael</first-name>
+</assistant-examiner>
+</examiners>
+<pct-or-regional-filing-data>
+<document-id>
+<country>WO</country>
+<doc-number>PCT/IB2009/005131</doc-number>
+<kind>00</kind>
+<date>20090331</date>
+</document-id>
+<us-371c124-date>
+<date>20101203</date>
+</us-371c124-date>
+</pct-or-regional-filing-data>
+<pct-or-regional-publishing-data>
+<document-id>
+<country>WO</country>
+<doc-number>WO2009/125267</doc-number>
+<kind>A </kind>
+<date>20091015</date>
+</document-id>
+</pct-or-regional-publishing-data>
+</us-bibliographic-data-grant>
+<abstract id="abstract">
+<p id="p-0001" num="0000">The child-resistant medication container includes:
+<ul id="ul0001" list-style="none">
+    <li id="ul0001-0001" num="0000">
+    <ul id="ul0002" list-style="none">
+        <li id="ul0002-0001" num="0000">a housing having an open end,</li>
+        <li id="ul0002-0002" num="0000">a support slidably mounted in the housing for supporting medication,</li>
+        <li id="ul0002-0003" num="0000">first locking element for locking the support in the housing and for unlocking the support so that the support may be slid to the outside of the housing through the open end, the first locking element including a first locking member coupled to the housing and a second locking member coupled to the support, the first and second locking members being engageable with each other, and</li>
+        <li id="ul0002-0004" num="0000">at least one button operable to act on the first locking element, the at least one button including a first button operable to disengage the first and second locking members,</li>
+        <li id="ul0002-0005" num="0000">second locking element for maintaining engagement between the first and second locking members, and</li>
+        <li id="ul0002-0006" num="0000">a second button operable to act on the second locking element to permit disengaging the first and second locking members by operating the first button.</li>
+    </ul>
+    </li>
+</ul>
+</p>
+</abstract>
+<drawings id="DRAWINGS">
+<figure id="Fig-EMI-D00000" num="00000">
+<img id="EMI-D00000" he="99.31mm" wi="137.75mm" file="US08672134-20140318-D00000.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00001" num="00001">
+<img id="EMI-D00001" he="226.14mm" wi="164.42mm" file="US08672134-20140318-D00001.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00002" num="00002">
+<img id="EMI-D00002" he="210.23mm" wi="146.13mm" file="US08672134-20140318-D00002.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00003" num="00003">
+<img id="EMI-D00003" he="207.43mm" wi="139.78mm" file="US08672134-20140318-D00003.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00004" num="00004">
+<img id="EMI-D00004" he="206.08mm" wi="135.72mm" file="US08672134-20140318-D00004.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00005" num="00005">
+<img id="EMI-D00005" he="212.26mm" wi="154.94mm" file="US08672134-20140318-D00005.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00006" num="00006">
+<img id="EMI-D00006" he="211.41mm" wi="132.93mm" file="US08672134-20140318-D00006.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00007" num="00007">
+<img id="EMI-D00007" he="216.49mm" wi="130.81mm" file="US08672134-20140318-D00007.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00008" num="00008">
+<img id="EMI-D00008" he="210.23mm" wi="146.73mm" file="US08672134-20140318-D00008.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00009" num="00009">
+<img id="EMI-D00009" he="206.16mm" wi="131.66mm" file="US08672134-20140318-D00009.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+</drawings>
+<description id="description">
+<?BRFSUM description="Brief Summary" end="lead"?>
+<p id="p-0002" num="0001">The present invention pertains to a container for the delivery of medication, more particularly to a child-resistant medication container.</p>
+<p id="p-0003" num="0002">Solid medications, in the form of tablets, pills, capsules or the like, are often stored in a blister card, which consists of a sheet, generally of plastic material, defining chambers (blisters) and on the back side of which a sealant film such as an aluminium or a paper foil is fixed. A medication dose contained in a blister may be released by pressing on the blister to collapse the latter and puncture the sealant foil.</p>
+<p id="p-0004" num="0003">To protect children and others from unsupervised access to medication, child-resistant medication containers have been proposed which comprise a housing containing medication and which require, for their being opened, a sequence of operations which a child normally cannot perform or would not think to perform.</p>
+<p id="p-0005" num="0004">In particular, the International patent applications WO 2004/037657 and WO 2005/030606 describe child-resistant medication containers comprising a housing and a blister card slidably mounted in the housing but locked therein. The blister card may be unlocked and slid out of the housing through an open end thereof by pressing one button provided at a top wall of the housing and by pulling the blister card while the button is pressed.</p>
+<p id="p-0006" num="0005">The American patent application US 2007/0284277 describes a child-resistant medication container comprising a housing and a tray slidably mounted in the housing but locked therein. The tray contains tablets. The tray may be unlocked and slid out of the housing through an open end thereof by simultaneously pressing and then sliding two lateral slide buttons.</p>
+<p id="p-0007" num="0006">The American patent application US 2004/0045858 describes a child-resistant medication container comprising a housing and a blister card slidably mounted in the housing but locked therein. The blister card may be unlocked and slid out of the housing through an open end thereof by simultaneously pressing two lateral push buttons and then actuating an optional lever to push the blister card or holding the housing downward to allow the blister card to drop out.</p>
+<p id="p-0008" num="0007">The containers described in the above-mentioned patent applications do not have a very high child resistance because only two successive actions are required to open the container.</p>
+<p id="p-0009" num="0008">The American patent application US 2004/0256277 describes a child-resistant medication container comprising a housing and a blister card slidably mounted in the housing but locked therein. The blister card may be unlocked and slid out of the housing through an open end thereof by pressing two lateral push buttons and then pulling the blister card while the lateral push buttons are pressed. To enable its being pulled, the blister card defines a tab which projects out of the housing through the open end and which may be seized by the user. This container does not have a very high child resistance because simultaneously pressing two lateral buttons is rather intuitive and only two successive actions are required to open it. Moreover, in this container, the blister card is permanently exposed, leaving the possibility for an unauthorised person to open the blisters with a tool such as a knife and access the medication.</p>
+<p id="p-0010" num="0009">The International patent application WO 2007/030067 describes a child-resistant medication container comprising a housing and a blister card. The housing is open in its top portion so as to permanently expose the blister card and has a bottom wall with holes. The blister card is slidably mounted in the housing between a locked position in which the blisters are offset relative to the holes and an unlocked position in which the blisters are aligned with the holes to enable the release of the medication through the holes. An operating member having two finger receiving regions locks the blister card when in a first position and unlocks the blister card when in a second position. The passage from the first position to the second position of the operating member is achieved by successively pushing the two finger receiving regions in two different directions. The operating member, irrespective of its position, retains the blister card in the housing. Since the blister card is permanently exposed, access to the medication using a tool is possible and the security of this container is therefore not very high.</p>
+<p id="p-0011" num="0010">The U.S. Pat. No. 6,460,693 describes a child-resistant medication container comprising a housing and a tray slidably mounted in the housing but locked therein. The tray contains a blister card. The tray may be unlocked by being pushed inward into the housing and then by pressing one button provided at the top wall of the housing. A drawback of this container is that it requires a bulky locking/unlocking mechanism at its rear part. This mechanism notably takes up a substantial portion of the length of the container.</p>
+<p id="p-0012" num="0011">The present invention aims at providing a medication container which may have a high child resistance without increasing to a large extent the size of the container.</p>
+<p id="p-0013" num="0012">To this end, the present invention proposes a container for the delivery of medication, comprising:
+<ul id="ul0003" list-style="none">
+    <li id="ul0003-0001" num="0000">
+    <ul id="ul0004" list-style="none">
+        <li id="ul0004-0001" num="0013">a housing having an open end,</li>
+        <li id="ul0004-0002" num="0014">a support for supporting medication, said support being slidably mounted in the housing,</li>
+        <li id="ul0004-0003" num="0015">first locking means for locking the support in the housing and for unlocking the support so that the support may be slid to the outside of the housing through the open end, said first locking means comprising a first locking member coupled to the housing and a second locking member coupled to the support, said first and second locking members being engageable with each other, and</li>
+        <li id="ul0004-0004" num="0016">at least one button operable to act on the first locking means, said at least one button comprising a first button operable to disengage the first and second locking members,</li>
+    </ul>
+    </li>
+</ul>
+</p>
+<p id="p-0014" num="0017">characterised by further comprising:
+<ul id="ul0005" list-style="none">
+    <li id="ul0005-0001" num="0000">
+    <ul id="ul0006" list-style="none">
+        <li id="ul0006-0001" num="0018">second locking means for maintaining engagement between the first and second locking members, and</li>
+        <li id="ul0006-0002" num="0019">a second button operable to act on the second locking means to permit disengaging the first and second locking members by operating the first button.</li>
+    </ul>
+    </li>
+</ul>
+</p>
+<p id="p-0015" num="0020">Typically, the first button is operable to act on the first locking member to disengage the first and second locking members.</p>
+<p id="p-0016" num="0021">The second locking means may be arranged to block the first locking member when an attempt is made to operate the first button while the second button is in a rest position.</p>
+<p id="p-0017" num="0022">Advantageously, the first and second buttons are operable in respective non-parallel directions.</p>
+<p id="p-0018" num="0023">The first and second buttons are preferably operable independently of the support, i.e. without causing a movement of the support.</p>
+<p id="p-0019" num="0024">The first and second buttons are preferably part of respective distinct pieces that are movable relative to each other.</p>
+<p id="p-0020" num="0025">Typically, the first button is a push button and the second button is a slide button.</p>
+<p id="p-0021" num="0026">In an embodiment, the second locking means comprise a surface coupled to the second button and a stop projection coupled to the first locking member, said surface is arranged to block said stop projection when an attempt is made to operate the first button while the second button is in a rest position, and said surface comprises a hole into which the stop projection enters when the second button is in an operated position and the first button is moved to its operated position.</p>
+<p id="p-0022" num="0027">Said surface may further comprise a stop projection which is blocked by the stop projection coupled to the first locking member when the first button is in an intermediate position where the stop projection coupled to the first locking member is blocked by said surface, to prevent the second button from being operated.</p>
+<p id="p-0023" num="0028">In another embodiment, the second locking means comprise first teeth coupled to the second button and second teeth coupled to the first button, the second teeth are out of engagement with the first teeth when the first and second buttons are in a rest position but engage the first teeth when an attempt is made to operate the first button while the second button is in a rest position, to block the first button in an intermediate position where the first locking member still engages the second locking member while locking the second button, and the first teeth are not on the path of the second teeth when the second button is in an operated position thus permitting the first button to be moved from its rest position to an operated position where the first locking member is disengaged from the second locking member.</p>
+<p id="p-0024" num="0029">Advantageously, the first button is provided at a side wall of the housing, said at least one button further comprises a third button provided at another, opposite side wall of the housing, the first locking means further comprise a third locking member coupled to the housing and a fourth locking member coupled to the support, said third and fourth locking members being engageable with each other, and the third button is operable to disengage the third and fourth locking members.</p>
+<p id="p-0025" num="0030">The third button may be operable to act on the third locking member to disengage the third and fourth locking members.</p>
+<p id="p-0026" num="0031">Preferably, the first and third buttons are arranged to unlock the support only when simultaneously in an operated position.</p>
+<p id="p-0027" num="0032">The container may further comprise third locking means for maintaining engagement between the third and fourth locking members and a fourth button operable to act on the third locking means to permit disengaging the third and fourth locking members by operating the third button.</p>
+<p id="p-0028" num="0033">The third button may be operable to act on the third locking member to disengage the third and fourth locking members and the third locking means may be arranged to block the third locking member when an attempt is made to operate the third button while the fourth button is in a rest position.</p>
+<p id="p-0029" num="0034">Typically, the first and third buttons are push buttons and the second and fourth buttons are slide buttons.</p>
+<p id="p-0030" num="0035">The second and fourth buttons may be provided at a top wall of the housing.</p>
+<p id="p-0031" num="0036">In an embodiment, the second locking means comprise a first surface coupled to the second button and a first stop projection coupled to the first locking member, the first surface is arranged to block the first stop projection when an attempt is made to operate the first button while the second button is in a rest position, the first surface comprises a hole into which the first stop projection enters when the second button is in an operated position and the first button is moved to its operated position, the third locking means comprise a second surface coupled to the fourth button and a second stop projection coupled to the third locking member, the second surface is arranged to block the second stop projection when an attempt is made to operate the third button while the fourth button is in a rest position, and the second surface comprises a hole into which the second stop projection enters when the fourth button is in an operated position and the third button is moved to its operated position.</p>
+<p id="p-0032" num="0037">The first surface may further comprise a third stop projection which is blocked by the first stop projection when the first button is in an intermediate position where the first stop projection is blocked by the first surface, to prevent the second button from being operated, and the second surface may further comprise a fourth stop projection which is blocked by the second stop projection when the third button is in an intermediate position where the second stop projection is blocked by the second surface, to prevent the fourth button from being operated.</p>
+<p id="p-0033" num="0038">In another embodiment, the second locking means comprise first teeth coupled to the second button and second teeth coupled to the first button, the second teeth are out of engagement with the first teeth when the first and second buttons are in a rest position but engage the first teeth when an attempt is made to operate the first button while the second button is in a rest position, to block the first button in an intermediate position where the first locking member still engages the second locking member while locking the second button, the first teeth are not on the path of the second teeth when the second button is in an operated position thus permitting the first button to be moved from its rest position to an operated position where the first locking member is disengaged from the second locking member, the third locking means comprise third teeth coupled to the fourth button and fourth teeth coupled to the third button, the fourth teeth are out of engagement with the third teeth when the third and fourth buttons are in a rest position but engage the third teeth when an attempt is made to operate the third button while the fourth button is in a rest position, to block the third button in an intermediate position where the third locking member still engages the fourth locking member while locking the fourth button, and the third teeth are not on the path of the fourth teeth when the fourth button is in an operated position thus permitting the third button to be moved from its rest position to an operated position where the third locking member is disengaged from the fourth locking member.</p>
+<p id="p-0034" num="0039">In another embodiment, the second and fourth buttons are one and a same button.</p>
+<p id="p-0035" num="0040">According to still another embodiment, the container comprises, besides the first and second locking means and the first and second buttons as defined in the beginning, third locking means for locking the second locking means and a third button operable to act on the third locking means to unlock the second locking means and permit acting on the second locking means by operating the second button.</p>
+<p id="p-0036" num="0041">The third locking means may comprise a third locking member coupled to the second locking means and a fourth locking member coupled to the third button, these third and fourth locking members being engaged with each other when the second and third buttons are in a rest position and being disengageable from each other by operating the third button.</p>
+<p id="p-0037" num="0042">Typically, the third and fourth locking members each comprise teeth.</p>
+<p id="p-0038" num="0043">The first and third buttons may be provided at side walls of the housing and the second button may be provided at a top wall of the housing.</p>
+<p id="p-0039" num="0044">The first and third buttons may be push buttons and the second button may be a slide button.</p>
+<p id="p-0040" num="0045">The first locking means may further comprise a fifth locking member coupled to the housing and a sixth locking member coupled to the support and the third button may be arranged to also disengage the fifth and sixth locking members when operated.</p>
+<p id="p-0041" num="0046">The third button may be arranged to act on the fifth locking member when operated, to disengage the fifth and sixth locking members.</p>
+<p id="p-0042" num="0047">In all embodiments above, the various buttons may each be subject to the action of elastic return means. Moreover, said buttons may each be operable independently of the support and may be part of respective distinct pieces that are movable relative to each other.</p>
+<p id="p-0043" num="0048">The container may further comprise a cap coupled to the support and which closes the open end of the housing when the support is in its locked position.</p>
+<p id="p-0044" num="0049">Typically, the support supports at least one blister card containing the medication, for example several separate blister cards containing the medication and placed side-by-side. The blisters of said at least one blister card are preferably fully encased in the housing when the support is in its locked position.</p>
+<p id="p-0045" num="0050">The medication may be in the form of capsules or tablets.</p>
+<p id="p-0046" num="0051">Advantageously, the container contains an even number of tablets.</p>
+<p id="p-0047" num="0052">The container may contain 2 to 14 tablets, preferably 6 to 10 tablets, most preferably 10 tablets.</p>
+<p id="p-0048" num="0053">The container according to the invention is particularly suitable for containing drug for the treatment of cancer, drug having an immediate toxic effect or drug having an effect on the immune system.</p>
+<p id="p-0049" num="0054">According to a particular embodiment, the medication comprises Cladribine or derivatives thereof.</p>
+<p id="p-0050" num="0055">The container according to the invention typically has a wallet size, preferably a length between 119 and 222 mm, a width between 52 and 98 mm and a thickness between 10 and 21 mm.</p>
+<p id="p-0051" num="0056">The present invention further provides a kit comprising separately a container as defined above and medication. Preferably, the kit comprises a description, for example on a separate sheet, containing information on how to handle the container and on the administration and dosing of the medication.</p>
+<p id="p-0052" num="0057">The present invention further provides a method of opening a container as defined above comprising first and third buttons and a second button for blocking/unblocking the first and third buttons, the method being characterised by comprising the following steps:
+<ul id="ul0007" list-style="none">
+    <li id="ul0007-0001" num="0000">
+    <ul id="ul0008" list-style="none">
+        <li id="ul0008-0001" num="0058">holding the housing,</li>
+        <li id="ul0008-0002" num="0059">operating the second button,</li>
+        <li id="ul0008-0003" num="0060">operating the first and third buttons while the second button is in its operated position, and</li>
+        <li id="ul0008-0004" num="0061">pulling the support while the first and third buttons are in their operated position.</li>
+    </ul>
+    </li>
+</ul>
+</p>
+<p id="p-0053" num="0062">The present invention further provides a method of opening a container as defined above comprising a first button, a second button for blocking/unblocking the first button and a third button for blocking/unblocking the second button, the method being characterised by comprising the following steps:
+<ul id="ul0009" list-style="none">
+    <li id="ul0009-0001" num="0000">
+    <ul id="ul0010" list-style="none">
+        <li id="ul0010-0001" num="0063">holding the housing,</li>
+        <li id="ul0010-0002" num="0064">operating successively the third button, the second button and the first button, and</li>
+        <li id="ul0010-0003" num="0065">pulling the support while the first and third buttons are in their operated position.</li>
+    </ul>
+    </li>
+</ul>
+</p>
+<?BRFSUM description="Brief Summary" end="tail"?>
+<?brief-description-of-drawings description="Brief Description of Drawings" end="lead"?>
+<description-of-drawings>
+<p id="p-0054" num="0066">Other features and advantages of the present invention will be apparent upon reading the following detailed description of preferred embodiments made with reference to the appended drawings in which:</p>
+<p id="p-0055" num="0067"><figref idref="DRAWINGS">FIG. 1</figref> is a perspective view of a child-resistant medication container according to a first embodiment of the invention, in an open position;</p>
+<p id="p-0056" num="0068"><figref idref="DRAWINGS">FIG. 2</figref> is a top view of the child-resistant medication container according to the first embodiment of the invention, in a closed position;</p>
+<p id="p-0057" num="0069"><figref idref="DRAWINGS">FIGS. 3 and 4</figref> show in top view a sequence of operations required to open the child-resistant medication container according to the first embodiment of the invention;</p>
+<p id="p-0058" num="0070"><figref idref="DRAWINGS">FIG. 5</figref> is a diagrammatic top view of the internal mechanism for opening/closing the child-resistant medication container according to the first embodiment of the invention;</p>
+<p id="p-0059" num="0071"><figref idref="DRAWINGS">FIGS. 6 to 8</figref> diagrammatically show in top view the successive configurations of the internal mechanism of <figref idref="DRAWINGS">FIG. 5</figref> during the said sequence of operations;</p>
+<p id="p-0060" num="0072"><figref idref="DRAWINGS">FIG. 9</figref> is a bottom view of a child-resistant medication container according to a second embodiment of the invention, in a closed position;</p>
+<p id="p-0061" num="0073"><figref idref="DRAWINGS">FIG. 10</figref> is a partial sectional view showing in an enlarged manner a detail of <figref idref="DRAWINGS">FIG. 9</figref>, namely a locking member located on a housing of the container and engaged with a locking notch located on a tray of the container;</p>
+<p id="p-0062" num="0074"><figref idref="DRAWINGS">FIG. 11</figref> is a partial sectional view showing the locking member and locking notch of <figref idref="DRAWINGS">FIG. 10</figref> in a position where they are disengaged from one another;</p>
+<p id="p-0063" num="0075"><figref idref="DRAWINGS">FIG. 12</figref> is a bottom view of the internal mechanism for opening/closing the child-resistant medication container according to the second embodiment of the invention, said mechanism being shown in a rest position;</p>
+<p id="p-0064" num="0076"><figref idref="DRAWINGS">FIG. 13</figref> is a bottom view of the internal mechanism for opening/closing the child-resistant medication container according to the second embodiment of the invention, said mechanism being shown in a position corresponding to a wrong opening action by the user;</p>
+<p id="p-0065" num="0077"><figref idref="DRAWINGS">FIGS. 14 and 15</figref> are bottom views of the internal mechanism for opening/closing the child-resistant medication container according to the second embodiment of the invention, said mechanism being shown respectively during right successive actions performed by the user to open the container;</p>
+<p id="p-0066" num="0078"><figref idref="DRAWINGS">FIG. 16</figref> is a top view of a child-resistant medication container according to a variant of the first and second embodiments;</p>
+<p id="p-0067" num="0079"><figref idref="DRAWINGS">FIG. 17</figref> is a bottom view of the internal mechanism for opening/closing a child-resistant medication container according to a third embodiment of the invention, said mechanism being shown in a rest position; and</p>
+<p id="p-0068" num="0080"><figref idref="DRAWINGS">FIGS. 18 and 19</figref> are bottom views of the internal mechanism for opening/closing the child-resistant medication container according to the third embodiment of the invention, said mechanism being shown respectively during successive actions performed by the user to open the container.</p>
+</description-of-drawings>
+<?brief-description-of-drawings description="Brief Description of Drawings" end="tail"?>
+<?DETDESC description="Detailed Description" end="lead"?>
+<p id="p-0069" num="0081">With reference to <figref idref="DRAWINGS">FIGS. 1 and 2</figref>, a child-resistant medication container according to a first embodiment of the invention comprises a housing <b>1</b> made of a top part and a bottom part assembled together. The housing <b>1</b> is of a generally parallelepipedic shape and comprises a top wall <b>2</b> and a base wall <b>3</b> opposite to one another, a closed end <b>4</b> and an open end <b>5</b> opposite to one another, and two opposite side walls <b>6</b>. A tray <b>7</b> supporting blisters <b>8</b> is slidably guided in the housing <b>1</b> along a longitudinal axis A of the container. The tray <b>7</b> may take a locked position, corresponding to a closed position of the container, in which the tray <b>7</b> is locked inside the housing <b>1</b>, preventing access to the blisters <b>8</b> (<figref idref="DRAWINGS">FIG. 2</figref>). The tray <b>7</b> may also be unlocked and then slid toward the outside of the housing <b>1</b> through the open end <b>5</b> to permit access to the blisters <b>8</b> (open position of the container; <figref idref="DRAWINGS">FIG. 1</figref>). A cap <b>9</b> is coupled to the front end of the tray <b>7</b>. The cap <b>9</b> closes the open end <b>5</b> when the tray <b>7</b> is in its locked position. The cap <b>9</b> may be of one-piece construction with the tray <b>7</b>.</p>
+<p id="p-0070" num="0082">Each blister <b>8</b> contains a dose of solid medication. The tray <b>7</b> comprises holes (not shown) under the blisters <b>8</b> through which the doses of solid medication may be expelled when the container is in its open position, by applying a pressure on the blisters <b>8</b>. In the example shown, the blisters <b>8</b> are arranged in pairs, each pair being defined by a separate blister card <b>10</b> fixed, e.g. snapped, on the tray <b>7</b>. The blister pairs or cards <b>10</b> are aligned side by side so as to form two blister rows as shown in <figref idref="DRAWINGS">FIG. 1</figref>. Such an arrangement of the blisters <b>8</b>, comprising several separate blister cards <b>10</b>, facilitates the management of the quantities of medication and permits reducing medication wastage. In a variant, however, a single blister card could be provided on the tray <b>7</b>, as is conventional.</p>
+<p id="p-0071" num="0083">The housing <b>1</b> includes opposite openings <b>11</b> in the side walls <b>6</b> and an opening <b>12</b> in the top wall <b>2</b>. Push buttons <b>13</b> are provided in the openings <b>11</b>, respectively, and a slide button <b>14</b> is provided in the opening <b>12</b>. In the context of the invention, the term &#x201c;button&#x201d; is to be understood in a broad sense, as covering any part on which a finger can rest to transmit a force. The lateral push buttons <b>13</b> are operable by being moved substantially perpendicularly to the longitudinal axis A toward the inside of the housing <b>1</b>. The slide button <b>14</b> is operable by being moved along the longitudinal axis A. To open the container, the user must perform the following sequence of operations:
+<ul id="ul0011" list-style="none">
+    <li id="ul0011-0001" num="0000">
+    <ul id="ul0012" list-style="none">
+        <li id="ul0012-0001" num="0084">operate the slide button <b>14</b> as shown by arrow <b>15</b> in <figref idref="DRAWINGS">FIG. 3</figref>,</li>
+        <li id="ul0012-0002" num="0085">then operate the lateral push buttons <b>13</b> as shown by arrows <b>16</b> in <figref idref="DRAWINGS">FIG. 4</figref> while maintaining the slide button <b>14</b> in its operated position,</li>
+        <li id="ul0012-0003" num="0086">and then pull the tray <b>7</b> as shown by arrow <b>17</b> while maintaining the lateral push buttons <b>13</b> in their operated position.
+<br/>
+Once the lateral push buttons <b>13</b> are operated, the user may release the slide button <b>14</b>. Maintaining the lateral push buttons <b>13</b> in their operated position is required only at the beginning of pulling the tray <b>7</b>, to unlock the latter. Then the tray <b>7</b> may be freely moved toward the outside of the housing <b>1</b> without maintaining pressure on the push buttons <b>13</b>. Typically, the container is held in one hand with the thumb and another finger of the hand acting on the lateral push buttons <b>13</b> and a finger of the other hand acting on the top slide button <b>14</b>, the said other hand being used to pull the tray <b>7</b> after releasing the top slide button <b>14</b>. Recesses <b>18</b> are provided in the top and base walls <b>2</b>, <b>3</b> at the open end <b>5</b> to expose surface portions <b>19</b> of the cap <b>9</b> when the tray <b>7</b> is in its locked position and to thereby facilitate seizing the tray <b>7</b>.
+</li>
+    </ul>
+    </li>
+</ul>
+</p>
+<p id="p-0072" num="0087">It will thus be appreciated that three successive actions have to be performed by the user, in a determined order, to unlock and move the tray <b>7</b>. As will be explained below, operating the lateral push buttons <b>13</b> while the slide button <b>14</b> is not in its operated position is not possible because the slide button <b>14</b>, in its rest position, blocks the lateral push buttons <b>13</b> and prevents them from moving beyond an intermediate pressed position in which the tray <b>7</b> is still locked. Operating the slide button <b>14</b> while a pressure is applied on one or two of the lateral push buttons <b>13</b> is not possible either, because the lateral push buttons <b>13</b>, in their intermediate pressed position, block the slide button <b>14</b>. Merely operating the slide button <b>14</b> frees the lateral push buttons <b>13</b> but does not free the tray <b>7</b>. Simultaneous pressure holding on the operated lateral push buttons <b>13</b> and pulling action on the tray <b>7</b> are required to initiate the movement of the tray <b>7</b>. A friction is preferably provided between the tray <b>7</b> and the housing <b>1</b> so that the tray <b>7</b> cannot be moved merely by inclining the container downward while the lateral push buttons <b>13</b> are in their operated position.</p>
+<p id="p-0073" num="0088">A child will generally not have the manual dexterity nor the cognitive knowledge to perform the above-described sequence of operations required to unlock and move the tray <b>7</b>. Moreover, the housing <b>1</b> may be made sufficiently wide for the lateral buttons <b>13</b> to be separated by a large distance, thereby making it impossible for a child to hold the container in one hand and to press the lateral buttons <b>13</b> while holding the slide button <b>14</b> in its operated position or to pull the tray <b>7</b> while pressing the lateral buttons <b>13</b>. It should also be noted that in the closed position of the container the blisters <b>8</b> are fully encased in the housing <b>1</b> and thus cannot be accessed.</p>
+<p id="p-0074" num="0089">The internal mechanism allowing the above-described sequence of operations is diagrammatically shown in <figref idref="DRAWINGS">FIGS. 5 to 8</figref>. The slide button <b>14</b> projects from and is rigidly connected to a plate <b>20</b> that is slidably guided in the housing <b>1</b> above the blisters <b>8</b> along the longitudinal axis A of the container. A return spring <b>21</b> is provided between the front end of the plate <b>20</b> and a bearing part <b>22</b> rigidly connected to the inner face of the top wall <b>2</b> of the housing <b>1</b>. The return spring <b>21</b> may be a leaf spring made of one-piece construction with the plate <b>20</b> and the button <b>14</b>, as shown. Alternatively, it could be a conventional metal leaf or helical spring disposed between the front end of the plate <b>20</b> and the bearing part <b>22</b>. The two side surfaces <b>23</b> of the plate <b>20</b> along the longitudinal axis A of the container include respective opposite holes <b>24</b> and, between the holes <b>24</b> and the front end of the plate <b>20</b>, respective stop projections <b>25</b>.</p>
+<p id="p-0075" num="0090">Each lateral push button <b>13</b> is part of a piece <b>26</b> comprising, inside the housing <b>1</b>, a locking part <b>27</b> and a return U-bent leaf spring <b>28</b> extending between a corresponding side surface <b>23</b> of the plate <b>20</b> and the button <b>13</b>. The piece <b>26</b> is held by a part <b>29</b> rigidly connected to the housing <b>1</b>. The locking part <b>27</b> comprises a stop projection <b>30</b> extending toward the inside of the housing <b>1</b> perpendicularly to the longitudinal axis A and a locking member <b>31</b> extending toward the outside of the housing <b>1</b> perpendicularly to the longitudinal axis A. The locking member <b>31</b> engages a corresponding locking member <b>32</b> of the cap <b>9</b> to lock the tray <b>7</b>, as is shown in <figref idref="DRAWINGS">FIG. 5</figref>. The locking member <b>32</b> extends toward the inside of the housing <b>1</b> perpendicularly to the longitudinal axis A and is located at the end of an arm <b>36</b> of the cap <b>9</b>. The stop projection <b>30</b> has two functions. A first function is to come into abutment against the corresponding side surface <b>23</b> of the plate <b>20</b> when the push button <b>13</b> is pressed and the slide button <b>14</b> is in its rest position, shown in <figref idref="DRAWINGS">FIG. 5</figref>, to prevent the piece <b>26</b> and the push button <b>13</b> from going beyond the aforementioned intermediate pressed position in which the locking member <b>31</b> still engages the locking member <b>32</b>, in other words to prevent disengagement of the locking members <b>31</b>, <b>32</b>. The second function is to block the stop projection <b>25</b> when the slide button <b>14</b> is moved toward its operated position while the push button <b>13</b> is held in its intermediate pressed position, thereby preventing the slide button <b>14</b> from reaching its operated position.</p>
+<p id="p-0076" num="0091">When the push buttons <b>13</b> are in their rest position, the stop projections <b>30</b> do not interrupt the paths of the stop projections <b>25</b> and therefore do not hinder the movement of the slide button <b>14</b>, which can thus be moved along the longitudinal axis A of the container up to its operated position. When the slide button <b>14</b> is in its operated position (<figref idref="DRAWINGS">FIG. 6</figref>), the stop projections <b>30</b> face the holes <b>24</b>. In this configuration, if the lateral push buttons <b>13</b> are pressed, the stop projections <b>30</b> will enter the holes <b>24</b>, enabling the pieces <b>26</b> and push buttons <b>13</b> to go beyond the aforementioned intermediate position and to reach their operated position, shown in <figref idref="DRAWINGS">FIG. 7</figref>. In this operated position, the locking members <b>31</b> are out of engagement with the locking members <b>32</b> and the tray <b>7</b> is therefore free. The tray <b>7</b> may thus be slid out to expose the blisters <b>8</b> (<figref idref="DRAWINGS">FIG. 8</figref>). The side surfaces <b>23</b> of the plate <b>20</b>, with their holes <b>24</b> and their surfaces of contact with the stop projections <b>30</b>, thus constitute locking means serving to prevent the locking members <b>31</b> from disengaging from the locking members <b>32</b> or to enable such a disengagement.</p>
+<p id="p-0077" num="0092">So long as the lateral push buttons <b>13</b> are held in their operated position, the slide button <b>14</b> is blocked in its operated position due to the cooperation between the stop projections <b>30</b> and the holes <b>24</b>. Once the buttons <b>13</b>, <b>14</b> have been released by the user, they are returned to their respective rest positions by the springs <b>28</b>, <b>21</b>. The tray <b>7</b> may be returned to its locked position merely by pushing it back toward the inside of the housing <b>1</b>. The internal faces of the side walls <b>6</b> of the housing <b>1</b> have recesses <b>33</b>. The locking members <b>31</b>, <b>32</b> have slanted surfaces <b>34</b>, <b>35</b> (see <figref idref="DRAWINGS">FIG. 8</figref>) that cooperate when the tray <b>7</b> is pushed back while the buttons <b>13</b> are in their rest position, causing the arms <b>36</b> of the cap <b>9</b> to deform externally into the recesses <b>33</b> until the locking members <b>32</b> recover their locked position in which they engage the locking members <b>31</b>.</p>
+<p id="p-0078" num="0093">With reference to <figref idref="DRAWINGS">FIG. 9</figref>, a child-resistant medication container according to a second embodiment of the invention comprises a housing <b>40</b> having a top wall <b>41</b>, a base wall <b>42</b> opposite to the top wall <b>41</b>, a closed end <b>43</b>, an open end <b>44</b> opposite to the closed end <b>43</b>, and two opposite side walls <b>45</b>. A tray <b>46</b> supporting blisters (not shown) is slidably guided in the housing <b>40</b> along a longitudinal axis A of the container between two guiding internal longitudinal walls <b>47</b> of the housing <b>40</b>. In the illustrated example, the base wall <b>42</b> of the housing <b>40</b> is transparent and the tray <b>46</b> is therefore visible when the container is viewed from below. As in the first embodiment, the tray <b>46</b> may take a locked position (<figref idref="DRAWINGS">FIG. 9</figref>) corresponding to a closed position of the container, in which the tray <b>46</b> is locked inside the housing <b>40</b>, preventing access to the blisters. The tray <b>46</b> may also be unlocked and slid toward the outside of the housing <b>40</b> through the open end <b>44</b> to permit access to the blisters (open position of the container). The tray <b>46</b> comprises holes <b>48</b> under the blisters through which the medication contained in the blisters may be expelled when the container is in its open position, by applying a pressure on the blisters. A cap <b>49</b> is coupled to the front end of the tray <b>46</b>. The cap <b>49</b> closes the open end <b>44</b> when the tray <b>46</b> is in its locked position. The cap <b>49</b> may be of one-piece construction with the tray <b>46</b>.</p>
+<p id="p-0079" num="0094">The housing <b>40</b> includes opposite openings in the side walls <b>45</b> in which push buttons <b>50</b>, <b>51</b> are provided and an opening in the top wall <b>41</b> in which a slide button <b>52</b> is provided. The lateral push buttons <b>50</b>, <b>51</b> are operable by being moved perpendicularly to the longitudinal axis A toward the inside of the housing <b>40</b>. The slide button <b>52</b> is operable by being moved along the longitudinal axis A. To open the container, the user must perform the same sequence of operations as in the first embodiment, namely:
+<ul id="ul0013" list-style="none">
+    <li id="ul0013-0001" num="0000">
+    <ul id="ul0014" list-style="none">
+        <li id="ul0014-0001" num="0095">operate the slide button <b>52</b>,</li>
+        <li id="ul0014-0002" num="0096">then operate the lateral push buttons <b>50</b>, <b>51</b> while maintaining the slide button <b>52</b> in its operated position,</li>
+        <li id="ul0014-0003" num="0097">and then pull the tray <b>46</b> while maintaining the lateral push buttons <b>50</b>, <b>51</b> in their operated position.</li>
+    </ul>
+    </li>
+</ul>
+</p>
+<p id="p-0080" num="0098">The internal mechanism allowing the above-described sequence of operations in this second embodiment is shown in <figref idref="DRAWINGS">FIGS. 10 to 15</figref>. The lateral push buttons <b>50</b>, <b>51</b> are part of two respective pieces <b>53</b>, <b>54</b>. For the purpose of clarity, the pieces <b>53</b>, <b>54</b> are shown with different line thicknesses in the drawings. Each piece <b>53</b>, <b>54</b> comprises a pair of return springs <b>55</b>, <b>56</b> extending from opposite sides of the corresponding button <b>50</b>, <b>51</b>. The respective free ends of the springs <b>55</b> bear against the external face of one of the guiding walls <b>47</b>. The respective free ends of the springs <b>56</b> bear against the external face of the other guiding wall <b>47</b>. Each piece <b>53</b>, <b>54</b> comprises a U-shaped flat portion <b>57</b>, <b>58</b> located inside the housing <b>40</b> on or near the internal face of the top wall <b>41</b>, i.e. between the blisters and the top wall <b>41</b>. The U-shaped flat portions <b>57</b>, <b>58</b> are oriented along the longitudinal axis A of the container in an opposite manner to each other. Each U-shaped flat portion <b>57</b>, <b>58</b> is so wide as to connect the corresponding button <b>50</b>, <b>51</b> provided on one side of the tray <b>46</b> to a locking member <b>59</b>, <b>60</b> of the piece <b>53</b>, <b>54</b> provided on the other side of the tray <b>46</b>. Each locking member <b>59</b>, <b>60</b> is in the form of a hook projecting from the flat portion <b>57</b>, <b>58</b> toward the base wall <b>42</b>. In the closed position of the container, each locking member <b>59</b>, <b>60</b> engages a respective notch <b>61</b>, <b>62</b> formed in the respective lateral side of the tray <b>46</b> to lock the latter (<figref idref="DRAWINGS">FIGS. 9 and 10</figref>).</p>
+<p id="p-0081" num="0099">Each piece <b>53</b>, <b>54</b> further comprises a portion <b>63</b>, <b>64</b> located in the same plane as the U-shaped flat portion <b>57</b>, <b>58</b> and projecting toward the inside of the housing <b>40</b> in a direction perpendicular to the longitudinal axis A of the container from the one of the two legs of the U-shaped flat portion <b>57</b>, <b>58</b> that is closer to the button <b>50</b>, <b>51</b>. Each projecting portion <b>63</b>, <b>64</b> is terminated by teeth <b>65</b>, <b>66</b> aligned in a direction parallel to the longitudinal axis A. The slide button <b>52</b> comprises an external portion (shown in dashed line) located on the external face of the top wall <b>41</b> to be directly accessible to the user and an internal portion <b>67</b> located and guided inside the housing <b>40</b>. A return spring <b>68</b> which may be of one-piece construction with the piece <b>54</b> is attached at one of its ends to the U-shaped flat portion <b>58</b> and at its other end to the internal portion <b>67</b> of the slide button <b>52</b>. The internal portion <b>67</b> comprises first teeth <b>69</b> at one its lateral sides and second teeth <b>70</b> at its other lateral side. In the rest position of the slide button <b>52</b> and of the lateral buttons <b>50</b>, <b>51</b>, the first teeth <b>69</b> respectively face the spaces between the teeth <b>65</b> of the piece <b>53</b> but do not engage them because a distance is provided in a direction perpendicular to the longitudinal axis A between the teeth <b>65</b> and the teeth <b>69</b>. Likewise, in the rest position of the slide button <b>52</b> and of the lateral buttons <b>50</b>, <b>51</b>, the second teeth <b>70</b> respectively face the spaces between the teeth <b>66</b> of the piece <b>54</b> but do not engage them because a distance is provided in a direction perpendicular to the longitudinal axis A between the teeth <b>66</b> and the teeth <b>70</b>. In the rest position of the slide button <b>52</b> (<figref idref="DRAWINGS">FIG. 12</figref>), if the lateral buttons <b>50</b>, <b>51</b> are pressed, the pieces <b>53</b>, <b>54</b> are moved in opposite directions perpendicular to the longitudinal axis A, namely in directions in which the locking members <b>59</b>, <b>60</b> start to disengage from the notches <b>61</b>, <b>62</b> respectively. However, the movement of the pieces <b>53</b>, <b>54</b> is stopped in an intermediate position thereof where the teeth <b>65</b>, <b>66</b> have respectively engaged the teeth <b>69</b>, <b>70</b>, i.e. have entered the spaces between the teeth <b>69</b>, <b>70</b>, and rest against the bottom of said spaces (<figref idref="DRAWINGS">FIG. 13</figref>). In this intermediate position, the locking members <b>59</b>, <b>60</b> are not fully disengaged from the notches <b>61</b>, <b>62</b> and, therefore, the tray <b>46</b> remains locked. Moreover, the slide button <b>52</b> is locked by the teeth <b>65</b>, <b>66</b> engaging the teeth <b>69</b>, <b>70</b> and, therefore, cannot be operated by the user.</p>
+<p id="p-0082" num="0100">From the configuration of the container where the slide button <b>52</b> and the lateral buttons <b>50</b>, <b>51</b> are in their rest position (<figref idref="DRAWINGS">FIG. 12</figref>), the slide button <b>52</b> may be operated, i.e. moved along the longitudinal axis A up to a position where it is in abutment against a bearing portion (not shown) of the top wall <b>41</b> (<figref idref="DRAWINGS">FIG. 14</figref>). In this operated position, the teeth <b>69</b>, <b>70</b> are no longer on the path of the projecting portions <b>63</b>, <b>64</b>, respectively, and the pieces <b>53</b>, <b>54</b> may thus be moved beyond their intermediate position if the lateral buttons are pressed (<figref idref="DRAWINGS">FIG. 15</figref>). The limit position of the lateral buttons <b>50</b>, <b>51</b>, more generally of the pieces <b>53</b>, <b>54</b>, is defined by the teeth <b>65</b>, <b>66</b> abutting the sides of the internal portion <b>67</b> of the slide button <b>52</b> or by the lateral buttons <b>50</b>, <b>51</b> abutting the internal walls <b>47</b> of the housing <b>40</b>. This limit position is the operated position of the lateral buttons <b>50</b>, <b>51</b>. In this position, the locking members <b>59</b>, <b>60</b> are fully disengaged from the notches <b>61</b>, <b>62</b> respectively (<figref idref="DRAWINGS">FIG. 11</figref>). The tray <b>46</b> is therefore unlocked and may be pulled to the outside of the housing <b>40</b> through the open end <b>44</b>.</p>
+<p id="p-0083" num="0101">One will note that full operation of the slide button <b>52</b> is necessary for unlocking the lateral buttons <b>50</b>, <b>51</b>, i.e. for allowing them to go beyond their intermediate position. If indeed the slide button <b>52</b> is not fully operated, some of the teeth <b>69</b> (respectively <b>70</b>) will remain on the path of the projecting member <b>63</b> (respectively <b>64</b>) and pressing the lateral buttons <b>50</b>, <b>51</b> will result in these buttons being stopped in their intermediate position and in the slide button <b>52</b> being locked.</p>
+<p id="p-0084" num="0102">As soon as the lateral buttons <b>50</b>, <b>51</b> are released from their operated position or from their intermediate position, the return springs <b>55</b>, <b>56</b> bring them back to their rest position. Likewise, the slide button <b>52</b> is returned to its rest position by the return spring <b>68</b> as soon as it is released if the lateral buttons <b>50</b>, <b>51</b> are in their rest position. When the lateral buttons <b>50</b>, <b>51</b> are in their operated position, the slide button <b>52</b> is retained in its operated position by the projecting portions <b>63</b>, <b>64</b> as shown in <figref idref="DRAWINGS">FIG. 15</figref>.</p>
+<p id="p-0085" num="0103"><figref idref="DRAWINGS">FIG. 16</figref> shows a variant of the first and second embodiments in which the sole slide button <b>14</b>, respectively <b>52</b>, has been replaced by two slide buttons <b>14</b><i>a</i>, <b>14</b><i>b</i>, respectively <b>52</b><i>a</i>, <b>52</b><i>b</i>. These slide buttons are located on the top wall of the housing and are both operable along the longitudinal axis A. The internal locking/unlocking mechanism is identical to that of the first or the second embodiment described above, except that the part <b>20</b>, respectively <b>67</b>, is divided into two separate and independent parts rigidly connected with the slide buttons respectively and each comprising locking means for a respective lateral button.</p>
+<p id="p-0086" num="0104">In each of the first and second embodiments, although it is preferable to have two lateral buttons and two corresponding locking members, one of these buttons and the corresponding piece could be suppressed. In this case, a high level of security would nevertheless still be achieved because a specific sequence of operations, namely operating a first button and then a second button, would be required to unlock the tray. The fact that said first and second buttons are operable in non-parallel directions still increases the security or child resistance. Moreover, at least one of said first and second buttons could be concealed, for example by being recessed with respect to the corresponding wall of the housing.</p>
+<p id="p-0087" num="0105"><figref idref="DRAWINGS">FIG. 17</figref> shows a child-resistant medication container according to a third embodiment of the invention. The container according to this third embodiment has a housing (not shown), a tray (not shown) for supporting blisters and an opening mechanism comprising a slide button <b>80</b> and pieces <b>81</b>, <b>82</b> defining lateral push buttons <b>83</b>, <b>84</b> respectively. The housing, the tray and the piece <b>81</b> are respectively identical to the housing <b>40</b>, the tray <b>46</b> and the piece <b>53</b> of the second embodiment. In particular, the piece <b>81</b> comprises a projecting portion <b>85</b> terminated by teeth <b>86</b> corresponding to the projecting portion <b>63</b> and its teeth <b>65</b> of the second embodiment. The piece <b>82</b> differs from the piece <b>54</b> of the second embodiment in that it does not have the projecting portion <b>64</b> but has another projecting portion <b>87</b> terminated by teeth <b>88</b> and located on the same side of the slide button <b>80</b> as the projecting portion <b>85</b> of the other piece <b>81</b>. The slide button <b>80</b> differs from the slide button <b>52</b> of the second embodiment in that it does not have the teeth <b>70</b> but comprises, in addition to teeth <b>89</b> identical to the teeth <b>69</b> of the second embodiment, teeth <b>90</b> located on the same side as the teeth <b>89</b>.</p>
+<p id="p-0088" num="0106">In the rest position of the buttons <b>80</b>, <b>83</b>, <b>84</b>, the teeth <b>90</b> are engaged by the teeth <b>88</b> so that the slide button <b>80</b> is locked. Moreover, the lateral button <b>83</b> is locked by the slide button <b>80</b>, i.e. cannot be operated beyond an intermediate position where the teeth <b>86</b> engage the teeth <b>89</b> and where the corresponding locking member, designated by the reference numeral <b>91</b>, still engages the corresponding locking notch of the tray. Pressing the lateral button <b>84</b> disengages the teeth <b>88</b> from the teeth <b>90</b> and frees the slide button <b>80</b> (<figref idref="DRAWINGS">FIG. 18</figref>). This also disengages the locking member of the piece <b>82</b>, designated by the reference numeral <b>92</b>, from the corresponding locking notch of the tray. However, at this stage, the tray remains locked by the locking member <b>91</b> of the piece <b>81</b> still engaging the corresponding locking notch of the tray. Operating the slide button <b>80</b> while the lateral button <b>84</b> is operated unlocks the lateral button <b>83</b> which may then be pressed beyond its intermediate position up to a position where its locking member <b>91</b> is fully disengaged from the corresponding locking notch of the tray (<figref idref="DRAWINGS">FIG. 19</figref>). In the configuration where both lateral buttons <b>83</b>, <b>84</b> are in their operated position, the tray is unlocked and may therefore be slid out of the housing.</p>
+<p id="p-0089" num="0107">Thus, in this third embodiment, four actions have to be performed by the user, in a determined order, to unlock and move the tray. This is one action more than in the first and second embodiments. The child resistance is therefore still improved.</p>
+<p id="p-0090" num="0108">In a variant of this third embodiment, the locking member <b>92</b> could be suppressed and the tray could be locked only by the locking member <b>91</b>.</p>
+<p id="p-0091" num="0109">In all three embodiments of the invention, the lateral push buttons <b>13</b>, <b>50</b>, <b>51</b>, <b>83</b>, <b>84</b> could be of one-piece construction with the housing and could be in the form of tabs defined by cut-outs made in the side walls of the housing and elastically hinged to the rest of the housing.</p>
+<p id="p-0092" num="0110">Furthermore, the housing could have another shape than a parallelepipedic one, for example a cylindrical shape. Since the buttons are operable independently of the tray and are part of respective distinct pieces that are movable relative to each other, a great flexibility is achieved in the designing of the container.</p>
+<p id="p-0093" num="0111">The medication container according to the invention may be made of plastics. Alternatively, the medication container, parts of it and/or the blisters can be made of a light-emitting material.</p>
+<p id="p-0094" num="0112">It will be appreciated that the invention is not limited to containers for medication stored in blisters. The medication could be freely disposed in a tray or other receptacle. Alternatively, the medication could be stored in blisters that are disposed in a tray or other receptacle without being fixed. It could also be envisaged to use the container according to the invention to store a liquid medication container, such as a syringe.</p>
+<p id="p-0095" num="0113">The medication container of the present invention is preferably used for dispensing medication, such as tablets, which may not be suitable or may be dangerous to children. The medication container is therefore most preferably used for anti-cancer drugs, drugs having an immediate toxic effect or drugs having an effect on the immune system, such as purine analogues, in particular Cladribine or derivatives thereof. Cladribine is a chlorinated purine analogue which has been suggested to be useful in the treatment of multiple sclerosis (EP 626 853) and cancer.</p>
+<p id="p-0096" num="0114">The present invention has been described above by way of example only. It will be apparent to the skilled person that modifications may be made without departing from the invention as claimed. In the appended claims, reference numerals in parentheses have been inserted to facilitate the reading. These reference numerals however shall in no manner be construed as limiting the scope of the claims.</p>
+<?DETDESC description="Detailed Description" end="tail"?>
+</description>
+<us-claim-statement>The invention claimed is:</us-claim-statement>
+<claims id="claims">
+<claim id="CLM-00001" num="00001">
+<claim-text>1. Container for the delivery of medication, comprising:
+<claim-text>a housing having an open end,</claim-text>
+<claim-text>a support for supporting medication, said support being slidably mounted in the,</claim-text>
+<claim-text>first locking means for locking the support in the housing and for unlocking the support so that the support may be slid to the outside of the housing through the open end, said first locking means comprising a first locking member coupled to the housing and a second locking member coupled to the support, said first and second locking members being engageable with each other, and</claim-text>
+<claim-text>at least one button operable to act on the first locking means, said at least one button comprising a first button operable to act on the first locking member to disengage the first and second locking members,</claim-text>
+<claim-text>characterised by further comprising:</claim-text>
+<claim-text>second locking means for maintaining engagement between the first and second locking members, arranged to block the first locking member when an attempt is made to operate the first button while the second button is in a rest position, and</claim-text>
+<claim-text>a second button operable to act on the second locking means to permit disengaging the first and second locking members by operating the first button.</claim-text>
+</claim-text>
+</claim>
+<claim id="CLM-00002" num="00002">
+<claim-text>2. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that the first and second buttons are operable in respective non-parallel directions.</claim-text>
+</claim>
+<claim id="CLM-00003" num="00003">
+<claim-text>3. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that the first and second buttons are operable independently of the support.</claim-text>
+</claim>
+<claim id="CLM-00004" num="00004">
+<claim-text>4. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that the first and second buttons are part of respective distinct pieces that are movable relative to each other.</claim-text>
+</claim>
+<claim id="CLM-00005" num="00005">
+<claim-text>5. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that the first button is a push button and the second button is a slide button.</claim-text>
+</claim>
+<claim id="CLM-00006" num="00006">
+<claim-text>6. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that the second locking means comprise a surface coupled to the second button and a stop projection coupled to the first locking member, in that said surface is arranged to block said stop projection when an attempt is made to operate the first button while the second button is in a rest position, and in that said surface comprises a hole into which the stop projection enters when the second button is in an operated position and the first button is moved to its operated position.</claim-text>
+</claim>
+<claim id="CLM-00007" num="00007">
+<claim-text>7. Container according to <claim-ref idref="CLM-00006">claim 6</claim-ref>, characterised in that said surface further comprises a stop projection which is blocked by the stop projection coupled to the first locking member when the first button is in an intermediate position where the stop projection coupled to the first locking member is blocked by said surface, to prevent the second button from being operated.</claim-text>
+</claim>
+<claim id="CLM-00008" num="00008">
+<claim-text>8. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that the second locking means comprise first teeth coupled to the second button and second teeth coupled to the first button, in that the second teeth are out of engagement with the first teeth when the first and second buttons are in a rest position but engage the first teeth when an attempt is made to operate the first button while the second button is in a rest position, to block the first button in an intermediate position where the first locking member still engages the second locking member while locking the second button, and in that the first teeth are not on the path of the second teeth when the second button is in an operated position thus permitting the first button to be moved from its rest position to an operated position where the first locking member is disengaged from the second locking member.</claim-text>
+</claim>
+<claim id="CLM-00009" num="00009">
+<claim-text>9. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that the first button is provided at a side wall of the housing, in that said at least one button further comprises a third button provided at another, opposite side wall of the housing, in that the first locking means further comprise a third locking member coupled to the housing and a fourth locking member coupled to the support, said third and fourth locking members being engageable with each other, and in that the third button is operable to disengage the third and fourth locking members.</claim-text>
+</claim>
+<claim id="CLM-00010" num="00010">
+<claim-text>10. Container according to <claim-ref idref="CLM-00009">claim 9</claim-ref>, characterised in that the third button is operable to act on the third locking member to disengage the third and fourth locking members.</claim-text>
+</claim>
+<claim id="CLM-00011" num="00011">
+<claim-text>11. Container according to <claim-ref idref="CLM-00009">claim 9</claim-ref>, characterised in that the first and third buttons are arranged to unlock the support only when simultaneously in an operated position.</claim-text>
+</claim>
+<claim id="CLM-00012" num="00012">
+<claim-text>12. Container according to <claim-ref idref="CLM-00009">claim 9</claim-ref>, characterised by further comprising third locking means for maintaining engagement between the third and fourth locking members and a fourth button operable to act on the third locking means to permit disengaging the third and fourth locking members by operating the third button.</claim-text>
+</claim>
+<claim id="CLM-00013" num="00013">
+<claim-text>13. Container according to <claim-ref idref="CLM-00012">claim 12</claim-ref>, characterised in that the third button is operable to act on the third locking member to disengage the third and fourth locking members and the third locking means are arranged to block the third locking member when an attempt is made to operate the third button while the fourth button is in a rest position.</claim-text>
+</claim>
+<claim id="CLM-00014" num="00014">
+<claim-text>14. Container according to <claim-ref idref="CLM-00012">claim 12</claim-ref>, characterised in that the first and third buttons are push buttons and the second and fourth buttons are slide buttons.</claim-text>
+</claim>
+<claim id="CLM-00015" num="00015">
+<claim-text>15. Container according to <claim-ref idref="CLM-00014">claim 14</claim-ref>, characterised in that the second and fourth buttons are provided at a top wall of the housing.</claim-text>
+</claim>
+<claim id="CLM-00016" num="00016">
+<claim-text>16. Container according to <claim-ref idref="CLM-00012">claim 12</claim-ref>, characterised in that the second locking means comprise a first surface coupled to the second button and a first stop projection coupled to the first locking member, in that the first surface is arranged to block the first stop projection when an attempt is made to operate the first button while the second button is in a rest position, in that the first surface comprises a hole into which the first stop projection enters when the second button is in an operated position and the first button is moved to its operated position, in that the third locking means comprise a second surface coupled to the fourth button and a second stop projection coupled to the third locking member, in that the second surface is arranged to block the second stop projection when an attempt is made to operate the third button while the fourth button is in a rest position, and in that the second surface comprises a hole into which the second stop projection enters when the fourth button is in an operated position and the third button is moved to its operated position.</claim-text>
+</claim>
+<claim id="CLM-00017" num="00017">
+<claim-text>17. Container according to <claim-ref idref="CLM-00016">claim 16</claim-ref>, characterised in that the first surface further comprises a third stop projection which is blocked by the first stop projection when the first button is in an intermediate position where the first stop projection is blocked by the first surface, to prevent the second button from being operated, and in that the second surface further comprises a fourth stop projection which is blocked by the second stop projection when the third button is in an intermediate position where the second stop projection is blocked by the second surface, to prevent the fourth button from being operated.</claim-text>
+</claim>
+<claim id="CLM-00018" num="00018">
+<claim-text>18. Container according to <claim-ref idref="CLM-00012">claim 12</claim-ref>, characterised in that the second locking means comprise first teeth coupled to the second button and second teeth coupled to the first button, in that the second teeth are out of engagement with the first teeth when the first and second buttons are in a rest position but engage the first teeth when an attempt is made to operate the first button while the second button is in a rest position, to block the first button in an intermediate position where the first locking member still engages the second locking member while locking the second button, in that the first teeth are not on the path of the second teeth when the second button is in an operated position thus permitting the first button to be moved from its rest position to an operated position where the first locking member is disengaged from the second locking member, in that the third locking means comprise third teeth coupled to the fourth button and fourth teeth coupled to the third button, in that the fourth teeth are out of engagement with the third teeth when the third and fourth buttons are in a rest position but engage the third teeth when an attempt is made to operate the third button while the fourth button is in a rest position, to block the third button in an intermediate position where the third locking member still engages the fourth locking member while locking the fourth button, and in that the third teeth are not on the path of the fourth teeth when the fourth button is in an operated position thus permitting the third button to be moved from its rest position to an operated position where the third locking member is disengaged from the fourth locking member.</claim-text>
+</claim>
+<claim id="CLM-00019" num="00019">
+<claim-text>19. Container according to <claim-ref idref="CLM-00012">claim 12</claim-ref>, characterised in that the second and fourth buttons are one and a same button.</claim-text>
+</claim>
+<claim id="CLM-00020" num="00020">
+<claim-text>20. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised by further comprising third locking means for locking the second locking means and a third button operable to act on the third locking means to unlock the second locking means and permit acting on the second locking means by operating the second button.</claim-text>
+</claim>
+<claim id="CLM-00021" num="00021">
+<claim-text>21. Container according to <claim-ref idref="CLM-00020">claim 20</claim-ref>, characterised in that the third locking means comprise a third locking member coupled to the second locking means and a fourth locking member coupled to the third button, and in that these third and fourth locking members are engaged with each other when the second and third buttons are in a rest position and may be disengaged from each other by operating the third button.</claim-text>
+</claim>
+<claim id="CLM-00022" num="00022">
+<claim-text>22. Container according to <claim-ref idref="CLM-00021">claim 21</claim-ref>, characterised in that the third and fourth locking members each comprise teeth.</claim-text>
+</claim>
+<claim id="CLM-00023" num="00023">
+<claim-text>23. Container according to <claim-ref idref="CLM-00020">claim 20</claim-ref>, characterised in that the first and third buttons are provided at side walls of the housing and the second button is provided at a top wall of the housing.</claim-text>
+</claim>
+<claim id="CLM-00024" num="00024">
+<claim-text>24. Container according to <claim-ref idref="CLM-00020">claim 20</claim-ref>, characterised in that the first and third buttons are push buttons and the second button is a slide button.</claim-text>
+</claim>
+<claim id="CLM-00025" num="00025">
+<claim-text>25. Container according to <claim-ref idref="CLM-00020">claim 20</claim-ref>, characterised in that the first locking means further comprise a fifth locking member coupled to the housing and a sixth locking member coupled to the support and the third button is arranged to also disengage the fifth and sixth locking members when operated.</claim-text>
+</claim>
+<claim id="CLM-00026" num="00026">
+<claim-text>26. Container according to <claim-ref idref="CLM-00025">claim 25</claim-ref>, characterised in that the third button is arranged to act on the fifth locking member when operated, to disengage the fifth and sixth locking members.</claim-text>
+</claim>
+<claim id="CLM-00027" num="00027">
+<claim-text>27. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that said buttons are each subject to the action of elastic return means.</claim-text>
+</claim>
+<claim id="CLM-00028" num="00028">
+<claim-text>28. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that said buttons are each operable independently of the support.</claim-text>
+</claim>
+<claim id="CLM-00029" num="00029">
+<claim-text>29. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that said buttons are part of respective distinct pieces that are movable relative to each other.</claim-text>
+</claim>
+<claim id="CLM-00030" num="00030">
+<claim-text>30. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised by further comprising a cap coupled to the support and which closes the open end of the housing when the support is in its locked position.</claim-text>
+</claim>
+<claim id="CLM-00031" num="00031">
+<claim-text>31. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that the support supports at least one blister card containing said medication.</claim-text>
+</claim>
+<claim id="CLM-00032" num="00032">
+<claim-text>32. Container according to <claim-ref idref="CLM-00031">claim 31</claim-ref>, characterised in that the blisters of said at least one blister card are fully encased in the housing when the support is in its locked position.</claim-text>
+</claim>
+<claim id="CLM-00033" num="00033">
+<claim-text>33. Container according to <claim-ref idref="CLM-00031">claim 31</claim-ref>, characterised in that the support supports several separate blister cards containing said medication and placed side-by-side.</claim-text>
+</claim>
+<claim id="CLM-00034" num="00034">
+<claim-text>34. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that the medication is in the form of capsules or tablets.</claim-text>
+</claim>
+<claim id="CLM-00035" num="00035">
+<claim-text>35. Container according to <claim-ref idref="CLM-00034">claim 34</claim-ref>, characterised in that it contains an even number of tablets.</claim-text>
+</claim>
+<claim id="CLM-00036" num="00036">
+<claim-text>36. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that it contains 2 to 14 tablets, preferably 6 to 10 tablets, most preferably 10 tablets.</claim-text>
+</claim>
+<claim id="CLM-00037" num="00037">
+<claim-text>37. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that said medication contains drug for the treatment of cancer, drug having an immediate toxic effect or drug having an effect on the immune system.</claim-text>
+</claim>
+<claim id="CLM-00038" num="00038">
+<claim-text>38. Container according to <claim-ref idref="CLM-00037">claim 37</claim-ref>, characterised in that said medication comprises Cladribine or derivatives thereof.</claim-text>
+</claim>
+<claim id="CLM-00039" num="00039">
+<claim-text>39. Container according to <claim-ref idref="CLM-00001">claim 1</claim-ref>, characterised in that it has a wallet size.</claim-text>
+</claim>
+<claim id="CLM-00040" num="00040">
+<claim-text>40. Kit comprising separately a container according to <claim-ref idref="CLM-00001">claim 1</claim-ref> and medication.</claim-text>
+</claim>
+<claim id="CLM-00041" num="00041">
+<claim-text>41. Kit according to <claim-ref idref="CLM-00040">claim 40</claim-ref>, characterised by further comprising a description containing information on how to handle the container and on the administration and dosing of the medication.</claim-text>
+</claim>
+<claim id="CLM-00042" num="00042">
+<claim-text>42. Method of opening a container according to <claim-ref idref="CLM-00019">claim 19</claim-ref>, characterised by comprising the following steps:
+<claim-text>holding the housing,</claim-text>
+<claim-text>operating the second button,</claim-text>
+<claim-text>operating the first and third buttons while the second button is in its operated position, and</claim-text>
+<claim-text>pulling the support while the first and third buttons are in their operated position.</claim-text>
+</claim-text>
+</claim>
+<claim id="CLM-00043" num="00043">
+<claim-text>43. Method of opening a container according to <claim-ref idref="CLM-00020">claim 20</claim-ref>, characterised by comprising the following steps:
+<claim-text>holding the housing,</claim-text>
+<claim-text>operating successively the third button, the second button and the first button, and</claim-text>
+<claim-text>pulling the support while the first and third buttons are in their operated position. </claim-text>
+</claim-text>
+</claim>
+</claims>
+</us-patent-grant>

@@ -55,6 +55,7 @@ class PictureDescriptionApiModel(PictureDescriptionBaseModel):
         assert picture.image is not None
 
         img_io = io.BytesIO()
+        assert picture.image.pil_image is not None
         picture.image.pil_image.save(img_io, "PNG")
 
         image_base64 = base64.b64encode(img_io.getvalue()).decode("utf-8")

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "docling"
-version = "2.4.0"  # DO NOT EDIT, updated automatically
+version = "2.17.0"  # DO NOT EDIT, updated automatically
 description = "SDK and CLI for parsing PDF, DOCX, HTML, and more, to a unified document representation for powering downstream workflows such as gen AI applications."
 authors = ["Christoph Auer <cau@zurich.ibm.com>", "Michele Dolfi <dol@zurich.ibm.com>", "Maxim Lysak <mly@zurich.ibm.com>", "Nikos Livathinos <nli@zurich.ibm.com>", "Ahmed Nassar <ahn@zurich.ibm.com>", "Panos Vagenas <pva@zurich.ibm.com>", "Peter Staar <taa@zurich.ibm.com>"]
 license = "MIT"
@@ -24,29 +24,39 @@ packages = [{include = "docling"}]
 ######################
 # actual dependencies:
 ######################
-python = "^3.10"
+python = "^3.9"
 pydantic = "^2.0.0"
-docling-core = "^2.3.0"
-docling-ibm-models = "^2.0.3"
-deepsearch-glm = "^0.26.1"
+docling-core = { version = "^2.15.1", extras = ["chunking"] }
+docling-ibm-models = "^3.3.0"
+deepsearch-glm = "^1.0.0"
+docling-parse = "^3.1.0"
 filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"
 pydantic-settings = "^2.3.0"
 huggingface_hub = ">=0.23,<1"
-requests = "^2.32.3"
+requests = "^2.32.2"
 easyocr = "^1.7"
 tesserocr = { version = "^2.7.1", optional = true }
-docling-parse = "^2.0.2"
 certifi = ">=2024.7.4"
 rtree = "^1.3.0"
-scipy = "^1.14.1"
-pyarrow = "^16.1.0"
+scipy = "^1.6.0"
 typer = "^0.12.5"
 python-docx = "^1.1.2"
 python-pptx = "^1.0.2"
 beautifulsoup4 = "^4.12.3"
 pandas = "^2.1.4"
 marko = "^2.1.2"
+openpyxl = "^3.1.5"
+lxml = ">=4.0.0,<6.0.0"
+ocrmac = { version = "^1.0.0", markers = "sys_platform == 'darwin'", optional = true }
+rapidocr-onnxruntime = { version = "^1.4.0", optional = true, markers = "python_version < '3.13'" }
+onnxruntime = [
+  # 1.19.2 is the last version with python3.9 support,
+  # see https://github.com/microsoft/onnxruntime/releases/tag/v1.20.0
+  { version = ">=1.7.0,<1.20.0", optional = true, markers = "python_version < '3.10'" },
+  { version = "^1.7.0", optional = true, markers = "python_version >= '3.10'" }
+]
+pillow = "^10.0.0"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
@@ -65,10 +75,14 @@ pandas-stubs = "^2.1.4.231227"
 ipykernel = "^6.29.5"
 ipywidgets = "^8.1.5"
 nbqa = "^1.9.0"
+types-openpyxl = "^3.1.5.20241114"
 
 [tool.poetry.group.docs.dependencies]
 mkdocs-material = "^9.5.40"
 mkdocs-jupyter = "^0.25.0"
+mkdocs-click = "^0.8.1"
+mkdocstrings = {extras = ["python"], version = "^0.27.0"}
+griffe-pydantic = "^1.1.0"
 
 [tool.poetry.group.examples.dependencies]
 datasets = "^2.21.0"
@@ -76,6 +90,15 @@ python-dotenv = "^1.0.1"
 langchain-huggingface = "^0.0.3"
 langchain-milvus = "^0.1.4"
 langchain-text-splitters = "^0.2.4"
+
+[tool.poetry.group.constraints]
+optional = true
+
+[tool.poetry.group.constraints.dependencies]
+numpy = [
+    { version = ">=1.24.4,<3.0.0", markers = 'python_version >= "3.10"' },
+    { version = ">=1.24.4,<2.1.0", markers = 'python_version < "3.10"' },
+]
 
 [tool.poetry.group.mac_intel]
 optional = true
@@ -92,6 +115,8 @@ torchvision = [
 
 [tool.poetry.extras]
 tesserocr = ["tesserocr"]
+ocrmac = ["ocrmac"]
+rapidocr = ["rapidocr-onnxruntime", "onnxruntime"]
 
 [tool.poetry.scripts]
 docling = "docling.cli.main:app"
@@ -102,13 +127,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 88
-target-version = ["py310"]
+target-version = ["py39"]
 include = '\.pyi?$'
 
 [tool.isort]
 profile = "black"
 line_length = 88
-py_version=311
+py_version=39
 
 [tool.mypy]
 pretty = true
@@ -127,6 +152,7 @@ module = [
     "tesserocr.*",
     "docling_ibm_models.*",
     "easyocr.*",
+    "ocrmac.*",
     "deepsearch_glm.*",
     "lxml.*",
     "bs4.*",

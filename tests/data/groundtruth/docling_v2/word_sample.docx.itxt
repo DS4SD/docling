@@ -2,7 +2,7 @@ item-0 at level 0: unspecified: group _root_
   item-1 at level 1: paragraph: Summer activities
   item-2 at level 1: title: Swimming in the lake
     item-3 at level 2: paragraph: Duck
-    item-4 at level 2: paragraph: 
+    item-4 at level 2: picture
     item-5 at level 2: paragraph: Figure 1: This is a cute duckling
     item-6 at level 2: section_header: Let’s swim!
       item-7 at level 3: paragraph: To get started with swimming, fi ...  down in a water and try not to drown:

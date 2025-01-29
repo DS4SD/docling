@@ -28,7 +28,7 @@ class PictureDescriptionBaseModel(BaseEnrichmentModel):
         return self.enabled and isinstance(element, PictureItem)
 
     def _annotate_image(self, picture: PictureItem) -> PictureDescriptionData:
-        raise NotImplemented
+        raise NotImplementedError
 
     def __call__(
         self, doc: DoclingDocument, element_batch: Iterable[NodeItem]

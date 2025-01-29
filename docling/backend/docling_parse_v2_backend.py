@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
 from docling_core.types.doc import BoundingBox, CoordOrigin
-from docling_parse.docling_parse import pdf_parser_v2
+from docling_parse.pdf_parsers import pdf_parser_v2
 from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage
 
@@ -140,7 +140,7 @@ class DoclingParseV2PageBackend(PdfPageBackend):
         return cells
 
     def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:
-        AREA_THRESHOLD = 32 * 32
+        AREA_THRESHOLD = 0  # 32 * 32
 
         images = self._dpage["sanitized"]["images"]["data"]
         images_header = self._dpage["sanitized"]["images"]["header"]
@@ -178,7 +178,7 @@ class DoclingParseV2PageBackend(PdfPageBackend):
                 l=0, r=0, t=0, b=0, coord_origin=CoordOrigin.BOTTOMLEFT
             )
         else:
-            padbox = cropbox.to_bottom_left_origin(page_size.height)
+            padbox = cropbox.to_bottom_left_origin(page_size.height).model_copy()
             padbox.r = page_size.width - padbox.r
             padbox.t = page_size.height - padbox.t
 
@@ -210,12 +210,14 @@ class DoclingParseV2DocumentBackend(PdfDocumentBackend):
         self.parser = pdf_parser_v2("fatal")
 
         success = False
-        if isinstance(path_or_stream, BytesIO):
+        if isinstance(self.path_or_stream, BytesIO):
             success = self.parser.load_document_from_bytesio(
-                self.document_hash, path_or_stream
+                self.document_hash, self.path_or_stream
             )
-        elif isinstance(path_or_stream, Path):
-            success = self.parser.load_document(self.document_hash, str(path_or_stream))
+        elif isinstance(self.path_or_stream, Path):
+            success = self.parser.load_document(
+                self.document_hash, str(self.path_or_stream)
+            )
 
         if not success:
             raise RuntimeError(

@@ -28,7 +28,6 @@ def main():
     pipeline_options = PdfPipelineOptions()
     pipeline_options.images_scale = IMAGE_RESOLUTION_SCALE
     pipeline_options.generate_page_images = True
-    pipeline_options.generate_table_images = True
     pipeline_options.generate_picture_images = True
 
     doc_converter = DocumentConverter(
@@ -61,7 +60,7 @@ def main():
                 output_dir / f"{doc_filename}-table-{table_counter}.png"
             )
             with element_image_filename.open("wb") as fp:
-                element.image.pil_image.save(fp, "PNG")
+                element.get_image(conv_res.document).save(fp, "PNG")
 
         if isinstance(element, PictureItem):
             picture_counter += 1
@@ -69,13 +68,19 @@ def main():
                 output_dir / f"{doc_filename}-picture-{picture_counter}.png"
             )
             with element_image_filename.open("wb") as fp:
-                element.image.pil_image.save(fp, "PNG")
+                element.get_image(conv_res.document).save(fp, "PNG")
 
     # Save markdown with embedded pictures
-    content_md = conv_res.document.export_to_markdown(image_mode=ImageRefMode.EMBEDDED)
     md_filename = output_dir / f"{doc_filename}-with-images.md"
-    with md_filename.open("w") as fp:
-        fp.write(content_md)
+    conv_res.document.save_as_markdown(md_filename, image_mode=ImageRefMode.EMBEDDED)
+
+    # Save markdown with externally referenced pictures
+    md_filename = output_dir / f"{doc_filename}-with-image-refs.md"
+    conv_res.document.save_as_markdown(md_filename, image_mode=ImageRefMode.REFERENCED)
+
+    # Save HTML with externally referenced pictures
+    html_filename = output_dir / f"{doc_filename}-with-image-refs.html"
+    conv_res.document.save_as_html(html_filename, image_mode=ImageRefMode.REFERENCED)
 
     end_time = time.time() - start_time
 

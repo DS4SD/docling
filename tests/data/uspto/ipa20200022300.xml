@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE us-patent-application SYSTEM "us-patent-application-v44-2014-04-03.dtd" [ ]>
+<us-patent-application lang="EN" dtd-version="v4.4 2014-04-03" file="US20200022300A1-20200123.XML" status="PRODUCTION" id="us-patent-application" country="US" date-produced="20200108" date-publ="20200123">
+<us-bibliographic-data-application lang="EN" country="US">
+<publication-reference>
+<document-id>
+<country>US</country>
+<doc-number>20200022300</doc-number>
+<kind>A1</kind>
+<date>20200123</date>
+</document-id>
+</publication-reference>
+<application-reference appl-type="utility">
+<document-id>
+<country>US</country>
+<doc-number>16039511</doc-number>
+<date>20180719</date>
+</document-id>
+</application-reference>
+<us-application-series-code>16</us-application-series-code>
+<classifications-ipcr>
+<classification-ipcr>
+<ipc-version-indicator><date>20060101</date></ipc-version-indicator>
+<classification-level>A</classification-level>
+<section>A</section>
+<class>01</class>
+<subclass>B</subclass>
+<main-group>63</main-group>
+<subgroup>32</subgroup>
+<symbol-position>F</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+</classification-ipcr>
+<classification-ipcr>
+<ipc-version-indicator><date>20060101</date></ipc-version-indicator>
+<classification-level>A</classification-level>
+<section>A</section>
+<class>01</class>
+<subclass>C</subclass>
+<main-group>5</main-group>
+<subgroup>06</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+</classification-ipcr>
+<classification-ipcr>
+<ipc-version-indicator><date>20060101</date></ipc-version-indicator>
+<classification-level>A</classification-level>
+<section>A</section>
+<class>01</class>
+<subclass>B</subclass>
+<main-group>63</main-group>
+<subgroup>00</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+</classification-ipcr>
+<classification-ipcr>
+<ipc-version-indicator><date>20060101</date></ipc-version-indicator>
+<classification-level>A</classification-level>
+<section>F</section>
+<class>15</class>
+<subclass>B</subclass>
+<main-group>21</main-group>
+<subgroup>00</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+</classification-ipcr>
+<classification-ipcr>
+<ipc-version-indicator><date>20060101</date></ipc-version-indicator>
+<classification-level>A</classification-level>
+<section>F</section>
+<class>15</class>
+<subclass>B</subclass>
+<main-group>11</main-group>
+<subgroup>10</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+</classification-ipcr>
+</classifications-ipcr>
+<classifications-cpc>
+<main-cpc>
+<classification-cpc>
+<cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+<section>A</section>
+<class>01</class>
+<subclass>B</subclass>
+<main-group>63</main-group>
+<subgroup>32</subgroup>
+<symbol-position>F</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+<scheme-origination-code>C</scheme-origination-code>
+</classification-cpc>
+</main-cpc>
+<further-cpc>
+<classification-cpc>
+<cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+<section>A</section>
+<class>01</class>
+<subclass>C</subclass>
+<main-group>5</main-group>
+<subgroup>062</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+<scheme-origination-code>C</scheme-origination-code>
+</classification-cpc>
+<classification-cpc>
+<cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+<section>A</section>
+<class>01</class>
+<subclass>C</subclass>
+<main-group>5</main-group>
+<subgroup>068</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+<scheme-origination-code>C</scheme-origination-code>
+</classification-cpc>
+<classification-cpc>
+<cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+<section>A</section>
+<class>01</class>
+<subclass>B</subclass>
+<main-group>63</main-group>
+<subgroup>008</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+<scheme-origination-code>C</scheme-origination-code>
+</classification-cpc>
+<classification-cpc>
+<cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+<section>F</section>
+<class>15</class>
+<subclass>B</subclass>
+<main-group>2211</main-group>
+<subgroup>8616</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>A</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+<scheme-origination-code>C</scheme-origination-code>
+</classification-cpc>
+<classification-cpc>
+<cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+<section>F</section>
+<class>15</class>
+<subclass>B</subclass>
+<main-group>11</main-group>
+<subgroup>10</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+<scheme-origination-code>C</scheme-origination-code>
+</classification-cpc>
+<classification-cpc>
+<cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+<section>F</section>
+<class>15</class>
+<subclass>B</subclass>
+<main-group>2211</main-group>
+<subgroup>46</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>A</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+<scheme-origination-code>C</scheme-origination-code>
+</classification-cpc>
+<classification-cpc>
+<cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+<section>F</section>
+<class>15</class>
+<subclass>B</subclass>
+<main-group>2211</main-group>
+<subgroup>7053</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>A</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+<scheme-origination-code>C</scheme-origination-code>
+</classification-cpc>
+<classification-cpc>
+<cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+<section>F</section>
+<class>15</class>
+<subclass>B</subclass>
+<main-group>21</main-group>
+<subgroup>008</subgroup>
+<symbol-position>L</symbol-position>
+<classification-value>I</classification-value>
+<action-date><date>20200123</date></action-date>
+<generating-office><country>US</country></generating-office>
+<classification-status>B</classification-status>
+<classification-data-source>H</classification-data-source>
+<scheme-origination-code>C</scheme-origination-code>
+</classification-cpc>
+</further-cpc>
+</classifications-cpc>
+<invention-title id="d2e43">SYSTEM FOR CONTROLLING THE OPERATION OF AN ACTUATOR MOUNTED ON A SEED PLANTING IMPLEMENT</invention-title>
+<us-parties>
+<us-applicants>
+<us-applicant sequence="00" app-type="applicant" designation="us-only" applicant-authority-category="assignee">
+<addressbook>
+<orgname>CNH Industrial Canada, Ltd.</orgname>
+<address>
+<city>Saskatoon</city>
+<country>CA</country>
+</address>
+</addressbook>
+<residence>
+<country>CA</country>
+</residence>
+</us-applicant>
+</us-applicants>
+<inventors>
+<inventor sequence="00" designation="us-only">
+<addressbook>
+<last-name>Gervais</last-name>
+<first-name>Joel John Octave</first-name>
+<address>
+<city>Saskatoon</city>
+<country>CA</country>
+</address>
+</addressbook>
+</inventor>
+<inventor sequence="01" designation="us-only">
+<addressbook>
+<last-name>Paulson</last-name>
+<first-name>Ian William Patrick</first-name>
+<address>
+<city>Saskatoon</city>
+<country>CA</country>
+</address>
+</addressbook>
+</inventor>
+</inventors>
+</us-parties>
+</us-bibliographic-data-application>
+<abstract id="abstract">
+<p id="p-0001" num="0000">In one aspect, a system for controlling an operation of an actuator mounted on a seed planting implement may include an actuator configured to adjust a position of a row unit of the seed planting implement relative to a toolbar of the seed planting implement. The system may also include a flow restrictor fluidly coupled to a fluid chamber of the actuator, with the flow restrictor being configured to reduce a rate at which fluid is permitted to exit the fluid chamber in a manner that provides damping to the row unit. Furthermore, the system may include a valve fluidly coupled to the flow restrictor in a parallel relationship such that the valve is configured to permit the fluid exiting the fluid chamber to flow through the flow restrictor and the fluid entering the fluid chamber to bypass the flow restrictor.</p>
+</abstract>
+<drawings id="DRAWINGS">
+<figure id="Fig-EMI-D00000" num="00000">
+<img id="EMI-D00000" he="102.45mm" wi="158.75mm" file="US20200022300A1-20200123-D00000.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00001" num="00001">
+<img id="EMI-D00001" he="183.81mm" wi="155.79mm" orientation="landscape" file="US20200022300A1-20200123-D00001.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00002" num="00002">
+<img id="EMI-D00002" he="245.53mm" wi="161.37mm" orientation="landscape" file="US20200022300A1-20200123-D00002.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00003" num="00003">
+<img id="EMI-D00003" he="209.63mm" wi="148.25mm" orientation="landscape" file="US20200022300A1-20200123-D00003.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00004" num="00004">
+<img id="EMI-D00004" he="198.04mm" wi="160.02mm" file="US20200022300A1-20200123-D00004.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00005" num="00005">
+<img id="EMI-D00005" he="212.34mm" wi="124.54mm" file="US20200022300A1-20200123-D00005.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00006" num="00006">
+<img id="EMI-D00006" he="209.72mm" wi="148.25mm" orientation="landscape" file="US20200022300A1-20200123-D00006.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+<figure id="Fig-EMI-D00007" num="00007">
+<img id="EMI-D00007" he="209.72mm" wi="153.59mm" orientation="landscape" file="US20200022300A1-20200123-D00007.TIF" alt="embedded image" img-content="drawing" img-format="tif"/>
+</figure>
+</drawings>
+<description id="description">
+<?summary-of-invention description="Summary of Invention" end="lead"?>
+<heading id="h-0001" level="1">FIELD</heading>
+<p id="p-0002" num="0001">The present disclosure generally relates to seed planting implements and, more particularly, to systems for controlling the operation of an actuator mounted on a seed planting implement in a manner that provides damping to one or more components of the seed planting implement.</p>
+<heading id="h-0002" level="1">BACKGROUND</heading>
+<p id="p-0003" num="0002">Modern farming practices strive to increase yields of agricultural fields. In this respect, seed planting implements are towed behind a tractor or other work vehicle to deposit seeds in a field. For example, seed planting implements typically include one or more ground engaging tools or openers that form a furrow or trench in the soil. One or more dispensing devices of the seed planting implement may, in turn, deposit seeds into the furrow(s). After deposition of the seeds, a packer wheel may pack the soil on top of the deposited seeds.</p>
+<p id="p-0004" num="0003">In certain instances, the packer wheel may also control the penetration depth of the furrow. In this regard, the position of the packer wheel may be moved vertically relative to the associated opener(s) to adjust the depth of the furrow. Additionally, the seed planting implement includes an actuator configured to exert a downward force on the opener(s) to ensure that the opener(s) is able to penetrate the soil to the depth set by the packer wheel. However, the seed planting implement may bounce or chatter when traveling at high speeds and/or when the opener(s) encounters hard or compacted soil. As such, operators generally operate the seed planting implement with the actuator exerting more downward force on the opener(s) than is necessary in order to prevent such bouncing or chatter. Operation of the seed planting implement with excessive down pressure applied to the opener(s), however, reduces the overall stability of the seed planting implement.</p>
+<p id="p-0005" num="0004">Accordingly, an improved system for controlling the operation of an actuator mounted on s seed planting implement to enhance the overall operation of the implement would be welcomed in the technology.</p>
+<heading id="h-0003" level="1">BRIEF DESCRIPTION</heading>
+<p id="p-0006" num="0005">Aspects and advantages of the technology will be set forth in part in the following description, or may be obvious from the description, or may be learned through practice of the technology.</p>
+<p id="p-0007" num="0006">In one aspect, the present subject matter is directed to a system for controlling an operation of an actuator mounted on a seed planting implement. The system may include a toolbar and a row unit adjustably mounted on the toolbar. The system may also include a fluid-driven actuator configured to adjust a position of the row unit relative to the toolbar, with the fluid-driven actuator defining first and second fluid chambers. Furthermore, the system may include a flow restrictor fluidly coupled to the first fluid chamber, with the flow restrictor being configured to reduce a rate at which fluid is permitted to exit the first fluid chamber in a manner that provides viscous damping to the row unit. Additionally, the system may include a valve fluidly coupled to the first fluid chamber. The valve may further be fluidly coupled to the flow restrictor in a parallel relationship such that the valve is configured to permit the fluid exiting the first fluid chamber to flow through the flow restrictor and the fluid entering the first fluid chamber to bypass the flow restrictor.</p>
+<p id="p-0008" num="0007">In another aspect, the present subject matter is directed to a seed planting implement including a toolbar and a plurality of row units adjustably coupled to the toolbar. Each row unit may include a ground engaging tool configured to form a furrow in the soil. The seed planting implement may also include plurality of fluid-driven actuators, with each fluid-driven actuator being coupled between the toolbar and a corresponding row unit of the plurality of row units. As such, each fluid-driven actuator may be configured to adjust a position of the corresponding row unit relative to the toolbar. Moreover, each fluid-driven actuator may define first and second fluid chambers. Furthermore, the seed planting implement may include a flow restrictor fluidly coupled to the first fluid chamber of a first fluid-driven actuator of the plurality of fluid-driven actuators. The flow restrictor may be configured to reduce a rate at which fluid is permitted to exit the first fluid chamber of the first fluid-driven actuator in a manner that provides viscous damping to the corresponding row unit. Additionally, the seed planting implement may include a valve fluidly coupled to the first fluid chamber of the first fluid-driven actuator. The valve further may be fluidly coupled to the flow restrictor in a parallel relationship such that the valve is configured to permit the fluid exiting the first fluid chamber to flow through the flow restrictor and the fluid entering the first fluid chamber to bypass the flow restrictor.</p>
+<p id="p-0009" num="0008">In a further aspect, the present subject matter is directed to a system for providing damping to a row unit of a seed planting implement. The system may include a toolbar, a row unit adjustably mounted on the toolbar, and a fluid-driven actuator configured to adjust a position of the row unit relative to the toolbar. As such, the fluid-driven actuator may define a fluid chamber. The system may also include a flow restrictor fluidly coupled to the fluid chamber. The flow restrictor may define an adjustable throat configured to reduce a rate at which fluid is permitted to exit the fluid chamber. In this regard, the throat may be adjustable between a first size configured to provide a first damping rate to the row unit and a second size configured to provide a second damping rate to the row unit, with the first and second damping rates being different.</p>
+<p id="p-0010" num="0009">These and other features, aspects and advantages of the present technology will become better understood with reference to the following description and appended claims. The accompanying drawings, which are incorporated in and constitute a part of this specification, illustrate embodiments of the technology and, together with the description, serve to explain the principles of the technology.</p>
+<?summary-of-invention description="Summary of Invention" end="tail"?>
+<?brief-description-of-drawings description="Brief Description of Drawings" end="lead"?>
+<description-of-drawings>
+<heading id="h-0004" level="1">BRIEF DESCRIPTION OF THE DRAWINGS</heading>
+<p id="p-0011" num="0010">A full and enabling disclosure of the present technology, including the best mode thereof, directed to one of ordinary skill in the art, is set forth in the specification, which makes reference to the appended figures, in which:</p>
+<p id="p-0012" num="0011"><figref idref="DRAWINGS">FIG. 1</figref> illustrates a perspective view of one embodiment of a seed planting implement in accordance with aspects of the present subject matter;</p>
+<p id="p-0013" num="0012"><figref idref="DRAWINGS">FIG. 2</figref> illustrates a side view of one embodiment of a row unit suitable for use with a seed planting implement in accordance with aspects of the present subject matter;</p>
+<p id="p-0014" num="0013"><figref idref="DRAWINGS">FIG. 3</figref> illustrates a schematic view of one embodiment of a system for controlling the operation of an actuator mounted on a seed planting implement in accordance with aspects of the present subject matter;</p>
+<p id="p-0015" num="0014"><figref idref="DRAWINGS">FIG. 4</figref> illustrates a cross-sectional view of one embodiment of a flow restrictor suitable for use in the system shown in <figref idref="DRAWINGS">FIG. 3</figref>, particularly illustrating the flow restrictor defining a throat having a fixed size in accordance with aspects of the present subject matter;</p>
+<p id="p-0016" num="0015"><figref idref="DRAWINGS">FIG. 5</figref> illustrates a cross-sectional view of another embodiment of a flow restrictor suitable for use in the system shown in <figref idref="DRAWINGS">FIG. 3</figref>, particularly illustrating the flow restrictor defining a throat having an adjustable size in accordance with aspects of the present subject matter;</p>
+<p id="p-0017" num="0016"><figref idref="DRAWINGS">FIG. 6</figref> illustrates a simplified cross-sectional view of the flow restrictor shown in <figref idref="DRAWINGS">FIG. 5</figref>, particularly illustrating the throat having a first size configured to provide a first damping rate in accordance with aspects of the present subject matter;</p>
+<p id="p-0018" num="0017"><figref idref="DRAWINGS">FIG. 7</figref> illustrates a simplified cross-sectional view of the flow restrictor shown in <figref idref="DRAWINGS">FIG. 5</figref>, particularly illustrating the throat having a second size configured to provide a second damping rate in accordance with aspects of the present subject matter;</p>
+<p id="p-0019" num="0018"><figref idref="DRAWINGS">FIG. 8</figref> illustrates a cross-sectional view of another embodiment of a system for controlling the operation of an actuator mounted on a seed planting implement in accordance with aspects of the present subject matter, particularly illustrating the system including a fluidly actuated check valve; and</p>
+<p id="p-0020" num="0019"><figref idref="DRAWINGS">FIG. 9</figref> illustrates a cross-sectional view of a further embodiment of a system for controlling the operation of an actuator mounted on a seed planting implement in accordance with aspects of the present subject matter, particularly illustrating the system including an electrically actuated check valve.</p>
+</description-of-drawings>
+<?brief-description-of-drawings description="Brief Description of Drawings" end="tail"?>
+<?detailed-description description="Detailed Description" end="lead"?>
+<p id="p-0021" num="0020">Repeat use of reference characters in the present specification and drawings is intended to represent the same or analogous features or elements of the present technology.</p>
+<heading id="h-0005" level="1">DETAILED DESCRIPTION</heading>
+<p id="p-0022" num="0021">Reference now will be made in detail to embodiments of the invention, one or more examples of which are illustrated in the drawings. Each example is provided by way of explanation of the invention, not limitation of the invention. In fact, it will be apparent to those skilled in the art that various modifications and variations can be made in the present invention without departing from the scope or spirit of the invention. For instance, features illustrated or described as part of one embodiment can be used with another embodiment to yield a still further embodiment. Thus, it is intended that the present invention covers such modifications and variations as come within the scope of the appended claims and their equivalents.</p>
+<p id="p-0023" num="0022">In general, the present subject matter is directed to systems for controlling the operation of an actuator mounted on a seed planting implement. Specifically, the disclosed systems may be configured to control the operation of the actuator in a manner that provides damping to one or more components of the seed planting implement. For example, in several embodiments, the seed planting implement may include a toolbar and one or more row units adjustably coupled to the toolbar. One or more fluid-driven actuators of the seed planting implement may be configured to control and/or adjust the position of the row unit(s) relative to the toolbar. Furthermore, a flow restrictor may be fluidly coupled to a fluid chamber of the actuator and configured to reduce the rate at which fluid is permitted to exit the fluid chamber so as to provide viscous damping to the row unit(s). In this regard, when the row unit(s) moves relative to the toolbar (e.g., when the row unit contacts a rock or other impediment in the soil), the flow restrictor may be configured to reduce the relative speed and/or displacement of such movement, thereby damping the movement of the row unit(s) relative to the toolbar.</p>
+<p id="p-0024" num="0023">In one embodiment, the flow restrictor may be configured to provide a variable damping rate to the component(s) of the seed planting implement. Specifically, in such embodiment, the flow restrictor may be configured as an adjustable valve having one or more components that may be adjusted to change the size of a fluid passage or throat defined by the valve. In this regard, changing the throat size of the valve varies the rate at which the fluid may exit the fluid chamber of the actuator, thereby adjusting the damping rate provided by the disclosed system. For example, adjusting the valve so as to increase the size of the throat may allow the fluid to exit the fluid chamber more quickly, thereby reducing the damping rate of the system. Conversely, adjusting the valve so as to decrease the size of the throat may allow the fluid to exit the fluid chamber more slowly, thereby increasing the damping rate of the system.</p>
+<p id="p-0025" num="0024">In accordance with aspects of the present subject matter, the system may further include a check valve fluidly coupled to the fluid chamber of the actuator. Specifically, in several embodiments, the check valve may also be fluidly coupled to the flow restrictor in a parallel relationship. As such, the check valve may be configured to direct the fluid exiting the fluid chamber of the actuator (e.g., when one of the row units hits a rock) to flow through the flow restrictor, thereby reducing the relative speed and/or displacement between the row unit(s) in the toolbar. Furthermore, the check valve may be configured to permit the fluid entering the fluid chamber to bypass the flow restrictor. For example, the fluid may return to the fluid chamber as the row unit(s) returns to its initial position following contact with the rock. In this regard, allowing the returning fluid to bypass the flow restrictor may increase the rate at which the fluid flows back into the fluid chamber, thereby further increasing the damping provided by the disclosed system.</p>
+<p id="p-0026" num="0025">Referring now to <figref idref="DRAWINGS">FIG. 1</figref>, a perspective view of one embodiment of a seed planting implement <b>10</b> is illustrated in accordance with aspects of the present subject matter. As shown in <figref idref="DRAWINGS">FIG. 1</figref>, the implement <b>10</b> may include a laterally extending toolbar or frame assembly <b>12</b> connected at its middle to a forwardly extending tow bar <b>14</b> to allow the implement <b>10</b> to be towed by a work vehicle (not shown), such as an agricultural tractor, in a direction of travel (e.g., as indicated by arrow <b>16</b>). The toolbar <b>12</b> may generally be configured to support a plurality of tool frames <b>18</b>. Each tool frame <b>18</b> may, in turn, be configured to support a plurality of row units <b>20</b>. As will be described below, each row unit <b>20</b> may include one or more ground engaging tools configured to excavate a furrow or trench in the soil.</p>
+<p id="p-0027" num="0026">It should be appreciated that, for purposes of illustration, only a portion of the row units <b>20</b> of the implement <b>10</b> have been shown in <figref idref="DRAWINGS">FIG. 1</figref>. In general, the implement <b>10</b> may include any number of row units <b>20</b>, such as six, eight, twelve, sixteen, twenty-four, thirty-two, or thirty-six row units. In addition, it should be appreciated that the lateral spacing between row units <b>20</b> may be selected based on the type of crop being planted. For example, the row units <b>20</b> may be spaced approximately thirty inches from one another for planting corn, and approximately fifteen inches from one another for planting soybeans.</p>
+<p id="p-0028" num="0027">It should also be appreciated that the configuration of the implement <b>10</b> described above and shown in <figref idref="DRAWINGS">FIG. 1</figref> is provided only to place the present subject matter in an exemplary field of use. Thus, it should be appreciated that the present subject matter may be readily adaptable to any manner of implement configuration.</p>
+<p id="p-0029" num="0028">Referring now to <figref idref="DRAWINGS">FIG. 2</figref>, a side view of one embodiment of a row unit <b>20</b> is illustrated in accordance with aspects of the present subject matter. As shown, the row unit <b>20</b> is configured as a hoe opener row unit. However, it should be appreciated that, in alternative embodiments, the row unit <b>20</b> may be configured as a disc opener row unit or any other suitable type of seed planting unit. Furthermore, it should be appreciated that, although the row unit <b>20</b> will generally be described in the context of the implement <b>10</b> shown in <figref idref="DRAWINGS">FIG. 1</figref>, the row unit <b>20</b> may generally be configured to be installed on any suitable seed planting implement having any suitable implement configuration.</p>
+<p id="p-0030" num="0029">As shown, the row unit <b>20</b> may be adjustably coupled to one of the tool frames <b>18</b> of the implement <b>10</b> by a suitable linkage assembly <b>22</b>. For example, in one embodiment, the linkage assembly <b>22</b> may include a mounting bracket <b>24</b> coupled to the tool frame <b>18</b>. Furthermore, the linkage assembly <b>22</b> may include first and second linkage members <b>26</b>, <b>28</b>. One end of each linkage member <b>26</b>, <b>28</b> may be pivotably coupled to the mounting bracket <b>24</b>, while an opposed end of each linkage member <b>26</b>, <b>28</b> may be pivotally coupled to a support member <b>30</b> of the row unit <b>20</b>. In this regard, the linkage assembly <b>22</b> may form a four bar linkage with the support member <b>30</b> that permits relative pivotable movement between the row unit <b>20</b> and the associated tool frame <b>18</b>. However, it should be appreciated that, in alternative embodiments, the row unit <b>20</b> may be adjustably coupled to the tool frame <b>18</b> or the toolbar <b>12</b> via any other suitable linkage assembly. Furthermore, it should be appreciated that, in further embodiments the linkage assembly <b>22</b> may couple the row unit <b>20</b> directly to the toolbar <b>12</b>.</p>
+<p id="p-0031" num="0030">Furthermore, the support member <b>30</b> may be configured to support one or more components of the row unit <b>20</b>. For example, in several embodiments, a ground engaging shank <b>32</b> may be mounted or otherwise supported on support member <b>22</b>. As shown, the shank <b>32</b> may include an opener <b>34</b> configured to excavate a furrow or trench in the soil as the implement <b>10</b> moves in the direction of travel <b>12</b> to facilitate deposition of a flowable granular or particulate-type agricultural product, such as seed, fertilizer, and/or the like. Moreover, the row unit <b>20</b> may include a packer wheel <b>36</b> configured to roll along the soil and close the furrow after deposition of the agricultural product. In one embodiment, the packer wheel <b>36</b> may be coupled to the support member <b>30</b> by an arm <b>38</b>. It should be appreciated that, in alternative embodiments, any other suitable component(s) may be supported on or otherwise coupled to the support member <b>30</b>. For example, the row unit <b>20</b> may include a ground engaging disc opener (not shown) in lieu of the ground engaging shank <b>32</b>.</p>
+<p id="p-0032" num="0031">Additionally, in several embodiments, a fluid-driven actuator <b>102</b> of the implement <b>10</b> may be configured to adjust the position of one or more components of the row unit <b>20</b> relative to the tool frame <b>18</b>. For example, in one embodiment, a rod <b>104</b> of the actuator <b>102</b> may be coupled to the shank <b>32</b> (e.g., the end of the shank <b>32</b> opposed from the opener <b>34</b>), while a cylinder <b>106</b> of the actuator <b>102</b> may be coupled to the mounting bracket <b>24</b>. As such, the rod <b>104</b> may be configured to extend and/or retract relative to the cylinder <b>106</b> to adjust the position of the shank <b>32</b> relative to the tool frame <b>18</b>, which, in turn, adjusts the force being applied to the shank <b>32</b>. However, it should be appreciated that, in alternative embodiments, the rod <b>104</b> may be coupled to the mounting bracket <b>24</b>, while the cylinder <b>106</b> may be coupled to the shank <b>32</b>. Furthermore, it should be appreciated that, in further embodiments, the actuator <b>102</b> may be coupled to any other suitable component of the row unit <b>20</b> and/or directly to the toolbar <b>12</b>.</p>
+<p id="p-0033" num="0032">Moreover, it should be appreciated that the configuration of the row unit <b>20</b> described above and shown in <figref idref="DRAWINGS">FIG. 2</figref> is provided only to place the present subject matter in an exemplary field of use. Thus, it should be appreciated that the present subject matter may be readily adaptable to any manner of seed planting unit configuration.</p>
+<p id="p-0034" num="0033">Referring now to <figref idref="DRAWINGS">FIG. 3</figref>, a schematic view of one embodiment of a system <b>100</b> for controlling the operation of an actuator mounted on a seed planting implement is illustrated in accordance with aspects of the present subject matter. In general, the system <b>100</b> will be described herein with reference to the seed planting implement <b>10</b> and the row unit <b>20</b> described above with reference to <figref idref="DRAWINGS">FIGS. 1 and 2</figref>. However, it should be appreciated by those of ordinary skill in the art that the disclosed system <b>100</b> may generally be utilized with seed planting implements having any other suitable implement configuration and/or seed planting units having any other suitable unit configuration.</p>
+<p id="p-0035" num="0034">As shown in <figref idref="DRAWINGS">FIG. 3</figref>, the system <b>100</b> may include a fluid-driven actuator, such as the actuator <b>102</b> of the row unit <b>20</b> described above with reference to <figref idref="DRAWINGS">FIG. 2</figref>. As shown, the actuator <b>102</b> may correspond to a hydraulic actuator. Thus, in several embodiments, the actuator <b>102</b> may include a piston <b>108</b> housed within the cylinder <b>106</b>. One end of the rod <b>104</b> may be coupled to the piston <b>108</b>, while an opposed end of the rod <b>104</b> may extend outwardly from the cylinder <b>106</b>. Additionally, the actuator <b>102</b> may include a cap-side chamber <b>110</b> and a rod-side chamber <b>112</b> defined within the cylinder <b>106</b>. As is generally understood, by regulating the pressure of the fluid supplied to one or both of the cylinder chambers <b>110</b>, <b>112</b>, the actuation of the rod <b>104</b> may be controlled. However, it should be appreciated that, in alternative embodiments, the actuator <b>102</b> may be configured as any other suitable type of actuator, such as a pneumatic actuator. Furthermore, it should be appreciated that, in further embodiments, the system <b>100</b> may include any other suitable number of fluid-driven actuators, such as additional actuators <b>102</b> mounted on the implement <b>10</b>.</p>
+<p id="p-0036" num="0035">Furthermore, the system <b>100</b> may include various components configured to provide fluid (e.g., hydraulic oil) to the cylinder chambers <b>110</b>, <b>112</b> of the actuator <b>102</b>. For example, in several embodiments, the system <b>100</b> may include a fluid reservoir <b>114</b> and first and second fluid conduits <b>116</b>, <b>118</b>. As shown, a first fluid conduit <b>116</b> may extend between and fluidly couple the reservoir <b>114</b> and the rod-side chamber <b>112</b> of the actuator <b>102</b>. Similarly, a second fluid conduit <b>118</b> may extend between and fluidly couple the reservoir <b>114</b> and the cap-side chamber <b>110</b> of the actuator <b>102</b>. Additionally, a pump <b>115</b> and a remote switch <b>117</b> or other valve(s) may be configured to control the flow of the fluid between the reservoir <b>114</b> and the cylinder chambers <b>110</b>, <b>112</b> of the actuator <b>102</b>. In one embodiment, the reservoir <b>114</b>, the pump <b>115</b>, and the remote switch <b>117</b> may be mounted on the work vehicle (not shown) configured to tow the implement <b>10</b>. However, it should be appreciated that, in alternative embodiments, the reservoir <b>114</b>, the pump <b>115</b>, and/or the remote switch <b>117</b> may be mounted on the implement <b>10</b>. Furthermore, it should be appreciated that the system <b>100</b> may include any other suit component(s) configured to control the flow of fluid between the reservoir and the actuator <b>102</b>.</p>
+<p id="p-0037" num="0036">In several embodiments, the system <b>100</b> may also include a flow restrictor <b>120</b> that is fluidly coupled to the cap-side chamber <b>110</b>. As such, the flow restrictor <b>120</b> may be provided in series with the second fluid conduit <b>118</b>. As will be described below, the flow restrictor <b>120</b> may be configured to reduce the flow rate of the fluid exiting the cap-side chamber <b>110</b> in a manner that provides damping to one or more components of the implement <b>10</b>. However, it should be appreciated that, in alternative embodiments, the flow restrictor <b>120</b> may be fluidly coupled to the rod-side chamber <b>120</b> such that the flow restrictor <b>120</b> is provided in series with the first fluid conduit <b>116</b>.</p>
+<p id="p-0038" num="0037">Additionally, in several embodiments, the system <b>100</b> may include a check valve <b>122</b> that is fluidly coupled to the cap-side chamber <b>110</b> and provided in series with the second fluid conduit <b>118</b>. As shown, the check valve <b>122</b> may be fluidly coupled to the flow restrictor <b>120</b> in parallel. In this regard, the check valve <b>122</b> may be provided in series with a first branch <b>124</b> of the second fluid conduit <b>118</b>, while the flow restrictor <b>120</b> may be provided in series with a second branch <b>126</b> of the second fluid conduit <b>118</b>. As such, the check valve <b>122</b> may be configured to allow the fluid to flow through the first branch <b>124</b> of the second fluid conduit <b>118</b> from the reservoir <b>114</b> to the cap-side chamber <b>110</b>. However, the check valve <b>122</b> may be configured to occlude or prevent the fluid from flowing through the first branch <b>124</b> of the second fluid conduit <b>118</b> from the cap-side chamber <b>110</b> to the reservoir <b>114</b>. In this regard, the check valve <b>122</b> directs all of the fluid exiting the cap-side chamber <b>110</b> into the flow restrictor <b>120</b>. Conversely, the check valve <b>122</b> permits the fluid flowing to the cap-side chamber <b>110</b> to bypass the flow restrictor <b>120</b>. As will be described below, such configuration facilitates damping of one or more components of the implement <b>10</b>. However, it should be appreciated that, in alternative embodiments, the check valve <b>122</b> may be fluidly coupled to the rod-side chamber <b>112</b> in combination with the flow restrictor <b>120</b> such that the check valve <b>122</b> is provided in series with the first fluid conduit <b>116</b>.</p>
+<p id="p-0039" num="0038">As indicated above, the system <b>100</b> may generally be configured to provide viscous damping to one or more components of the implement <b>10</b>. For example, when a ground engaging tool of the implement <b>10</b>, such as the shank <b>32</b>, contacts a rock or other impediment in the soil, the corresponding row unit <b>20</b> may pivot relative to the corresponding tool frame <b>18</b> and/or the toolbar <b>12</b> against the down pressure load applied to the row unit <b>20</b> by the corresponding actuator <b>102</b>. In several embodiments, such movement may cause the rod <b>104</b> of the actuator <b>102</b> to retract into the cylinder <b>106</b>, thereby moving the piston <b>108</b> in a manner that decreases the volume of the cap-side chamber <b>110</b>. In such instances, some of the fluid present within the cap-side chamber <b>110</b> may exit and flow into the second fluid conduit <b>118</b> toward the reservoir <b>114</b>. The check valve <b>122</b> may prevent the fluid exiting the cap-side chamber <b>110</b> from flowing through the first branch <b>124</b> of the second fluid conduit <b>118</b>. As such, all fluid exiting the cap-side chamber <b>110</b> may be directed into the second branch <b>126</b> and through the flow restrictor <b>120</b>. As indicated above, the flow restrictor <b>120</b> reduces or limits the rate at which the fluid may flow through the second fluid conduit <b>118</b> so as to reduce the rate at which the fluid may exit the cap-side chamber <b>110</b>. In this regard, the speed at which and/or the amount that the rod <b>104</b> retracts into the cylinder <b>106</b> when the shank <b>32</b> contacts a soil impediment may be reduced (e.g., because of the reduced rate at which the fluid is discharged from the cap-side chamber <b>110</b>), thereby damping the movement of the row unit <b>20</b> relative to the corresponding tool frame <b>18</b> and/or the toolbar <b>12</b>. Furthermore, after the initial retraction of the rod <b>104</b> into the cylinder <b>106</b>, the piston <b>108</b> may then move in a manner that increases the volume of the cap-side chamber <b>110</b>, thereby extending the rod <b>104</b> from the cylinder <b>106</b>. In such instances, fluid present within the reservoir <b>114</b> and the second fluid conduit <b>118</b> may be drawn back into the cap-side chamber <b>110</b>. As indicated above, the check valve <b>122</b> may permit the fluid within the second fluid conduit <b>118</b> to bypass the flow restrictor <b>120</b> and flow unobstructed through the first branch <b>124</b>, thereby maximizing the rate at which the fluid returns to the cap-side chamber <b>110</b>. Increasing the rate at which the fluid returns to the cap-side chamber <b>110</b> may decrease the time that the row unit <b>20</b> is displaced relative to the tool frame <b>18</b>, thereby further damping of the row unit <b>20</b> relative to the corresponding tool frame <b>18</b> and/or the toolbar <b>12</b>.</p>
+<p id="p-0040" num="0039">Referring now to <figref idref="DRAWINGS">FIG. 4</figref>, a cross-sectional view of one embodiment of the flow restrictor <b>120</b> is illustrated in accordance with aspects of the present subject matter. For example, in the illustrated embodiment, the flow restrictor <b>120</b> may include a restrictor body <b>128</b> coupled to the second branch <b>126</b> of the second fluid conduit <b>118</b>, with the restrictor body <b>128</b>, in turn, defining a fluid passage <b>130</b> extending therethrough. Furthermore, the flow restrictor <b>120</b> may include an orifice plate <b>132</b> extending inward from the restrictor body <b>128</b> into the fluid passage <b>130</b>. As shown, the orifice plate <b>132</b> may define a central aperture or throat <b>134</b> extending therethrough. In general, the size (e.g., the area, diameter, etc.) of the throat <b>134</b> may be smaller than the size of the fluid passage <b>130</b> so as to reduce the flow rate of the fluid through the flow restrictor <b>120</b>. It should be appreciated that, in the illustrated embodiment, the throat <b>134</b> has a fixed size such that the throat <b>134</b> provides a fixed or constant backpressure for a given fluid flow rate. In this regard, in such embodiment, a fixed or constant damping rate is provided by the system <b>100</b>. However, it should be appreciated that, in alternative embodiments, the flow restrictor <b>120</b> may have any other suitable configuration that reduces the flow rate of the fluid flowing therethrough.</p>
+<p id="p-0041" num="0040">Referring now to <figref idref="DRAWINGS">FIG. 5</figref>, a cross-sectional view of another embodiment of the flow restrictor <b>120</b> is illustrated in accordance with aspects of the present subject matter. As shown, the flow restrictor <b>120</b> may generally be configured the same as or similar to that described above with reference to <figref idref="DRAWINGS">FIG. 4</figref>. For instance, the flow restrictor <b>120</b> may define the throat <b>134</b>, which is configured to reduce the flow rate of the fluid through the flow restrictor <b>120</b>. However, as shown in <figref idref="DRAWINGS">FIG. 5</figref>, unlike the above-describe embodiment, the size (e.g., the area, diameter, etc.) of the throat <b>134</b> is adjustable. For example, in such embodiment, the flow restrictor <b>120</b> may be configured as an adjustable valve <b>136</b>. As shown, the valve <b>136</b> may include a valve body <b>138</b> coupled to the second branch <b>126</b> of the second fluid conduit <b>118</b>, a shaft <b>140</b> rotatably coupled to the valve body <b>138</b>, a disc <b>142</b> coupled to the shaft <b>140</b>, and an actuator <b>144</b> (e.g., a suitable electric motor) coupled to the shaft <b>140</b>. As such, the actuator <b>144</b> may be configured to rotate the shaft <b>140</b> and the disc <b>142</b> relative to the valve body <b>138</b> (e.g., as indicated by arrow <b>146</b> in <figref idref="DRAWINGS">FIG. 5</figref>) to change the size of the throat <b>134</b> defined between the disc <b>142</b> and the valve body <b>138</b>. Although the valve <b>136</b> is configured as a butterfly valve in <figref idref="DRAWINGS">FIG. 5</figref>, it should be appreciated that, in alternative embodiments, the valve <b>136</b> may be configured as any other suitable type of valve or adjustable flow restrictor. For example, in one embodiment, the valve <b>136</b> may be configured as a suitable ball valve.</p>
+<p id="p-0042" num="0041">In accordance with aspects of the present disclosure, by adjusting the size of the throat <b>134</b>, the system <b>100</b> may be able to provide variable damping rates. In general, the size of the throat <b>134</b> may be indicative of the amount of damping provided by the system <b>100</b>. For example, in several embodiments, the disc <b>142</b> may be adjustable between a first position shown in <figref idref="DRAWINGS">FIG. 6</figref> and a second position shown in <figref idref="DRAWINGS">FIG. 7</figref>. More specifically, when the disc <b>142</b> is at the first position, the throat <b>134</b> defines a first size (e.g., as indicated by arrow <b>148</b> in <figref idref="DRAWINGS">FIG. 6</figref>), thereby providing a first damping rate. Conversely, when the disc <b>142</b> is at the second position, the throat <b>134</b> defines a second size (e.g., as indicated by arrow <b>150</b> in <figref idref="DRAWINGS">FIG. 7</figref>), thereby providing a second damping rate. As shown in <figref idref="DRAWINGS">FIGS. 6 and 7</figref>, the first distance <b>148</b> is larger than the second distance <b>150</b>. In such instance, the system <b>100</b> provides greater damping when the throat <b>134</b> is adjusted to the first size than when the throat <b>134</b> is adjusted to the second size. It should be appreciated that, in alternative embodiments, the disc <b>142</b> may be adjustable between any other suitable positions that provide any other suitable damping rates. For example, the disc <b>142</b> may be adjustable to a plurality of different positions defined between the fully opened and fully closed positions of the valve, thereby providing for a corresponding number of different damping rates. Furthermore, it should be appreciated that the disc <b>142</b> may be continuously adjustable or adjustable between various discrete positions.</p>
+<p id="p-0043" num="0042">Referring back to <figref idref="DRAWINGS">FIG. 5</figref>, a controller <b>152</b> of the system <b>100</b> may be configured to electronically control the operation of one or more components of the valve <b>138</b>, such as the actuator <b>144</b>. In general, the controller <b>152</b> may comprise any suitable processor-based device known in the art, such as a computing device or any suitable combination of computing devices. Thus, in several embodiments, the controller <b>152</b> may include one or more processor(s) <b>154</b> and associated memory device(s) <b>156</b> configured to perform a variety of computer-implemented functions. As used herein, the term &#x201c;processor&#x201d; refers not only to integrated circuits referred to in the art as being included in a computer, but also refers to a controller, a microcontroller, a microcomputer, a programmable logic controller (PLC), an application specific integrated circuit, and other programmable circuits. Additionally, the memory device(s) <b>156</b> of the controller <b>152</b> may generally comprise memory element(s) including, but not limited to, a computer readable medium (e.g., random access memory (RAM)), a computer readable non-volatile medium (e.g., a flash memory), a floppy disk, a compact disc-read only memory (CD-ROM), a magneto-optical disk (MOD), a digital versatile disc (DVD) and/or other suitable memory elements. Such memory device(s) <b>156</b> may generally be configured to store suitable computer-readable instructions that, when implemented by the processor(s) <b>154</b>, configure the controller <b>152</b> to perform various computer-implemented functions. In addition, the controller <b>152</b> may also include various other suitable components, such as a communications circuit or module, one or more input/output channels, a data/control bus and/or the like.</p>
+<p id="p-0044" num="0043">It should be appreciated that the controller <b>152</b> may correspond to an existing controller of the implement <b>10</b> or associated work vehicle (not shown) or the controller <b>152</b> may correspond to a separate processing device. For instance, in one embodiment, the controller <b>152</b> may form all or part of a separate plug-in module that may be installed within the implement <b>10</b> or associated work vehicle to allow for the disclosed system and method to be implemented without requiring additional software to be uploaded onto existing control devices of the implement <b>10</b> or associated work vehicle.</p>
+<p id="p-0045" num="0044">Furthermore, in one embodiment, a user interface <b>158</b> of the system <b>100</b> may be communicatively coupled to the controller <b>152</b> via a wired or wireless connection to allow feedback signals (e.g., as indicated by dashed line <b>160</b> in <figref idref="DRAWINGS">FIG. 5</figref>) to be transmitted from the controller <b>152</b> to the user interface <b>158</b>. More specifically, the user interface <b>158</b> may be configured to receive an input from an operator of the implement <b>10</b> or the associated work vehicle, such as an input associated with a desired damping characteristic(s) to be provided by the system <b>100</b>. As such, the user interface <b>158</b> may include one or more input devices (not shown), such as touchscreens, keypads, touchpads, knobs, buttons, sliders, switches, mice, microphones, and/or the like. In addition, some embodiments of the user interface <b>158</b> may include one or more one or more feedback devices (not shown), such as display screens, speakers, warning lights, and/or the like, which are configured to communicate such feedback from the controller <b>152</b> to the operator of the implement <b>10</b>. However, in alternative embodiments, the user interface <b>158</b> may have any suitable configuration.</p>
+<p id="p-0046" num="0045">Moreover, in one embodiment, one or more sensors <b>162</b> of the system <b>100</b> may be communicatively coupled to the controller <b>152</b> via a wired or wireless connection to allow sensor data (e.g., as indicated by dashed line <b>164</b> in <figref idref="DRAWINGS">FIG. 5</figref>) to be transmitted from the sensor(s) <b>162</b> to the controller <b>152</b>. For example, in one embodiment, the sensor(s) <b>162</b> may include a location sensor, such as a GNSS-based sensor, that is configured to detect a parameter associated with the location of the implement <b>10</b> or associated work vehicle within the field. In another embodiment, the sensor(s) <b>162</b> may include a speed sensor, such as a Hall Effect sensor, that is configured to detect a parameter associated with the speed at which the implement <b>10</b> is moved across the field. However, it should be appreciated that, in alternative embodiments, the sensor(s) <b>162</b> may include any suitable sensing device(s) configured to detect any suitable operating parameter of the implement <b>10</b> and/or the associated work vehicle.</p>
+<p id="p-0047" num="0046">In several embodiments, the controller <b>152</b> may be configured to control the operation of the valve <b>136</b> based on the feedback signals <b>160</b> received from the user interface <b>158</b> and/or the sensor data <b>164</b> received from the sensor(s) <b>162</b>. Specifically, as shown in <figref idref="DRAWINGS">FIG. 5</figref>, the controller <b>152</b> may be communicatively coupled to the actuator <b>144</b> of the valve <b>136</b> via a wired or wireless connection to allow control signals (e.g., indicated by dashed lines <b>166</b> in <figref idref="DRAWINGS">FIG. 5</figref>) to be transmitted from the controller <b>152</b> to the actuator <b>144</b>. Such control signals <b>166</b> may be configured to regulate the operation of the actuator <b>144</b> to adjust the position of the disc <b>142</b> relative to the valve body <b>138</b>, such as by moving the disc <b>142</b> along the direction <b>146</b> between the first position (<figref idref="DRAWINGS">FIG. 6</figref>) and the second position (<figref idref="DRAWINGS">FIG. 7</figref>). For example, the feedback signals <b>116</b> received by the controller <b>152</b> may be indicative that the operator desires to adjust the damping provided by the system <b>100</b>. Furthermore, upon receipt of the sensor data <b>164</b> (e.g., data indicative of the location and/or speed of the implement <b>10</b>), the controller <b>152</b> may be configured to determine that the damping rate of the system <b>100</b> should be adjusted. In either instance, the controller <b>152</b> may be configured to transmit the control signals <b>166</b> to the actuator <b>144</b>, with such control signals <b>166</b> being configured to control the operation of the actuator <b>144</b> to adjust the position of the disc <b>142</b> to provide the desired damping rate. However, it should be appreciated that, in alternative embodiments, the controller <b>152</b> may be configured to control the operation of the valve <b>136</b> based on any other suitable input(s) and/or parameter(s).</p>
+<p id="p-0048" num="0047">Referring now to <figref idref="DRAWINGS">FIG. 8</figref>, a schematic view of another embodiment of the system <b>100</b> is illustrated in accordance with aspects of the present subject matter. As shown, the system <b>100</b> may generally be configured the same as or similar to that described above with reference to <figref idref="DRAWINGS">FIG. 3</figref>. For instance, the system <b>100</b> may include the flow restrictor <b>120</b> and the check valve <b>122</b> fluidly coupled to the cap-side chamber <b>110</b> of the actuator <b>102</b> via the second fluid conduit <b>118</b>. Furthermore, the flow restrictor <b>120</b> and the check valve <b>122</b> may be fluidly coupled together in parallel. However, as shown in <figref idref="DRAWINGS">FIG. 8</figref>, unlike the above-describe embodiment, the check valve <b>122</b> may be configured as a pilot-operated or fluid actuated three-way valve that is fluidly coupled to the first fluid conduit <b>116</b> by a pilot conduit <b>168</b>.</p>
+<p id="p-0049" num="0048">In general, when the row unit <b>20</b> is lifted from an operational position relative to the ground to a raised position relative to the ground, it may be desirable for fluid to exit the cap-side chamber <b>110</b> without its flow rate being limited by the flow restrictor <b>120</b>. For example, permitting such fluid to bypass the flow restrictor <b>120</b> may reduce the time required to lift the row unit <b>20</b> from the operational position to the raised position. More specifically, when lifting the row unit <b>20</b> from the operational position to the raised position, a pump (not shown) may pump fluid through the first fluid conduit <b>116</b> from the reservoir <b>114</b> to the rod-side chamber <b>112</b> of the actuator <b>102</b>, thereby retracting the rod <b>104</b> into the cylinder <b>106</b>. This may, in turn, discharge fluid from the cap-side chamber <b>110</b> into the second fluid conduit <b>118</b>. As described above, the check valve <b>122</b> may generally be configured to direct all fluid exiting the cap-side chamber <b>110</b> into the flow restrictor <b>120</b>. However, in the configuration of the system <b>100</b> shown in <figref idref="DRAWINGS">FIG. 8</figref>, when lifting the row unit <b>20</b> to the raised position, the pilot conduit <b>168</b> supplies fluid flowing through the first fluid conduit <b>116</b> to the check valve <b>122</b>. The fluid received from the pilot conduit <b>168</b> may, in turn, actuate suitable component(s) of the check valve <b>122</b> (e.g., a diaphragm(s), a spring(s), and/or the like) in a manner that causes the check valve <b>122</b> to open, thereby permitting the fluid exiting the cap-side chamber <b>110</b> to bypass the flow restrictor <b>120</b> and flow unobstructed through the check valve <b>122</b> toward the reservoir <b>114</b>. Conversely, when the row unit <b>20</b> is at the operational position, the check valve <b>122</b> may be closed, thereby directing all fluid exiting the cap-side chamber <b>110</b> into the flow restrictor <b>120</b>.</p>
+<p id="p-0050" num="0049">Referring now to <figref idref="DRAWINGS">FIG. 9</figref>, a schematic view of a further embodiment of the system <b>100</b> is illustrated in accordance with aspects of the present subject matter. As shown, the system <b>100</b> may generally be configured the same as or similar to that described above with reference to <figref idref="DRAWINGS">FIGS. 3 and 8</figref>. For instance, the system <b>100</b> may include the flow restrictor <b>120</b> and the check valve <b>122</b> fluidly coupled to the cap-side chamber <b>110</b> of the actuator <b>102</b> via the second fluid conduit <b>118</b>. Furthermore, the flow restrictor <b>120</b> and the check valve <b>122</b> may be fluidly coupled together in parallel. However, as shown in <figref idref="DRAWINGS">FIG. 9</figref>, unlike the above-describe embodiments, the check valve <b>122</b> may be configured as an electrically actuated valve. Specifically, as shown, the controller <b>152</b> may be communicatively coupled to the check valve <b>122</b> via a wired or wireless connection to allow control signals (e.g., indicated by dashed lines <b>170</b> in <figref idref="DRAWINGS">FIG. 9</figref>) to be transmitted from the controller <b>152</b> to the check valve <b>122</b>. In this regard, when the row unit <b>20</b> is lifted from the operational position to the raised position, the control signals <b>170</b> may be configured to instruct the check valve <b>122</b> to open in a manner that permits the fluid exiting the cap-side chamber <b>110</b> to bypass the flow restrictor <b>120</b> and flow unobstructed through the check valve <b>122</b> toward the reservoir <b>114</b>. Conversely, when the row unit <b>20</b> is at the operational position, the control signals <b>170</b> may be configured to instruct the check valve <b>122</b> to close, thereby directing all fluid exiting the cap-side chamber <b>110</b> into the flow restrictor <b>120</b>.</p>
+<p id="p-0051" num="0050">This written description uses examples to disclose the technology, including the best mode, and also to enable any person skilled in the art to practice the technology, including making and using any devices or systems and performing any incorporated methods. The patentable scope of the technology is defined by the claims, and may include other examples that occur to those skilled in the art. Such other examples are intended to be within the scope of the claims if they include structural elements that do not differ from the literal language of the claims, or if they include equivalent structural elements with insubstantial differences from the literal language of the claims.</p>
+<?detailed-description description="Detailed Description" end="tail"?>
+</description>
+<us-claim-statement>What is claimed is:</us-claim-statement>
+<claims id="claims">
+<claim id="CLM-00001" num="00001">
+<claim-text><b>1</b>. A system for controlling an operation of an actuator mounted on a seed planting implement, the system comprising:
+<claim-text>a toolbar;</claim-text>
+<claim-text>a row unit adjustably mounted on the toolbar;</claim-text>
+<claim-text>a fluid-driven actuator configured to adjust a position of the row unit relative to the toolbar, the fluid-driven actuator defining first and second fluid chambers;</claim-text>
+<claim-text>a flow restrictor fluidly coupled to the first fluid chamber, the flow restrictor being configured to reduce a rate at which fluid is permitted to exit the first fluid chamber in a manner that provides damping to the row unit; and</claim-text>
+<claim-text>a valve fluidly coupled to the first fluid chamber, the valve further being fluidly coupled to the flow restrictor in a parallel relationship such that the valve is configured to permit the fluid exiting the first fluid chamber to flow through the flow restrictor and the fluid entering the first fluid chamber to bypass the flow restrictor.</claim-text>
+</claim-text>
+</claim>
+<claim id="CLM-00002" num="00002">
+<claim-text><b>2</b>. The system of <claim-ref idref="CLM-00001">claim 1</claim-ref>, wherein, when fluid is supplied to the second fluid chamber, the valve is configured to permit fluid exiting the first fluid chamber to bypass the flow restrictor.</claim-text>
+</claim>
+<claim id="CLM-00003" num="00003">
+<claim-text><b>3</b>. The system of <claim-ref idref="CLM-00001">claim 1</claim-ref>, wherein the valve is fluidly actuated.</claim-text>
+</claim>
+<claim id="CLM-00004" num="00004">
+<claim-text><b>4</b>. The system of <claim-ref idref="CLM-00003">claim 3</claim-ref>, further comprising:
+<claim-text>a fluid line configured to supply the fluid to the second fluid chamber, the fluid line being fluidly coupled to the valve such that, when the fluid flows through the fluid line to the second fluid chamber, the valve opens in a manner that permits the fluid exiting first fluid chamber to bypass the flow restrictor.</claim-text>
+</claim-text>
+</claim>
+<claim id="CLM-00005" num="00005">
+<claim-text><b>5</b>. The system of <claim-ref idref="CLM-00001">claim 1</claim-ref>, wherein the valve is electrically actuated.</claim-text>
+</claim>
+<claim id="CLM-00006" num="00006">
+<claim-text><b>6</b>. The system of <claim-ref idref="CLM-00001">claim 1</claim-ref>, wherein the flow restrictor defines a throat having a fixed size.</claim-text>
+</claim>
+<claim id="CLM-00007" num="00007">
+<claim-text><b>7</b>. The system of <claim-ref idref="CLM-00001">claim 1</claim-ref>, wherein the flow restrictor defines a throat having an adjustable size.</claim-text>
+</claim>
+<claim id="CLM-00008" num="00008">
+<claim-text><b>8</b>. A seed planting implement, comprising:
+<claim-text>a toolbar;</claim-text>
+<claim-text>a plurality of row units adjustably coupled to the toolbar, each row unit including a ground engaging tool configured to form a furrow in the soil;</claim-text>
+<claim-text>a plurality of fluid-driven actuators, each fluid-driven actuator being coupled between the toolbar and a corresponding row unit of the plurality of row units, each fluid-driven actuator being configured to adjust a position of the corresponding row unit relative to the toolbar, each fluid-driven actuator defining first and second fluid chambers;</claim-text>
+<claim-text>a flow restrictor fluidly coupled to the first fluid chamber of a first fluid-driven actuator of the plurality of fluid-driven actuators, the flow restrictor being configured to reduce a rate at which fluid is permitted to exit the first fluid chamber of the first fluid-driven actuator in a manner that provides damping to the corresponding row unit; and</claim-text>
+<claim-text>a valve fluidly coupled to the first fluid chamber of the first fluid-driven actuator, the valve further being fluidly coupled to the flow restrictor in a parallel relationship such that the valve is configured to permit the fluid exiting the first fluid chamber to flow through the flow restrictor and the fluid entering the first fluid chamber to bypass the flow restrictor.</claim-text>
+</claim-text>
+</claim>
+<claim id="CLM-00009" num="00009">
+<claim-text><b>9</b>. The seed planting implement of <claim-ref idref="CLM-00008">claim 8</claim-ref>, wherein, when fluid is supplied to the second fluid chamber of the first fluid-driven actuator, the valve is configured to permit fluid exiting the first fluid chamber of the first fluid-driven actuator to bypass the flow restrictor.</claim-text>
+</claim>
+<claim id="CLM-00010" num="00010">
+<claim-text><b>10</b>. The seed planting implement of <claim-ref idref="CLM-00008">claim 8</claim-ref>, wherein the valve is fluidly actuated.</claim-text>
+</claim>
+<claim id="CLM-00011" num="00011">
+<claim-text><b>11</b>. The seed planting implement of <claim-ref idref="CLM-00010">claim 10</claim-ref>, further comprising:
+<claim-text>a fluid line configured to supply fluid to the second fluid chamber of the first fluid-driven actuator, the fluid line being fluidly coupled to the valve such that, when fluid flows through the fluid line to the second fluid chamber of the first fluid-driven actuator, the valve opens in a manner that permits the fluid exiting first fluid chamber of the first fluid-driven actuator to bypass the flow restrictor.</claim-text>
+</claim-text>
+</claim>
+<claim id="CLM-00012" num="00012">
+<claim-text><b>12</b>. The seed planting implement of <claim-ref idref="CLM-00008">claim 8</claim-ref>, wherein the valve is electrically actuated.</claim-text>
+</claim>
+<claim id="CLM-00013" num="00013">
+<claim-text><b>13</b>. The seed planting implement of <claim-ref idref="CLM-00008">claim 8</claim-ref>, wherein the flow restrictor defines a throat having a fixed size.</claim-text>
+</claim>
+<claim id="CLM-00014" num="00014">
+<claim-text><b>14</b>. The seed planting implement of <claim-ref idref="CLM-00008">claim 8</claim-ref>, wherein the flow restrictor defines a throat having an adjustable size.</claim-text>
+</claim>
+<claim id="CLM-00015" num="00015">
+<claim-text><b>15</b>. A system for providing damping to a row unit of a seed planting implement, the system comprising:
+<claim-text>a toolbar;</claim-text>
+<claim-text>a row unit adjustably mounted on the toolbar;</claim-text>
+<claim-text>a fluid-driven actuator configured to adjust a position of the row unit relative to the toolbar, the fluid-driven actuator defining a fluid chamber; and</claim-text>
+<claim-text>a flow restrictor fluidly coupled to the fluid chamber, the flow restrictor defining an adjustable throat configured to reduce a rate at which fluid is permitted to exit the fluid chamber, the throat being adjustable between a first size configured to provide a first damping rate to the row unit and a second size configured to provide a second damping rate to the row unit, the first and second damping rates being different.</claim-text>
+</claim-text>
+</claim>
+<claim id="CLM-00016" num="00016">
+<claim-text><b>16</b>. The system of <claim-ref idref="CLM-00015">claim 15</claim-ref>, wherein the throat is adjustable between the first and second damping rates based on an operator input.</claim-text>
+</claim>
+<claim id="CLM-00017" num="00017">
+<claim-text><b>17</b>. The system of <claim-ref idref="CLM-00015">claim 15</claim-ref>, wherein the throat is adjustable between the first and second damping rates based on data received from one or more sensors on the seed planting implement.</claim-text>
+</claim>
+<claim id="CLM-00018" num="00018">
+<claim-text><b>18</b>. The system of <claim-ref idref="CLM-00015">claim 15</claim-ref>, further comprising:
+<claim-text>a valve fluidly coupled to the fluid chamber, the valve being configured to selectively occlude the flow of fluid such that fluid exiting the fluid chamber flows through the flow restrictor and fluid entering the fluid chamber bypasses the flow restrictor.</claim-text>
+</claim-text>
+</claim>
+<claim id="CLM-00019" num="00019">
+<claim-text><b>19</b>. The system of <claim-ref idref="CLM-00018">claim 18</claim-ref>, wherein the flow restrictor and the valve are fluidly coupled in a parallel relationship.</claim-text>
+</claim>
+</claims>
+</us-patent-application>

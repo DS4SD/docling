@@ -6,7 +6,7 @@ from typing import Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
 from docling_core.types.doc import BoundingBox, CoordOrigin, Size
-from docling_parse.docling_parse import pdf_parser_v1
+from docling_parse.pdf_parsers import pdf_parser_v1
 from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage
 
@@ -132,7 +132,7 @@ class DoclingParsePageBackend(PdfPageBackend):
         return cells
 
     def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:
-        AREA_THRESHOLD = 32 * 32
+        AREA_THRESHOLD = 0  # 32 * 32
 
         for i in range(len(self._dpage["images"])):
             bitmap = self._dpage["images"][i]
@@ -163,7 +163,7 @@ class DoclingParsePageBackend(PdfPageBackend):
                 l=0, r=0, t=0, b=0, coord_origin=CoordOrigin.BOTTOMLEFT
             )
         else:
-            padbox = cropbox.to_bottom_left_origin(page_size.height)
+            padbox = cropbox.to_bottom_left_origin(page_size.height).model_copy()
             padbox.r = page_size.width - padbox.r
             padbox.t = page_size.height - padbox.t
 

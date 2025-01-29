@@ -3,7 +3,7 @@ import logging
 import time
 import traceback
 from abc import ABC, abstractmethod
-from typing import Callable, Iterable, List
+from typing import Any, Callable, Iterable, List
 
 from docling_core.types.doc import DoclingDocument, NodeItem
 
@@ -18,7 +18,7 @@ from docling.datamodel.base_models import (
 from docling.datamodel.document import ConversionResult, InputDocument
 from docling.datamodel.pipeline_options import PipelineOptions
 from docling.datamodel.settings import settings
-from docling.models.base_model import BaseEnrichmentModel
+from docling.models.base_model import GenericEnrichmentModel
 from docling.utils.profiling import ProfilingScope, TimeRecorder
 from docling.utils.utils import chunkify
 
@@ -28,8 +28,9 @@ _log = logging.getLogger(__name__)
 class BasePipeline(ABC):
     def __init__(self, pipeline_options: PipelineOptions):
         self.pipeline_options = pipeline_options
+        self.keep_images = False
         self.build_pipe: List[Callable] = []
-        self.enrichment_pipe: List[BaseEnrichmentModel] = []
+        self.enrichment_pipe: List[GenericEnrichmentModel[Any]] = []
 
     def execute(self, in_doc: InputDocument, raises_on_error: bool) -> ConversionResult:
         conv_res = ConversionResult(input=in_doc)
@@ -40,7 +41,7 @@ class BasePipeline(ABC):
                 conv_res, "pipeline_total", scope=ProfilingScope.DOCUMENT
             ):
                 # These steps are building and assembling the structure of the
-                # output DoclingDocument
+                # output DoclingDocument.
                 conv_res = self._build_document(conv_res)
                 conv_res = self._assemble_document(conv_res)
                 # From this stage, all operations should rely only on conv_res.output
@@ -50,6 +51,8 @@ class BasePipeline(ABC):
             conv_res.status = ConversionStatus.FAILURE
             if raises_on_error:
                 raise e
+        finally:
+            self._unload(conv_res)
 
         return conv_res
 
@@ -62,21 +65,22 @@ class BasePipeline(ABC):
 
     def _enrich_document(self, conv_res: ConversionResult) -> ConversionResult:
 
-        def _filter_elements(
-            doc: DoclingDocument, model: BaseEnrichmentModel
+        def _prepare_elements(
+            conv_res: ConversionResult, model: GenericEnrichmentModel[Any]
         ) -> Iterable[NodeItem]:
-            for element, _level in doc.iterate_items():
-                if model.is_processable(doc=doc, element=element):
-                    yield element
+            for doc_element, _level in conv_res.document.iterate_items():
+                prepared_element = model.prepare_element(
+                    conv_res=conv_res, element=doc_element
+                )
+                if prepared_element is not None:
+                    yield prepared_element
 
         with TimeRecorder(conv_res, "doc_enrich", scope=ProfilingScope.DOCUMENT):
             for model in self.enrichment_pipe:
                 for element_batch in chunkify(
-                    _filter_elements(conv_res.document, model),
+                    _prepare_elements(conv_res, model),
                     settings.perf.elements_batch_size,
                 ):
-                    # TODO: currently we assume the element itself is modified, because
-                    # we don't have an interface to save the element back to the document
                     for element in model(
                         doc=conv_res.document, element_batch=element_batch
                     ):  # Must exhaust!
@@ -86,6 +90,9 @@ class BasePipeline(ABC):
 
     @abstractmethod
     def _determine_status(self, conv_res: ConversionResult) -> ConversionStatus:
+        pass
+
+    def _unload(self, conv_res: ConversionResult):
         pass
 
     @classmethod
@@ -107,6 +114,10 @@ class BasePipeline(ABC):
 
 class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
 
+    def __init__(self, pipeline_options: PipelineOptions):
+        super().__init__(pipeline_options)
+        self.keep_backend = False
+
     def _apply_on_pages(
         self, conv_res: ConversionResult, page_batch: Iterable[Page]
     ) -> Iterable[Page]:
@@ -126,6 +137,7 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
             # conv_res.status = ConversionStatus.FAILURE
             # return conv_res
 
+        total_elapsed_time = 0.0
         with TimeRecorder(conv_res, "doc_build", scope=ProfilingScope.DOCUMENT):
 
             for i in range(0, conv_res.input.page_count):
@@ -136,7 +148,7 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
                 for page_batch in chunkify(
                     conv_res.pages, settings.perf.page_batch_size
                 ):
-                    start_pb_time = time.time()
+                    start_batch_time = time.monotonic()
 
                     # 1. Initialise the page resources
                     init_pages = map(
@@ -147,24 +159,51 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
                     pipeline_pages = self._apply_on_pages(conv_res, init_pages)
 
                     for p in pipeline_pages:  # Must exhaust!
-                        pass
 
-                    end_pb_time = time.time() - start_pb_time
-                    _log.debug(f"Finished converting page batch time={end_pb_time:.3f}")
+                        # Cleanup cached images
+                        if not self.keep_images:
+                            p._image_cache = {}
+
+                        # Cleanup page backends
+                        if not self.keep_backend and p._backend is not None:
+                            p._backend.unload()
+
+                    end_batch_time = time.monotonic()
+                    total_elapsed_time += end_batch_time - start_batch_time
+                    if (
+                        self.pipeline_options.document_timeout is not None
+                        and total_elapsed_time > self.pipeline_options.document_timeout
+                    ):
+                        _log.warning(
+                            f"Document processing time ({total_elapsed_time:.3f} seconds) exceeded the specified timeout of {self.pipeline_options.document_timeout:.3f} seconds"
+                        )
+                        conv_res.status = ConversionStatus.PARTIAL_SUCCESS
+                        break
+
+                    _log.debug(
+                        f"Finished converting page batch time={end_batch_time:.3f}"
+                    )
 
             except Exception as e:
                 conv_res.status = ConversionStatus.FAILURE
-                trace = "\n".join(traceback.format_exception(e))
+                trace = "\n".join(
+                    traceback.format_exception(type(e), e, e.__traceback__)
+                )
                 _log.warning(
                     f"Encountered an error during conversion of document {conv_res.input.document_hash}:\n"
                     f"{trace}"
                 )
                 raise e
 
-            finally:
-                # Always unload the PDF backend, even in case of failure
-                if conv_res.input._backend:
-                    conv_res.input._backend.unload()
+        return conv_res
+
+    def _unload(self, conv_res: ConversionResult) -> ConversionResult:
+        for page in conv_res.pages:
+            if page._backend is not None:
+                page._backend.unload()
+
+        if conv_res.input._backend:
+            conv_res.input._backend.unload()
 
         return conv_res
 

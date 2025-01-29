@@ -3,7 +3,17 @@ import re
 from enum import Enum
 from io import BytesIO
 from pathlib import Path, PurePath
-from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Type, Union
+from typing import (
+    TYPE_CHECKING,
+    Dict,
+    Iterable,
+    List,
+    Literal,
+    Optional,
+    Set,
+    Type,
+    Union,
+)
 
 import filetype
 from docling_core.types.doc import (
@@ -32,7 +42,8 @@ from docling_core.types.legacy_doc.document import (
 )
 from docling_core.types.legacy_doc.document import CCSFileInfoObject as DsFileInfoObject
 from docling_core.types.legacy_doc.document import ExportedCCSDocument as DsDocument
-from docling_core.utils.file import resolve_file_source
+from docling_core.utils.file import resolve_source_to_stream
+from docling_core.utils.legacy import docling_document_to_legacy
 from pydantic import BaseModel
 from typing_extensions import deprecated
 
@@ -62,7 +73,7 @@ _log = logging.getLogger(__name__)
 
 layout_label_to_ds_type = {
     DocItemLabel.TITLE: "title",
-    DocItemLabel.DOCUMENT_INDEX: "table-of-contents",
+    DocItemLabel.DOCUMENT_INDEX: "table",
     DocItemLabel.SECTION_HEADER: "subtitle-level-1",
     DocItemLabel.CHECKBOX_SELECTED: "checkbox-selected",
     DocItemLabel.CHECKBOX_UNSELECTED: "checkbox-unselected",
@@ -77,6 +88,8 @@ layout_label_to_ds_type = {
     DocItemLabel.PICTURE: "figure",
     DocItemLabel.TEXT: "paragraph",
     DocItemLabel.PARAGRAPH: "paragraph",
+    DocItemLabel.FORM: DocItemLabel.FORM.value,
+    DocItemLabel.KEY_VALUE_REGION: DocItemLabel.KEY_VALUE_REGION.value,
 }
 
 _EMPTY_DOCLING_DOC = DoclingDocument(name="dummy")
@@ -164,12 +177,6 @@ class InputDocument(BaseModel):
         backend: Type[AbstractDocumentBackend],
         path_or_stream: Union[BytesIO, Path],
     ) -> None:
-        if backend is None:
-            raise RuntimeError(
-                f"No backend configuration provided for file {self.file.name} with format {self.format}. "
-                f"Please check your format configuration on DocumentConverter."
-            )
-
         self._backend = backend(self, path_or_stream=path_or_stream)
         if not self._backend.is_valid():
             self.valid = False
@@ -195,284 +202,57 @@ class ConversionResult(BaseModel):
     @property
     @deprecated("Use document instead.")
     def legacy_document(self):
-        reverse_label_mapping = {
-            DocItemLabel.CAPTION.value: "Caption",
-            DocItemLabel.FOOTNOTE.value: "Footnote",
-            DocItemLabel.FORMULA.value: "Formula",
-            DocItemLabel.LIST_ITEM.value: "List-item",
-            DocItemLabel.PAGE_FOOTER.value: "Page-footer",
-            DocItemLabel.PAGE_HEADER.value: "Page-header",
-            DocItemLabel.PICTURE.value: "Picture",  # low threshold adjust to capture chemical structures for examples.
-            DocItemLabel.SECTION_HEADER.value: "Section-header",
-            DocItemLabel.TABLE.value: "Table",
-            DocItemLabel.TEXT.value: "Text",
-            DocItemLabel.TITLE.value: "Title",
-            DocItemLabel.DOCUMENT_INDEX.value: "Document Index",
-            DocItemLabel.CODE.value: "Code",
-            DocItemLabel.CHECKBOX_SELECTED.value: "Checkbox-Selected",
-            DocItemLabel.CHECKBOX_UNSELECTED.value: "Checkbox-Unselected",
-            DocItemLabel.FORM.value: "Form",
-            DocItemLabel.KEY_VALUE_REGION.value: "Key-Value Region",
-            DocItemLabel.PARAGRAPH.value: "paragraph",
-        }
+        return docling_document_to_legacy(self.document)
 
-        title = ""
-        desc = DsDocumentDescription(logs=[])
 
-        page_hashes = [
-            PageReference(
-                hash=create_hash(self.input.document_hash + ":" + str(p.page_no - 1)),
-                page=p.page_no,
-                model="default",
-            )
-            for p in self.document.pages.values()
-        ]
+class _DummyBackend(AbstractDocumentBackend):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        file_info = DsFileInfoObject(
-            filename=self.input.file.name,
-            document_hash=self.input.document_hash,
-            num_pages=self.input.page_count,
-            page_hashes=page_hashes,
-        )
+    def is_valid(self) -> bool:
+        return False
 
-        main_text = []
-        tables = []
-        figures = []
-        equations = []
-        footnotes = []
-        page_headers = []
-        page_footers = []
+    @classmethod
+    def supported_formats(cls) -> Set[InputFormat]:
+        return set()
 
-        embedded_captions = set()
-        for ix, (item, level) in enumerate(
-            self.document.iterate_items(self.document.body)
-        ):
+    @classmethod
+    def supports_pagination(cls) -> bool:
+        return False
 
-            if isinstance(item, (TableItem, PictureItem)) and len(item.captions) > 0:
-                caption = item.caption_text(self.document)
-                if caption:
-                    embedded_captions.add(caption)
-
-        for item, level in self.document.iterate_items():
-            if isinstance(item, DocItem):
-                item_type = item.label
-
-                if isinstance(item, (TextItem, ListItem, SectionHeaderItem)):
-
-                    if isinstance(item, ListItem) and item.marker:
-                        text = f"{item.marker} {item.text}"
-                    else:
-                        text = item.text
-
-                    # Can be empty.
-                    prov = [
-                        Prov(
-                            bbox=p.bbox.as_tuple(),
-                            page=p.page_no,
-                            span=[0, len(item.text)],
-                        )
-                        for p in item.prov
-                    ]
-                    main_text.append(
-                        BaseText(
-                            text=text,
-                            obj_type=layout_label_to_ds_type.get(item.label),
-                            name=reverse_label_mapping[item.label],
-                            prov=prov,
-                        )
-                    )
-
-                    # skip captions of they are embedded in the actual
-                    # floating object
-                    if item_type == DocItemLabel.CAPTION and text in embedded_captions:
-                        continue
-
-                elif isinstance(item, TableItem) and item.data:
-                    index = len(tables)
-                    ref_str = f"#/tables/{index}"
-                    main_text.append(
-                        Ref(
-                            name=reverse_label_mapping[item.label],
-                            obj_type=layout_label_to_ds_type.get(item.label),
-                            ref=ref_str,
-                        ),
-                    )
-
-                    # Initialise empty table data grid (only empty cells)
-                    table_data = [
-                        [
-                            TableCell(
-                                text="",
-                                # bbox=[0,0,0,0],
-                                spans=[[i, j]],
-                                obj_type="body",
-                            )
-                            for j in range(item.data.num_cols)
-                        ]
-                        for i in range(item.data.num_rows)
-                    ]
-
-                    # Overwrite cells in table data for which there is actual cell content.
-                    for cell in item.data.table_cells:
-                        for i in range(
-                            min(cell.start_row_offset_idx, item.data.num_rows),
-                            min(cell.end_row_offset_idx, item.data.num_rows),
-                        ):
-                            for j in range(
-                                min(cell.start_col_offset_idx, item.data.num_cols),
-                                min(cell.end_col_offset_idx, item.data.num_cols),
-                            ):
-                                celltype = "body"
-                                if cell.column_header:
-                                    celltype = "col_header"
-                                elif cell.row_header:
-                                    celltype = "row_header"
-                                elif cell.row_section:
-                                    celltype = "row_section"
-
-                                def make_spans(cell):
-                                    for rspan in range(
-                                        min(
-                                            cell.start_row_offset_idx,
-                                            item.data.num_rows,
-                                        ),
-                                        min(
-                                            cell.end_row_offset_idx, item.data.num_rows
-                                        ),
-                                    ):
-                                        for cspan in range(
-                                            min(
-                                                cell.start_col_offset_idx,
-                                                item.data.num_cols,
-                                            ),
-                                            min(
-                                                cell.end_col_offset_idx,
-                                                item.data.num_cols,
-                                            ),
-                                        ):
-                                            yield [rspan, cspan]
-
-                                spans = list(make_spans(cell))
-                                table_data[i][j] = GlmTableCell(
-                                    text=cell.text,
-                                    bbox=(
-                                        cell.bbox.as_tuple()
-                                        if cell.bbox is not None
-                                        else None
-                                    ),  # check if this is bottom-left
-                                    spans=spans,
-                                    obj_type=celltype,
-                                    col=j,
-                                    row=i,
-                                    row_header=cell.row_header,
-                                    row_section=cell.row_section,
-                                    col_header=cell.column_header,
-                                    row_span=[
-                                        cell.start_row_offset_idx,
-                                        cell.end_row_offset_idx,
-                                    ],
-                                    col_span=[
-                                        cell.start_col_offset_idx,
-                                        cell.end_col_offset_idx,
-                                    ],
-                                )
-
-                    # Compute the caption
-                    caption = item.caption_text(self.document)
-
-                    tables.append(
-                        DsSchemaTable(
-                            text=caption,
-                            num_cols=item.data.num_cols,
-                            num_rows=item.data.num_rows,
-                            obj_type=layout_label_to_ds_type.get(item.label),
-                            data=table_data,
-                            prov=[
-                                Prov(
-                                    bbox=p.bbox.as_tuple(),
-                                    page=p.page_no,
-                                    span=[0, 0],
-                                )
-                                for p in item.prov
-                            ],
-                        )
-                    )
-
-                elif isinstance(item, PictureItem):
-                    index = len(figures)
-                    ref_str = f"#/figures/{index}"
-                    main_text.append(
-                        Ref(
-                            name=reverse_label_mapping[item.label],
-                            obj_type=layout_label_to_ds_type.get(item.label),
-                            ref=ref_str,
-                        ),
-                    )
-
-                    # Compute the caption
-                    caption = item.caption_text(self.document)
-
-                    figures.append(
-                        Figure(
-                            prov=[
-                                Prov(
-                                    bbox=p.bbox.as_tuple(),
-                                    page=p.page_no,
-                                    span=[0, len(caption)],
-                                )
-                                for p in item.prov
-                            ],
-                            obj_type=layout_label_to_ds_type.get(item.label),
-                            text=caption,
-                            # data=[[]],
-                        )
-                    )
-
-        page_dimensions = [
-            PageDimensions(page=p.page_no, height=p.size.height, width=p.size.width)
-            for p in self.document.pages.values()
-        ]
-
-        ds_doc = DsDocument(
-            name=title,
-            description=desc,
-            file_info=file_info,
-            main_text=main_text,
-            equations=equations,
-            footnotes=footnotes,
-            page_headers=page_headers,
-            page_footers=page_footers,
-            tables=tables,
-            figures=figures,
-            page_dimensions=page_dimensions,
-        )
-
-        return ds_doc
+    def unload(self):
+        return super().unload()
 
 
 class _DocumentConversionInput(BaseModel):
 
     path_or_stream_iterator: Iterable[Union[Path, str, DocumentStream]]
+    headers: Optional[Dict[str, str]] = None
     limits: Optional[DocumentLimits] = DocumentLimits()
 
     def docs(
         self, format_options: Dict[InputFormat, "FormatOption"]
     ) -> Iterable[InputDocument]:
         for item in self.path_or_stream_iterator:
-            obj = resolve_file_source(item) if isinstance(item, str) else item
+            obj = (
+                resolve_source_to_stream(item, self.headers)
+                if isinstance(item, str)
+                else item
+            )
             format = self._guess_format(obj)
+            backend: Type[AbstractDocumentBackend]
             if format not in format_options.keys():
-                _log.info(
-                    f"Skipping input document {obj.name} because it isn't matching any of the allowed formats."
+                _log.error(
+                    f"Input document {obj.name} does not match any allowed format."
                 )
-                continue
+                backend = _DummyBackend
             else:
                 backend = format_options[format].backend
 
             if isinstance(obj, Path):
                 yield InputDocument(
                     path_or_stream=obj,
-                    format=format,
+                    format=format,  # type: ignore[arg-type]
                     filename=obj.name,
                     limits=self.limits,
                     backend=backend,
@@ -480,7 +260,7 @@ class _DocumentConversionInput(BaseModel):
             elif isinstance(obj, DocumentStream):
                 yield InputDocument(
                     path_or_stream=obj.stream,
-                    format=format,
+                    format=format,  # type: ignore[arg-type]
                     filename=obj.name,
                     limits=self.limits,
                     backend=backend,
@@ -488,15 +268,15 @@ class _DocumentConversionInput(BaseModel):
             else:
                 raise RuntimeError(f"Unexpected obj type in iterator: {type(obj)}")
 
-    def _guess_format(self, obj: Union[Path, DocumentStream]):
+    def _guess_format(self, obj: Union[Path, DocumentStream]) -> Optional[InputFormat]:
         content = b""  # empty binary blob
-        format = None
+        formats: list[InputFormat] = []
 
         if isinstance(obj, Path):
             mime = filetype.guess_mime(str(obj))
             if mime is None:
                 ext = obj.suffix[1:]
-                mime = self._mime_from_extension(ext)
+                mime = _DocumentConversionInput._mime_from_extension(ext)
             if mime is None:  # must guess from
                 with obj.open("rb") as f:
                     content = f.read(1024)  # Read first 1KB
@@ -511,15 +291,58 @@ class _DocumentConversionInput(BaseModel):
                     if ("." in obj.name and not obj.name.startswith("."))
                     else ""
                 )
-                mime = self._mime_from_extension(ext)
+                mime = _DocumentConversionInput._mime_from_extension(ext)
 
-        mime = mime or self._detect_html_xhtml(content)
+        mime = mime or _DocumentConversionInput._detect_html_xhtml(content)
         mime = mime or "text/plain"
+        formats = MimeTypeToFormat.get(mime, [])
+        if formats:
+            if len(formats) == 1 and mime not in ("text/plain"):
+                return formats[0]
+            else:  # ambiguity in formats
+                return _DocumentConversionInput._guess_from_content(
+                    content, mime, formats
+                )
+        else:
+            return None
 
-        format = MimeTypeToFormat.get(mime)
-        return format
+    @staticmethod
+    def _guess_from_content(
+        content: bytes, mime: str, formats: list[InputFormat]
+    ) -> Optional[InputFormat]:
+        """Guess the input format of a document by checking part of its content."""
+        input_format: Optional[InputFormat] = None
+        content_str = content.decode("utf-8")
 
-    def _mime_from_extension(self, ext):
+        if mime == "application/xml":
+            match_doctype = re.search(r"<!DOCTYPE [^>]+>", content_str)
+            if match_doctype:
+                xml_doctype = match_doctype.group()
+                if InputFormat.XML_USPTO in formats and any(
+                    item in xml_doctype
+                    for item in (
+                        "us-patent-application-v4",
+                        "us-patent-grant-v4",
+                        "us-grant-025",
+                        "patent-application-publication",
+                    )
+                ):
+                    input_format = InputFormat.XML_USPTO
+
+                if (
+                    InputFormat.XML_PUBMED in formats
+                    and "/NLM//DTD JATS" in xml_doctype
+                ):
+                    input_format = InputFormat.XML_PUBMED
+
+        elif mime == "text/plain":
+            if InputFormat.XML_USPTO in formats and content_str.startswith("PATN\r\n"):
+                input_format = InputFormat.XML_USPTO
+
+        return input_format
+
+    @staticmethod
+    def _mime_from_extension(ext):
         mime = None
         if ext in FormatToExtensions[InputFormat.ASCIIDOC]:
             mime = FormatToMimeType[InputFormat.ASCIIDOC][0]
@@ -527,10 +350,25 @@ class _DocumentConversionInput(BaseModel):
             mime = FormatToMimeType[InputFormat.HTML][0]
         elif ext in FormatToExtensions[InputFormat.MD]:
             mime = FormatToMimeType[InputFormat.MD][0]
-
+        elif ext in FormatToExtensions[InputFormat.JSON_DOCLING]:
+            mime = FormatToMimeType[InputFormat.JSON_DOCLING][0]
+        elif ext in FormatToExtensions[InputFormat.PDF]:
+            mime = FormatToMimeType[InputFormat.PDF][0]
         return mime
 
-    def _detect_html_xhtml(self, content):
+    @staticmethod
+    def _detect_html_xhtml(
+        content: bytes,
+    ) -> Optional[Literal["application/xhtml+xml", "application/xml", "text/html"]]:
+        """Guess the mime type of an XHTML, HTML, or XML file from its content.
+
+        Args:
+            content: A short piece of a document from its beginning.
+
+        Returns:
+            The mime type of an XHTML, HTML, or XML file, or None if the content does
+              not match any of these formats.
+        """
         content_str = content.decode("ascii", errors="ignore").lower()
         # Remove XML comments
         content_str = re.sub(r"<!--(.*?)-->", "", content_str, flags=re.DOTALL)
@@ -539,8 +377,16 @@ class _DocumentConversionInput(BaseModel):
         if re.match(r"<\?xml", content_str):
             if "xhtml" in content_str[:1000]:
                 return "application/xhtml+xml"
+            else:
+                return "application/xml"
 
         if re.match(r"<!doctype\s+html|<html|<head|<body", content_str):
             return "text/html"
+
+        p = re.compile(
+            r"<!doctype\s+(?P<root>[a-zA-Z_:][a-zA-Z0-9_:.-]*)\s+.*>\s*<(?P=root)\b"
+        )
+        if p.search(content_str):
+            return "application/xml"
 
         return None
