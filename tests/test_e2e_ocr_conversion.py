@@ -59,14 +59,17 @@ def test_e2e_conversions():
         EasyOcrOptions(),
         TesseractOcrOptions(),
         TesseractCliOcrOptions(),
-        RapidOcrOptions(),
         EasyOcrOptions(force_full_page_ocr=True),
         TesseractOcrOptions(force_full_page_ocr=True),
         TesseractOcrOptions(force_full_page_ocr=True, lang=["auto"]),
         TesseractCliOcrOptions(force_full_page_ocr=True),
         TesseractCliOcrOptions(force_full_page_ocr=True, lang=["auto"]),
-        RapidOcrOptions(force_full_page_ocr=True),
     ]
+
+    # rapidocr is only available for Python >=3.6,<3.13
+    if sys.version_info < (3, 13):
+        engines.append(RapidOcrOptions())
+        engines.append(RapidOcrOptions(force_full_page_ocr=True))
 
     # only works on mac
     if "darwin" == sys.platform:

@@ -7,28 +7,7 @@ This is a collection of FAQ collected from the user questions on <https://github
 
     ### Is Python 3.13 supported?
 
-    Full support for Python 3.13 is currently waiting for [pytorch](https://github.com/pytorch/pytorch).
-
-    At the moment, no release has full support, but nightly builds are available. Docling was tested on Python 3.13 with the following steps:
-
-    ```sh
-    # Create a python 3.13 virtualenv
-    python3.13 -m venv venv
-    source ./venv/bin/activate
-
-    # Install torch nightly builds, see https://pytorch.org/
-    pip3 install --pre torch torchvision --index-url https://download.pytorch.org/whl/nightly/cpu
-
-    # Install docling
-    pip3 install docling
-
-    # Run docling
-    docling --no-ocr https://arxiv.org/pdf/2408.09869
-    ```
-
-    _Note: we are disabling OCR since easyocr and the nightly torch builds have some conflicts._
-
-    Source: Issue [#136](https://github.com/DS4SD/docling/issues/136)
+    Python 3.13 is supported from Docling 2.18.0.
 
 
 ??? question "Install conflicts with numpy (python 3.13)"
