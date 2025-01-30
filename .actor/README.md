@@ -50,7 +50,7 @@ This Actor wraps the [Docling project](https://ds4sd.github.io/docling/) to prov
 
 ```bash
 curl --request POST \
-  --url https://api.apify.com/v2/acts/vancura~docling/runs \
+  --url "https://api.apify.com/v2/acts/username~actorname/run" \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer YOUR_API_TOKEN' \
   --data '{
@@ -63,8 +63,7 @@ curl --request POST \
 ### Using Apify CLI
 
 ```bash
-# Example CLI usage
-apify call vancura/docling --input='{
+apify call username/actorname --input='{
     "documentUrl": "https://example.com/file.pdf",
     "outputFormat": "md",
     "ocr": true
@@ -75,11 +74,11 @@ apify call vancura/docling --input='{
 
 The Actor accepts a JSON schema matching the file `.actor/input_schema.json`. Below is a summary of the fields:
 
-| Field         | Type    | Required | Default  | Description                                                                                               |
-|---------------|---------|----------|----------|-----------------------------------------------------------------------------------------------------------|
-| documentUrl   | string  | Yes      | None     | URL of the document (PDF, image, DOCX, etc.) to be processed. Must be directly accessible via public URL. |
-| outputFormat  | string  | No       | "md"     | Desired output format. One of `md`, `json`, `html`, `text`, or `doctags`.                                 |
-| ocr           | boolean | No       | true     | If set to true, OCR will be applied to scanned PDFs or images for text recognition.                       |
+| Field          | Type    | Required | Default  | Description                                                                                               |
+|----------------|---------|----------|----------|-----------------------------------------------------------------------------------------------------------|
+| `documentUrl`  | string  | Yes      | None     | URL of the document (PDF, image, DOCX, etc.) to be processed. Must be directly accessible via public URL. |
+| `outputFormat` | string  | No       | `md`     | Desired output format. One of `md`, `json`, `html`, `text`, or `doctags`.                                 |
+| `ocr`          | boolean | No       | `true`   | If set to true, OCR will be applied to scanned PDFs or images for text recognition.                       |
 
 ### Example Input
 
