@@ -151,3 +151,11 @@ This is a collection of FAQ collected from the user questions on <https://github
     pipeline_options = PdfPipelineOptions()
     pipeline_options.ocr_options.lang = ["fr", "de", "es", "en"]  # example of languages for EasyOCR
     ```
+
+
+??? Some images are missing from MS Word and Powerpoint"
+
+    ### Some images are missing from MS Word and Powerpoint
+
+    The image processing library used by Docling is able to handle embedded WMF images only on Windows platform.
+    If you are on other operaring systems, these images will be ignored.

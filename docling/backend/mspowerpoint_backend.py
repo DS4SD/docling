@@ -271,13 +271,12 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         return
 
     def handle_pictures(self, shape, parent_slide, slide_ind, doc):
-        # Get the image bytes
-        image = shape.image
-        image_bytes = image.blob
-        im_dpi, _ = image.dpi
-
         # Open it with PIL
         try:
+            # Get the image bytes
+            image = shape.image
+            image_bytes = image.blob
+            im_dpi, _ = image.dpi
             pil_image = Image.open(BytesIO(image_bytes))
 
             # shape has picture

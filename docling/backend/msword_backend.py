@@ -520,11 +520,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 image_data = image_part.blob  # Get the binary image data
             return image_data
 
-        image_data = get_docx_image(element, drawing_blip)
-        image_bytes = BytesIO(image_data)
         level = self.get_level()
         # Open the BytesIO object with PIL to create an Image
         try:
+            image_data = get_docx_image(element, drawing_blip)
+            image_bytes = BytesIO(image_data)
             pil_image = Image.open(image_bytes)
             doc.add_picture(
                 parent=self.parents[level - 1],
