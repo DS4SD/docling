@@ -19,7 +19,7 @@ RUN groupadd -r appuser && useradd -r -g appuser -s /sbin/nologin appuser && \
     rm -rf /var/lib/apt/lists/* && \
     \
     pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir docling==2.15.1 && \
+    pip install --no-cache-dir docling==2.17.0 && \
     \
     npm install -g npm@latest && \
     npm install -g apify-cli && \
