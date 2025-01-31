@@ -935,7 +935,7 @@ tabulate = ">=0.9.0,<1.0.0"
 type = "git"
 url = "ssh://git@github.com/DS4SD/docling-parse.git"
 reference = "feat/add-char-level-extraction"
-resolved_reference = "c5378e8ee567b071d8d0a391ef3819a04ece7120"
+resolved_reference = "f886b1d72db59c99618dc0b82b5fa4d47e8485ae"
 
 [[package]]
 name = "docutils"
