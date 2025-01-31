@@ -6,6 +6,7 @@ from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
+    AcceleratorDevice,
     EasyOcrOptions,
     OcrMacOptions,
     OcrOptions,
@@ -37,6 +38,7 @@ def get_converter(ocr_options: OcrOptions):
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
     pipeline_options.ocr_options = ocr_options
+    pipeline_options.accelerator_options.device = AcceleratorDevice.CPU
 
     converter = DocumentConverter(
         format_options={
@@ -57,14 +59,17 @@ def test_e2e_conversions():
         EasyOcrOptions(),
         TesseractOcrOptions(),
         TesseractCliOcrOptions(),
-        RapidOcrOptions(),
         EasyOcrOptions(force_full_page_ocr=True),
         TesseractOcrOptions(force_full_page_ocr=True),
         TesseractOcrOptions(force_full_page_ocr=True, lang=["auto"]),
         TesseractCliOcrOptions(force_full_page_ocr=True),
         TesseractCliOcrOptions(force_full_page_ocr=True, lang=["auto"]),
-        RapidOcrOptions(force_full_page_ocr=True),
     ]
+
+    # rapidocr is only available for Python >=3.6,<3.13
+    if sys.version_info < (3, 13):
+        engines.append(RapidOcrOptions())
+        engines.append(RapidOcrOptions(force_full_page_ocr=True))
 
     # only works on mac
     if "darwin" == sys.platform:

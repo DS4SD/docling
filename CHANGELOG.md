@@ -1,3 +1,27 @@
+## [v2.17.0](https://github.com/DS4SD/docling/releases/tag/v2.17.0) - 2025-01-28
+
+### Feature
+
+* **CLI:** Expose code and formula models in the CLI ([#820](https://github.com/DS4SD/docling/issues/820)) ([`6882e6c`](https://github.com/DS4SD/docling/commit/6882e6c38df30e4d4a1b83e01b13900ca7ea001f))
+* Add platform info to CLI version printout ([#816](https://github.com/DS4SD/docling/issues/816)) ([`95b293a`](https://github.com/DS4SD/docling/commit/95b293a72356f94c7076e3649be970c8a51121a3))
+* **ocr:** Expose `rec_keys_path` in RapidOcrOptions to support custom dictionaries ([#786](https://github.com/DS4SD/docling/issues/786)) ([`5332755`](https://github.com/DS4SD/docling/commit/53327552e83ced079ae50d8067ba7a8ce80cd9ad))
+* Introduce automatic language detection in TesseractOcrCliModel ([#800](https://github.com/DS4SD/docling/issues/800)) ([`3be2fb5`](https://github.com/DS4SD/docling/commit/3be2fb581fe5a2ebd5cec9c86bb22eb1dec6fd0f))
+
+### Fix
+
+* Fix single newline handling in MD backend ([#824](https://github.com/DS4SD/docling/issues/824)) ([`5aed9f8`](https://github.com/DS4SD/docling/commit/5aed9f8aeba1624ba1a721e2ed3ba4aceaa7a482))
+* Use file extension if filetype fails with PDF ([#827](https://github.com/DS4SD/docling/issues/827)) ([`adf6353`](https://github.com/DS4SD/docling/commit/adf635348365f82daa64e3f879076a7baf71edc0))
+* Parse html with omitted body tag ([#818](https://github.com/DS4SD/docling/issues/818)) ([`a112d7a`](https://github.com/DS4SD/docling/commit/a112d7a03512e8a00842a100416426254d6ecfc0))
+
+### Documentation
+
+* Document Docling JSON parsing ([#819](https://github.com/DS4SD/docling/issues/819)) ([`6875913`](https://github.com/DS4SD/docling/commit/6875913e34abacb8d71b5d31543adbf7b5bd5e92))
+* Add SSL verification error mitigation ([#821](https://github.com/DS4SD/docling/issues/821)) ([`5139b48`](https://github.com/DS4SD/docling/commit/5139b48e4e62bb061d956c132958ec2e6d88e40a))
+* **backend XML:** Do not delete temp file in notebook ([#817](https://github.com/DS4SD/docling/issues/817)) ([`4d41db3`](https://github.com/DS4SD/docling/commit/4d41db3f7abb86c8c65386bf94e7eb0bf22bb82b))
+* Typo ([#814](https://github.com/DS4SD/docling/issues/814)) ([`8a4ec77`](https://github.com/DS4SD/docling/commit/8a4ec77576b8a9fd60d0047939665d00cf93b4dd))
+* Added markdown headings to enable TOC in github pages ([#808](https://github.com/DS4SD/docling/issues/808)) ([`b885b2f`](https://github.com/DS4SD/docling/commit/b885b2fa3c2519c399ed4b9a3dd4c2f6f62235d1))
+* Description of supported formats and backends ([#788](https://github.com/DS4SD/docling/issues/788)) ([`c2ae1cc`](https://github.com/DS4SD/docling/commit/c2ae1cc4cab0f9e693c7ca460fe8afa5b515ee94))
+
 ## [v2.16.0](https://github.com/DS4SD/docling/releases/tag/v2.16.0) - 2025-01-24
 
 ### Feature
