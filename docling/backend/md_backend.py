@@ -24,10 +24,15 @@ from docling_core.types.doc import (
 from marko import Markdown
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
+from docling.backend.html_backend import HTMLDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
+
+_MARKER_BODY = "DOCLING_DOC_MD_HTML_EXPORT"
+_START_MARKER = f"#_#_{_MARKER_BODY}_START_#_#"
+_STOP_MARKER = f"#_#_{_MARKER_BODY}_STOP_#_#"
 
 
 class MarkdownDocumentBackend(DeclarativeDocumentBackend):
@@ -67,6 +72,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         self.in_table = False
         self.md_table_buffer: list[str] = []
         self.inline_texts: list[str] = []
+        self._html_blocks: int = 0
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
@@ -295,16 +301,18 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 self.md_table_buffer.append("")
 
         elif isinstance(element, marko.block.HTMLBlock):
+            self._html_blocks += 1
             self.process_inline_text(parent_element, doc)
             self.close_table(doc)
             _log.debug("HTML Block: {}".format(element))
             if (
-                len(element.children) > 0
+                len(element.body) > 0
             ):  # If Marko doesn't return any content for HTML block, skip it
-                snippet_text = str(element.children).strip()
-                doc.add_text(
-                    label=DocItemLabel.CODE, parent=parent_element, text=snippet_text
-                )
+                html_block = element.body.strip()
+
+                # wrap in markers to enable post-processing in convert()
+                text_to_add = f"{_START_MARKER}{html_block}{_STOP_MARKER}"
+                doc.add_code(parent=parent_element, text=text_to_add)
         else:
             if not isinstance(element, str):
                 self.close_table(doc)
@@ -360,6 +368,42 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             # Start iterating from the root of the AST
             self.iterate_elements(parsed_ast, 0, doc, None)
             self.process_inline_text(None, doc)  # handle last hanging inline text
+
+            # if HTML blocks were detected, export to HTML and delegate to HTML backend
+            if self._html_blocks > 0:
+
+                # export to HTML
+                html_backend_cls = HTMLDocumentBackend
+                html_str = doc.export_to_html()
+
+                def _restore_original_html(txt, regex):
+                    _txt, count = re.subn(regex, "", txt)
+                    if count != self._html_blocks:
+                        raise RuntimeError(
+                            "An internal error has occurred during Markdown conversion."
+                        )
+                    return _txt
+
+                # restore original HTML by removing previouly added markers
+                for regex in [
+                    rf"<pre>\s*<code>\s*{_START_MARKER}",
+                    rf"{_STOP_MARKER}\s*</code>\s*</pre>",
+                ]:
+                    html_str = _restore_original_html(txt=html_str, regex=regex)
+                self._html_blocks = 0
+
+                # delegate to HTML backend
+                stream = BytesIO(bytes(html_str, encoding="utf-8"))
+                in_doc = InputDocument(
+                    path_or_stream=stream,
+                    format=InputFormat.HTML,
+                    backend=html_backend_cls,
+                    filename=self.file.name,
+                )
+                html_backend_obj = html_backend_cls(
+                    in_doc=in_doc, path_or_stream=stream
+                )
+                doc = html_backend_obj.convert()
         else:
             raise RuntimeError(
                 f"Cannot convert md with {self.document_hash} because the backend failed to init."
