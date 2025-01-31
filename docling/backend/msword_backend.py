@@ -137,6 +137,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             namespaces = {
                 "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
                 "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+                "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
             }
             xpath_expr = XPath(".//a:blip", namespaces=namespaces)
             drawing_blip = xpath_expr(element)
@@ -150,6 +151,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
             elif drawing_blip:
                 self.handle_pictures(element, docx_obj, drawing_blip, doc)
+            # Check for the sdt containers, like table of contents
+            elif tag_name in ["sdt"]:
+                sdt_content = element.find(".//w:sdtContent", namespaces=namespaces)
+                if sdt_content is not None:
+                    # Iterate paragraphs, runs, or text inside <w:sdtContent>.
+                    paragraphs = sdt_content.findall(".//w:p", namespaces=namespaces)
+                    for p in paragraphs:
+                        self.handle_text_elements(p, docx_obj, doc)
             # Check for Text
             elif tag_name in ["p"]:
                 # "tcPr", "sectPr"
