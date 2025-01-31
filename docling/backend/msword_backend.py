@@ -2,7 +2,7 @@ import logging
 import re
 from io import BytesIO
 from pathlib import Path
-from typing import Set, Union
+from typing import Optional, Set, Union
 
 import docx
 from docling_core.types.doc import (
@@ -14,6 +14,8 @@ from docling_core.types.doc import (
     TableCell,
     TableData,
 )
+from docx.oxml.table import CT_Tc
+from docx.table import Table, _Cell
 from lxml import etree
 from lxml.etree import XPath
 from PIL import Image, UnidentifiedImageError
@@ -449,30 +451,10 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         return
 
     def handle_tables(self, element, docx_obj, doc):
-
-        # Function to check if a cell has a colspan (gridSpan)
-        def get_colspan(cell):
-            grid_span = cell._element.xpath("@w:gridSpan")
-            if grid_span:
-                return int(grid_span[0])  # Return the number of columns spanned
-            return 1  # Default is 1 (no colspan)
-
-        # Function to check if a cell has a rowspan (vMerge)
-        def get_rowspan(cell):
-            v_merge = cell._element.xpath("@w:vMerge")
-            if v_merge:
-                return v_merge[
-                    0
-                ]  # 'restart' indicates the beginning of a rowspan, others are continuation
-            return 1
-
-        table = docx.table.Table(element, docx_obj)
-
+        table: Table = Table(element, docx_obj)
         num_rows = len(table.rows)
-        num_cols = 0
-        for row in table.rows:
-            # Calculate the max number of columns
-            num_cols = max(num_cols, sum(get_colspan(cell) for cell in row.cells))
+        num_cols = len(table.columns)
+        _log.debug(f"Table grid with {num_rows} rows and {num_cols} columns")
 
         if num_rows == 1 and num_cols == 1:
             cell_element = table.rows[0].cells[0]
@@ -481,52 +463,47 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             self.walk_linear(cell_element._element, docx_obj, doc)
             return
 
-        # Initialize the table grid
-        table_grid = [[None for _ in range(num_cols)] for _ in range(num_rows)]
-
-        data = TableData(num_rows=num_rows, num_cols=num_cols, table_cells=[])
-
+        data = TableData(num_rows=num_rows, num_cols=num_cols)
+        cell_set: set[CT_Tc] = set()
         for row_idx, row in enumerate(table.rows):
+            _log.debug(f"Row index {row_idx} with {len(row.cells)} populated cells")
             col_idx = 0
-            for c, cell in enumerate(row.cells):
-                row_span = get_rowspan(cell)
-                col_span = get_colspan(cell)
+            while col_idx < num_cols:
+                cell: _Cell = row.cells[col_idx]
+                _log.debug(
+                    f" col {col_idx} grid_span {cell.grid_span} grid_cols_before {row.grid_cols_before}"
+                )
+                if cell is None or cell._tc in cell_set:
+                    _log.debug(f"  skipped since repeated content")
+                    col_idx += cell.grid_span
+                    continue
+                else:
+                    cell_set.add(cell._tc)
 
-                cell_text = cell.text
-                # In case cell doesn't return text via docx library:
-                if len(cell_text) == 0:
-                    cell_xml = cell._element
+                spanned_idx = row_idx
+                spanned_tc: Optional[CT_Tc] = cell._tc
+                while spanned_tc == cell._tc:
+                    spanned_idx += 1
+                    spanned_tc = (
+                        table.rows[spanned_idx].cells[col_idx]._tc
+                        if spanned_idx < num_rows
+                        else None
+                    )
+                _log.debug(f"  spanned before row {spanned_idx}")
 
-                    texts = [""]
-                    for elem in cell_xml.iter():
-                        if elem.tag.endswith("t"):  # <w:t> tags that contain text
-                            if elem.text:
-                                texts.append(elem.text)
-                    # Join the collected text
-                    cell_text = " ".join(texts).strip()
-
-                # Find the next available column in the grid
-                while table_grid[row_idx][col_idx] is not None:
-                    col_idx += 1
-
-                # Fill the grid with the cell value, considering rowspan and colspan
-                for i in range(row_span if row_span == "restart" else 1):
-                    for j in range(col_span):
-                        table_grid[row_idx + i][col_idx + j] = ""
-
-                cell = TableCell(
-                    text=cell_text,
-                    row_span=row_span,
-                    col_span=col_span,
-                    start_row_offset_idx=row_idx,
-                    end_row_offset_idx=row_idx + row_span,
+                table_cell = TableCell(
+                    text=cell.text,
+                    row_span=spanned_idx - row_idx,
+                    col_span=cell.grid_span,
+                    start_row_offset_idx=row.grid_cols_before + row_idx,
+                    end_row_offset_idx=row.grid_cols_before + spanned_idx,
                     start_col_offset_idx=col_idx,
-                    end_col_offset_idx=col_idx + col_span,
+                    end_col_offset_idx=col_idx + cell.grid_span,
                     col_header=False,
                     row_header=False,
                 )
-
-                data.table_cells.append(cell)
+                data.table_cells.append(table_cell)
+                col_idx += cell.grid_span
 
         level = self.get_level()
         doc.add_table(data=data, parent=self.parents[level - 1])
