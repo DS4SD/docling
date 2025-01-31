@@ -240,7 +240,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             numid = None
 
         # Handle lists
-        if numid is not None and ilevel is not None:
+        if (
+            numid is not None
+            and ilevel is not None
+            and p_style_id not in ["Title", "Heading"]
+        ):
             self.add_listitem(
                 element,
                 docx_obj,
@@ -254,12 +258,22 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             )
             self.update_history(p_style_id, p_level, numid, ilevel)
             return
-        elif numid is None and self.prev_numid() is not None:  # Close list
-            for key, val in self.parents.items():
-                if key >= self.level_at_new_list:
+        elif (
+            numid is None
+            and self.prev_numid() is not None
+            and p_style_id not in ["Title", "Heading"]
+        ):  # Close list
+            if self.level_at_new_list:
+                for key in range(len(self.parents)):
+                    if key >= self.level_at_new_list:
+                        self.parents[key] = None
+                self.level = self.level_at_new_list - 1
+                self.level_at_new_list = None
+            else:
+                for key in range(len(self.parents)):
                     self.parents[key] = None
-            self.level = self.level_at_new_list - 1
-            self.level_at_new_list = None
+                self.level = 0
+
         if p_style_id in ["Title"]:
             for key, val in self.parents.items():
                 self.parents[key] = None
