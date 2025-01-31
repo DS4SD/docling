@@ -210,11 +210,22 @@ class TableStructureModel(BasePageModel):
                                 table_cells.append(tc)
 
                             # Retrieving cols/rows, after post processing:
-                            num_rows = table_out["predict_details"]["num_rows"]
-                            num_cols = table_out["predict_details"]["num_cols"]
-                            otsl_seq = table_out["predict_details"]["prediction"][
-                                "rs_seq"
-                            ]
+                            num_rows = 0
+                            num_cols = 0
+                            otsl_seq = []
+                            if "predict_details" in table_out:
+                                if "num_rows" in table_out["predict_details"]:
+                                    num_rows = table_out["predict_details"]["num_rows"]
+                                if "num_cols" in table_out["predict_details"]:
+                                    num_cols = table_out["predict_details"]["num_cols"]
+                                if "prediction" in table_out["predict_details"]:
+                                    if (
+                                        "rs_seq"
+                                        in table_out["predict_details"]["prediction"]
+                                    ):
+                                        otsl_seq = table_out["predict_details"][
+                                            "prediction"
+                                        ]["rs_seq"]
 
                             tbl = Table(
                                 otsl_seq=otsl_seq,
