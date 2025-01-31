@@ -264,7 +264,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             and p_style_id not in ["Title", "Heading"]
         ):  # Close list
             if self.level_at_new_list:
-                for key, val in self.parents.items():
+                for key in range(len(self.parents)):
                     if key >= self.level_at_new_list:
                         self.parents[key] = None
                 self.level = self.level_at_new_list - 1
