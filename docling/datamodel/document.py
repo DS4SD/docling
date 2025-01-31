@@ -157,6 +157,8 @@ class InputDocument(BaseModel):
                     self.page_count = self._backend.page_count()
                     if not self.page_count <= self.limits.max_num_pages:
                         self.valid = False
+                    elif self.page_count < self.limits.page_range[0]:
+                        self.valid = False
 
         except (FileNotFoundError, OSError) as e:
             self.valid = False

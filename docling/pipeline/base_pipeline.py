@@ -141,7 +141,9 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
         with TimeRecorder(conv_res, "doc_build", scope=ProfilingScope.DOCUMENT):
 
             for i in range(0, conv_res.input.page_count):
-                conv_res.pages.append(Page(page_no=i))
+                start_page, end_page = conv_res.input.limits.page_range
+                if (start_page - 1) <= i <= (end_page - 1):
+                    conv_res.pages.append(Page(page_no=i))
 
             try:
                 # Iterate batches of pages (page_batch_size) in the doc
