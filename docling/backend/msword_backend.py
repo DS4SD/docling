@@ -270,7 +270,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 self.level = self.level_at_new_list - 1
                 self.level_at_new_list = None
             else:
-                for key, val in self.parents.items():
+                for key in range(len(self.parents)):
                     self.parents[key] = None
                 self.level = 0
 
