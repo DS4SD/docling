@@ -1,9 +1,9 @@
 import logging
 from io import BytesIO
 from pathlib import Path
-from typing import Set, Union
+from typing import Optional, Set, Union
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
@@ -24,7 +24,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
         _log.debug("About to init HTML backend...")
-        self.soup = None
+        self.soup: Optional[Tag] = None
         # HTML file:
         self.path_or_stream = path_or_stream
         # Initialise the parents for the hierarchy
@@ -78,17 +78,18 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         if self.is_valid():
             assert self.soup is not None
+            content = self.soup.body or self.soup
             # Replace <br> tags with newline characters
-            for br in self.soup.body.find_all("br"):
+            for br in content.find_all("br"):
                 br.replace_with("\n")
-            doc = self.walk(self.soup.body, doc)
+            doc = self.walk(content, doc)
         else:
             raise RuntimeError(
                 f"Cannot convert doc with {self.document_hash} because the backend failed to init."
             )
         return doc
 
-    def walk(self, element, doc):
+    def walk(self, element: Tag, doc: DoclingDocument):
         try:
             # Iterate over elements in the body of the document
             for idx, element in enumerate(element.children):
@@ -105,7 +106,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         return doc
 
-    def analyse_element(self, element, idx, doc):
+    def analyse_element(self, element: Tag, idx: int, doc: DoclingDocument):
         """
         if element.name!=None:
             _log.debug("\t"*self.level, idx, "\t", f"{element.name} ({self.level})")
@@ -135,7 +136,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         else:
             self.walk(element, doc)
 
-    def get_direct_text(self, item):
+    def get_direct_text(self, item: Tag):
         """Get the direct text of the <li> element (ignoring nested lists)."""
         text = item.find(string=True, recursive=False)
         if isinstance(text, str):
@@ -144,7 +145,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         return ""
 
     # Function to recursively extract text from all child nodes
-    def extract_text_recursively(self, item):
+    def extract_text_recursively(self, item: Tag):
         result = []
 
         if isinstance(item, str):
@@ -165,7 +166,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         return "".join(result) + " "
 
-    def handle_header(self, element, idx, doc):
+    def handle_header(self, element: Tag, idx: int, doc: DoclingDocument):
         """Handles header tags (h1, h2, etc.)."""
         hlevel = int(element.name.replace("h", ""))
         slevel = hlevel - 1
@@ -207,7 +208,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 level=hlevel,
             )
 
-    def handle_code(self, element, idx, doc):
+    def handle_code(self, element: Tag, idx: int, doc: DoclingDocument):
         """Handles monospace code snippets (pre)."""
         if element.text is None:
             return
@@ -215,9 +216,9 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         label = DocItemLabel.CODE
         if len(text) == 0:
             return
-        doc.add_text(parent=self.parents[self.level], label=label, text=text)
+        doc.add_code(parent=self.parents[self.level], text=text)
 
-    def handle_paragraph(self, element, idx, doc):
+    def handle_paragraph(self, element: Tag, idx: int, doc: DoclingDocument):
         """Handles paragraph tags (p)."""
         if element.text is None:
             return
@@ -227,7 +228,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             return
         doc.add_text(parent=self.parents[self.level], label=label, text=text)
 
-    def handle_list(self, element, idx, doc):
+    def handle_list(self, element: Tag, idx: int, doc: DoclingDocument):
         """Handles list tags (ul, ol) and their list items."""
 
         if element.name == "ul":
@@ -249,7 +250,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         self.parents[self.level + 1] = None
         self.level -= 1
 
-    def handle_listitem(self, element, idx, doc):
+    def handle_listitem(self, element: Tag, idx: int, doc: DoclingDocument):
         """Handles listitem tags (li)."""
         nested_lists = element.find(["ul", "ol"])
 
@@ -303,7 +304,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         else:
             _log.warn("list-item has no text: ", element)
 
-    def handle_table(self, element, idx, doc):
+    def handle_table(self, element: Tag, idx: int, doc: DoclingDocument):
         """Handles table tags."""
 
         nested_tables = element.find("table")
@@ -376,7 +377,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         doc.add_table(data=data, parent=self.parents[self.level])
 
-    def get_list_text(self, list_element, level=0):
+    def get_list_text(self, list_element: Tag, level=0):
         """Recursively extract text from <ul> or <ol> with proper indentation."""
         result = []
         bullet_char = "*"  # Default bullet character for unordered lists
@@ -402,7 +403,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         return result
 
-    def extract_table_cell_text(self, cell):
+    def extract_table_cell_text(self, cell: Tag):
         """Extract text from a table cell, including lists with indents."""
         contains_lists = cell.find(["ul", "ol"])
         if contains_lists is None:
@@ -413,7 +414,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             )
             return cell.text
 
-    def handle_figure(self, element, idx, doc):
+    def handle_figure(self, element: Tag, idx: int, doc: DoclingDocument):
         """Handles image tags (img)."""
 
         # Extract the image URI from the <img> tag
@@ -436,6 +437,6 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 caption=fig_caption,
             )
 
-    def handle_image(self, element, idx, doc):
+    def handle_image(self, element: Tag, idx, doc: DoclingDocument):
         """Handles image tags (img)."""
         doc.add_picture(parent=self.parents[self.level], caption=None)

@@ -3,23 +3,16 @@
 import json
 import logging
 import os
-import unittest
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 import pytest
-import yaml
 from docling_core.types import DoclingDocument
 from docling_core.types.doc import DocItemLabel, TableData, TextItem
 
 from docling.backend.xml.uspto_backend import PatentUsptoDocumentBackend, XmlTable
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import (
-    ConversionResult,
-    InputDocument,
-    SectionHeaderItem,
-)
-from docling.document_converter import DocumentConverter
+from docling.datamodel.document import InputDocument
 
 GENERATE: bool = True
 DATA_PATH: Path = Path("./tests/data/uspto/")

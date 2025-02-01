@@ -59,6 +59,7 @@ class RapidOcrModel(BaseOcrModel):
                 det_model_path=self.options.det_model_path,
                 cls_model_path=self.options.cls_model_path,
                 rec_model_path=self.options.rec_model_path,
+                rec_keys_path=self.options.rec_keys_path,
             )
 
     def __call__(

@@ -140,7 +140,7 @@ class DoclingParseV2PageBackend(PdfPageBackend):
         return cells
 
     def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:
-        AREA_THRESHOLD = 32 * 32
+        AREA_THRESHOLD = 0  # 32 * 32
 
         images = self._dpage["sanitized"]["images"]["data"]
         images_header = self._dpage["sanitized"]["images"]["header"]
@@ -178,7 +178,7 @@ class DoclingParseV2PageBackend(PdfPageBackend):
                 l=0, r=0, t=0, b=0, coord_origin=CoordOrigin.BOTTOMLEFT
             )
         else:
-            padbox = cropbox.to_bottom_left_origin(page_size.height)
+            padbox = cropbox.to_bottom_left_origin(page_size.height).model_copy()
             padbox.r = page_size.width - padbox.r
             padbox.t = page_size.height - padbox.t
 
