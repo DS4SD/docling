@@ -230,12 +230,70 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         else:
             return label, None
 
+    def format_text(self, text, bold: bool, italic: bool, underline: bool):
+        """
+        Apply bold, italic, and underline markdown styles to a text
+        """
+
+        # Exclude leading and trailing spaces from style
+        prefix, text, suffix = re.match(r"(^\s*)(.*?)(\s*$)", text, re.DOTALL).groups()
+
+        # Apply style
+        if bold:
+            text = f"**{text}**"
+        if italic:
+            text = f"*{text}*"
+        if underline:
+            text = f"<u>{text}</u>"
+
+        # Add back leading and trailing spaces
+        text = prefix + text + suffix
+
+        return text
+
+    def format_paragraph(self, paragraph):
+        """
+        Apply hyperlink, bold, italic, and underline markdown styles to a paragraph
+        """
+
+        paragraph_text = ""
+        group_text = ""
+        previous_style = None
+
+        # Iterate over the runs of the paragraph and group them by style
+        for c in paragraph.iter_inner_content():
+            if isinstance(c, docx.text.hyperlink.Hyperlink):
+                text = f"[{c.text}]({c.address})"
+                style = (c.runs[0].bold, c.runs[0].italic, c.runs[0].underline)
+            elif isinstance(c, docx.text.run.Run):
+                text = c.text
+                style = (c.bold, c.italic, c.underline)
+            else:
+                continue
+
+            # Initialize previous_style with the first style
+            previous_style = previous_style or style
+
+            # If the style changes for a non empty text, format the group and reset it
+            if len(text.strip()) and (style != previous_style):
+                paragraph_text += self.format_text(group_text, *previous_style)
+                previous_style = style
+                group_text = ""
+
+            group_text += text
+
+        # Format the last group
+        if len(group_text.strip()) > 0:
+            paragraph_text += self.format_text(group_text, *style)
+
+        return paragraph_text.strip()
+
     def handle_text_elements(self, element, docx_obj, doc):
         paragraph = docx.text.paragraph.Paragraph(element, docx_obj)
 
         if paragraph.text is None:
             return
-        text = paragraph.text.strip()
+        text = self.format_paragraph(paragraph)
 
         # Common styles for bullet and numbered lists.
         # "List Bullet", "List Number", "List Paragraph"
