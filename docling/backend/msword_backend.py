@@ -26,7 +26,6 @@ _log = logging.getLogger(__name__)
 
 
 class MsWordDocumentBackend(DeclarativeDocumentBackend):
-
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
         self.XML_KEY = (
@@ -138,6 +137,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             namespaces = {
                 "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
                 "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+                "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
             }
             xpath_expr = XPath(".//a:blip", namespaces=namespaces)
             drawing_blip = xpath_expr(element)
@@ -151,6 +151,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
             elif drawing_blip:
                 self.handle_pictures(element, docx_obj, drawing_blip, doc)
+            # Check for the sdt containers, like table of contents
+            elif tag_name in ["sdt"]:
+                sdt_content = element.find(".//w:sdtContent", namespaces=namespaces)
+                if sdt_content is not None:
+                    # Iterate paragraphs, runs, or text inside <w:sdtContent>.
+                    paragraphs = sdt_content.findall(".//w:p", namespaces=namespaces)
+                    for p in paragraphs:
+                        self.handle_text_elements(p, docx_obj, doc)
             # Check for Text
             elif tag_name in ["p"]:
                 # "tcPr", "sectPr"
@@ -241,7 +249,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             numid = None
 
         # Handle lists
-        if numid is not None and ilevel is not None:
+        if (
+            numid is not None
+            and ilevel is not None
+            and p_style_id not in ["Title", "Heading"]
+        ):
             self.add_listitem(
                 element,
                 docx_obj,
@@ -255,12 +267,22 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             )
             self.update_history(p_style_id, p_level, numid, ilevel)
             return
-        elif numid is None and self.prev_numid() is not None:  # Close list
-            for key, val in self.parents.items():
-                if key >= self.level_at_new_list:
+        elif (
+            numid is None
+            and self.prev_numid() is not None
+            and p_style_id not in ["Title", "Heading"]
+        ):  # Close list
+            if self.level_at_new_list:
+                for key in range(len(self.parents)):
+                    if key >= self.level_at_new_list:
+                        self.parents[key] = None
+                self.level = self.level_at_new_list - 1
+                self.level_at_new_list = None
+            else:
+                for key in range(len(self.parents)):
                     self.parents[key] = None
-            self.level = self.level_at_new_list - 1
-            self.level_at_new_list = None
+                self.level = 0
+
         if p_style_id in ["Title"]:
             for key, val in self.parents.items():
                 self.parents[key] = None
@@ -521,11 +543,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 image_data = image_part.blob  # Get the binary image data
             return image_data
 
-        image_data = get_docx_image(element, drawing_blip)
-        image_bytes = BytesIO(image_data)
         level = self.get_level()
         # Open the BytesIO object with PIL to create an Image
         try:
+            image_data = get_docx_image(element, drawing_blip)
+            image_bytes = BytesIO(image_data)
             pil_image = Image.open(image_bytes)
             doc.add_picture(
                 parent=self.parents[level - 1],

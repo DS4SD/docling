@@ -7,28 +7,7 @@ This is a collection of FAQ collected from the user questions on <https://github
 
     ### Is Python 3.13 supported?
 
-    Full support for Python 3.13 is currently waiting for [pytorch](https://github.com/pytorch/pytorch).
-
-    At the moment, no release has full support, but nightly builds are available. Docling was tested on Python 3.13 with the following steps:
-
-    ```sh
-    # Create a python 3.13 virtualenv
-    python3.13 -m venv venv
-    source ./venv/bin/activate
-
-    # Install torch nightly builds, see https://pytorch.org/
-    pip3 install --pre torch torchvision --index-url https://download.pytorch.org/whl/nightly/cpu
-
-    # Install docling
-    pip3 install docling
-
-    # Run docling
-    docling --no-ocr https://arxiv.org/pdf/2408.09869
-    ```
-
-    _Note: we are disabling OCR since easyocr and the nightly torch builds have some conflicts._
-
-    Source: Issue [#136](https://github.com/DS4SD/docling/issues/136)
+    Python 3.13 is supported from Docling 2.18.0.
 
 
 ??? question "Install conflicts with numpy (python 3.13)"
@@ -123,6 +102,12 @@ This is a collection of FAQ collected from the user questions on <https://github
 
     - Update to the latest version of [certifi](https://pypi.org/project/certifi/), i.e. `pip install --upgrade certifi`
     - Use [pip-system-certs](https://pypi.org/project/pip-system-certs/) to use the latest trusted certificates on your system.
+    - Set environment variables `SSL_CERT_FILE` and `REQUESTS_CA_BUNDLE` to the value of `python -m certifi`:
+        ```
+        CERT_PATH=$(python -m certifi)
+        export SSL_CERT_FILE=${CERT_PATH}
+        export REQUESTS_CA_BUNDLE=${CERT_PATH}
+        ```
 
 
 ??? question "Which OCR languages are supported?"
@@ -145,3 +130,11 @@ This is a collection of FAQ collected from the user questions on <https://github
     pipeline_options = PdfPipelineOptions()
     pipeline_options.ocr_options.lang = ["fr", "de", "es", "en"]  # example of languages for EasyOCR
     ```
+
+
+??? Some images are missing from MS Word and Powerpoint"
+
+    ### Some images are missing from MS Word and Powerpoint
+
+    The image processing library used by Docling is able to handle embedded WMF images only on Windows platform.
+    If you are on other operaring systems, these images will be ignored.

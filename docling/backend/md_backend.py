@@ -3,19 +3,23 @@ import re
 import warnings
 from io import BytesIO
 from pathlib import Path
-from typing import Set, Union
+from typing import List, Optional, Set, Union
 
 import marko
+import marko.element
 import marko.ext
 import marko.ext.gfm
 import marko.inline
 from docling_core.types.doc import (
+    DocItem,
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
+    NodeItem,
     TableCell,
     TableData,
+    TextItem,
 )
 from marko import Markdown
 
@@ -27,8 +31,7 @@ _log = logging.getLogger(__name__)
 
 
 class MarkdownDocumentBackend(DeclarativeDocumentBackend):
-
-    def shorten_underscore_sequences(self, markdown_text, max_length=10):
+    def shorten_underscore_sequences(self, markdown_text: str, max_length: int = 10):
         # This regex will match any sequence of underscores
         pattern = r"_+"
 
@@ -63,7 +66,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
         self.in_table = False
         self.md_table_buffer: list[str] = []
-        self.inline_text_buffer = ""
+        self.inline_texts: list[str] = []
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
@@ -90,13 +93,13 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             ) from e
         return
 
-    def close_table(self, doc=None):
+    def close_table(self, doc: DoclingDocument):
         if self.in_table:
             _log.debug("=== TABLE START ===")
             for md_table_row in self.md_table_buffer:
                 _log.debug(md_table_row)
             _log.debug("=== TABLE END ===")
-            tcells = []
+            tcells: List[TableCell] = []
             result_table = []
             for n, md_table_row in enumerate(self.md_table_buffer):
                 data = []
@@ -137,33 +140,42 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             self.in_table = False
             self.md_table_buffer = []  # clean table markdown buffer
             # Initialize Docling TableData
-            data = TableData(num_rows=num_rows, num_cols=num_cols, table_cells=tcells)
+            table_data = TableData(
+                num_rows=num_rows, num_cols=num_cols, table_cells=tcells
+            )
             # Populate
             for tcell in tcells:
-                data.table_cells.append(tcell)
+                table_data.table_cells.append(tcell)
             if len(tcells) > 0:
-                doc.add_table(data=data)
+                doc.add_table(data=table_data)
         return
 
-    def process_inline_text(self, parent_element, doc=None):
-        # self.inline_text_buffer += str(text_in)
-        txt = self.inline_text_buffer.strip()
+    def process_inline_text(
+        self, parent_element: Optional[NodeItem], doc: DoclingDocument
+    ):
+        txt = " ".join(self.inline_texts)
         if len(txt) > 0:
             doc.add_text(
                 label=DocItemLabel.PARAGRAPH,
                 parent=parent_element,
                 text=txt,
             )
-        self.inline_text_buffer = ""
+        self.inline_texts = []
 
-    def iterate_elements(self, element, depth=0, doc=None, parent_element=None):
+    def iterate_elements(
+        self,
+        element: marko.element.Element,
+        depth: int,
+        doc: DoclingDocument,
+        parent_element: Optional[NodeItem] = None,
+    ):
         # Iterates over all elements in the AST
         # Check for different element types and process relevant details
-        if isinstance(element, marko.block.Heading):
+        if isinstance(element, marko.block.Heading) and len(element.children) > 0:
             self.close_table(doc)
             self.process_inline_text(parent_element, doc)
             _log.debug(
-                f" - Heading level {element.level}, content: {element.children[0].children}"
+                f" - Heading level {element.level}, content: {element.children[0].children}"  # type: ignore
             )
             if element.level == 1:
                 doc_label = DocItemLabel.TITLE
@@ -172,10 +184,10 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
             # Header could have arbitrary inclusion of bold, italic or emphasis,
             # hence we need to traverse the tree to get full text of a header
-            strings = []
+            strings: List[str] = []
 
             # Define a recursive function to traverse the tree
-            def traverse(node):
+            def traverse(node: marko.block.BlockElement):
                 # Check if the node has a "children" attribute
                 if hasattr(node, "children"):
                     # If "children" is a list, continue traversal
@@ -194,24 +206,33 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 )
 
         elif isinstance(element, marko.block.List):
+            has_non_empty_list_items = False
+            for child in element.children:
+                if isinstance(child, marko.block.ListItem) and len(child.children) > 0:
+                    has_non_empty_list_items = True
+                    break
+
             self.close_table(doc)
             self.process_inline_text(parent_element, doc)
             _log.debug(f" - List {'ordered' if element.ordered else 'unordered'}")
-            list_label = GroupLabel.LIST
-            if element.ordered:
-                list_label = GroupLabel.ORDERED_LIST
-            parent_element = doc.add_group(
-                label=list_label, name=f"list", parent=parent_element
-            )
+            if has_non_empty_list_items:
+                label = GroupLabel.ORDERED_LIST if element.ordered else GroupLabel.LIST
+                parent_element = doc.add_group(
+                    label=label, name=f"list", parent=parent_element
+                )
 
-        elif isinstance(element, marko.block.ListItem):
+        elif isinstance(element, marko.block.ListItem) and len(element.children) > 0:
             self.close_table(doc)
             self.process_inline_text(parent_element, doc)
             _log.debug(" - List item")
 
-            snippet_text = str(element.children[0].children[0].children)
+            snippet_text = str(element.children[0].children[0].children)  # type: ignore
             is_numbered = False
-            if parent_element.label == GroupLabel.ORDERED_LIST:
+            if (
+                parent_element is not None
+                and isinstance(parent_element, DocItem)
+                and parent_element.label == GroupLabel.ORDERED_LIST
+            ):
                 is_numbered = True
             doc.add_list_item(
                 enumerated=is_numbered, parent=parent_element, text=snippet_text
@@ -221,61 +242,54 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             self.close_table(doc)
             self.process_inline_text(parent_element, doc)
             _log.debug(f" - Image with alt: {element.title}, url: {element.dest}")
-            doc.add_picture(parent=parent_element, caption=element.title)
 
-        elif isinstance(element, marko.block.Paragraph):
+            fig_caption: Optional[TextItem] = None
+            if element.title is not None and element.title != "":
+                fig_caption = doc.add_text(
+                    label=DocItemLabel.CAPTION, text=element.title
+                )
+
+            doc.add_picture(parent=parent_element, caption=fig_caption)
+
+        elif isinstance(element, marko.block.Paragraph) and len(element.children) > 0:
             self.process_inline_text(parent_element, doc)
 
         elif isinstance(element, marko.inline.RawText):
             _log.debug(f" - Paragraph (raw text): {element.children}")
-            snippet_text = str(element.children).strip()
+            snippet_text = element.children.strip()
             # Detect start of the table:
             if "|" in snippet_text:
                 # most likely part of the markdown table
                 self.in_table = True
                 if len(self.md_table_buffer) > 0:
-                    self.md_table_buffer[len(self.md_table_buffer) - 1] += str(
-                        snippet_text
-                    )
+                    self.md_table_buffer[len(self.md_table_buffer) - 1] += snippet_text
                 else:
                     self.md_table_buffer.append(snippet_text)
             else:
                 self.close_table(doc)
                 self.in_table = False
                 # most likely just inline text
-                self.inline_text_buffer += str(
-                    element.children
-                )  # do not strip an inline text, as it may contain important spaces
+                self.inline_texts.append(str(element.children))
 
         elif isinstance(element, marko.inline.CodeSpan):
             self.close_table(doc)
             self.process_inline_text(parent_element, doc)
             _log.debug(f" - Code Span: {element.children}")
             snippet_text = str(element.children).strip()
-            doc.add_text(
-                label=DocItemLabel.CODE, parent=parent_element, text=snippet_text
-            )
+            doc.add_code(parent=parent_element, text=snippet_text)
 
-        elif isinstance(element, marko.block.CodeBlock):
+        elif (
+            isinstance(element, (marko.block.CodeBlock, marko.block.FencedCode))
+            and len(element.children) > 0
+            and isinstance((first_child := element.children[0]), marko.inline.RawText)
+            and len(snippet_text := (first_child.children.strip())) > 0
+        ):
             self.close_table(doc)
             self.process_inline_text(parent_element, doc)
             _log.debug(f" - Code Block: {element.children}")
-            snippet_text = str(element.children[0].children).strip()
-            doc.add_text(
-                label=DocItemLabel.CODE, parent=parent_element, text=snippet_text
-            )
-
-        elif isinstance(element, marko.block.FencedCode):
-            self.close_table(doc)
-            self.process_inline_text(parent_element, doc)
-            _log.debug(f" - Code Block: {element.children}")
-            snippet_text = str(element.children[0].children).strip()
-            doc.add_text(
-                label=DocItemLabel.CODE, parent=parent_element, text=snippet_text
-            )
+            doc.add_code(parent=parent_element, text=snippet_text)
 
         elif isinstance(element, marko.inline.LineBreak):
-            self.process_inline_text(parent_element, doc)
             if self.in_table:
                 _log.debug("Line break in a table")
                 self.md_table_buffer.append("")
@@ -296,14 +310,21 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 self.close_table(doc)
                 _log.debug("Some other element: {}".format(element))
 
+        processed_block_types = (
+            marko.block.ListItem,
+            marko.block.Heading,
+            marko.block.CodeBlock,
+            marko.block.FencedCode,
+            # marko.block.Paragraph,
+            marko.inline.RawText,
+        )
+
         # Iterate through the element's children (if any)
-        if not isinstance(element, marko.block.ListItem):
-            if not isinstance(element, marko.block.Heading):
-                if not isinstance(element, marko.block.FencedCode):
-                    # if not isinstance(element, marko.block.Paragraph):
-                    if hasattr(element, "children"):
-                        for child in element.children:
-                            self.iterate_elements(child, depth + 1, doc, parent_element)
+        if hasattr(element, "children") and not isinstance(
+            element, processed_block_types
+        ):
+            for child in element.children:
+                self.iterate_elements(child, depth + 1, doc, parent_element)
 
     def is_valid(self) -> bool:
         return self.valid
