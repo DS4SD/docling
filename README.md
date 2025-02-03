@@ -84,6 +84,20 @@ To further accelerate your AI application development, check out Docling's nativ
 [integrations](https://ds4sd.github.io/docling/integrations/) with popular frameworks
 and tools.
 
+## Apify Actor
+
+You can run Docling in the cloud without installation using the [Docling Actor](https://apify.com/vancura/docling) on Apify platform. Simply provide a document URL and get the processed result:
+
+```bash
+apify call vancura/docling -i '{
+    "documentUrl": "https://arxiv.org/pdf/2408.09869",
+    "outputFormat": "markdown",
+    "ocr": true
+}'
+```
+
+Read more about the [Docling Actor](.actor/README.md), including how to use it via the Apify API and CLI.
+
 ## Get help and support
 
 Please feel free to connect with us using the [discussion section](https://github.com/DS4SD/docling/discussions).
