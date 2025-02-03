@@ -19,6 +19,7 @@ from lxml.etree import XPath
 from PIL import Image, UnidentifiedImageError
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
+from docling.backend.docx_latex.omml import oMath2Latex
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
@@ -133,6 +134,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     def walk_linear(self, body, docx_obj, doc) -> DoclingDocument:
         for element in body:
             tag_name = etree.QName(element).localname
+
             # Check for Inline Images (blip elements)
             namespaces = {
                 "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
@@ -230,12 +232,31 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         else:
             return label, None
 
+    def handle_equations_in_text(self, element, text):
+        only_texts = []
+        texts_and_equations = []
+        for subt in element.iter():
+            tag_name = etree.QName(subt).localname
+            if tag_name == "t" and "math" not in subt.tag:
+                only_texts.append(subt.text)
+                texts_and_equations.append(subt.text)
+            elif "oMath" in subt.tag and "oMathPara" not in subt.tag:
+                texts_and_equations.append(f"${str(oMath2Latex(subt))}$")
+
+        if "".join(only_texts) != text:
+            return text
+
+        return "".join(texts_and_equations)
+
     def handle_text_elements(self, element, docx_obj, doc):
         paragraph = docx.text.paragraph.Paragraph(element, docx_obj)
 
-        if paragraph.text is None:
+        raw_text = paragraph.text
+        text = self.handle_equations_in_text(element=element, text=raw_text)
+
+        if text is None:
             return
-        text = paragraph.text.strip()
+        text = text.strip()
 
         # Common styles for bullet and numbered lists.
         # "List Bullet", "List Number", "List Paragraph"
@@ -289,18 +310,36 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             self.parents[0] = doc.add_text(
                 parent=None, label=DocItemLabel.TITLE, text=text
             )
+
         elif "Heading" in p_style_id:
             self.add_header(element, docx_obj, doc, p_style_id, p_level, text)
 
         elif p_style_id in [
-            "Paragraph",
-            "Normal",
             "Subtitle",
             "Author",
-            "DefaultText",
             "ListParagraph",
             "ListBullet",
             "Quote",
+        ]:
+            level = self.get_level()
+            doc.add_text(
+                label=DocItemLabel.PARAGRAPH, parent=self.parents[level - 1], text=text
+            )
+
+        elif (raw_text is None or len(raw_text) == 0) and len(text) > 0:
+            # Standalone equation
+            # Entities in which all text comes from equations
+            level = self.get_level()
+            if text.strip().startswith("$") and text.strip().endswith("$"):
+                text = text.strip()[1:-1]
+            doc.add_text(
+                label=DocItemLabel.FORMULA, parent=self.parents[level - 1], text=text
+            )
+
+        elif p_style_id in [
+            "Paragraph",
+            "Normal",
+            "DefaultText",
         ]:
             level = self.get_level()
             doc.add_text(
@@ -312,9 +351,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # hence we treat all other labels as pure text
             level = self.get_level()
             doc.add_text(
-                label=DocItemLabel.PARAGRAPH, parent=self.parents[level - 1], text=text
+                label=DocItemLabel.TEXT, parent=self.parents[level - 1], text=text
             )
-
         self.update_history(p_style_id, p_level, numid, ilevel)
         return
 
