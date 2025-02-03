@@ -307,6 +307,10 @@ def to_docling_document(doc_glm, update_name_label=False) -> DoclingDocument:
                 current_list = None
 
                 doc.add_code(text=text, prov=prov)
+            elif label == DocItemLabel.FORMULA:
+                current_list = None
+
+                doc.add_text(label=DocItemLabel.FORMULA, text="", orig=text, prov=prov)
             else:
                 current_list = None
 
