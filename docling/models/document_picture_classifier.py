@@ -55,12 +55,13 @@ class DocumentPictureClassifier(BaseEnrichmentModel):
         Processes a batch of elements and adds classification annotations.
     """
 
+    _model_repo_folder = "DocumentFigureClassifier"
     images_scale = 2
 
     def __init__(
         self,
         enabled: bool,
-        artifacts_path: Optional[Union[Path, str]],
+        artifacts_path: Optional[Path],
         options: DocumentPictureClassifierOptions,
         accelerator_options: AcceleratorOptions,
     ):
@@ -90,7 +91,7 @@ class DocumentPictureClassifier(BaseEnrichmentModel):
             if artifacts_path is None:
                 artifacts_path = self.download_models_hf()
             else:
-                artifacts_path = Path(artifacts_path)
+                artifacts_path = artifacts_path / self._model_repo_folder
 
             self.document_picture_classifier = DocumentFigureClassifierPredictor(
                 artifacts_path=artifacts_path,

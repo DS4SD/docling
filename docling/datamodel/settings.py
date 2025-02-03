@@ -61,5 +61,7 @@ class AppSettings(BaseSettings):
     perf: BatchConcurrencySettings
     debug: DebugSettings
 
+    cache_dir: Path = Path.home() / ".cache" / "docling"
+
 
 settings = AppSettings(perf=BatchConcurrencySettings(), debug=DebugSettings())

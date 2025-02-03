@@ -17,6 +17,7 @@ from docling.datamodel.pipeline_options import (
     TesseractCliOcrOptions,
     TesseractOcrOptions,
 )
+from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.code_formula_model import CodeFormulaModel, CodeFormulaModelOptions
 from docling.models.document_picture_classifier import (
@@ -43,17 +44,16 @@ _log = logging.getLogger(__name__)
 
 
 class StandardPdfPipeline(PaginatedPipeline):
-    _layout_model_path = "model_artifacts/layout"
-    _table_model_path = "model_artifacts/tableformer"
+    _layout_model_path = LayoutModel._model_path
+    _table_model_path = TableStructureModel._model_path
 
     def __init__(self, pipeline_options: PdfPipelineOptions):
         super().__init__(pipeline_options)
         self.pipeline_options: PdfPipelineOptions
 
-        if pipeline_options.artifacts_path is None:
-            self.artifacts_path = self.download_models_hf()
-        else:
-            self.artifacts_path = Path(pipeline_options.artifacts_path)
+        artifacts_path: Optional[Path] = None
+        if pipeline_options.artifacts_path is not None:
+            artifacts_path = Path(pipeline_options.artifacts_path).expanduser()
 
         self.keep_images = (
             self.pipeline_options.generate_page_images
@@ -79,15 +79,13 @@ class StandardPdfPipeline(PaginatedPipeline):
             ocr_model,
             # Layout model
             LayoutModel(
-                artifacts_path=self.artifacts_path
-                / StandardPdfPipeline._layout_model_path,
+                artifacts_path=artifacts_path,
                 accelerator_options=pipeline_options.accelerator_options,
             ),
             # Table structure model
             TableStructureModel(
                 enabled=pipeline_options.do_table_structure,
-                artifacts_path=self.artifacts_path
-                / StandardPdfPipeline._table_model_path,
+                artifacts_path=artifacts_path,
                 options=pipeline_options.table_structure_options,
                 accelerator_options=pipeline_options.accelerator_options,
             ),
@@ -101,7 +99,7 @@ class StandardPdfPipeline(PaginatedPipeline):
             CodeFormulaModel(
                 enabled=pipeline_options.do_code_enrichment
                 or pipeline_options.do_formula_enrichment,
-                artifacts_path=pipeline_options.artifacts_path,
+                artifacts_path=artifacts_path,
                 options=CodeFormulaModelOptions(
                     do_code_enrichment=pipeline_options.do_code_enrichment,
                     do_formula_enrichment=pipeline_options.do_formula_enrichment,
@@ -111,7 +109,7 @@ class StandardPdfPipeline(PaginatedPipeline):
             # Document Picture Classifier
             DocumentPictureClassifier(
                 enabled=pipeline_options.do_picture_classification,
-                artifacts_path=pipeline_options.artifacts_path,
+                artifacts_path=artifacts_path,
                 options=DocumentPictureClassifierOptions(),
                 accelerator_options=pipeline_options.accelerator_options,
             ),
@@ -127,18 +125,29 @@ class StandardPdfPipeline(PaginatedPipeline):
     def download_models_hf(
         local_dir: Optional[Path] = None, force: bool = False
     ) -> Path:
-        from huggingface_hub import snapshot_download
-        from huggingface_hub.utils import disable_progress_bars
 
-        disable_progress_bars()
-        download_path = snapshot_download(
-            repo_id="ds4sd/docling-models",
-            force_download=force,
-            local_dir=local_dir,
-            revision="v2.1.0",
+        if local_dir is None:
+            local_dir = settings.cache_dir / "models"
+
+        # Make sure the folder exists
+        local_dir.mkdir(exist_ok=True, parents=True)
+
+        # Download model weights
+        LayoutModel.download_models_hf(
+            local_dir=local_dir / LayoutModel._model_repo_folder, force=force
+        )
+        TableStructureModel.download_models_hf(
+            local_dir=local_dir / TableStructureModel._model_repo_folder, force=force
+        )
+        DocumentPictureClassifier.download_models_hf(
+            local_dir=local_dir / DocumentPictureClassifier._model_repo_folder,
+            force=force,
+        )
+        CodeFormulaModel.download_models_hf(
+            local_dir=local_dir / CodeFormulaModel._model_repo_folder, force=force
         )
 
-        return Path(download_path)
+        return local_dir
 
     def get_ocr_model(self) -> Optional[BaseOcrModel]:
         if isinstance(self.pipeline_options.ocr_options, EasyOcrOptions):
