@@ -39,7 +39,7 @@ class AcceleratorOptions(BaseSettings):
     )
 
     num_threads: int = 4
-    device: str = "auto"
+    device: Union[str, AcceleratorDevice] = "auto"
 
     @field_validator("device")
     def validate_device(cls, value):
