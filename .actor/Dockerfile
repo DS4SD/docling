@@ -26,7 +26,13 @@ RUN groupadd -r appuser && useradd -r -g appuser -s /sbin/nologin appuser && \
     npm cache clean --force && \
     \
     mkdir -p /home/appuser && \
-    chown -R appuser:appuser /home/appuser
+    chown -R appuser:appuser /home/appuser && \
+    \
+    apt-get update && apt-get install -y --no-install-recommends \
+    time \
+    procps \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -38,5 +44,14 @@ COPY --chown=appuser:appuser .actor/ .actor/
 COPY --chown=appuser:appuser . .
 
 USER appuser
+
+# Set environment variables for better resource management
+ENV PYTHONUNBUFFERED=1
+ENV MALLOC_ARENA_MAX=2
+ENV EASYOCR_DOWNLOAD_CACHE="/tmp/easyocr"
+
+# Create cache directory for EasyOCR
+RUN mkdir -p /tmp/easyocr && \
+    chown -R appuser:appuser /tmp/easyocr
 
 ENTRYPOINT [".actor/actor.sh"]

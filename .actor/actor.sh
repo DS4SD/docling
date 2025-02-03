@@ -67,6 +67,10 @@ if [ "$(echo "${INPUT}" | jq -r '.ocr')" = "true" ]; then
     DOC_CONVERT_CMD="${DOC_CONVERT_CMD} --ocr"
 fi
 
+# Print the exact command that will be executed
+echo "Debug: Command string: $DOC_CONVERT_CMD"
+echo "Debug: Full command: /usr/bin/time -v bash -c \"$DOC_CONVERT_CMD\""
+
 # --- Process document with Docling ---
 
 echo "Processing document with Docling CLI..."
@@ -79,15 +83,17 @@ touch "$TIMESTAMP_FILE" || {
     exit 1
 }
 
-# Execute the command
-set +e # Temporarily disable exit on error to handle the error ourselves
-eval "$DOC_CONVERT_CMD"
-DOCLING_EXIT_CODE=$?
-set -e # Re-enable exit on error
+# Execute the command with timeout and memory monitoring
+echo "Starting document processing with memory monitoring..."
+/usr/bin/time -v bash -c "$DOC_CONVERT_CMD" 2>&1 | tee -a "$LOG_FILE"
+DOCLING_EXIT_CODE=${PIPESTATUS[0]}
 
 # Check if the command failed and handle the error
 if [ $DOCLING_EXIT_CODE -ne 0 ]; then
     echo "Error: Docling command failed with exit code $DOCLING_EXIT_CODE"
+    echo "Memory usage information:"
+    free -h
+    df -h
     exit 1
 fi
 
