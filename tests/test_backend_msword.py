@@ -6,6 +6,7 @@ from docling.backend.msword_backend import MsWordDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import (
     ConversionResult,
+    DoclingDocument,
     InputDocument,
     SectionHeaderItem,
 )
@@ -68,7 +69,6 @@ def verify_export(pred_text: str, gtfile: str):
         with open(gtfile, "r") as fr:
             true_text = fr.read()
 
-        assert pred_text == true_text, "pred_itxt==true_itxt"
         return pred_text == true_text
 
 
@@ -100,3 +100,7 @@ def test_e2e_docx_conversions():
 
         pred_json: str = json.dumps(doc.export_to_dict(), indent=2)
         assert verify_export(pred_json, str(gt_path) + ".json"), "export to json"
+
+        if docx_path.name == "word_tables.docx":
+            pred_html: str = doc.export_to_html()
+            assert verify_export(pred_html, str(gt_path) + ".html"), "export to html"

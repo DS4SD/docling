@@ -209,12 +209,16 @@ class TableStructureModel(BasePageModel):
                                     tc.bbox = tc.bbox.scaled(1 / self.scale)
                                 table_cells.append(tc)
 
+                            assert "predict_details" in table_out
+
                             # Retrieving cols/rows, after post processing:
-                            num_rows = table_out["predict_details"]["num_rows"]
-                            num_cols = table_out["predict_details"]["num_cols"]
-                            otsl_seq = table_out["predict_details"]["prediction"][
-                                "rs_seq"
-                            ]
+                            num_rows = table_out["predict_details"].get("num_rows", 0)
+                            num_cols = table_out["predict_details"].get("num_cols", 0)
+                            otsl_seq = (
+                                table_out["predict_details"]
+                                .get("prediction", {})
+                                .get("rs_seq", [])
+                            )
 
                             tbl = Table(
                                 otsl_seq=otsl_seq,

@@ -2,13 +2,8 @@ import json
 import os
 from pathlib import Path
 
-from docling.backend.msword_backend import MsWordDocumentBackend
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import (
-    ConversionResult,
-    InputDocument,
-    SectionHeaderItem,
-)
+from docling.datamodel.document import ConversionResult, DoclingDocument
 from docling.document_converter import DocumentConverter
 
 GENERATE = False
@@ -53,7 +48,7 @@ def test_e2e_xlsx_conversions():
     converter = get_converter()
 
     for xlsx_path in xlsx_paths:
-        # print(f"converting {xlsx_path}")
+        print(f"converting {xlsx_path}")
 
         gt_path = (
             xlsx_path.parent.parent / "groundtruth" / "docling_v2" / xlsx_path.name

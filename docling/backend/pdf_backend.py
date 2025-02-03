@@ -12,7 +12,6 @@ from docling.datamodel.document import InputDocument
 
 
 class PdfPageBackend(ABC):
-
     @abstractmethod
     def get_text_in_rect(self, bbox: BoundingBox) -> str:
         pass
@@ -45,7 +44,6 @@ class PdfPageBackend(ABC):
 
 
 class PdfDocumentBackend(PaginatedDocumentBackend):
-
     def __init__(self, in_doc: InputDocument, path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
 
