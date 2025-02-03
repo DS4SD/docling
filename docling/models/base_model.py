@@ -6,6 +6,7 @@ from typing_extensions import TypeVar
 
 from docling.datamodel.base_models import ItemAndImageEnrichmentElement, Page
 from docling.datamodel.document import ConversionResult
+from docling.datamodel.settings import settings
 
 
 class BasePageModel(ABC):
@@ -20,6 +21,8 @@ EnrichElementT = TypeVar("EnrichElementT", default=NodeItem)
 
 
 class GenericEnrichmentModel(ABC, Generic[EnrichElementT]):
+
+    elements_batch_size: int = settings.perf.elements_batch_size
 
     @abstractmethod
     def is_processable(self, doc: DoclingDocument, element: NodeItem) -> bool:

@@ -61,6 +61,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
         Processes the given batch of elements and enriches them with predictions.
     """
 
+    elements_batch_size = 5
     images_scale = 1.66  # = 120 dpi, aligned with training data resolution
     expansion_factor = 0.03
 
@@ -233,6 +234,8 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
             elements.append(el.item)
             labels.append(el.item.label)
             images.append(el.image)
+
+        print(f"BATCH: {len(images)=}")
 
         outputs = self.code_formula_model.predict(images, labels)
 
