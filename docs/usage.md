@@ -26,11 +26,46 @@ To see all available options (export formats etc.) run `docling --help`. More de
 
 ### Advanced options
 
+#### Provide specific artifacts path (offline mode)
+
+By default, artifacts such as models are downloaded automatically upon first usage. If you would prefer to use a local path where the artifacts have been explicitly prefetched, you can do that as follows:
+
+```python
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import EasyOcrOptions, PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
+
+artifacts_path = "/local/path/to/artifacts"
+
+pipeline_options = PdfPipelineOptions(artifacts_path=artifacts_path)
+# if you are using EasyOcr
+pipeline_options.ocr_options = EasyOcrOptions(
+    download_enabled=False,
+    model_storage_directory=str(artifacts_path / "EasyOcr")
+)
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+    }
+)
+```
+
+To download all the artifacts needed to run offline, Docling provides the `docling-models download` utility.
+
+```sh
+$ docling-models download
+Downloading layout model...
+Downloading tableformer model...
+Downloading picture classifier model...
+Downloading code formula model...
+Downloading easyocr models...
+All models downloaded in the directory $HOME/.cache/docling/models.
+```
+
 #### Adjust pipeline features
 
 The example file [custom_convert.py](./examples/custom_convert.py) contains multiple ways
 one can adjust the conversion pipeline and features.
-
 
 ##### Control PDF table extraction options
 
@@ -70,28 +105,6 @@ doc_converter = DocumentConverter(
 )
 ```
 
-##### Provide specific artifacts path
-
-By default, artifacts such as models are downloaded automatically upon first usage. If you would prefer to use a local path where the artifacts have been explicitly prefetched, you can do that as follows:
-
-```python
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import PdfPipelineOptions
-from docling.document_converter import DocumentConverter, PdfFormatOption
-from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
-
-# # to explicitly prefetch:
-# artifacts_path = StandardPdfPipeline.download_models_hf()
-
-artifacts_path = "/local/path/to/artifacts"
-
-pipeline_options = PdfPipelineOptions(artifacts_path=artifacts_path)
-doc_converter = DocumentConverter(
-    format_options={
-        InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
-    }
-)
-```
 
 #### Impose limits on the document size
 
