@@ -1,6 +1,6 @@
 # Docling Actor on Apify
 
-[![Docling Actor](https://apify.com/actor-badge?actor=vancura/docling)](https://apify.com/vancura/docling)
+[![Docling Actor](https://apify.com/actor-badge?actor=vancura/docling?fpr=docling)](https://apify.com/vancura/docling)
 
 This Actor wraps the [Docling project](https://ds4sd.github.io/docling/) to provide serverless document processing in the cloud. It can process complex documents (PDF, DOCX, images) and convert them into structured formats (Markdown, JSON, HTML, Text, or DocTags) with optional OCR support.
 
@@ -205,7 +205,7 @@ If you wish to develop or modify this Actor locally:
 
 ## Requirements & Installation
 
-- An [Apify account](https://console.apify.com/) (free tier available)
+- An [Apify account](https://console.apify.com/?fpr=docling) (free tier available)
 - For local development:
   - Docker installed
   - Apify CLI (`npm install -g apify-cli`)
@@ -231,4 +231,4 @@ This wrapper project is under the MIT License, matching the original Docling lic
 ## Acknowledgments
 
 - [Docling](https://ds4sd.github.io/docling/) codebase by IBM
-- [Apify](https://apify.com/) for the serverless actor environment
+- [Apify](https://apify.com/?fpr=docling) for the serverless actor environment

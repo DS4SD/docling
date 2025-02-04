@@ -21,7 +21,7 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![License MIT](https://img.shields.io/github/license/DS4SD/docling)](https://opensource.org/licenses/MIT)
 [![PyPI Downloads](https://static.pepy.tech/badge/docling/month)](https://pepy.tech/projects/docling)
-[![Docling Actor](https://apify.com/actor-badge?actor=vancura/docling)](https://apify.com/vancura/docling)
+[![Docling Actor](https://apify.com/actor-badge?actor=vancura/docling?fpr=docling)](https://apify.com/vancura/docling)
 
 Docling parses documents and exports them to the desired format with ease and speed.
 
@@ -86,7 +86,7 @@ and tools.
 
 ## Apify Actor
 
-You can run Docling in the cloud without installation using the [Docling Actor](https://apify.com/vancura/docling) on Apify platform. Simply provide a document URL and get the processed result:
+You can run Docling in the cloud without installation using the [Docling Actor](https://apify.com/vancura/docling?fpr=docling) on Apify platform. Simply provide a document URL and get the processed result:
 
 ```bash
 apify call vancura/docling -i '{
