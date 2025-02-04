@@ -62,7 +62,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
     """
 
     images_scale = 1.66  # = 120 dpi, aligned with training data resolution
-    expansion_factor = 0.03
+    expansion_factor = 0.1
 
     def __init__(
         self,
@@ -118,7 +118,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
             repo_id="ds4sd/CodeFormula",
             force_download=force,
             local_dir=local_dir,
-            revision="v1.0.0",
+            revision="v1.0.1",
         )
 
         return Path(download_path)
