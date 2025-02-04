@@ -8,6 +8,7 @@ on:
       - "**"
       - "!main"
       - "!gh-pages"
+      - "!chore-docs-search-fix"  # FIX remove tmp condition
 
 env:
   # disable keyring (https://github.com/actions/runner-images/issues/6185):
