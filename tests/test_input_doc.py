@@ -9,7 +9,7 @@ from docling.datamodel.settings import DocumentLimits
 
 def test_in_doc_from_valid_path():
 
-    test_doc_path = Path("./tests/data/2206.01062.pdf")
+    test_doc_path = Path("./tests/data/pdf/2206.01062.pdf")
     doc = _make_input_doc(test_doc_path)
     assert doc.valid == True
 
@@ -24,7 +24,7 @@ def test_in_doc_from_invalid_path():
 
 def test_in_doc_from_valid_buf():
 
-    buf = BytesIO(Path("./tests/data/2206.01062.pdf").open("rb").read())
+    buf = BytesIO(Path("./tests/data/pdf/2206.01062.pdf").open("rb").read())
     stream = DocumentStream(name="my_doc.pdf", stream=buf)
 
     doc = _make_input_doc_from_stream(stream)
@@ -41,7 +41,7 @@ def test_in_doc_from_invalid_buf():
 
 
 def test_in_doc_with_page_range():
-    test_doc_path = Path("./tests/data/2206.01062.pdf")
+    test_doc_path = Path("./tests/data/pdf/2206.01062.pdf")
     limits = DocumentLimits()
     limits.page_range = (1, 10)
 
@@ -81,10 +81,10 @@ def test_guess_format(tmp_path):
     temp_dir.mkdir()
 
     # Valid PDF
-    buf = BytesIO(Path("./tests/data/2206.01062.pdf").open("rb").read())
+    buf = BytesIO(Path("./tests/data/pdf/2206.01062.pdf").open("rb").read())
     stream = DocumentStream(name="my_doc.pdf", stream=buf)
     assert dci._guess_format(stream) == InputFormat.PDF
-    doc_path = Path("./tests/data/2206.01062.pdf")
+    doc_path = Path("./tests/data/pdf/2206.01062.pdf")
     assert dci._guess_format(doc_path) == InputFormat.PDF
 
     # Valid MS Office
