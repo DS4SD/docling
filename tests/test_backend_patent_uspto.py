@@ -14,7 +14,7 @@ from docling.backend.xml.uspto_backend import PatentUsptoDocumentBackend, XmlTab
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
-GENERATE: bool = True
+GENERATE: bool = False
 DATA_PATH: Path = Path("./tests/data/uspto/")
 GT_PATH: Path = Path("./tests/data/groundtruth/docling_v2/")
 
