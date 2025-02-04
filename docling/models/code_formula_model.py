@@ -62,7 +62,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
     """
 
     images_scale = 1.66  # = 120 dpi, aligned with training data resolution
-    expansion_factor = 0.1
+    expansion_factor = 0.05
 
     def __init__(
         self,
