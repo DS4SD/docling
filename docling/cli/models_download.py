@@ -143,7 +143,7 @@ def download(
             "\n",
             "Docling can now be configured for running offline using the local artifacts.\n\n",
             "Using the CLI:",
-            "`docling --artifacts-path={output_dir} FILE`",
+            f"`docling --artifacts-path={output_dir} FILE`",
             "\n",
             "Using Python: see the documentation at <https://ds4sd.github.io/docling/usage>.",
         )
