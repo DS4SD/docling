@@ -10,7 +10,7 @@
   "furniture": {
     "self_ref": "#/furniture",
     "children": [],
-    "content_layer": "body",
+    "content_layer": "furniture",
     "name": "_root_",
     "label": "unspecified"
   },

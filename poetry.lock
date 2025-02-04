@@ -887,7 +887,7 @@ chunking = ["semchunk (>=2.2.0,<3.0.0)", "transformers (>=4.34.0,<5.0.0)"]
 type = "git"
 url = "ssh://git@github.com/DS4SD/docling-core.git"
 reference = "cau/add-content-layer"
-resolved_reference = "1609660791cbf83e7ffa3e5e1877f08c0ae986d7"
+resolved_reference = "4c19ae7f7fb128a12173c50a9ab376114f70a689"
 
 [[package]]
 name = "docling-ibm-models"
