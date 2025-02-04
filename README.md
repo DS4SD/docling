@@ -86,6 +86,8 @@ and tools.
 
 ## Apify Actor
 
+<a href="https://apify.com/vancura/docling?fpr=docling"><img src="https://apify.com/ext/run-on-apify.png" alt="Run Docling Actor on Apify" width="176" height="39" /></a>
+
 You can run Docling in the cloud without installation using the [Docling Actor](https://apify.com/vancura/docling?fpr=docling) on Apify platform. Simply provide a document URL and get the processed result:
 
 ```bash
