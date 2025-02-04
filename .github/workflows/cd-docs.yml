@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - "main"
-      - "chore-docs-search-fix"  # FIX remove tmp condition
 
 jobs:
   build-deploy-docs:
