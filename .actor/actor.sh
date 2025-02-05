@@ -58,6 +58,14 @@ case "$OUTPUT_FORMAT" in md | json | html | text | doctags) ;;
     ;;
 esac
 
+# Validate URL is accessible.
+echo "Validating document URL..."
+if ! curl --output /dev/null --silent --head --fail "${DOCUMENT_URL}"; then
+    echo "Error: Unable to access document at URL: ${DOCUMENT_URL}"
+    echo "Please ensure the URL is valid and publicly accessible."
+    exit 1
+fi
+
 # --- Build Docling command ---
 
 DOC_CONVERT_CMD="docling --verbose \"${DOCUMENT_URL}\" --to \"${OUTPUT_FORMAT}\""
