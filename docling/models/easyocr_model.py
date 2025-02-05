@@ -31,6 +31,7 @@ class EasyOcrModel(BaseOcrModel):
     def __init__(
         self,
         enabled: bool,
+        artifacts_path: Optional[Path],
         options: EasyOcrOptions,
         accelerator_options: AcceleratorOptions,
     ):
@@ -68,12 +69,18 @@ class EasyOcrModel(BaseOcrModel):
                 )
                 use_gpu = self.options.use_gpu
 
+            download_enabled = self.options.download_enabled
+            model_storage_directory = self.options.model_storage_directory
+            if artifacts_path is not None and model_storage_directory is None:
+                download_enabled = False
+                model_storage_directory = str(artifacts_path / self._model_repo_folder)
+
             self.reader = easyocr.Reader(
                 lang_list=self.options.lang,
                 gpu=use_gpu,
-                model_storage_directory=self.options.model_storage_directory,
+                model_storage_directory=model_storage_directory,
                 recog_network=self.options.recog_network,
-                download_enabled=self.options.download_enabled,
+                download_enabled=download_enabled,
                 verbose=False,
             )
 

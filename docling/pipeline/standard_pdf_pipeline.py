@@ -64,7 +64,7 @@ class StandardPdfPipeline(PaginatedPipeline):
 
         self.glm_model = GlmModel(options=GlmOptions())
 
-        if (ocr_model := self.get_ocr_model()) is None:
+        if (ocr_model := self.get_ocr_model(artifacts_path=artifacts_path)) is None:
             raise RuntimeError(
                 f"The specified OCR kind is not supported: {pipeline_options.ocr_options.kind}."
             )
@@ -157,10 +157,13 @@ class StandardPdfPipeline(PaginatedPipeline):
 
         return local_dir
 
-    def get_ocr_model(self) -> Optional[BaseOcrModel]:
+    def get_ocr_model(
+        self, artifacts_path: Optional[Path] = None
+    ) -> Optional[BaseOcrModel]:
         if isinstance(self.pipeline_options.ocr_options, EasyOcrOptions):
             return EasyOcrModel(
                 enabled=self.pipeline_options.do_ocr,
+                artifacts_path=artifacts_path,
                 options=self.pipeline_options.ocr_options,
                 accelerator_options=self.pipeline_options.accelerator_options,
             )
