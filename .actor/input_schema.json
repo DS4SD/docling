@@ -8,7 +8,7 @@
       "title": "Document URL",
       "type": "string",
       "description": "URL of the document to process with Docling. Supported formats: images, 'pdf', 'docx', 'pptx', 'xlsx, 'html', 'md', 'xml_pubmed', 'asciidoc', 'xml_uspto'.",
-      "prefill": "https://vancura.dev/assets/actor-test/facial-hairstyles-and-filtering-facepiece-respirators.pdf",
+      "prefill": "https://arxiv.org/pdf/2408.09869.pdf",
       "editor": "textfield"
     },
     "outputFormat": {
