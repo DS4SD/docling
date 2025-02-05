@@ -49,7 +49,7 @@ This Actor wraps the [Docling project](https://ds4sd.github.io/docling/) to prov
 ### Using Apify API
 
 ```bash
-curl --request POST \
+$ curl --request POST \
   --url "https://api.apify.com/v2/acts/username~actorname/run" \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer YOUR_API_TOKEN' \
@@ -98,7 +98,7 @@ If the Actor logs warnings or debug info, these messages can be pushed to `DOCLI
 You can retrieve the results programmatically by calling:
 
 ```bash
-apify key-value-store get OUTPUT_RESULT
+$ apify key-value-stores get-value OUTPUT_RESULT
 ```
 
 ### Example Outputs
@@ -188,7 +188,7 @@ If you wish to develop or modify this Actor locally:
 4. Run the Actor locally using:
 
    ```bash
-   apify run
+   $ apify run
    ```
 
 ### Actor Structure

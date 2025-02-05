@@ -2,14 +2,14 @@
 
 # --- Setup Error Handling ---
 
-# Initialize log file first
+# Initialize log file first.
 LOG_FILE="/tmp/docling.log"
 touch "$LOG_FILE" || {
     echo "Fatal: Cannot create log file at $LOG_FILE"
     exit 1
 }
 
-# Ensure all output is logged
+# Ensure all output is logged.
 exec 1> >(tee -a "$LOG_FILE")
 exec 2> >(tee -a "$LOG_FILE" >&2)
 
@@ -67,7 +67,7 @@ if [ "$(echo "${INPUT}" | jq -r '.ocr')" = "true" ]; then
     DOC_CONVERT_CMD="${DOC_CONVERT_CMD} --ocr"
 fi
 
-# Print the exact command that will be executed
+# Print the exact command that will be executed.
 echo "Debug: Command string: $DOC_CONVERT_CMD"
 echo "Debug: Full command: /usr/bin/time -v bash -c \"$DOC_CONVERT_CMD\""
 
@@ -83,12 +83,11 @@ touch "$TIMESTAMP_FILE" || {
     exit 1
 }
 
-# Execute the command with timeout and memory monitoring
 echo "Starting document processing with memory monitoring..."
 /usr/bin/time -v bash -c "$DOC_CONVERT_CMD" 2>&1 | tee -a "$LOG_FILE"
 DOCLING_EXIT_CODE=${PIPESTATUS[0]}
 
-# Check if the command failed and handle the error
+# Check if the command failed and handle the error.
 if [ $DOCLING_EXIT_CODE -ne 0 ]; then
     echo "Error: Docling command failed with exit code $DOCLING_EXIT_CODE"
     echo "Memory usage information:"
