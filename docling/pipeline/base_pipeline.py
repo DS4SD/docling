@@ -79,7 +79,7 @@ class BasePipeline(ABC):
             for model in self.enrichment_pipe:
                 for element_batch in chunkify(
                     _prepare_elements(conv_res, model),
-                    settings.perf.elements_batch_size,
+                    model.elements_batch_size,
                 ):
                     for element in model(
                         doc=conv_res.document, element_batch=element_batch
