@@ -41,8 +41,6 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.datamodel.settings import settings
 from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
-from docling.models.code_formula_model import CodeFormulaModel
-from docling.models.document_picture_classifier import DocumentPictureClassifier
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
 warnings.filterwarnings(action="ignore", category=FutureWarning, module="easyocr")
