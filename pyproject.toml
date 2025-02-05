@@ -125,7 +125,7 @@ rapidocr = ["rapidocr-onnxruntime", "onnxruntime"]
 
 [tool.poetry.scripts]
 docling = "docling.cli.main:app"
-docling-models = "docling.cli.models_download:app"
+docling-tools = "docling.cli.tools:app"
 
 [build-system]
 requires = ["poetry-core"]

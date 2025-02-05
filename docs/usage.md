@@ -50,10 +50,10 @@ doc_converter = DocumentConverter(
 )
 ```
 
-To download all the artifacts needed to run offline, Docling provides the `docling-models download` utility.
+To download all the artifacts needed to run offline, Docling provides the `docling-tools models download` utility.
 
 ```sh
-$ docling-models download
+$ docling-tools models download
 Downloading layout model...
 Downloading tableformer model...
 Downloading picture classifier model...

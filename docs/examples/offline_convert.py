@@ -4,7 +4,7 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import EasyOcrOptions, PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
-# The location of the local artifacts, e.g. from the `docling-models download` command
+# The location of the local artifacts, e.g. from the `docling-tools models download` command
 artifacts_path = Path("PATH TO MODELS")  # <-- fill me
 pipeline_options = PdfPipelineOptions(artifacts_path=artifacts_path)
 pipeline_options.ocr_options = EasyOcrOptions(

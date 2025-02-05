@@ -24,7 +24,8 @@ err_console = Console(stderr=True)
 
 
 app = typer.Typer(
-    name="Docling model helper",
+    name="Docling models helper",
+    no_args_is_help=True,
     add_completion=False,
     pretty_exceptions_enable=False,
 )
@@ -149,9 +150,9 @@ def download(
         )
 
 
-@app.command(hidden=True)
-def other():
-    raise NotImplementedError()
+# @app.command(hidden=True)
+# def other():
+#     raise NotImplementedError()
 
 
 click_app = typer.main.get_command(app)
