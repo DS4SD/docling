@@ -35,14 +35,10 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import EasyOcrOptions, PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
+# dowload all models with `docling-tools models download`
 artifacts_path = "/local/path/to/artifacts"
 
 pipeline_options = PdfPipelineOptions(artifacts_path=artifacts_path)
-# if you are using EasyOcr
-pipeline_options.ocr_options = EasyOcrOptions(
-    download_enabled=False,
-    model_storage_directory=str(artifacts_path / "EasyOcr")
-)
 doc_converter = DocumentConverter(
     format_options={
         InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
@@ -61,6 +57,9 @@ Downloading code formula model...
 Downloading easyocr models...
 All models downloaded in the directory $HOME/.cache/docling/models.
 ```
+
+Alternatively, the download of all models can be triggered also with `docling.utils.models_downloader.download_all()`.
+
 
 #### Adjust pipeline features
 
