@@ -54,7 +54,7 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer YOUR_API_TOKEN' \
   --data '{
-    "documentUrl": "https://example.com/document.pdf",
+    "documentUrl": "https://arxiv.org/pdf/2408.09869.pdf",
     "outputFormat": "md",
     "ocr": true
   }'
@@ -63,8 +63,8 @@ curl --request POST \
 ### Using Apify CLI
 
 ```bash
-apify call username/actorname --input='{
-    "documentUrl": "https://example.com/file.pdf",
+$ apify call username/actorname --input='{
+    "documentUrl": "https://arxiv.org/pdf/2408.09869.pdf",
     "outputFormat": "md",
     "ocr": true
 }'
@@ -84,7 +84,7 @@ The Actor accepts a JSON schema matching the file `.actor/input_schema.json`. Be
 
 ```json
 {
-    "documentUrl": "https://some-website.com/document.pdf",
+    "documentUrl": "https://arxiv.org/pdf/2408.09869.pdf",
     "outputFormat": "md",
     "ocr": false
 }
