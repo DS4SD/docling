@@ -1,5 +1,6 @@
 import logging
 import sys
+import warnings
 from pathlib import Path
 from typing import Optional
 
@@ -125,6 +126,13 @@ class StandardPdfPipeline(PaginatedPipeline):
     def download_models_hf(
         local_dir: Optional[Path] = None, force: bool = False
     ) -> Path:
+        warnings.warn(
+            "The usage of StandardPdfPipeline.download_models_hf() is deprecated "
+            "use instead the utility `docling-tools models download`, or "
+            "the upstream method in docling.utils.",
+            DeprecationWarning,
+            stacklevel=3,
+        )
 
         if local_dir is None:
             local_dir = settings.cache_dir / "models"
@@ -133,17 +141,17 @@ class StandardPdfPipeline(PaginatedPipeline):
         local_dir.mkdir(exist_ok=True, parents=True)
 
         # Download model weights
-        LayoutModel.download_models_hf(
+        LayoutModel.download_models(
             local_dir=local_dir / LayoutModel._model_repo_folder, force=force
         )
-        TableStructureModel.download_models_hf(
+        TableStructureModel.download_models(
             local_dir=local_dir / TableStructureModel._model_repo_folder, force=force
         )
-        DocumentPictureClassifier.download_models_hf(
+        DocumentPictureClassifier.download_models(
             local_dir=local_dir / DocumentPictureClassifier._model_repo_folder,
             force=force,
         )
-        CodeFormulaModel.download_models_hf(
+        CodeFormulaModel.download_models(
             local_dir=local_dir / CodeFormulaModel._model_repo_folder, force=force
         )
 

@@ -51,7 +51,7 @@ class LayoutModel(BasePageModel):
         device = decide_device(accelerator_options.device)
 
         if artifacts_path is None:
-            artifacts_path = self.download_models_hf() / self._model_path
+            artifacts_path = self.download_models() / self._model_path
         else:
             # will become the default in the future
             if (artifacts_path / self._model_repo_folder).exists():
@@ -76,7 +76,7 @@ class LayoutModel(BasePageModel):
         )
 
     @staticmethod
-    def download_models_hf(
+    def download_models(
         local_dir: Optional[Path] = None,
         force: bool = False,
         progress: bool = False,

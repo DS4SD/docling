@@ -97,7 +97,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
             )
 
             if artifacts_path is None:
-                artifacts_path = self.download_models_hf()
+                artifacts_path = self.download_models()
             else:
                 artifacts_path = artifacts_path / self._model_repo_folder
 
@@ -108,7 +108,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
             )
 
     @staticmethod
-    def download_models_hf(
+    def download_models(
         local_dir: Optional[Path] = None,
         force: bool = False,
         progress: bool = False,

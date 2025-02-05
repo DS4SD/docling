@@ -93,7 +93,7 @@ def download(
     if layout:
         if not quite:
             typer.secho(f"Downloading layout model...", fg="blue")
-        LayoutModel.download_models_hf(
+        LayoutModel.download_models(
             local_dir=output_dir / LayoutModel._model_repo_folder,
             force=force,
             progress=show_progress,
@@ -102,7 +102,7 @@ def download(
     if tableformer:
         if not quite:
             typer.secho(f"Downloading tableformer model...", fg="blue")
-        TableStructureModel.download_models_hf(
+        TableStructureModel.download_models(
             local_dir=output_dir / TableStructureModel._model_repo_folder,
             force=force,
             progress=show_progress,
@@ -111,7 +111,7 @@ def download(
     if picture_classifier:
         if not quite:
             typer.secho(f"Downloading picture classifier model...", fg="blue")
-        DocumentPictureClassifier.download_models_hf(
+        DocumentPictureClassifier.download_models(
             local_dir=output_dir / DocumentPictureClassifier._model_repo_folder,
             force=force,
             progress=show_progress,
@@ -120,7 +120,7 @@ def download(
     if code_formula:
         if not quite:
             typer.secho(f"Downloading code formula model...", fg="blue")
-        CodeFormulaModel.download_models_hf(
+        CodeFormulaModel.download_models(
             local_dir=output_dir / CodeFormulaModel._model_repo_folder,
             force=force,
             progress=show_progress,

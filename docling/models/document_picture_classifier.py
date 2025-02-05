@@ -89,7 +89,7 @@ class DocumentPictureClassifier(BaseEnrichmentModel):
             )
 
             if artifacts_path is None:
-                artifacts_path = self.download_models_hf()
+                artifacts_path = self.download_models()
             else:
                 artifacts_path = artifacts_path / self._model_repo_folder
 
@@ -100,7 +100,7 @@ class DocumentPictureClassifier(BaseEnrichmentModel):
             )
 
     @staticmethod
-    def download_models_hf(
+    def download_models(
         local_dir: Optional[Path] = None, force: bool = False, progress: bool = False
     ) -> Path:
         from huggingface_hub import snapshot_download

@@ -41,7 +41,7 @@ class TableStructureModel(BasePageModel):
         if self.enabled:
 
             if artifacts_path is None:
-                artifacts_path = self.download_models_hf() / self._model_path
+                artifacts_path = self.download_models() / self._model_path
             else:
                 # will become the default in the future
                 if (artifacts_path / self._model_repo_folder).exists():
@@ -83,7 +83,7 @@ class TableStructureModel(BasePageModel):
             self.scale = 2.0  # Scale up table input images to 144 dpi
 
     @staticmethod
-    def download_models_hf(
+    def download_models(
         local_dir: Optional[Path] = None, force: bool = False, progress: bool = False
     ) -> Path:
         from huggingface_hub import snapshot_download
