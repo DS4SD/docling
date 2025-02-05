@@ -74,7 +74,7 @@ the docs.
 Check out Docling's [documentation](https://ds4sd.github.io/docling/), for details on
 installation, usage, concepts, recipes, extensions, and more.
 
-## Installation
+## Requirements file installation
 
 To install all packages inside, e.g. pip:
 
