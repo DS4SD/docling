@@ -68,7 +68,7 @@ fi
 
 # --- Build Docling command ---
 
-DOC_CONVERT_CMD="docling --verbose \"${DOCUMENT_URL}\" --to \"${OUTPUT_FORMAT}\""
+DOC_CONVERT_CMD="docling --verbose '${DOCUMENT_URL}' --to '${OUTPUT_FORMAT}'"
 
 # If OCR is enabled, add the OCR flag to the command.
 if [ "$(echo "${INPUT}" | jq -r '.ocr')" = "true" ]; then
@@ -92,7 +92,7 @@ touch "$TIMESTAMP_FILE" || {
 }
 
 echo "Starting document processing with memory monitoring..."
-/usr/bin/time -v bash -c "$DOC_CONVERT_CMD" 2>&1 | tee -a "$LOG_FILE"
+/usr/bin/time -v bash -c "${DOC_CONVERT_CMD}" 2>&1 | tee -a "$LOG_FILE"
 DOCLING_EXIT_CODE=${PIPESTATUS[0]}
 
 # Check if the command failed and handle the error.
