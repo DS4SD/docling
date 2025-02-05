@@ -290,12 +290,6 @@ def convert(
     device: Annotated[
         AcceleratorDevice, typer.Option(..., help="Accelerator device")
     ] = AcceleratorDevice.AUTO,
-    batch_size_code_formula: Annotated[
-        int, typer.Option(..., help="Batch size for the code and formula model")
-    ] = CodeFormulaModel.elements_batch_size,
-    batch_size_picture_classes: Annotated[
-        int, typer.Option(..., help="Batch size for the picture classifier")
-    ] = DocumentPictureClassifier.elements_batch_size,
 ):
     if verbose == 0:
         logging.basicConfig(level=logging.WARNING)

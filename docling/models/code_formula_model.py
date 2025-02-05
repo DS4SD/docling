@@ -235,8 +235,6 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
             labels.append(el.item.label)
             images.append(el.image)
 
-        print(f"BATCH: {len(images)=}")
-
         outputs = self.code_formula_model.predict(images, labels)
 
         for item, output in zip(elements, outputs):
