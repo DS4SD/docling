@@ -39,6 +39,7 @@ from docling.models.table_structure_model import TableStructureModel
 from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
 from docling.models.tesseract_ocr_model import TesseractOcrModel
 from docling.pipeline.base_pipeline import PaginatedPipeline
+from docling.utils.models_downloader import download_all
 from docling.utils.profiling import ProfilingScope, TimeRecorder
 
 _log = logging.getLogger(__name__)
@@ -129,33 +130,13 @@ class StandardPdfPipeline(PaginatedPipeline):
         warnings.warn(
             "The usage of StandardPdfPipeline.download_models_hf() is deprecated "
             "use instead the utility `docling-tools models download`, or "
-            "the upstream method in docling.utils.",
+            "the upstream method docling.utils.models_downloader.download_all()",
             DeprecationWarning,
             stacklevel=3,
         )
 
-        if local_dir is None:
-            local_dir = settings.cache_dir / "models"
-
-        # Make sure the folder exists
-        local_dir.mkdir(exist_ok=True, parents=True)
-
-        # Download model weights
-        LayoutModel.download_models(
-            local_dir=local_dir / LayoutModel._model_repo_folder, force=force
-        )
-        TableStructureModel.download_models(
-            local_dir=local_dir / TableStructureModel._model_repo_folder, force=force
-        )
-        DocumentPictureClassifier.download_models(
-            local_dir=local_dir / DocumentPictureClassifier._model_repo_folder,
-            force=force,
-        )
-        CodeFormulaModel.download_models(
-            local_dir=local_dir / CodeFormulaModel._model_repo_folder, force=force
-        )
-
-        return local_dir
+        output_dir = download_all(output_dir=local_dir, force=force, progress=False)
+        return output_dir
 
     def get_ocr_model(
         self, artifacts_path: Optional[Path] = None
