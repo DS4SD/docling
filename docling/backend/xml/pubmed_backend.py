@@ -132,7 +132,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
     def _parse_title(self) -> str:
         title: str = " ".join(
             [
-                t.replace("\n", "")
+                t.replace("\n", " ")
                 for t in self.tree.xpath(".//title-group/article-title")[0].itertext()
             ]
         )
@@ -186,7 +186,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
         texts = []
         for abstract_node in self.tree.xpath(".//abstract"):
             for text in abstract_node.itertext():
-                texts.append(text.replace("\n", ""))
+                texts.append(text.replace("\n", " "))
         abstract: str = "".join(texts)
         return abstract
 
@@ -201,7 +201,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
 
             # Text
             paragraph["text"] = "".join(
-                [t.replace("\n", "") for t in paragraph_node.itertext()]
+                [t.replace("\n", " ") for t in paragraph_node.itertext()]
             )
 
             # Header
@@ -210,7 +210,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
                 paragraph["headers"].append(
                     "".join(
                         [
-                            t.replace("\n", "")
+                            t.replace("\n", " ")
                             for t in paragraph_node.xpath(path)[0].itertext()
                         ]
                     )
@@ -245,7 +245,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
                 caption_node = None
             if caption_node != None:
                 table["caption"] = "".join(
-                    [t.replace("\n", "") for t in caption_node.itertext()]
+                    [t.replace("\n", " ") for t in caption_node.itertext()]
                 )
 
             # Label
@@ -271,7 +271,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
             if figure_node.xpath("label"):
                 figure_caption["label"] = "".join(
                     [
-                        t.replace("\n", "")
+                        t.replace("\n", " ")
                         for t in figure_node.xpath("label")[0].itertext()
                     ]
                 )
@@ -281,7 +281,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
                 caption = ""
                 for caption_node in figure_node.xpath("caption")[0].getchildren():
                     caption += (
-                        "".join([t.replace("\n", "") for t in caption_node.itertext()])
+                        "".join([t.replace("\n", " ") for t in caption_node.itertext()])
                         + "\n"
                     )
                 figure_caption["caption"] = caption
