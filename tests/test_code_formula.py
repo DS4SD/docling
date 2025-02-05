@@ -61,6 +61,6 @@ def test_code_and_formula_conversion():
     ]
     assert len(formula_blocks) == 1
 
-    gt = "x ^ { 2 } + 8 = 1 2"
+    gt = "a ^ { 2 } + 8 = 1 2"
     predicted = formula_blocks[0].text
     assert predicted == gt, f"mismatch in text {predicted=}, {gt=}"
