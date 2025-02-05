@@ -368,6 +368,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             # Start iterating from the root of the AST
             self.iterate_elements(parsed_ast, 0, doc, None)
             self.process_inline_text(None, doc)  # handle last hanging inline text
+            self.close_table(doc=doc)  # handle any last hanging table
 
             # if HTML blocks were detected, export to HTML and delegate to HTML backend
             if self._html_blocks > 0:
