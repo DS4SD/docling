@@ -21,13 +21,10 @@
         "$ref": "#/texts/0"
       },
       {
-        "$ref": "#/texts/50"
-      },
-      {
         "$ref": "#/texts/51"
       },
       {
-        "$ref": "#/texts/53"
+        "$ref": "#/texts/52"
       },
       {
         "$ref": "#/texts/54"
@@ -58,6 +55,9 @@
       },
       {
         "$ref": "#/texts/63"
+      },
+      {
+        "$ref": "#/texts/64"
       }
     ],
     "content_layer": "body",
@@ -68,12 +68,9 @@
     {
       "self_ref": "#/groups/0",
       "parent": {
-        "$ref": "#/texts/64"
+        "$ref": "#/texts/65"
       },
       "children": [
-        {
-          "$ref": "#/texts/65"
-        },
         {
           "$ref": "#/texts/66"
         },
@@ -238,6 +235,9 @@
         },
         {
           "$ref": "#/texts/120"
+        },
+        {
+          "$ref": "#/texts/121"
         }
       ],
       "content_layer": "body",
@@ -259,25 +259,28 @@
           "$ref": "#/texts/2"
         },
         {
-          "$ref": "#/texts/4"
+          "$ref": "#/texts/3"
         },
         {
-          "$ref": "#/texts/7"
+          "$ref": "#/texts/5"
         },
         {
-          "$ref": "#/texts/26"
+          "$ref": "#/texts/8"
         },
         {
-          "$ref": "#/texts/29"
+          "$ref": "#/texts/27"
         },
         {
-          "$ref": "#/texts/49"
+          "$ref": "#/texts/30"
         },
         {
-          "$ref": "#/texts/52"
+          "$ref": "#/texts/50"
         },
         {
-          "$ref": "#/texts/64"
+          "$ref": "#/texts/53"
+        },
+        {
+          "$ref": "#/texts/65"
         }
       ],
       "content_layer": "body",
@@ -295,17 +298,29 @@
       "content_layer": "body",
       "label": "paragraph",
       "prov": [],
-      "orig": "Wolf Gernot; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; de Iaco Alberto; 2: School of Life Sciences, \u00c9cole Polytechnique F\u00e9d\u00e9rale de Lausanne (EPFL): Lausanne: Switzerland; Sun Ming-An; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; Bruno Melania; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; Tinkham Matthew; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; Hoang Don; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; Mitra Apratim; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; Ralls Sherry; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; Trono Didier; 2: School of Life Sciences, \u00c9cole Polytechnique F\u00e9d\u00e9rale de Lausanne (EPFL): Lausanne: Switzerland; Macfarlan Todd S; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States",
-      "text": "Wolf Gernot; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; de Iaco Alberto; 2: School of Life Sciences, \u00c9cole Polytechnique F\u00e9d\u00e9rale de Lausanne (EPFL): Lausanne: Switzerland; Sun Ming-An; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; Bruno Melania; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; Tinkham Matthew; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; Hoang Don; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; Mitra Apratim; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; Ralls Sherry; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States; Trono Didier; 2: School of Life Sciences, \u00c9cole Polytechnique F\u00e9d\u00e9rale de Lausanne (EPFL): Lausanne: Switzerland; Macfarlan Todd S; 1: The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health: Bethesda: United States"
+      "orig": "Gernot Wolf, Alberto de Iaco, Ming-An Sun, Melania Bruno, Matthew Tinkham, Don Hoang, Apratim Mitra, Sherry Ralls, Didier Trono, Todd S Macfarlan",
+      "text": "Gernot Wolf, Alberto de Iaco, Ming-An Sun, Melania Bruno, Matthew Tinkham, Don Hoang, Apratim Mitra, Sherry Ralls, Didier Trono, Todd S Macfarlan"
     },
     {
       "self_ref": "#/texts/2",
       "parent": {
         "$ref": "#/texts/0"
       },
+      "children": [],
+      "content_layer": "body",
+      "label": "paragraph",
+      "prov": [],
+      "orig": "The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health, Bethesda, United States; School of Life Sciences, \u00c9cole Polytechnique F\u00e9d\u00e9rale de Lausanne (EPFL), Lausanne, Switzerland",
+      "text": "The Eunice Kennedy Shriver National Institute of Child Health and Human Development, The National Institutes of Health, Bethesda, United States; School of Life Sciences, \u00c9cole Polytechnique F\u00e9d\u00e9rale de Lausanne (EPFL), Lausanne, Switzerland"
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/texts/0"
+      },
       "children": [
         {
-          "$ref": "#/texts/3"
+          "$ref": "#/texts/4"
         }
       ],
       "content_layer": "body",
@@ -316,9 +331,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/3",
+      "self_ref": "#/texts/4",
       "parent": {
-        "$ref": "#/texts/2"
+        "$ref": "#/texts/3"
       },
       "children": [],
       "content_layer": "body",
@@ -328,16 +343,16 @@
       "text": "The Kr\u00fcppel-associated box zinc finger protein (KRAB-ZFP) family diversified in mammals. The majority of human KRAB-ZFPs bind transposable elements (TEs), however, since most TEs are inactive in humans it is unclear whether KRAB-ZFPs emerged to suppress TEs. We demonstrate that many recently emerged murine KRAB-ZFPs also bind to TEs, including the active ETn, IAP, and L1 families. Using a CRISPR/Cas9-based engineering approach, we genetically deleted five large clusters of KRAB-ZFPs and demonstrate that target TEs are de-repressed, unleashing TE-encoded enhancers. Homozygous knockout mice lacking one of two KRAB-ZFP gene clusters on chromosome 2 and chromosome 4 were nonetheless viable. In pedigrees of chromosome 4 cluster KRAB-ZFP mutants, we identified numerous novel ETn insertions with a modest increase in mutants. Our data strongly support the current model that recent waves of retrotransposon activity drove the expansion of KRAB-ZFP genes in mice and that many KRAB-ZFPs play a redundant role restricting TE activity."
     },
     {
-      "self_ref": "#/texts/4",
+      "self_ref": "#/texts/5",
       "parent": {
         "$ref": "#/texts/0"
       },
       "children": [
         {
-          "$ref": "#/texts/5"
+          "$ref": "#/texts/6"
         },
         {
-          "$ref": "#/texts/6"
+          "$ref": "#/texts/7"
         }
       ],
       "content_layer": "body",
@@ -348,9 +363,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/5",
+      "self_ref": "#/texts/6",
       "parent": {
-        "$ref": "#/texts/4"
+        "$ref": "#/texts/5"
       },
       "children": [],
       "content_layer": "body",
@@ -360,9 +375,9 @@
       "text": "Nearly half of the human and mouse genomes consist of transposable elements (TEs). TEs shape the evolution of species, serving as a source for genetic innovation (Chuong et al., 2016; Frank and Feschotte, 2017). However, TEs also potentially harm their hosts by insertional mutagenesis, gene deregulation and activation of innate immunity (Maksakova et al., 2006; Kano et al., 2007; Brodziak et al., 2012; Hancks and Kazazian, 2016). To protect themselves from TE activity, host organisms have developed a wide range of defense mechanisms targeting virtually all steps of the TE life cycle (Dewannieux and Heidmann, 2013). In tetrapods, KRAB zinc finger protein (KRAB-ZFP) genes have amplified and diversified, likely in response to TE colonization (Thomas and Schneider, 2011; Najafabadi et al., 2015; Wolf et al., 2015a; Wolf et al., 2015b; Imbeault et al., 2017). Conventional ZFPs bind DNA using tandem arrays of C2H2 zinc finger domains, each capable of specifically interacting with three nucleotides, whereas some zinc fingers can bind two or four nucleotides and include DNA backbone interactions depending on target DNA structure (Patel et al., 2018). This allows KRAB-ZFPs to flexibly bind to large stretches of DNA with high affinity. The KRAB domain binds the corepressor KAP1, which in turn recruits histone modifying enzymes including the NuRD histone deacetylase complex and the H3K9-specific methylase SETDB1 (Schultz et al., 2002; Sripathy et al., 2006), which induces persistent and heritable gene silencing (Groner et al., 2010). Deletion of KAP1 (Rowe et al., 2010) or SETDB1 (Matsui et al., 2010) in mouse embryonic stem (ES) cells induces TE reactivation and cell death, but only minor phenotypes in differentiated cells, suggesting KRAB-ZFPs are most important during early embryogenesis where they mark TEs for stable epigenetic silencing that persists through development. However, SETDB1-containing complexes are also required to repress TEs in primordial germ cells (Liu et al., 2014) and adult tissues (Ecco et al., 2016), indicating KRAB-ZFPs are active beyond early development."
     },
     {
-      "self_ref": "#/texts/6",
+      "self_ref": "#/texts/7",
       "parent": {
-        "$ref": "#/texts/4"
+        "$ref": "#/texts/5"
       },
       "children": [],
       "content_layer": "body",
@@ -372,22 +387,22 @@
       "text": "TEs, especially long terminal repeat (LTR) retrotransposons, also known as endogenous retroviruses (ERVs), can affect expression of neighboring genes through their promoter and enhancer functions (Macfarlan et al., 2012; Wang et al., 2014; Thompson et al., 2016). KAP1 deletion in mouse ES cells causes rapid gene deregulation (Rowe et al., 2013), indicating that KRAB-ZFPs may regulate gene expression by recruiting KAP1 to TEs. Indeed, Zfp809 knock-out (KO) in mice resulted in transcriptional activation of a handful of genes in various tissues adjacent to ZFP809-targeted VL30-Pro elements (Wolf et al., 2015b). It has therefore been speculated that KRAB-ZFPs bind to TE sequences to domesticate them for gene regulatory innovation (Ecco et al., 2017). This idea is supported by the observation that many human KRAB-ZFPs target TE groups that have lost their coding potential millions of years ago and that KRAB-ZFP target sequences within TEs are in some cases under purifying selection (Imbeault et al., 2017). However, there are also clear signs of an evolutionary arms-race between human TEs and KRAB-ZFPs (Jacobs et al., 2014), indicating that some KRAB-ZFPs may limit TE mobility for stretches of evolutionary time, prior to their ultimate loss from the genome or adaptation for other regulatory functions. Here we use the laboratory mouse, which has undergone a recent expansion of the KRAB-ZFP family, to determine the in vivo requirement of the majority of evolutionarily young KRAB-ZFP genes."
     },
     {
-      "self_ref": "#/texts/7",
+      "self_ref": "#/texts/8",
       "parent": {
         "$ref": "#/texts/0"
       },
       "children": [
         {
-          "$ref": "#/texts/8"
+          "$ref": "#/texts/9"
         },
         {
-          "$ref": "#/texts/14"
+          "$ref": "#/texts/15"
         },
         {
-          "$ref": "#/texts/16"
+          "$ref": "#/texts/17"
         },
         {
-          "$ref": "#/texts/19"
+          "$ref": "#/texts/20"
         }
       ],
       "content_layer": "body",
@@ -398,14 +413,11 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/8",
+      "self_ref": "#/texts/9",
       "parent": {
-        "$ref": "#/texts/7"
+        "$ref": "#/texts/8"
       },
       "children": [
-        {
-          "$ref": "#/texts/9"
-        },
         {
           "$ref": "#/texts/10"
         },
@@ -417,6 +429,9 @@
         },
         {
           "$ref": "#/texts/13"
+        },
+        {
+          "$ref": "#/texts/14"
         }
       ],
       "content_layer": "body",
@@ -427,9 +442,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/9",
+      "self_ref": "#/texts/10",
       "parent": {
-        "$ref": "#/texts/8"
+        "$ref": "#/texts/9"
       },
       "children": [],
       "content_layer": "body",
@@ -439,9 +454,9 @@
       "text": "We analyzed the RNA expression profiles of mouse KRAB-ZFPs across a wide range of tissues to identify candidates active in early embryos/ES cells. While the majority of KRAB-ZFPs are expressed at low levels and uniformly across tissues, a group of KRAB-ZFPs are highly and almost exclusively expressed in ES cells (Figure 1\u2014figure supplement 1A). About two thirds of these KRAB-ZFPs are physically linked in two clusters on chromosome 2 (Chr2-cl) and 4 (Chr4-cl) (Figure 1\u2014figure supplement 1B). These two clusters encode 40 and 21 KRAB-ZFP annotated genes, respectively, which, with one exception on Chr4-cl, do not have orthologues in rat or any other sequenced mammals (Supplementary file 1). The KRAB-ZFPs within these two genomic clusters also group together phylogenetically (Figure 1\u2014figure supplement 1C), indicating these gene clusters arose by a series of recent segmental gene duplications (Kauzlaric et al., 2017)."
     },
     {
-      "self_ref": "#/texts/10",
+      "self_ref": "#/texts/11",
       "parent": {
-        "$ref": "#/texts/8"
+        "$ref": "#/texts/9"
       },
       "children": [],
       "content_layer": "body",
@@ -451,9 +466,9 @@
       "text": "To determine the binding sites of the KRAB-ZFPs within these and other gene clusters, we expressed epitope-tagged KRAB-ZFPs using stably integrating vectors in mouse embryonic carcinoma (EC) or ES cells (Table 1, Supplementary file 1) and performed chromatin immunoprecipitation followed by deep sequencing (ChIP-seq). We then determined whether the identified binding sites are significantly enriched over annotated TEs and used the non-repetitive peak fraction to identify binding motifs. We discarded 7 of 68 ChIP-seq datasets because we could not obtain a binding motif or a target TE and manual inspection confirmed low signal to noise ratio. Of the remaining 61 KRAB-ZFPs, 51 significantly overlapped at least one TE subfamily (adjusted p-value<1e-5). Altogether, 81 LTR retrotransposon, 18 LINE, 10 SINE and one DNA transposon subfamilies were targeted by at least one of the 51 KRAB-ZFPs (Figure 1A and Supplementary file 1). Chr2-cl KRAB-ZFPs preferably bound IAPEz retrotransposons and L1-type LINEs, while Chr4-cl KRAB-ZFPs targeted various retrotransposons, including the closely related MMETn (hereafter referred to as ETn) and ETnERV (also known as MusD) elements (Figure 1A). ETn elements are non-autonomous LTR retrotransposons that require trans-complementation by the fully coding ETnERV elements that contain Gag, Pro and Pol genes (Ribet et al., 2004). These elements have accumulated to\u00a0~240 and~100 copies in the reference C57BL/6 genome, respectively, with\u00a0~550 solitary LTRs (Baust et al., 2003). Both ETn and ETnERVs are still active, generating polymorphisms and mutations in several mouse strains (Gagnier et al., 2019). The validity of our ChIP-seq screen was confirmed by the identification of binding motifs - which often resembled the computationally predicted motifs (Figure 1\u2014figure supplement 2A) - for the majority of screened KRAB-ZFPs (Supplementary file 1). Moreover, predicted and experimentally determined motifs were found in targeted TEs in most cases (Supplementary file 1), and reporter repression assays confirmed KRAB-ZFP induced silencing for all the tested sequences (Figure 1\u2014figure supplement 2B). Finally, we observed KAP1 and H3K9me3 enrichment at most of the targeted TEs in wild type ES cells, indicating that most of these KRAB-ZFPs are functionally active in the early embryo (Figure 1A)."
     },
     {
-      "self_ref": "#/texts/11",
+      "self_ref": "#/texts/12",
       "parent": {
-        "$ref": "#/texts/8"
+        "$ref": "#/texts/9"
       },
       "children": [],
       "content_layer": "body",
@@ -463,9 +478,9 @@
       "text": "We generally observed that KRAB-ZFPs present exclusively in mouse target TEs that are restricted to the mouse genome, indicating KRAB-ZFPs and their targets emerged together. For example, several mouse-specific KRAB-ZFPs in Chr2-cl and Chr4-cl target IAP and ETn elements which are only found in the mouse genome and are highly active. This is the strongest data to date supporting that recent KRAB-ZFP expansions in these young clusters is a response to recent TE activity. Likewise, ZFP599 and ZFP617, both conserved in Muroidea, bind to various ORR1-type LTRs which are present in the rat genome (Supplementary file 1). However, ZFP961, a KRAB-ZFP encoded on a small gene cluster on chromosome 8 that is conserved in Muroidea targets TEs that are only found in the mouse genome (e.g. ETn), a paradox we have previously observed with ZFP809, which also targets TEs that are evolutionarily younger than itself (Wolf et al., 2015b). The ZFP961 binding site is located at the 5\u2019 end of the internal region of ETn and ETnERV elements, a sequence that usually contains the primer binding site (PBS), which is required to prime retroviral reverse transcription. Indeed, the ZFP961 motif closely resembles the PBSLys1,2 (Figure 1\u2014figure supplement 3A), which had been previously identified as a KAP1-dependent target of retroviral repression (Yamauchi et al., 1995; Wolf et al., 2008). Repression of the PBSLys1,2 by ZFP961 was also confirmed in reporter assays (Figure 1\u2014figure supplement 2B), indicating that ZFP961 is likely responsible for this silencing effect."
     },
     {
-      "self_ref": "#/texts/12",
+      "self_ref": "#/texts/13",
       "parent": {
-        "$ref": "#/texts/8"
+        "$ref": "#/texts/9"
       },
       "children": [],
       "content_layer": "body",
@@ -475,9 +490,9 @@
       "text": "To further test the hypothesis that KRAB-ZFPs target sites necessary for retrotransposition, we utilized previously generated ETn and ETnERV retrotransposition reporters in which we mutated KRAB-ZFP binding sites (Ribet et al., 2004). Whereas the ETnERV reporters are sufficient for retrotransposition, the ETn reporter requires ETnERV genes supplied in trans. We tested and confirmed that the REX2/ZFP600 and GM13051 binding sites within these TEs are required for efficient retrotransposition (Figure 1\u2014figure supplement 3B). REX2 and ZFP600 both bind a target about 200 bp from the start of the internal region (Figure 1B), a region that often encodes the packaging signal. GM13051 binds a target coding for part of a highly structured mRNA export signal (Legiewicz et al., 2010) near the 3\u2019 end of the internal region of ETn (Figure 1\u2014figure supplement 3C). Both signals are characterized by stem-loop intramolecular base-pairing in which a single mutation can disrupt loop formation. This indicates that at least some KRAB-ZFPs evolved to bind functionally essential target sequences which cannot easily evade repression by mutation."
     },
     {
-      "self_ref": "#/texts/13",
+      "self_ref": "#/texts/14",
       "parent": {
-        "$ref": "#/texts/8"
+        "$ref": "#/texts/9"
       },
       "children": [],
       "content_layer": "body",
@@ -487,13 +502,13 @@
       "text": "Our KRAB-ZFP ChIP-seq dataset also provided unique insights into the emergence of new KRAB-ZFPs and binding patterns. The Chr4-cl KRAB-ZFPs REX2 and ZFP600 bind to the same target within ETn but with varying affinity (Figure 1C). Comparison of the amino acids responsible for DNA contact revealed a high similarity between REX2 and ZFP600, with the main differences at the most C-terminal zinc fingers. Additionally, we found that GM30910, another KRAB-ZFP encoded in the Chr4-cl, also shows a strong similarity to both KRAB-ZFPs yet targets entirely different groups of TEs (Figure 1C and Supplementary file 1). Together with previously shown data (Ecco et al., 2016), this example highlights how addition of a few new zinc fingers to an existing array can entirely shift the mode of DNA binding."
     },
     {
-      "self_ref": "#/texts/14",
+      "self_ref": "#/texts/15",
       "parent": {
-        "$ref": "#/texts/7"
+        "$ref": "#/texts/8"
       },
       "children": [
         {
-          "$ref": "#/texts/15"
+          "$ref": "#/texts/16"
         }
       ],
       "content_layer": "body",
@@ -504,9 +519,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/15",
+      "self_ref": "#/texts/16",
       "parent": {
-        "$ref": "#/texts/14"
+        "$ref": "#/texts/15"
       },
       "children": [],
       "content_layer": "body",
@@ -516,16 +531,16 @@
       "text": "The majority of KRAB-ZFP genes are harbored in large, highly repetitive clusters that have formed by successive complex segmental duplications (Kauzlaric et al., 2017), rendering them inaccessible to conventional gene targeting. We therefore developed a strategy to delete entire KRAB-ZFP gene clusters in ES cells (including the Chr2-cl and Chr4-cl as well as two clusters on chromosome 13 and a cluster on chromosome 10) using two CRISPR/Cas9 gRNAs targeting unique regions flanking each cluster, and short single-stranded repair oligos with homologies to both sides of the projected cut sites. Using this approach, we generated five cluster KO ES cell lines in at least two biological replicates and performed RNA sequencing (RNA-seq) to determine TE expression levels. Strikingly, four of the five cluster KO ES cells exhibited distinct TE reactivation phenotypes (Figure 2A). Chr2-cl KO resulted in reactivation of several L1 subfamilies as well as RLTR10 (up to more than 100-fold as compared to WT) and IAPEz ERVs. In contrast, the most strongly upregulated TEs in Chr4-cl KO cells were ETn/ETnERV (up to 10-fold as compared to WT), with several other ERV groups modestly reactivated. ETn/ETnERV elements were also upregulated in Chr13.2-cl KO ES cells while the only upregulated ERVs in Chr13.1-cl KO ES cells were MMERVK10C elements (Figure 2A). Most reactivated retrotransposons were targeted by at least one KRAB-ZFP that was encoded in the deleted cluster (Figure 2A and Supplementary file 1), indicating a direct effect of these KRAB-ZFPs on TE expression levels. Furthermore, we observed a loss of KAP1 binding and H3K9me3 at several TE subfamilies that are targeted by at least one KRAB-ZFP within the deleted Chr2-cl and Chr4-cl (Figure 2B, Figure 2\u2014figure supplement 1A), including L1, ETn and IAPEz elements. Using reduced representation bisulfite sequencing (RRBS-seq), we found that a subset of KRAB-ZFP bound TEs were partially hypomethylated in Chr4-cl KO ES cells, but only when grown in genome-wide hypomethylation-inducing conditions (Blaschke et al., 2013; Figure 2C and Supplementary file 2). These data are consistent with the hypothesis that KRAB-ZFPs/KAP1 are not required to establish DNA methylation, but under certain conditions they protect specific TEs and imprint control regions from genome-wide demethylation (Leung et al., 2014; Deniz et al., 2018)."
     },
     {
-      "self_ref": "#/texts/16",
+      "self_ref": "#/texts/17",
       "parent": {
-        "$ref": "#/texts/7"
+        "$ref": "#/texts/8"
       },
       "children": [
         {
-          "$ref": "#/texts/17"
+          "$ref": "#/texts/18"
         },
         {
-          "$ref": "#/texts/18"
+          "$ref": "#/texts/19"
         }
       ],
       "content_layer": "body",
@@ -536,9 +551,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/17",
+      "self_ref": "#/texts/18",
       "parent": {
-        "$ref": "#/texts/16"
+        "$ref": "#/texts/17"
       },
       "children": [],
       "content_layer": "body",
@@ -548,9 +563,9 @@
       "text": "We next used our RNA-seq datasets to determine the effect of KRAB-ZFP cluster deletions on gene expression. We identified 195 significantly upregulated and 130 downregulated genes in Chr4-cl KO ES cells, and 108 upregulated and 59 downregulated genes in Chr2-cl KO ES cells (excluding genes on the deleted cluster) (Figure 3A). To address whether gene deregulation in Chr2-cl and Chr4-cl KO ES cells is caused by nearby TE reactivation, we determined whether genes near certain TE subfamilies are more frequently deregulated than random genes. We found a strong correlation of gene upregulation and TE proximity for several TE subfamilies, of which many became transcriptionally activated themselves (Figure 3B). For example, nearly 10% of genes that are located within 100 kb (up- or downstream of the TSS) of an ETn element are upregulated in Chr4-cl KO ES cells, as compared to 0.8% of all genes. In Chr2-cl KO ES cells, upregulated genes were significantly enriched near various LINE groups but also IAPEz-int and RLTR10-int elements, indicating that TE-binding KRAB-ZFPs in these clusters limit the potential activating effects of TEs on nearby genes."
     },
     {
-      "self_ref": "#/texts/18",
+      "self_ref": "#/texts/19",
       "parent": {
-        "$ref": "#/texts/16"
+        "$ref": "#/texts/17"
       },
       "children": [],
       "content_layer": "body",
@@ -560,14 +575,11 @@
       "text": "While we generally observed that TE-associated gene reactivation is not caused by elongated or spliced transcription starting at the retrotransposons, we did observe that the strength of the effect of ETn elements on gene expression is stronger on genes in closer proximity. About 25% of genes located within 20 kb of an ETn element, but only 5% of genes located at a distance between 50 and 100 kb from the nearest ETn insertion, become upregulated in Chr4-cl KO ES cells. Importantly however, the correlation is still significant for genes that are located at distances between 50 and 100 kb from the nearest ETn insertion, indicating that ETn elements can act as long-range enhancers of gene expression in the absence of KRAB-ZFPs that target them. To confirm that Chr4-cl KRAB-ZFPs such as GM13051 block ETn-borne enhancers, we tested the ability of a putative ETn enhancer to activate transcription in a reporter assay. For this purpose, we cloned a 5 kb fragment spanning from the GM13051 binding site within the internal region of a truncated ETn insertion to the first exon of the Cd59a gene, which is strongly activated in Chr4-cl KO ES cells (Figure 2\u2014figure supplement 1B). We observed strong transcriptional activity of this fragment which was significantly higher in Chr4-cl KO ES cells. Surprisingly, this activity was reduced to background when the internal segment of the ETn element was not included in the fragment, suggesting the internal segment of the ETn element, but not its LTR, contains a Chr4-cl KRAB-ZFP sensitive enhancer. To further corroborate these findings, we genetically deleted an ETn element that is located about 60 kb from the TSS of Chst1, one of the top-upregulated genes in Chr4-cl KO ES cells (Figure 3C). RT-qPCR analysis revealed that the Chst1 upregulation phenotype in Chr4-cl KO ES cells diminishes when the ETn insertion is absent, providing direct evidence that a KRAB-ZFP controlled ETn-borne enhancer regulates Chst1 expression (Figure 3D). Furthermore, ChIP-seq confirmed a general increase of H3K4me3, H3K4me1 and H3K27ac marks at ETn elements in Chr4-cl KO ES cells (Figure 3E). Notably, enhancer marks were most pronounced around the GM13051 binding site near the 3\u2019 end of the internal region, confirming that the enhancer activity of ETn is located on the internal region and not on the LTR."
     },
     {
-      "self_ref": "#/texts/19",
+      "self_ref": "#/texts/20",
       "parent": {
-        "$ref": "#/texts/7"
+        "$ref": "#/texts/8"
       },
       "children": [
-        {
-          "$ref": "#/texts/20"
-        },
         {
           "$ref": "#/texts/21"
         },
@@ -582,6 +594,9 @@
         },
         {
           "$ref": "#/texts/25"
+        },
+        {
+          "$ref": "#/texts/26"
         }
       ],
       "content_layer": "body",
@@ -592,9 +607,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/20",
+      "self_ref": "#/texts/21",
       "parent": {
-        "$ref": "#/texts/19"
+        "$ref": "#/texts/20"
       },
       "children": [],
       "content_layer": "body",
@@ -604,9 +619,9 @@
       "text": "IAP, ETn/ETnERV and MuLV/RLTR4 retrotransposons are highly polymorphic in inbred mouse strains (Nell\u00e5ker et al., 2012), indicating that these elements are able to mobilize in the germ line. Since these retrotransposons are upregulated in Chr2-cl and Chr4-cl KO ES cells, we speculated that these KRAB-ZFP clusters evolved to minimize the risks of insertional mutagenesis by retrotransposition. To test this, we generated Chr2-cl and Chr4-cl KO mice via ES cell injection into blastocysts, and after germ line transmission we genotyped the offspring of heterozygous breeding pairs. While the offspring of Chr4-cl KO/WT parents were born close to Mendelian ratios in pure C57BL/6 and mixed C57BL/6 129Sv matings, one Chr4-cl KO/WT breeding pair gave birth to significantly fewer KO mice than expected (p-value=0.022) (Figure 4\u2014figure supplement 1A). Likewise, two out of four Chr2-cl KO breeding pairs on mixed C57BL/6 129Sv matings failed to give birth to a single KO offspring (p-value<0.01) while the two other mating pairs produced KO offspring at near Mendelian ratios (Figure 4\u2014figure supplement 1A). Altogether, these data indicate that KRAB-ZFP clusters are not absolutely essential in mice, but that genetic and/or epigenetic factors may contribute to reduced viability."
     },
     {
-      "self_ref": "#/texts/21",
+      "self_ref": "#/texts/22",
       "parent": {
-        "$ref": "#/texts/19"
+        "$ref": "#/texts/20"
       },
       "children": [],
       "content_layer": "body",
@@ -616,9 +631,9 @@
       "text": "We reasoned that retrotransposon activation could account for the reduced viability of Chr2-cl and Chr4-cl KO mice in some matings. However, since only rare matings produced non-viable KO embryos, we instead turned to the viable KO mice to assay for increased transposon activity. RNA-seq in blood, brain and testis revealed that, with a few exceptions, retrotransposons upregulated in Chr2 and Chr4 KRAB-ZFP cluster KO ES cells are not expressed at higher levels in adult tissues (Figure 4\u2014figure supplement 1B). Likewise, no strong transcriptional TE reactivation phenotype was observed in liver and kidney of Chr4-cl KO mice (data not shown) and ChIP-seq with antibodies against H3K4me1, H3K4me3 and H3K27ac in testis of Chr4-cl WT and KO mice revealed no increase of active histone marks at ETn elements or other TEs (data not shown). This indicates that Chr2-cl and Chr4-cl KRAB-ZFPs are primarily required for TE repression during early development. This is consistent with the high expression of these KRAB-ZFPs uniquely in ES cells (Figure 1\u2014figure supplement 1A). To determine whether retrotransposition occurs at a higher frequency in Chr4-cl KO mice during development, we screened for novel ETn (ETn/ETnERV) and MuLV (MuLV/RLTR4_MM) insertions in viable Chr4-cl KO mice. For this purpose, we developed a capture-sequencing approach to enrich for ETn/MuLV DNA and flanking sequences from genomic DNA using probes that hybridize with the 5\u2019 and 3\u2019 ends of ETn and MuLV LTRs prior to deep sequencing. We screened genomic DNA samples from a total of 76 mice, including 54 mice from ancestry-controlled Chr4-cl KO matings in various strain backgrounds, the two ES cell lines the Chr4-cl KO mice were generated from, and eight mice from a Chr2-cl KO mating which served as a control (since ETn and MuLVs are not activated in Chr2-cl KO ES cells) (Supplementary file 4). Using this approach, we were able to enrich reads mapping to ETn/MuLV LTRs about 2,000-fold compared to genome sequencing without capture. ETn/MuLV insertions were determined by counting uniquely mapped reads that were paired with reads mapping to ETn/MuLV elements (see materials and methods for details). To assess the efficiency of the capture approach, we determined what proportion of a set of 309 largely intact (two LTRs flanking an internal sequence) reference ETn elements could be identified using our sequencing data. 95% of these insertions were called with high confidence in the majority of our samples (data not shown), indicating that we are able to identify ETn insertions at a high recovery rate."
     },
     {
-      "self_ref": "#/texts/22",
+      "self_ref": "#/texts/23",
       "parent": {
-        "$ref": "#/texts/19"
+        "$ref": "#/texts/20"
       },
       "children": [],
       "content_layer": "body",
@@ -628,9 +643,9 @@
       "text": "Using this dataset, we first confirmed the polymorphic nature of both ETn and MuLV retrotransposons in laboratory mouse strains (Figure 4\u2014figure supplement 2A), highlighting the potential of these elements to retrotranspose. To identify novel insertions, we filtered out insertions that were supported by ETn/MuLV-paired reads in more than one animal. While none of the 54 ancestry-controlled mice showed a single novel MuLV insertion, we observed greatly varying numbers of up to 80 novel ETn insertions in our pedigree (Figure 4A)."
     },
     {
-      "self_ref": "#/texts/23",
+      "self_ref": "#/texts/24",
       "parent": {
-        "$ref": "#/texts/19"
+        "$ref": "#/texts/20"
       },
       "children": [],
       "content_layer": "body",
@@ -640,9 +655,9 @@
       "text": "To validate some of the novel ETn insertions, we designed specific PCR primers for five of the insertions and screened genomic DNA of the mice in which they were identified as well as their parents. For all tested insertions, we were able to amplify their flanking sequence and show that these insertions are absent in their parents (Figure 4\u2014figure supplement 3A). To confirm their identity, we amplified and sequenced three of the novel full-length ETn insertions. Two of these elements (Genbank accession: MH449667-68) resembled typical ETnII elements with identical 5\u2019 and 3\u2019 LTRs and target site duplications (TSD) of 4 or 6 bp, respectively. The third sequenced element (MH449669) represented a hybrid element that contains both ETnI and MusD (ETnERV) sequences. Similar insertions can be found in the B6 reference genome; however, the identified novel insertion has a 2.5 kb deletion of the 5\u2019 end of the internal region. Additionally, the 5\u2019 and 3\u2019 LTR of this element differ in one nucleotide near the start site and contain an unusually large 248 bp TSD (containing a SINE repeat) indicating that an improper integration process might have truncated this element."
     },
     {
-      "self_ref": "#/texts/24",
+      "self_ref": "#/texts/25",
       "parent": {
-        "$ref": "#/texts/19"
+        "$ref": "#/texts/20"
       },
       "children": [],
       "content_layer": "body",
@@ -652,9 +667,9 @@
       "text": "Besides novel ETn insertions that were only identified in one specific animal, we also observed three ETn insertions that could be detected in several siblings but not in their parents or any of the other screened mice. This strongly indicates that these retrotransposition events occurred in the germ line of the parents from which they were passed on to some of their offspring. One of these germ line insertions was evidently passed on from the offspring to the next generation (Figure 4A). As expected, the read numbers supporting these novel germ line insertions were comparable to the read numbers that were found in the flanking regions of annotated B6 ETn insertions (Figure 4\u2014figure supplement 3B). In contrast, virtually all novel insertions that were only found in one animal were supported by significantly fewer reads (Figure 4\u2014figure supplement 3B). This indicates that these elements resulted from retrotransposition events in the developing embryo and not in the zygote or parental germ cells. Indeed, we detected different sets of insertions in various tissues from the same animal (Figure 4\u2014figure supplement 3C). Even between tail samples that were collected from the same animal at different ages, only a fraction of the new insertions were present in both samples, while technical replicates from the same genomic DNA samples showed a nearly complete overlap in insertions (Figure 4\u2014figure supplement 3D)."
     },
     {
-      "self_ref": "#/texts/25",
+      "self_ref": "#/texts/26",
       "parent": {
-        "$ref": "#/texts/19"
+        "$ref": "#/texts/20"
       },
       "children": [],
       "content_layer": "body",
@@ -664,16 +679,16 @@
       "text": "Finally, we asked whether there were more novel ETn insertions in mice lacking the Chr4-cl relative to their wild type and heterozygous littermates in our pedigree. Interestingly, only one out of the eight Chr4-cl KO mice in a pure C57BL/6 strain background and none of the eight offspring from a Chr2-cl mating carried a single novel ETn insertion (Figure 4A). When crossing into a 129Sv background for a single generation before intercrossing heterozygous mice (F1), we observed 4 out of 8 Chr4-cl KO mice that contained at least one new ETn insertion, whereas none of 3 heterozygous mice contained any insertions. After crossing to the 129Sv background for a second generation (F2), we determined the number of novel ETn insertions in the offspring of one KO/WT x KO and two KO/WT x KO/WT matings, excluding all samples that were not derived from juvenile tail tissue. Only in the offspring of the KO/WT x KO mating, we observed a statistically significant higher average number of ETn insertions in KO vs. KO/WT animals (7.3 vs. 29.6, p=0.045, Figure 4B). Other than that, only a non-significant trend towards greater average numbers of ETn insertions in KO (11 vs. 27.8, p=0.192, Figure 4B) was apparent in one of the WT/KO x KO/WT matings whereas no difference in ETn insertion numbers between WT and KO mice could be observed in the second mating WT/KO x KO/WT (26 vs. 31, p=0.668, Figure 4B). When comparing all KO with all WT and WT/KO mice from these three matings, a trend towards more ETn insertions in KO remained but was not supported by strong significance (26 vs. 13, p=0.057, Figure 4B). Altogether, we observed a high variability in the number of new ETn insertions in both KO and WT but our data suggest that the Chr4-cl KRAB-ZFPs may have a modest effect on ETn retrotransposition rates in some mouse strains but other genetic and epigenetic effects clearly also play an important role."
     },
     {
-      "self_ref": "#/texts/26",
+      "self_ref": "#/texts/27",
       "parent": {
         "$ref": "#/texts/0"
       },
       "children": [
         {
-          "$ref": "#/texts/27"
+          "$ref": "#/texts/28"
         },
         {
-          "$ref": "#/texts/28"
+          "$ref": "#/texts/29"
         }
       ],
       "content_layer": "body",
@@ -684,9 +699,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/27",
+      "self_ref": "#/texts/28",
       "parent": {
-        "$ref": "#/texts/26"
+        "$ref": "#/texts/27"
       },
       "children": [],
       "content_layer": "body",
@@ -696,9 +711,9 @@
       "text": "C2H2 zinc finger proteins, about half of which contain a KRAB repressor domain, represent the largest DNA-binding protein family in mammals. Nevertheless, most of these factors have not been investigated using loss-of-function studies. The most comprehensive characterization of human KRAB-ZFPs revealed a strong preference to bind TEs (Imbeault et al., 2017;\u00a0Najafabadi et al., 2015) yet their function remains unknown. In humans, very few TEs are capable of retrotransposition yet many of them, often tens of million years old, are bound by KRAB-ZFPs. While this suggests that human KRAB-ZFPs mainly serve to control TE-borne enhancers and may have potentially transcription-independent functions, we were interested in the biological significance of KRAB-ZFPs in restricting potentially active TEs. The mouse is an ideal model for such studies since the mouse genome contains several active TE families, including IAP, ETn and L1 elements. We found that many of the young KRAB-ZFPs present in the genomic clusters of KRAB-ZFPs on chromosomes 2 and 4, which are highly expressed in a restricted pattern in ES cells, bound redundantly to these three active TE families. In several cases, KRAB-ZFPs bound to functionally constrained sequence elements we and others have demonstrated to be necessary for retrotransposition, including PBS and viral packaging signals. Targeting such sequences may help the host defense system keep pace with rapidly evolving mouse transposons. This provides strong evidence that many young KRAB-ZFPs are indeed expanding in response to TE activity. But do these young KRAB-ZFP genes limit the mobilization of TEs? Despite the large number of polymorphic ETn elements in mouse strains (Nell\u00e5ker et al., 2012) and several reports of phenotype-causing novel ETn germ line insertions, no new ETn insertions were reported in recent screens of C57BL/6 mouse genomes (Richardson et al., 2017; Gagnier et al., 2019), indicating that the overall rate of ETn germ line mobilization in inbred mice is rather low. We have demonstrated that Chr4-cl KRAB-ZFPs control ETn/ETnERV expression in ES cells, but this does not lead to widespread ETn mobility in viable C57BL/6 mice. In contrast, we found numerous novel, including several germ line, ETn insertions in both WT and Chr4-cl KO mice in a C57BL/6 129Sv mixed genetic background, with generally more insertions in KO mice and in mice with more 129Sv DNA. This is consistent with a report detecting ETn insertions in FVB.129 mice (Schauer et al., 2018). Notably, there was a large variation in the number of new insertions in these mice, possibly caused by hyperactive polymorphic ETn insertions that varied from individual to individual, epigenetic variation at ETn insertions between individuals and/or the general stochastic nature of ETn mobilization. Furthermore, recent reports have suggested that KRAB-ZFP gene content is distinct in different strains of laboratory mice (Lilue et al., 2018; Treger et al., 2019), and reduced KRAB-ZFP gene content could contribute to increased activity in individual mice. Although we have yet to find obvious phenotypes in the mice carrying new insertions, novel ETn germ line insertions have been shown to cause phenotypes from short tails (Lugani et al., 2013; Semba et al., 2013; Vlangos et al., 2013) to limb malformation (Kano et al., 2007) and severe morphogenetic defects including polypodia (Lehoczky et al., 2013) depending upon their insertion site."
     },
     {
-      "self_ref": "#/texts/28",
+      "self_ref": "#/texts/29",
       "parent": {
-        "$ref": "#/texts/26"
+        "$ref": "#/texts/27"
       },
       "children": [],
       "content_layer": "body",
@@ -708,37 +723,37 @@
       "text": "Despite a lack of widespread ETn activation in Chr4-cl KO mice, it still remains to be determined whether other TEs, like L1, IAP or other LTR retrotransposons are activated in any of the KRAB-ZFP cluster KO mice, which will require the development of additional capture-seq based assays. Notably, two of the heterozygous matings from Chr2-cl KO mice failed to produce viable knockout offspring, which could indicate a TE-reactivation phenotype. It may also be necessary to generate compound homozygous mutants of distinct KRAB-ZFP clusters to eliminate redundancy before TEs become unleashed. The KRAB-ZFP cluster knockouts produced here will be useful reagents to test such hypotheses. In sum, our data supports that a major driver of KRAB-ZFP gene expansion in mice is recent retrotransposon insertions, and that redundancy within the KRAB-ZFP gene family and with other TE restriction pathways provides protection against widespread TE mobility, explaining the non-essential function of the majority of KRAB-ZFP genes."
     },
     {
-      "self_ref": "#/texts/29",
+      "self_ref": "#/texts/30",
       "parent": {
         "$ref": "#/texts/0"
       },
       "children": [
         {
-          "$ref": "#/texts/30"
+          "$ref": "#/texts/31"
         },
         {
-          "$ref": "#/texts/32"
+          "$ref": "#/texts/33"
         },
         {
-          "$ref": "#/texts/34"
+          "$ref": "#/texts/35"
         },
         {
-          "$ref": "#/texts/36"
+          "$ref": "#/texts/37"
         },
         {
-          "$ref": "#/texts/39"
+          "$ref": "#/texts/40"
         },
         {
-          "$ref": "#/texts/41"
+          "$ref": "#/texts/42"
         },
         {
-          "$ref": "#/texts/43"
+          "$ref": "#/texts/44"
         },
         {
-          "$ref": "#/texts/45"
+          "$ref": "#/texts/46"
         },
         {
-          "$ref": "#/texts/47"
+          "$ref": "#/texts/48"
         }
       ],
       "content_layer": "body",
@@ -749,13 +764,13 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/30",
+      "self_ref": "#/texts/31",
       "parent": {
-        "$ref": "#/texts/29"
+        "$ref": "#/texts/30"
       },
       "children": [
         {
-          "$ref": "#/texts/31"
+          "$ref": "#/texts/32"
         }
       ],
       "content_layer": "body",
@@ -766,9 +781,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/31",
+      "self_ref": "#/texts/32",
       "parent": {
-        "$ref": "#/texts/30"
+        "$ref": "#/texts/31"
       },
       "children": [],
       "content_layer": "body",
@@ -778,13 +793,13 @@
       "text": "Mouse ES cells and F9 EC cells were cultivated as described previously (Wolf et al., 2015b) unless stated otherwise. Chr4-cl KO ES cells originate from B6;129\u2010 Gt(ROSA)26Sortm1(cre/ERT)Nat/J mice (Jackson lab), all other KRAB-ZFP cluster KO ES cell lines originate from JM8A3.N1 C57BL/6N-Atm1Brd ES cells (KOMP Repository). Chr2-cl KO and WT ES cells were initially grown in serum-containing media (Wolf et al., 2015b) but changed to 2i media (De Iaco et al., 2017) for several weeks before analysis. To generate Chr4-cl and Chr2-cl KO mice, the cluster deletions were repeated in B6 ES (KOMP repository) or R1 (Nagy lab) ES cells, respectively, and heterozygous clones were injected into B6 albino blastocysts. Chr2-cl KO mice were therefore kept on a mixed B6/Svx129/Sv-CP strain background while Chr4-cl KO mice were initially derived on a pure C57BL/6 background. For capture-seq screens, Chr4-cl KO mice were crossed with 129 \u00d7 1/SvJ mice (Jackson lab) to produce the founder mice for Chr4-cl KO and WT (B6/129 F1) offspring. Chr4-cl KO/WT (B6/129 F1) were also crossed with 129 \u00d7 1/SvJ mice to get Chr4-cl KO/WT (B6/129 F1) mice, which were intercrossed to give rise to the parents of Chr4-cl KO/KO and KO/WT (B6/129 F2) offspring."
     },
     {
-      "self_ref": "#/texts/32",
+      "self_ref": "#/texts/33",
       "parent": {
-        "$ref": "#/texts/29"
+        "$ref": "#/texts/30"
       },
       "children": [
         {
-          "$ref": "#/texts/33"
+          "$ref": "#/texts/34"
         }
       ],
       "content_layer": "body",
@@ -795,9 +810,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/33",
+      "self_ref": "#/texts/34",
       "parent": {
-        "$ref": "#/texts/32"
+        "$ref": "#/texts/33"
       },
       "children": [],
       "content_layer": "body",
@@ -807,13 +822,13 @@
       "text": "KRAB-ZFP ORFs were PCR-amplified from cDNA or synthesized with codon-optimization (Supplementary file 1), and stably expressed with 3XFLAG or 3XHA tags in F9 EC or ES cells using Sleeping beauty transposon-based (Wolf et al., 2015b) or lentiviral expression vectors (Imbeault et al., 2017; Supplementary file 1). Cells were selected with puromycin (1 \u00b5g/ml) and resistant clones were pooled and further expanded for ChIP-seq."
     },
     {
-      "self_ref": "#/texts/34",
+      "self_ref": "#/texts/35",
       "parent": {
-        "$ref": "#/texts/29"
+        "$ref": "#/texts/30"
       },
       "children": [
         {
-          "$ref": "#/texts/35"
+          "$ref": "#/texts/36"
         }
       ],
       "content_layer": "body",
@@ -824,9 +839,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/35",
+      "self_ref": "#/texts/36",
       "parent": {
-        "$ref": "#/texts/34"
+        "$ref": "#/texts/35"
       },
       "children": [],
       "content_layer": "body",
@@ -836,16 +851,16 @@
       "text": "All gRNAs were expressed from the pX330-U6-Chimeric_BB-CBh-hSpCas9 vector (RRID:Addgene_42230) and nucleofected into 106 ES cells using Amaxa nucleofection in the following amounts: 5 \u00b5g of each pX330-gRNA plasmid, 1 \u00b5g pPGK-puro and 500 pmoles single-stranded repair oligos (Supplementary file 3). One day after nucleofection, cells were kept under puromycin selection (1 \u00b5g/ml) for 24 hr. Individual KO and WT clones were picked 7\u20138 days after nucleofection and expanded for PCR genotyping (Supplementary file 3)."
     },
     {
-      "self_ref": "#/texts/36",
+      "self_ref": "#/texts/37",
       "parent": {
-        "$ref": "#/texts/29"
+        "$ref": "#/texts/30"
       },
       "children": [
         {
-          "$ref": "#/texts/37"
+          "$ref": "#/texts/38"
         },
         {
-          "$ref": "#/texts/38"
+          "$ref": "#/texts/39"
         }
       ],
       "content_layer": "body",
@@ -856,9 +871,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/37",
+      "self_ref": "#/texts/38",
       "parent": {
-        "$ref": "#/texts/36"
+        "$ref": "#/texts/37"
       },
       "children": [],
       "content_layer": "body",
@@ -868,9 +883,9 @@
       "text": "For ChIP-seq analysis of KRAB-ZFP expressing cells, 5\u201310 \u00d7 107 cells were crosslinked and immunoprecipitated with anti-FLAG (Sigma-Aldrich Cat# F1804, RRID:AB_262044) or anti-HA (Abcam Cat# ab9110, RRID:AB_307019 or Covance Cat# MMS-101P-200, RRID:AB_10064068) antibody using one of two previously described protocols (O'Geen et al., 2010; Imbeault et al., 2017) as indicated in Supplementary file 1. H3K9me3 distribution in Chr4-cl, Chr10-cl, Chr13.1-cl and Chr13.2-cl KO ES cells was determined by native ChIP-seq with anti-H3K9me3 serum (Active Motif Cat# 39161, RRID:AB_2532132) as described previously (Karimi et al., 2011). In Chr2-cl KO ES cells, H3K9me3 and KAP1 ChIP-seq was performed as previously described (Ecco et al., 2016). In Chr4-cl KO and WT ES cells KAP1 binding was determined by endogenous tagging of KAP1 with C-terminal GFP (Supplementary file 3), followed by FACS to enrich for GFP-positive cells and ChIP with anti-GFP (Thermo Fisher Scientific Cat# A-11122, RRID:AB_221569) using a previously described protocol (O'Geen et al., 2010). For ChIP-seq analysis of active histone marks, cross-linked chromatin from ES cells or testis (from two-week old mice) was immunoprecipitated with antibodies against H3K4me3 (Abcam Cat# ab8580, RRID:AB_306649), H3K4me1 (Abcam Cat# ab8895, RRID:AB_306847) and H3K27ac (Abcam Cat# ab4729, RRID:AB_2118291) following the protocol developed by O'Geen et al., 2010 or Khil et al., 2012 respectively."
     },
     {
-      "self_ref": "#/texts/38",
+      "self_ref": "#/texts/39",
       "parent": {
-        "$ref": "#/texts/36"
+        "$ref": "#/texts/37"
       },
       "children": [],
       "content_layer": "body",
@@ -880,13 +895,13 @@
       "text": "ChIP-seq libraries were constructed and sequenced as indicated in Supplementary file 4. Reads were mapped to the mm9 genome using Bowtie (RRID:SCR_005476; settings: --best) or Bowtie2 (Langmead and Salzberg, 2012) as indicated in Supplementary file 4. Under these settings, reads that map to multiple genomic regions are assigned to the top-scored match and, if a set of equally good choices is encountered, a pseudo-random number is used to choose one location. Peaks were called using MACS14 (RRID:SCR_013291) under high stringency settings (p<1e-10, peak enrichment\u00a0>20) (Zhang et al., 2008). Peaks were called both over the Input control and a FLAG or HA control ChIP (unless otherwise stated in Supplementary file 4) and only peaks that were called in both settings were kept for further analysis. In cases when the stringency settings did not result in at least 50 peaks, the settings were changed to medium (p<1e-10, peak enrichment\u00a0>10) or low (p<1e-5, peak enrichment\u00a0>10) stringency (Supplementary file 4). For further analysis, all peaks were scaled to 200 bp regions centered around the peak summits. The overlap of the scaled peaks to each repeat element in UCSC Genome Browser (RRID:SCR_005780) were calculated by using the bedfisher function (settings: -f 0.25) from BEDTools (RRID:SCR_006646). The right-tailed p-values between pair-wise comparison of each ChIP-seq peak and repeat element were extracted, and then adjusted using the Benjamini-Hochberg approach implemented in the R function p.adjust(). Binding motifs were determined using only nonrepetitive (<10% repeat content) peaks with MEME (Bailey et al., 2009). MEME motifs were compared with in silico predicted motifs (Najafabadi et al., 2015) using Tomtom (Bailey et al., 2009) and considered as significantly overlapping with a False Discovery Rate (FDR) below 0.1. To find MEME and predicted motifs in repetitive peaks, we used FIMO (Bailey et al., 2009). Differential H3K9me3 and KAP1 distribution in WT and Chr2-cl or Chr4-cl KO ES cells at TEs was determined by counting ChIP-seq reads overlapping annotated insertions of each TE group using BEDTools (MultiCovBed). Additionally, ChIP-seq reads were counted at the TE fraction that was bound by Chr2-cl or Chr4-cl KRAB-ZFPs (overlapping with 200 bp peaks). Count tables were concatenated and analyzed using DESeq2 (Love et al., 2014). The previously published ChIP-seq datasets for KAP1 (Castro-Diaz et al., 2014) and H3K9me3 (Dan et al., 2014) were re-mapped using Bowtie (--best)."
     },
     {
-      "self_ref": "#/texts/39",
+      "self_ref": "#/texts/40",
       "parent": {
-        "$ref": "#/texts/29"
+        "$ref": "#/texts/30"
       },
       "children": [
         {
-          "$ref": "#/texts/40"
+          "$ref": "#/texts/41"
         }
       ],
       "content_layer": "body",
@@ -897,9 +912,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/40",
+      "self_ref": "#/texts/41",
       "parent": {
-        "$ref": "#/texts/39"
+        "$ref": "#/texts/40"
       },
       "children": [],
       "content_layer": "body",
@@ -909,13 +924,13 @@
       "text": "For KRAB-ZFP repression assays, double-stranded DNA oligos containing KRAB-ZFP target sequences (Supplementary file 3) were cloned upstream of the SV40 promoter of the pGL3-Promoter vector (Promega) between the restriction sites for NheI and XhoI. 33 ng of reporter vectors were co-transfected (Lipofectamine 2000, Thermofisher) with 33 ng pRL-SV40 (Promega) for normalization and 33 ng of transient KRAB-ZFP expression vectors (in pcDNA3.1) or empty pcDNA3.1 into 293 T cells seeded one day earlier in 96-well plates. Cells were lysed 48 hr after transfection and luciferase/Renilla luciferase activity was measured using the Dual-Luciferase Reporter Assay System (Promega). To measure the transcriptional activity of the MMETn element upstream of the Cd59a gene, fragments of varying sizes (Supplementary file 3) were cloned into the promoter-less pGL3-basic vector (Promega) using NheI and NcoI sites. 70 ng of reporter vectors were cotransfected with 30 ng pRL-SV40 into feeder-depleted Chr4-cl WT and KO ES cells, seeded into a gelatinized 96-well plate 2 hr before transfection. Luciferase activity was measured 48 hr after transfection as described above."
     },
     {
-      "self_ref": "#/texts/41",
+      "self_ref": "#/texts/42",
       "parent": {
-        "$ref": "#/texts/29"
+        "$ref": "#/texts/30"
       },
       "children": [
         {
-          "$ref": "#/texts/42"
+          "$ref": "#/texts/43"
         }
       ],
       "content_layer": "body",
@@ -926,9 +941,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/42",
+      "self_ref": "#/texts/43",
       "parent": {
-        "$ref": "#/texts/41"
+        "$ref": "#/texts/42"
       },
       "children": [],
       "content_layer": "body",
@@ -938,13 +953,13 @@
       "text": "Whole RNA was purified using RNeasy columns (Qiagen) with on column DNase treatment or the High Pure RNA Isolation Kit (Roche) (Supplementary file 4). Tissues were first lysed in TRIzol reagent (ThermoFisher) and RNA was purified after the isopropanol precipitation step using RNeasy columns (Qiagen) with on column DNase treatment. Libraries were generated using the SureSelect Strand-Specific RNA Library Prep kit (Agilent) or Illumina\u2019s TruSeq RNA Library Prep Kit (with polyA selection) and sequenced as 50 or 100 bp paired-end reads on an Illumina HiSeq2500 (RRID:SCR_016383) or HiSeq3000 (RRID:SCR_016386) machine (Supplementary file 4). RNA-seq reads were mapped to the mouse genome (mm9) using Tophat (RRID:SCR_013035; settings: --I 200000 g 1) unless otherwise stated. These settings allow each mappable read to be reported once, in case the read maps to multiple locations equally well, one match is randomly chosen. For differential transposon expression, mapped reads that overlap with TEs annotated in Repeatmasker (RRID:SCR_012954) were counted using BEDTools MultiCovBed (setting: -split). Reads mapping to multiple fragments that belong to the same TE insertion (as indicated by the repeat ID) were summed up. Only transposons with a total of at least 20 (for two biological replicates) or 30 (for three biological replicates) mapped reads across WT and KO samples were considered for differential expression analysis. Transposons within the deleted KRAB-ZFP cluster were excluded from the analysis. Read count tables were used for differential expression analysis with DESeq2 (RRID:SCR_015687). For differential gene expression analysis, reads overlapping with gene exons were counted using HTSeq-count and analyzed using DESeq2. To test if KRAB-ZFP peaks are significantly enriched near up- or down-regulated genes, a binomial test was performed. Briefly, the proportion of the peaks that are located within a certain distance up- or downstream to the TSS of genes was determined using the windowBed function of BED tools. The probability p in the binomial distribution was estimated as the fraction of all genes overlapped with KRAB-ZFP peaks. Then, given n which is the number of specific groups of genes, and x which is the number of this group of genes overlapped with peaks, the R function binom.test() was used to estimate the p-value based on right-tailed Binomial test. Finally, the adjusted p-values were determined separately for LTR and LINE retrotransposon groups using the Benjamini-Hochberg approach implemented in the R function p.adjust()."
     },
     {
-      "self_ref": "#/texts/43",
+      "self_ref": "#/texts/44",
       "parent": {
-        "$ref": "#/texts/29"
+        "$ref": "#/texts/30"
       },
       "children": [
         {
-          "$ref": "#/texts/44"
+          "$ref": "#/texts/45"
         }
       ],
       "content_layer": "body",
@@ -955,9 +970,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/44",
+      "self_ref": "#/texts/45",
       "parent": {
-        "$ref": "#/texts/43"
+        "$ref": "#/texts/44"
       },
       "children": [],
       "content_layer": "body",
@@ -967,13 +982,13 @@
       "text": "For RRBS-seq analysis, Chr4-cl WT and KO ES cells were grown in either standard ES cell media containing FCS or for one week in 2i media containing vitamin C as described previously (Blaschke et al., 2013). Genomic DNA was purified from WT and Chr4-cl KO ES cells using the Quick-gDNA purification kit (Zymo Research) and bisulfite-converted with the NEXTflex Bisulfite-Seq Kit (Bio Scientific) using Msp1 digestion to fragment DNA. Libraries were sequenced as 50 bp paired-end reads on an Illumina HiSeq. The reads were processed using Trim Galore (--illumina --paired \u2013rrbs) to trim poor quality bases and adaptors. Additionally, the first 5 nt of R2 and the last 3 nt of R1 and R2 were trimmed. Reads were then mapped to the reference genome (mm9) using Bismark (Krueger and Andrews, 2011) to extract methylation calling results. The CpG methylation pattern for each covered CpG dyads (two complementary CG dinucleotides) was calculated using a custom script (Source code 1: get_CpG_ML.pl). For comparison of CpG methylation between WT and Chr4-cl KO ES cells (in serum or 2i + Vitamin C conditions) only CpG sites with at least 10-fold coverage in each sample were considered for analysis."
     },
     {
-      "self_ref": "#/texts/45",
+      "self_ref": "#/texts/46",
       "parent": {
-        "$ref": "#/texts/29"
+        "$ref": "#/texts/30"
       },
       "children": [
         {
-          "$ref": "#/texts/46"
+          "$ref": "#/texts/47"
         }
       ],
       "content_layer": "body",
@@ -984,9 +999,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/46",
+      "self_ref": "#/texts/47",
       "parent": {
-        "$ref": "#/texts/45"
+        "$ref": "#/texts/46"
       },
       "children": [],
       "content_layer": "body",
@@ -996,13 +1011,13 @@
       "text": "The retrotransposition vectors pCMV-MusD2, pCMV-MusD2-neoTNF and pCMV-ETnI1-neoTNF (Ribet et al., 2004) were a kind gift from Dixie Mager. To partially delete the Gm13051 binding site within pCMV-MusD2-neoTNF, the vector was cut with KpnI and re-ligated using a repair oligo, leaving a 24 bp deletion within the Gm13051 binding site. The Rex2 binding site in pCMV-ETnI1-neoTNF was deleted by cutting the vector with EcoRI and XbaI followed by re-ligation using two overlapping PCR products, leaving a 45 bp deletion while maintaining the rest of the vector unchanged (see Supplementary file 3 for primer sequences). For MusD retrotransposition assays, 5 \u00d7 104 HeLa cells (ATCC CCL-2) were transfected in a 24-well dish with 100 ng pCMV-MusD2-neoTNF or pCMV-MusD2-neoTNF (\u0394Gm13051-m) using Lipofectamine 2000. For ETn retrotransposition assays, 50 ng of pCMV-ETnI1-neoTNF or pCMV-ETnI1-neoTNF (\u0394Rex2) vectors were cotransfected with 50 ng pCMV-MusD2 to provide gag and pol proteins in trans. G418 (0.6 mg/ml) was added five days after transfection and cells were grown under selection until colonies were readily visible by eye. G418-resistant colonies were stained with Amido Black (Sigma)."
     },
     {
-      "self_ref": "#/texts/47",
+      "self_ref": "#/texts/48",
       "parent": {
-        "$ref": "#/texts/29"
+        "$ref": "#/texts/30"
       },
       "children": [
         {
-          "$ref": "#/texts/48"
+          "$ref": "#/texts/49"
         }
       ],
       "content_layer": "body",
@@ -1013,9 +1028,9 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/48",
+      "self_ref": "#/texts/49",
       "parent": {
-        "$ref": "#/texts/47"
+        "$ref": "#/texts/48"
       },
       "children": [],
       "content_layer": "body",
@@ -1025,7 +1040,7 @@
       "text": "To identify novel retrotransposon insertions, genomic DNA from various tissues (Supplementary file 4) was purified and used for library construction with target enrichment using the SureSelectQXT Target Enrichment kit (Agilent). Custom RNA capture probes were designed to hybridize with the 120 bp 5\u2019 ends of the 5\u2019 LTRs and the 120 bp 3\u2019 ends of the 3\u2019 LTR of about 600 intact (internal region flanked by two LTRs) MMETn/RLTRETN retrotransposons or of 140 RLTR4_MM/RLTR4 retrotransposons that were upregulated in Chr4-cl KO ES cells (Figure 4\u2014source data 2). Enriched libraries were sequenced on an Illumina HiSeq as paired-end 50 bp reads. R1 and R2 reads were mapped to the mm9 genome separately, using settings that only allow non-duplicated, uniquely mappable reads (Bowtie -m 1 --best --strata; samtools rmdup -s) and under settings that allow multimapping and duplicated reads (Bowtie --best). Of the latter, only reads that overlap (min. 50% of read) with RLTRETN, MMETn-int, ETnERV-int, ETnERV2-int or ETnERV3-int repeats (ETn) or RLTR4, RLTR4_MM-int or MuLV-int repeats (RLTR4) were kept. Only uniquely mappable reads whose paired reads were overlapping with the repeats mentioned above were used for further analysis. All ETn- and RLTR4-paired reads were then clustered (as bed files) using BEDTools (bedtools merge -i -n -d 1000) to receive a list of all potential annotated and non-annotated new ETn or RLTR4 insertion sites and all overlapping ETn- or RLTR4-paired reads were counted for each sample at each locus. Finally, all regions that were located within 1 kb of an annotated RLTRETN, MMETn-int, ETnERV-int, ETnERV2-int or ETnERV3-int repeat as well as regions overlapping with previously identified polymorphic ETn elements (Nell\u00e5ker et al., 2012) were removed. Genomic loci with at least 10 reads per million unique ETn- or RLTR4-paired reads were considered as insertion sites. To qualify for a de-novo insertion, we allowed no called insertions in any of the other screened mice at the locus and not a single read at the locus in the ancestors of the mouse. Insertions at the same locus in at least two siblings from the same offspring were considered as germ line insertions, if the insertion was absent in the parents and mice who were not direct descendants from these siblings. Full-length sequencing of new ETn insertions was done by Sanger sequencing of short PCR products in combination with Illumina sequencing of a large PCR product (Supplementary file 3), followed by de-novo assembly using the Unicycler software."
     },
     {
-      "self_ref": "#/texts/49",
+      "self_ref": "#/texts/50",
       "parent": {
         "$ref": "#/texts/0"
       },
@@ -1045,7 +1060,7 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/50",
+      "self_ref": "#/texts/51",
       "parent": {
         "$ref": "#/body"
       },
@@ -1057,7 +1072,7 @@
       "text": "Table 1.: * Number of protein-coding KRAB-ZFP genes identified in a previously published screen (Imbeault et al., 2017) and the ChIP-seq data column indicates the number of KRAB-ZFPs for which ChIP-seq was performed in this study."
     },
     {
-      "self_ref": "#/texts/51",
+      "self_ref": "#/texts/52",
       "parent": {
         "$ref": "#/body"
       },
@@ -1069,7 +1084,7 @@
       "text": "Key resources table: "
     },
     {
-      "self_ref": "#/texts/52",
+      "self_ref": "#/texts/53",
       "parent": {
         "$ref": "#/texts/0"
       },
@@ -1116,7 +1131,7 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/53",
+      "self_ref": "#/texts/54",
       "parent": {
         "$ref": "#/body"
       },
@@ -1128,7 +1143,7 @@
       "text": "Figure 1.: Genome-wide binding patterns of mouse KRAB-ZFPs.\n(A) Probability heatmap of KRAB-ZFP binding to TEs. Blue color intensity (main field) corresponds to -log10 (adjusted p-value) enrichment of ChIP-seq peak overlap with TE groups (Fisher\u2019s exact test). The green/red color intensity (top panel) represents mean KAP1 (GEO accession: GSM1406445) and H3K9me3 (GEO accession: GSM1327148) enrichment (respectively) at peaks overlapping significantly targeted TEs (adjusted p-value<1e-5) in WT ES cells. (B) Summarized ChIP-seq signal for indicated KRAB-ZFPs and previously published KAP1 and H3K9me3 in WT ES cells across 127 intact ETn elements. (C) Heatmaps of KRAB-ZFP ChIP-seq signal at ChIP-seq peaks. For better comparison, peaks for all three KRAB-ZFPs were called with the same parameters (p<1e-10, peak enrichment\u00a0>20). The top panel shows a schematic of the arrangement of the contact amino acid composition of each zinc finger. Zinc fingers are grouped and colored according to similarity, with amino acid differences relative to the five consensus fingers highlighted in white.\nFigure 1\u2014source data 1.KRAB-ZFP expression in 40 mouse tissues and cell lines (ENCODE).Mean values of replicates are shown as log2 transcripts per million.\nFigure 1\u2014source data 2.Probability heatmap of KRAB-ZFP binding to TEs.Values corresponds to -log10 (adjusted p-value) enrichment of ChIP-seq peak overlap with TE groups (Fisher\u2019s exact test)."
     },
     {
-      "self_ref": "#/texts/54",
+      "self_ref": "#/texts/55",
       "parent": {
         "$ref": "#/body"
       },
@@ -1140,7 +1155,7 @@
       "text": "Figure 1\u2014figure supplement 1.: ES cell-specific expression of KRAB-ZFP gene clusters.\n(A) Heatmap showing expression patterns of mouse KRAB-ZFPs in 40 mouse tissues and cell lines (ENCODE). Heatmap colors indicate gene expression levels in log2 transcripts per million (TPM). The asterisk indicates a group of 30 KRAB-ZFPs that are exclusively expressed in ES cells. (B) Physical location of the genes encoding for the 30 KRAB-ZFPs that are exclusively expressed in ES cells. (C) Phylogenetic (Maximum likelihood) tree of the KRAB domains of mouse KRAB-ZFPs. KRAB-ZFPs encoded on the gene clusters on chromosome 2 and 4 are highlighted. The scale bar at the bottom indicates amino acid substitutions per site."
     },
     {
-      "self_ref": "#/texts/55",
+      "self_ref": "#/texts/56",
       "parent": {
         "$ref": "#/body"
       },
@@ -1152,7 +1167,7 @@
       "text": "Figure 1\u2014figure supplement 2.: KRAB-ZFP binding motifs and their repression activity.\n(A) Comparison of computationally predicted (bottom) and experimentally determined (top) KRAB-ZFP binding motifs. Only significant pairs are shown (FDR\u00a0<\u00a00.1). (B) Luciferase reporter assays to confirm KRAB-ZFP repression of the identified target sites. Bars show the luciferase activity (normalized to Renilla luciferase) of reporter plasmids containing the indicated target sites cloned upstream of the SV40 promoter. Reporter plasmids were co-transfected into 293 T cells with a Renilla luciferase plasmid for normalization and plasmids expressing the targeting KRAB-ZFP. Normalized mean luciferase activity (from three replicates) is shown relative to luciferase activity of the reporter plasmid co-transfected with an empty pcDNA3.1 vector."
     },
     {
-      "self_ref": "#/texts/56",
+      "self_ref": "#/texts/57",
       "parent": {
         "$ref": "#/body"
       },
@@ -1164,7 +1179,7 @@
       "text": "Figure 1\u2014figure supplement 3.: KRAB-ZFP binding to ETn retrotransposons.\n(A) Comparison of the PBSLys1,2 sequence with Zfp961 binding motifs in nonrepetitive peaks (Nonrep) and peaks at ETn elements. (B) Retrotransposition assays of original (ETnI1-neoTNF and MusD2-neoTNF Ribet et al., 2004) and modified reporter vectors where the Rex2 or Gm13051 binding motifs where removed. Schematic of reporter vectors are displayed at the top. HeLa cells were transfected as described in the Materials and Methods section and neo-resistant colonies, indicating retrotransposition events, were selected and stained. (C) Stem-loop structure of the ETn RNA export signal, the Gm13051 motif on the corresponding DNA is marked with red circles, the part of the motif that was deleted is indicated with grey crosses (adapted from Legiewicz et al., 2010)."
     },
     {
-      "self_ref": "#/texts/57",
+      "self_ref": "#/texts/58",
       "parent": {
         "$ref": "#/body"
       },
@@ -1176,7 +1191,7 @@
       "text": "Figure 2.: Retrotransposon reactivation in KRAB-ZFP cluster KO ES cells.\n(A) RNA-seq analysis of TE expression in five KRAB-ZFP cluster KO ES cells. Green and grey squares on top of the panel represent KRAB-ZFPs with or without ChIP-seq data, respectively, within each deleted gene cluster. Reactivated TEs that are bound by one or several KRAB-ZFPs are indicated by green squares in the panel. Significantly up- and downregulated elements (adjusted p-value<0.05) are highlighted in red and green, respectively. (B) Differential KAP1 binding and H3K9me3 enrichment at TE groups (summarized across all insertions) in Chr2-cl and Chr4-cl KO ES cells. TE groups targeted by one or several KRAB-ZFPs encoded within the deleted clusters are highlighted in blue (differential enrichment over the entire TE sequences) and red (differential enrichment at TE regions that overlap with KRAB-ZFP ChIP-seq peaks). (C) DNA methylation status of CpG sites at indicated TE groups in WT and Chr4-cl KO ES cells grown in serum containing media or in hypomethylation-inducing media (2i + Vitamin C). P-values were calculated using paired t-test.\nFigure 2\u2014source data 1.Differential H3K9me3 and KAP1 distribution in WT and KRAB-ZFP cluster KO ES cells at TE families and KRAB-ZFP bound TE insertions.Differential read counts and statistical testing were determined by DESeq2."
     },
     {
-      "self_ref": "#/texts/58",
+      "self_ref": "#/texts/59",
       "parent": {
         "$ref": "#/body"
       },
@@ -1188,7 +1203,7 @@
       "text": "Figure 2\u2014figure supplement 1.: Epigenetic changes at TEs and TE-borne enhancers in KRAB-ZFP cluster KO ES cells.\n(A) Differential analysis of summative (all individual insertions combined) H3K9me3 enrichment at TE groups in Chr10-cl, Chr13.1-cl and Chr13.2-cl KO ES cells.\u00a0TE groups targeted by one or several KRAB-ZFPs encoded within the deleted clusters are highlighted in orange (differential enrichment over the entire TE sequences) and red (differential enrichment at TE regions that overlap with KRAB-ZFP ChIP-seq peaks). (B) Top: Schematic view of the Cd59a/Cd59b locus with a 5\u2019 truncated ETn insertion. ChIP-seq (Input subtracted from ChIP) data for overexpressed epitope-tagged Gm13051 (a Chr4-cl KRAB-ZFP) in F9 EC cells, and re-mapped KAP1 (GEO accession: GSM1406445) and H3K9me3 (GEO accession: GSM1327148) in WT ES cells are shown together with RNA-seq data from Chr4-cl WT and KO ES cells (mapped using Bowtie (-a -m 1 --strata -v 2) to exclude reads that cannot be uniquely mapped). Bottom: Transcriptional activity of a 5 kb fragment with or without fragments of the ETn insertion was tested by luciferase reporter assay in Chr4-cl WT and KO ES cells."
     },
     {
-      "self_ref": "#/texts/59",
+      "self_ref": "#/texts/60",
       "parent": {
         "$ref": "#/body"
       },
@@ -1200,7 +1215,7 @@
       "text": "Figure 3.: TE-dependent gene activation in KRAB-ZFP cluster KO ES cells.\n(A) Differential gene expression in Chr2-cl and Chr4-cl KO ES cells. Significantly up- and downregulated genes (adjusted p-value<0.05) are highlighted in red and green, respectively, KRAB-ZFP genes within the deleted clusters are shown in blue. (B) Correlation of TEs and gene deregulation. Plots show enrichment of TE groups within 100 kb of up- and downregulated genes relative to all genes. Significantly overrepresented LTR and LINE groups (adjusted p-value<0.1) are highlighted in blue and red, respectively. (C) Schematic view of the downstream region of Chst1 where a 5\u2019 truncated ETn insertion is located. ChIP-seq (Input subtracted from ChIP) data for overexpressed epitope-tagged Gm13051 (a Chr4-cl KRAB-ZFP) in F9 EC cells, and re-mapped KAP1 (GEO accession: GSM1406445) and H3K9me3 (GEO accession: GSM1327148) in WT ES cells are shown together with RNA-seq data from Chr4-cl WT and KO ES cells (mapped using Bowtie (-a -m 1 --strata -v 2) to exclude reads that cannot be uniquely mapped). (D) RT-qPCR analysis of Chst1 mRNA expression in Chr4-cl WT and KO ES cells with or without the CRISPR/Cas9 deleted ETn insertion near Chst1. Values represent mean expression (normalized to Gapdh) from three biological replicates per sample (each performed in three technical replicates) in arbitrary units. Error bars represent standard deviation and asterisks indicate significance (p<0.01, Student\u2019s t-test). n.s.: not significant. (E) Mean coverage of ChIP-seq data (Input subtracted from ChIP) in Chr4-cl WT and KO ES cells over 127 full-length ETn insertions. The binding sites of the Chr4-cl KRAB-ZFPs Rex2 and Gm13051 are indicated by dashed lines."
     },
     {
-      "self_ref": "#/texts/60",
+      "self_ref": "#/texts/61",
       "parent": {
         "$ref": "#/body"
       },
@@ -1212,7 +1227,7 @@
       "text": "Figure 4.: ETn retrotransposition in Chr4-cl KO mice.\n(A) Pedigree of mice used for transposon insertion screening by capture-seq in mice of different strain backgrounds. The number of novel ETn insertions (only present in one animal) are indicated. For animals whose direct ancestors have not been screened, the ETn insertions are shown in parentheses since parental inheritance cannot be excluded in that case. Germ line insertions are indicated by asterisks. All DNA samples were prepared from tail tissues unless noted (-S: spleen, -E: ear, -B:Blood) (B) Statistical analysis of ETn insertion frequency in tail tissue from 30 Chr4-cl KO, KO/WT and WT mice that were derived from one Chr4-c KO x KO/WT and two Chr4-cl KO/WT x KO/WT matings. Only DNA samples that were collected from juvenile tails were considered for this analysis. P-values were calculated using one-sided Wilcoxon Rank Sum Test. In the last panel, KO, WT and KO/WT mice derived from all matings were combined for the statistical analysis.\nFigure 4\u2014source data 1.Coordinates of identified novel ETn insertions and supporting capture-seq read counts.Genomic regions indicate cluster of supporting reads.\nFigure 4\u2014source data 2.Sequences of capture-seq probes used to enrich genomic DNA for ETn and MuLV (RLTR4) insertions."
     },
     {
-      "self_ref": "#/texts/61",
+      "self_ref": "#/texts/62",
       "parent": {
         "$ref": "#/body"
       },
@@ -1224,7 +1239,7 @@
       "text": "Figure 4\u2014figure supplement 1.: Birth statistics of KRAB-ZFP cluster KO mice and TE reactivation in adult tissues.\n(A) Birth statistics of Chr4- and Chr2-cl mice derived from KO/WT x KO/WT matings in different strain backgrounds.\u00a0(B) RNA-seq analysis of TE expression in Chr2- (left) and Chr4-cl (right) KO tissues. TE groups with the highest reactivation phenotype in ES cells are shown separately. Significantly up- and downregulated elements (adjusted p-value<0.05) are highlighted in red and green, respectively. Experiments were performed in at least two biological replicates."
     },
     {
-      "self_ref": "#/texts/62",
+      "self_ref": "#/texts/63",
       "parent": {
         "$ref": "#/body"
       },
@@ -1236,7 +1251,7 @@
       "text": "Figure 4\u2014figure supplement 2.: Identification of polymorphic ETn and MuLV retrotransposon insertions in Chr4-cl KO and WT mice.\nHeatmaps show normalized capture-seq read counts in RPM (Read Per Million) for identified polymorphic ETn (A) and MuLV (B) loci in different mouse strains. Only loci with strong support for germ line ETn or MuLV insertions (at least 100 or 3000 ETn or MuLV RPM, respectively) in at least two animals are shown. Non-polymorphic insertion loci with high read counts in all screened mice were excluded for better visibility. The sample information (sample name and cell type/tissue) is annotated at the bottom, with the strain information indicated by color at the top. The color gradient indicates log10(RPM+1)."
     },
     {
-      "self_ref": "#/texts/63",
+      "self_ref": "#/texts/64",
       "parent": {
         "$ref": "#/body"
       },
@@ -1248,7 +1263,7 @@
       "text": "Figure 4\u2014figure supplement 3.: Confirmation of novel ETn insertions identified by capture-seq.\n(A) PCR validation of novel ETn insertions in genomic DNA of three littermates (IDs: T09673, T09674 and T00436) and their parents (T3913 and T3921). Primer sequences are shown in Supplementary file 3. (B) ETn capture-seq read counts (RPM) at putative novel somatic (loci identified exclusively in one single animal), novel germ line (loci identified in several littermates) insertions, and at B6 reference ETn elements. (C) Heatmap shows capture-seq read counts (RPM) of a Chr4-cl KO mouse (ID: C6733) as determined in different tissues. Each row represents a novel ETn locus that was identified in at least one tissue. The color gradient indicates log10(RPM+1). (D) Heatmap shows the capture-seq RPM in technical replicates using the same Chr4-cl KO DNA sample (rep1/rep2) or replicates with DNA samples prepared from different sections of the tail from the same mouse at different ages (tail1/tail2). Each row represents a novel ETn locus that was identified in at least one of the displayed samples. The color gradient indicates log10(RPM+1)."
     },
     {
-      "self_ref": "#/texts/64",
+      "self_ref": "#/texts/65",
       "parent": {
         "$ref": "#/texts/0"
       },
@@ -1265,7 +1280,7 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/65",
+      "self_ref": "#/texts/66",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1279,7 +1294,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/66",
+      "self_ref": "#/texts/67",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1293,7 +1308,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/67",
+      "self_ref": "#/texts/68",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1307,7 +1322,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/68",
+      "self_ref": "#/texts/69",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1321,7 +1336,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/69",
+      "self_ref": "#/texts/70",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1335,7 +1350,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/70",
+      "self_ref": "#/texts/71",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1349,7 +1364,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/71",
+      "self_ref": "#/texts/72",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1363,7 +1378,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/72",
+      "self_ref": "#/texts/73",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1377,7 +1392,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/73",
+      "self_ref": "#/texts/74",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1391,7 +1406,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/74",
+      "self_ref": "#/texts/75",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1405,7 +1420,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/75",
+      "self_ref": "#/texts/76",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1419,7 +1434,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/76",
+      "self_ref": "#/texts/77",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1433,7 +1448,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/77",
+      "self_ref": "#/texts/78",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1447,7 +1462,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/78",
+      "self_ref": "#/texts/79",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1461,7 +1476,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/79",
+      "self_ref": "#/texts/80",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1475,7 +1490,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/80",
+      "self_ref": "#/texts/81",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1489,7 +1504,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/81",
+      "self_ref": "#/texts/82",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1503,7 +1518,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/82",
+      "self_ref": "#/texts/83",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1517,7 +1532,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/83",
+      "self_ref": "#/texts/84",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1531,7 +1546,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/84",
+      "self_ref": "#/texts/85",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1545,7 +1560,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/85",
+      "self_ref": "#/texts/86",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1559,7 +1574,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/86",
+      "self_ref": "#/texts/87",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1573,7 +1588,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/87",
+      "self_ref": "#/texts/88",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1587,7 +1602,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/88",
+      "self_ref": "#/texts/89",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1601,7 +1616,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/89",
+      "self_ref": "#/texts/90",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1615,7 +1630,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/90",
+      "self_ref": "#/texts/91",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1629,7 +1644,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/91",
+      "self_ref": "#/texts/92",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1643,7 +1658,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/92",
+      "self_ref": "#/texts/93",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1657,7 +1672,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/93",
+      "self_ref": "#/texts/94",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1671,7 +1686,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/94",
+      "self_ref": "#/texts/95",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1685,7 +1700,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/95",
+      "self_ref": "#/texts/96",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1699,7 +1714,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/96",
+      "self_ref": "#/texts/97",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1713,7 +1728,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/97",
+      "self_ref": "#/texts/98",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1727,7 +1742,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/98",
+      "self_ref": "#/texts/99",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1741,7 +1756,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/99",
+      "self_ref": "#/texts/100",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1755,7 +1770,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/100",
+      "self_ref": "#/texts/101",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1769,7 +1784,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/101",
+      "self_ref": "#/texts/102",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1783,7 +1798,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/102",
+      "self_ref": "#/texts/103",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1797,7 +1812,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/103",
+      "self_ref": "#/texts/104",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1811,7 +1826,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/104",
+      "self_ref": "#/texts/105",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1825,7 +1840,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/105",
+      "self_ref": "#/texts/106",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1839,7 +1854,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/106",
+      "self_ref": "#/texts/107",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1853,7 +1868,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/107",
+      "self_ref": "#/texts/108",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1867,7 +1882,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/108",
+      "self_ref": "#/texts/109",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1881,7 +1896,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/109",
+      "self_ref": "#/texts/110",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1895,7 +1910,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/110",
+      "self_ref": "#/texts/111",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1909,7 +1924,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/111",
+      "self_ref": "#/texts/112",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1923,7 +1938,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/112",
+      "self_ref": "#/texts/113",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1937,7 +1952,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/113",
+      "self_ref": "#/texts/114",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1951,7 +1966,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/114",
+      "self_ref": "#/texts/115",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1965,7 +1980,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/115",
+      "self_ref": "#/texts/116",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1979,7 +1994,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/116",
+      "self_ref": "#/texts/117",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -1993,7 +2008,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/117",
+      "self_ref": "#/texts/118",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -2007,7 +2022,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/118",
+      "self_ref": "#/texts/119",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -2021,7 +2036,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/119",
+      "self_ref": "#/texts/120",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -2035,7 +2050,7 @@
       "marker": "-"
     },
     {
-      "self_ref": "#/texts/120",
+      "self_ref": "#/texts/121",
       "parent": {
         "$ref": "#/groups/0"
       },
@@ -2053,25 +2068,7 @@
     {
       "self_ref": "#/pictures/0",
       "parent": {
-        "$ref": "#/texts/52"
-      },
-      "children": [],
-      "content_layer": "body",
-      "label": "picture",
-      "prov": [],
-      "captions": [
-        {
-          "$ref": "#/texts/53"
-        }
-      ],
-      "references": [],
-      "footnotes": [],
-      "annotations": []
-    },
-    {
-      "self_ref": "#/pictures/1",
-      "parent": {
-        "$ref": "#/texts/52"
+        "$ref": "#/texts/53"
       },
       "children": [],
       "content_layer": "body",
@@ -2087,9 +2084,9 @@
       "annotations": []
     },
     {
-      "self_ref": "#/pictures/2",
+      "self_ref": "#/pictures/1",
       "parent": {
-        "$ref": "#/texts/52"
+        "$ref": "#/texts/53"
       },
       "children": [],
       "content_layer": "body",
@@ -2105,9 +2102,9 @@
       "annotations": []
     },
     {
-      "self_ref": "#/pictures/3",
+      "self_ref": "#/pictures/2",
       "parent": {
-        "$ref": "#/texts/52"
+        "$ref": "#/texts/53"
       },
       "children": [],
       "content_layer": "body",
@@ -2123,9 +2120,9 @@
       "annotations": []
     },
     {
-      "self_ref": "#/pictures/4",
+      "self_ref": "#/pictures/3",
       "parent": {
-        "$ref": "#/texts/52"
+        "$ref": "#/texts/53"
       },
       "children": [],
       "content_layer": "body",
@@ -2141,9 +2138,9 @@
       "annotations": []
     },
     {
-      "self_ref": "#/pictures/5",
+      "self_ref": "#/pictures/4",
       "parent": {
-        "$ref": "#/texts/52"
+        "$ref": "#/texts/53"
       },
       "children": [],
       "content_layer": "body",
@@ -2159,9 +2156,9 @@
       "annotations": []
     },
     {
-      "self_ref": "#/pictures/6",
+      "self_ref": "#/pictures/5",
       "parent": {
-        "$ref": "#/texts/52"
+        "$ref": "#/texts/53"
       },
       "children": [],
       "content_layer": "body",
@@ -2177,9 +2174,9 @@
       "annotations": []
     },
     {
-      "self_ref": "#/pictures/7",
+      "self_ref": "#/pictures/6",
       "parent": {
-        "$ref": "#/texts/52"
+        "$ref": "#/texts/53"
       },
       "children": [],
       "content_layer": "body",
@@ -2195,9 +2192,9 @@
       "annotations": []
     },
     {
-      "self_ref": "#/pictures/8",
+      "self_ref": "#/pictures/7",
       "parent": {
-        "$ref": "#/texts/52"
+        "$ref": "#/texts/53"
       },
       "children": [],
       "content_layer": "body",
@@ -2213,9 +2210,9 @@
       "annotations": []
     },
     {
-      "self_ref": "#/pictures/9",
+      "self_ref": "#/pictures/8",
       "parent": {
-        "$ref": "#/texts/52"
+        "$ref": "#/texts/53"
       },
       "children": [],
       "content_layer": "body",
@@ -2231,9 +2228,9 @@
       "annotations": []
     },
     {
-      "self_ref": "#/pictures/10",
+      "self_ref": "#/pictures/9",
       "parent": {
-        "$ref": "#/texts/52"
+        "$ref": "#/texts/53"
       },
       "children": [],
       "content_layer": "body",
@@ -2247,13 +2244,31 @@
       "references": [],
       "footnotes": [],
       "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/10",
+      "parent": {
+        "$ref": "#/texts/53"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "picture",
+      "prov": [],
+      "captions": [
+        {
+          "$ref": "#/texts/64"
+        }
+      ],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
     }
   ],
   "tables": [
     {
       "self_ref": "#/tables/0",
       "parent": {
-        "$ref": "#/texts/49"
+        "$ref": "#/texts/50"
       },
       "children": [],
       "content_layer": "body",
@@ -2261,7 +2276,7 @@
       "prov": [],
       "captions": [
         {
-          "$ref": "#/texts/50"
+          "$ref": "#/texts/51"
         }
       ],
       "references": [],
@@ -3376,7 +3391,7 @@
     {
       "self_ref": "#/tables/1",
       "parent": {
-        "$ref": "#/texts/49"
+        "$ref": "#/texts/50"
       },
       "children": [],
       "content_layer": "body",
@@ -3384,7 +3399,7 @@
       "prov": [],
       "captions": [
         {
-          "$ref": "#/texts/51"
+          "$ref": "#/texts/52"
         }
       ],
       "references": [],

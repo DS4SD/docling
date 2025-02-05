@@ -1,6 +1,8 @@
 # Potential to reduce greenhouse gas emissions through different dairy cattle systems in subtropical regions
 
-Ribeiro-Filho Henrique M. N.; 1: Department of Animal Science, University of California, Davis, California, United States of America, 2: Programa de Pós-graduação em Ciência Animal, Universidade do Estado de Santa Catarina, Lages, Santa Catarina, Brazil; Civiero Maurício; 2: Programa de Pós-graduação em Ciência Animal, Universidade do Estado de Santa Catarina, Lages, Santa Catarina, Brazil; Kebreab Ermias; 1: Department of Animal Science, University of California, Davis, California, United States of America
+Henrique M. N. Ribeiro-Filho, Maurício Civiero, Ermias Kebreab
+
+Department of Animal Science, University of California, Davis, California, United States of America; Programa de Pós-graduação em Ciência Animal, Universidade do Estado de Santa Catarina, Lages, Santa Catarina, Brazil
 
 ## Abstract
 

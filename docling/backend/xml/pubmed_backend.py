@@ -142,9 +142,13 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
         # Get mapping between affiliation ids and names
         affiliation_names = []
         for affiliation_node in self.tree.xpath(".//aff[@id]"):
-            affiliation_names.append(
-                ": ".join([t for t in affiliation_node.itertext() if t != "\n"])
-            )
+            aff = ", ".join([t for t in affiliation_node.itertext() if t.strip()])
+            aff = aff.replace("\n", " ")
+            label = affiliation_node.xpath("label")
+            if label:
+                # TODO: once superscript is supported, add label with formatting
+                aff = aff.removeprefix(f"{label[0].text}, ")
+            affiliation_names.append(aff)
         affiliation_ids_names = {
             id: name
             for id, name in zip(self.tree.xpath(".//aff[@id]/@id"), affiliation_names)
@@ -170,9 +174,9 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
 
             # Name
             author["name"] = (
-                author_node.xpath("name/surname")[0].text
+                author_node.xpath("name/given-names")[0].text
                 + " "
-                + author_node.xpath("name/given-names")[0].text
+                + author_node.xpath("name/surname")[0].text
             )
 
             authors.append(author)
@@ -415,17 +419,29 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
         return
 
     def _add_authors(self, doc: DoclingDocument, xml_components: XMLComponents) -> None:
-        authors_affiliations: list = []
-        for author in xml_components["authors"]:
-            authors_affiliations.append(author["name"])
-            authors_affiliations.append(", ".join(author["affiliation_names"]))
-        authors_affiliations_str = "; ".join(authors_affiliations)
+        # TODO: once docling supports text formatting, add affiliation reference to
+        # author names through superscripts
+        authors: list = [item["name"] for item in xml_components["authors"]]
+        authors_str = ", ".join(authors)
+        affiliations: list = [
+            item
+            for author in xml_components["authors"]
+            for item in author["affiliation_names"]
+        ]
+        affiliations_str = "; ".join(list(dict.fromkeys(affiliations)))
+        if authors_str:
+            doc.add_text(
+                parent=self.parents["Title"],
+                text=authors_str,
+                label=DocItemLabel.PARAGRAPH,
+            )
+        if affiliations_str:
+            doc.add_text(
+                parent=self.parents["Title"],
+                text=affiliations_str,
+                label=DocItemLabel.PARAGRAPH,
+            )
 
-        doc.add_text(
-            parent=self.parents["Title"],
-            text=authors_affiliations_str,
-            label=DocItemLabel.PARAGRAPH,
-        )
         return
 
     def _add_abstract(
