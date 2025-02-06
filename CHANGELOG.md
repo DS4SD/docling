@@ -1,3 +1,29 @@
+## [v2.18.0](https://github.com/DS4SD/docling/releases/tag/v2.18.0) - 2025-02-03
+
+### Feature
+
+* Expose equation exports ([#869](https://github.com/DS4SD/docling/issues/869)) ([`6a76b49`](https://github.com/DS4SD/docling/commit/6a76b49a4756fd00503d0baec5db8d23be8207e8))
+* Add option to define page range ([#852](https://github.com/DS4SD/docling/issues/852)) ([`70d68b6`](https://github.com/DS4SD/docling/commit/70d68b6164c6c7029b39dd65c5a278278768c381))
+* **docx:** Support of SDTs in docx backend ([#853](https://github.com/DS4SD/docling/issues/853)) ([`d727b04`](https://github.com/DS4SD/docling/commit/d727b04ad080df0b3811902059e0fe0539f7037e))
+* Python 3.13 support ([#841](https://github.com/DS4SD/docling/issues/841)) ([`4df085a`](https://github.com/DS4SD/docling/commit/4df085aa6c6f5cc043f4f7a9f0c1b4af43f95e8f))
+
+### Fix
+
+* **markdown:** Fix parsing if doc ending with table ([#873](https://github.com/DS4SD/docling/issues/873)) ([`5ac2887`](https://github.com/DS4SD/docling/commit/5ac2887e4ad52ed6e7147e3af1e3ee5eb0006a70))
+* **markdown:** Add support for HTML content ([#855](https://github.com/DS4SD/docling/issues/855)) ([`94751a7`](https://github.com/DS4SD/docling/commit/94751a78f4f61b78f64952190717440ec6d84c62))
+* **docx:** Merged table cells not properly converted ([#857](https://github.com/DS4SD/docling/issues/857)) ([`0cd81a8`](https://github.com/DS4SD/docling/commit/0cd81a81226c0d4aa4f20e4e58c3b33e4fe50ce0))
+* Processing of placeholder shapes in pptx that have text but no bbox ([#868](https://github.com/DS4SD/docling/issues/868)) ([`eff16b6`](https://github.com/DS4SD/docling/commit/eff16b62ccdb0eb764eeacee550563898784dd6a))
+* KeyError in tableformer prediction ([#854](https://github.com/DS4SD/docling/issues/854)) ([`b1cf796`](https://github.com/DS4SD/docling/commit/b1cf796730901222ad0882ff44efa0ef43a743ee))
+* Fixed docx import with headers that are also lists ([#842](https://github.com/DS4SD/docling/issues/842)) ([`2c037ae`](https://github.com/DS4SD/docling/commit/2c037ae62e123967eddf065ccb2abbaf78cdcab3))
+* Use new add_code in html backend and add more typing hints ([#850](https://github.com/DS4SD/docling/issues/850)) ([`2a1f8af`](https://github.com/DS4SD/docling/commit/2a1f8afe7e8d9d508aebcfd3998ee1625c938933))
+* **markdown:** Fix empty block handling ([#843](https://github.com/DS4SD/docling/issues/843)) ([`bccb022`](https://github.com/DS4SD/docling/commit/bccb022fc82d4d0ef2ed2d8bea5f5d8e6400c1d9))
+* Fix for the crash when encountering WMF images in pptx and docx ([#837](https://github.com/DS4SD/docling/issues/837)) ([`fea0a99`](https://github.com/DS4SD/docling/commit/fea0a99a95d97e72687f48f8174d31102655483e))
+
+### Documentation
+
+* Updated the readme with upcoming features ([#831](https://github.com/DS4SD/docling/issues/831)) ([`d7c0828`](https://github.com/DS4SD/docling/commit/d7c082894e3ef85881665d20167198adcbc1becd))
+* Add example for inspection of picture content ([#624](https://github.com/DS4SD/docling/issues/624)) ([`f9144f2`](https://github.com/DS4SD/docling/commit/f9144f2bb6b322244c9d37683dca1e537ec6d781))
+
 ## [v2.17.0](https://github.com/DS4SD/docling/releases/tag/v2.17.0) - 2025-01-28
 
 ### Feature

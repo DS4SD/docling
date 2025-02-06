@@ -1,9 +1,10 @@
 import logging
+import math
 import sys
 import time
 from functools import partial
 from pathlib import Path
-from typing import Dict, Iterable, Iterator, List, Optional, Type, Union
+from typing import Dict, Iterable, Iterator, List, Optional, Tuple, Type, Union
 
 from pydantic import BaseModel, ConfigDict, model_validator, validate_call
 
@@ -31,7 +32,12 @@ from docling.datamodel.document import (
     _DocumentConversionInput,
 )
 from docling.datamodel.pipeline_options import PipelineOptions
-from docling.datamodel.settings import DocumentLimits, settings
+from docling.datamodel.settings import (
+    DEFAULT_PAGE_RANGE,
+    DocumentLimits,
+    PageRange,
+    settings,
+)
 from docling.exceptions import ConversionError
 from docling.pipeline.base_pipeline import BasePipeline
 from docling.pipeline.simple_pipeline import SimplePipeline
@@ -184,6 +190,7 @@ class DocumentConverter:
         raises_on_error: bool = True,
         max_num_pages: int = sys.maxsize,
         max_file_size: int = sys.maxsize,
+        page_range: PageRange = DEFAULT_PAGE_RANGE,
     ) -> ConversionResult:
         all_res = self.convert_all(
             source=[source],
@@ -191,6 +198,7 @@ class DocumentConverter:
             max_num_pages=max_num_pages,
             max_file_size=max_file_size,
             headers=headers,
+            page_range=page_range,
         )
         return next(all_res)
 
@@ -202,10 +210,12 @@ class DocumentConverter:
         raises_on_error: bool = True,  # True: raises on first conversion error; False: does not raise on conv error
         max_num_pages: int = sys.maxsize,
         max_file_size: int = sys.maxsize,
+        page_range: PageRange = DEFAULT_PAGE_RANGE,
     ) -> Iterator[ConversionResult]:
         limits = DocumentLimits(
             max_num_pages=max_num_pages,
             max_file_size=max_file_size,
+            page_range=page_range,
         )
         conv_input = _DocumentConversionInput(
             path_or_stream_iterator=source, limits=limits, headers=headers

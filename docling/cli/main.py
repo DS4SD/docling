@@ -219,6 +219,13 @@ def convert(
         bool,
         typer.Option(..., help="Enable the formula enrichment model in the pipeline."),
     ] = False,
+    enrich_picture_classes: Annotated[
+        bool,
+        typer.Option(
+            ...,
+            help="Enable the picture classification enrichment model in the pipeline.",
+        ),
+    ] = False,
     enrich_picture_desc: Annotated[
         bool,
         typer.Option(..., help="Enable the picture description model in the pipeline."),
@@ -380,6 +387,7 @@ def convert(
             do_code_enrichment=enrich_code,
             do_formula_enrichment=enrich_formula,
             do_picture_description=enrich_picture_desc,
+            do_picture_classification=enrich_picture_classes,
             document_timeout=document_timeout,
         )
         pipeline_options.table_structure_options.do_cell_matching = (

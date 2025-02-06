@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "docling"
-version = "2.17.0"  # DO NOT EDIT, updated automatically
+version = "2.18.0"  # DO NOT EDIT, updated automatically
 description = "SDK and CLI for parsing PDF, DOCX, HTML, and more, to a unified document representation for powering downstream workflows such as gen AI applications."
 authors = ["Christoph Auer <cau@zurich.ibm.com>", "Michele Dolfi <dol@zurich.ibm.com>", "Maxim Lysak <mly@zurich.ibm.com>", "Nikos Livathinos <nli@zurich.ibm.com>", "Ahmed Nassar <ahn@zurich.ibm.com>", "Panos Vagenas <pva@zurich.ibm.com>", "Peter Staar <taa@zurich.ibm.com>"]
 license = "MIT"
@@ -26,7 +26,7 @@ packages = [{include = "docling"}]
 ######################
 python = "^3.9"
 pydantic = "^2.0.0"
-docling-core = { version = "^2.15.1", extras = ["chunking"] }
+docling-core = {extras = ["chunking"], version = "^2.17.0"}
 docling-ibm-models = "^3.3.0"
 deepsearch-glm = "^1.0.0"
 docling-parse = "^3.1.0"
@@ -39,7 +39,10 @@ easyocr = "^1.7"
 tesserocr = { version = "^2.7.1", optional = true }
 certifi = ">=2024.7.4"
 rtree = "^1.3.0"
-scipy = "^1.6.0"
+scipy = [
+  { version = "^1.6.0", markers = "python_version >= '3.10'" },
+  { version = ">=1.6.0,<1.14.0", markers = "python_version < '3.10'" }
+]
 typer = "^0.12.5"
 python-docx = "^1.1.2"
 python-pptx = "^1.0.2"

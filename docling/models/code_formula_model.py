@@ -61,6 +61,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
         Processes the given batch of elements and enriches them with predictions.
     """
 
+    elements_batch_size = 5
     images_scale = 1.66  # = 120 dpi, aligned with training data resolution
     expansion_factor = 0.03
 

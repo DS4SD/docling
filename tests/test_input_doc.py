@@ -4,6 +4,7 @@ from pathlib import Path
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import DocumentStream, InputFormat
 from docling.datamodel.document import InputDocument, _DocumentConversionInput
+from docling.datamodel.settings import DocumentLimits
 
 
 def test_in_doc_from_valid_path():
@@ -36,6 +37,40 @@ def test_in_doc_from_invalid_buf():
     stream = DocumentStream(name="my_doc.pdf", stream=buf)
 
     doc = _make_input_doc_from_stream(stream)
+    assert doc.valid == False
+
+
+def test_in_doc_with_page_range():
+    test_doc_path = Path("./tests/data/2206.01062.pdf")
+    limits = DocumentLimits()
+    limits.page_range = (1, 10)
+
+    doc = InputDocument(
+        path_or_stream=test_doc_path,
+        format=InputFormat.PDF,
+        backend=PyPdfiumDocumentBackend,
+        limits=limits,
+    )
+    assert doc.valid == True
+
+    limits.page_range = (9, 9)
+
+    doc = InputDocument(
+        path_or_stream=test_doc_path,
+        format=InputFormat.PDF,
+        backend=PyPdfiumDocumentBackend,
+        limits=limits,
+    )
+    assert doc.valid == True
+
+    limits.page_range = (11, 12)
+
+    doc = InputDocument(
+        path_or_stream=test_doc_path,
+        format=InputFormat.PDF,
+        backend=PyPdfiumDocumentBackend,
+        limits=limits,
+    )
     assert doc.valid == False
 
 
