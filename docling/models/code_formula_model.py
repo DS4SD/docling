@@ -61,6 +61,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
         Processes the given batch of elements and enriches them with predictions.
     """
 
+    _model_repo_folder = "CodeFormula"
     elements_batch_size = 5
     images_scale = 1.66  # = 120 dpi, aligned with training data resolution
     expansion_factor = 0.03
@@ -68,7 +69,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
     def __init__(
         self,
         enabled: bool,
-        artifacts_path: Optional[Union[Path, str]],
+        artifacts_path: Optional[Path],
         options: CodeFormulaModelOptions,
         accelerator_options: AcceleratorOptions,
     ):
@@ -97,9 +98,9 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
             )
 
             if artifacts_path is None:
-                artifacts_path = self.download_models_hf()
+                artifacts_path = self.download_models()
             else:
-                artifacts_path = Path(artifacts_path)
+                artifacts_path = artifacts_path / self._model_repo_folder
 
             self.code_formula_model = CodeFormulaPredictor(
                 artifacts_path=artifacts_path,
@@ -108,13 +109,16 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
             )
 
     @staticmethod
-    def download_models_hf(
-        local_dir: Optional[Path] = None, force: bool = False
+    def download_models(
+        local_dir: Optional[Path] = None,
+        force: bool = False,
+        progress: bool = False,
     ) -> Path:
         from huggingface_hub import snapshot_download
         from huggingface_hub.utils import disable_progress_bars
 
-        disable_progress_bars()
+        if not progress:
+            disable_progress_bars()
         download_path = snapshot_download(
             repo_id="ds4sd/CodeFormula",
             force_download=force,
