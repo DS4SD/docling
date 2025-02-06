@@ -36,7 +36,7 @@ def get_converter():
 
 
 def test_code_and_formula_conversion():
-    pdf_path = Path("tests/data/code_and_formula.pdf")
+    pdf_path = Path("tests/data/pdf/code_and_formula.pdf")
     converter = get_converter()
 
     print(f"converting {pdf_path}")

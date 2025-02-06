@@ -12,7 +12,7 @@ from docling.datamodel.document import InputDocument
 
 @pytest.fixture
 def test_doc_path():
-    return Path("./tests/data/2206.01062.pdf")
+    return Path("./tests/data/pdf/2206.01062.pdf")
 
 
 def _get_backend(pdf_doc):
@@ -26,8 +26,19 @@ def _get_backend(pdf_doc):
     return doc_backend
 
 
+def test_cell_ordering():
+    pdf_doc = Path("tests/data/pdf/right_to_left_01.pdf")
+    doc_backend = _get_backend(pdf_doc)
+
+    for page_index in range(0, doc_backend.page_count()):
+        page_backend: DoclingParseV2PageBackend = doc_backend.load_page(page_index)
+        cells = list(page_backend.get_text_cells())
+
+        1 == 1
+
+
 def test_text_cell_counts():
-    pdf_doc = Path("./tests/data/redp5110_sampled.pdf")
+    pdf_doc = Path("./tests/data/pdf/redp5110_sampled.pdf")
 
     doc_backend = _get_backend(pdf_doc)
 
