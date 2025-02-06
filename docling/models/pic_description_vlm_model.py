@@ -69,6 +69,7 @@ class PictureDescriptionVlmModel(PictureDescriptionBaseModel):
         return Path(download_path)
 
     def _annotate_images(self, images: Iterable[Image.Image]) -> Iterable[str]:
+        from transformers import GenerationConfig
 
         # Create input messages
         messages = [
@@ -81,7 +82,6 @@ class PictureDescriptionVlmModel(PictureDescriptionBaseModel):
             },
         ]
 
-        # TODO: set seed for reproducibility
         # TODO: do batch generation
 
         for image in images:
@@ -94,7 +94,8 @@ class PictureDescriptionVlmModel(PictureDescriptionBaseModel):
 
             # Generate outputs
             generated_ids = self.model.generate(
-                **inputs, max_new_tokens=self.options.max_new_tokens
+                **inputs,
+                generation_config=GenerationConfig(**self.options.generation_config),
             )
             generated_texts = self.processor.batch_decode(
                 generated_ids[:, inputs["input_ids"].shape[1] :],

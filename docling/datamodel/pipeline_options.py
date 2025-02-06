@@ -211,7 +211,8 @@ class PicDescVlmOptions(PicDescBaseOptions):
 
     repo_id: str
     prompt: str = "Describe this image in a few sentences."
-    max_new_tokens: int = 200
+    # Config from here https://huggingface.co/docs/transformers/en/main_classes/text_generation#transformers.GenerationConfig
+    generation_config: Dict[str, Any] = dict(max_new_tokens=200, do_sample=False)
 
 
 # class PicDescSmolVlmOptions(PicDescVlmOptions):
