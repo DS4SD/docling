@@ -264,7 +264,6 @@ class GlmModel:
             glm_doc = self.model.apply_on_doc(ds_doc_dict)
 
             docling_doc: DoclingDocument = to_docling_document(glm_doc)  # Experimental
-            1 == 1
 
         # DEBUG code:
         def draw_clusters_and_cells(ds_document, page_no, show: bool = False):

@@ -34,8 +34,6 @@ def test_cell_ordering():
         page_backend: DoclingParseV2PageBackend = doc_backend.load_page(page_index)
         cells = list(page_backend.get_text_cells())
 
-        1 == 1
-
 
 def test_text_cell_counts():
     pdf_doc = Path("./tests/data/pdf/redp5110_sampled.pdf")
