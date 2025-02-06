@@ -14,7 +14,7 @@ from docling.datamodel.pipeline_options import (
     OcrMacOptions,
     PdfPipelineOptions,
     PicDescApiOptions,
-    PicDescVllmOptions,
+    PicDescVlmOptions,
     RapidOcrOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
@@ -36,7 +36,7 @@ from docling.models.page_preprocessing_model import (
 )
 from docling.models.pic_description_api_model import PictureDescriptionApiModel
 from docling.models.pic_description_base_model import PictureDescriptionBaseModel
-from docling.models.pic_description_vllm_model import PictureDescriptionVllmModel
+from docling.models.pic_description_vlm_model import PictureDescriptionVlmModel
 from docling.models.rapid_ocr_model import RapidOcrModel
 from docling.models.table_structure_model import TableStructureModel
 from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
@@ -132,6 +132,7 @@ class StandardPdfPipeline(PaginatedPipeline):
         if (
             self.pipeline_options.do_formula_enrichment
             or self.pipeline_options.do_code_enrichment
+            or self.pipeline_options.do_picture_description
         ):
             self.keep_backend = True
 
@@ -186,7 +187,9 @@ class StandardPdfPipeline(PaginatedPipeline):
             )
         return None
 
-    def get_pic_description_model(self) -> Optional[PictureDescriptionBaseModel]:
+    def get_pic_description_model(
+        self, artifacts_path: Optional[Path] = None
+    ) -> Optional[PictureDescriptionBaseModel]:
         if isinstance(
             self.pipeline_options.picture_description_options, PicDescApiOptions
         ):
@@ -195,11 +198,13 @@ class StandardPdfPipeline(PaginatedPipeline):
                 options=self.pipeline_options.picture_description_options,
             )
         elif isinstance(
-            self.pipeline_options.picture_description_options, PicDescVllmOptions
+            self.pipeline_options.picture_description_options, PicDescVlmOptions
         ):
-            return PictureDescriptionVllmModel(
+            return PictureDescriptionVlmModel(
                 enabled=self.pipeline_options.do_picture_description,
+                artifacts_path=artifacts_path,
                 options=self.pipeline_options.picture_description_options,
+                accelerator_options=self.pipeline_options.accelerator_options,
             )
         return None
 

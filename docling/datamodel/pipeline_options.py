@@ -197,7 +197,7 @@ class PicDescBaseOptions(BaseModel):
 class PicDescApiOptions(PicDescBaseOptions):
     kind: Literal["api"] = "api"
 
-    url: AnyUrl = AnyUrl("")
+    url: AnyUrl = AnyUrl("http://localhost/")
     headers: Dict[str, str] = {}
     params: Dict[str, Any] = {}
     timeout: float = 20
@@ -206,22 +206,29 @@ class PicDescApiOptions(PicDescBaseOptions):
     provenance: str = ""
 
 
-class PicDescVllmOptions(PicDescBaseOptions):
-    kind: Literal["vllm"] = "vllm"
+class PicDescVlmOptions(PicDescBaseOptions):
+    kind: Literal["vlm"] = "vlm"
 
-    # For more example parameters see https://docs.vllm.ai/en/latest/getting_started/examples/offline_inference_vision_language.html
+    repo_id: str
+    prompt: str = "Describe this image in a few sentences."
+    max_new_tokens: int = 200
 
-    # Parameters for LLaVA-1.6/LLaVA-NeXT
-    llm_name: str = "llava-hf/llava-v1.6-mistral-7b-hf"
-    llm_prompt: str = "[INST] <image>\nDescribe the image in details. [/INST]"
-    llm_extra: Dict[str, Any] = dict(max_model_len=8192)
 
-    # Parameters for Phi-3-Vision
-    # llm_name: str = "microsoft/Phi-3-vision-128k-instruct"
-    # llm_prompt: str = "<|user|>\n<|image_1|>\nDescribe the image in details.<|end|>\n<|assistant|>\n"
-    # llm_extra: Dict[str, Any] = dict(max_num_seqs=5, trust_remote_code=True)
+# class PicDescSmolVlmOptions(PicDescVlmOptions):
+#     repo_id: str = "HuggingFaceTB/SmolVLM-256M-Instruct"
 
-    sampling_params: Dict[str, Any] = dict(max_tokens=64, seed=42)
+
+# class PicDescGraniteOptions(PicDescVlmOptions):
+#     repo_id: str = "ibm-granite/granite-vision-3.1-2b-preview"
+#     prompt: str = "What is shown in this image?"
+
+
+smolvlm_pic_desc = PicDescVlmOptions(repo_id="HuggingFaceTB/SmolVLM-256M-Instruct")
+# phi_pic_desc = PicDescVlmOptions(repo_id="microsoft/Phi-3-vision-128k-instruct")
+granite_pic_desc = PicDescVlmOptions(
+    repo_id="ibm-granite/granite-vision-3.1-2b-preview",
+    prompt="What is shown in this image?",
+)
 
 
 # Define an enum for the backend options
@@ -274,8 +281,8 @@ class PdfPipelineOptions(PipelineOptions):
         RapidOcrOptions,
     ] = Field(EasyOcrOptions(), discriminator="kind")
     picture_description_options: Annotated[
-        Union[PicDescApiOptions, PicDescVllmOptions], Field(discriminator="kind")
-    ] = PicDescApiOptions()  # TODO: needs defaults or optional
+        Union[PicDescApiOptions, PicDescVlmOptions], Field(discriminator="kind")
+    ] = smolvlm_pic_desc
 
     images_scale: float = 1.0
     generate_page_images: bool = False
