@@ -46,7 +46,7 @@ Downloading easyocr models...
 Models downloaded into $HOME/.cache/docling/models.
 ```
 
-Alternatively, models can be programmatically downloaded using `docling.utils.models_downloader.download_models()`.
+Alternatively, models can be programmatically downloaded using `docling.utils.model_downloader.download_models()`.
 
 **Step 2: Use the prefetched models**
 

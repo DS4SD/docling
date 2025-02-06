@@ -9,7 +9,7 @@ from rich.console import Console
 from rich.logging import RichHandler
 
 from docling.datamodel.settings import settings
-from docling.utils.models_downloader import download_models
+from docling.utils.model_downloader import download_models
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
 warnings.filterwarnings(action="ignore", category=FutureWarning, module="easyocr")
