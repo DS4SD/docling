@@ -29,8 +29,7 @@ pydantic = "^2.0.0"
 docling-core = {extras = ["chunking"], version = "^2.17.0"}
 docling-ibm-models = "^3.3.0"
 deepsearch-glm = "^1.0.0"
-# docling-parse = "^3.1.0"
-docling-parse = { git = "https://github.com/DS4SD/docling-parse.git", rev = "93e281576e740345d0161ad5da1b1fff815df8e4"}
+docling-parse = "^3.3.0"
 filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"
 pydantic-settings = "^2.3.0"
