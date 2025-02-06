@@ -197,12 +197,12 @@ class PicDescBaseOptions(BaseModel):
 class PicDescApiOptions(PicDescBaseOptions):
     kind: Literal["api"] = "api"
 
-    url: AnyUrl = AnyUrl("http://localhost/")
+    url: AnyUrl = AnyUrl("http://localhost:8000/v1/chat/completions")
     headers: Dict[str, str] = {}
     params: Dict[str, Any] = {}
     timeout: float = 20
 
-    llm_prompt: str = ""
+    prompt: str = "Describe this image in a few sentences."
     provenance: str = ""
 
 

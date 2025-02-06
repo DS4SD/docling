@@ -1,13 +1,14 @@
 import base64
 import io
 import logging
-from typing import List, Optional
+from typing import Iterable, List, Optional
 
 import httpx
 from docling_core.types.doc import PictureItem
 from docling_core.types.doc.document import (  # TODO: move import to docling_core.types.doc
     PictureDescriptionData,
 )
+from PIL import Image
 from pydantic import BaseModel, ConfigDict
 
 from docling.datamodel.pipeline_options import PicDescApiOptions
@@ -39,62 +40,60 @@ class ApiResponse(BaseModel):
     )
 
     id: str
-    model: Optional[str] = None  # returned bu openai
+    model: Optional[str] = None  # returned by openai
     choices: List[ResponseChoice]
     created: int
     usage: ResponseUsage
 
 
 class PictureDescriptionApiModel(PictureDescriptionBaseModel):
+    # elements_batch_size = 4
 
     def __init__(self, enabled: bool, options: PicDescApiOptions):
         super().__init__(enabled=enabled, options=options)
         self.options: PicDescApiOptions
 
-    def _annotate_image(self, picture: PictureItem) -> PictureDescriptionData:
-        assert picture.image is not None
+    def _annotate_images(self, images: Iterable[Image.Image]) -> Iterable[str]:
+        # Note: technically we could make a batch request here,
+        # but not all APIs will allow for it. For example, vllm won't allow more than 1.
+        for image in images:
+            img_io = io.BytesIO()
+            image.save(img_io, "PNG")
+            image_base64 = base64.b64encode(img_io.getvalue()).decode("utf-8")
 
-        img_io = io.BytesIO()
-        assert picture.image.pil_image is not None
-        picture.image.pil_image.save(img_io, "PNG")
+            messages = [
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": self.options.prompt,
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:image/png;base64,{image_base64}"
+                            },
+                        },
+                    ],
+                }
+            ]
 
-        image_base64 = base64.b64encode(img_io.getvalue()).decode("utf-8")
-
-        messages = [
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": self.options.llm_prompt,
-                    },
-                    {
-                        "type": "image_url",
-                        "image_url": {"url": f"data:image/png;base64,{image_base64}"},
-                    },
-                ],
+            payload = {
+                "messages": messages,
+                **self.options.params,
             }
-        ]
 
-        payload = {
-            "messages": messages,
-            **self.options.params,
-        }
+            r = httpx.post(
+                str(self.options.url),
+                headers=self.options.headers,
+                json=payload,
+                timeout=self.options.timeout,
+            )
+            if not r.is_success:
+                _log.error(f"Error calling the API. Reponse was {r.text}")
+            r.raise_for_status()
 
-        r = httpx.post(
-            str(self.options.url),
-            headers=self.options.headers,
-            json=payload,
-            timeout=self.options.timeout,
-        )
-        if not r.is_success:
-            _log.error(f"Error calling the API. Reponse was {r.text}")
-        r.raise_for_status()
-
-        api_resp = ApiResponse.model_validate_json(r.text)
-        generated_text = api_resp.choices[0].message.content.strip()
-
-        return PictureDescriptionData(
-            provenance=self.options.provenance,
-            text=generated_text,
-        )
+            api_resp = ApiResponse.model_validate_json(r.text)
+            generated_text = api_resp.choices[0].message.content.strip()
+            yield generated_text
