@@ -6,10 +6,11 @@ from typing import Iterable
 
 import yaml
 
-from docling.datamodel.base_models import ConversionStatus
+from docling.backend.docling_parse_v3_backend import DoclingParseV3DocumentBackend
+from docling.datamodel.base_models import ConversionStatus, InputFormat
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.settings import settings
-from docling.document_converter import DocumentConverter
+from docling.document_converter import DocumentConverter, PdfFormatOption
 
 _log = logging.getLogger(__name__)
 
@@ -103,10 +104,11 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     input_doc_paths = [
-        Path("./tests/data/2206.01062.pdf"),
-        Path("./tests/data/2203.01017v2.pdf"),
-        Path("./tests/data/2305.03393v1.pdf"),
-        Path("./tests/data/redp5110_sampled.pdf"),
+        Path("tests/data/redp5110_sampled.pdf"),
+        # Path("./tests/data/2206.01062.pdf"),
+        # Path("./tests/data/2203.01017v2.pdf"),
+        # Path("./tests/data/2305.03393v1.pdf"),
+        # Path("./tests/data/redp5110_sampled.pdf"),
     ]
 
     # buf = BytesIO(Path("./test/data/2206.01062.pdf").open("rb").read())
@@ -119,13 +121,17 @@ def main():
     # settings.debug.visualize_tables = True
     # settings.debug.visualize_cells = True
 
-    doc_converter = DocumentConverter()
+    doc_converter = DocumentConverter(
+        format_options={
+            InputFormat.PDF: PdfFormatOption(backend=DoclingParseV3DocumentBackend)
+        }
+    )
 
     start_time = time.time()
 
     conv_results = doc_converter.convert_all(
         input_doc_paths,
-        raises_on_error=False,  # to let conversion run through all and examine results at the end
+        raises_on_error=True,  # to let conversion run through all and examine results at the end
     )
     success_count, partial_success_count, failure_count = export_documents(
         conv_results, output_dir=Path("scratch")
