@@ -1,0 +1,198 @@
+import logging
+import random
+from io import BytesIO
+from pathlib import Path
+from typing import TYPE_CHECKING, Iterable, List, Optional, Union
+
+import pypdfium2 as pdfium
+from docling_core.types.doc import BoundingBox, CoordOrigin
+from docling_parse.document import PageBoundaryType, ParsedPdfPage
+from docling_parse.pdf_parser import DoclingPdfParser, PdfDocument
+from docling_parse.pdf_parsers import pdf_parser_v2
+from PIL import Image, ImageDraw
+from pypdfium2 import PdfPage
+
+from docling.backend.pdf_backend import PdfDocumentBackend, PdfPageBackend
+from docling.datamodel.base_models import Cell, Size
+
+if TYPE_CHECKING:
+    from docling.datamodel.document import InputDocument
+
+_log = logging.getLogger(__name__)
+
+
+class DoclingParseV3PageBackend(PdfPageBackend):
+    def __init__(self, parsed_page: ParsedPdfPage, page_obj: PdfPage):
+        self._ppage = page_obj
+        self._dpage = parsed_page
+        self.valid = parsed_page is not None
+
+    def is_valid(self) -> bool:
+        return self.valid
+
+    def get_text_in_rect(self, bbox: BoundingBox) -> str:
+        # Find intersecting cells on the page
+        text_piece = ""
+        page_size = self.get_size()
+
+        scale = (
+            1  # FIX - Replace with param in get_text_in_rect across backends (optional)
+        )
+
+        for i, cell in enumerate(self._dpage.sanitized.cells):
+            cell_bbox = (
+                cell.rect.to_bounding_box()
+                .to_top_left_origin(page_height=page_size.height)
+                .scaled(scale)
+            )
+
+            overlap_frac = cell_bbox.intersection_area_with(bbox) / cell_bbox.area()
+
+            if overlap_frac > 0.5:
+                if len(text_piece) > 0:
+                    text_piece += " "
+                text_piece += cell.text
+
+        return text_piece
+
+    def get_text_cells(self) -> Iterable[Cell]:
+        cells: List[Cell] = []
+        cell_counter = 0
+
+        page_size = self.get_size()
+
+        for i, cell in enumerate(self._dpage.sanitized.cells):
+            cell_bbox = cell.rect.to_bounding_box()
+
+            if cell_bbox.r < cell_bbox.l:
+                cell_bbox.r, cell_bbox.l = cell_bbox.l, cell_bbox.r
+            if cell_bbox.b > cell_bbox.t:
+                cell_bbox.b, cell_bbox.t = cell_bbox.t, cell_bbox.b
+
+            text_piece = cell.text
+            cells.append(
+                Cell(
+                    id=cell_counter,
+                    text=text_piece,
+                    bbox=cell_bbox.to_top_left_origin(page_size.height),
+                )
+            )
+            cell_counter += 1
+
+        def draw_clusters_and_cells():
+            image = (
+                self.get_page_image()
+            )  # make new image to avoid drawing on the saved ones
+            draw = ImageDraw.Draw(image)
+            for c in cells:
+                x0, y0, x1, y1 = c.bbox.as_tuple()
+                cell_color = (
+                    random.randint(30, 140),
+                    random.randint(30, 140),
+                    random.randint(30, 140),
+                )
+                draw.rectangle([(x0, y0), (x1, y1)], outline=cell_color)
+            image.show()
+
+        # draw_clusters_and_cells()
+
+        return cells
+
+    def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:
+        AREA_THRESHOLD = 0  # 32 * 32
+
+        images = self._dpage.sanitized.bitmap_resources
+
+        for img in images:
+            cropbox = img.rect.to_bounding_box().to_top_left_origin(
+                self.get_size().height
+            )
+
+            if cropbox.area() > AREA_THRESHOLD:
+                cropbox = cropbox.scaled(scale=scale)
+
+                yield cropbox
+
+    def get_page_image(
+        self, scale: float = 1, cropbox: Optional[BoundingBox] = None
+    ) -> Image.Image:
+
+        page_size = self.get_size()
+
+        if not cropbox:
+            cropbox = BoundingBox(
+                l=0,
+                r=page_size.width,
+                t=0,
+                b=page_size.height,
+                coord_origin=CoordOrigin.TOPLEFT,
+            )
+            padbox = BoundingBox(
+                l=0, r=0, t=0, b=0, coord_origin=CoordOrigin.BOTTOMLEFT
+            )
+        else:
+            padbox = cropbox.to_bottom_left_origin(page_size.height).model_copy()
+            padbox.r = page_size.width - padbox.r
+            padbox.t = page_size.height - padbox.t
+
+        image = (
+            self._ppage.render(
+                scale=scale * 1.5,
+                rotation=0,  # no additional rotation
+                crop=padbox.as_tuple(),
+            )
+            .to_pil()
+            .resize(size=(round(cropbox.width * scale), round(cropbox.height * scale)))
+        )  # We resize the image from 1.5x the given scale to make it sharper.
+
+        return image
+
+    def get_size(self) -> Size:
+        return Size(
+            width=self._dpage.sanitized.dimension.width,
+            height=self._dpage.sanitized.dimension.height,
+        )
+
+    def unload(self):
+        self._ppage = None
+        self._dpage = None
+
+
+class DoclingParseV3DocumentBackend(PdfDocumentBackend):
+    def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
+        super().__init__(in_doc, path_or_stream)
+
+        self._pdoc = pdfium.PdfDocument(self.path_or_stream)
+        self.parser = DoclingPdfParser(loglevel="fatal")
+        self.dp_doc: PdfDocument = self.parser.load(path_or_stream=path_or_stream)
+        success = self.dp_doc is not None
+
+        if not success:
+            raise RuntimeError(
+                f"docling-parse v2 could not load document {self.document_hash}."
+            )
+
+    def page_count(self) -> int:
+        # return len(self._pdoc)  # To be replaced with docling-parse API
+
+        len_1 = len(self._pdoc)
+        len_2 = self.dp_doc.number_of_pages()
+
+        if len_1 != len_2:
+            _log.error(f"Inconsistent number of pages: {len_1}!={len_2}")
+
+        return len_2
+
+    def load_page(self, page_no: int) -> DoclingParseV3PageBackend:
+        return DoclingParseV3PageBackend(
+            self.dp_doc.get_page(page_no + 1), self._pdoc[page_no]
+        )
+
+    def is_valid(self) -> bool:
+        return self.page_count() > 0
+
+    def unload(self):
+        super().unload()
+        self.dp_doc.unload()
+        self._pdoc.close()
+        self._pdoc = None
