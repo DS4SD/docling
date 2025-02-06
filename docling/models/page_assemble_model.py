@@ -11,7 +11,6 @@ from docling.datamodel.base_models import (
     Page,
     PageElement,
     Table,
-    TextDirection,
     TextElement,
 )
 from docling.datamodel.document import ConversionResult
@@ -76,23 +75,12 @@ class PageAssembleModel(BasePageModel):
                     for cluster in page.predictions.layout.clusters:
                         # _log.info("Cluster label seen:", cluster.label)
                         if cluster.label in LayoutModel.TEXT_ELEM_LABELS:
-                            textlines = []
 
-                            dominant_text_direction = TextDirection.LEFT_TO_RIGHT
-
-                            # Naive code: dominant text direction == direction of first cell.
-                            for cell in cluster.cells:
-                                dominant_text_direction = cell.text_direction
-                                break
-
-                            for cell in cluster.cells:
-                                text = cell.text.replace("\x02", "-").strip()
-                                if text:
-                                    # if dominant_text_direction == TextDirection.RIGHT_TO_LEFT:
-                                    #    textlines.insert(0, text)  # Prepend RTL text
-                                    # else:
-                                    textlines.append(text)  # Append LTR text
-
+                            textlines = [
+                                cell.text.replace("\x02", "-").strip()
+                                for cell in cluster.cells
+                                if len(cell.text.strip()) > 0
+                            ]
                             text = self.sanitize_text(textlines)
                             text_el = TextElement(
                                 label=cluster.label,

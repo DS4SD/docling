@@ -11,7 +11,7 @@ from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage
 
 from docling.backend.pdf_backend import PdfDocumentBackend, PdfPageBackend
-from docling.datamodel.base_models import Cell, Size, TextDirection
+from docling.datamodel.base_models import Cell, Size
 
 if TYPE_CHECKING:
     from docling.datamodel.document import InputDocument
@@ -97,7 +97,6 @@ class DoclingParseV2PageBackend(PdfPageBackend):
             y0 = cell_data[cells_header.index("y0")]
             x1 = cell_data[cells_header.index("x1")]
             y1 = cell_data[cells_header.index("y1")]
-            ltr = cell_data[cells_header.index("left_to_right")]
 
             if x1 < x0:
                 x0, x1 = x1, x0
@@ -117,11 +116,6 @@ class DoclingParseV2PageBackend(PdfPageBackend):
                         t=y1 * page_size.height / parser_height,
                         coord_origin=CoordOrigin.BOTTOMLEFT,
                     ).to_top_left_origin(page_size.height),
-                    text_direction=(
-                        TextDirection.LEFT_TO_RIGHT
-                        if ltr
-                        else TextDirection.RIGHT_TO_LEFT
-                    ),
                 )
             )
             cell_counter += 1

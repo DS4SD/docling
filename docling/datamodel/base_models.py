@@ -120,16 +120,10 @@ class ErrorItem(BaseModel):
     error_message: str
 
 
-class TextDirection(str, Enum):
-    LEFT_TO_RIGHT = "left_to_right"
-    RIGHT_TO_LEFT = "right_to_left"
-
-
 class Cell(BaseModel):
     id: int
     text: str
     bbox: BoundingBox
-    text_direction: TextDirection = TextDirection.LEFT_TO_RIGHT
 
 
 class OcrCell(Cell):

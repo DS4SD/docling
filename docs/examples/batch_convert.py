@@ -49,8 +49,6 @@ def export_documents(
                 with (output_dir / f"{doc_filename}.md").open("w") as fp:
                     fp.write(conv_res.document.export_to_markdown())
 
-                conv_res.document.save_as_html(output_dir / f"{doc_filename}.html")
-
                 # Export Docling document format to text:
                 with (output_dir / f"{doc_filename}.txt").open("w") as fp:
                     fp.write(conv_res.document.export_to_markdown(strict_text=True))
@@ -105,13 +103,10 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     input_doc_paths = [
-        Path("./tests/data/pdf/right_to_left_01.pdf"),
-        Path("./tests/data/pdf/right_to_left_02.pdf"),
-        Path("./tests/data/pdf/right_to_left_03.pdf"),
-        Path("./tests/data/pdf/2206.01062.pdf"),
-        Path("./tests/data/pdf/2203.01017v2.pdf"),
-        Path("./tests/data/pdf/2305.03393v1.pdf"),
-        Path("./tests/data/pdf/redp5110_sampled.pdf"),
+        Path("./tests/data/2206.01062.pdf"),
+        Path("./tests/data/2203.01017v2.pdf"),
+        Path("./tests/data/2305.03393v1.pdf"),
+        Path("./tests/data/redp5110_sampled.pdf"),
     ]
 
     # buf = BytesIO(Path("./test/data/2206.01062.pdf").open("rb").read())
