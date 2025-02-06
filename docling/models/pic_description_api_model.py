@@ -53,6 +53,12 @@ class PictureDescriptionApiModel(PictureDescriptionBaseModel):
         super().__init__(enabled=enabled, options=options)
         self.options: PicDescApiOptions
 
+        if self.enabled:
+            if options.url.host != "localhost":
+                raise NotImplementedError(
+                    "The options try to connect to remote APIs which are not yet allowed."
+                )
+
     def _annotate_images(self, images: Iterable[Image.Image]) -> Iterable[str]:
         # Note: technically we could make a batch request here,
         # but not all APIs will allow for it. For example, vllm won't allow more than 1.
