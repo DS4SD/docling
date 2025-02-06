@@ -1,6 +1,6 @@
 import typer
 
-from docling.cli.models_download import app as models_app
+from docling.cli.models import app as models_app
 
 app = typer.Typer(
     name="Docling helpers",
