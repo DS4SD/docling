@@ -1,25 +1,18 @@
 import logging
 import warnings
+from enum import Enum
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Optional
 
 import typer
+from rich.console import Console
+from rich.logging import RichHandler
 
 from docling.datamodel.settings import settings
-from docling.models.code_formula_model import CodeFormulaModel
-from docling.models.document_picture_classifier import DocumentPictureClassifier
-from docling.models.easyocr_model import EasyOcrModel
-from docling.models.layout_model import LayoutModel
-from docling.models.rapid_ocr_model import RapidOcrModel
-from docling.models.table_structure_model import TableStructureModel
-from docling.utils.models_downloader import download_all
+from docling.utils.models_downloader import download_models
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
 warnings.filterwarnings(action="ignore", category=FutureWarning, module="easyocr")
-
-_log = logging.getLogger(__name__)
-from rich.console import Console
-from rich.logging import RichHandler
 
 console = Console()
 err_console = Console(stderr=True)
@@ -33,6 +26,14 @@ app = typer.Typer(
 )
 
 
+class _AvailableModels(str, Enum):
+    LAYOUT = "layout"
+    TABLEFORMER = "tableformer"
+    CODE_FORMULA = "code_formula"
+    PICTURE_CLASSIFIER = "picture_classifier"
+    EASYOCR = "easyocr"
+
+
 @app.command("download")
 def download(
     output_dir: Annotated[
@@ -43,51 +44,27 @@ def download(
             "--output-dir",
             help="The directory where all the models are downloaded.",
         ),
-    ] = settings.cache_dir
-    / "models",
+    ] = (settings.cache_dir / "models"),
     force: Annotated[
         bool, typer.Option(..., help="If true, the download will be forced")
     ] = False,
-    quite: Annotated[
+    models: Annotated[
+        Optional[list[_AvailableModels]],
+        typer.Argument(
+            help=f"Models to download (default behavior: all will be downloaded)",
+        ),
+    ] = None,
+    quiet: Annotated[
         bool,
         typer.Option(
             ...,
             "-q",
-            help="No extra output is generated, the CLI print only the directory with the cached models.",
+            "--quiet",
+            help="No extra output is generated, the CLI prints only the directory with the cached models.",
         ),
     ] = False,
-    layout: Annotated[
-        bool,
-        typer.Option(..., help="If true, the layout model weights are downloaded."),
-    ] = True,
-    tableformer: Annotated[
-        bool,
-        typer.Option(
-            ..., help="If true, the tableformer model weights are downloaded."
-        ),
-    ] = True,
-    code_formula: Annotated[
-        bool,
-        typer.Option(
-            ..., help="If true, the code formula model weights are downloaded."
-        ),
-    ] = True,
-    picture_classifier: Annotated[
-        bool,
-        typer.Option(
-            ..., help="If true, the picture classifier model weights are downloaded."
-        ),
-    ] = True,
-    easyocr: Annotated[
-        bool,
-        typer.Option(..., help="If true, the easyocr model weights are downloaded."),
-    ] = True,
-    rapidocr: Annotated[
-        bool,
-        typer.Option(..., help="If true, the rapidocr model weights are downloaded."),
-    ] = True,
 ):
-    if not quite:
+    if not quiet:
         FORMAT = "%(message)s"
         logging.basicConfig(
             level=logging.INFO,
@@ -95,25 +72,22 @@ def download(
             datefmt="[%X]",
             handlers=[RichHandler(show_level=False, show_time=False, markup=True)],
         )
-
-    output_dir = download_all(
+    to_download = models or [m for m in _AvailableModels]
+    output_dir = download_models(
         output_dir=output_dir,
         force=force,
-        progress=(not quite),
-        layout=layout,
-        tableformer=tableformer,
-        code_formula=code_formula,
-        picture_classifier=picture_classifier,
-        easyocr=easyocr,
-        rapidocr=rapidocr,
+        progress=(not quiet),
+        with_layout=_AvailableModels.LAYOUT in to_download,
+        with_tableformer=_AvailableModels.TABLEFORMER in to_download,
+        with_code_formula=_AvailableModels.CODE_FORMULA in to_download,
+        with_picture_classifier=_AvailableModels.PICTURE_CLASSIFIER in to_download,
+        with_easyocr=_AvailableModels.EASYOCR in to_download,
     )
 
-    if quite:
+    if quiet:
         typer.echo(output_dir)
     else:
-        typer.secho(
-            f"\nAll models downloaded in the directory {output_dir}.", fg="green"
-        )
+        typer.secho(f"\nModels downloaded into: {output_dir}.", fg="green")
 
         console.print(
             "\n",
