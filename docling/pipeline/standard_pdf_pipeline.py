@@ -39,7 +39,7 @@ from docling.models.table_structure_model import TableStructureModel
 from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
 from docling.models.tesseract_ocr_model import TesseractOcrModel
 from docling.pipeline.base_pipeline import PaginatedPipeline
-from docling.utils.models_downloader import download_all
+from docling.utils.models_downloader import download_models
 from docling.utils.profiling import ProfilingScope, TimeRecorder
 
 _log = logging.getLogger(__name__)
@@ -135,7 +135,7 @@ class StandardPdfPipeline(PaginatedPipeline):
             stacklevel=3,
         )
 
-        output_dir = download_all(output_dir=local_dir, force=force, progress=False)
+        output_dir = download_models(output_dir=local_dir, force=force, progress=False)
         return output_dir
 
     def get_ocr_model(

@@ -26,17 +26,36 @@ To see all available options (export formats etc.) run `docling --help`. More de
 
 ### Advanced options
 
-#### Provide specific artifacts path (offline mode)
+#### Model prefetching and offline usage
 
-By default, artifacts such as models are downloaded automatically upon first usage. If you would prefer to use a local path where the artifacts have been explicitly prefetched, you can do that as follows:
+By default, models are downloaded automatically upon first usage. If you would prefer
+to explicitly prefetch them for offline use (e.g. in air-gapped environments) you can do
+that as follows:
+
+**Step 1: Prefetch the models**
+
+Use the `docling-tools models download` utility:
+
+```sh
+$ docling-tools models download
+Downloading layout model...
+Downloading tableformer model...
+Downloading picture classifier model...
+Downloading code formula model...
+Downloading easyocr models...
+Models downloaded into $HOME/.cache/docling/models.
+```
+
+Alternatively, models can be programmatically downloaded using `docling.utils.models_downloader.download_models()`.
+
+**Step 2: Use the prefetched models**
 
 ```python
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import EasyOcrOptions, PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
-# dowload all models with `docling-tools models download`
-artifacts_path = "/local/path/to/artifacts"
+artifacts_path = "/local/path/to/models"
 
 pipeline_options = PdfPipelineOptions(artifacts_path=artifacts_path)
 doc_converter = DocumentConverter(
@@ -46,20 +65,11 @@ doc_converter = DocumentConverter(
 )
 ```
 
-To download all the artifacts needed to run offline, Docling provides the `docling-tools models download` utility.
+Or using the CLI:
 
 ```sh
-$ docling-tools models download
-Downloading layout model...
-Downloading tableformer model...
-Downloading picture classifier model...
-Downloading code formula model...
-Downloading easyocr models...
-All models downloaded in the directory $HOME/.cache/docling/models.
+docling --artifacts-path="/local/path/to/models" FILE
 ```
-
-Alternatively, the download of all models can be triggered also with `docling.utils.models_downloader.download_all()`.
-
 
 #### Adjust pipeline features
 
