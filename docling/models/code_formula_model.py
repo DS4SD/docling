@@ -2,6 +2,7 @@ import re
 from pathlib import Path
 from typing import Iterable, List, Literal, Optional, Tuple, Union
 
+import numpy as np
 from docling_core.types.doc import (
     CodeItem,
     DocItemLabel,
@@ -101,7 +102,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
                 artifacts_path = Path(artifacts_path)
 
             self.code_formula_model = CodeFormulaPredictor(
-                artifacts_path=artifacts_path,
+                artifacts_path=str(artifacts_path),
                 device=device,
                 num_threads=accelerator_options.num_threads,
             )
@@ -226,7 +227,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
             return
 
         labels: List[str] = []
-        images: List[Image.Image] = []
+        images: List[Union[Image.Image, np.ndarray]] = []
         elements: List[TextItem] = []
         for el in element_batch:
             assert isinstance(el.item, TextItem)

@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Iterable, List, Literal, Optional, Tuple, Union
 
+import numpy as np
 from docling_core.types.doc import (
     DoclingDocument,
     NodeItem,
@@ -93,7 +94,7 @@ class DocumentPictureClassifier(BaseEnrichmentModel):
                 artifacts_path = Path(artifacts_path)
 
             self.document_picture_classifier = DocumentFigureClassifierPredictor(
-                artifacts_path=artifacts_path,
+                artifacts_path=str(artifacts_path),
                 device=device,
                 num_threads=accelerator_options.num_threads,
             )
@@ -159,7 +160,7 @@ class DocumentPictureClassifier(BaseEnrichmentModel):
                 yield element
             return
 
-        images: List[Image.Image] = []
+        images: List[Union[Image.Image, np.ndarray]] = []
         elements: List[PictureItem] = []
         for el in element_batch:
             assert isinstance(el, PictureItem)
