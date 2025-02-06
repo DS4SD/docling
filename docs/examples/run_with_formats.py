@@ -25,7 +25,7 @@ def main():
         Path("tests/data/docx/lorem_ipsum.docx"),
         Path("tests/data/pptx/powerpoint_sample.pptx"),
         Path("tests/data/2305.03393v1-pg9-img.png"),
-        Path("tests/data/2206.01062.pdf"),
+        Path("tests/data/pdf/2206.01062.pdf"),
         Path("tests/data/test_01.asciidoc"),
         Path("tests/data/test_01.asciidoc"),
     ]
