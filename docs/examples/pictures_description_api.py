@@ -4,7 +4,10 @@ from pathlib import Path
 from docling_core.types.doc import PictureItem
 
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import PdfPipelineOptions, PicDescApiOptions
+from docling.datamodel.pipeline_options import (
+    PdfPipelineOptions,
+    PictureDescriptionApiOptions,
+)
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
 
@@ -19,7 +22,7 @@ def main():
 
     pipeline_options = PdfPipelineOptions()
     pipeline_options.do_picture_description = True
-    pipeline_options.picture_description_options = PicDescApiOptions(
+    pipeline_options.picture_description_options = PictureDescriptionApiOptions(
         url="http://localhost:8000/v1/chat/completions",
         params=dict(
             model="HuggingFaceTB/SmolVLM-256M-Instruct",

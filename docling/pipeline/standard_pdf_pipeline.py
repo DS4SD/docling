@@ -13,8 +13,8 @@ from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     OcrMacOptions,
     PdfPipelineOptions,
-    PicDescApiOptions,
-    PicDescVlmOptions,
+    PictureDescriptionApiOptions,
+    PictureDescriptionVlmOptions,
     RapidOcrOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
@@ -191,14 +191,16 @@ class StandardPdfPipeline(PaginatedPipeline):
         self, artifacts_path: Optional[Path] = None
     ) -> Optional[PictureDescriptionBaseModel]:
         if isinstance(
-            self.pipeline_options.picture_description_options, PicDescApiOptions
+            self.pipeline_options.picture_description_options,
+            PictureDescriptionApiOptions,
         ):
             return PictureDescriptionApiModel(
                 enabled=self.pipeline_options.do_picture_description,
                 options=self.pipeline_options.picture_description_options,
             )
         elif isinstance(
-            self.pipeline_options.picture_description_options, PicDescVlmOptions
+            self.pipeline_options.picture_description_options,
+            PictureDescriptionVlmOptions,
         ):
             return PictureDescriptionVlmModel(
                 enabled=self.pipeline_options.do_picture_description,

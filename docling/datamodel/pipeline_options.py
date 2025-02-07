@@ -184,7 +184,7 @@ class OcrMacOptions(OcrOptions):
     )
 
 
-class PicDescBaseOptions(BaseModel):
+class PictureDescriptionBaseOptions(BaseModel):
     kind: str
     batch_size: int = 8
     scale: float = 2
@@ -194,7 +194,7 @@ class PicDescBaseOptions(BaseModel):
     )
 
 
-class PicDescApiOptions(PicDescBaseOptions):
+class PictureDescriptionApiOptions(PictureDescriptionBaseOptions):
     kind: Literal["api"] = "api"
 
     url: AnyUrl = AnyUrl("http://localhost:8000/v1/chat/completions")
@@ -206,7 +206,7 @@ class PicDescApiOptions(PicDescBaseOptions):
     provenance: str = ""
 
 
-class PicDescVlmOptions(PicDescBaseOptions):
+class PictureDescriptionVlmOptions(PictureDescriptionBaseOptions):
     kind: Literal["vlm"] = "vlm"
 
     repo_id: str
@@ -215,18 +215,11 @@ class PicDescVlmOptions(PicDescBaseOptions):
     generation_config: Dict[str, Any] = dict(max_new_tokens=200, do_sample=False)
 
 
-# class PicDescSmolVlmOptions(PicDescVlmOptions):
-#     repo_id: str = "HuggingFaceTB/SmolVLM-256M-Instruct"
-
-
-# class PicDescGraniteOptions(PicDescVlmOptions):
-#     repo_id: str = "ibm-granite/granite-vision-3.1-2b-preview"
-#     prompt: str = "What is shown in this image?"
-
-
-smolvlm_pic_desc = PicDescVlmOptions(repo_id="HuggingFaceTB/SmolVLM-256M-Instruct")
-# phi_pic_desc = PicDescVlmOptions(repo_id="microsoft/Phi-3-vision-128k-instruct")
-granite_pic_desc = PicDescVlmOptions(
+smolvlm_picture_description = PictureDescriptionVlmOptions(
+    repo_id="HuggingFaceTB/SmolVLM-256M-Instruct"
+)
+# phi_pic_desc = PictureDescriptionVlmOptions(repo_id="microsoft/Phi-3-vision-128k-instruct")
+granite_picture_description = PictureDescriptionVlmOptions(
     repo_id="ibm-granite/granite-vision-3.1-2b-preview",
     prompt="What is shown in this image?",
 )
@@ -282,8 +275,9 @@ class PdfPipelineOptions(PipelineOptions):
         RapidOcrOptions,
     ] = Field(EasyOcrOptions(), discriminator="kind")
     picture_description_options: Annotated[
-        Union[PicDescApiOptions, PicDescVlmOptions], Field(discriminator="kind")
-    ] = smolvlm_pic_desc
+        Union[PictureDescriptionApiOptions, PictureDescriptionVlmOptions],
+        Field(discriminator="kind"),
+    ] = smolvlm_picture_description
 
     images_scale: float = 1.0
     generate_page_images: bool = False

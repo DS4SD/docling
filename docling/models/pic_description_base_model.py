@@ -13,7 +13,7 @@ from docling_core.types.doc.document import (  # TODO: move import to docling_co
 )
 from PIL import Image
 
-from docling.datamodel.pipeline_options import PicDescBaseOptions
+from docling.datamodel.pipeline_options import PictureDescriptionBaseOptions
 from docling.models.base_model import (
     BaseItemAndImageEnrichmentModel,
     ItemAndImageEnrichmentElement,
@@ -26,7 +26,7 @@ class PictureDescriptionBaseModel(BaseItemAndImageEnrichmentModel):
     def __init__(
         self,
         enabled: bool,
-        options: PicDescBaseOptions,
+        options: PictureDescriptionBaseOptions,
     ):
         self.enabled = enabled
         self.options = options

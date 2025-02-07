@@ -4,10 +4,10 @@ from pathlib import Path
 from docling_core.types.doc import PictureItem
 
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import (  # PicDescSmolVlmOptions, PicDescGraniteOptions
+from docling.datamodel.pipeline_options import (
     PdfPipelineOptions,
-    granite_pic_desc,
-    smolvlm_pic_desc,
+    granite_picture_description,
+    smolvlm_picture_description,
 )
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
@@ -19,7 +19,7 @@ def main():
 
     pipeline_options = PdfPipelineOptions()
     pipeline_options.do_picture_description = True
-    pipeline_options.picture_description_options = smolvlm_pic_desc
+    pipeline_options.picture_description_options = smolvlm_picture_description
     # pipeline_options.picture_description_options = granite_pic_desc
 
     pipeline_options.picture_description_options.prompt = (

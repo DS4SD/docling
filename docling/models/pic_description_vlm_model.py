@@ -4,7 +4,10 @@ from typing import Iterable, List, Optional, Union
 
 from PIL import Image
 
-from docling.datamodel.pipeline_options import AcceleratorOptions, PicDescVlmOptions
+from docling.datamodel.pipeline_options import (
+    AcceleratorOptions,
+    PictureDescriptionVlmOptions,
+)
 from docling.models.pic_description_base_model import PictureDescriptionBaseModel
 from docling.utils.accelerator_utils import decide_device
 
@@ -15,11 +18,11 @@ class PictureDescriptionVlmModel(PictureDescriptionBaseModel):
         self,
         enabled: bool,
         artifacts_path: Optional[Union[Path, str]],
-        options: PicDescVlmOptions,
+        options: PictureDescriptionVlmOptions,
         accelerator_options: AcceleratorOptions,
     ):
         super().__init__(enabled=enabled, options=options)
-        self.options: PicDescVlmOptions
+        self.options: PictureDescriptionVlmOptions
 
         if self.enabled:
 

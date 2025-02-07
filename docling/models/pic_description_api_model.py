@@ -11,7 +11,7 @@ from docling_core.types.doc.document import (  # TODO: move import to docling_co
 from PIL import Image
 from pydantic import BaseModel, ConfigDict
 
-from docling.datamodel.pipeline_options import PicDescApiOptions
+from docling.datamodel.pipeline_options import PictureDescriptionApiOptions
 from docling.models.pic_description_base_model import PictureDescriptionBaseModel
 
 _log = logging.getLogger(__name__)
@@ -49,9 +49,9 @@ class ApiResponse(BaseModel):
 class PictureDescriptionApiModel(PictureDescriptionBaseModel):
     # elements_batch_size = 4
 
-    def __init__(self, enabled: bool, options: PicDescApiOptions):
+    def __init__(self, enabled: bool, options: PictureDescriptionApiOptions):
         super().__init__(enabled=enabled, options=options)
-        self.options: PicDescApiOptions
+        self.options: PictureDescriptionApiOptions
 
         if self.enabled:
             if options.url.host != "localhost":
