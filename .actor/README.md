@@ -44,7 +44,7 @@ This Actor wraps the [Docling project](https://ds4sd.github.io/docling/) to prov
    - The URL of the document.
    - Output format (`md`, `json`, `html`, `text`, or `doctags`).
    - OCR boolean toggle.
-4. The Actor will run and produce its outputs in the default Key-Value Store under the key `OUTPUT_RESULT`.
+4. The Actor will run and produce its outputs in the default key-value store under the key `OUTPUT_RESULT`.
 
 ### Using Apify API
 
