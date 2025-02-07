@@ -38,10 +38,17 @@ DOCUMENT_URL="$(echo "${INPUT}" | jq -r '.documentUrl')"
 OUTPUT_FORMAT="$(echo "${INPUT}" | jq -r '.outputFormat')"
 OUTPUT_NAME="output_file.${OUTPUT_FORMAT}"
 
-# If no document URL is provided, exit with an error.
+# Define error codes.
+readonly ERR_INVALID_INPUT=10
+readonly ERR_URL_INACCESSIBLE=11
+readonly ERR_DOCLING_FAILED=12
+readonly ERR_OUTPUT_MISSING=13
+readonly ERR_STORAGE_FAILED=14
+
+# Update error handling with codes.
 if [ -z "$DOCUMENT_URL" ]; then
     echo "Error: Missing document URL. Please provide 'documentUrl' in the input"
-    exit 1
+    exit $ERR_INVALID_INPUT
 fi
 
 # If no output format is specified, default to 'md'.
@@ -63,7 +70,7 @@ echo "Validating document URL..."
 if ! curl --output /dev/null --silent --head --fail "${DOCUMENT_URL}"; then
     echo "Error: Unable to access document at URL: ${DOCUMENT_URL}"
     echo "Please ensure the URL is valid and publicly accessible."
-    exit 1
+    exit $ERR_URL_INACCESSIBLE
 fi
 
 # --- Build Docling command ---
@@ -101,7 +108,7 @@ if [ $DOCLING_EXIT_CODE -ne 0 ]; then
     echo "Memory usage information:"
     free -h
     df -h
-    exit 1
+    exit $ERR_DOCLING_FAILED
 fi
 
 GENERATED_FILE="$(find . -type f -name "*.${OUTPUT_FORMAT}" -newer "$TIMESTAMP_FILE")"
@@ -109,7 +116,7 @@ GENERATED_FILE="$(find . -type f -name "*.${OUTPUT_FORMAT}" -newer "$TIMESTAMP_F
 # If no generated file is found, exit with an error.
 if [ -z "$GENERATED_FILE" ]; then
     echo "Error: Could not find generated output file with extension .$OUTPUT_FORMAT"
-    exit 1
+    exit $ERR_OUTPUT_MISSING
 fi
 
 mv "${GENERATED_FILE}" "${OUTPUT_NAME}"
@@ -119,13 +126,13 @@ mv "${GENERATED_FILE}" "${OUTPUT_NAME}"
 # If the output file is not found, exit with an error.
 if [ ! -f "$OUTPUT_NAME" ]; then
     echo "Error: Expected output file '$OUTPUT_NAME' was not generated"
-    exit 1
+    exit $ERR_OUTPUT_MISSING
 fi
 
 # If the output file is empty, exit with an error.
 if [ ! -s "$OUTPUT_NAME" ]; then
     echo "Error: Generated output file '$OUTPUT_NAME' is empty"
-    exit 1
+    exit $ERR_OUTPUT_MISSING
 fi
 
 echo "Document successfully processed and exported as '$OUTPUT_FORMAT' to file: $OUTPUT_NAME"
@@ -135,7 +142,7 @@ echo "Document successfully processed and exported as '$OUTPUT_FORMAT' to file: 
 echo "Pushing processed document to Key-Value Store (record key: OUTPUT_RESULT)..."
 apify actor:set-value "OUTPUT_RESULT" --contentType "application/$OUTPUT_FORMAT" <"$OUTPUT_NAME" || {
     echo "Error: Failed to push the output document to the Key-Value Store"
-    exit 1
+    exit $ERR_STORAGE_FAILED
 }
 
 if [ -f "$LOG_FILE" ]; then
