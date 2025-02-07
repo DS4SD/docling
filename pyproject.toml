@@ -26,10 +26,10 @@ packages = [{include = "docling"}]
 ######################
 python = "^3.9"
 pydantic = "^2.0.0"
-docling-core = {extras = ["chunking"], version = "^2.17.0"}
+docling-core = {extras = ["chunking"], version = "^2.17.2"}
 docling-ibm-models = "^3.3.0"
 deepsearch-glm = "^1.0.0"
-docling-parse = "^3.1.0"
+docling-parse = "^3.3.0"
 filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"
 pydantic-settings = "^2.3.0"
@@ -46,7 +46,7 @@ scipy = [
 typer = "^0.12.5"
 python-docx = "^1.1.2"
 python-pptx = "^1.0.2"
-beautifulsoup4 = "^4.12.3"
+beautifulsoup4 = ">=4.12.3,<4.13.0"
 pandas = "^2.1.4"
 marko = "^2.1.2"
 openpyxl = "^3.1.5"

@@ -36,7 +36,7 @@ def get_converter():
 
 
 def test_code_and_formula_conversion():
-    pdf_path = Path("tests/data/code_and_formula.pdf")
+    pdf_path = Path("tests/data/pdf/code_and_formula.pdf")
     converter = get_converter()
 
     print(f"converting {pdf_path}")
@@ -48,11 +48,11 @@ def test_code_and_formula_conversion():
     code_blocks = [el for el in results if isinstance(el, CodeItem)]
     assert len(code_blocks) == 1
 
-    gt = 'public static void print() {\n    System.out.println("Java Code");\n}'
+    gt = "function add(a, b) {\n    return a + b;\n}\nconsole.log(add(3, 5));"
 
     predicted = code_blocks[0].text.strip()
     assert predicted == gt, f"mismatch in text {predicted=}, {gt=}"
-    assert code_blocks[0].code_language == CodeLanguageLabel.JAVA
+    assert code_blocks[0].code_language == CodeLanguageLabel.JAVASCRIPT
 
     formula_blocks = [
         el

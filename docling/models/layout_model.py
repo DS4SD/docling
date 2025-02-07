@@ -150,10 +150,12 @@ class LayoutModel(BasePageModel):
             else:
                 with TimeRecorder(conv_res, "layout"):
                     assert page.size is not None
+                    page_image = page.get_image(scale=1.0)
+                    assert page_image is not None
 
                     clusters = []
                     for ix, pred_item in enumerate(
-                        self.layout_predictor.predict(page.get_image(scale=1.0))
+                        self.layout_predictor.predict(page_image)
                     ):
                         label = DocItemLabel(
                             pred_item["label"]
