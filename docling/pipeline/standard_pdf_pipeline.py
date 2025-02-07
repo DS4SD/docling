@@ -36,9 +36,9 @@ from docling.models.page_preprocessing_model import (
     PagePreprocessingModel,
     PagePreprocessingOptions,
 )
-from docling.models.pic_description_api_model import PictureDescriptionApiModel
-from docling.models.pic_description_base_model import PictureDescriptionBaseModel
-from docling.models.pic_description_vlm_model import PictureDescriptionVlmModel
+from docling.models.picture_description_api_model import PictureDescriptionApiModel
+from docling.models.picture_description_base_model import PictureDescriptionBaseModel
+from docling.models.picture_description_vlm_model import PictureDescriptionVlmModel
 from docling.models.rapid_ocr_model import RapidOcrModel
 from docling.models.table_structure_model import TableStructureModel
 from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
@@ -101,7 +101,7 @@ class StandardPdfPipeline(PaginatedPipeline):
         ]
 
         # Picture description model
-        if (pic_desc_model := self.get_pic_description_model()) is None:
+        if (picture_description_model := self.get_picture_description_model()) is None:
             raise RuntimeError(
                 f"The specified picture description kind is not supported: {pipeline_options.picture_description_options.kind}."
             )
@@ -126,7 +126,7 @@ class StandardPdfPipeline(PaginatedPipeline):
                 accelerator_options=pipeline_options.accelerator_options,
             ),
             # Document Picture description
-            pic_desc_model,
+            picture_description_model,
         ]
 
         if (
@@ -188,7 +188,7 @@ class StandardPdfPipeline(PaginatedPipeline):
             )
         return None
 
-    def get_pic_description_model(
+    def get_picture_description_model(
         self, artifacts_path: Optional[Path] = None
     ) -> Optional[PictureDescriptionBaseModel]:
         if isinstance(

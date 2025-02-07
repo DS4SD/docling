@@ -20,7 +20,7 @@ def main():
     pipeline_options = PdfPipelineOptions()
     pipeline_options.do_picture_description = True
     pipeline_options.picture_description_options = smolvlm_picture_description
-    # pipeline_options.picture_description_options = granite_pic_desc
+    # pipeline_options.picture_description_options = granite_picture_description
 
     pipeline_options.picture_description_options.prompt = (
         "Describe the image in three sentences. Be consise and accurate."

@@ -218,7 +218,7 @@ class PictureDescriptionVlmOptions(PictureDescriptionBaseOptions):
 smolvlm_picture_description = PictureDescriptionVlmOptions(
     repo_id="HuggingFaceTB/SmolVLM-256M-Instruct"
 )
-# phi_pic_desc = PictureDescriptionVlmOptions(repo_id="microsoft/Phi-3-vision-128k-instruct")
+# phi_picture_description = PictureDescriptionVlmOptions(repo_id="microsoft/Phi-3-vision-128k-instruct")
 granite_picture_description = PictureDescriptionVlmOptions(
     repo_id="ibm-granite/granite-vision-3.1-2b-preview",
     prompt="What is shown in this image?",

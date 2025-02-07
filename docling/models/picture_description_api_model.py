@@ -12,7 +12,7 @@ from PIL import Image
 from pydantic import BaseModel, ConfigDict
 
 from docling.datamodel.pipeline_options import PictureDescriptionApiOptions
-from docling.models.pic_description_base_model import PictureDescriptionBaseModel
+from docling.models.picture_description_base_model import PictureDescriptionBaseModel
 
 _log = logging.getLogger(__name__)
 

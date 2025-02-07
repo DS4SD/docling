@@ -1,6 +1,5 @@
-import json
 from pathlib import Path
-from typing import Iterable, List, Optional, Union
+from typing import Iterable, Optional, Union
 
 from PIL import Image
 
@@ -8,7 +7,7 @@ from docling.datamodel.pipeline_options import (
     AcceleratorOptions,
     PictureDescriptionVlmOptions,
 )
-from docling.models.pic_description_base_model import PictureDescriptionBaseModel
+from docling.models.picture_description_base_model import PictureDescriptionBaseModel
 from docling.utils.accelerator_utils import decide_device
 
 
