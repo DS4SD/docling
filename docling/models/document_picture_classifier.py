@@ -56,7 +56,7 @@ class DocumentPictureClassifier(BaseEnrichmentModel):
         Processes a batch of elements and adds classification annotations.
     """
 
-    _model_repo_folder = "DocumentFigureClassifier"
+    _model_repo_folder = "ds4sd--DocumentFigureClassifier"
     images_scale = 2
 
     def __init__(

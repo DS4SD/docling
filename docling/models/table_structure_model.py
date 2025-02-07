@@ -23,7 +23,7 @@ from docling.utils.profiling import TimeRecorder
 
 
 class TableStructureModel(BasePageModel):
-    _model_repo_folder = "docling-models"
+    _model_repo_folder = "ds4sd--docling-models"
     _model_path = "model_artifacts/tableformer"
 
     def __init__(
