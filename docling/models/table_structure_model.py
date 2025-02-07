@@ -1,6 +1,7 @@
 import copy
+import warnings
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Optional, Union
 
 import numpy
 from docling_core.types.doc import BoundingBox, DocItemLabel, TableCell
@@ -22,10 +23,13 @@ from docling.utils.profiling import TimeRecorder
 
 
 class TableStructureModel(BasePageModel):
+    _model_repo_folder = "docling-models"
+    _model_path = "model_artifacts/tableformer"
+
     def __init__(
         self,
         enabled: bool,
-        artifacts_path: Path,
+        artifacts_path: Optional[Path],
         options: TableStructureOptions,
         accelerator_options: AcceleratorOptions,
     ):
@@ -35,6 +39,26 @@ class TableStructureModel(BasePageModel):
 
         self.enabled = enabled
         if self.enabled:
+
+            if artifacts_path is None:
+                artifacts_path = self.download_models() / self._model_path
+            else:
+                # will become the default in the future
+                if (artifacts_path / self._model_repo_folder).exists():
+                    artifacts_path = (
+                        artifacts_path / self._model_repo_folder / self._model_path
+                    )
+                elif (artifacts_path / self._model_path).exists():
+                    warnings.warn(
+                        "The usage of artifacts_path containing directly "
+                        f"{self._model_path} is deprecated. Please point "
+                        "the artifacts_path to the parent containing "
+                        f"the {self._model_repo_folder} folder.",
+                        DeprecationWarning,
+                        stacklevel=3,
+                    )
+                    artifacts_path = artifacts_path / self._model_path
+
             if self.mode == TableFormerMode.ACCURATE:
                 artifacts_path = artifacts_path / "accurate"
             else:
@@ -57,6 +81,24 @@ class TableStructureModel(BasePageModel):
                 self.tm_config, device, accelerator_options.num_threads
             )
             self.scale = 2.0  # Scale up table input images to 144 dpi
+
+    @staticmethod
+    def download_models(
+        local_dir: Optional[Path] = None, force: bool = False, progress: bool = False
+    ) -> Path:
+        from huggingface_hub import snapshot_download
+        from huggingface_hub.utils import disable_progress_bars
+
+        if not progress:
+            disable_progress_bars()
+        download_path = snapshot_download(
+            repo_id="ds4sd/docling-models",
+            force_download=force,
+            local_dir=local_dir,
+            revision="v2.1.0",
+        )
+
+        return Path(download_path)
 
     def draw_table_and_cells(
         self,

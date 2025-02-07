@@ -1,0 +1,35 @@
+<document>
+<section_header_level_1><location><page_1><loc_12><loc_90><loc_45><loc_93></location>یلخاد یلااک - یلصا رازاب رد شريذپ همانديما</section_header_level_1>
+<figure>
+<location><page_1><loc_65><loc_88><loc_81><loc_96></location>
+</figure>
+<section_header_level_1><location><page_1><loc_63><loc_81><loc_81><loc_84></location>لااک درادناتسا -2-5</section_header_level_1>
+<text><location><page_1><loc_77><loc_79><loc_87><loc_81></location>درادناتسا مان</text>
+<text><location><page_1><loc_11><loc_75><loc_44><loc_81></location>یرگ هتخير شور هب هدش ديلوت لاشمش و هشمش فرصم دروم هتسويپ یا هزاس یاهدلاوف رد - قباطم تسويپ زيلانآ</text>
+<text><location><page_1><loc_71><loc_72><loc_87><loc_74></location>یلم درادناتسا هرامش</text>
+<text><location><page_1><loc_40><loc_73><loc_45><loc_74></location>20300</text>
+<text><location><page_1><loc_68><loc_70><loc_87><loc_72></location>؟تسا یرابجا درادناتسا</text>
+<checkbox_unselected><location><page_1><loc_33><loc_70><loc_44><loc_72></location>ريخ       یلب</checkbox_unselected>
+<text><location><page_1><loc_65><loc_67><loc_87><loc_69></location>درادناتسا هدننکرداص عجرم</text>
+<text><location><page_1><loc_28><loc_67><loc_44><loc_69></location>ناريا درادناتسا یلم نامزاس</text>
+<text><location><page_1><loc_49><loc_62><loc_87><loc_66></location>ذخا ار روکذم درادناتسا ،لوصحم هدننکديلوت ايآ ؟تسا هدومن</text>
+<checkbox_selected><location><page_1><loc_33><loc_65><loc_35><loc_66></location>ريخ</checkbox_selected>
+<checkbox_unselected><location><page_1><loc_40><loc_65><loc_42><loc_66></location>یلب</checkbox_unselected>
+<section_header_level_1><location><page_1><loc_69><loc_56><loc_85><loc_58></location>سروب رد شريذپ -3</section_header_level_1>
+<text><location><page_1><loc_68><loc_54><loc_83><loc_56></location>کرادم هئارا خيرات</text>
+<text><location><page_1><loc_23><loc_54><loc_32><loc_56></location>1403/09/19</text>
+<text><location><page_1><loc_72><loc_51><loc_83><loc_53></location>شريذپ خيرات</text>
+<text><location><page_1><loc_23><loc_51><loc_32><loc_53></location>1403/10/04</text>
+<text><location><page_1><loc_62><loc_48><loc_83><loc_50></location>هضرع هتيمک هسلج هرامش</text>
+<text><location><page_1><loc_26><loc_49><loc_29><loc_50></location>436</text>
+<text><location><page_1><loc_67><loc_45><loc_83><loc_47></location>همانديما جرد خيرات</text>
+<text><location><page_1><loc_23><loc_46><loc_32><loc_48></location>1403/10/05</text>
+<text><location><page_1><loc_71><loc_43><loc_83><loc_45></location>شريذپ رواشم</text>
+<text><location><page_1><loc_21><loc_43><loc_34><loc_45></location>سروب نومرآ یرازگراک</text>
+<text><location><page_1><loc_47><loc_37><loc_83><loc_42></location>رد لااک شريذپ زا سپ هياپ تميق نييعت ةوحن سروب</text>
+<text><location><page_1><loc_18><loc_40><loc_36><loc_42></location>یناهج  یاه تميق ساسا رب</text>
+<text><location><page_1><loc_45><loc_32><loc_83><loc_37></location>شورف /شورف لک /ديلوت زا هضرع دصرد لقادح یلخاد</text>
+<text><location><page_1><loc_14><loc_35><loc_40><loc_37></location>نت 47.500 اي هنايلاس ديلوت زا %50 لقادح</text>
+<text><location><page_1><loc_68><loc_29><loc_83><loc_31></location>ليوحت زاجم یاطخ</text>
+<text><location><page_1><loc_18><loc_30><loc_37><loc_31></location>ليوحت لباق هلومحم نيرخآ 5%</text>
+</document>

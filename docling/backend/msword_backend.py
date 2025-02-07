@@ -242,7 +242,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             parts = label.split(":")
 
             if len(parts) == 2:
-                return parts[0], int(parts[1])
+                return parts[0], self.str_to_int(parts[1], None)
 
         parts = self.split_text_and_number(label)
 
