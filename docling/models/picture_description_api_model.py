@@ -3,7 +3,7 @@ import io
 import logging
 from typing import Iterable, List, Optional
 
-import httpx
+import requests
 from docling_core.types.doc import PictureItem
 from docling_core.types.doc.document import (  # TODO: move import to docling_core.types.doc
     PictureDescriptionData,
@@ -90,13 +90,13 @@ class PictureDescriptionApiModel(PictureDescriptionBaseModel):
                 **self.options.params,
             }
 
-            r = httpx.post(
+            r = requests.post(
                 str(self.options.url),
                 headers=self.options.headers,
                 json=payload,
                 timeout=self.options.timeout,
             )
-            if not r.is_success:
+            if not r.ok:
                 _log.error(f"Error calling the API. Reponse was {r.text}")
             r.raise_for_status()
 
