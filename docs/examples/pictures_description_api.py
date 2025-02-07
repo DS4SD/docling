@@ -14,7 +14,7 @@ from docling.document_converter import DocumentConverter, PdfFormatOption
 def main():
     logging.basicConfig(level=logging.INFO)
 
-    input_doc_path = Path("./tests/data/2206.01062.pdf")
+    input_doc_path = Path("./tests/data/pdf/2206.01062.pdf")
 
     # This is using a local API server to do picture description.
     # For example, you can launch it locally with:
