@@ -48,6 +48,7 @@ readonly ERR_STORAGE_FAILED=14
 # Update error handling with codes.
 if [ -z "$DOCUMENT_URL" ]; then
     echo "Error: Missing document URL. Please provide 'documentUrl' in the input"
+    apify pushData "{\"url\": \"${DOCUMENT_URL}\", \"status\": \"error\", \"error\": \"Missing document URL\"}" || true
     exit $ERR_INVALID_INPUT
 fi
 
@@ -70,6 +71,7 @@ echo "Validating document URL..."
 if ! curl --output /dev/null --silent --head --fail "${DOCUMENT_URL}"; then
     echo "Error: Unable to access document at URL: ${DOCUMENT_URL}"
     echo "Please ensure the URL is valid and publicly accessible."
+    apify pushData "{\"url\": \"${DOCUMENT_URL}\", \"status\": \"error\", \"error\": \"URL inaccessible\"}" || true
     exit $ERR_URL_INACCESSIBLE
 fi
 
@@ -145,6 +147,13 @@ apify actor:set-value "OUTPUT_RESULT" --contentType "application/$OUTPUT_FORMAT"
     exit $ERR_STORAGE_FAILED
 }
 
+# Create dataset record with processing results.
+RESULT_URL="https://api.apify.com/v2/key-value-stores/${APIFY_DEFAULT_KEY_VALUE_STORE_ID}/records/OUTPUT_RESULT"
+echo "Adding record to dataset..."
+apify pushData "{\"url\": \"${DOCUMENT_URL}\", \"output_file\": \"${RESULT_URL}\", \"status\": \"success\"}" || {
+    echo "Warning: Failed to push data to dataset"
+}
+
 if [ -f "$LOG_FILE" ]; then
     if [ -s "$LOG_FILE" ]; then
         echo "Log file is not empty, pushing to Key-Value Store (record key: DOCLING_LOG)..."
@@ -168,4 +177,5 @@ cleanup() {
 
 trap cleanup EXIT
 
-echo "Done!"
+echo "Processing completed successfully!"
+echo "You can find your results at: '$RESULT_URL'"
