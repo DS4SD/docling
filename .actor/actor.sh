@@ -139,11 +139,11 @@ fi
 
 echo "Document successfully processed and exported as '$OUTPUT_FORMAT' to file: $OUTPUT_NAME"
 
-# --- Store output and log in Key-Value Store ---
+# --- Store output and log in key-value store ---
 
-echo "Pushing processed document to Key-Value Store (record key: OUTPUT_RESULT)..."
+echo "Pushing processed document to key-value store (record key: OUTPUT_RESULT)..."
 apify actor:set-value "OUTPUT_RESULT" --contentType "application/$OUTPUT_FORMAT" <"$OUTPUT_NAME" || {
-    echo "Error: Failed to push the output document to the Key-Value Store"
+    echo "Error: Failed to push the output document to the key-value store"
     exit $ERR_STORAGE_FAILED
 }
 
@@ -156,9 +156,9 @@ apify pushData "{\"url\": \"${DOCUMENT_URL}\", \"output_file\": \"${RESULT_URL}\
 
 if [ -f "$LOG_FILE" ]; then
     if [ -s "$LOG_FILE" ]; then
-        echo "Log file is not empty, pushing to Key-Value Store (record key: DOCLING_LOG)..."
+        echo "Log file is not empty, pushing to key-value store (record key: DOCLING_LOG)..."
         apify actor:set-value "DOCLING_LOG" --contentType "text/plain" <"$LOG_FILE" || {
-            echo "Warning: Failed to push the log file to the Key-Value Store"
+            echo "Warning: Failed to push the log file to the key-value store"
         }
     else
         echo "Warning: docling.log file exists but is empty"
