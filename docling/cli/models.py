@@ -31,6 +31,7 @@ class _AvailableModels(str, Enum):
     TABLEFORMER = "tableformer"
     CODE_FORMULA = "code_formula"
     PICTURE_CLASSIFIER = "picture_classifier"
+    SMOLVLM = "smolvlm"
     EASYOCR = "easyocr"
 
 
@@ -81,6 +82,7 @@ def download(
         with_tableformer=_AvailableModels.TABLEFORMER in to_download,
         with_code_formula=_AvailableModels.CODE_FORMULA in to_download,
         with_picture_classifier=_AvailableModels.PICTURE_CLASSIFIER in to_download,
+        with_smolvlm=_AvailableModels.SMOLVLM in to_download,
         with_easyocr=_AvailableModels.EASYOCR in to_download,
     )
 

@@ -2727,13 +2727,13 @@ pygments = ">2.12.0"
 
 [[package]]
 name = "mkdocs-material"
-version = "9.6.2"
+version = "9.6.3"
 description = "Documentation that simply works"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "mkdocs_material-9.6.2-py3-none-any.whl", hash = "sha256:71d90dbd63b393ad11a4d90151dfe3dcbfcd802c0f29ce80bebd9bbac6abc753"},
-    {file = "mkdocs_material-9.6.2.tar.gz", hash = "sha256:a3de1c5d4c745f10afa78b1a02f917b9dce0808fb206adc0f5bb48b58c1ca21f"},
+    {file = "mkdocs_material-9.6.3-py3-none-any.whl", hash = "sha256:1125622067e26940806701219303b27c0933e04533560725d97ec26fd16a39cf"},
+    {file = "mkdocs_material-9.6.3.tar.gz", hash = "sha256:c87f7d1c39ce6326da5e10e232aed51bae46252e646755900f4b0fc9192fa832"},
 ]
 
 [package.dependencies]
@@ -7846,8 +7846,9 @@ type = ["pytest-mypy"]
 ocrmac = ["ocrmac"]
 rapidocr = ["onnxruntime", "onnxruntime", "rapidocr-onnxruntime"]
 tesserocr = ["tesserocr"]
+vlm = ["transformers", "transformers"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "ca0464df452664834ae9bccc59f89240e2f5e8f3b179761de615548c799680e7"
+content-hash = "86d266adc6272f3db65ab07f5cce35cbe9626368dc0e09ab374c861f0809f693"

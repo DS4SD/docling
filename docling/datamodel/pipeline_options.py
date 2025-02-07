@@ -2,9 +2,9 @@ import logging
 import os
 from enum import Enum
 from pathlib import Path
-from typing import Any, List, Literal, Optional, Union
+from typing import Annotated, Any, Dict, List, Literal, Optional, Union
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import AnyUrl, BaseModel, ConfigDict, Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _log = logging.getLogger(__name__)
@@ -184,6 +184,51 @@ class OcrMacOptions(OcrOptions):
     )
 
 
+class PictureDescriptionBaseOptions(BaseModel):
+    kind: str
+    batch_size: int = 8
+    scale: float = 2
+
+    bitmap_area_threshold: float = (
+        0.2  # percentage of the area for a bitmap to processed with the models
+    )
+
+
+class PictureDescriptionApiOptions(PictureDescriptionBaseOptions):
+    kind: Literal["api"] = "api"
+
+    url: AnyUrl = AnyUrl("http://localhost:8000/v1/chat/completions")
+    headers: Dict[str, str] = {}
+    params: Dict[str, Any] = {}
+    timeout: float = 20
+
+    prompt: str = "Describe this image in a few sentences."
+    provenance: str = ""
+
+
+class PictureDescriptionVlmOptions(PictureDescriptionBaseOptions):
+    kind: Literal["vlm"] = "vlm"
+
+    repo_id: str
+    prompt: str = "Describe this image in a few sentences."
+    # Config from here https://huggingface.co/docs/transformers/en/main_classes/text_generation#transformers.GenerationConfig
+    generation_config: Dict[str, Any] = dict(max_new_tokens=200, do_sample=False)
+
+    @property
+    def repo_cache_folder(self) -> str:
+        return self.repo_id.replace("/", "--")
+
+
+smolvlm_picture_description = PictureDescriptionVlmOptions(
+    repo_id="HuggingFaceTB/SmolVLM-256M-Instruct"
+)
+# phi_picture_description = PictureDescriptionVlmOptions(repo_id="microsoft/Phi-3-vision-128k-instruct")
+granite_picture_description = PictureDescriptionVlmOptions(
+    repo_id="ibm-granite/granite-vision-3.1-2b-preview",
+    prompt="What is shown in this image?",
+)
+
+
 # Define an enum for the backend options
 class PdfBackend(str, Enum):
     """Enum of valid PDF backends."""
@@ -223,6 +268,7 @@ class PdfPipelineOptions(PipelineOptions):
     do_code_enrichment: bool = False  # True: perform code OCR
     do_formula_enrichment: bool = False  # True: perform formula OCR, return Latex code
     do_picture_classification: bool = False  # True: classify pictures in documents
+    do_picture_description: bool = False  # True: run describe pictures in documents
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
     ocr_options: Union[
@@ -232,6 +278,10 @@ class PdfPipelineOptions(PipelineOptions):
         OcrMacOptions,
         RapidOcrOptions,
     ] = Field(EasyOcrOptions(), discriminator="kind")
+    picture_description_options: Annotated[
+        Union[PictureDescriptionApiOptions, PictureDescriptionVlmOptions],
+        Field(discriminator="kind"),
+    ] = smolvlm_picture_description
 
     images_scale: float = 1.0
     generate_page_images: bool = False

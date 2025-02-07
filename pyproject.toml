@@ -59,6 +59,10 @@ onnxruntime = [
   { version = ">=1.7.0,<1.20.0", optional = true, markers = "python_version < '3.10'" },
   { version = "^1.7.0", optional = true, markers = "python_version >= '3.10'" }
 ]
+transformers = [
+  {markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'", version = "^4.46.0", optional = true },
+  {markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'", version = "~4.42.0", optional = true }
+]
 pillow = "^10.0.0"
 tqdm = "^4.65.0"
 
@@ -121,6 +125,7 @@ torchvision = [
 [tool.poetry.extras]
 tesserocr = ["tesserocr"]
 ocrmac = ["ocrmac"]
+vlm = ["transformers"]
 rapidocr = ["rapidocr-onnxruntime", "onnxruntime"]
 
 [tool.poetry.scripts]
@@ -162,7 +167,8 @@ module = [
     "deepsearch_glm.*",
     "lxml.*",
     "bs4.*",
-    "huggingface_hub.*"
+    "huggingface_hub.*",
+    "transformers.*",
 ]
 ignore_missing_imports = true
 
