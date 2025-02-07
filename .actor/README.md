@@ -2,7 +2,7 @@
 
 [![Docling Actor](https://apify.com/actor-badge?actor=vancura/docling?fpr=docling)](https://apify.com/vancura/docling)
 
-This Actor wraps the [Docling project](https://ds4sd.github.io/docling/) to provide serverless document processing in the cloud. It can process complex documents (PDF, DOCX, images) and convert them into structured formats (Markdown, JSON, HTML, Text, or DocTags) with optional OCR support.
+This Actor (specification v1) wraps the [Docling project](https://ds4sd.github.io/docling/) to provide serverless document processing in the cloud. It can process complex documents (PDF, DOCX, images) and convert them into structured formats (Markdown, JSON, HTML, Text, or DocTags) with optional OCR support.
 
 ## Table of Contents
 
@@ -16,6 +16,7 @@ This Actor wraps the [Docling project](https://ds4sd.github.io/docling/) to prov
 8. [Requirements & Installation](#requirements--installation)
 9. [License](#license)
 10. [Acknowledgments](#acknowledgments)
+11. [Security Considerations](#security-considerations)
 
 ## Features
 
@@ -92,14 +93,30 @@ The Actor accepts a JSON schema matching the file `.actor/input_schema.json`. Be
 
 ## Output
 
-After processing, the final document is saved as `OUTPUT_RESULT` in the default Key-Value Store.
-If the Actor logs warnings or debug info, these messages can be pushed to `DOCLING_LOG`.
+The Actor provides three types of outputs:
 
-You can retrieve the results programmatically by calling:
+1. **Processed Document** - Saved as `OUTPUT_RESULT` in the default key-value store
+2. **Processing Log** - Saved as `DOCLING_LOG` in the default key-value store
+3. **Dataset Record** - Contains processing metadata with:
+   - Input document URL
+   - Direct link to the processed output
+   - Processing status
+
+You can access the results in several ways:
+
+1. **Direct URL** (shown in Actor run logs):
+
+```text
+https://api.apify.com/v2/key-value-stores/[STORE_ID]/records/OUTPUT_RESULT
+```
+
+2. **Programmatically** via Apify CLI:
 
 ```bash
 apify key-value-stores get-value OUTPUT_RESULT
 ```
+
+3. **Dataset** - Check the "Dataset" tab in the Actor run details to see processing metadata
 
 ### Example Outputs
 
@@ -138,12 +155,32 @@ Content of section 2...
 <p>Content of section 1...</p>
 ```
 
+### Processing Logs (`DOCLING_LOG`)
+
+The Actor maintains detailed processing logs including:
+
+- Memory usage statistics
+- Processing steps and timing
+- Error messages and stack traces
+- Input validation results
+- OCR processing details (when enabled)
+
+Access logs via:
+
+```bash
+apify key-value-stores get-record DOCLING_LOG
+```
+
 ## Performance & Resources
 
 - **Docker Image Size**: ~6 GB (includes OCR libraries and ML models)
 - **Memory Requirements**:
   - Minimum: 4 GB RAM
   - Recommended: 8 GB RAM for large documents
+- **Memory Monitoring**:
+  - Real-time memory usage tracking during processing
+  - Detailed memory statistics in `DOCLING_LOG`
+  - Automatic failure detection for out-of-memory situations
 - **Processing Time**:
   - Simple documents: 30-60 seconds
   - Complex PDFs with OCR: 2-5 minutes
@@ -172,6 +209,17 @@ Common issues and solutions:
    - Verify the output format is supported
    - Check if the document structure is compatible
    - Review the `DOCLING_LOG` for specific errors
+
+### Error Handling
+
+The Actor implements comprehensive error handling:
+
+- Input validation for document URLs and parameters
+- Detailed error messages in `DOCLING_LOG`
+- Proper exit codes for different failure scenarios
+- Memory monitoring and out-of-memory detection
+- Automatic cleanup on failure
+- Dataset records with processing status
 
 ## Local Development
 
@@ -232,3 +280,11 @@ This wrapper project is under the MIT License, matching the original Docling lic
 
 - [Docling](https://ds4sd.github.io/docling/) codebase by IBM
 - [Apify](https://apify.com/?fpr=docling) for the serverless actor environment
+
+## Security Considerations
+
+- Actor runs under a non-root user (appuser) for enhanced security
+- Input URLs are validated before processing
+- Temporary files are securely managed and cleaned up
+- Process isolation through Docker containerization
+- Secure handling of processing artifacts

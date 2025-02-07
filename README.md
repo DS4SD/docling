@@ -98,6 +98,12 @@ apify call vancura/docling -i '{
 }'
 ```
 
+The Actor stores results in:
+
+* Processed document in key-value store (`OUTPUT_RESULT`)
+* Processing logs (`DOCLING_LOG`)
+* Dataset record with result URL and status
+
 Read more about the [Docling Actor](.actor/README.md), including how to use it via the Apify API and CLI.
 
 ## Get help and support
