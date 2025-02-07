@@ -4,10 +4,6 @@ import logging
 from typing import Iterable, List, Optional
 
 import requests
-from docling_core.types.doc import PictureItem
-from docling_core.types.doc.document import (  # TODO: move import to docling_core.types.doc
-    PictureDescriptionData,
-)
 from PIL import Image
 from pydantic import BaseModel, ConfigDict
 
