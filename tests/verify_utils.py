@@ -249,7 +249,13 @@ def verify_conversion_result_v1(
         doc_pred_dt = doc_result.legacy_document.export_to_document_tokens()
 
     engine_suffix = "" if ocr_engine is None else f".{ocr_engine}"
+
     gt_subpath = input_path.parent / "groundtruth" / "docling_v1" / input_path.name
+    if str(input_path.parent).endswith("pdf"):
+        gt_subpath = (
+            input_path.parent.parent / "groundtruth" / "docling_v1" / input_path.name
+        )
+
     pages_path = gt_subpath.with_suffix(f"{engine_suffix}.pages.json")
     json_path = gt_subpath.with_suffix(f"{engine_suffix}.json")
     md_path = gt_subpath.with_suffix(f"{engine_suffix}.md")
@@ -325,7 +331,13 @@ def verify_conversion_result_v2(
     doc_pred_dt = doc_result.document.export_to_document_tokens()
 
     engine_suffix = "" if ocr_engine is None else f".{ocr_engine}"
+
     gt_subpath = input_path.parent / "groundtruth" / "docling_v2" / input_path.name
+    if str(input_path.parent).endswith("pdf"):
+        gt_subpath = (
+            input_path.parent.parent / "groundtruth" / "docling_v2" / input_path.name
+        )
+
     pages_path = gt_subpath.with_suffix(f"{engine_suffix}.pages.json")
     json_path = gt_subpath.with_suffix(f"{engine_suffix}.json")
     md_path = gt_subpath.with_suffix(f"{engine_suffix}.md")

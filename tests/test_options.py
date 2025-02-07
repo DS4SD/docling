@@ -17,7 +17,7 @@ from docling.document_converter import DocumentConverter, PdfFormatOption
 
 @pytest.fixture
 def test_doc_path():
-    return Path("./tests/data/2206.01062.pdf")
+    return Path("./tests/data/pdf/2206.01062.pdf")
 
 
 def get_converters_with_table_options():

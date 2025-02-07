@@ -15,7 +15,7 @@ GENERATE_V2 = False
 def get_pdf_paths():
 
     # Define the directory you want to search
-    directory = Path("./tests/data")
+    directory = Path("./tests/data/pdf/")
 
     # List all PDF files in the directory and its subdirectories
     pdf_files = sorted(directory.rglob("*.pdf"))
