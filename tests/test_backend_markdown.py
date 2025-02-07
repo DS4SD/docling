@@ -4,6 +4,8 @@ from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
+from .test_data_gen_flag import GEN_TEST_DATA
+
 
 def test_convert_valid():
     fmt = InputFormat.MD
@@ -30,6 +32,10 @@ def test_convert_valid():
         act_doc = backend.convert()
         act_data = act_doc.export_to_markdown()
 
-        with open(gt_path, "r", encoding="utf-8") as f:
-            exp_data = f.read().rstrip()
-        assert act_data == exp_data
+        if GEN_TEST_DATA:
+            with open(gt_path, mode="w", encoding="utf-8") as f:
+                f.write(f"{act_data}\n")
+        else:
+            with open(gt_path, encoding="utf-8") as f:
+                exp_data = f.read().rstrip()
+            assert exp_data == act_data
