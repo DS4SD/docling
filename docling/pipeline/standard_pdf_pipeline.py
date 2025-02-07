@@ -13,6 +13,7 @@ from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     OcrMacOptions,
+    OcrOptions,
     PdfPipelineOptions,
     PictureDescriptionApiOptions,
     PictureDescriptionVlmOptions,
@@ -73,6 +74,7 @@ class StandardPdfPipeline(PaginatedPipeline):
         if (ocr_model := self.get_ocr_model(artifacts_path=artifacts_path)) is None:
             raise RuntimeError(
                 f"The specified OCR kind is not supported: {pipeline_options.ocr_options.kind}."
+                " You can provide a custom OCR model class in the options."
             )
 
         self.build_pipe = [
@@ -190,6 +192,12 @@ class StandardPdfPipeline(PaginatedPipeline):
                 enabled=self.pipeline_options.do_ocr,
                 options=self.pipeline_options.ocr_options,
             )
+        elif isinstance(self.pipeline_options.ocr_options, OcrOptions):
+            if self.pipeline_options.ocr_options.ocr_model is not None:
+                return self.pipeline_options.ocr_options.ocr_model(
+                    enabled=self.pipeline_options.do_ocr,
+                    options=self.pipeline_options.ocr_options,
+                )
         return None
 
     def get_picture_description_model(

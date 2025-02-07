@@ -2,10 +2,12 @@ import logging
 import os
 from enum import Enum
 from pathlib import Path
-from typing import Annotated, Any, Dict, List, Literal, Optional, Union
+from typing import Annotated, Any, Dict, List, Literal, Optional, Type, Union
 
 from pydantic import AnyUrl, BaseModel, ConfigDict, Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from docling.models.base_ocr_model import BaseOcrModel
 
 _log = logging.getLogger(__name__)
 
@@ -85,6 +87,7 @@ class OcrOptions(BaseModel):
     bitmap_area_threshold: float = (
         0.05  # percentage of the area for a bitmap to processed with OCR
     )
+    ocr_model: Optional[Type[BaseOcrModel]] = None
 
 
 class RapidOcrOptions(OcrOptions):
@@ -151,6 +154,7 @@ class TesseractCliOcrOptions(OcrOptions):
 
     kind: Literal["tesseract"] = "tesseract"
     lang: List[str] = ["fra", "deu", "spa", "eng"]
+
     tesseract_cmd: str = "tesseract"
     path: Optional[str] = None
 
@@ -164,6 +168,7 @@ class TesseractOcrOptions(OcrOptions):
 
     kind: Literal["tesserocr"] = "tesserocr"
     lang: List[str] = ["fra", "deu", "spa", "eng"]
+
     path: Optional[str] = None
 
     model_config = ConfigDict(
@@ -176,6 +181,7 @@ class OcrMacOptions(OcrOptions):
 
     kind: Literal["ocrmac"] = "ocrmac"
     lang: List[str] = ["fr-FR", "de-DE", "es-ES", "en-US"]
+
     recognition: str = "accurate"
     framework: str = "vision"
 
@@ -271,13 +277,7 @@ class PdfPipelineOptions(PipelineOptions):
     do_picture_description: bool = False  # True: run describe pictures in documents
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
-    ocr_options: Union[
-        EasyOcrOptions,
-        TesseractCliOcrOptions,
-        TesseractOcrOptions,
-        OcrMacOptions,
-        RapidOcrOptions,
-    ] = Field(EasyOcrOptions(), discriminator="kind")
+    ocr_options: OcrOptions = EasyOcrOptions()
     picture_description_options: Annotated[
         Union[PictureDescriptionApiOptions, PictureDescriptionVlmOptions],
         Field(discriminator="kind"),
