@@ -95,8 +95,14 @@ The Actor accepts a JSON schema matching the file `.actor/input_schema.json`. Be
 
 The Actor provides three types of outputs:
 
-1. **Processed Document** - Saved as `OUTPUT_RESULT` in the default key-value store
-2. **Processing Log** - Saved as `DOCLING_LOG` in the default key-value store
+1. **Processed Document** - The Actor will provide the direct URL to your result in the run log, looking like:
+
+   ```text
+   You can find your results at: 'https://api.apify.com/v2/key-value-stores/[YOUR_STORE_ID]/records/OUTPUT_RESULT'
+   ```
+
+2. **Processing Log** - Available in the key-value store as `DOCLING_LOG`
+
 3. **Dataset Record** - Contains processing metadata with:
    - Input document URL
    - Direct link to the processed output
