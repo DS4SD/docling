@@ -214,6 +214,10 @@ class PictureDescriptionVlmOptions(PictureDescriptionBaseOptions):
     # Config from here https://huggingface.co/docs/transformers/en/main_classes/text_generation#transformers.GenerationConfig
     generation_config: Dict[str, Any] = dict(max_new_tokens=200, do_sample=False)
 
+    @property
+    def repo_cache_folder(self) -> str:
+        return self.repo_id.replace("/", "--")
+
 
 smolvlm_picture_description = PictureDescriptionVlmOptions(
     repo_id="HuggingFaceTB/SmolVLM-256M-Instruct"

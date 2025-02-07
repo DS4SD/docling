@@ -2,11 +2,13 @@ import logging
 from pathlib import Path
 from typing import Optional
 
+from docling.datamodel.pipeline_options import smolvlm_picture_description
 from docling.datamodel.settings import settings
 from docling.models.code_formula_model import CodeFormulaModel
 from docling.models.document_picture_classifier import DocumentPictureClassifier
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
+from docling.models.picture_description_vlm_model import PictureDescriptionVlmModel
 from docling.models.table_structure_model import TableStructureModel
 
 _log = logging.getLogger(__name__)
@@ -21,6 +23,7 @@ def download_models(
     with_tableformer: bool = True,
     with_code_formula: bool = True,
     with_picture_classifier: bool = True,
+    with_smolvlm: bool = True,
     with_easyocr: bool = True,
 ):
     if output_dir is None:
@@ -57,6 +60,15 @@ def download_models(
         _log.info(f"Downloading code formula model...")
         CodeFormulaModel.download_models(
             local_dir=output_dir / CodeFormulaModel._model_repo_folder,
+            force=force,
+            progress=progress,
+        )
+
+    if with_smolvlm:
+        _log.info(f"Downloading SmolVlm model...")
+        PictureDescriptionVlmModel.download_models(
+            repo_id=smolvlm_picture_description.repo_id,
+            local_dir=output_dir / smolvlm_picture_description.repo_cache_folder,
             force=force,
             progress=progress,
         )

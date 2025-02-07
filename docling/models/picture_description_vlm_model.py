@@ -27,6 +27,8 @@ class PictureDescriptionVlmModel(PictureDescriptionBaseModel):
 
             if artifacts_path is None:
                 artifacts_path = self.download_models(repo_id=self.options.repo_id)
+            else:
+                artifacts_path = Path(artifacts_path) / self.options.repo_cache_folder
 
             self.device = decide_device(accelerator_options.device)
 

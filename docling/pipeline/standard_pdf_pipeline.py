@@ -101,7 +101,11 @@ class StandardPdfPipeline(PaginatedPipeline):
         ]
 
         # Picture description model
-        if (picture_description_model := self.get_picture_description_model()) is None:
+        if (
+            picture_description_model := self.get_picture_description_model(
+                artifacts_path=artifacts_path
+            )
+        ) is None:
             raise RuntimeError(
                 f"The specified picture description kind is not supported: {pipeline_options.picture_description_options.kind}."
             )
