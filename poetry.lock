@@ -877,7 +877,7 @@ transformers = [
 
 [package.source]
 type = "git"
-url = "ssh://git@github.com/DS4SD/docling-ibm-models.git"
+url = "https://github.com/DS4SD/docling-ibm-models.git"
 reference = "dev/add-reading-order"
 resolved_reference = "2f88418a493321a1ee82a01604f617488f6a8feb"
 
@@ -7811,4 +7811,4 @@ vlm = ["transformers", "transformers"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "2f9094fd6d160bde008c03a85235f83a7f40a6139c93a451368680c05f070f96"
+content-hash = "19ee67c2a10b5d377e6292699fcf0fb6ff351996a197d6fb747b1471ad7ab7da"
