@@ -866,33 +866,31 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "2.17.2"
+version = "2.18.0"
 description = "A python library to define and validate data types in Docling."
 optional = false
-python-versions = "^3.9"
-files = []
-develop = false
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "docling_core-2.18.0-py3-none-any.whl", hash = "sha256:9dee0084cef3d6d742686629f538653e332ee8b7541ad7581c98c8ddc28149b3"},
+    {file = "docling_core-2.18.0.tar.gz", hash = "sha256:e8623b8cf4b1e19d5c05c4e3446ac7835afb178997b91c8d11ce8e504a09ec43"},
+]
 
 [package.dependencies]
-jsonref = "^1.1.0"
-jsonschema = "^4.16.0"
-latex2mathml = "^3.77.0"
-pandas = "^2.1.4"
-pillow = "^10.3.0"
-pydantic = ">=2.6.0,<3.0.0,!=2.10.0,!=2.10.1,!=2.10.2"
+jsonref = ">=1.1.0,<2.0.0"
+jsonschema = ">=4.16.0,<5.0.0"
+latex2mathml = ">=3.77.0,<4.0.0"
+pandas = ">=2.1.4,<3.0.0"
+pillow = ">=10.3.0,<11.0.0"
+pydantic = ">=2.6.0,<2.10.0 || >2.10.0,<2.10.1 || >2.10.1,<2.10.2 || >2.10.2,<3.0.0"
 pyyaml = ">=5.1,<7.0.0"
-tabulate = "^0.9.0"
-typer = "^0.12.5"
-typing-extensions = "^4.12.2"
+semchunk = {version = ">=2.2.0,<3.0.0", optional = true, markers = "extra == \"chunking\""}
+tabulate = ">=0.9.0,<0.10.0"
+transformers = {version = ">=4.34.0,<5.0.0", optional = true, markers = "extra == \"chunking\""}
+typer = ">=0.12.5,<0.13.0"
+typing-extensions = ">=4.12.2,<5.0.0"
 
 [package.extras]
 chunking = ["semchunk (>=2.2.0,<3.0.0)", "transformers (>=4.34.0,<5.0.0)"]
-
-[package.source]
-type = "git"
-url = "https://github.com/DS4SD/docling-core.git"
-reference = "main"
-resolved_reference = "786f0c68336a7b9cced5fb0cb66427b050955e32"
 
 [[package]]
 name = "docling-ibm-models"
@@ -2822,6 +2820,32 @@ files = [
     {file = "more-itertools-10.6.0.tar.gz", hash = "sha256:2cd7fad1009c31cc9fb6a035108509e6547547a7a738374f10bd49a09eb3ee3b"},
     {file = "more_itertools-10.6.0-py3-none-any.whl", hash = "sha256:6eb054cb4b6db1473f6e15fcc676a08e4732548acd47c708f0e179c2c7c01e89"},
 ]
+
+[[package]]
+name = "mpire"
+version = "2.10.2"
+description = "A Python package for easy multiprocessing, but faster than multiprocessing"
+optional = false
+python-versions = "*"
+files = [
+    {file = "mpire-2.10.2-py3-none-any.whl", hash = "sha256:d627707f7a8d02aa4c7f7d59de399dec5290945ddf7fbd36cbb1d6ebb37a51fb"},
+    {file = "mpire-2.10.2.tar.gz", hash = "sha256:f66a321e93fadff34585a4bfa05e95bd946cf714b442f51c529038eb45773d97"},
+]
+
+[package.dependencies]
+multiprocess = [
+    {version = "*", optional = true, markers = "python_version < \"3.11\" and extra == \"dill\""},
+    {version = ">=0.70.15", optional = true, markers = "python_version >= \"3.11\" and extra == \"dill\""},
+]
+pygments = ">=2.0"
+pywin32 = {version = ">=301", markers = "platform_system == \"Windows\""}
+tqdm = ">=4.27"
+
+[package.extras]
+dashboard = ["flask"]
+dill = ["multiprocess", "multiprocess (>=0.70.15)"]
+docs = ["docutils (==0.17.1)", "sphinx (==3.2.1)", "sphinx-autodoc-typehints (==1.11.0)", "sphinx-rtd-theme (==0.5.0)", "sphinx-versions (==1.0.1)", "sphinxcontrib-images (==0.9.2)"]
+testing = ["ipywidgets", "multiprocess", "multiprocess (>=0.70.15)", "numpy", "pywin32 (>=301)", "rich"]
 
 [[package]]
 name = "mpmath"
@@ -6153,6 +6177,21 @@ cryptography = ">=2.0"
 jeepney = ">=0.6"
 
 [[package]]
+name = "semchunk"
+version = "2.2.2"
+description = "A fast and lightweight Python library for splitting text into semantically meaningful chunks."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "semchunk-2.2.2-py3-none-any.whl", hash = "sha256:94ca19020c013c073abdfd06d79a7c13637b91738335f3b8cdb5655ee7cc94d2"},
+    {file = "semchunk-2.2.2.tar.gz", hash = "sha256:940e89896e64eeb01de97ba60f51c8c7b96c6a3951dfcf574f25ce2146752f52"},
+]
+
+[package.dependencies]
+mpire = {version = "*", extras = ["dill"]}
+tqdm = "*"
+
+[[package]]
 name = "semver"
 version = "2.13.0"
 description = "Python helper for Semantic Versioning (http://semver.org/)"
@@ -7812,4 +7851,4 @@ vlm = ["transformers", "transformers"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "e2b4d37787e29ba511c8a728a0789eb2df43b5740854a6f144c6ada1a612077b"
+content-hash = "dc683f71ec9f8c0f94cef7c60a616aa17f3c831e322d136b76cef794e1809fd7"
