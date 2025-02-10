@@ -22,7 +22,7 @@ _log = logging.getLogger(__name__)
 
 
 class LayoutModel(BasePageModel):
-    _model_repo_folder = "docling-models"
+    _model_repo_folder = "ds4sd--docling-models"
     _model_path = "model_artifacts/layout"
 
     TEXT_ELEM_LABELS = [

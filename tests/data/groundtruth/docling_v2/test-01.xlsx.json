@@ -1,6 +1,6 @@
 {
   "schema_name": "DoclingDocument",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "test-01",
   "origin": {
     "mimetype": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -10,6 +10,7 @@
   "furniture": {
     "self_ref": "#/furniture",
     "children": [],
+    "content_layer": "furniture",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -26,6 +27,7 @@
         "$ref": "#/groups/2"
       }
     ],
+    "content_layer": "body",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -40,6 +42,7 @@
           "$ref": "#/tables/0"
         }
       ],
+      "content_layer": "body",
       "name": "sheet: Sheet1",
       "label": "section"
     },
@@ -59,6 +62,7 @@
           "$ref": "#/tables/3"
         }
       ],
+      "content_layer": "body",
       "name": "sheet: Sheet2",
       "label": "section"
     },
@@ -78,6 +82,7 @@
           "$ref": "#/pictures/0"
         }
       ],
+      "content_layer": "body",
       "name": "sheet: Sheet3",
       "label": "section"
     }
@@ -90,6 +95,7 @@
         "$ref": "#/groups/2"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [],
@@ -114,6 +120,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
@@ -652,6 +659,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
@@ -1554,6 +1562,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
@@ -1944,6 +1953,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
@@ -2334,6 +2344,7 @@
         "$ref": "#/groups/2"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
@@ -2800,6 +2811,7 @@
         "$ref": "#/groups/2"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
