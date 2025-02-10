@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Iterable
 
 import yaml
+from docling_core.types.doc import ImageRefMode
 
 from docling.datamodel.base_models import ConversionStatus
 from docling.datamodel.document import ConversionResult
@@ -14,7 +15,7 @@ from docling.document_converter import DocumentConverter
 _log = logging.getLogger(__name__)
 
 USE_V2 = True
-USE_LEGACY = True
+USE_LEGACY = False
 
 
 def export_documents(
@@ -33,25 +34,30 @@ def export_documents(
             doc_filename = conv_res.input.file.stem
 
             if USE_V2:
-                # Export Docling document format to JSON:
-                with (output_dir / f"{doc_filename}.json").open("w") as fp:
-                    fp.write(json.dumps(conv_res.document.export_to_dict()))
+                conv_res.document.save_as_json(
+                    output_dir / f"{doc_filename}.json",
+                    image_mode=ImageRefMode.PLACEHOLDER,
+                )
+                conv_res.document.save_as_document_tokens(
+                    output_dir / f"{doc_filename}.doctags.txt"
+                )
+                conv_res.document.save_as_markdown(
+                    output_dir / f"{doc_filename}.md",
+                    image_mode=ImageRefMode.PLACEHOLDER,
+                )
+                conv_res.document.save_as_markdown(
+                    output_dir / f"{doc_filename}.txt",
+                    image_mode=ImageRefMode.PLACEHOLDER,
+                    strict_text=True,
+                )
+                conv_res.document.save_as_html(
+                    output_dir / f"{doc_filename}.html",
+                    image_mode=ImageRefMode.EMBEDDED,
+                )
 
                 # Export Docling document format to YAML:
                 with (output_dir / f"{doc_filename}.yaml").open("w") as fp:
                     fp.write(yaml.safe_dump(conv_res.document.export_to_dict()))
-
-                # Export Docling document format to doctags:
-                with (output_dir / f"{doc_filename}.doctags.txt").open("w") as fp:
-                    fp.write(conv_res.document.export_to_document_tokens())
-
-                # Export Docling document format to markdown:
-                with (output_dir / f"{doc_filename}.md").open("w") as fp:
-                    fp.write(conv_res.document.export_to_markdown())
-
-                # Export Docling document format to text:
-                with (output_dir / f"{doc_filename}.txt").open("w") as fp:
-                    fp.write(conv_res.document.export_to_markdown(strict_text=True))
 
             if USE_LEGACY:
                 # Export Deep Search document JSON format:

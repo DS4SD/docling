@@ -93,6 +93,7 @@ class ReadingOrderModel:
             RefItem(cref=f"#/{elem.page_no}/{elem.cluster.id}").cref: elem
             for elem in conv_res.assembled.elements
         }
+        cid_to_rels = {rel.cid: rel for rel in ro_elements}
 
         origin = DocumentOrigin(
             mimetype="application/pdf",
@@ -111,52 +112,38 @@ class ReadingOrderModel:
             out_doc.add_page(page_no=page_no, size=size)
 
         current_list = None
+        skippable_cids = {
+            cid
+            for mapping in (
+                el_to_captions_mapping,
+                el_to_footnotes_mapping,
+                el_merges_mapping,
+            )
+            for lst in mapping.values()
+            for cid in lst
+        }
 
         # TODO: handle merges
 
         for rel in ro_elements:
+            if rel.cid in skippable_cids:
+                continue
             element = id_to_elem[rel.ref.cref]
 
             page_height = conv_res.pages[element.page_no].size.height  # type: ignore
 
             if isinstance(element, TextElement):
-                text = element.text
-
-                prov = ProvenanceItem(
-                    page_no=element.page_no + 1,
-                    charspan=(0, len(text)),
-                    bbox=element.cluster.bbox.to_bottom_left_origin(page_height),
+                new_item, current_list = self._handle_text_element(
+                    element, out_doc, current_list, page_height
                 )
-                label = element.label
 
-                if label == DocItemLabel.LIST_ITEM:
-                    if current_list is None:
-                        current_list = out_doc.add_group(
-                            label=GroupLabel.LIST, name="list"
+                if rel.cid in el_merges_mapping.keys():
+                    for merged_cid in el_merges_mapping[rel.cid]:
+                        merged_elem = id_to_elem[cid_to_rels[merged_cid].ref.cref]
+
+                        self._merge_elements(
+                            element, merged_elem, new_item, page_height
                         )
-
-                    # TODO: Infer if this is a numbered or a bullet list item
-                    out_doc.add_list_item(
-                        text=text, enumerated=False, prov=prov, parent=current_list
-                    )
-                elif label == DocItemLabel.SECTION_HEADER:
-                    current_list = None
-
-                    out_doc.add_heading(text=text, prov=prov)
-                elif label == DocItemLabel.CODE:
-                    current_list = None
-
-                    out_doc.add_code(text=text, prov=prov)
-                elif label == DocItemLabel.FORMULA:
-                    current_list = None
-
-                    out_doc.add_text(
-                        label=DocItemLabel.FORMULA, text="", orig=text, prov=prov
-                    )
-                else:
-                    current_list = None
-
-                    out_doc.add_text(label=element.label, text=text, prov=prov)
 
             elif isinstance(element, Table):
 
@@ -176,23 +163,54 @@ class ReadingOrderModel:
                     data=tbl_data, prov=prov, label=element.cluster.label
                 )
 
+                if rel.cid in el_to_captions_mapping.keys():
+                    for caption_cid in el_to_captions_mapping[rel.cid]:
+                        caption_elem = id_to_elem[cid_to_rels[caption_cid].ref.cref]
+                        new_cap_item = self._add_caption_or_footnote(
+                            caption_elem, out_doc, tbl, page_height
+                        )
+
+                        tbl.captions.append(new_cap_item.get_ref())
+
+                if rel.cid in el_to_footnotes_mapping.keys():
+                    for footnote_cid in el_to_footnotes_mapping[rel.cid]:
+                        footnote_elem = id_to_elem[cid_to_rels[footnote_cid].ref.cref]
+                        new_footnote_item = self._add_caption_or_footnote(
+                            footnote_elem, out_doc, tbl, page_height
+                        )
+
+                        tbl.footnotes.append(new_footnote_item.get_ref())
+
                 # TODO: handle element.cluster.children.
-                # TODO: handle captions
-                # tbl.captions.extend(caption_refs)
 
             elif isinstance(element, FigureElement):
-                text = ""
+                cap_text = ""
                 prov = ProvenanceItem(
                     page_no=element.page_no + 1,
-                    charspan=(0, len(text)),
+                    charspan=(0, len(cap_text)),
                     bbox=element.cluster.bbox.to_bottom_left_origin(page_height),
                 )
-
                 pic = out_doc.add_picture(prov=prov)
 
+                if rel.cid in el_to_captions_mapping.keys():
+                    for caption_cid in el_to_captions_mapping[rel.cid]:
+                        caption_elem = id_to_elem[cid_to_rels[caption_cid].ref.cref]
+                        new_cap_item = self._add_caption_or_footnote(
+                            caption_elem, out_doc, pic, page_height
+                        )
+
+                        pic.captions.append(new_cap_item.get_ref())
+
+                if rel.cid in el_to_footnotes_mapping.keys():
+                    for footnote_cid in el_to_footnotes_mapping[rel.cid]:
+                        footnote_elem = id_to_elem[cid_to_rels[footnote_cid].ref.cref]
+                        new_footnote_item = self._add_caption_or_footnote(
+                            footnote_elem, out_doc, pic, page_height
+                        )
+
+                        pic.footnotes.append(new_footnote_item.get_ref())
+
                 # TODO: handle element.cluster.children.
-                # TODO: handle captions
-                # pic.captions.extend(caption_refs)
                 # _add_child_elements(pic, doc, obj, pelem)
 
             elif isinstance(element, ContainerElement):
@@ -200,6 +218,74 @@ class ReadingOrderModel:
                 # TODO: handle element.cluster.children.
 
         return out_doc
+
+    def _add_caption_or_footnote(self, elem, out_doc, parent, page_height):
+        assert isinstance(elem, TextElement)
+        text = elem.text
+        prov = ProvenanceItem(
+            page_no=elem.page_no + 1,
+            charspan=(0, len(text)),
+            bbox=elem.cluster.bbox.to_bottom_left_origin(page_height),
+        )
+        new_item = out_doc.add_text(
+            label=elem.label, text=text, prov=prov, parent=parent
+        )
+        return new_item
+
+    def _handle_text_element(self, element, out_doc, current_list, page_height):
+        cap_text = element.text
+        prov = ProvenanceItem(
+            page_no=element.page_no + 1,
+            charspan=(0, len(cap_text)),
+            bbox=element.cluster.bbox.to_bottom_left_origin(page_height),
+        )
+        label = element.label
+        if label == DocItemLabel.LIST_ITEM:
+            if current_list is None:
+                current_list = out_doc.add_group(label=GroupLabel.LIST, name="list")
+
+            # TODO: Infer if this is a numbered or a bullet list item
+            new_item = out_doc.add_list_item(
+                text=cap_text, enumerated=False, prov=prov, parent=current_list
+            )
+        elif label == DocItemLabel.SECTION_HEADER:
+            current_list = None
+
+            new_item = out_doc.add_heading(text=cap_text, prov=prov)
+        elif label == DocItemLabel.CODE:
+            current_list = None
+
+            new_item = out_doc.add_code(text=cap_text, prov=prov)
+        elif label == DocItemLabel.FORMULA:
+            current_list = None
+
+            new_item = out_doc.add_text(
+                label=DocItemLabel.FORMULA, text="", orig=cap_text, prov=prov
+            )
+        else:
+            current_list = None
+
+            new_item = out_doc.add_text(label=element.label, text=cap_text, prov=prov)
+        return new_item, current_list
+
+    def _merge_elements(self, element, merged_elem, new_item, page_height):
+        assert isinstance(
+            merged_elem, type(element)
+        ), "Merged element must be of same type as element."
+        assert (
+            merged_elem.label == new_item.label
+        ), "Labels of merged elements must match."
+        prov = ProvenanceItem(
+            page_no=element.page_no + 1,
+            charspan=(
+                len(new_item.text) + 1,
+                len(new_item.text) + 1 + len(merged_elem.text),
+            ),
+            bbox=element.cluster.bbox.to_bottom_left_origin(page_height),
+        )
+        new_item.text += f" {merged_elem.text}"
+        new_item.orig += f" {merged_elem.text}"  # TODO: This is incomplete.
+        new_item.prov.append(prov)
 
     def __call__(self, conv_res: ConversionResult) -> DoclingDocument:
         with TimeRecorder(conv_res, "glm", scope=ProfilingScope.DOCUMENT):
