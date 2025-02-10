@@ -1,3 +1,30 @@
+## [v2.20.0](https://github.com/DS4SD/docling/releases/tag/v2.20.0) - 2025-02-07
+
+### Feature
+
+* Describe pictures using vision models ([#259](https://github.com/DS4SD/docling/issues/259)) ([`4cc6e3e`](https://github.com/DS4SD/docling/commit/4cc6e3ea5e858b367136acc729b723ea0552d22a))
+
+### Fix
+
+* Remove unused httpx ([#919](https://github.com/DS4SD/docling/issues/919)) ([`c18f47c`](https://github.com/DS4SD/docling/commit/c18f47c5c032c49bf3175aecd2236df37c0e9ae1))
+
+## [v2.19.0](https://github.com/DS4SD/docling/releases/tag/v2.19.0) - 2025-02-07
+
+### Feature
+
+* New artifacts path and CLI utility ([#876](https://github.com/DS4SD/docling/issues/876)) ([`ed74fe2`](https://github.com/DS4SD/docling/commit/ed74fe2ec0a702834f0deacfdb5717c8c587dab1))
+
+### Fix
+
+* **markdown:** Handle nested lists ([#910](https://github.com/DS4SD/docling/issues/910)) ([`90b766e`](https://github.com/DS4SD/docling/commit/90b766e2ae1695a759191df37c272efc09be5ee3))
+* Test cases for RTL programmatic PDFs and fixes for the formula model ([#903](https://github.com/DS4SD/docling/issues/903)) ([`9114ada`](https://github.com/DS4SD/docling/commit/9114ada7bc4dd45ce0046de2f9d00a80ccb25c79))
+* **msword_backend:** Handle conversion error in label parsing ([#896](https://github.com/DS4SD/docling/issues/896)) ([`722a6eb`](https://github.com/DS4SD/docling/commit/722a6eb7b994a0261312a356df80b2fced121812))
+* Enrichment models batch size and expose picture classifier ([#878](https://github.com/DS4SD/docling/issues/878)) ([`5ad6de0`](https://github.com/DS4SD/docling/commit/5ad6de05600315617b574bd12af553e00b4d316e))
+
+### Documentation
+
+* Introduce example with custom models for RapidOCR ([#874](https://github.com/DS4SD/docling/issues/874)) ([`6d3fea0`](https://github.com/DS4SD/docling/commit/6d3fea019635bd6ca94bd36c3928b28c245d638d))
+
 ## [v2.18.0](https://github.com/DS4SD/docling/releases/tag/v2.18.0) - 2025-02-03
 
 ### Feature
