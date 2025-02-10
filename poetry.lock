@@ -866,7 +866,7 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "2.17.0"
+version = "2.17.2"
 description = "A python library to define and validate data types in Docling."
 optional = false
 python-versions = "^3.9"
@@ -890,9 +890,9 @@ chunking = ["semchunk (>=2.2.0,<3.0.0)", "transformers (>=4.34.0,<5.0.0)"]
 
 [package.source]
 type = "git"
-url = "ssh://git@github.com/DS4SD/docling-core.git"
-reference = "cau/add-content-layer"
-resolved_reference = "46ffd203e0c86202acd0a05d17ee6f4723aa2f57"
+url = "https://github.com/DS4SD/docling-core.git"
+reference = "main"
+resolved_reference = "786f0c68336a7b9cced5fb0cb66427b050955e32"
 
 [[package]]
 name = "docling-ibm-models"
@@ -7812,4 +7812,4 @@ vlm = ["transformers", "transformers"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "f84601b873a323359d00e8e3f8acf1034bd031ae5f9cf96eb83d91d0704e2be6"
+content-hash = "e2b4d37787e29ba511c8a728a0789eb2df43b5740854a6f144c6ada1a612077b"
