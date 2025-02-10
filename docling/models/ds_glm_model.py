@@ -4,7 +4,12 @@ from pathlib import Path
 from typing import List, Union
 
 from deepsearch_glm.andromeda_nlp import nlp_model
-from docling_core.types.doc import BoundingBox, CoordOrigin, DoclingDocument
+from docling_core.types.doc import (
+    BoundingBox,
+    CoordOrigin,
+    DocItemLabel,
+    DoclingDocument,
+)
 from docling_core.types.legacy_doc.base import BoundingBox as DsBoundingBox
 from docling_core.types.legacy_doc.base import (
     Figure,
@@ -71,12 +76,15 @@ class GlmModel:
         )
 
         main_text: List[Union[Ref, BaseText]] = []
+        page_headers: List[Union[Ref, BaseText]] = []
+        page_footers: List[Union[Ref, BaseText]] = []
+
         tables: List[DsSchemaTable] = []
         figures: List[Figure] = []
 
         page_no_to_page = {p.page_no: p for p in conv_res.pages}
 
-        for element in conv_res.assembled.elements:
+        for element in conv_res.assembled.body:
             # Convert bboxes to lower-left origin.
             target_bbox = DsBoundingBox(
                 element.cluster.bbox.to_bottom_left_origin(
@@ -238,6 +246,53 @@ class GlmModel:
                     )
                 )
 
+        # We can throw in headers and footers at the end of the legacy doc
+        # since the reading-order will re-sort it later.
+        for element in conv_res.assembled.headers:
+            # Convert bboxes to lower-left origin.
+            target_bbox = DsBoundingBox(
+                element.cluster.bbox.to_bottom_left_origin(
+                    page_no_to_page[element.page_no].size.height
+                ).as_tuple()
+            )
+
+            if isinstance(element, TextElement):
+
+                tel = BaseText(
+                    text=element.text,
+                    obj_type=layout_label_to_ds_type.get(element.label),
+                    name=element.label,
+                    prov=[
+                        Prov(
+                            bbox=target_bbox,
+                            page=element.page_no + 1,
+                            span=[0, len(element.text)],
+                        )
+                    ],
+                )
+                if element.label == DocItemLabel.PAGE_HEADER:
+                    index = len(page_headers)
+                    ref_str = f"#/page-headers/{index}"
+                    main_text.append(
+                        Ref(
+                            name=element.label,
+                            obj_type=layout_label_to_ds_type.get(element.label),
+                            ref=ref_str,
+                        ),
+                    )
+                    page_headers.append(tel)
+                elif element.label == DocItemLabel.PAGE_FOOTER:
+                    index = len(page_footers)
+                    ref_str = f"#/page-footers/{index}"
+                    main_text.append(
+                        Ref(
+                            name=element.label,
+                            obj_type=layout_label_to_ds_type.get(element.label),
+                            ref=ref_str,
+                        ),
+                    )
+                    page_footers.append(tel)
+
         page_dimensions = [
             PageDimensions(page=p.page_no + 1, height=p.size.height, width=p.size.width)
             for p in conv_res.pages
@@ -252,6 +307,8 @@ class GlmModel:
             tables=tables,
             figures=figures,
             page_dimensions=page_dimensions,
+            page_headers=page_headers,
+            page_footers=page_footers,
         )
 
         return ds_doc
@@ -264,6 +321,7 @@ class GlmModel:
             glm_doc = self.model.apply_on_doc(ds_doc_dict)
 
             docling_doc: DoclingDocument = to_docling_document(glm_doc)  # Experimental
+            1 == 1
 
         # DEBUG code:
         def draw_clusters_and_cells(ds_document, page_no, show: bool = False):

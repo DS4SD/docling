@@ -1,6 +1,6 @@
 {
   "schema_name": "DoclingDocument",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "wiki_duck",
   "origin": {
     "mimetype": "text/html",
@@ -10,6 +10,7 @@
   "furniture": {
     "self_ref": "#/furniture",
     "children": [],
+    "content_layer": "furniture",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -95,6 +96,7 @@
         "$ref": "#/texts/250"
       }
     ],
+    "content_layer": "body",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -124,6 +126,7 @@
           "$ref": "#/texts/5"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -149,6 +152,7 @@
           "$ref": "#/texts/10"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -158,6 +162,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -171,6 +176,7 @@
           "$ref": "#/texts/11"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -180,6 +186,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -196,6 +203,7 @@
           "$ref": "#/texts/13"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -212,6 +220,7 @@
           "$ref": "#/texts/15"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -228,6 +237,7 @@
           "$ref": "#/texts/17"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -241,6 +251,7 @@
           "$ref": "#/texts/18"
         }
       ],
+      "content_layer": "body",
       "name": "header-1",
       "label": "section"
     },
@@ -281,6 +292,7 @@
           "$ref": "#/texts/38"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -290,6 +302,7 @@
         "$ref": "#/texts/20"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -299,6 +312,7 @@
         "$ref": "#/texts/21"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -308,6 +322,7 @@
         "$ref": "#/texts/22"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -317,6 +332,7 @@
         "$ref": "#/texts/23"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -339,6 +355,7 @@
           "$ref": "#/texts/28"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -348,6 +365,7 @@
         "$ref": "#/texts/25"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -357,6 +375,7 @@
         "$ref": "#/texts/26"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -366,6 +385,7 @@
         "$ref": "#/texts/27"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -375,6 +395,7 @@
         "$ref": "#/texts/28"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -397,6 +418,7 @@
           "$ref": "#/texts/33"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -406,6 +428,7 @@
         "$ref": "#/texts/30"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -415,6 +438,7 @@
         "$ref": "#/texts/31"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -424,6 +448,7 @@
         "$ref": "#/texts/32"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -433,6 +458,7 @@
         "$ref": "#/texts/33"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -442,6 +468,7 @@
         "$ref": "#/texts/34"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -458,6 +485,7 @@
           "$ref": "#/texts/37"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -467,6 +495,7 @@
         "$ref": "#/texts/36"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -476,6 +505,7 @@
         "$ref": "#/texts/37"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -485,6 +515,7 @@
         "$ref": "#/texts/38"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -903,6 +934,7 @@
           "$ref": "#/texts/175"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -919,6 +951,7 @@
           "$ref": "#/texts/177"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -928,6 +961,7 @@
         "$ref": "#/texts/39"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -947,6 +981,7 @@
           "$ref": "#/texts/180"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -966,6 +1001,7 @@
           "$ref": "#/texts/183"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1006,6 +1042,7 @@
           "$ref": "#/texts/193"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1022,6 +1059,7 @@
           "$ref": "#/texts/195"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1038,6 +1076,7 @@
           "$ref": "#/texts/197"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1051,6 +1090,7 @@
           "$ref": "#/texts/256"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1079,6 +1119,7 @@
           "$ref": "#/texts/262"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1254,6 +1295,7 @@
           "$ref": "#/texts/319"
         }
       ],
+      "content_layer": "body",
       "name": "ordered list",
       "label": "ordered_list"
     },
@@ -1324,6 +1366,7 @@
           "$ref": "#/texts/340"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1352,6 +1395,7 @@
           "$ref": "#/texts/347"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1374,6 +1418,7 @@
           "$ref": "#/texts/351"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1393,6 +1438,7 @@
           "$ref": "#/texts/354"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1481,6 +1527,7 @@
           "$ref": "#/texts/380"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1497,6 +1544,7 @@
           "$ref": "#/texts/382"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1534,6 +1582,7 @@
           "$ref": "#/texts/391"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1550,6 +1599,7 @@
           "$ref": "#/texts/393"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -1559,6 +1609,7 @@
         "$ref": "#/texts/341"
       },
       "children": [],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     }
@@ -1570,6 +1621,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Main page",
@@ -1583,6 +1635,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Contents",
@@ -1596,6 +1649,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Current events",
@@ -1609,6 +1663,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Random article",
@@ -1622,6 +1677,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "About Wikipedia",
@@ -1635,6 +1691,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Contact us",
@@ -1648,6 +1705,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Help",
@@ -1661,6 +1719,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Learn to edit",
@@ -1674,6 +1733,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Community portal",
@@ -1687,6 +1747,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Recent changes",
@@ -1700,6 +1761,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Upload file",
@@ -1713,6 +1775,7 @@
         "$ref": "#/groups/3"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Donate",
@@ -1726,6 +1789,7 @@
         "$ref": "#/groups/5"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Create account",
@@ -1739,6 +1803,7 @@
         "$ref": "#/groups/5"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Log in",
@@ -1752,6 +1817,7 @@
         "$ref": "#/groups/6"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Create account",
@@ -1765,6 +1831,7 @@
         "$ref": "#/groups/6"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Log in",
@@ -1778,6 +1845,7 @@
         "$ref": "#/groups/7"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Contributions",
@@ -1791,6 +1859,7 @@
         "$ref": "#/groups/7"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Talk",
@@ -1808,6 +1877,7 @@
           "$ref": "#/groups/9"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Contents",
@@ -1820,6 +1890,7 @@
         "$ref": "#/groups/9"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "(Top)",
@@ -1837,6 +1908,7 @@
           "$ref": "#/groups/10"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "1 Etymology",
@@ -1854,6 +1926,7 @@
           "$ref": "#/groups/11"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "2 Taxonomy",
@@ -1871,6 +1944,7 @@
           "$ref": "#/groups/12"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "3 Morphology",
@@ -1888,6 +1962,7 @@
           "$ref": "#/groups/13"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "4 Distribution and habitat",
@@ -1905,6 +1980,7 @@
           "$ref": "#/groups/14"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "5 Behaviour Toggle Behaviour subsection",
@@ -1922,6 +1998,7 @@
           "$ref": "#/groups/15"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "5.1 Feeding",
@@ -1939,6 +2016,7 @@
           "$ref": "#/groups/16"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "5.2 Breeding",
@@ -1956,6 +2034,7 @@
           "$ref": "#/groups/17"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "5.3 Communication",
@@ -1973,6 +2052,7 @@
           "$ref": "#/groups/18"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "5.4 Predators",
@@ -1990,6 +2070,7 @@
           "$ref": "#/groups/19"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "6 Relationship with humans Toggle Relationship with humans subsection",
@@ -2007,6 +2088,7 @@
           "$ref": "#/groups/20"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "6.1 Hunting",
@@ -2024,6 +2106,7 @@
           "$ref": "#/groups/21"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "6.2 Domestication",
@@ -2041,6 +2124,7 @@
           "$ref": "#/groups/22"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "6.3 Heraldry",
@@ -2058,6 +2142,7 @@
           "$ref": "#/groups/23"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "6.4 Cultural references",
@@ -2075,6 +2160,7 @@
           "$ref": "#/groups/24"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "7 See also",
@@ -2092,6 +2178,7 @@
           "$ref": "#/groups/25"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "8 Notes Toggle Notes subsection",
@@ -2109,6 +2196,7 @@
           "$ref": "#/groups/26"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "8.1 Citations",
@@ -2126,6 +2214,7 @@
           "$ref": "#/groups/27"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "8.2 Sources",
@@ -2143,6 +2232,7 @@
           "$ref": "#/groups/28"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "9 External links",
@@ -2220,6 +2310,7 @@
           "$ref": "#/texts/341"
         }
       ],
+      "content_layer": "body",
       "label": "title",
       "prov": [],
       "orig": "Duck",
@@ -2231,6 +2322,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Ac\u00e8h",
@@ -2244,6 +2336,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Afrikaans",
@@ -2257,6 +2350,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Alemannisch",
@@ -2270,6 +2364,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u12a0\u121b\u122d\u129b",
@@ -2283,6 +2378,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u00c6nglisc",
@@ -2296,6 +2392,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629",
@@ -2309,6 +2406,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Aragon\u00e9s",
@@ -2322,6 +2420,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0710\u072a\u0721\u071d\u0710",
@@ -2335,6 +2434,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Arm\u00e3neashti",
@@ -2348,6 +2448,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Asturianu",
@@ -2361,6 +2462,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Atikamekw",
@@ -2374,6 +2476,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0410\u0432\u0430\u0440",
@@ -2387,6 +2490,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Aymar aru",
@@ -2400,6 +2504,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u062a\u06c6\u0631\u06a9\u062c\u0647",
@@ -2413,6 +2518,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Basa Bali",
@@ -2426,6 +2532,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u09ac\u09be\u0982\u09b2\u09be",
@@ -2439,6 +2546,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u95a9\u5357\u8a9e / B\u00e2n-l\u00e2m-g\u00fa",
@@ -2452,6 +2560,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0411\u0435\u043b\u0430\u0440\u0443\u0441\u043a\u0430\u044f",
@@ -2465,6 +2574,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0411\u0435\u043b\u0430\u0440\u0443\u0441\u043a\u0430\u044f (\u0442\u0430\u0440\u0430\u0448\u043a\u0435\u0432\u0456\u0446\u0430)",
@@ -2478,6 +2588,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Bikol Central",
@@ -2491,6 +2602,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0411\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438",
@@ -2504,6 +2616,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Brezhoneg",
@@ -2517,6 +2630,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0411\u0443\u0440\u044f\u0430\u0434",
@@ -2530,6 +2644,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Catal\u00e0",
@@ -2543,6 +2658,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0427\u04d1\u0432\u0430\u0448\u043b\u0430",
@@ -2556,6 +2672,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u010ce\u0161tina",
@@ -2569,6 +2686,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "ChiShona",
@@ -2582,6 +2700,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Cymraeg",
@@ -2595,6 +2714,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Dagbanli",
@@ -2608,6 +2728,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Dansk",
@@ -2621,6 +2742,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Deitsch",
@@ -2634,6 +2756,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Deutsch",
@@ -2647,6 +2770,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0921\u094b\u091f\u0947\u0932\u0940",
@@ -2660,6 +2784,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0395\u03bb\u03bb\u03b7\u03bd\u03b9\u03ba\u03ac",
@@ -2673,6 +2798,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Emili\u00e0n e rumagn\u00f2l",
@@ -2686,6 +2812,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Espa\u00f1ol",
@@ -2699,6 +2826,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Esperanto",
@@ -2712,6 +2840,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Euskara",
@@ -2725,6 +2854,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0641\u0627\u0631\u0633\u06cc",
@@ -2738,6 +2868,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Fran\u00e7ais",
@@ -2751,6 +2882,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Gaeilge",
@@ -2764,6 +2896,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Galego",
@@ -2777,6 +2910,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0413\u04c0\u0430\u043b\u0433\u04c0\u0430\u0439",
@@ -2790,6 +2924,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u8d1b\u8a9e",
@@ -2803,6 +2938,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u06af\u06cc\u0644\u06a9\u06cc",
@@ -2816,6 +2952,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\ud800\udf32\ud800\udf3f\ud800\udf44\ud800\udf39\ud800\udf43\ud800\udf3a",
@@ -2829,6 +2966,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0917\u094b\u0902\u092f\u091a\u0940 \u0915\u094b\u0902\u0915\u0923\u0940 / G\u00f5ychi Konknni",
@@ -2842,6 +2980,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u5ba2\u5bb6\u8a9e / Hak-k\u00e2-ng\u00ee",
@@ -2855,6 +2994,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\ud55c\uad6d\uc5b4",
@@ -2868,6 +3008,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Hausa",
@@ -2881,6 +3022,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0540\u0561\u0575\u0565\u0580\u0565\u0576",
@@ -2894,6 +3036,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0939\u093f\u0928\u094d\u0926\u0940",
@@ -2907,6 +3050,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Hrvatski",
@@ -2920,6 +3064,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Ido",
@@ -2933,6 +3078,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Bahasa Indonesia",
@@ -2946,6 +3092,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "I\u00f1upiatun",
@@ -2959,6 +3106,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u00cdslenska",
@@ -2972,6 +3120,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Italiano",
@@ -2985,6 +3134,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u05e2\u05d1\u05e8\u05d9\u05ea",
@@ -2998,6 +3148,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Jawa",
@@ -3011,6 +3162,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0c95\u0ca8\u0ccd\u0ca8\u0ca1",
@@ -3024,6 +3176,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Kapampangan",
@@ -3037,6 +3190,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u10e5\u10d0\u10e0\u10d7\u10e3\u10da\u10d8",
@@ -3050,6 +3204,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0915\u0949\u0936\u0941\u0930 / \u06a9\u0672\u0634\u064f\u0631",
@@ -3063,6 +3218,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u049a\u0430\u0437\u0430\u049b\u0448\u0430",
@@ -3076,6 +3232,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Ikirundi",
@@ -3089,6 +3246,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Kongo",
@@ -3102,6 +3260,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Krey\u00f2l ayisyen",
@@ -3115,6 +3274,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u041a\u044b\u0440\u044b\u043a \u043c\u0430\u0440\u044b",
@@ -3128,6 +3288,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0ea5\u0eb2\u0ea7",
@@ -3141,6 +3302,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Latina",
@@ -3154,6 +3316,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Latvie\u0161u",
@@ -3167,6 +3330,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Lietuvi\u0173",
@@ -3180,6 +3344,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Li Niha",
@@ -3193,6 +3358,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Ligure",
@@ -3206,6 +3372,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Limburgs",
@@ -3219,6 +3386,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Ling\u00e1la",
@@ -3232,6 +3400,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Malagasy",
@@ -3245,6 +3414,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0d2e\u0d32\u0d2f\u0d3e\u0d33\u0d02",
@@ -3258,6 +3428,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u092e\u0930\u093e\u0920\u0940",
@@ -3271,6 +3442,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0645\u0627\u0632\u0650\u0631\u0648\u0646\u06cc",
@@ -3284,6 +3456,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Bahasa Melayu",
@@ -3297,6 +3470,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\uabc3\uabe4\uabc7\uabe9 \uabc2\uabe3\uabdf",
@@ -3310,6 +3484,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u95a9\u6771\u8a9e / M\u00ecng-d\u0115\u0324ng-ng\u1e73\u0304",
@@ -3323,6 +3498,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u041c\u043e\u043a\u0448\u0435\u043d\u044c",
@@ -3336,6 +3512,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u041c\u043e\u043d\u0433\u043e\u043b",
@@ -3349,6 +3526,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u1019\u103c\u1014\u103a\u1019\u102c\u1018\u102c\u101e\u102c",
@@ -3362,6 +3540,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Nederlands",
@@ -3375,6 +3554,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Nedersaksies",
@@ -3388,6 +3568,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0928\u0947\u092a\u093e\u0932\u0940",
@@ -3401,6 +3582,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0928\u0947\u092a\u093e\u0932 \u092d\u093e\u0937\u093e",
@@ -3414,6 +3596,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u65e5\u672c\u8a9e",
@@ -3427,6 +3610,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u041d\u043e\u0445\u0447\u0438\u0439\u043d",
@@ -3440,6 +3624,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Norsk nynorsk",
@@ -3453,6 +3638,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Occitan",
@@ -3466,6 +3652,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Oromoo",
@@ -3479,6 +3666,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0a2a\u0a70\u0a1c\u0a3e\u0a2c\u0a40",
@@ -3492,6 +3680,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Picard",
@@ -3505,6 +3694,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Plattd\u00fc\u00fctsch",
@@ -3518,6 +3708,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Polski",
@@ -3531,6 +3722,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Portugu\u00eas",
@@ -3544,6 +3736,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Q\u0131r\u0131mtatarca",
@@ -3557,6 +3750,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Rom\u00e2n\u0103",
@@ -3570,6 +3764,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0420\u0443\u0441\u0441\u043a\u0438\u0439",
@@ -3583,6 +3778,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0421\u0430\u0445\u0430 \u0442\u044b\u043b\u0430",
@@ -3596,6 +3792,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u1c65\u1c5f\u1c71\u1c5b\u1c5f\u1c72\u1c64",
@@ -3609,6 +3806,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Sardu",
@@ -3622,6 +3820,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Scots",
@@ -3635,6 +3834,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Seeltersk",
@@ -3648,6 +3848,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Shqip",
@@ -3661,6 +3862,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Sicilianu",
@@ -3674,6 +3876,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0dc3\u0dd2\u0d82\u0dc4\u0dbd",
@@ -3687,6 +3890,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Simple English",
@@ -3700,6 +3904,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0633\u0646\u068c\u064a",
@@ -3713,6 +3918,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u06a9\u0648\u0631\u062f\u06cc",
@@ -3726,6 +3932,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0421\u0440\u043f\u0441\u043a\u0438 / srpski",
@@ -3739,6 +3946,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Srpskohrvatski / \u0441\u0440\u043f\u0441\u043a\u043e\u0445\u0440\u0432\u0430\u0442\u0441\u043a\u0438",
@@ -3752,6 +3960,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Sunda",
@@ -3765,6 +3974,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Svenska",
@@ -3778,6 +3988,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Tagalog",
@@ -3791,6 +4002,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0ba4\u0bae\u0bbf\u0bb4\u0bcd",
@@ -3804,6 +4016,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Taqbaylit",
@@ -3817,6 +4030,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0422\u0430\u0442\u0430\u0440\u0447\u0430 / tatar\u00e7a",
@@ -3830,6 +4044,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0e44\u0e17\u0e22",
@@ -3843,6 +4058,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "T\u00fcrk\u00e7e",
@@ -3856,6 +4072,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0423\u043a\u0440\u0430\u0457\u043d\u0441\u044c\u043a\u0430",
@@ -3869,6 +4086,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u0626\u06c7\u064a\u063a\u06c7\u0631\u0686\u06d5 / Uyghurche",
@@ -3882,6 +4100,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Vahcuengh",
@@ -3895,6 +4114,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Ti\u1ebfng Vi\u1ec7t",
@@ -3908,6 +4128,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Walon",
@@ -3921,6 +4142,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u6587\u8a00",
@@ -3934,6 +4156,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Winaray",
@@ -3947,6 +4170,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u5434\u8bed",
@@ -3960,6 +4184,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u7cb5\u8a9e",
@@ -3973,6 +4198,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u017demait\u0117\u0161ka",
@@ -3986,6 +4212,7 @@
         "$ref": "#/groups/29"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "\u4e2d\u6587",
@@ -3999,6 +4226,7 @@
         "$ref": "#/groups/30"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Article",
@@ -4012,6 +4240,7 @@
         "$ref": "#/groups/30"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Talk",
@@ -4025,6 +4254,7 @@
         "$ref": "#/groups/32"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Read",
@@ -4038,6 +4268,7 @@
         "$ref": "#/groups/32"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "View source",
@@ -4051,6 +4282,7 @@
         "$ref": "#/groups/32"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "View history",
@@ -4064,6 +4296,7 @@
         "$ref": "#/groups/33"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Read",
@@ -4077,6 +4310,7 @@
         "$ref": "#/groups/33"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "View source",
@@ -4090,6 +4324,7 @@
         "$ref": "#/groups/33"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "View history",
@@ -4103,6 +4338,7 @@
         "$ref": "#/groups/34"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "What links here",
@@ -4116,6 +4352,7 @@
         "$ref": "#/groups/34"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Related changes",
@@ -4129,6 +4366,7 @@
         "$ref": "#/groups/34"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Upload file",
@@ -4142,6 +4380,7 @@
         "$ref": "#/groups/34"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Special pages",
@@ -4155,6 +4394,7 @@
         "$ref": "#/groups/34"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Permanent link",
@@ -4168,6 +4408,7 @@
         "$ref": "#/groups/34"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Page information",
@@ -4181,6 +4422,7 @@
         "$ref": "#/groups/34"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Cite this page",
@@ -4194,6 +4436,7 @@
         "$ref": "#/groups/34"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Get shortened URL",
@@ -4207,6 +4450,7 @@
         "$ref": "#/groups/34"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Download QR code",
@@ -4220,6 +4464,7 @@
         "$ref": "#/groups/34"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Wikidata item",
@@ -4233,6 +4478,7 @@
         "$ref": "#/groups/35"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Download as PDF",
@@ -4246,6 +4492,7 @@
         "$ref": "#/groups/35"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Printable version",
@@ -4259,6 +4506,7 @@
         "$ref": "#/groups/36"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Wikimedia Commons",
@@ -4272,6 +4520,7 @@
         "$ref": "#/groups/36"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Wikiquote",
@@ -4285,6 +4534,7 @@
         "$ref": "#/texts/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Duck is the common name for numerous species of waterfowl in the family Anatidae. Ducks are generally smaller and shorter-necked than swans and geese, which are members of the same family. Divided among several subfamilies, they are a form taxon; they do not represent a monophyletic group (the group of all descendants of a single common ancestral species), since swans and geese are not considered ducks. Ducks are mostly aquatic birds, and may be found in both fresh water and sea water.",
@@ -4296,6 +4546,7 @@
         "$ref": "#/texts/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Ducks are sometimes confused with several types of unrelated water birds with similar forms, such as loons or divers, grebes, gallinules and coots.",
@@ -4329,6 +4580,7 @@
           "$ref": "#/pictures/6"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Etymology",
@@ -4341,6 +4593,7 @@
         "$ref": "#/texts/200"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "The word duck comes from Old English d\u016bce 'diver', a derivative of the verb *d\u016bcan 'to duck, bend down low as if to get under something, or dive', because of the way many species in the dabbling duck group feed by upending; compare with Dutch duiken and German tauchen 'to dive'.",
@@ -4352,6 +4605,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "caption",
       "prov": [],
       "orig": "Pacific black duck displaying the characteristic upending \"duck\"",
@@ -4363,6 +4617,7 @@
         "$ref": "#/texts/200"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "This word replaced Old English ened /\u00e6nid 'duck', possibly to avoid confusion with other words, such as ende 'end' with similar forms. Other Germanic languages still have similar words for duck, for example, Dutch eend, German Ente and Norwegian and. The word ened /\u00e6nid was inherited from Proto-Indo-European; cf. Latin anas \"duck\", Lithuanian \u00e1ntis 'duck', Ancient Greek \u03bd\u1fc6\u03c3\u03c3\u03b1 /\u03bd\u1fc6\u03c4\u03c4\u03b1 (n\u0113ssa /n\u0113tta) 'duck', and Sanskrit \u0101t\u00ed 'water bird', among others.",
@@ -4374,6 +4629,7 @@
         "$ref": "#/texts/200"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "A duckling is a young duck in downy plumage[1] or baby duck,[2] but in the food trade a young domestic duck which has just reached adult size and bulk and its meat is still fully tender, is sometimes labelled as a duckling.",
@@ -4385,6 +4641,7 @@
         "$ref": "#/texts/200"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "A male is called a drake and the female is called a duck, or in ornithology a hen.[3][4]",
@@ -4396,6 +4653,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "caption",
       "prov": [],
       "orig": "Male mallard.",
@@ -4407,6 +4665,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "caption",
       "prov": [],
       "orig": "Wood ducks.",
@@ -4431,6 +4690,7 @@
           "$ref": "#/texts/212"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Taxonomy",
@@ -4443,6 +4703,7 @@
         "$ref": "#/texts/208"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "All ducks belong to the biological order Anseriformes, a group that contains the ducks, geese and swans, as well as the screamers, and the magpie goose.[5] All except the screamers belong to the biological family Anatidae.[5] Within the family, ducks are split into a variety of subfamilies and 'tribes'. The number and composition of these subfamilies and tribes is the cause of considerable disagreement among taxonomists.[5] Some base their decisions on morphological characteristics, others on shared behaviours or genetic studies.[6][7] The number of suggested subfamilies containing ducks ranges from two to five.[8][9] The significant level of hybridisation that occurs among wild ducks complicates efforts to tease apart the relationships between various species.[9]",
@@ -4454,6 +4715,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "caption",
       "prov": [],
       "orig": "Mallard landing in approach",
@@ -4465,6 +4727,7 @@
         "$ref": "#/texts/208"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "In most modern classifications, the so-called 'true ducks' belong to the subfamily Anatinae, which is further split into a varying number of tribes.[10] The largest of these, the Anatini, contains the 'dabbling' or 'river' ducks \u2013 named for their method of feeding primarily at the surface of fresh water.[11] The 'diving ducks', also named for their primary feeding method, make up the tribe Aythyini.[12] The 'sea ducks' of the tribe Mergini are diving ducks which specialise on fish and shellfish and spend a majority of their lives in saltwater.[13] The tribe Oxyurini contains the 'stifftails', diving ducks notable for their small size and stiff, upright tails.[14]",
@@ -4476,6 +4739,7 @@
         "$ref": "#/texts/208"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "A number of other species called ducks are not considered to be 'true ducks', and are typically placed in other subfamilies or tribes. The whistling ducks are assigned either to a tribe (Dendrocygnini) in the subfamily Anatinae or the subfamily Anserinae,[15] or to their own subfamily (Dendrocygninae) or family (Dendrocyganidae).[9][16] The freckled duck of Australia is either the sole member of the tribe Stictonettini in the subfamily Anserinae,[15] or in its own family, the Stictonettinae.[9] The shelducks make up the tribe Tadornini in the family Anserinae in some classifications,[15] and their own subfamily, Tadorninae, in others,[17] while the steamer ducks are either placed in the family Anserinae in the tribe Tachyerini[15] or lumped with the shelducks in the tribe Tadorini.[9] The perching ducks make up in the tribe Cairinini in the subfamily Anserinae in some classifications, while that tribe is eliminated in other classifications and its members assigned to the tribe Anatini.[9] The torrent duck is generally included in the subfamily Anserinae in the monotypic tribe Merganettini,[15] but is sometimes included in the tribe Tadornini.[18] The pink-eared duck is sometimes included as a true duck either in the tribe Anatini[15] or the tribe Malacorhynchini,[19] and other times is included with the shelducks in the tribe Tadornini.[15]",
@@ -4497,6 +4761,7 @@
           "$ref": "#/texts/216"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Morphology",
@@ -4509,6 +4774,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "caption",
       "prov": [],
       "orig": "Male Mandarin duck",
@@ -4520,6 +4786,7 @@
         "$ref": "#/texts/213"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "The overall body plan of ducks is elongated and broad, and they are also relatively long-necked, albeit not as long-necked as the geese and swans. The body shape of diving ducks varies somewhat from this in being more rounded. The bill is usually broad and contains serrated pectens, which are particularly well defined in the filter-feeding species. In the case of some fishing species the bill is long and strongly serrated. The scaled legs are strong and well developed, and generally set far back on the body, more so in the highly aquatic species. The wings are very strong and are generally short and pointed, and the flight of ducks requires fast continuous strokes, requiring in turn strong wing muscles. Three species of steamer duck are almost flightless, however. Many species of duck are temporarily flightless while moulting; they seek out protected habitat with good food supplies during this period. This moult typically precedes migration.",
@@ -4531,6 +4798,7 @@
         "$ref": "#/texts/213"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "The drakes of northern species often have extravagant plumage, but that is moulted in summer to give a more female-like appearance, the \"eclipse\" plumage. Southern resident species typically show less sexual dimorphism, although there are exceptions such as the paradise shelduck of New Zealand, which is both strikingly sexually dimorphic and in which the female's plumage is brighter than that of the male. The plumage of juvenile birds generally resembles that of the female. Female ducks have evolved to have a corkscrew shaped vagina to prevent rape.",
@@ -4555,6 +4823,7 @@
           "$ref": "#/texts/221"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Distribution and habitat",
@@ -4567,6 +4836,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "caption",
       "prov": [],
       "orig": "Flying steamer ducks in Ushuaia, Argentina",
@@ -4578,6 +4848,7 @@
         "$ref": "#/texts/217"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Ducks have a cosmopolitan distribution, and are found on every continent except Antarctica.[5] Several species manage to live on subantarctic islands, including South Georgia and the Auckland Islands.[20] Ducks have reached a number of isolated oceanic islands, including the Hawaiian Islands, Micronesia and the Gal\u00e1pagos Islands, where they are often vagrants and less often residents.[21][22] A handful are endemic to such far-flung islands.[21]",
@@ -4589,6 +4860,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "caption",
       "prov": [],
       "orig": "Female mallard in Cornwall, England",
@@ -4600,6 +4872,7 @@
         "$ref": "#/texts/217"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Some duck species, mainly those breeding in the temperate and Arctic Northern Hemisphere, are migratory; those in the tropics are generally not. Some ducks, particularly in Australia where rainfall is erratic, are nomadic, seeking out the temporary lakes and pools that form after localised heavy rain.[23]",
@@ -4624,6 +4897,7 @@
           "$ref": "#/texts/238"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Behaviour",
@@ -4661,6 +4935,7 @@
           "$ref": "#/texts/231"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Feeding",
@@ -4673,6 +4948,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "caption",
       "prov": [],
       "orig": "Pecten along the bill",
@@ -4684,6 +4960,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "caption",
       "prov": [],
       "orig": "Mallard duckling preening",
@@ -4695,6 +4972,7 @@
         "$ref": "#/texts/223"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Ducks eat food sources such as grasses, aquatic plants, fish, insects, small amphibians, worms, and small molluscs.",
@@ -4706,6 +4984,7 @@
         "$ref": "#/texts/223"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Dabbling ducks feed on the surface of water or on land, or as deep as they can reach by up-ending without completely submerging.[24] Along the edge of the bill, there is a comb-like structure called a pecten. This strains the water squirting from the side of the bill and traps any food. The pecten is also used to preen feathers and to hold slippery food items.",
@@ -4717,6 +4996,7 @@
         "$ref": "#/texts/223"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Diving ducks and sea ducks forage deep underwater. To be able to submerge more easily, the diving ducks are heavier than dabbling ducks, and therefore have more difficulty taking off to fly.",
@@ -4728,6 +5008,7 @@
         "$ref": "#/texts/223"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "A few specialized species such as the mergansers are adapted to catch and swallow large fish.",
@@ -4739,6 +5020,7 @@
         "$ref": "#/texts/223"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "The others have the characteristic wide flat bill adapted to dredging-type jobs such as pulling up waterweed, pulling worms and small molluscs out of mud, searching for insect larvae, and bulk jobs such as dredging out, holding, turning head first, and swallowing a squirming frog. To avoid injury when digging into sediment it has no cere, but the nostrils come out through hard horn.",
@@ -4750,6 +5032,7 @@
         "$ref": "#/texts/223"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "The Guardian published an article advising that ducks should not be fed with bread because it damages the health of the ducks and pollutes waterways.[25]",
@@ -4768,6 +5051,7 @@
           "$ref": "#/texts/234"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Breeding",
@@ -4780,6 +5064,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "caption",
       "prov": [],
       "orig": "A Muscovy duckling",
@@ -4791,6 +5076,7 @@
         "$ref": "#/texts/232"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Ducks generally only have one partner at a time, although the partnership usually only lasts one year.[26] Larger species and the more sedentary species (like fast-river specialists) tend to have pair-bonds that last numerous years.[27] Most duck species breed once a year, choosing to do so in favourable conditions (spring/summer or wet seasons). Ducks also tend to make a nest before breeding, and, after hatching, lead their ducklings to water. Mother ducks are very caring and protective of their young, but may abandon some of their ducklings if they are physically stuck in an area they cannot get out of (such as nesting in an enclosed courtyard) or are not prospering due to genetic defects or sickness brought about by hypothermia, starvation, or disease. Ducklings can also be orphaned by inconsistent late hatching where a few eggs hatch after the mother has abandoned the nest and led her ducklings to water.[28]",
@@ -4809,6 +5095,7 @@
           "$ref": "#/texts/237"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Communication",
@@ -4821,6 +5108,7 @@
         "$ref": "#/texts/235"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Female mallard ducks (as well as several other species in the genus Anas, such as the American and Pacific black ducks, spot-billed duck, northern pintail and common teal) make the classic \"quack\" sound while males make a similar but raspier sound that is sometimes written as \"breeeeze\",[29][self-published source?] but, despite widespread misconceptions, most species of duck do not \"quack\".[30] In general, ducks make a range of calls, including whistles, cooing, yodels and grunts. For example, the scaup \u2013 which are diving ducks \u2013 make a noise like \"scaup\" (hence their name). Calls may be loud displaying calls or quieter contact calls.",
@@ -4832,6 +5120,7 @@
         "$ref": "#/texts/235"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "A common urban legend claims that duck quacks do not echo; however, this has been proven to be false. This myth was first debunked by the Acoustics Research Centre at the University of Salford in 2003 as part of the British Association's Festival of Science.[31] It was also debunked in one of the earlier episodes of the popular Discovery Channel television show MythBusters.[32]",
@@ -4853,6 +5142,7 @@
           "$ref": "#/texts/241"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Predators",
@@ -4865,6 +5155,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "caption",
       "prov": [],
       "orig": "Ringed teal",
@@ -4876,6 +5167,7 @@
         "$ref": "#/texts/238"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Ducks have many predators. Ducklings are particularly vulnerable, since their inability to fly makes them easy prey not only for predatory birds but also for large fish like pike, crocodilians, predatory testudines such as the alligator snapping turtle, and other aquatic hunters, including fish-eating birds such as herons. Ducks' nests are raided by land-based predators, and brooding females may be caught unaware on the nest by mammals, such as foxes, or large birds, such as hawks or owls.",
@@ -4887,6 +5179,7 @@
         "$ref": "#/texts/238"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Adult ducks are fast fliers, but may be caught on the water by large aquatic predators including big fish such as the North American muskie and the European pike. In flight, ducks are safe from all but a few predators such as humans and the peregrine falcon, which uses its speed and strength to catch ducks.",
@@ -4911,6 +5204,7 @@
           "$ref": "#/texts/252"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Relationship with humans",
@@ -4930,6 +5224,7 @@
           "$ref": "#/texts/245"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Hunting",
@@ -4942,6 +5237,7 @@
         "$ref": "#/texts/243"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Humans have hunted ducks since prehistoric times. Excavations of middens in California dating to 7800 \u2013 6400 BP have turned up bones of ducks, including at least one now-extinct flightless species.[33] Ducks were captured in \"significant numbers\" by Holocene inhabitants of the lower Ohio River valley, suggesting they took advantage of the seasonal bounty provided by migrating waterfowl.[34] Neolithic hunters in locations as far apart as the Caribbean,[35] Scandinavia,[36] Egypt,[37] Switzerland,[38] and China relied on ducks as a source of protein for some or all of the year.[39] Archeological evidence shows that M\u0101ori people in New Zealand hunted the flightless Finsch's duck, possibly to extinction, though rat predation may also have contributed to its fate.[40] A similar end awaited the Chatham duck, a species with reduced flying capabilities which went extinct shortly after its island was colonised by Polynesian settlers.[41] It is probable that duck eggs were gathered by Neolithic hunter-gathers as well, though hard evidence of this is uncommon.[35][42]",
@@ -4953,6 +5249,7 @@
         "$ref": "#/texts/243"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "In many areas, wild ducks (including ducks farmed and released into the wild) are hunted for food or sport,[43] by shooting, or by being trapped using duck decoys. Because an idle floating duck or a duck squatting on land cannot react to fly or move quickly, \"a sitting duck\" has come to mean \"an easy target\". These ducks may be contaminated by pollutants such as PCBs.[44]",
@@ -4971,6 +5268,7 @@
           "$ref": "#/texts/248"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Domestication",
@@ -4983,6 +5281,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "caption",
       "prov": [],
       "orig": "Indian Runner ducks, a common breed of domestic ducks",
@@ -4994,6 +5293,7 @@
         "$ref": "#/texts/246"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Ducks have many economic uses, being farmed for their meat, eggs, and feathers (particularly their down). Approximately 3 billion ducks are slaughtered each year for meat worldwide.[45] They are also kept and bred by aviculturists and often displayed in zoos. Almost all the varieties of domestic ducks are descended from the mallard (Anas platyrhynchos), apart from the Muscovy duck (Cairina moschata).[46][47] The Call duck is another example of a domestic duck breed. Its name comes from its original use established by hunters, as a decoy to attract wild mallards from the sky, into traps set for them on the ground. The call duck is the world's smallest domestic duck breed, as it weighs less than 1\u00a0kg (2.2\u00a0lb).[48]",
@@ -5012,6 +5312,7 @@
           "$ref": "#/texts/251"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Heraldry",
@@ -5024,6 +5325,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "caption",
       "prov": [],
       "orig": "Three black-colored ducks in the coat of arms of Maaninka[49]",
@@ -5035,6 +5337,7 @@
         "$ref": "#/texts/249"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Ducks appear on several coats of arms, including the coat of arms of Lub\u0101na (Latvia)[50] and the coat of arms of F\u00f6gl\u00f6 (\u00c5land).[51]",
@@ -5053,6 +5356,7 @@
           "$ref": "#/texts/254"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Cultural references",
@@ -5065,6 +5369,7 @@
         "$ref": "#/texts/252"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "In 2002, psychologist Richard Wiseman and colleagues at the University of Hertfordshire, UK, finished a year-long LaughLab experiment, concluding that of all animals, ducks attract the most humor and silliness; he said, \"If you're going to tell a joke involving an animal, make it a duck.\"[52] The word \"duck\" may have become an inherently funny word in many languages, possibly because ducks are seen as silly in their looks or behavior. Of the many ducks in fiction, many are cartoon characters, such as Walt Disney's Donald Duck, and Warner Bros.' Daffy Duck. Howard the Duck started as a comic book character in 1973[53][54] and was made into a movie in 1986.",
@@ -5076,6 +5381,7 @@
         "$ref": "#/texts/252"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "The 1992 Disney film The Mighty Ducks, starring Emilio Estevez, chose the duck as the mascot for the fictional youth hockey team who are protagonists of the movie, based on the duck being described as a fierce fighter. This led to the duck becoming the nickname and mascot for the eventual National Hockey League professional team of the Anaheim Ducks, who were founded with the name the Mighty Ducks of Anaheim.[citation needed] The duck is also the nickname of the University of Oregon sports teams as well as the Long Island Ducks minor league baseball team.[55]",
@@ -5094,6 +5400,7 @@
           "$ref": "#/groups/38"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "See also",
@@ -5106,6 +5413,7 @@
         "$ref": "#/groups/37"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Birds portal",
@@ -5119,6 +5427,7 @@
         "$ref": "#/groups/38"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Domestic duck",
@@ -5132,6 +5441,7 @@
         "$ref": "#/groups/38"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Duck as food",
@@ -5145,6 +5455,7 @@
         "$ref": "#/groups/38"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Duck test",
@@ -5158,6 +5469,7 @@
         "$ref": "#/groups/38"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Duck breeds",
@@ -5171,6 +5483,7 @@
         "$ref": "#/groups/38"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Fictional ducks",
@@ -5184,6 +5497,7 @@
         "$ref": "#/groups/38"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Rubber duck",
@@ -5204,6 +5518,7 @@
           "$ref": "#/texts/320"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Notes",
@@ -5220,6 +5535,7 @@
           "$ref": "#/groups/39"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Citations",
@@ -5232,6 +5548,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ \"Duckling\". The American Heritage Dictionary of the English Language, Fourth Edition. Houghton Mifflin Company. 2006. Retrieved 2015-05-22.",
@@ -5245,6 +5562,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ \"Duckling\". Kernerman English Multilingual Dictionary (Beta Version). K. Dictionaries Ltd. 2000\u20132006. Retrieved 2015-05-22.",
@@ -5258,6 +5576,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Dohner, Janet Vorwald (2001). The Encyclopedia of Historic and Endangered Livestock and Poultry Breeds. Yale University Press. ISBN\u00a0978-0300138139.",
@@ -5271,6 +5590,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Visca, Curt; Visca, Kelley (2003). How to Draw Cartoon Birds. The Rosen Publishing Group. ISBN\u00a09780823961566.",
@@ -5284,6 +5604,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ a b c d Carboneras 1992, p.\u00a0536.",
@@ -5297,6 +5618,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Livezey 1986, pp.\u00a0737\u2013738.",
@@ -5310,6 +5632,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Madsen, McHugh & de Kloet 1988, p.\u00a0452.",
@@ -5323,6 +5646,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Donne-Gouss\u00e9, Laudet & H\u00e4nni 2002, pp.\u00a0353\u2013354.",
@@ -5336,6 +5660,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ a b c d e f Carboneras 1992, p.\u00a0540.",
@@ -5349,6 +5674,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Elphick, Dunning & Sibley 2001, p.\u00a0191.",
@@ -5362,6 +5688,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Kear 2005, p.\u00a0448.",
@@ -5375,6 +5702,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Kear 2005, p.\u00a0622\u2013623.",
@@ -5388,6 +5716,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Kear 2005, p.\u00a0686.",
@@ -5401,6 +5730,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Elphick, Dunning & Sibley 2001, p.\u00a0193.",
@@ -5414,6 +5744,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ a b c d e f g Carboneras 1992, p.\u00a0537.",
@@ -5427,6 +5758,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ American Ornithologists' Union 1998, p.\u00a0xix.",
@@ -5440,6 +5772,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ American Ornithologists' Union 1998.",
@@ -5453,6 +5786,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Carboneras 1992, p.\u00a0538.",
@@ -5466,6 +5800,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Christidis & Boles 2008, p.\u00a062.",
@@ -5479,6 +5814,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Shirihai 2008, pp.\u00a0239, 245.",
@@ -5492,6 +5828,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ a b Pratt, Bruner & Berrett 1987, pp.\u00a098\u2013107.",
@@ -5505,6 +5842,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Fitter, Fitter & Hosking 2000, pp.\u00a052\u20133.",
@@ -5518,6 +5856,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ \"Pacific Black Duck\". www.wiresnr.org. Retrieved 2018-04-27.",
@@ -5531,6 +5870,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Ogden, Evans. \"Dabbling Ducks\". CWE. Retrieved 2006-11-02.",
@@ -5544,6 +5884,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Karl Mathiesen (16 March 2015). \"Don't feed the ducks bread, say conservationists\". The Guardian. Retrieved 13 November 2016.",
@@ -5557,6 +5898,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Rohwer, Frank C.; Anderson, Michael G. (1988). \"Female-Biased Philopatry, Monogamy, and the Timing of Pair Formation in Migratory Waterfowl\". Current Ornithology. pp.\u00a0187\u2013221. doi:10.1007/978-1-4615-6787-5_4. ISBN\u00a0978-1-4615-6789-9.",
@@ -5570,6 +5912,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Smith, Cyndi M.; Cooke, Fred; Robertson, Gregory J.; Goudie, R. Ian; Boyd, W. Sean (2000). \"Long-Term Pair Bonds in Harlequin Ducks\". The Condor. 102 (1): 201\u2013205. doi:10.1093/condor/102.1.201. hdl:10315/13797.",
@@ -5583,6 +5926,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ \"If You Find An Orphaned Duckling - Wildlife Rehabber\". wildliferehabber.com. Archived from the original on 2018-09-23. Retrieved 2018-12-22.",
@@ -5596,6 +5940,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Carver, Heather (2011). The Duck Bible. Lulu.com. ISBN\u00a09780557901562.[self-published source]",
@@ -5609,6 +5954,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Titlow, Budd (2013-09-03). Bird Brains: Inside the Strange Minds of Our Fine Feathered Friends. Rowman & Littlefield. ISBN\u00a09780762797707.",
@@ -5622,6 +5968,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Amos, Jonathan (2003-09-08). \"Sound science is quackers\". BBC News. Retrieved 2006-11-02.",
@@ -5635,6 +5982,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ \"Mythbusters Episode 8\". 12 December 2003.",
@@ -5648,6 +5996,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Erlandson 1994, p.\u00a0171.",
@@ -5661,6 +6010,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Jeffries 2008, pp.\u00a0168, 243.",
@@ -5674,6 +6024,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ a b Sued-Badillo 2003, p.\u00a065.",
@@ -5687,6 +6038,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Thorpe 1996, p.\u00a068.",
@@ -5700,6 +6052,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Maisels 1999, p.\u00a042.",
@@ -5713,6 +6066,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Rau 1876, p.\u00a0133.",
@@ -5726,6 +6080,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Higman 2012, p.\u00a023.",
@@ -5739,6 +6094,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Hume 2012, p.\u00a053.",
@@ -5752,6 +6108,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Hume 2012, p.\u00a052.",
@@ -5765,6 +6122,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Fieldhouse 2002, p.\u00a0167.",
@@ -5778,6 +6136,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Livingston, A. D. (1998-01-01). Guide to Edible Plants and Animals. Wordsworth Editions, Limited. ISBN\u00a09781853263774.",
@@ -5791,6 +6150,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ \"Study plan for waterfowl injury assessment: Determining PCB concentrations in Hudson river resident waterfowl\" (PDF). New York State Department of Environmental Conservation. US Department of Commerce. December 2008. p.\u00a03. Archived (PDF) from the original on 2022-10-09. Retrieved 2 July 2019.",
@@ -5804,6 +6164,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ \"FAOSTAT\". www.fao.org. Retrieved 2019-10-25.",
@@ -5817,6 +6178,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ \"Anas platyrhynchos, Domestic Duck; DigiMorph Staff - The University of Texas at Austin\". Digimorph.org. Retrieved 2012-12-23.",
@@ -5830,6 +6192,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Sy Montgomery. \"Mallard; Encyclop\u00e6dia Britannica\". Britannica.com. Retrieved 2012-12-23.",
@@ -5843,6 +6206,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Glenday, Craig (2014). Guinness World Records. Guinness World Records Limited. pp.\u00a0135. ISBN\u00a0978-1-908843-15-9.",
@@ -5856,6 +6220,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Suomen kunnallisvaakunat (in Finnish). Suomen Kunnallisliitto. 1982. p.\u00a0147. ISBN\u00a0951-773-085-3.",
@@ -5869,6 +6234,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ \"Lub\u0101nas simbolika\" (in Latvian). Retrieved September 9, 2021.",
@@ -5882,6 +6248,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ \"F\u00f6gl\u00f6\" (in Swedish). Retrieved September 9, 2021.",
@@ -5895,6 +6262,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Young, Emma. \"World's funniest joke revealed\". New Scientist. Retrieved 7 January 2019.",
@@ -5908,6 +6276,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ \"Howard the Duck (character)\". Grand Comics Database.",
@@ -5921,6 +6290,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ Sanderson, Peter; Gilbert, Laura (2008). \"1970s\". Marvel Chronicle A Year by Year History. London, United Kingdom: Dorling Kindersley. p.\u00a0161. ISBN\u00a0978-0756641238. December saw the debut of the cigar-smoking Howard the Duck. In this story by writer Steve Gerber and artist Val Mayerik, various beings from different realities had begun turning up in the Man-Thing's Florida swamp, including this bad-tempered talking duck.",
@@ -5934,6 +6304,7 @@
         "$ref": "#/groups/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "^ \"The Duck\". University of Oregon Athletics. Retrieved 2022-01-20.",
@@ -5951,6 +6322,7 @@
           "$ref": "#/groups/40"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Sources",
@@ -5963,6 +6335,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "American Ornithologists' Union (1998). Checklist of North American Birds (PDF). Washington, DC: American Ornithologists' Union. ISBN\u00a0978-1-891276-00-2. Archived (PDF) from the original on 2022-10-09.",
@@ -5976,6 +6349,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Carboneras, Carlos (1992). del Hoyo, Josep; Elliott, Andrew; Sargatal, Jordi (eds.). Handbook of the Birds of the World. Vol.\u00a01: Ostrich to Ducks. Barcelona: Lynx Edicions. ISBN\u00a0978-84-87334-10-8.",
@@ -5989,6 +6363,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Christidis, Les; Boles, Walter E., eds. (2008). Systematics and Taxonomy of Australian Birds. Collingwood, VIC: Csiro Publishing. ISBN\u00a0978-0-643-06511-6.",
@@ -6002,6 +6377,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Donne-Gouss\u00e9, Carole; Laudet, Vincent; H\u00e4nni, Catherine (July 2002). \"A molecular phylogeny of Anseriformes based on mitochondrial DNA analysis\". Molecular Phylogenetics and Evolution. 23 (3): 339\u2013356. Bibcode:2002MolPE..23..339D. doi:10.1016/S1055-7903(02)00019-2. PMID\u00a012099792.",
@@ -6015,6 +6391,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Elphick, Chris; Dunning, John B. Jr.; Sibley, David, eds. (2001). The Sibley Guide to Bird Life and Behaviour. London: Christopher Helm. ISBN\u00a0978-0-7136-6250-4.",
@@ -6028,6 +6405,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Erlandson, Jon M. (1994). Early Hunter-Gatherers of the California Coast. New York, NY: Springer Science & Business Media. ISBN\u00a0978-1-4419-3231-0.",
@@ -6041,6 +6419,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Fieldhouse, Paul (2002). Food, Feasts, and Faith: An Encyclopedia of Food Culture in World Religions. Vol.\u00a0I: A\u2013K. Santa Barbara: ABC-CLIO. ISBN\u00a0978-1-61069-412-4.",
@@ -6054,6 +6433,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Fitter, Julian; Fitter, Daniel; Hosking, David (2000). Wildlife of the Gal\u00e1pagos. Princeton, NJ: Princeton University Press. ISBN\u00a0978-0-691-10295-5.",
@@ -6067,6 +6447,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Higman, B. W. (2012). How Food Made History. Chichester, UK: John Wiley & Sons. ISBN\u00a0978-1-4051-8947-7.",
@@ -6080,6 +6461,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Hume, Julian H. (2012). Extinct Birds. London: Christopher Helm. ISBN\u00a0978-1-4729-3744-5.",
@@ -6093,6 +6475,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Jeffries, Richard (2008). Holocene Hunter-Gatherers of the Lower Ohio River Valley. Tuscaloosa: University of Alabama Press. ISBN\u00a0978-0-8173-1658-7.",
@@ -6106,6 +6489,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Kear, Janet, ed. (2005). Ducks, Geese and Swans: Species Accounts (Cairina to Mergus). Bird Families of the World. Oxford: Oxford University Press. ISBN\u00a0978-0-19-861009-0.",
@@ -6119,6 +6503,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Livezey, Bradley C. (October 1986). \"A phylogenetic analysis of recent Anseriform genera using morphological characters\" (PDF). The Auk. 103 (4): 737\u2013754. doi:10.1093/auk/103.4.737. Archived (PDF) from the original on 2022-10-09.",
@@ -6132,6 +6517,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Madsen, Cort S.; McHugh, Kevin P.; de Kloet, Siwo R. (July 1988). \"A partial classification of waterfowl (Anatidae) based on single-copy DNA\" (PDF). The Auk. 105 (3): 452\u2013459. doi:10.1093/auk/105.3.452. Archived (PDF) from the original on 2022-10-09.",
@@ -6145,6 +6531,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Maisels, Charles Keith (1999). Early Civilizations of the Old World. London: Routledge. ISBN\u00a0978-0-415-10975-8.",
@@ -6158,6 +6545,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Pratt, H. Douglas; Bruner, Phillip L.; Berrett, Delwyn G. (1987). A Field Guide to the Birds of Hawaii and the Tropical Pacific. Princeton, NJ: Princeton University Press. ISBN\u00a00-691-02399-9.",
@@ -6171,6 +6559,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Rau, Charles (1876). Early Man in Europe. New York: Harper & Brothers. LCCN\u00a005040168.",
@@ -6184,6 +6573,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Shirihai, Hadoram (2008). A Complete Guide to Antarctic Wildlife. Princeton, NJ, US: Princeton University Press. ISBN\u00a0978-0-691-13666-0.",
@@ -6197,6 +6587,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Sued-Badillo, Jalil (2003). Autochthonous Societies. General History of the Caribbean. Paris: UNESCO. ISBN\u00a0978-92-3-103832-7.",
@@ -6210,6 +6601,7 @@
         "$ref": "#/groups/40"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Thorpe, I. J. (1996). The Origins of Agriculture in Europe. New York: Routledge. ISBN\u00a0978-0-415-08009-5.",
@@ -6254,6 +6646,7 @@
           "$ref": "#/groups/48"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "External links",
@@ -6266,6 +6659,7 @@
         "$ref": "#/groups/41"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Definitions from Wiktionary",
@@ -6279,6 +6673,7 @@
         "$ref": "#/groups/41"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Media from Commons",
@@ -6292,6 +6687,7 @@
         "$ref": "#/groups/41"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Quotations from Wikiquote",
@@ -6305,6 +6701,7 @@
         "$ref": "#/groups/41"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Recipes from Wikibooks",
@@ -6318,6 +6715,7 @@
         "$ref": "#/groups/41"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Taxa from Wikispecies",
@@ -6331,6 +6729,7 @@
         "$ref": "#/groups/41"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Data from Wikidata",
@@ -6344,6 +6743,7 @@
         "$ref": "#/groups/42"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "list of books (useful looking abstracts)",
@@ -6357,6 +6757,7 @@
         "$ref": "#/groups/42"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Ducks on postage stamps Archived 2013-05-13 at the Wayback Machine",
@@ -6370,6 +6771,7 @@
         "$ref": "#/groups/42"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "",
@@ -6383,6 +6785,7 @@
         "$ref": "#/groups/42"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Ducks at a Distance, by Rob Hines at Project Gutenberg - A modern illustrated guide to identification of US waterfowl",
@@ -6396,6 +6799,7 @@
         "$ref": "#/groups/43"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Ducks",
@@ -6409,6 +6813,7 @@
         "$ref": "#/groups/43"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Game birds",
@@ -6422,6 +6827,7 @@
         "$ref": "#/groups/43"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Bird common names",
@@ -6435,6 +6841,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "All accuracy disputes",
@@ -6448,6 +6855,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Accuracy disputes from February 2020",
@@ -6461,6 +6869,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "CS1 Finnish-language sources (fi)",
@@ -6474,6 +6883,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "CS1 Latvian-language sources (lv)",
@@ -6487,6 +6897,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "CS1 Swedish-language sources (sv)",
@@ -6500,6 +6911,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Articles with short description",
@@ -6513,6 +6925,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Short description is different from Wikidata",
@@ -6526,6 +6939,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Wikipedia indefinitely move-protected pages",
@@ -6539,6 +6953,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Wikipedia indefinitely semi-protected pages",
@@ -6552,6 +6967,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Articles with 'species' microformats",
@@ -6565,6 +6981,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Articles containing Old English (ca. 450-1100)-language text",
@@ -6578,6 +6995,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Articles containing Dutch-language text",
@@ -6591,6 +7009,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Articles containing German-language text",
@@ -6604,6 +7023,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Articles containing Norwegian-language text",
@@ -6617,6 +7037,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Articles containing Lithuanian-language text",
@@ -6630,6 +7051,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Articles containing Ancient Greek (to 1453)-language text",
@@ -6643,6 +7065,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "All articles with self-published sources",
@@ -6656,6 +7079,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Articles with self-published sources from February 2020",
@@ -6669,6 +7093,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "All articles with unsourced statements",
@@ -6682,6 +7107,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Articles with unsourced statements from January 2022",
@@ -6695,6 +7121,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "CS1: long volume value",
@@ -6708,6 +7135,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Pages using Sister project links with wikidata mismatch",
@@ -6721,6 +7149,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Pages using Sister project links with hidden wikidata",
@@ -6734,6 +7163,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Webarchive template wayback links",
@@ -6747,6 +7177,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Articles with Project Gutenberg links",
@@ -6760,6 +7191,7 @@
         "$ref": "#/groups/44"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Articles containing video clips",
@@ -6773,6 +7205,7 @@
         "$ref": "#/groups/45"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "This page was last edited on 21 September 2024, at 12:11\u00a0(UTC).",
@@ -6786,6 +7219,7 @@
         "$ref": "#/groups/45"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Text is available under the Creative Commons Attribution-ShareAlike License 4.0;\nadditional terms may apply. By using this site, you agree to the Terms of Use and Privacy Policy. Wikipedia\u00ae is a registered trademark of the Wikimedia Foundation, Inc., a non-profit organization.",
@@ -6799,6 +7233,7 @@
         "$ref": "#/groups/46"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Privacy policy",
@@ -6812,6 +7247,7 @@
         "$ref": "#/groups/46"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "About Wikipedia",
@@ -6825,6 +7261,7 @@
         "$ref": "#/groups/46"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Disclaimers",
@@ -6838,6 +7275,7 @@
         "$ref": "#/groups/46"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Contact Wikipedia",
@@ -6851,6 +7289,7 @@
         "$ref": "#/groups/46"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Code of Conduct",
@@ -6864,6 +7303,7 @@
         "$ref": "#/groups/46"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Developers",
@@ -6877,6 +7317,7 @@
         "$ref": "#/groups/46"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Statistics",
@@ -6890,6 +7331,7 @@
         "$ref": "#/groups/46"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Cookie statement",
@@ -6903,6 +7345,7 @@
         "$ref": "#/groups/46"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Mobile view",
@@ -6916,6 +7359,7 @@
         "$ref": "#/groups/47"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "",
@@ -6929,6 +7373,7 @@
         "$ref": "#/groups/47"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "",
@@ -6944,6 +7389,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [],
@@ -6957,6 +7403,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [],
@@ -6970,6 +7417,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [],
@@ -6983,6 +7431,7 @@
         "$ref": "#/texts/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [],
@@ -6996,6 +7445,7 @@
         "$ref": "#/texts/200"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [
@@ -7013,6 +7463,7 @@
         "$ref": "#/texts/200"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [
@@ -7030,6 +7481,7 @@
         "$ref": "#/texts/200"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [
@@ -7047,6 +7499,7 @@
         "$ref": "#/texts/208"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [
@@ -7064,6 +7517,7 @@
         "$ref": "#/texts/213"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [
@@ -7081,6 +7535,7 @@
         "$ref": "#/texts/217"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [
@@ -7098,6 +7553,7 @@
         "$ref": "#/texts/217"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [
@@ -7115,6 +7571,7 @@
         "$ref": "#/texts/223"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [
@@ -7132,6 +7589,7 @@
         "$ref": "#/texts/223"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [
@@ -7149,6 +7607,7 @@
         "$ref": "#/texts/232"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [
@@ -7166,6 +7625,7 @@
         "$ref": "#/texts/238"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [
@@ -7183,6 +7643,7 @@
         "$ref": "#/texts/246"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [
@@ -7200,6 +7661,7 @@
         "$ref": "#/texts/249"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [
@@ -7217,6 +7679,7 @@
         "$ref": "#/texts/341"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [],
@@ -7232,6 +7695,7 @@
         "$ref": "#/texts/39"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
@@ -7830,6 +8294,7 @@
         "$ref": "#/texts/341"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],

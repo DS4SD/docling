@@ -1,6 +1,6 @@
 {
   "schema_name": "DoclingDocument",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "word_tables",
   "origin": {
     "mimetype": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -10,6 +10,7 @@
   "furniture": {
     "self_ref": "#/furniture",
     "children": [],
+    "content_layer": "furniture",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -20,6 +21,7 @@
         "$ref": "#/groups/0"
       }
     ],
+    "content_layer": "body",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -34,6 +36,7 @@
           "$ref": "#/texts/0"
         }
       ],
+      "content_layer": "body",
       "name": "header-0",
       "label": "section"
     }
@@ -94,6 +97,7 @@
           "$ref": "#/texts/11"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Test with tables",
@@ -106,6 +110,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "A uniform table",
@@ -117,6 +122,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -128,6 +134,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "A non-uniform table with horizontal spans",
@@ -139,6 +146,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -150,6 +158,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "A non-uniform table with horizontal spans in inner columns",
@@ -161,6 +170,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -172,6 +182,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "A non-uniform table with vertical spans",
@@ -183,6 +194,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -194,6 +206,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "A non-uniform table with all kinds of spans and empty cells",
@@ -205,6 +218,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -216,6 +230,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -230,6 +245,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
@@ -472,6 +488,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
@@ -690,6 +707,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
@@ -980,6 +998,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
@@ -1346,6 +1365,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
