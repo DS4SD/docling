@@ -879,7 +879,7 @@ transformers = [
 type = "git"
 url = "https://github.com/DS4SD/docling-ibm-models.git"
 reference = "dev/add-reading-order"
-resolved_reference = "2f88418a493321a1ee82a01604f617488f6a8feb"
+resolved_reference = "6892adfa4fcf0878b938e8efc1407dec46e96bdd"
 
 [[package]]
 name = "docling-parse"
