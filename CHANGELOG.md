@@ -1,3 +1,9 @@
+## [v2.21.0](https://github.com/DS4SD/docling/releases/tag/v2.21.0) - 2025-02-10
+
+### Feature
+
+* Add content_layer property to items to address body, furniture and other roles ([#735](https://github.com/DS4SD/docling/issues/735)) ([`cf78d5b`](https://github.com/DS4SD/docling/commit/cf78d5b7b9f12728270e673857fd299efc01a7db))
+
 ## [v2.20.0](https://github.com/DS4SD/docling/releases/tag/v2.20.0) - 2025-02-07
 
 ### Feature
