@@ -74,7 +74,7 @@ docling --artifacts-path="/local/path/to/models" FILE
 #### Using remote services
 
 The main purpose of Docling is to run local models which are not sharing any user data with remote services.
-Anyhow, there are valid use cases for processing part of the pipeline using remote services, for example invoking OCR engines from cloud vendors or the usage hosted LLMs.
+Anyhow, there are valid use cases for processing part of the pipeline using remote services, for example invoking OCR engines from cloud vendors or the usage of hosted LLMs.
 
 In Docling we decided to allow such models, but we require the user to explicitly opt-in in communicating with external services.
 
@@ -93,6 +93,7 @@ doc_converter = DocumentConverter(
 
 When the value `allow_remote_services=True` is not set, the system will raise an exception `OperationNotAllowed()`.
 
+_Note: This option is only related to the system sending user data to remote services. Control of pulling data (e.g. model weights) follows the logic described in [Model prefetching and offline usage](#model-prefetching-and-offline-usage)._
 
 ##### List of remote model services
 
