@@ -14,18 +14,19 @@ from docling.pipeline.vlm_pipeline import VlmPipeline
 
 sources = [
     # "https://arxiv.org/pdf/2408.09869",
-    # "tests/data/2305.03393v1-pg9-img.png",
-    "tests/data/2305.03393v1-pg9.pdf",
+    "tests/data/2305.03393v1-pg9-img.png",
+    # "tests/data/2305.03393v1-pg9.pdf",
 ]
 
 pipeline_options = PdfPipelineOptions()
 pipeline_options.generate_page_images = True
 # If force_backend_text = True, text from backend will be used instead of generated text
 pipeline_options.force_backend_text = False
+# pipeline_options.artifacts_path = "model_artifacts/SmolDocling_250M_0.9"
 
 vlm_options = SmolDoclingOptions(
-    artifacts_path="model_artifacts/SmolDocling_2.7_DT_0.7",
-    question="Perform Layout Analysis.",
+    artifacts_path="model_artifacts/SmolDocling_250M_0.9",
+    question="Convert this page to docling.",
     load_in_8bit=True,
     llm_int8_threshold=6.0,
     quantized=False,
