@@ -399,6 +399,10 @@ class VlmPipeline(PaginatedPipeline):
                     doc.add_table(data=table_data)
 
                 elif tag_name == "picture":
+                    text_caption_content = extract_inner_text(full_chunk)
+                    print("----------- TEXT CONTENT OF A PICTURE TAG -------------")
+                    print(text_caption_content)
+                    print("-------------------------------------------------------")
                     if image:
                         if bbox:
                             width, height = image.size
@@ -409,7 +413,7 @@ class VlmPipeline(PaginatedPipeline):
                                 int(bbox.b * height),
                             )
                             cropped_image = image.crop(crop_box)
-                            doc.add_picture(
+                            pic = doc.add_picture(
                                 parent=None,
                                 image=ImageRef.from_pil(image=cropped_image, dpi=72),
                                 prov=(
@@ -418,18 +422,35 @@ class VlmPipeline(PaginatedPipeline):
                                     )
                                 ),
                             )
+                            # If there is a caption to an image, add it as well
+                            if len(text_caption_content) > 0:
+                                caption_item = doc.add_text(
+                                    label=DocItemLabel.CAPTION,
+                                    text=text_caption_content,
+                                    parent=None,
+                                )
+                                pic.captions.append(caption_item.get_ref())
                     else:
                         if bbox:
+                            # In case we don't have access to an binary of an image
                             doc.add_picture(
                                 parent=None,
                                 prov=ProvenanceItem(
                                     bbox=bbox, charspan=(0, 0), page_no=page_no
                                 ),
                             )
+                            # If there is a caption to an image, add it as well
+                            if len(text_caption_content) > 0:
+                                caption_item = doc.add_text(
+                                    label=DocItemLabel.CAPTION,
+                                    text=text_caption_content,
+                                    parent=None,
+                                )
+                                pic.captions.append(caption_item.get_ref())
                 else:
                     # For everything else, treat as text
                     if self.force_backend_text:
-                        content = extract_text_from_backend(page, bbox)
+                        text_content = extract_text_from_backend(page, bbox)
                     else:
                         text_content = extract_inner_text(full_chunk)
                     # If it's code, wrap it with <pre><code> tags
@@ -439,7 +460,11 @@ class VlmPipeline(PaginatedPipeline):
                         label=doc_label,
                         text=text_content,
                         prov=(
-                            ProvenanceItem(bbox=bbox, charspan=(0, 0), page_no=page_no)
+                            ProvenanceItem(
+                                bbox=bbox,
+                                charspan=(0, len(text_content)),
+                                page_no=page_no,
+                            )
                             if bbox
                             else None
                         ),
