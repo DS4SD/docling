@@ -61,6 +61,8 @@ class StandardPdfPipeline(PaginatedPipeline):
         artifacts_path: Optional[Path] = None
         if pipeline_options.artifacts_path is not None:
             artifacts_path = Path(pipeline_options.artifacts_path).expanduser()
+        elif settings.artifacts_path is not None:
+            artifacts_path = Path(settings.artifacts_path).expanduser()
 
         self.keep_images = (
             self.pipeline_options.generate_page_images
