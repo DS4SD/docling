@@ -30,7 +30,6 @@ class SmolDoclingModel(BasePageModel):
 
     def __init__(
         self,
-        # artifacts_path: Path,
         accelerator_options: AcceleratorOptions,
         vlm_options: SmolDoclingOptions,
     ):
@@ -76,6 +75,16 @@ class SmolDoclingModel(BasePageModel):
                     assert page.size is not None
 
                     hi_res_image = page.get_image(scale=2.0)  # 144dpi
+                    # hi_res_image = page.get_image(scale=1.0)  # 72dpi
+
+                    if hi_res_image is not None:
+                        im_width, im_height = hi_res_image.size
+                        print(
+                            "Processed image resolution: {} x {}".format(
+                                im_width, im_height
+                            )
+                        )
+
                     # populate page_tags with predicted doc tags
                     page_tags = ""
 
@@ -103,8 +112,8 @@ class SmolDoclingModel(BasePageModel):
                         text=prompt, images=[hi_res_image], return_tensors="pt"
                     )
                     inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    prompt = prompt.replace("<end_of_utterance>", "")
 
+                    print("In the model, starting to generate...")
                     start_time = time.time()
                     # Call model to generate:
                     generated_ids = self.vlm_model.generate(
@@ -129,11 +138,9 @@ class SmolDoclingModel(BasePageModel):
                     tokens_per_second = num_tokens / generation_time
                     print("")
                     print(f"Page Inference Time: {inference_time:.2f} seconds")
+                    print(f"Total tokens on page: {num_tokens:.2f}")
                     print(f"Tokens/sec: {tokens_per_second:.2f}")
                     print("")
-                    print("Page predictions:")
-                    print(page_tags)
-
                     page.predictions.doctags = DocTagsPrediction(tag_string=page_tags)
 
                 yield page
