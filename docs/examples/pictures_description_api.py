@@ -70,7 +70,7 @@ def main():
     input_doc_path = Path("./tests/data/pdf/2206.01062.pdf")
 
     pipeline_options = PdfPipelineOptions(
-        allow_remote_services=True  # <-- this is required!
+        enable_remote_services=True  # <-- this is required!
     )
     pipeline_options.do_picture_description = True
 
