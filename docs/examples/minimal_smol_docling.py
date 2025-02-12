@@ -1,14 +1,11 @@
 import json
-import os
 import time
 from pathlib import Path
-from urllib.parse import urlparse
 
 import yaml
 
-from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import PdfPipelineOptions, SmolDoclingOptions
+from docling.datamodel.pipeline_options import SmolDoclingOptions, VlmPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.pipeline.vlm_pipeline import VlmPipeline
 
@@ -18,18 +15,17 @@ sources = [
     # "tests/data/2305.03393v1-pg9.pdf",
 ]
 
-pipeline_options = PdfPipelineOptions()
+pipeline_options = VlmPipelineOptions()  # artifacts_path="~/local_model_artifacts/")
 pipeline_options.generate_page_images = True
 # If force_backend_text = True, text from backend will be used instead of generated text
 pipeline_options.force_backend_text = False
-# pipeline_options.artifacts_path = "model_artifacts/SmolDocling_250M_0.9"
+
 
 vlm_options = SmolDoclingOptions(
-    artifacts_path="model_artifacts/SmolDocling_250M_0.9",
-    question="Convert this page to docling.",
-    load_in_8bit=True,
-    llm_int8_threshold=6.0,
-    quantized=False,
+    # question="Convert this page to docling.",
+    # load_in_8bit=True,
+    # llm_int8_threshold=6.0,
+    # quantized=False,
 )
 
 pipeline_options.vlm_options = vlm_options

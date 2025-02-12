@@ -113,24 +113,6 @@ class VlmPipeline(PaginatedPipeline):
             # Other models working on `NodeItem` elements in the DoclingDocument
         ]
 
-    @staticmethod
-    def download_models_hf(
-        local_dir: Optional[Path] = None, force: bool = False
-    ) -> Path:
-        from huggingface_hub import snapshot_download
-        from huggingface_hub.utils import disable_progress_bars
-
-        disable_progress_bars()
-
-        # TODO: download the correct model (private repo)
-        download_path = snapshot_download(
-            repo_id="ds4sd/xxx",
-            force_download=force,
-            local_dir=local_dir,
-        )
-
-        return Path(download_path)
-
     def initialize_page(self, conv_res: ConversionResult, page: Page) -> Page:
         with TimeRecorder(conv_res, "page_init"):
             page._backend = conv_res.input._backend.load_page(page.page_no)  # type: ignore
