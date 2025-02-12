@@ -213,7 +213,7 @@ class ReadingOrderModel:
                 # TODO: handle element.cluster.children.
                 # _add_child_elements(pic, doc, obj, pelem)
 
-            elif isinstance(element, ContainerElement):
+            elif isinstance(element, ContainerElement):  # Form, KV region
                 pass
                 # TODO: handle element.cluster.children.
 
