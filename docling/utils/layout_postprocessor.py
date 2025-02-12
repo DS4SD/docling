@@ -264,26 +264,29 @@ class LayoutPostprocessor:
         # Remove clusters with no cells
         clusters = [cluster for cluster in clusters if cluster.cells]
 
-        # Handle orphaned cells
-        unassigned = self._find_unassigned_cells(clusters)
-        if unassigned:
-            next_id = max((c.id for c in clusters), default=0) + 1
-            orphan_clusters = []
-            for i, cell in enumerate(unassigned):
-                conf = 1.0
-                if isinstance(cell, OcrCell):
-                    conf = cell.confidence
+        ###########################################################################################
+        # Debug
+        # # Handle orphaned cells
+        # unassigned = self._find_unassigned_cells(clusters)
+        # if unassigned:
+        #     next_id = max((c.id for c in clusters), default=0) + 1
+        #     orphan_clusters = []
+        #     for i, cell in enumerate(unassigned):
+        #         conf = 1.0
+        #         if isinstance(cell, OcrCell):
+        #             conf = cell.confidence
 
-                orphan_clusters.append(
-                    Cluster(
-                        id=next_id + i,
-                        label=DocItemLabel.TEXT,
-                        bbox=cell.bbox,
-                        confidence=conf,
-                        cells=[cell],
-                    )
-                )
-            clusters.extend(orphan_clusters)
+        #         orphan_clusters.append(
+        #             Cluster(
+        #                 id=next_id + i,
+        #                 label=DocItemLabel.TEXT,
+        #                 bbox=cell.bbox,
+        #                 confidence=conf,
+        #                 cells=[cell],
+        #             )
+        #         )
+        #     clusters.extend(orphan_clusters)
+        ###########################################################################################
 
         # Iterative refinement
         prev_count = len(clusters) + 1
