@@ -117,17 +117,12 @@ class SmolDoclingModel(BasePageModel):
                     )
 
                     generation_time = time.time() - start_time
-
                     generated_texts = self.processor.batch_decode(
-                        generated_ids, skip_special_tokens=False
+                        generated_ids[:, inputs["input_ids"].shape[1] :],
+                        skip_special_tokens=False,
                     )[0]
+
                     num_tokens = len(generated_ids[0])
-                    # DELETE NOISE BEFORE "Assistant: "
-                    starting_point = "Assistant: "
-                    generated_texts = generated_texts[
-                        generated_texts.index(starting_point) + len(starting_point) :
-                    ]
-                    # generated_texts = generated_texts.replace("Assistant: ", "")
                     page_tags = generated_texts
 
                     inference_time = time.time() - start_time
