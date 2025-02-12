@@ -28,6 +28,8 @@ _log = logging.getLogger(__name__)
 
 class SmolDoclingModel(BasePageModel):
 
+    _repo_id: str = "ds4sd/SmolDocling-256M-preview"
+
     def __init__(
         self,
         accelerator_options: AcceleratorOptions,

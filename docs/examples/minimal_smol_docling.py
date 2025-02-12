@@ -15,7 +15,7 @@ sources = [
     # "tests/data/2305.03393v1-pg9.pdf",
 ]
 
-pipeline_options = VlmPipelineOptions()  # artifacts_path="~/local_model_artifacts/")
+pipeline_options = VlmPipelineOptions()  # artifacts_path="~/local_model_artifacts/"
 pipeline_options.generate_page_images = True
 # If force_backend_text = True, text from backend will be used instead of generated text
 pipeline_options.force_backend_text = False
