@@ -83,7 +83,7 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
-pipeline_options = PdfPipelineOptions(allow_remote_services=True)
+pipeline_options = PdfPipelineOptions(enable_remote_services=True)
 doc_converter = DocumentConverter(
     format_options={
         InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
@@ -91,13 +91,13 @@ doc_converter = DocumentConverter(
 )
 ```
 
-When the value `allow_remote_services=True` is not set, the system will raise an exception `OperationNotAllowed()`.
+When the value `enable_remote_services=True` is not set, the system will raise an exception `OperationNotAllowed()`.
 
 _Note: This option is only related to the system sending user data to remote services. Control of pulling data (e.g. model weights) follows the logic described in [Model prefetching and offline usage](#model-prefetching-and-offline-usage)._
 
 ##### List of remote model services
 
-The options in this list require the explicit `allow_remote_services=True` when processing the documents.
+The options in this list require the explicit `enable_remote_services=True` when processing the documents.
 
 - `PictureDescriptionApiOptions`: Using vision models via API calls.
 

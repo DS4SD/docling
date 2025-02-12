@@ -257,7 +257,7 @@ class PipelineOptions(BaseModel):
     )
     document_timeout: Optional[float] = None
     accelerator_options: AcceleratorOptions = AcceleratorOptions()
-    allow_remote_services: bool = False
+    enable_remote_services: bool = False
 
 
 class PdfPipelineOptions(PipelineOptions):

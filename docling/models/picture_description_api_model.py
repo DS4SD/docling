@@ -49,17 +49,17 @@ class PictureDescriptionApiModel(PictureDescriptionBaseModel):
     def __init__(
         self,
         enabled: bool,
-        allow_remote_services: bool,
+        enable_remote_services: bool,
         options: PictureDescriptionApiOptions,
     ):
         super().__init__(enabled=enabled, options=options)
         self.options: PictureDescriptionApiOptions
 
         if self.enabled:
-            if not allow_remote_services:
+            if not enable_remote_services:
                 raise OperationNotAllowed(
                     "Connections to remote services is only allowed when set explicitly. "
-                    "pipeline_options.allow_remote_services=True."
+                    "pipeline_options.enable_remote_services=True."
                 )
 
     def _annotate_images(self, images: Iterable[Image.Image]) -> Iterable[str]:

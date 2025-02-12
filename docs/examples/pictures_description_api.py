@@ -21,7 +21,7 @@ def main():
     # $ vllm serve "HuggingFaceTB/SmolVLM-256M-Instruct"
 
     pipeline_options = PdfPipelineOptions(
-        allow_remote_services=True  # <-- this is required!
+        enable_remote_services=True  # <-- this is required!
     )
     pipeline_options.do_picture_description = True
     pipeline_options.picture_description_options = PictureDescriptionApiOptions(

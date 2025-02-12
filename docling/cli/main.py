@@ -234,7 +234,7 @@ def convert(
         Optional[Path],
         typer.Option(..., help="If provided, the location of the model artifacts."),
     ] = None,
-    allow_remote_services: Annotated[
+    enable_remote_services: Annotated[
         bool,
         typer.Option(
             ..., help="Must be enabled when using models connecting to remote services."
@@ -386,7 +386,7 @@ def convert(
 
         accelerator_options = AcceleratorOptions(num_threads=num_threads, device=device)
         pipeline_options = PdfPipelineOptions(
-            allow_remote_services=allow_remote_services,
+            enable_remote_services=enable_remote_services,
             accelerator_options=accelerator_options,
             do_ocr=ocr,
             ocr_options=ocr_options,
