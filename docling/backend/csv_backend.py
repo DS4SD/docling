@@ -29,8 +29,7 @@ class CsvDocumentBackend(DeclarativeDocumentBackend):
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
-                # Decode bytes to string for CSV reading
-                content = self.path_or_stream.read().decode('utf-8')
+                content = self.path_or_stream.getvalue().decode("utf-8")
                 self.csv_data = list(csv.reader(StringIO(content)))
             elif isinstance(self.path_or_stream, Path):
                 with open(self.path_or_stream, 'r', newline='') as f:

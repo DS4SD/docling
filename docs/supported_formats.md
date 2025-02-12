@@ -13,6 +13,7 @@ Below you can find a listing of all supported input and output formats.
 | Markdown | |
 | AsciiDoc | |
 | HTML, XHTML | |
+| CSV | |
 | PNG, JPEG, TIFF, BMP | Image formats |
 
 Schema-specific support:
