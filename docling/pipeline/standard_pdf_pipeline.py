@@ -61,6 +61,14 @@ class StandardPdfPipeline(PaginatedPipeline):
         artifacts_path: Optional[Path] = None
         if pipeline_options.artifacts_path is not None:
             artifacts_path = Path(pipeline_options.artifacts_path).expanduser()
+        elif settings.artifacts_path is not None:
+            artifacts_path = Path(settings.artifacts_path).expanduser()
+
+        if artifacts_path is not None and not artifacts_path.is_dir():
+            raise RuntimeError(
+                f"The value of {artifacts_path=} is not valid. "
+                "When defined, it must point to a folder containing all models required by the pipeline."
+            )
 
         self.keep_images = (
             self.pipeline_options.generate_page_images
