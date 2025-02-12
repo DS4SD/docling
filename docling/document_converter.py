@@ -14,6 +14,7 @@ from docling.backend.docling_parse_v2_backend import DoclingParseV2DocumentBacke
 from docling.backend.html_backend import HTMLDocumentBackend
 from docling.backend.json.docling_json_backend import DoclingJSONBackend
 from docling.backend.md_backend import MarkdownDocumentBackend
+from docling.backend.csv_backend import CsvDocumentBackend
 from docling.backend.msexcel_backend import MsExcelDocumentBackend
 from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
@@ -60,6 +61,10 @@ class FormatOption(BaseModel):
             self.pipeline_options = self.pipeline_cls.get_default_options()
         return self
 
+
+class CsvFormatOption(FormatOption):
+    pipeline_cls: Type = SimplePipeline
+    backend: Type[AbstractDocumentBackend] = CsvDocumentBackend
 
 class ExcelFormatOption(FormatOption):
     pipeline_cls: Type = SimplePipeline
@@ -113,6 +118,9 @@ class PdfFormatOption(FormatOption):
 
 def _get_default_option(format: InputFormat) -> FormatOption:
     format_to_default_options = {
+        InputFormat.CSV: FormatOption(
+            pipeline_cls=SimplePipeline, backend=CsvDocumentBackend
+        ),
         InputFormat.XLSX: FormatOption(
             pipeline_cls=SimplePipeline, backend=MsExcelDocumentBackend
         ),
