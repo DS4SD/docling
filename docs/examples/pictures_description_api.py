@@ -20,7 +20,9 @@ def main():
     # For example, you can launch it locally with:
     # $ vllm serve "HuggingFaceTB/SmolVLM-256M-Instruct"
 
-    pipeline_options = PdfPipelineOptions()
+    pipeline_options = PdfPipelineOptions(
+        enable_remote_services=True  # <-- this is required!
+    )
     pipeline_options.do_picture_description = True
     pipeline_options.picture_description_options = PictureDescriptionApiOptions(
         url="http://localhost:8000/v1/chat/completions",

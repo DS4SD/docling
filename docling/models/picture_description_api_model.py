@@ -8,6 +8,7 @@ from PIL import Image
 from pydantic import BaseModel, ConfigDict
 
 from docling.datamodel.pipeline_options import PictureDescriptionApiOptions
+from docling.exceptions import OperationNotAllowed
 from docling.models.picture_description_base_model import PictureDescriptionBaseModel
 
 _log = logging.getLogger(__name__)
@@ -45,14 +46,20 @@ class ApiResponse(BaseModel):
 class PictureDescriptionApiModel(PictureDescriptionBaseModel):
     # elements_batch_size = 4
 
-    def __init__(self, enabled: bool, options: PictureDescriptionApiOptions):
+    def __init__(
+        self,
+        enabled: bool,
+        enable_remote_services: bool,
+        options: PictureDescriptionApiOptions,
+    ):
         super().__init__(enabled=enabled, options=options)
         self.options: PictureDescriptionApiOptions
 
         if self.enabled:
-            if options.url.host != "localhost":
-                raise NotImplementedError(
-                    "The options try to connect to remote APIs which are not yet allowed."
+            if not enable_remote_services:
+                raise OperationNotAllowed(
+                    "Connections to remote services is only allowed when set explicitly. "
+                    "pipeline_options.enable_remote_services=True."
                 )
 
     def _annotate_images(self, images: Iterable[Image.Image]) -> Iterable[str]:

@@ -209,6 +209,7 @@ class StandardPdfPipeline(PaginatedPipeline):
         ):
             return PictureDescriptionApiModel(
                 enabled=self.pipeline_options.do_picture_description,
+                enable_remote_services=self.pipeline_options.enable_remote_services,
                 options=self.pipeline_options.picture_description_options,
             )
         elif isinstance(
