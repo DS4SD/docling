@@ -334,9 +334,6 @@ class VlmPipeline(PaginatedPipeline):
             xml_content = ""
             predicted_text = ""
             if page.predictions.doctags:
-                print("Doctags predicted for a page {}:".format(pg_idx))
-                print(page.predictions.doctags)
-                print("")
                 predicted_text = page.predictions.doctags.tag_string
             image = page.image
             page_no = pg_idx + 1
@@ -382,9 +379,6 @@ class VlmPipeline(PaginatedPipeline):
 
                 elif tag_name == "picture":
                     text_caption_content = extract_inner_text(full_chunk)
-                    print("----------- TEXT CONTENT OF A PICTURE TAG -------------")
-                    print(text_caption_content)
-                    print("-------------------------------------------------------")
                     if image:
                         if bbox:
                             width, height = image.size

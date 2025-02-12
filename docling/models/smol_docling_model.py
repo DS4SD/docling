@@ -81,11 +81,6 @@ class SmolDoclingModel(BasePageModel):
 
                     if hi_res_image is not None:
                         im_width, im_height = hi_res_image.size
-                        print(
-                            "Processed image resolution: {} x {}".format(
-                                im_width, im_height
-                            )
-                        )
 
                     # populate page_tags with predicted doc tags
                     page_tags = ""
@@ -115,7 +110,6 @@ class SmolDoclingModel(BasePageModel):
                     )
                     inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
-                    print("In the model, starting to generate...")
                     start_time = time.time()
                     # Call model to generate:
                     generated_ids = self.vlm_model.generate(
@@ -138,11 +132,11 @@ class SmolDoclingModel(BasePageModel):
 
                     inference_time = time.time() - start_time
                     tokens_per_second = num_tokens / generation_time
-                    print("")
-                    print(f"Page Inference Time: {inference_time:.2f} seconds")
-                    print(f"Total tokens on page: {num_tokens:.2f}")
-                    print(f"Tokens/sec: {tokens_per_second:.2f}")
-                    print("")
+                    # print("")
+                    # print(f"Page Inference Time: {inference_time:.2f} seconds")
+                    # print(f"Total tokens on page: {num_tokens:.2f}")
+                    # print(f"Tokens/sec: {tokens_per_second:.2f}")
+                    # print("")
                     page.predictions.doctags = DocTagsPrediction(tag_string=page_tags)
 
                 yield page
