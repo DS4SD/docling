@@ -19,7 +19,7 @@ pipeline_options = VlmPipelineOptions()  # artifacts_path="~/local_model_artifac
 pipeline_options.generate_page_images = True
 # If force_backend_text = True, text from backend will be used instead of generated text
 pipeline_options.force_backend_text = False
-
+# pipeline_options.do_vlm = True - use False to disable VLM model (i.e. SmallDocling), extra python imports will not be performed
 
 vlm_options = SmolDoclingOptions(
     # question="Convert this page to docling.",

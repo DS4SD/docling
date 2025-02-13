@@ -116,7 +116,10 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
 
     def __init__(self, pipeline_options: PipelineOptions):
         super().__init__(pipeline_options)
-        self.keep_backend = True
+        self.keep_backend = (
+            True  # For now, need to be able to query for page size post prediction
+        )
+        # self.keep_backend = False
 
     def _apply_on_pages(
         self, conv_res: ConversionResult, page_batch: Iterable[Page]

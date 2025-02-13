@@ -255,9 +255,7 @@ granite_picture_description = PictureDescriptionVlmOptions(
 
 
 class SmolDoclingOptions(BaseModel):
-    artifacts_path: str = ""
-    question: str = "Convert this page to docling."  # "Perform Layout Analysis."
-
+    question: str = "Convert this page to docling."
     load_in_8bit: bool = True
     llm_int8_threshold: float = 6.0
     quantized: bool = False
@@ -294,7 +292,24 @@ class PipelineOptions(BaseModel):
     enable_remote_services: bool = False
 
 
-class PdfPipelineOptions(PipelineOptions):
+class PaginatedPipelineOptions(PipelineOptions):
+    images_scale: float = 1.0
+    generate_page_images: bool = False
+    generate_picture_images: bool = False
+
+
+class VlmPipelineOptions(PaginatedPipelineOptions):
+    artifacts_path: Optional[Union[Path, str]] = None
+    do_vlm: bool = True  # True: perform inference of Visual Language Model
+
+    force_backend_text: bool = (
+        False  # (To be used with vlms, or other generative models)
+    )
+    # If True, text from backend will be used instead of generated text
+    vlm_options: Union[SmolDoclingOptions,] = Field(SmolDoclingOptions())
+
+
+class PdfPipelineOptions(PaginatedPipelineOptions):
     """Options for the PDF pipeline."""
 
     artifacts_path: Optional[Union[Path, str]] = None

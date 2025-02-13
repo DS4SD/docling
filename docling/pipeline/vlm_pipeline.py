@@ -97,6 +97,8 @@ class VlmPipeline(PaginatedPipeline):
 
         self.build_pipe = [
             SmolDoclingModel(
+                enabled=pipeline_options.do_vlm,
+                artifacts_path=artifacts_path,
                 accelerator_options=pipeline_options.accelerator_options,
                 vlm_options=self.pipeline_options.vlm_options,
             ),
@@ -297,6 +299,7 @@ class VlmPipeline(PaginatedPipeline):
                 token
                 for token in tokens
                 if not (token.startswith("<loc_") or token in ["<otsl>", "</otsl>"])
+                # if not (token.startswith(DocumentToken.BEG_LOC) or token in [DocumentToken.BEG_OTSL, DocumentToken.END_OTSL])
             ]
             # Split the string by those tokens to get the in-between text
             text_parts = re.split(pattern, s)
@@ -304,6 +307,7 @@ class VlmPipeline(PaginatedPipeline):
                 token
                 for token in text_parts
                 if not (token.startswith("<loc_") or token in ["<otsl>", "</otsl>"])
+                # if not (token.startswith(DocumentToken.BEG_LOC) or token in [DocumentToken.BEG_OTSL, DocumentToken.END_OTSL])
             ]
             # Remove any empty or purely whitespace strings from text_parts
             text_parts = [part for part in text_parts if part.strip()]
@@ -347,10 +351,15 @@ class VlmPipeline(PaginatedPipeline):
 
             # Regex for all recognized tags
             tag_pattern = (
-                r"<(?P<tag>title|document_index|otsl|section_header_level_1|checkbox_selected|"
-                r"checkbox_unselected|text|page_header|page_footer|formula|caption|picture|"
-                r"list_item|footnote|code)>.*?</(?P=tag)>"
+                rf"<(?P<tag>{DocItemLabel.TITLE}|{DocItemLabel.DOCUMENT_INDEX}|"
+                rf"{DocItemLabel.CHECKBOX_UNSELECTED}|{DocItemLabel.CHECKBOX_SELECTED}|"
+                rf"{DocItemLabel.TEXT}|{DocItemLabel.PAGE_HEADER}|"
+                rf"{DocItemLabel.PAGE_FOOTER}|{DocItemLabel.FORMULA}|"
+                rf"{DocItemLabel.CAPTION}|{DocItemLabel.PICTURE}|"
+                rf"{DocItemLabel.LIST_ITEM}|{DocItemLabel.FOOTNOTE}|{DocItemLabel.CODE}|"
+                rf"{DocItemLabel.SECTION_HEADER}_level_1|otsl)>.*?</(?P=tag)>"
             )
+
             pattern = re.compile(tag_pattern, re.DOTALL)
 
             # Go through each match in order
@@ -438,8 +447,8 @@ class VlmPipeline(PaginatedPipeline):
         return doc
 
     @classmethod
-    def get_default_options(cls) -> PdfPipelineOptions:
-        return PdfPipelineOptions()
+    def get_default_options(cls) -> VlmPipelineOptions:
+        return VlmPipelineOptions()
 
     @classmethod
     def is_backend_supported(cls, backend: AbstractDocumentBackend):
