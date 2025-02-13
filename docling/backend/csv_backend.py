@@ -4,13 +4,7 @@ from io import BytesIO, StringIO
 from pathlib import Path
 from typing import Set, Union
 
-from docling_core.types.doc import (
-    DoclingDocument,
-    DocumentOrigin,
-    GroupLabel,
-    TableCell,
-    TableData,
-)
+from docling_core.types.doc import DoclingDocument, DocumentOrigin, TableCell, TableData
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.datamodel.base_models import InputFormat
@@ -23,27 +17,21 @@ class CsvDocumentBackend(DeclarativeDocumentBackend):
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
 
-        # Initialize parent for hierarchy
-        self.parent = None
-        self.valid = False
-
+        # Load content
         try:
             if isinstance(self.path_or_stream, BytesIO):
-                content = self.path_or_stream.getvalue().decode("utf-8")
-                self.csv_data = list(csv.reader(StringIO(content)))
+                self.content = self.path_or_stream.getvalue().decode("utf-8")
             elif isinstance(self.path_or_stream, Path):
-                with open(self.path_or_stream, 'r', newline='') as f:
-                    self.csv_data = list(csv.reader(f))
-            
+                with open(self.path_or_stream, "r", newline="") as f:
+                    self.content = f.read()
             self.valid = True
         except Exception as e:
-            self.valid = False
             raise RuntimeError(
                 f"CsvDocumentBackend could not load document with hash {self.document_hash}"
             ) from e
+        return
 
     def is_valid(self) -> bool:
-        _log.info(f"valid: {self.valid}")
         return self.valid
 
     @classmethod
@@ -60,6 +48,23 @@ class CsvDocumentBackend(DeclarativeDocumentBackend):
         return {InputFormat.CSV}
 
     def convert(self) -> DoclingDocument:
+        """
+        Parses the CSV data into a structured document model.
+        """
+
+        # Detect CSV dialect
+        dialect = csv.Sniffer().sniff(self.content)
+        _log.info(f'Parsing CSV with delimiter: "{dialect.delimiter}"')
+        if not dialect.delimiter in {",", ";", "\t", "|"}:
+            raise RuntimeError(
+                f"Cannot convert csv with unknown delimiter {dialect.delimiter}."
+            )
+
+        # Parce CSV
+        result = csv.reader(StringIO(self.content), dialect=dialect)
+        self.csv_data = list(result)
+        _log.info(f"Detected {len(self.csv_data)} lines")
+
         # Parse the CSV into a structured document model
         origin = DocumentOrigin(
             filename=self.file.name or "file.csv",
@@ -70,13 +75,6 @@ class CsvDocumentBackend(DeclarativeDocumentBackend):
         doc = DoclingDocument(name=self.file.stem or "file.csv", origin=origin)
 
         if self.is_valid():
-            # Create a section for the CSV content
-            self.parent = doc.add_group(
-                parent=None,
-                label=GroupLabel.SECTION,
-                name="csv content",
-            )
-
             # Convert CSV data to table
             if self.csv_data:
                 num_rows = len(self.csv_data)
@@ -104,7 +102,7 @@ class CsvDocumentBackend(DeclarativeDocumentBackend):
                         )
                         table_data.table_cells.append(cell)
 
-                doc.add_table(data=table_data, parent=self.parent)
+                doc.add_table(data=table_data)
         else:
             raise RuntimeError(
                 f"Cannot convert doc with {self.document_hash} because the backend failed to init."

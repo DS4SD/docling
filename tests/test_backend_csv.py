@@ -50,9 +50,7 @@ def test_e2e_csv_conversions():
     for csv_path in csv_paths:
         print(f"converting {csv_path}")
 
-        gt_path = (
-            csv_path.parent.parent / "groundtruth" / "docling_v2" / csv_path.name
-        )
+        gt_path = csv_path.parent.parent / "groundtruth" / "docling_v2" / csv_path.name
 
         conv_result: ConversionResult = converter.convert(csv_path)
 

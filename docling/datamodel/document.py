@@ -1,6 +1,6 @@
+import csv
 import logging
 import re
-import csv
 from enum import Enum
 from io import BytesIO
 from pathlib import Path, PurePath
