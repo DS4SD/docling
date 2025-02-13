@@ -89,14 +89,7 @@ class VlmPipeline(PaginatedPipeline):
             "code": "lightblue",
         }
 
-        """
-        if pipeline_options.artifacts_path is None:
-            self.artifacts_path = self.download_models_hf()
-        else:
-            self.artifacts_path = Path(pipeline_options.artifacts_path)
-        """
-
-        keep_images = (
+        self.keep_images = (
             self.pipeline_options.generate_page_images
             or self.pipeline_options.generate_picture_images
             or self.pipeline_options.generate_table_images
@@ -429,9 +422,6 @@ class VlmPipeline(PaginatedPipeline):
                         text_content = extract_text_from_backend(page, bbox)
                     else:
                         text_content = extract_inner_text(full_chunk)
-                    # If it's code, wrap it with <pre><code> tags
-                    if doc_label == DocItemLabel.CODE:
-                        text_content = f"<pre><code>{text_content}</code></pre>"
                     doc.add_text(
                         label=doc_label,
                         text=text_content,
@@ -454,6 +444,3 @@ class VlmPipeline(PaginatedPipeline):
     @classmethod
     def is_backend_supported(cls, backend: AbstractDocumentBackend):
         return isinstance(backend, PdfDocumentBackend)
-
-    # def _turn_tags_into_doc(self, document_tags):
-    #     return DoclingDocument()
