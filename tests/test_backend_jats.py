@@ -19,7 +19,7 @@ def get_pubmed_paths():
 
 
 def get_converter():
-    converter = DocumentConverter(allowed_formats=[InputFormat.XML_PUBMED])
+    converter = DocumentConverter(allowed_formats=[InputFormat.XML_JATS])
     return converter
 
 

@@ -66,11 +66,21 @@ class XMLComponents(TypedDict):
     abstract: list[Abstract]
 
 
-class PubMedDocumentBackend(DeclarativeDocumentBackend):
-    """
-    The code from this document backend has been developed by modifying parts of the PubMed Parser library (version 0.5.0, released on 12.08.2024):
+class JatsDocumentBackend(DeclarativeDocumentBackend):
+    """Backend to parse articles in XML format tagged according to JATS definition.
+
+    The Journal Article Tag Suite (JATS) is an definition standard for the
+    representation of journal articles in XML format. Several publishers and journal
+    archives provide content in JATS format, including PubMed Central® (PMC), bioRxiv,
+    medRxiv, or Springer Nature.
+
+    Refer to https://jats.nlm.nih.gov for more details on JATS.
+
+    The code from this document backend has been developed by modifying parts of the
+    PubMed Parser library (version 0.5.0, released on 12.08.2024):
     Achakulvisut et al., (2020).
-    Pubmed Parser: A Python Parser for PubMed Open-Access XML Subset and MEDLINE XML Dataset XML Dataset.
+    Pubmed Parser: A Python Parser for PubMed Open-Access XML Subset and MEDLINE XML
+      Dataset XML Dataset.
     Journal of Open Source Software, 5(46), 1979,
     https://doi.org/10.21105/joss.01979
     """
@@ -105,7 +115,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
                     return
         except Exception as exc:
             raise RuntimeError(
-                f"Could not initialize PubMed backend for file with hash {self.document_hash}."
+                f"Could not initialize JATS backend for file with hash {self.document_hash}."
             ) from exc
 
     @override
@@ -126,7 +136,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
     @classmethod
     @override
     def supported_formats(cls) -> set[InputFormat]:
-        return {InputFormat.XML_PUBMED}
+        return {InputFormat.XML_JATS}
 
     @override
     def convert(self) -> DoclingDocument:
@@ -170,7 +180,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
         for child in list(node):
             if child.tag not in skip_tags:
                 # TODO: apply styling according to child.tag when supported by docling-core
-                text += PubMedDocumentBackend._get_text(child, sep)
+                text += JatsDocumentBackend._get_text(child, sep)
             if sep:
                 text = text.rstrip(sep) + sep
             text += child.tail.replace("\n", " ") if child.tail else ""
@@ -196,7 +206,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
             abstract: Abstract = dict(label="", content="")
             texts = []
             for abs_par in abs_node.xpath("p"):
-                texts.append(PubMedDocumentBackend._get_text(abs_par).strip())
+                texts.append(JatsDocumentBackend._get_text(abs_par).strip())
             abstract["content"] = " ".join(texts)
 
             label_node = abs_node.xpath("title|label")
@@ -280,7 +290,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
         return text
 
     def _parse_metadata(self) -> XMLComponents:
-        """Parsing PubMed document metadata."""
+        """Parsing JATS document metadata."""
         xml_components: XMLComponents = {
             "title": self._parse_title(),
             "authors": self._parse_authors(),
@@ -385,7 +395,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
                 title_node = name_node[0]
                 break
         citation["title"] = (
-            PubMedDocumentBackend._get_text(title_node)
+            JatsDocumentBackend._get_text(title_node)
             if title_node is not None
             else node.text.replace("\n", " ").strip()
         )
@@ -415,7 +425,9 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
                 id_text = id_node.text
                 if id_type and id_text:
                     pub_id.append(
-                        f"{id_type.replace("\n", " ").strip().upper()}: {id_text.replace("\n", " ").strip()}"
+                        id_type.replace("\n", " ").strip().upper()
+                        + ": "
+                        + id_text.replace("\n", " ").strip()
                     )
             if pub_id:
                 citation["pub_id"] = ", ".join(pub_id)
@@ -428,9 +440,9 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
         elif len(node.xpath("fpage")) > 0:
             citation["page"] = node.xpath("fpage")[0].text.replace("\n", " ").strip()
             if len(node.xpath("lpage")) > 0:
-                citation[
-                    "page"
-                ] += f"–{node.xpath('lpage')[0].text.replace("\n", " ").strip()}"
+                citation["page"] += (
+                    "–" + node.xpath("lpage")[0].text.replace("\n", " ").strip()
+                )
 
         # Flatten the citation to string
 
@@ -447,7 +459,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
             text += citation["publisher_name"] + ". "
         if citation["volume"]:
             text = text.rstrip(". ")
-            text += f" {citation["volume"]}. "
+            text += f" {citation['volume']}. "
         if citation["page"]:
             text = text.rstrip(". ")
             if citation["volume"]:
@@ -480,7 +492,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
     ) -> None:
         label_node = node.xpath("label")
         label: Optional[str] = (
-            PubMedDocumentBackend._get_text(label_node[0]).strip() if label_node else ""
+            JatsDocumentBackend._get_text(label_node[0]).strip() if label_node else ""
         )
 
         caption_node = node.xpath("caption")
@@ -490,7 +502,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
             for caption_par in list(caption_node[0]):
                 if caption_par.xpath(".//supplementary-material"):
                     continue
-                caption += PubMedDocumentBackend._get_text(caption_par).strip() + " "
+                caption += JatsDocumentBackend._get_text(caption_par).strip() + " "
             caption = caption.strip()
         else:
             caption = None
@@ -511,7 +523,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
     # def _add_footnote_group(self, doc: DoclingDocument, parent: NodeItem, node: etree._Element) -> None:
     #     new_parent = doc.add_group(label=GroupLabel.LIST, name="footnotes", parent=parent)
     #     for child in node.iterchildren(tag="fn"):
-    #         text = PubMedDocumentBackend._get_text(child)
+    #         text = JatsDocumentBackend._get_text(child)
     #         doc.add_list_item(text=text, parent=new_parent)
 
     def _add_metadata(
@@ -631,7 +643,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
             for caption_par in list(caption_node[0]):
                 if caption_par.xpath(".//supplementary-material"):
                     continue
-                caption += PubMedDocumentBackend._get_text(caption_par).strip() + " "
+                caption += JatsDocumentBackend._get_text(caption_par).strip() + " "
             caption = caption.strip()
         else:
             caption = None
@@ -686,7 +698,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
                 header = child.xpath("title|label")
                 text: Optional[str] = None
                 if len(header) > 0:
-                    text = PubMedDocumentBackend._get_text(header[0])
+                    text = JatsDocumentBackend._get_text(header[0])
                 elif child.tag == "ack":
                     text = DEFAULT_HEADER_ACKNOWLEDGMENTS
                 if text:
@@ -698,7 +710,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
             elif child.tag == "list-item":
                 # TODO: address any type of content (another list, formula,...)
                 # TODO: address list type and item label
-                text = PubMedDocumentBackend._get_text(child).strip()
+                text = JatsDocumentBackend._get_text(child).strip()
                 new_parent = doc.add_list_item(text=text, parent=parent)
                 stop_walk = True
             elif child.tag == "fig":
@@ -712,14 +724,14 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
             elif child.tag == "fn-group":
                 # header = child.xpath(".//title") or child.xpath(".//label")
                 # if header:
-                #     text = PubMedDocumentBackend._get_text(header[0])
+                #     text = JatsDocumentBackend._get_text(header[0])
                 #     fn_parent = doc.add_heading(text=text, parent=new_parent)
                 # self._add_footnote_group(doc, fn_parent, child)
                 stop_walk = True
             elif child.tag == "ref-list" and node.tag != "ref-list":
                 header = child.xpath("title|label")
                 text = (
-                    PubMedDocumentBackend._get_text(header[0])
+                    JatsDocumentBackend._get_text(header[0])
                     if len(header) > 0
                     else DEFAULT_HEADER_REFERENCES
                 )
@@ -732,7 +744,7 @@ class PubMedDocumentBackend(DeclarativeDocumentBackend):
                 self._add_citation(doc, parent, text)
                 stop_walk = True
             elif child.tag == "mixed-citation":
-                text = PubMedDocumentBackend._get_text(child).strip()
+                text = JatsDocumentBackend._get_text(child).strip()
                 self._add_citation(doc, parent, text)
                 stop_walk = True
             elif child.tag == "tex-math":
