@@ -2,21 +2,28 @@ import json
 import os
 from pathlib import Path
 
+from pytest import warns
+
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import ConversionResult, DoclingDocument
 from docling.document_converter import DocumentConverter
 
-GENERATE = False
+GENERATE = True
 
 
 def get_csv_paths():
 
     # Define the directory you want to search
-    directory = Path("./tests/data/csv/")
+    directory = Path(f"./tests/data/csv/")
 
-    # List all PDF files in the directory and its subdirectories
-    pdf_files = sorted(directory.rglob("*.csv"))
-    return pdf_files
+    # List all CSV files in the directory and its subdirectories
+    return sorted(directory.rglob("*.csv"))
+
+
+def get_csv_path(name: str):
+
+    # Return the matching CSV file path
+    return Path(f"./tests/data/csv/{name}.csv")
 
 
 def get_converter():
@@ -42,12 +49,11 @@ def verify_export(pred_text: str, gtfile: str):
         return pred_text == true_text
 
 
-def test_e2e_csv_conversions():
-
-    csv_paths = get_csv_paths()
+def test_e2e_valid_csv_conversions():
+    valid_csv_paths = get_csv_paths()
     converter = get_converter()
 
-    for csv_path in csv_paths:
+    for csv_path in valid_csv_paths:
         print(f"converting {csv_path}")
 
         gt_path = csv_path.parent.parent / "groundtruth" / "docling_v2" / csv_path.name
@@ -68,3 +74,22 @@ def test_e2e_csv_conversions():
 
         pred_json: str = json.dumps(doc.export_to_dict(), indent=2)
         assert verify_export(pred_json, str(gt_path) + ".json"), "export to json"
+
+
+def test_e2e_invalid_csv_conversions():
+    csv_too_few_columns = get_csv_path("csv-too-few-columns")
+    csv_too_many_columns = get_csv_path("csv-too-many-columns")
+    csv_inconsistent_header = get_csv_path("csv-inconsistent-header")
+    converter = get_converter()
+
+    print(f"converting {csv_too_few_columns}")
+    with warns(UserWarning, match="Inconsistent column lengths"):
+        converter.convert(csv_too_few_columns)
+
+    print(f"converting {csv_too_many_columns}")
+    with warns(UserWarning, match="Inconsistent column lengths"):
+        converter.convert(csv_too_many_columns)
+
+    print(f"converting {csv_inconsistent_header}")
+    with warns(UserWarning, match="Inconsistent column lengths"):
+        converter.convert(csv_inconsistent_header)

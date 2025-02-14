@@ -1,5 +1,6 @@
 import csv
 import logging
+import warnings
 from io import BytesIO, StringIO
 from pathlib import Path
 from typing import Set, Union
@@ -14,16 +15,17 @@ _log = logging.getLogger(__name__)
 
 
 class CsvDocumentBackend(DeclarativeDocumentBackend):
+    content: StringIO
+
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
 
         # Load content
         try:
             if isinstance(self.path_or_stream, BytesIO):
-                self.content = self.path_or_stream.getvalue().decode("utf-8")
+                self.content = StringIO(self.path_or_stream.getvalue().decode("utf-8"))
             elif isinstance(self.path_or_stream, Path):
-                with open(self.path_or_stream, "r", newline="") as f:
-                    self.content = f.read()
+                self.content = StringIO(self.path_or_stream.read_text("utf-8"))
             self.valid = True
         except Exception as e:
             raise RuntimeError(
@@ -53,17 +55,29 @@ class CsvDocumentBackend(DeclarativeDocumentBackend):
         """
 
         # Detect CSV dialect
-        dialect = csv.Sniffer().sniff(self.content)
+        head = self.content.readline()
+        dialect = csv.Sniffer().sniff(head, ",;\t|:")
         _log.info(f'Parsing CSV with delimiter: "{dialect.delimiter}"')
-        if not dialect.delimiter in {",", ";", "\t", "|"}:
+        if not dialect.delimiter in {",", ";", "\t", "|", ":"}:
             raise RuntimeError(
                 f"Cannot convert csv with unknown delimiter {dialect.delimiter}."
             )
 
         # Parce CSV
-        result = csv.reader(StringIO(self.content), dialect=dialect)
+        self.content.seek(0)
+        result = csv.reader(self.content, dialect=dialect, strict=True)
         self.csv_data = list(result)
         _log.info(f"Detected {len(self.csv_data)} lines")
+
+        # Ensure uniform column length
+        expected_length = len(self.csv_data[0])
+        is_uniform = all(len(row) == expected_length for row in self.csv_data)
+        if not is_uniform:
+            warnings.warn(
+                f"Inconsistent column lengths detected in CSV data. "
+                f"Expected {expected_length} columns, but found rows with varying lengths. "
+                f"Ensure all rows have the same number of columns."
+            )
 
         # Parse the CSV into a structured document model
         origin = DocumentOrigin(
