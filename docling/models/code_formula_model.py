@@ -5,6 +5,7 @@ from typing import Iterable, List, Literal, Optional, Tuple, Union
 import numpy as np
 from docling_core.types.doc import (
     CodeItem,
+    DocItem,
     DocItemLabel,
     DoclingDocument,
     NodeItem,
@@ -233,9 +234,9 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
 
         labels: List[str] = []
         images: List[Union[Image.Image, np.ndarray]] = []
-        elements: List[Union[TextItem | CodeItem]] = []
+        elements: List[TextItem] = []
         for el in element_batch:
-            assert isinstance(el.item, TextItem) or isinstance(el.item, CodeItem)
+            assert isinstance(el.item, TextItem)
             elements.append(el.item)
             labels.append(el.item.label)
             images.append(el.image)
