@@ -1,3 +1,21 @@
+## [v2.22.0](https://github.com/DS4SD/docling/releases/tag/v2.22.0) - 2025-02-14
+
+### Feature
+
+* Add support for CSV input with new backend to transform CSV files to DoclingDocument ([#945](https://github.com/DS4SD/docling/issues/945)) ([`00d9405`](https://github.com/DS4SD/docling/commit/00d9405b0ac519d321ae54e8150f5facbaabbe14))
+* Introduce the enable_remote_services option to allow remote connections while processing ([#941](https://github.com/DS4SD/docling/issues/941)) ([`2716c7d`](https://github.com/DS4SD/docling/commit/2716c7d4ffb836664178178d3f8d01b7f9112595))
+* Allow artifacts_path to be defined as ENV ([#940](https://github.com/DS4SD/docling/issues/940)) ([`5101e25`](https://github.com/DS4SD/docling/commit/5101e2519e7a5bb727531b1412b1131a7cfbda52))
+
+### Fix
+
+* Update Pillow constraints ([#958](https://github.com/DS4SD/docling/issues/958)) ([`af19c03`](https://github.com/DS4SD/docling/commit/af19c03f6e5e0b24e12d6a3baac6c46a4c8b10d1))
+* Fix the initialization of the TesseractOcrModel ([#935](https://github.com/DS4SD/docling/issues/935)) ([`c47ae70`](https://github.com/DS4SD/docling/commit/c47ae700ece2ea4efee17f82e4667c1ce9a0ed2a))
+
+### Documentation
+
+* Update example Dockerfile with download CLI ([#929](https://github.com/DS4SD/docling/issues/929)) ([`7493d5b`](https://github.com/DS4SD/docling/commit/7493d5b01f8be60294afeffdfb54a62bb74bcc92))
+* Examples for picture descriptions ([#951](https://github.com/DS4SD/docling/issues/951)) ([`2d66e99`](https://github.com/DS4SD/docling/commit/2d66e99b69f39a282109c366fae3679f41c6e081))
+
 ## [v2.21.0](https://github.com/DS4SD/docling/releases/tag/v2.21.0) - 2025-02-10
 
 ### Feature
