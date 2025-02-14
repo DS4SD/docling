@@ -108,6 +108,15 @@ def test_guess_format(tmp_path):
     doc_path = Path("./tests/data/md/wiki.md")
     assert dci._guess_format(doc_path) == InputFormat.MD
 
+    # Valid CSV
+    buf = BytesIO(Path("./tests/data/csv/csv-comma.csv").open("rb").read())
+    stream = DocumentStream(name="csv-comma.csv", stream=buf)
+    assert dci._guess_format(stream) == InputFormat.CSV
+    stream = DocumentStream(name="test-comma", stream=buf)
+    assert dci._guess_format(stream) == InputFormat.CSV
+    doc_path = Path("./tests/data/csv/csv-comma.csv")
+    assert dci._guess_format(doc_path) == InputFormat.CSV
+
     # Valid XML USPTO patent
     buf = BytesIO(Path("./tests/data/uspto/ipa20110039701.xml").open("rb").read())
     stream = DocumentStream(name="ipa20110039701.xml", stream=buf)

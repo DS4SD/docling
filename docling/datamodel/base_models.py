@@ -39,6 +39,7 @@ class InputFormat(str, Enum):
     PDF = "pdf"
     ASCIIDOC = "asciidoc"
     MD = "md"
+    CSV = "csv"
     XLSX = "xlsx"
     XML_USPTO = "xml_uspto"
     JSON_DOCLING = "json_docling"
@@ -61,6 +62,7 @@ FormatToExtensions: Dict[InputFormat, List[str]] = {
     InputFormat.XML_PUBMED: ["xml", "nxml"],
     InputFormat.IMAGE: ["jpg", "jpeg", "png", "tif", "tiff", "bmp"],
     InputFormat.ASCIIDOC: ["adoc", "asciidoc", "asc"],
+    InputFormat.CSV: ["csv"],
     InputFormat.XLSX: ["xlsx"],
     InputFormat.XML_USPTO: ["xml", "txt"],
     InputFormat.JSON_DOCLING: ["json"],
@@ -88,6 +90,7 @@ FormatToMimeType: Dict[InputFormat, List[str]] = {
     InputFormat.PDF: ["application/pdf"],
     InputFormat.ASCIIDOC: ["text/asciidoc"],
     InputFormat.MD: ["text/markdown", "text/x-markdown"],
+    InputFormat.CSV: ["text/csv"],
     InputFormat.XLSX: [
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ],

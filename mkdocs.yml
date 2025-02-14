@@ -82,6 +82,7 @@ nav:
       - "RapidOCR with custom OCR models": examples/rapidocr_with_custom_models.py
       - "Accelerator options": examples/run_with_accelerator.py
       - "Simple translation": examples/translate.py
+      - examples/backend_csv.ipynb
       - examples/backend_xml_rag.ipynb
     - ✂️ Chunking:
       - examples/hybrid_chunking.ipynb

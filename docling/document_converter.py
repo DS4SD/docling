@@ -10,6 +10,7 @@ from pydantic import BaseModel, ConfigDict, model_validator, validate_call
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.asciidoc_backend import AsciiDocBackend
+from docling.backend.csv_backend import CsvDocumentBackend
 from docling.backend.docling_parse_v2_backend import DoclingParseV2DocumentBackend
 from docling.backend.html_backend import HTMLDocumentBackend
 from docling.backend.json.docling_json_backend import DoclingJSONBackend
@@ -59,6 +60,11 @@ class FormatOption(BaseModel):
         if self.pipeline_options is None:
             self.pipeline_options = self.pipeline_cls.get_default_options()
         return self
+
+
+class CsvFormatOption(FormatOption):
+    pipeline_cls: Type = SimplePipeline
+    backend: Type[AbstractDocumentBackend] = CsvDocumentBackend
 
 
 class ExcelFormatOption(FormatOption):
@@ -113,6 +119,9 @@ class PdfFormatOption(FormatOption):
 
 def _get_default_option(format: InputFormat) -> FormatOption:
     format_to_default_options = {
+        InputFormat.CSV: FormatOption(
+            pipeline_cls=SimplePipeline, backend=CsvDocumentBackend
+        ),
         InputFormat.XLSX: FormatOption(
             pipeline_cls=SimplePipeline, backend=MsExcelDocumentBackend
         ),
