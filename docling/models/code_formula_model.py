@@ -233,9 +233,9 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
 
         labels: List[str] = []
         images: List[Union[Image.Image, np.ndarray]] = []
-        elements: List[TextItem] = []
+        elements: List[Union[TextItem | CodeItem]] = []
         for el in element_batch:
-            assert isinstance(el.item, TextItem)
+            assert isinstance(el.item, TextItem) or isinstance(el.item, CodeItem)
             elements.append(el.item)
             labels.append(el.item.label)
             images.append(el.image)
