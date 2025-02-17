@@ -18,7 +18,7 @@ from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.msexcel_backend import MsExcelDocumentBackend
 from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
-from docling.backend.xml.pubmed_backend import PubMedDocumentBackend
+from docling.backend.xml.jats_backend import JatsDocumentBackend
 from docling.backend.xml.uspto_backend import PatentUsptoDocumentBackend
 from docling.datamodel.base_models import (
     ConversionStatus,
@@ -102,9 +102,9 @@ class PatentUsptoFormatOption(FormatOption):
     backend: Type[PatentUsptoDocumentBackend] = PatentUsptoDocumentBackend
 
 
-class XMLPubMedFormatOption(FormatOption):
+class XMLJatsFormatOption(FormatOption):
     pipeline_cls: Type = SimplePipeline
-    backend: Type[AbstractDocumentBackend] = PubMedDocumentBackend
+    backend: Type[AbstractDocumentBackend] = JatsDocumentBackend
 
 
 class ImageFormatOption(FormatOption):
@@ -143,8 +143,8 @@ def _get_default_option(format: InputFormat) -> FormatOption:
         InputFormat.XML_USPTO: FormatOption(
             pipeline_cls=SimplePipeline, backend=PatentUsptoDocumentBackend
         ),
-        InputFormat.XML_PUBMED: FormatOption(
-            pipeline_cls=SimplePipeline, backend=PubMedDocumentBackend
+        InputFormat.XML_JATS: FormatOption(
+            pipeline_cls=SimplePipeline, backend=JatsDocumentBackend
         ),
         InputFormat.IMAGE: FormatOption(
             pipeline_cls=StandardPdfPipeline, backend=DoclingParseV2DocumentBackend

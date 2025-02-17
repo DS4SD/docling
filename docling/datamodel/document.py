@@ -333,11 +333,11 @@ class _DocumentConversionInput(BaseModel):
                 ):
                     input_format = InputFormat.XML_USPTO
 
-                if (
-                    InputFormat.XML_PUBMED in formats
-                    and "/NLM//DTD JATS" in xml_doctype
+                if InputFormat.XML_JATS in formats and (
+                    "JATS-journalpublishing" in xml_doctype
+                    or "JATS-archive" in xml_doctype
                 ):
-                    input_format = InputFormat.XML_PUBMED
+                    input_format = InputFormat.XML_JATS
 
         elif mime == "text/plain":
             if InputFormat.XML_USPTO in formats and content_str.startswith("PATN\r\n"):
