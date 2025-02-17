@@ -5,7 +5,6 @@ from typing import Iterable, List, Literal, Optional, Tuple, Union
 import numpy as np
 from docling_core.types.doc import (
     CodeItem,
-    DocItem,
     DocItemLabel,
     DoclingDocument,
     NodeItem,
