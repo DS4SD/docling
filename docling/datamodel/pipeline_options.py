@@ -1,11 +1,26 @@
 import logging
 import os
+import re
+import warnings
 from enum import Enum
 from pathlib import Path
 from typing import Annotated, Any, Dict, List, Literal, Optional, Union
 
-from pydantic import AnyUrl, BaseModel, ConfigDict, Field, model_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import (
+    AnyUrl,
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_validator,
+    validator,
+)
+from pydantic_settings import (
+    BaseSettings,
+    PydanticBaseSettingsSource,
+    SettingsConfigDict,
+)
+from typing_extensions import deprecated
 
 _log = logging.getLogger(__name__)
 
@@ -25,7 +40,18 @@ class AcceleratorOptions(BaseSettings):
     )
 
     num_threads: int = 4
-    device: AcceleratorDevice = AcceleratorDevice.AUTO
+    device: Union[str, AcceleratorDevice] = "auto"
+
+    @field_validator("device")
+    def validate_device(cls, value):
+        # "auto", "cpu", "cuda", "mps", or "cuda:N"
+        if value in {d.value for d in AcceleratorDevice} or re.match(
+            r"^cuda(:\d+)?$", value
+        ):
+            return value
+        raise ValueError(
+            "Invalid device option. Use 'auto', 'cpu', 'mps', 'cuda', or 'cuda:N'."
+        )
 
     @model_validator(mode="before")
     @classmethod
@@ -41,7 +67,6 @@ class AcceleratorOptions(BaseSettings):
         """
         if isinstance(data, dict):
             input_num_threads = data.get("num_threads")
-
             # Check if to set the num_threads from the alternative envvar
             if input_num_threads is None:
                 docling_num_threads = os.getenv("DOCLING_NUM_THREADS")
