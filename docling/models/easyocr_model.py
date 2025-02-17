@@ -55,7 +55,6 @@ class EasyOcrModel(BaseOcrModel):
                         for x in [
                             AcceleratorDevice.CUDA.value,
                             AcceleratorDevice.MPS.value,
-                            "cuda:",
                         ]
                     ]
                 )

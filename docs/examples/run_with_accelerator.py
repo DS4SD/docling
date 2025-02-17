@@ -30,8 +30,8 @@ def main():
     #     num_threads=8, device=AcceleratorDevice.CUDA
     # )
 
-    # easyocr doesnt support cuda:N allocation
-    # accelerator_options = AcceleratorOptions(num_threads=8, device="cuda:0")
+    # easyocr doesnt support cuda:N allocation, defaults to cuda:0
+    # accelerator_options = AcceleratorOptions(num_threads=8, device="cuda:1")
 
     pipeline_options = PdfPipelineOptions()
     pipeline_options.accelerator_options = accelerator_options
@@ -57,8 +57,8 @@ def main():
     # List with total time per document
     doc_conversion_secs = conversion_result.timings["pipeline_total"].times
 
-    # md = doc.export_to_markdown()
-    # print(md)
+    md = doc.export_to_markdown()
+    print(md)
     print(f"Conversion secs: {doc_conversion_secs}")
 
 
