@@ -473,7 +473,6 @@ The 1992 Disney film The Mighty Ducks, starring Emilio Estevez, chose the duck a
 
 - list of books (useful looking abstracts)
 - Ducks on postage stamps Archived 2013-05-13 at the Wayback Machine
-- 
 - Ducks at a Distance, by Rob Hines at Project Gutenberg - A modern illustrated guide to identification of US waterfowl
 
 | Authority control databases    | Authority control databases                  |
@@ -527,6 +526,3 @@ additional terms may apply. By using this site, you agree to the Terms of Use an
 - Statistics
 - Cookie statement
 - Mobile view
-
-- 
--

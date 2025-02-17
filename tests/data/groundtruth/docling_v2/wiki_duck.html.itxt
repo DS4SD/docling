@@ -410,68 +410,65 @@ item-0 at level 0: unspecified: group _root_
       item-396 at level 3: list: group list
         item-397 at level 4: list_item: list of books (useful looking abstracts)
         item-398 at level 4: list_item: Ducks on postage stamps Archived 2013-05-13 at the Wayback Machine
-        item-399 at level 4: list_item: 
-        item-400 at level 4: list_item: Ducks at a Distance, by Rob Hine ... uide to identification of US waterfowl
-      item-401 at level 3: table with [3x2]
-      item-402 at level 3: picture
-      item-403 at level 3: list: group list
-        item-404 at level 4: list_item: Ducks
-        item-405 at level 4: list_item: Game birds
-        item-406 at level 4: list_item: Bird common names
-      item-407 at level 3: list: group list
-        item-408 at level 4: list_item: All accuracy disputes
-        item-409 at level 4: list_item: Accuracy disputes from February 2020
-        item-410 at level 4: list_item: CS1 Finnish-language sources (fi)
-        item-411 at level 4: list_item: CS1 Latvian-language sources (lv)
-        item-412 at level 4: list_item: CS1 Swedish-language sources (sv)
-        item-413 at level 4: list_item: Articles with short description
-        item-414 at level 4: list_item: Short description is different from Wikidata
-        item-415 at level 4: list_item: Wikipedia indefinitely move-protected pages
-        item-416 at level 4: list_item: Wikipedia indefinitely semi-protected pages
-        item-417 at level 4: list_item: Articles with 'species' microformats
-        item-418 at level 4: list_item: Articles containing Old English (ca. 450-1100)-language text
-        item-419 at level 4: list_item: Articles containing Dutch-language text
-        item-420 at level 4: list_item: Articles containing German-language text
-        item-421 at level 4: list_item: Articles containing Norwegian-language text
-        item-422 at level 4: list_item: Articles containing Lithuanian-language text
-        item-423 at level 4: list_item: Articles containing Ancient Greek (to 1453)-language text
-        item-424 at level 4: list_item: All articles with self-published sources
-        item-425 at level 4: list_item: Articles with self-published sources from February 2020
-        item-426 at level 4: list_item: All articles with unsourced statements
-        item-427 at level 4: list_item: Articles with unsourced statements from January 2022
-        item-428 at level 4: list_item: CS1: long volume value
-        item-429 at level 4: list_item: Pages using Sister project links with wikidata mismatch
-        item-430 at level 4: list_item: Pages using Sister project links with hidden wikidata
-        item-431 at level 4: list_item: Webarchive template wayback links
-        item-432 at level 4: list_item: Articles with Project Gutenberg links
-        item-433 at level 4: list_item: Articles containing video clips
-      item-434 at level 3: list: group list
-        item-435 at level 4: list_item: This page was last edited on 21 September 2024, at 12:11 (UTC).
-        item-436 at level 4: list_item: Text is available under the Crea ... tion, Inc., a non-profit organization.
-      item-437 at level 3: list: group list
-        item-438 at level 4: list_item: Privacy policy
-        item-439 at level 4: list_item: About Wikipedia
-        item-440 at level 4: list_item: Disclaimers
-        item-441 at level 4: list_item: Contact Wikipedia
-        item-442 at level 4: list_item: Code of Conduct
-        item-443 at level 4: list_item: Developers
-        item-444 at level 4: list_item: Statistics
-        item-445 at level 4: list_item: Cookie statement
-        item-446 at level 4: list_item: Mobile view
+        item-399 at level 4: list_item: Ducks at a Distance, by Rob Hine ... uide to identification of US waterfowl
+      item-400 at level 3: table with [3x2]
+      item-401 at level 3: picture
+      item-402 at level 3: list: group list
+        item-403 at level 4: list_item: Ducks
+        item-404 at level 4: list_item: Game birds
+        item-405 at level 4: list_item: Bird common names
+      item-406 at level 3: list: group list
+        item-407 at level 4: list_item: All accuracy disputes
+        item-408 at level 4: list_item: Accuracy disputes from February 2020
+        item-409 at level 4: list_item: CS1 Finnish-language sources (fi)
+        item-410 at level 4: list_item: CS1 Latvian-language sources (lv)
+        item-411 at level 4: list_item: CS1 Swedish-language sources (sv)
+        item-412 at level 4: list_item: Articles with short description
+        item-413 at level 4: list_item: Short description is different from Wikidata
+        item-414 at level 4: list_item: Wikipedia indefinitely move-protected pages
+        item-415 at level 4: list_item: Wikipedia indefinitely semi-protected pages
+        item-416 at level 4: list_item: Articles with 'species' microformats
+        item-417 at level 4: list_item: Articles containing Old English (ca. 450-1100)-language text
+        item-418 at level 4: list_item: Articles containing Dutch-language text
+        item-419 at level 4: list_item: Articles containing German-language text
+        item-420 at level 4: list_item: Articles containing Norwegian-language text
+        item-421 at level 4: list_item: Articles containing Lithuanian-language text
+        item-422 at level 4: list_item: Articles containing Ancient Greek (to 1453)-language text
+        item-423 at level 4: list_item: All articles with self-published sources
+        item-424 at level 4: list_item: Articles with self-published sources from February 2020
+        item-425 at level 4: list_item: All articles with unsourced statements
+        item-426 at level 4: list_item: Articles with unsourced statements from January 2022
+        item-427 at level 4: list_item: CS1: long volume value
+        item-428 at level 4: list_item: Pages using Sister project links with wikidata mismatch
+        item-429 at level 4: list_item: Pages using Sister project links with hidden wikidata
+        item-430 at level 4: list_item: Webarchive template wayback links
+        item-431 at level 4: list_item: Articles with Project Gutenberg links
+        item-432 at level 4: list_item: Articles containing video clips
+      item-433 at level 3: list: group list
+        item-434 at level 4: list_item: This page was last edited on 21 September 2024, at 12:11 (UTC).
+        item-435 at level 4: list_item: Text is available under the Crea ... tion, Inc., a non-profit organization.
+      item-436 at level 3: list: group list
+        item-437 at level 4: list_item: Privacy policy
+        item-438 at level 4: list_item: About Wikipedia
+        item-439 at level 4: list_item: Disclaimers
+        item-440 at level 4: list_item: Contact Wikipedia
+        item-441 at level 4: list_item: Code of Conduct
+        item-442 at level 4: list_item: Developers
+        item-443 at level 4: list_item: Statistics
+        item-444 at level 4: list_item: Cookie statement
+        item-445 at level 4: list_item: Mobile view
+      item-446 at level 3: list: group list
       item-447 at level 3: list: group list
-        item-448 at level 4: list_item: 
-        item-449 at level 4: list_item: 
-      item-450 at level 3: list: group list
-  item-451 at level 1: caption: Pacific black duck displaying the characteristic upending "duck"
-  item-452 at level 1: caption: Male mallard.
-  item-453 at level 1: caption: Wood ducks.
-  item-454 at level 1: caption: Mallard landing in approach
-  item-455 at level 1: caption: Male Mandarin duck
-  item-456 at level 1: caption: Flying steamer ducks in Ushuaia, Argentina
-  item-457 at level 1: caption: Female mallard in Cornwall, England
-  item-458 at level 1: caption: Pecten along the bill
-  item-459 at level 1: caption: Mallard duckling preening
-  item-460 at level 1: caption: A Muscovy duckling
-  item-461 at level 1: caption: Ringed teal
-  item-462 at level 1: caption: Indian Runner ducks, a common breed of domestic ducks
-  item-463 at level 1: caption: Three black-colored ducks in the coat of arms of Maaninka[49]
+  item-448 at level 1: caption: Pacific black duck displaying the characteristic upending "duck"
+  item-449 at level 1: caption: Male mallard.
+  item-450 at level 1: caption: Wood ducks.
+  item-451 at level 1: caption: Mallard landing in approach
+  item-452 at level 1: caption: Male Mandarin duck
+  item-453 at level 1: caption: Flying steamer ducks in Ushuaia, Argentina
+  item-454 at level 1: caption: Female mallard in Cornwall, England
+  item-455 at level 1: caption: Pecten along the bill
+  item-456 at level 1: caption: Mallard duckling preening
+  item-457 at level 1: caption: A Muscovy duckling
+  item-458 at level 1: caption: Ringed teal
+  item-459 at level 1: caption: Indian Runner ducks, a common breed of domestic ducks
+  item-460 at level 1: caption: Three black-colored ducks in the coat of arms of Maaninka[49]
