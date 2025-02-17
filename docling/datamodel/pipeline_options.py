@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Annotated, Any, Dict, List, Literal, Optional, Union
 
 from pydantic import (
+    AnyUrl,
     BaseModel,
     ConfigDict,
     Field,
@@ -66,6 +67,7 @@ class AcceleratorOptions(BaseSettings):
         """
         if isinstance(data, dict):
             input_num_threads = data.get("num_threads")
+            # Check if to set the num_threads from the alternative envvar
             if input_num_threads is None:
                 docling_num_threads = os.getenv("DOCLING_NUM_THREADS")
                 omp_num_threads = os.getenv("OMP_NUM_THREADS")

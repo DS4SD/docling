@@ -31,11 +31,11 @@ def main():
     # )
 
     # easyocr doesnt support cuda:N allocation, defaults to cuda:0
-    # accelerator_options = AcceleratorOptions(num_threads=8, device="cuda:1")
+    accelerator_options = AcceleratorOptions(num_threads=8, device="cuda:1")
 
     pipeline_options = PdfPipelineOptions()
     pipeline_options.accelerator_options = accelerator_options
-    pipeline_options.do_ocr = True
+    pipeline_options.do_ocr = False
     pipeline_options.do_table_structure = True
     pipeline_options.table_structure_options.do_cell_matching = True
 

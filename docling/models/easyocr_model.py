@@ -18,6 +18,7 @@ from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.utils.accelerator_utils import decide_device
 from docling.utils.profiling import TimeRecorder
+from docling.utils.utils import download_url_with_progress
 
 _log = logging.getLogger(__name__)
 
@@ -80,6 +81,40 @@ class EasyOcrModel(BaseOcrModel):
                 download_enabled=download_enabled,
                 verbose=False,
             )
+
+    @staticmethod
+    def download_models(
+        detection_models: List[str] = ["craft"],
+        recognition_models: List[str] = ["english_g2", "latin_g2"],
+        local_dir: Optional[Path] = None,
+        force: bool = False,
+        progress: bool = False,
+    ) -> Path:
+        # Models are located in https://github.com/JaidedAI/EasyOCR/blob/master/easyocr/config.py
+        from easyocr.config import detection_models as det_models_dict
+        from easyocr.config import recognition_models as rec_models_dict
+
+        if local_dir is None:
+            local_dir = settings.cache_dir / "models" / EasyOcrModel._model_repo_folder
+
+        local_dir.mkdir(parents=True, exist_ok=True)
+
+        # Collect models to download
+        download_list = []
+        for model_name in detection_models:
+            if model_name in det_models_dict:
+                download_list.append(det_models_dict[model_name])
+        for model_name in recognition_models:
+            if model_name in rec_models_dict["gen2"]:
+                download_list.append(rec_models_dict["gen2"][model_name])
+
+        # Download models
+        for model_details in download_list:
+            buf = download_url_with_progress(model_details["url"], progress=progress)
+            with zipfile.ZipFile(buf, "r") as zip_ref:
+                zip_ref.extractall(local_dir)
+
+        return local_dir
 
     def __call__(
         self, conv_res: ConversionResult, page_batch: Iterable[Page]
