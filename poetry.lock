@@ -866,35 +866,31 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "2.18.1"
+version = "2.19.0"
 description = "A python library to define and validate data types in Docling."
 optional = false
-python-versions = "^3.9"
-files = []
-develop = false
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "docling_core-2.19.0-py3-none-any.whl", hash = "sha256:caa1e13d98fa9a00608091c386609c75b3560c7291e842c252f0b6f8d5812dbd"},
+    {file = "docling_core-2.19.0.tar.gz", hash = "sha256:ebf3062e31155bb5f0e6132056a2d239a0e6e693a75c5758886909bb9fef461a"},
+]
 
 [package.dependencies]
-jsonref = "^1.1.0"
-jsonschema = "^4.16.0"
-latex2mathml = "^3.77.0"
-pandas = "^2.1.4"
+jsonref = ">=1.1.0,<2.0.0"
+jsonschema = ">=4.16.0,<5.0.0"
+latex2mathml = ">=3.77.0,<4.0.0"
+pandas = ">=2.1.4,<3.0.0"
 pillow = ">=10.0.0,<12.0.0"
-pydantic = ">=2.6.0,<3.0.0,!=2.10.0,!=2.10.1,!=2.10.2"
+pydantic = ">=2.6.0,<2.10.0 || >2.10.0,<2.10.1 || >2.10.1,<2.10.2 || >2.10.2,<3.0.0"
 pyyaml = ">=5.1,<7.0.0"
-semchunk = {version = "^2.2.0", optional = true}
-tabulate = "^0.9.0"
-transformers = {version = "^4.34.0", optional = true}
-typer = "^0.12.5"
-typing-extensions = "^4.12.2"
+semchunk = {version = ">=2.2.0,<3.0.0", optional = true, markers = "extra == \"chunking\""}
+tabulate = ">=0.9.0,<0.10.0"
+transformers = {version = ">=4.34.0,<5.0.0", optional = true, markers = "extra == \"chunking\""}
+typer = ">=0.12.5,<0.13.0"
+typing-extensions = ">=4.12.2,<5.0.0"
 
 [package.extras]
 chunking = ["semchunk (>=2.2.0,<3.0.0)", "transformers (>=4.34.0,<5.0.0)"]
-
-[package.source]
-type = "git"
-url = "https://github.com/DS4SD/docling-core.git"
-reference = "dt_cleanup"
-resolved_reference = "3667caf9faeae5b3e79772aacc4d63eb54a1438d"
 
 [[package]]
 name = "docling-ibm-models"
@@ -7845,4 +7841,4 @@ vlm = ["transformers", "transformers"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "89a9fce0d10c9c23f72062fe06d7ecaedac6a9a295e932ddebdbbde160a83cca"
+content-hash = "2cca8bac31dd535e36045cf2f5f0380852c34f6bafad78834144d6ca56d2d79c"
