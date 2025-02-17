@@ -1,3 +1,14 @@
+## [v2.23.0](https://github.com/DS4SD/docling/releases/tag/v2.23.0) - 2025-02-17
+
+### Feature
+
+* Support cuda:n GPU device allocation ([#694](https://github.com/DS4SD/docling/issues/694)) ([`77eb77b`](https://github.com/DS4SD/docling/commit/77eb77bdc2c07b632a1d171826d1855a5218399e))
+* **xml-jats:** Parse XML JATS documents ([#967](https://github.com/DS4SD/docling/issues/967)) ([`428b656`](https://github.com/DS4SD/docling/commit/428b656793cb75d108c69f20c254be7c198cee5c))
+
+### Fix
+
+* Revise DocTags, fix iterate_items to output content_layer in items ([#965](https://github.com/DS4SD/docling/issues/965)) ([`6e75f0b`](https://github.com/DS4SD/docling/commit/6e75f0b5d3ee42738a80049d4cf2fa6d34e8ab97))
+
 ## [v2.22.0](https://github.com/DS4SD/docling/releases/tag/v2.22.0) - 2025-02-14
 
 ### Feature
