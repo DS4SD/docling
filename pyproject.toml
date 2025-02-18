@@ -46,7 +46,7 @@ scipy = [
 typer = "^0.12.5"
 python-docx = "^1.1.2"
 python-pptx = "^1.0.2"
-beautifulsoup4 = ">=4.12.3,<4.13.0"
+beautifulsoup4 = "^4.12.3"
 pandas = "^2.1.4"
 marko = "^2.1.2"
 openpyxl = "^3.1.5"
@@ -166,7 +166,6 @@ module = [
     "ocrmac.*",
     "deepsearch_glm.*",
     "lxml.*",
-    "bs4.*",
     "huggingface_hub.*",
     "transformers.*",
 ]
