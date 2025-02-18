@@ -1,3 +1,4 @@
+import os
 import sys
 from pathlib import Path
 from typing import List
@@ -53,6 +54,12 @@ def get_converter(ocr_options: OcrOptions):
 
 
 def test_e2e_conversions():
+    r"""
+    End-to-end conversions with OCR
+    """
+    # Disable parallelisation for HF tokenizers to avoid warning messages
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
     pdf_paths = get_pdf_paths()
 
     engines: List[OcrOptions] = [
