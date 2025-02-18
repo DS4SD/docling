@@ -71,6 +71,37 @@ Or using the CLI:
 docling --artifacts-path="/local/path/to/models" FILE
 ```
 
+#### Using remote services
+
+The main purpose of Docling is to run local models which are not sharing any user data with remote services.
+Anyhow, there are valid use cases for processing part of the pipeline using remote services, for example invoking OCR engines from cloud vendors or the usage of hosted LLMs.
+
+In Docling we decided to allow such models, but we require the user to explicitly opt-in in communicating with external services.
+
+```py
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
+
+pipeline_options = PdfPipelineOptions(enable_remote_services=True)
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+    }
+)
+```
+
+When the value `enable_remote_services=True` is not set, the system will raise an exception `OperationNotAllowed()`.
+
+_Note: This option is only related to the system sending user data to remote services. Control of pulling data (e.g. model weights) follows the logic described in [Model prefetching and offline usage](#model-prefetching-and-offline-usage)._
+
+##### List of remote model services
+
+The options in this list require the explicit `enable_remote_services=True` when processing the documents.
+
+- `PictureDescriptionApiOptions`: Using vision models via API calls.
+
+
 #### Adjust pipeline features
 
 The example file [custom_convert.py](./examples/custom_convert.py) contains multiple ways

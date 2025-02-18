@@ -43,6 +43,7 @@ def main():
                 InputFormat.HTML,
                 InputFormat.PPTX,
                 InputFormat.ASCIIDOC,
+                InputFormat.CSV,
                 InputFormat.MD,
             ],  # whitelist formats, non-matching files are ignored.
             format_options={
