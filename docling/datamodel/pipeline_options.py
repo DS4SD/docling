@@ -13,10 +13,7 @@ from pydantic import (
     field_validator,
     model_validator,
 )
-from pydantic_settings import (
-    BaseSettings,
-    SettingsConfigDict,
-)
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing_extensions import deprecated
 
 _log = logging.getLogger(__name__)
