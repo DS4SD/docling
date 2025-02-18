@@ -146,7 +146,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         result: list[str] = []
 
         if isinstance(item, NavigableString):
-            return [item.string]
+            return [item]
 
         tag = cast(Tag, item)
         if tag.name not in ["ul", "ol"]:
