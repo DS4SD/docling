@@ -1,12 +1,18 @@
 import logging
+import sys
 import tempfile
-from typing import Iterable, Optional, Tuple
+from pathlib import Path
+from typing import Iterable, Optional, Tuple, Type
 
 from docling_core.types.doc import BoundingBox, CoordOrigin
 
 from docling.datamodel.base_models import OcrCell, Page
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import OcrMacOptions
+from docling.datamodel.pipeline_options import (
+    AcceleratorOptions,
+    OcrMacOptions,
+    OcrOptions,
+)
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.utils.profiling import TimeRecorder
@@ -15,13 +21,26 @@ _log = logging.getLogger(__name__)
 
 
 class OcrMacModel(BaseOcrModel):
-    def __init__(self, enabled: bool, options: OcrMacOptions):
-        super().__init__(enabled=enabled, options=options)
+    def __init__(
+        self,
+        enabled: bool,
+        artifacts_path: Optional[Path],
+        options: OcrMacOptions,
+        accelerator_options: AcceleratorOptions,
+    ):
+        super().__init__(
+            enabled=enabled,
+            artifacts_path=artifacts_path,
+            options=options,
+            accelerator_options=accelerator_options,
+        )
         self.options: OcrMacOptions
 
         self.scale = 3  # multiplier for 72 dpi == 216 dpi.
 
         if self.enabled:
+            if "darwin" != sys.platform:
+                raise RuntimeError(f"OcrMac is only supported on Mac.")
             install_errmsg = (
                 "ocrmac is not correctly installed. "
                 "Please install it via `pip install ocrmac` to use this OCR engine. "
@@ -116,3 +135,7 @@ class OcrMacModel(BaseOcrModel):
                     self.draw_ocr_rects_and_cells(conv_res, page, ocr_rects)
 
                 yield page
+
+    @classmethod
+    def get_options_type(cls) -> Type[OcrOptions]:
+        return OcrMacOptions

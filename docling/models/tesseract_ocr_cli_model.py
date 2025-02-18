@@ -3,15 +3,20 @@ import io
 import logging
 import os
 import tempfile
+from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
-from typing import Iterable, List, Optional, Tuple
+from typing import Iterable, List, Optional, Tuple, Type
 
 import pandas as pd
 from docling_core.types.doc import BoundingBox, CoordOrigin
 
 from docling.datamodel.base_models import Cell, OcrCell, Page
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import TesseractCliOcrOptions
+from docling.datamodel.pipeline_options import (
+    AcceleratorOptions,
+    OcrOptions,
+    TesseractCliOcrOptions,
+)
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.utils.ocr_utils import map_tesseract_script
@@ -21,8 +26,19 @@ _log = logging.getLogger(__name__)
 
 
 class TesseractOcrCliModel(BaseOcrModel):
-    def __init__(self, enabled: bool, options: TesseractCliOcrOptions):
-        super().__init__(enabled=enabled, options=options)
+    def __init__(
+        self,
+        enabled: bool,
+        artifacts_path: Optional[Path],
+        options: TesseractCliOcrOptions,
+        accelerator_options: AcceleratorOptions,
+    ):
+        super().__init__(
+            enabled=enabled,
+            artifacts_path=artifacts_path,
+            options=options,
+            accelerator_options=accelerator_options,
+        )
         self.options: TesseractCliOcrOptions
 
         self.scale = 3  # multiplier for 72 dpi == 216 dpi.
@@ -250,3 +266,7 @@ class TesseractOcrCliModel(BaseOcrModel):
                     self.draw_ocr_rects_and_cells(conv_res, page, ocr_rects)
 
                 yield page
+
+    @classmethod
+    def get_options_type(cls) -> Type[OcrOptions]:
+        return TesseractCliOcrOptions

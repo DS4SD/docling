@@ -924,39 +924,39 @@ transformers = [
 
 [[package]]
 name = "docling-parse"
-version = "3.3.1"
+version = "3.4.0"
 description = "Simple package to extract text with coordinates from programmatic PDFs"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "docling_parse-3.3.1-cp310-cp310-macosx_13_0_x86_64.whl", hash = "sha256:abf3a0c9ea35fc33fbd288031096826688d1e787f7c51e174cc9fea6a22d2f67"},
-    {file = "docling_parse-3.3.1-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:1e07cc6e3603ff246affa11bec25a82d90f79c6b92c370d993f2bd6318476b7c"},
-    {file = "docling_parse-3.3.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:338000deee0251f7e2ebdfde2bcd6392c388624206555410867cfc93608d84fe"},
-    {file = "docling_parse-3.3.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:46f14a9871e840a021a642ea0ece4b675cc9584224eba3b85cd269feda892b76"},
-    {file = "docling_parse-3.3.1-cp310-cp310-win_amd64.whl", hash = "sha256:c0bad3db594e05bca2366d46e630a0b8050b6eb37fcae2cbcd5020b06ac0879a"},
-    {file = "docling_parse-3.3.1-cp311-cp311-macosx_13_0_x86_64.whl", hash = "sha256:db0cebe28b299f78f1da58b5567c22de6f5b30aa5b6fe4fb2daae9f372bd022c"},
-    {file = "docling_parse-3.3.1-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:72e901cc6dfac9e4f5e13ddd841f758b41484e61b7092b891c693e2c036461ac"},
-    {file = "docling_parse-3.3.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:fcfc7309b46e9b0941cc5513560b06f0b1c221ff3a2d5e516eb752ae7f2ccb81"},
-    {file = "docling_parse-3.3.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:76dc12fc510d08d1f76741dc429666a5791db003275067aa1f18da02b7a98925"},
-    {file = "docling_parse-3.3.1-cp311-cp311-win_amd64.whl", hash = "sha256:4c096f5c2460a6eb308e046e3045bb0100b6b602ef4394924cfd4846cee5800e"},
-    {file = "docling_parse-3.3.1-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:3cc23f0d6aa91d015117b8962162bf4a482e2208d2068abfada34fda112ef077"},
-    {file = "docling_parse-3.3.1-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:7a62afe01b6f008f3f50a12e3d8feddb28d045bc2b96321d48933ab23ff1e201"},
-    {file = "docling_parse-3.3.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:fd93d2a23a22b84c61213fa62db906ae444201e4e404d7dc2b6152d64d69ec50"},
-    {file = "docling_parse-3.3.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:87a8678b8e37a1f0bd41fb0227938a7bba0dc7e6f6ce69777b1ee947ef0e28ef"},
-    {file = "docling_parse-3.3.1-cp312-cp312-win_amd64.whl", hash = "sha256:c6ae62864d3d0e1e3bfb467e217c90ae938b0773c671412ff3ca110081b024ea"},
-    {file = "docling_parse-3.3.1-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:79cc92e3b1d3d8957df11c8dfd5c8f89aaae06d5ac49f019a59a0aad301ba59c"},
-    {file = "docling_parse-3.3.1-cp313-cp313-macosx_14_0_arm64.whl", hash = "sha256:8d8b988ca77dd88111fb8e5d961806fcb26b3ea146841d7d304d1d52b82ed27b"},
-    {file = "docling_parse-3.3.1-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:781a88c3a4eb27dd09598fe5956f8cd874acb49c102c2d35ccf0fbbeb3fc714d"},
-    {file = "docling_parse-3.3.1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cb803dd61d79a7f876ff7febb4ce2f43de19646f05196031f35b891a8c24b57a"},
-    {file = "docling_parse-3.3.1-cp313-cp313-win_amd64.whl", hash = "sha256:2052d3dc4711975fdcfa343947a1fbb9502c6a81ccc5834af41615868e61fb94"},
-    {file = "docling_parse-3.3.1-cp39-cp39-macosx_13_0_x86_64.whl", hash = "sha256:7ccb186369f706b5df8d6751c6cfff2a4355c3c843c68b0210e3f53a2bdf9bf6"},
-    {file = "docling_parse-3.3.1-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:5a00c37ed9923f7d7317044135d8ff81829474d1d47730dfc8bd2d2a3e3e60cd"},
-    {file = "docling_parse-3.3.1-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:72beb63683f5e581c15d1c3370480dbe4457031f447944342a09bd23a66b378e"},
-    {file = "docling_parse-3.3.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d5ac8f3bb64e50cf58959ce591574cb0ba3d6ebe9bdbedfabbff1817aaf34664"},
-    {file = "docling_parse-3.3.1-cp39-cp39-win_amd64.whl", hash = "sha256:24ea10d7bda2ea35c6cc24b8db3fdea4a1e05182890ea44364fcd703e5090e54"},
-    {file = "docling_parse-3.3.1-pp310-pypy310_pp73-win_amd64.whl", hash = "sha256:048157bc8640e3c03c082b4296f9f8946516c624a5469e10c7c9a32dcb0dc5c8"},
-    {file = "docling_parse-3.3.1-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:c6f293644856d05a1fced3e100dd052374da793e7e3a0e6023c69b9d3eb64881"},
-    {file = "docling_parse-3.3.1.tar.gz", hash = "sha256:536f581e7564cbfd37bff2e79d2cb17e7dbaa0d34d054cfdb28d648da31da85b"},
+    {file = "docling_parse-3.4.0-cp310-cp310-macosx_13_0_x86_64.whl", hash = "sha256:96e95e63ab722dfe5340fcb04d0e07bd1c0a0ba2f62e93c91ac26dda0a312a44"},
+    {file = "docling_parse-3.4.0-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:f9e14a7a0b92526d4dfd3f390f3d7e075f59d14d6b8a0a564fbc26299e56cd47"},
+    {file = "docling_parse-3.4.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:fdef1d51291e841e5b6a32689a39a9f35986389f863b415eaa1790b29d021101"},
+    {file = "docling_parse-3.4.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:68652610d6c34adc684dbaa77b5d596b25d004912a78e85ec4ae57910bf7086f"},
+    {file = "docling_parse-3.4.0-cp310-cp310-win_amd64.whl", hash = "sha256:daad07fe93f306d8e2378acb24ef2fa68535ccdb960a1b99d6b36ab8c299fef1"},
+    {file = "docling_parse-3.4.0-cp311-cp311-macosx_13_0_x86_64.whl", hash = "sha256:6f30c5fd3c04bd3d1a7d06baeae2e5c3adbebc284071a9a52b0150bcd4917a3d"},
+    {file = "docling_parse-3.4.0-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:2c3664e4c8980dc44e0d026b1b01fbc94f0dac9adf7be835071d4a761977c36d"},
+    {file = "docling_parse-3.4.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3febf7515453d18df03c275356db2bb5b0618ba9fc033aba05d58318a9846b1a"},
+    {file = "docling_parse-3.4.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:75aeb038bb7f6400ecde99cf6c4ef35867c528ac21676071a822ed72d0653149"},
+    {file = "docling_parse-3.4.0-cp311-cp311-win_amd64.whl", hash = "sha256:8d20e3584022542448c21ed0ac868b2457ae35211cea63ed20142e375549e633"},
+    {file = "docling_parse-3.4.0-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:ddfe2bd730ed08363f25954a0480da021e6e6bdb175276643cc2913a6bbd98e2"},
+    {file = "docling_parse-3.4.0-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:faf8ba9eaab8c17ea72516be5d440f754fcca27f37488dcf126a0f3ac3a63058"},
+    {file = "docling_parse-3.4.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:9eb5e7e50b3057690d0d4fa651363cafd7735bb952378dd8a4ca6c7d359507db"},
+    {file = "docling_parse-3.4.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:452334b387e2c699f69acf37a4ea4ae7097d062a2dd1980c573b73051c031158"},
+    {file = "docling_parse-3.4.0-cp312-cp312-win_amd64.whl", hash = "sha256:1ba00147ccb0a1dc10cdf58645e67f4ee895c6920bc583bc6f25d27cd562bfed"},
+    {file = "docling_parse-3.4.0-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:2b22a33a2d2f3616a7ac0f4b2f2ba6099f8a5dc6fa328be0f17c9c506455d7c1"},
+    {file = "docling_parse-3.4.0-cp313-cp313-macosx_14_0_arm64.whl", hash = "sha256:0dd2440a94d555f98b702e88bfe7cc5a585d9191f4ea93884b02e286e7af3a06"},
+    {file = "docling_parse-3.4.0-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:5f5828744a0e33136e09e8c61ca0b2c0ead8f76595f2e0955beaac16adce51f5"},
+    {file = "docling_parse-3.4.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:26fff6e36809d17ff855532f985df3738ada8d86a9fc746049ea6e6524d5e0a2"},
+    {file = "docling_parse-3.4.0-cp313-cp313-win_amd64.whl", hash = "sha256:13fc442f64171280db98dc4507274ffa0a65bac94eecbcc60c3cbf41f433b556"},
+    {file = "docling_parse-3.4.0-cp39-cp39-macosx_13_0_x86_64.whl", hash = "sha256:16d570ab655ea5a25d9cd1e27bc4d6905372784907d679cde4cef2fb22df61c7"},
+    {file = "docling_parse-3.4.0-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:05bd405635be2379ef6cb0c7c39dc08edf3ba93788eb0fca7426b2218538bce1"},
+    {file = "docling_parse-3.4.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f6c92f0353bbae7ca9b39553cc4d03f5fefdab33ecd26809ab710cc752fac03c"},
+    {file = "docling_parse-3.4.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8e883326ec4121891c48d365d064e5ae30c5b90a2dac44ed61ac02e7da41345d"},
+    {file = "docling_parse-3.4.0-cp39-cp39-win_amd64.whl", hash = "sha256:b2a0fe1e1d88c3814553137daa597ee34dc310f50fe415e1f8a1c6e611d95e42"},
+    {file = "docling_parse-3.4.0-pp310-pypy310_pp73-win_amd64.whl", hash = "sha256:930f5a5d78404de573c0ba302d313b6647f1e86714766e5a1cdc09af014ca111"},
+    {file = "docling_parse-3.4.0-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:328fd72f274b939d454e3ff20a73074d99664cb4a51e6ccdaf195a6626691b95"},
+    {file = "docling_parse-3.4.0.tar.gz", hash = "sha256:36cdd17bcc4a833b5c9af9ae3dc461ed18a975c1b084ccfd19a9d9cde4f66e14"},
 ]
 
 [package.dependencies]
@@ -7842,4 +7842,4 @@ vlm = ["transformers", "transformers"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "63f9271160d39cac74fa3fc959dbb0f91530d76a693c69d81ced006477d04315"
+content-hash = "ccc7e0aec5519c63d5dee8482f1242c94b8241fea831e86071cde94ae1fc04d6"

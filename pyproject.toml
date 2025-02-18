@@ -65,6 +65,7 @@ transformers = [
 ]
 pillow = ">=10.0.0,<12.0.0"
 tqdm = "^4.65.0"
+pluggy = "^1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
@@ -131,6 +132,9 @@ rapidocr = ["rapidocr-onnxruntime", "onnxruntime"]
 [tool.poetry.scripts]
 docling = "docling.cli.main:app"
 docling-tools = "docling.cli.tools:app"
+
+[tool.poetry.plugins."docling"]
+"docling_ocr_engines" = "docling.models.plugins.ocr_engines"
 
 [build-system]
 requires = ["poetry-core"]

@@ -29,6 +29,7 @@ from docling.models.document_picture_classifier import (
 )
 from docling.models.ds_glm_model import GlmModel, GlmOptions
 from docling.models.easyocr_model import EasyOcrModel
+from docling.models.factories import get_ocr_factory
 from docling.models.layout_model import LayoutModel
 from docling.models.ocr_mac_model import OcrMacModel
 from docling.models.page_assemble_model import PageAssembleModel, PageAssembleOptions
@@ -78,10 +79,7 @@ class StandardPdfPipeline(PaginatedPipeline):
 
         self.glm_model = GlmModel(options=GlmOptions())
 
-        if (ocr_model := self.get_ocr_model(artifacts_path=artifacts_path)) is None:
-            raise RuntimeError(
-                f"The specified OCR kind is not supported: {pipeline_options.ocr_options.kind}."
-            )
+        ocr_model = self.get_ocr_model(artifacts_path=artifacts_path)
 
         self.build_pipe = [
             # Pre-processing
@@ -163,42 +161,18 @@ class StandardPdfPipeline(PaginatedPipeline):
         output_dir = download_models(output_dir=local_dir, force=force, progress=False)
         return output_dir
 
-    def get_ocr_model(
-        self, artifacts_path: Optional[Path] = None
-    ) -> Optional[BaseOcrModel]:
-        if isinstance(self.pipeline_options.ocr_options, EasyOcrOptions):
-            return EasyOcrModel(
-                enabled=self.pipeline_options.do_ocr,
-                artifacts_path=artifacts_path,
-                options=self.pipeline_options.ocr_options,
-                accelerator_options=self.pipeline_options.accelerator_options,
-            )
-        elif isinstance(self.pipeline_options.ocr_options, TesseractCliOcrOptions):
-            return TesseractOcrCliModel(
-                enabled=self.pipeline_options.do_ocr,
-                options=self.pipeline_options.ocr_options,
-            )
-        elif isinstance(self.pipeline_options.ocr_options, TesseractOcrOptions):
-            return TesseractOcrModel(
-                enabled=self.pipeline_options.do_ocr,
-                options=self.pipeline_options.ocr_options,
-            )
-        elif isinstance(self.pipeline_options.ocr_options, RapidOcrOptions):
-            return RapidOcrModel(
-                enabled=self.pipeline_options.do_ocr,
-                options=self.pipeline_options.ocr_options,
-                accelerator_options=self.pipeline_options.accelerator_options,
-            )
-        elif isinstance(self.pipeline_options.ocr_options, OcrMacOptions):
-            if "darwin" != sys.platform:
-                raise RuntimeError(
-                    f"The specified OCR type is only supported on Mac: {self.pipeline_options.ocr_options.kind}."
-                )
-            return OcrMacModel(
-                enabled=self.pipeline_options.do_ocr,
-                options=self.pipeline_options.ocr_options,
-            )
-        return None
+    def get_ocr_model(self, artifacts_path: Optional[Path] = None) -> BaseOcrModel:
+        ocr_factory = get_ocr_factory()
+        ocr_engine_cls = ocr_factory.get_class(
+            options=self.pipeline_options.ocr_options
+        )
+
+        return ocr_engine_cls(
+            enabled=self.pipeline_options.do_ocr,
+            artifacts_path=artifacts_path,
+            options=self.pipeline_options.ocr_options,
+            accelerator_options=self.pipeline_options.accelerator_options,
+        )
 
     def get_picture_description_model(
         self, artifacts_path: Optional[Path] = None

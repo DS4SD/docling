@@ -29,18 +29,13 @@ from docling.datamodel.pipeline_options import (
     AcceleratorDevice,
     AcceleratorOptions,
     EasyOcrOptions,
-    OcrEngine,
-    OcrMacOptions,
-    OcrOptions,
     PdfBackend,
     PdfPipelineOptions,
-    RapidOcrOptions,
     TableFormerMode,
-    TesseractCliOcrOptions,
-    TesseractOcrOptions,
 )
 from docling.datamodel.settings import settings
 from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
+from docling.models.factories import get_ocr_factory
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
 warnings.filterwarnings(action="ignore", category=FutureWarning, module="easyocr")
@@ -50,6 +45,8 @@ from rich.console import Console
 
 err_console = Console(stderr=True)
 
+ocr_factory = get_ocr_factory()
+ocr_engines_enum = ocr_factory.get_enum()
 
 app = typer.Typer(
     name="Docling",
@@ -194,9 +191,11 @@ def convert(
             help="Replace any existing text with OCR generated text over the full content.",
         ),
     ] = False,
-    ocr_engine: Annotated[
-        OcrEngine, typer.Option(..., help="The OCR engine to use.")
-    ] = OcrEngine.EASYOCR,
+    ocr_engine: Annotated[  # type: ignore
+        ocr_engines_enum,
+        # ocr_factory.get_registered_enum(),
+        typer.Option(..., help="The OCR engine to use."),
+    ] = EasyOcrOptions.kind,
     ocr_lang: Annotated[
         Optional[str],
         typer.Option(
@@ -367,18 +366,8 @@ def convert(
         export_txt = OutputFormat.TEXT in to_formats
         export_doctags = OutputFormat.DOCTAGS in to_formats
 
-        if ocr_engine == OcrEngine.EASYOCR:
-            ocr_options: OcrOptions = EasyOcrOptions(force_full_page_ocr=force_ocr)
-        elif ocr_engine == OcrEngine.TESSERACT_CLI:
-            ocr_options = TesseractCliOcrOptions(force_full_page_ocr=force_ocr)
-        elif ocr_engine == OcrEngine.TESSERACT:
-            ocr_options = TesseractOcrOptions(force_full_page_ocr=force_ocr)
-        elif ocr_engine == OcrEngine.OCRMAC:
-            ocr_options = OcrMacOptions(force_full_page_ocr=force_ocr)
-        elif ocr_engine == OcrEngine.RAPIDOCR:
-            ocr_options = RapidOcrOptions(force_full_page_ocr=force_ocr)
-        else:
-            raise RuntimeError(f"Unexpected OCR engine type {ocr_engine}")
+        ocr_options_class = ocr_factory.get_options_class(kind=str(ocr_engine.value))  # type: ignore
+        ocr_options = ocr_options_class(force_full_page_ocr=force_ocr)
 
         ocr_lang_list = _split_list(ocr_lang)
         if ocr_lang_list is not None:
