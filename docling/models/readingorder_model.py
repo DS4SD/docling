@@ -6,10 +6,12 @@ from typing import Dict, List
 from docling_core.types.doc import (
     BoundingBox,
     CoordOrigin,
+    DocItem,
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
+    NodeItem,
     ProvenanceItem,
     RefItem,
     TableData,
@@ -24,6 +26,7 @@ from PIL import ImageDraw
 from pydantic import BaseModel, ConfigDict
 
 from docling.datamodel.base_models import (
+    BasePageElement,
     Cluster,
     ContainerElement,
     FigureElement,
@@ -80,6 +83,35 @@ class ReadingOrderModel:
 
         return elements
 
+    def _add_child_elements(
+        self, element: BasePageElement, doc_item: NodeItem, doc: DoclingDocument
+    ):
+
+        child: Cluster
+        for child in element.cluster.children:
+            c_label = child.label
+            c_bbox = child.bbox.to_bottom_left_origin(
+                doc.pages[element.page_no].size.height
+            )
+            c_text = " ".join(
+                [
+                    cell.text.replace("\x02", "-").strip()
+                    for cell in child.cells
+                    if len(cell.text.strip()) > 0
+                ]
+            )
+
+            c_prov = ProvenanceItem(
+                page_no=element.page_no, charspan=(0, len(c_text)), bbox=c_bbox
+            )
+            if c_label == DocItemLabel.LIST_ITEM:
+                # TODO: Infer if this is a numbered or a bullet list item
+                doc.add_list_item(parent=doc_item, text=c_text, prov=c_prov)
+            elif c_label == DocItemLabel.SECTION_HEADER:
+                doc.add_heading(parent=doc_item, text=c_text, prov=c_prov)
+            else:
+                doc.add_text(parent=doc_item, label=c_label, text=c_text, prov=c_prov)
+
     def _readingorder_elements_to_docling_doc(
         self,
         conv_res: ConversionResult,
@@ -122,8 +154,6 @@ class ReadingOrderModel:
             for lst in mapping.values()
             for cid in lst
         }
-
-        # TODO: handle merges
 
         for rel in ro_elements:
             if rel.cid in skippable_cids:
@@ -181,7 +211,7 @@ class ReadingOrderModel:
 
                         tbl.footnotes.append(new_footnote_item.get_ref())
 
-                # TODO: handle element.cluster.children.
+                # TODO: Consider adding children of Table.
 
             elif isinstance(element, FigureElement):
                 cap_text = ""
@@ -210,12 +240,19 @@ class ReadingOrderModel:
 
                         pic.footnotes.append(new_footnote_item.get_ref())
 
-                # TODO: handle element.cluster.children.
-                # _add_child_elements(pic, doc, obj, pelem)
+                self._add_child_elements(element, pic, out_doc)
 
             elif isinstance(element, ContainerElement):  # Form, KV region
-                pass
-                # TODO: handle element.cluster.children.
+                label = element.label
+                group_label = GroupLabel.UNSPECIFIED
+                if label == DocItemLabel.FORM:
+                    group_label = GroupLabel.FORM_AREA
+                elif label == DocItemLabel.KEY_VALUE_REGION:
+                    group_label = GroupLabel.KEY_VALUE_AREA
+
+                container_el = out_doc.add_group(label=group_label)
+
+                self._add_child_elements(element, container_el, out_doc)
 
         return out_doc
 
@@ -284,7 +321,7 @@ class ReadingOrderModel:
             bbox=element.cluster.bbox.to_bottom_left_origin(page_height),
         )
         new_item.text += f" {merged_elem.text}"
-        new_item.orig += f" {merged_elem.text}"  # TODO: This is incomplete.
+        new_item.orig += f" {merged_elem.text}"  # TODO: This is incomplete, we don't have the `orig` field of the merged element.
         new_item.prov.append(prov)
 
     def __call__(self, conv_res: ConversionResult) -> DoclingDocument:
