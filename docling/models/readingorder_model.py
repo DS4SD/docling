@@ -166,17 +166,46 @@ class ReadingOrderModel:
             page_height = page_no_to_pages[element.page_no].size.height  # type: ignore
 
             if isinstance(element, TextElement):
-                new_item, current_list = self._handle_text_element(
-                    element, out_doc, current_list, page_height
-                )
+                if element.label == DocItemLabel.CODE:
+                    cap_text = element.text
+                    prov = ProvenanceItem(
+                        page_no=element.page_no + 1,
+                        charspan=(0, len(cap_text)),
+                        bbox=element.cluster.bbox.to_bottom_left_origin(page_height),
+                    )
+                    code_item = out_doc.add_code(text=cap_text, prov=prov)
 
-                if rel.cid in el_merges_mapping.keys():
-                    for merged_cid in el_merges_mapping[rel.cid]:
-                        merged_elem = id_to_elem[cid_to_rels[merged_cid].ref.cref]
+                    if rel.cid in el_to_captions_mapping.keys():
+                        for caption_cid in el_to_captions_mapping[rel.cid]:
+                            caption_elem = id_to_elem[cid_to_rels[caption_cid].ref.cref]
+                            new_cap_item = self._add_caption_or_footnote(
+                                caption_elem, out_doc, code_item, page_height
+                            )
 
-                        self._merge_elements(
-                            element, merged_elem, new_item, page_height
-                        )
+                            code_item.captions.append(new_cap_item.get_ref())
+
+                    if rel.cid in el_to_footnotes_mapping.keys():
+                        for footnote_cid in el_to_footnotes_mapping[rel.cid]:
+                            footnote_elem = id_to_elem[
+                                cid_to_rels[footnote_cid].ref.cref
+                            ]
+                            new_footnote_item = self._add_caption_or_footnote(
+                                footnote_elem, out_doc, code_item, page_height
+                            )
+
+                            code_item.footnotes.append(new_footnote_item.get_ref())
+                else:
+                    new_item, current_list = self._handle_text_element(
+                        element, out_doc, current_list, page_height
+                    )
+
+                    if rel.cid in el_merges_mapping.keys():
+                        for merged_cid in el_merges_mapping[rel.cid]:
+                            merged_elem = id_to_elem[cid_to_rels[merged_cid].ref.cref]
+
+                            self._merge_elements(
+                                element, merged_elem, new_item, page_height
+                            )
 
             elif isinstance(element, Table):
 
@@ -292,10 +321,6 @@ class ReadingOrderModel:
             current_list = None
 
             new_item = out_doc.add_heading(text=cap_text, prov=prov)
-        elif label == DocItemLabel.CODE:
-            current_list = None
-
-            new_item = out_doc.add_code(text=cap_text, prov=prov)
         elif label == DocItemLabel.FORMULA:
             current_list = None
 
