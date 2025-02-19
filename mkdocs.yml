@@ -75,7 +75,7 @@ nav:
       - "Figure enrichment": examples/develop_picture_enrichment.py
       - "Table export": examples/export_tables.py
       - "Multimodal export": examples/export_multimodal.py
-      - "Annotate picture with local vlm": examples/pictures_description.py
+      - "Annotate picture with local vlm": examples/pictures_description.ipynb
       - "Annotate picture with remote vlm": examples/pictures_description_api.py
       - "Force full page OCR": examples/full_page_ocr.py
       - "Automatic OCR language detection with tesseract": examples/tesseract_lang_detection.py
