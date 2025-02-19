@@ -6,7 +6,7 @@ Front cover
 
 <!-- image -->
 
-<!-- image -->
+Front cover
 
 ## Contents
 
@@ -82,7 +82,7 @@ No one else has the vast consulting experiences, skills sharing and renown servi
 
 Because no one else is IBM.
 
-With combined experiences and direct access to development groups, we're the experts in IBM DB2® for i. The DB2 for i Center of Excellence (CoE) can help you achieve-perhaps reexamine and exceed-your business requirements and gain more confidence and satisfaction in IBM product data management products and solutions.
+With combined experiences and direct access to development groups, we’re the experts in IBM DB2® for i. The DB2 for i Center of Excellence (CoE) can help you achieve-perhaps reexamine and exceed-your business requirements and gain more confidence and satisfaction in IBM product data management products and solutions.
 
 ## Who we are, some of what we do
 
@@ -108,19 +108,19 @@ This paper was produced by the IBM DB2 for i Center of Excellence team in partne
 
 <!-- image -->
 
-<!-- image -->
-
 Jim Bainbridge is a senior DB2 consultant on the DB2 for i Center of Excellence team in the IBM Lab Services and Training organization. His primary role is training and implementation services for IBM DB2 Web Query for i and business analytics. Jim began his career with IBM 30 years ago in the IBM Rochester Development Lab, where he developed cooperative processing products that paired IBM PCs with IBM S/36 and AS/.400 systems. In the years since, Jim has held numerous technical roles, including independent software vendors technical support on a broad range of IBM technologies and products, and supporting customers in the IBM Executive Briefing Center and IBM Project Office.
 
-Hernando Bedoya is a Senior IT Specialist at STG Lab Services and Training in Rochester, Minnesota. He writes extensively and teaches IBM classes worldwide in all areas of DB2 for i. Before joining STG Lab Services, he worked in the ITSO for nine years writing multiple IBM Redbooksfi publications. He also worked for IBM Colombia as an IBM AS/400fi IT Specialist doing presales support for the Andean countries. He has 28 years of experience in the computing field and has taught database classes in Colombian universities. He holds a Master's degree in Computer Science from EAFIT, Colombia. His areas of expertise are database technology, performance, and data warehousing. Hernando can be contacted at hbedoya@us.ibm.com .
+<!-- image -->
+
+Hernando Bedoya is a Senior IT Specialist at STG Lab Services and Training in Rochester, Minnesota. He writes extensively and teaches IBM classes worldwide in all areas of DB2 for i. Before joining STG Lab Services, he worked in the ITSO for nine years writing multiple IBM Redbooksfi publications. He also worked for IBM Colombia as an IBM AS/400fi IT Specialist doing presales support for the Andean countries. He has 28 years of experience in the computing field and has taught database classes in Colombian universities. He holds a Master’s degree in Computer Science from EAFIT, Colombia. His areas of expertise are database technology, performance, and data warehousing. Hernando can be contacted at hbedoya@us.ibm.com .
 
 ## Authors
 
 <!-- image -->
 
-Chapter 1.
-
 1
+
+Chapter 1.
 
 ## Securing and protecting IBM DB2 data
 
@@ -138,7 +138,7 @@ This chapter describes how you can secure and protect data in DB2 for i. The fol
 
 Before reviewing database security techniques, there are two fundamental steps in securing information assets that must be described:
 
-- GLYPH&lt;SM590000&gt; First, and most important, is the definition of a company's security policy . Without a security policy, there is no definition of what are acceptable practices for using, accessing, and storing information by who, what, when, where, and how. A security policy should minimally address three things: confidentiality, integrity, and availability.
+- GLYPH&lt;SM590000&gt; First, and most important, is the definition of a company’s security policy . Without a security policy, there is no definition of what are acceptable practices for using, accessing, and storing information by who, what, when, where, and how. A security policy should minimally address three things: confidentiality, integrity, and availability.
 - The monitoring and assessment of adherence to the security policy determines whether your security strategy is working. Often, IBM security consultants are asked to perform security assessments for companies without regard to the security policy. Although these assessments can be useful for observing how the system is defined and how data is being accessed, they cannot determine the level of security without a security policy. Without a security policy, it really is not an assessment as much as it is a baseline for monitoring the changes in the security settings that are captured.
 
 A security policy is what defines whether the system and its settings are secure (or not).
@@ -151,9 +151,9 @@ With your eyes now open to the importance of securing information assets, the re
 
 Because of the inherently secure nature of IBM i, many clients rely on the default system settings to protect their business data that is stored in DB2 for i. In most cases, this means no data protection because the default setting for the Create default public authority (QCRTAUT) system value is *CHANGE.
 
-Even more disturbing is that many IBM i clients remain in this state, despite the news headlines and the significant costs that are involved with databases being compromised. This default security configuration makes it quite challenging to implement basic security policies. A tighter implementation is required if you really want to protect one of your company's most valuable assets, which is the data.
+Even more disturbing is that many IBM i clients remain in this state, despite the news headlines and the significant costs that are involved with databases being compromised. This default security configuration makes it quite challenging to implement basic security policies. A tighter implementation is required if you really want to protect one of your company’s most valuable assets, which is the data.
 
-Traditionally, IBM i applications have employed menu-based security to counteract this default configuration that gives all users access to the data. The theory is that data is protected by the menu options controlling what database operations that the user can perform. This approach is ineffective, even if the user profile is restricted from running interactive commands. The reason is that in today's connected world there are a multitude of interfaces into the system, from web browsers to PC clients, that bypass application menus. If there are no object-level controls, users of these newer interfaces have an open door to your data.
+Traditionally, IBM i applications have employed menu-based security to counteract this default configuration that gives all users access to the data. The theory is that data is protected by the menu options controlling what database operations that the user can perform. This approach is ineffective, even if the user profile is restricted from running interactive commands. The reason is that in today’s connected world there are a multitude of interfaces into the system, from web browsers to PC clients, that bypass application menus. If there are no object-level controls, users of these newer interfaces have an open door to your data.
 
 Many businesses are trying to limit data access to a need-to-know basis. This security goal means that users should be given access only to the minimum set of data that is required to perform their job. Often, users with object-level access are given access to row and column values that are beyond what their business task requires because that object-level security provides an all-or-nothing solution. For example, object-level controls allow a manager to access data about all employees. Most security policies limit a manager to accessing data only for the employees that they manage.
 
@@ -196,8 +196,6 @@ Table 2-1 FUNCTION\_USAGE view
 
 To discover who has authorization to define and manage RCAC, you can use the query that is shown in Example 2-1.
 
-Example 2-1 Query to determine who has authority to define and manage RCAC
-
 SELECT
 
 function\_id,
@@ -224,7 +222,7 @@ user\_name;
 
 Separation of duties helps businesses comply with industry regulations or organizational requirements and simplifies the management of authorities. Separation of duties is commonly used to prevent fraudulent activities or errors by a single person. It provides the ability for administrative functions to be divided across individuals without overlapping responsibilities, so that one user does not possess unlimited authority, such as with the *ALLOBJ authority.
 
-For example, assume that a business has assigned the duty to manage security on IBM i to Theresa. Before release IBM i 7.2, to grant privileges, Theresa had to have the same privileges Theresa was granting to others. Therefore, to grant *USE privileges to the PAYROLL table, Theresa had to have *OBJMGT and *USE authority (or a higher level of authority, such as *ALLOBJ). This requirement allowed Theresa to access the data in the PAYROLL table even though Theresa's job description was only to manage its security.
+For example, assume that a business has assigned the duty to manage security on IBM i to Theresa. Before release IBM i 7.2, to grant privileges, Theresa had to have the same privileges Theresa was granting to others. Therefore, to grant *USE privileges to the PAYROLL table, Theresa had to have *OBJMGT and *USE authority (or a higher level of authority, such as *ALLOBJ). This requirement allowed Theresa to access the data in the PAYROLL table even though Theresa’s job description was only to manage its security.
 
 In IBM i 7.2, the QIBM\_DB\_SECADM function usage grants authorities, revokes authorities, changes ownership, or changes the primary group without giving access to the object or, in the case of a database table, to the data that is in the table or allowing other operations on the table.
 
@@ -241,10 +239,10 @@ Table 2-2 Comparison of the different function usage IDs and *JOBCTL authority
 | User action                                                                    | *JOBCTL   | QIBM\_DB\_SECADM   | QIBM\_DB\_SQLADM   | QIBM\_DB\_SYSMON   | No Authority   |
 |--------------------------------------------------------------------------------|-----------|------------------|------------------|------------------|----------------|
 | SET CURRENT DEGREE  (SQL statement)                                            | X         |                  | X                |                  |                |
-| CHGQRYA  command targeting a different user's job                              | X         |                  | X                |                  |                |
-| STRDBMON  or  ENDDBMON  commands targeting a different user's job              | X         |                  | X                |                  |                |
+| CHGQRYA  command targeting a different user’s job                              | X         |                  | X                |                  |                |
+| STRDBMON  or  ENDDBMON  commands targeting a different user’s job              | X         |                  | X                |                  |                |
 | STRDBMON  or  ENDDBMON  commands targeting a job that matches the current user | X         |                  | X                | X                | X              |
-| QUSRJOBI() API format 900 or System i Navigator's SQL Details for Job          | X         |                  | X                | X                |                |
+| QUSRJOBI() API format 900 or System i Navigator’s SQL Details for Job          | X         |                  | X                | X                |                |
 | Visual Explain within Run SQL scripts                                          | X         |                  | X                | X                | X              |
 | Visual Explain outside of Run SQL scripts                                      | X         |                  | X                |                  |                |
 | ANALYZE PLAN CACHE procedure                                                   | X         |                  | X                |                  |                |
@@ -253,15 +251,13 @@ Table 2-2 Comparison of the different function usage IDs and *JOBCTL authority
 | MODIFY PLAN CACHE PROPERTIES procedure (currently does not check authority)    | X         |                  | X                |                  |                |
 | CHANGE PLAN CACHE SIZE procedure (currently does not check authority)          | X         |                  | X                |                  |                |
 
-The SQL CREATE PERMISSION statement that is shown in Figure 3-1 is used to define and initially enable or disable the row access rules.Figure 3-1 CREATE PERMISSION SQL statement
+Figure 3-1 CREATE PERMISSION SQL statement
 
 <!-- image -->
 
 ## Column mask
 
 A column mask is a database object that manifests a column value access control rule for a specific column in a specific table. It uses a CASE expression that describes what you see when you access the column. For example, a teller can see only the last four digits of a tax identification number.
-
-Table 3-1 summarizes these special registers and their values.
 
 Table 3-1 Special registers and their corresponding values
 
@@ -275,7 +271,7 @@ Figure 3-5 shows the difference in the special register values when an adopted a
 
 - GLYPH&lt;SM590000&gt; A user connects to the server using the user profile ALICE.
 - GLYPH&lt;SM590000&gt; USER and CURRENT USER initially have the same value of ALICE.
-- GLYPH&lt;SM590000&gt; ALICE calls an SQL procedure that is named proc1, which is owned by user profile JOE and was created to adopt JOE's authority when it is called.
+- GLYPH&lt;SM590000&gt; ALICE calls an SQL procedure that is named proc1, which is owned by user profile JOE and was created to adopt JOE’s authority when it is called.
 - GLYPH&lt;SM590000&gt; While the procedure is running, the special register USER still contains the value of ALICE because it excludes any adopted authority. The special register CURRENT USER contains the value of JOE because it includes any adopted authority.
 - GLYPH&lt;SM590000&gt; When proc1 ends, the session reverts to its original state with both USER and CURRENT USER having the value of ALICE.
 
@@ -336,8 +332,6 @@ WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR', 'EMP' ) = 1 THEN EMPLOYEES . D
 - -Any other person sees the entire TAX\_ID as masked, for example, XXX-XX-XXXX.
 - To implement this column mask, run the SQL statement that is shown in Example 3-9.
 
-Example 3-9 Creating a mask on the TAX\_ID column
-
 ```
 CREATE MASK HR_SCHEMA.MASK_TAX_ID_ON_EMPLOYEES ON HR_SCHEMA.EMPLOYEES AS EMPLOYEES FOR COLUMN TAX_ID RETURN CASE WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR' ) = 1 THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER = EMPLOYEES . USER_ID THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER <> EMPLOYEES . USER_ID THEN ( 'XXX-XX-' CONCAT QSYS2 . SUBSTR ( EMPLOYEES . TAX_ID , 8 , 4 ) ) WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'EMP' ) = 1 THEN EMPLOYEES . TAX_ID ELSE 'XXX-XX-XXXX' END ENABLE ;
 ```
@@ -368,18 +362,16 @@ ACTIVATE ROW ACCESS CONTROL
 ACTIVATE COLUMN ACCESS CONTROL;
 
 - 2. Look at the definition of the EMPLOYEE table, as shown in Figure 3-11. To do this, from the main navigation pane of System i Navigator, click Schemas  HR\_SCHEMA  Tables , right-click the EMPLOYEES table, and click Definition .
+- 2. Figure 4-68 shows the Visual Explain of the same SQL statement, but with RCAC enabled. It is clear that the implementation of the SQL statement is more complex because the row permission rule becomes part of the WHERE clause.
+- 3. Compare the advised indexes that are provided by the Optimizer without RCAC and with RCAC enabled. Figure 4-69 shows the index advice for the SQL statement without RCAC enabled. The index being advised is for the ORDER BY clause.
 
 Figure 3-11 Selecting the EMPLOYEES table from System i Navigator
 
 <!-- image -->
 
-- 2. Figure 4-68 shows the Visual Explain of the same SQL statement, but with RCAC enabled. It is clear that the implementation of the SQL statement is more complex because the row permission rule becomes part of the WHERE clause.
-
 Figure 4-68 Visual Explain with RCAC enabled
 
 <!-- image -->
-
-- 3. Compare the advised indexes that are provided by the Optimizer without RCAC and with RCAC enabled. Figure 4-69 shows the index advice for the SQL statement without RCAC enabled. The index being advised is for the ORDER BY clause.
 
 Figure 4-69 Index advice with no RCAC
 
@@ -397,9 +389,9 @@ Implement roles and separation of duties
 
 Leverage row permissions on the database
 
-Protect columns by defining column masks
-
 This IBM Redpaper publication provides information about the IBM i 7.2 feature of IBM DB2 for i Row and Column Access Control (RCAC). It offers a broad description of the function and advantages of controlling access to data in a comprehensive and transparent way. This publication helps you understand the capabilities of RCAC and provides examples of defining, creating, and implementing the row permissions and column masks in a relational database environment.
+
+Protect columns by defining column masks
 
 This paper is intended for database engineers, data-centric application developers, and security officers who want to design and implement RCAC as a part of their data control and governance policy. A solid background in IBM i object level security, DB2 for i relational database concepts, and SQL is assumed.
 

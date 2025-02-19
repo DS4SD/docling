@@ -54,6 +54,7 @@ class ReadingOrderModel:
     ) -> List[ReadingOrderPageElement]:
 
         elements: List[ReadingOrderPageElement] = []
+        page_no_to_pages = {p.page_no: p for p in conv_res.pages}
 
         for (
             element
@@ -61,7 +62,7 @@ class ReadingOrderModel:
             conv_res.assembled.body
         ):  # FIXME: use conv_res.assembled.elements (include furniture)
 
-            page_height = conv_res.pages[element.page_no].size.height  # type: ignore
+            page_height = page_no_to_pages[element.page_no].size.height  # type: ignore
             bbox = element.cluster.bbox.to_bottom_left_origin(page_height)
             text = element.text or ""
 
@@ -71,7 +72,7 @@ class ReadingOrderModel:
                     ref=RefItem(cref=f"#/{element.page_no}/{element.cluster.id}"),
                     text=text,
                     page_no=element.page_no,
-                    page_size=conv_res.pages[element.page_no].size,
+                    page_size=page_no_to_pages[element.page_no].size,
                     label=element.label,
                     l=bbox.l,
                     r=bbox.r,
@@ -91,7 +92,7 @@ class ReadingOrderModel:
         for child in element.cluster.children:
             c_label = child.label
             c_bbox = child.bbox.to_bottom_left_origin(
-                doc.pages[element.page_no].size.height
+                doc.pages[element.page_no + 1].size.height
             )
             c_text = " ".join(
                 [
@@ -102,7 +103,7 @@ class ReadingOrderModel:
             )
 
             c_prov = ProvenanceItem(
-                page_no=element.page_no, charspan=(0, len(c_text)), bbox=c_bbox
+                page_no=element.page_no + 1, charspan=(0, len(c_text)), bbox=c_bbox
             )
             if c_label == DocItemLabel.LIST_ITEM:
                 # TODO: Infer if this is a numbered or a bullet list item
@@ -155,12 +156,14 @@ class ReadingOrderModel:
             for cid in lst
         }
 
+        page_no_to_pages = {p.page_no: p for p in conv_res.pages}
+
         for rel in ro_elements:
             if rel.cid in skippable_cids:
                 continue
             element = id_to_elem[rel.ref.cref]
 
-            page_height = conv_res.pages[element.page_no].size.height  # type: ignore
+            page_height = page_no_to_pages[element.page_no].size.height  # type: ignore
 
             if isinstance(element, TextElement):
                 new_item, current_list = self._handle_text_element(
