@@ -16,6 +16,7 @@ from docling_core.types.doc import (
     RefItem,
     TableData,
 )
+from docling_core.types.doc.document import ContentLayer
 from docling_core.types.legacy_doc.base import Ref
 from docling_core.types.legacy_doc.document import BaseText
 from docling_ibm_models.reading_order.reading_order_rb import (
@@ -191,6 +192,7 @@ class ReadingOrderModel:
 
                             code_item.footnotes.append(new_footnote_item.get_ref())
                 else:
+
                     new_item, current_list = self._handle_text_element(
                         element, out_doc, current_list, page_height
                     )
@@ -299,6 +301,7 @@ class ReadingOrderModel:
 
     def _handle_text_element(self, element, out_doc, current_list, page_height):
         cap_text = element.text
+
         prov = ProvenanceItem(
             page_no=element.page_no + 1,
             charspan=(0, len(cap_text)),
@@ -326,7 +329,16 @@ class ReadingOrderModel:
         else:
             current_list = None
 
-            new_item = out_doc.add_text(label=element.label, text=cap_text, prov=prov)
+            content_layer = ContentLayer.BODY
+            if element.label in [DocItemLabel.PAGE_HEADER, DocItemLabel.PAGE_FOOTER]:
+                content_layer = ContentLayer.FURNITURE
+
+            new_item = out_doc.add_text(
+                label=element.label,
+                text=cap_text,
+                prov=prov,
+                content_layer=content_layer,
+            )
         return new_item, current_list
 
     def _merge_elements(self, element, merged_elem, new_item, page_height):
