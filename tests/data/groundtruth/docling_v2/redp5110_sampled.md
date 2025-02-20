@@ -331,12 +331,11 @@ WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR', 'EMP' ) = 1 THEN EMPLOYEES . D
 - -Managers see a masked version of TAX\_ID with the first five characters replaced with the X character (for example, XXX-XX-1234).
 - -Any other person sees the entire TAX\_ID as masked, for example, XXX-XX-XXXX.
 - To implement this column mask, run the SQL statement that is shown in Example 3-9.
+- 3. Figure 3-10 shows the masks that are created in the HR\_SCHEMA.
 
 ```
 CREATE MASK HR_SCHEMA.MASK_TAX_ID_ON_EMPLOYEES ON HR_SCHEMA.EMPLOYEES AS EMPLOYEES FOR COLUMN TAX_ID RETURN CASE WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR' ) = 1 THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER = EMPLOYEES . USER_ID THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER <> EMPLOYEES . USER_ID THEN ( 'XXX-XX-' CONCAT QSYS2 . SUBSTR ( EMPLOYEES . TAX_ID , 8 , 4 ) ) WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'EMP' ) = 1 THEN EMPLOYEES . TAX_ID ELSE 'XXX-XX-XXXX' END ENABLE ;
 ```
-
-- 3. Figure 3-10 shows the masks that are created in the HR\_SCHEMA.
 
 Figure 3-10 Column masks shown in System i Navigator
 
