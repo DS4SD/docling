@@ -27,7 +27,7 @@ packages = [{include = "docling"}]
 python = "^3.9"
 pydantic = "^2.0.0"
 docling-core = {extras = ["chunking"], version = "^2.19.0"}
-docling-ibm-models = {git = "https://github.com/DS4SD/docling-ibm-models.git", rev = "dev/add-reading-order"}
+docling-ibm-models = "^3.4.0"
 docling-parse = "^3.3.0"
 filetype = "^1.2.0"
 pypdfium2 = "^4.30.0"

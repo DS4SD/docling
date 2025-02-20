@@ -849,38 +849,34 @@ chunking = ["semchunk (>=2.2.0,<3.0.0)", "transformers (>=4.34.0,<5.0.0)"]
 
 [[package]]
 name = "docling-ibm-models"
-version = "3.3.2"
+version = "3.4.0"
 description = "This package contains the AI models used by the Docling PDF conversion package"
 optional = false
-python-versions = "^3.9"
-files = []
-develop = false
+python-versions = "<4.0,>=3.9"
+files = [
+    {file = "docling_ibm_models-3.4.0-py3-none-any.whl", hash = "sha256:186517ff1f76e76113600fa1e5a699927325081a8013fdd5d0551121c2e34190"},
+    {file = "docling_ibm_models-3.4.0.tar.gz", hash = "sha256:fb79beeb07d1bb9bc8acf9d0a44643cd7ce1910aa418cd685e2e477b13eeafee"},
+]
 
 [package.dependencies]
-docling-core = "^2.19.0"
+docling-core = ">=2.19.0,<3.0.0"
 huggingface_hub = ">=0.23,<1"
-jsonlines = "^3.1.0"
+jsonlines = ">=3.1.0,<4.0.0"
 numpy = [
     {version = ">=1.24.4,<3.0.0", markers = "sys_platform != \"darwin\" or platform_machine != \"x86_64\""},
     {version = ">=1.24.4,<2.0.0", markers = "sys_platform == \"darwin\" and platform_machine == \"x86_64\""},
 ]
-opencv-python-headless = "^4.6.0.66"
+opencv-python-headless = ">=4.6.0.66,<5.0.0.0"
 Pillow = ">=10.0.0,<12.0.0"
-pydantic = "^2.0.0"
+pydantic = ">=2.0.0,<3.0.0"
 safetensors = {version = ">=0.4.3,<1", extras = ["torch"]}
-torch = "^2.2.2"
-torchvision = "^0"
-tqdm = "^4.64.0"
+torch = ">=2.2.2,<3.0.0"
+torchvision = ">=0,<1"
+tqdm = ">=4.64.0,<5.0.0"
 transformers = [
     {version = ">=4.42.0,<5.0.0", markers = "sys_platform != \"darwin\" or platform_machine != \"x86_64\""},
     {version = ">=4.42.0,<4.43.0", markers = "sys_platform == \"darwin\" and platform_machine == \"x86_64\""},
 ]
-
-[package.source]
-type = "git"
-url = "https://github.com/DS4SD/docling-ibm-models.git"
-reference = "dev/add-reading-order"
-resolved_reference = "fe9794d472459e17d36bfbb0b247e77b29b80349"
 
 [[package]]
 name = "docling-parse"
@@ -1455,13 +1451,13 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "huggingface-hub"
-version = "0.29.0"
+version = "0.29.1"
 description = "Client library to download and publish models, datasets and other repos on the huggingface.co hub"
 optional = false
 python-versions = ">=3.8.0"
 files = [
-    {file = "huggingface_hub-0.29.0-py3-none-any.whl", hash = "sha256:c02daa0b6bafbdacb1320fdfd1dc7151d0940825c88c4ef89837fdb1f6ea0afe"},
-    {file = "huggingface_hub-0.29.0.tar.gz", hash = "sha256:64034c852be270cac16c5743fe1f659b14515a9de6342d6f42cbb2ede191fc80"},
+    {file = "huggingface_hub-0.29.1-py3-none-any.whl", hash = "sha256:352f69caf16566c7b6de84b54a822f6238e17ddd8ae3da4f8f2272aea5b198d5"},
+    {file = "huggingface_hub-0.29.1.tar.gz", hash = "sha256:9524eae42077b8ff4fc459ceb7a514eca1c1232b775276b009709fe2a084f250"},
 ]
 
 [package.dependencies]
@@ -7790,4 +7786,4 @@ vlm = ["transformers", "transformers"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "3f657e7af78058e75dfb9f32e373f7f70e5e68a42a5b3603189e2251be90f349"
+content-hash = "21c25b86d88aa138f7faa68fcba95af1d9a5edaa22550bd325997aed6eef44fe"
