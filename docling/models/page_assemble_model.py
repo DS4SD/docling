@@ -53,12 +53,12 @@ class PageAssembleModel(BasePageModel):
         sanitized_text = "".join(lines)
 
         # Text normalization
-        sanitized_text.replace("⁄", "/")
-        sanitized_text.replace("’", "'")
-        sanitized_text.replace("‘", "'")
-        sanitized_text.replace("“", '"')
-        sanitized_text.replace("”", '"')
-        sanitized_text.replace("•", "·")
+        sanitized_text = sanitized_text.replace("⁄", "/")
+        sanitized_text = sanitized_text.replace("’", "'")
+        sanitized_text = sanitized_text.replace("‘", "'")
+        sanitized_text = sanitized_text.replace("“", '"')
+        sanitized_text = sanitized_text.replace("”", '"')
+        sanitized_text = sanitized_text.replace("•", "·")
 
         return sanitized_text.strip()  # Strip any leading or trailing whitespace
 

@@ -15,7 +15,7 @@ Boots self-locking nuts are made with three different spring styles and in vario
 Figure 7-26. Self-locking nuts.
 <!-- image -->
 
-the most common ranges in size for No. 6 up to 1 ⁄ 4 inch, the Rol-top ranges from 1 ⁄ 4 inch to 1 ⁄ 6 inch, and the bellows type ranges in size from No. 8 up to 3 ⁄ 8 inch. Wing-type nuts are made of anodized aluminum alloy, cadmium-plated carbon steel, or stainless steel. The Rol-top nut is cadmium-plated steel, and the bellows type is made of aluminum alloy only.
+the most common ranges in size for No. 6 up to 1 / 4 inch, the Rol-top ranges from 1 / 4 inch to 1 / 6 inch, and the bellows type ranges in size from No. 8 up to 3 / 8 inch. Wing-type nuts are made of anodized aluminum alloy, cadmium-plated carbon steel, or stainless steel. The Rol-top nut is cadmium-plated steel, and the bellows type is made of aluminum alloy only.
 
 .
 
