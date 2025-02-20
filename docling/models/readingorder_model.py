@@ -56,11 +56,7 @@ class ReadingOrderModel:
         elements: List[ReadingOrderPageElement] = []
         page_no_to_pages = {p.page_no: p for p in conv_res.pages}
 
-        for (
-            element
-        ) in (
-            conv_res.assembled.body
-        ):  # FIXME: use conv_res.assembled.elements (include furniture)
+        for element in conv_res.assembled.elements:
 
             page_height = page_no_to_pages[element.page_no].size.height  # type: ignore
             bbox = element.cluster.bbox.to_bottom_left_origin(page_height)

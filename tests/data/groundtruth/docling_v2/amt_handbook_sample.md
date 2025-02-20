@@ -31,3 +31,5 @@ The elastic stop nut is a standard nut with the height increased to accommodate 
 Figure 7-27. Stainless steel self-locking nut.
 
 <!-- image -->
+
+7-45

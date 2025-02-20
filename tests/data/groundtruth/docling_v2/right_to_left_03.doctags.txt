@@ -29,4 +29,5 @@
 <text><loc_72><loc_316><loc_202><loc_325>نت 47.500 اي هنايلاس ديلوت زا %50 لقادح</text>
 <text><loc_340><loc_344><loc_414><loc_354>ليوحت زاجم یاطخ</text>
 <text><loc_90><loc_343><loc_184><loc_351>ليوحت لباق هلومحم نيرخآ 5%</text>
+<page_footer><loc_224><loc_463><loc_247><loc_469>Page 7</page_footer>
 </doctag>

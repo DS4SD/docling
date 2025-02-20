@@ -313,11 +313,11 @@ WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR', 'EMP' ) = 1 THEN EMPLOYEES . D
 
 - To implement this column mask, run the SQL statement that is shown in Example 3-9.
 
-- 3. Figure 3-10 shows the masks that are created in the HR_SCHEMA.
-
 CREATE MASK HR_SCHEMA.MASK_TAX_ID_ON_EMPLOYEES ON HR_SCHEMA.EMPLOYEES AS EMPLOYEES FOR COLUMN TAX_ID RETURN CASE WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR' ) = 1 THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER = EMPLOYEES . USER_ID THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER <> EMPLOYEES . USER_ID THEN ( 'XXX-XX-' CONCAT QSYS2 . SUBSTR ( EMPLOYEES . TAX_ID , 8 , 4 ) ) WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'EMP' ) = 1 THEN EMPLOYEES . TAX_ID ELSE 'XXX-XX-XXXX' END ENABLE ;
 
 Example 3-9 Creating a mask on the TAX_ID column
+
+- 3. Figure 3-10 shows the masks that are created in the HR_SCHEMA.
 
 Figure 3-10 Column masks shown in System i Navigator
 <!-- image -->
@@ -344,12 +344,12 @@ ACTIVATE COLUMN ACCESS CONTROL;
 
 - 2. Look at the definition of the EMPLOYEE table, as shown in Figure 3-11. To do this, from the main navigation pane of System i Navigator, click Schemas  HR_SCHEMA  Tables , right-click the EMPLOYEES table, and click Definition .
 
+Figure 3-11 Selecting the EMPLOYEES table from System i Navigator
+<!-- image -->
+
 - 2. Figure 4-68 shows the Visual Explain of the same SQL statement, but with RCAC enabled. It is clear that the implementation of the SQL statement is more complex because the row permission rule becomes part of the WHERE clause.
 
 - 3. Compare the advised indexes that are provided by the Optimizer without RCAC and with RCAC enabled. Figure 4-69 shows the index advice for the SQL statement without RCAC enabled. The index being advised is for the ORDER BY clause.
-
-Figure 3-11 Selecting the EMPLOYEES table from System i Navigator
-<!-- image -->
 
 Figure 4-68 Visual Explain with RCAC enabled
 <!-- image -->

@@ -8,6 +8,8 @@ Front cover
 
 Front cover
 
+ibm.com /redbooks
+
 ## Contents
 
 | Notices                                                                                                                                                                   | . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . vii   |
@@ -54,6 +56,10 @@ Front cover
 | 3.6.6 Activating RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                                 | 28                                                                                                                                      |
 | 3.6.7 Demonstrating data access with RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                                                 | 29                                                                                                                                      |
 | 3.6.8 Demonstrating data access with a view and RCAC . . . . . . . . . . . . . . . . . . . . . . .                                                                        | 32                                                                                                                                      |
+
+' Copyright IBM Corp. 2014. All rights reserved.
+
+iii
 
 DB2 for i Center of Excellence
 
@@ -116,6 +122,10 @@ Hernando Bedoya is a Senior IT Specialist at STG Lab Services and Training in Ro
 
 ## Authors
 
+' Copyright IBM Corp. 2014. All rights reserved.
+
+xi
+
 <!-- image -->
 
 1
@@ -133,6 +143,10 @@ This chapter describes how you can secure and protect data in DB2 for i. The fol
 - GLYPH&lt;SM590000&gt; Security fundamentals
 - GLYPH&lt;SM590000&gt; Current state of IBM i security
 - GLYPH&lt;SM590000&gt; DB2 for i security controls
+
+' Copyright IBM Corp. 2014. All rights reserved.
+
+1
 
 ## 1.1 Security fundamentals
 
@@ -155,6 +169,10 @@ Even more disturbing is that many IBM i clients remain in this state, despite th
 
 Traditionally, IBM i applications have employed menu-based security to counteract this default configuration that gives all users access to the data. The theory is that data is protected by the menu options controlling what database operations that the user can perform. This approach is ineffective, even if the user profile is restricted from running interactive commands. The reason is that in today's connected world there are a multitude of interfaces into the system, from web browsers to PC clients, that bypass application menus. If there are no object-level controls, users of these newer interfaces have an open door to your data.
 
+2
+
+Row and Column Access Control Support in IBM DB2 for i
+
 Many businesses are trying to limit data access to a need-to-know basis. This security goal means that users should be given access only to the minimum set of data that is required to perform their job. Often, users with object-level access are given access to row and column values that are beyond what their business task requires because that object-level security provides an all-or-nothing solution. For example, object-level controls allow a manager to access data about all employees. Most security policies limit a manager to accessing data only for the employees that they manage.
 
 ## 1.3.1 Existing row and column control
@@ -168,6 +186,10 @@ Even if you are willing to live with these performance and management issues, a 
 Figure 1-2 Existing row and column controls
 
 <!-- image -->
+
+4
+
+Row and Column Access Control Support in IBM DB2 for i
 
 ## 2.1.6 Change Function Usage CL command
 
@@ -222,6 +244,10 @@ user\_name;
 
 Separation of duties helps businesses comply with industry regulations or organizational requirements and simplifies the management of authorities. Separation of duties is commonly used to prevent fraudulent activities or errors by a single person. It provides the ability for administrative functions to be divided across individuals without overlapping responsibilities, so that one user does not possess unlimited authority, such as with the *ALLOBJ authority.
 
+10
+
+Row and Column Access Control Support in IBM DB2 for i
+
 For example, assume that a business has assigned the duty to manage security on IBM i to Theresa. Before release IBM i 7.2, to grant privileges, Theresa had to have the same privileges Theresa was granting to others. Therefore, to grant *USE privileges to the PAYROLL table, Theresa had to have *OBJMGT and *USE authority (or a higher level of authority, such as *ALLOBJ). This requirement allowed Theresa to access the data in the PAYROLL table even though Theresa's job description was only to manage its security.
 
 In IBM i 7.2, the QIBM\_DB\_SECADM function usage grants authorities, revokes authorities, changes ownership, or changes the primary group without giving access to the object or, in the case of a database table, to the data that is in the table or allowing other operations on the table.
@@ -251,6 +277,10 @@ Table 2-2 Comparison of the different function usage IDs and *JOBCTL authority
 | MODIFY PLAN CACHE PROPERTIES procedure (currently does not check authority)    | X         |                  | X                |                  |                |
 | CHANGE PLAN CACHE SIZE procedure (currently does not check authority)          | X         |                  | X                |                  |                |
 
+Chapter 2. Roles and separation of duties
+
+11
+
 Figure 3-1 CREATE PERMISSION SQL statement
 
 <!-- image -->
@@ -258,6 +288,10 @@ Figure 3-1 CREATE PERMISSION SQL statement
 ## Column mask
 
 A column mask is a database object that manifests a column value access control rule for a specific column in a specific table. It uses a CASE expression that describes what you see when you access the column. For example, a teller can see only the last four digits of a tax identification number.
+
+Chapter 3. Row and Column Access Control
+
+15
 
 Table 3-1 Special registers and their corresponding values
 
@@ -284,6 +318,10 @@ Figure 3-5 Special registers and adopted authority
 Built-in global variables are provided with the database manager and are used in SQL statements to retrieve scalar values that are associated with the variables.
 
 IBM DB2 for i supports nine different built-in global variables that are read only and maintained by the system. These global variables can be used to identify attributes of the database connection and used as part of the RCAC logic.
+
+Chapter 3. Row and Column Access Control
+
+19
 
 Table 3-2 lists the nine built-in global variables.
 
@@ -317,6 +355,10 @@ Here is an example of using the VERIFY\_GROUP\_FOR\_USER function:
 VERIFY_GROUP_FOR_USER (CURRENT_USER, 'MGR') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR') VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JANE', 'MGR', 'STEVE') The following function invocation returns a value of 0: VERIFY_GROUP_FOR_USER (CURRENT_USER, 'JUDY', 'TONY')
 ```
 
+20
+
+Row and Column Access Control Support in IBM DB2 for i
+
 RETURN
 
 CASE
@@ -331,11 +373,16 @@ WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR', 'EMP' ) = 1 THEN EMPLOYEES . D
 - -Managers see a masked version of TAX\_ID with the first five characters replaced with the X character (for example, XXX-XX-1234).
 - -Any other person sees the entire TAX\_ID as masked, for example, XXX-XX-XXXX.
 - To implement this column mask, run the SQL statement that is shown in Example 3-9.
-- 3. Figure 3-10 shows the masks that are created in the HR\_SCHEMA.
 
 ```
 CREATE MASK HR_SCHEMA.MASK_TAX_ID_ON_EMPLOYEES ON HR_SCHEMA.EMPLOYEES AS EMPLOYEES FOR COLUMN TAX_ID RETURN CASE WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'HR' ) = 1 THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER = EMPLOYEES . USER_ID THEN EMPLOYEES . TAX_ID WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'MGR' ) = 1 AND SESSION_USER <> EMPLOYEES . USER_ID THEN ( 'XXX-XX-' CONCAT QSYS2 . SUBSTR ( EMPLOYEES . TAX_ID , 8 , 4 ) ) WHEN VERIFY_GROUP_FOR_USER ( SESSION_USER , 'EMP' ) = 1 THEN EMPLOYEES . TAX_ID ELSE 'XXX-XX-XXXX' END ENABLE ;
 ```
+
+Chapter 3. Row and Column Access Control
+
+27
+
+- 3. Figure 3-10 shows the masks that are created in the HR\_SCHEMA.
 
 Figure 3-10 Column masks shown in System i Navigator
 
@@ -361,12 +408,17 @@ ACTIVATE ROW ACCESS CONTROL
 ACTIVATE COLUMN ACCESS CONTROL;
 
 - 2. Look at the definition of the EMPLOYEE table, as shown in Figure 3-11. To do this, from the main navigation pane of System i Navigator, click Schemas  HR\_SCHEMA  Tables , right-click the EMPLOYEES table, and click Definition .
-- 2. Figure 4-68 shows the Visual Explain of the same SQL statement, but with RCAC enabled. It is clear that the implementation of the SQL statement is more complex because the row permission rule becomes part of the WHERE clause.
-- 3. Compare the advised indexes that are provided by the Optimizer without RCAC and with RCAC enabled. Figure 4-69 shows the index advice for the SQL statement without RCAC enabled. The index being advised is for the ORDER BY clause.
 
 Figure 3-11 Selecting the EMPLOYEES table from System i Navigator
 
 <!-- image -->
+
+28
+
+Row and Column Access Control Support in IBM DB2 for i
+
+- 2. Figure 4-68 shows the Visual Explain of the same SQL statement, but with RCAC enabled. It is clear that the implementation of the SQL statement is more complex because the row permission rule becomes part of the WHERE clause.
+- 3. Compare the advised indexes that are provided by the Optimizer without RCAC and with RCAC enabled. Figure 4-69 shows the index advice for the SQL statement without RCAC enabled. The index being advised is for the ORDER BY clause.
 
 Figure 4-68 Visual Explain with RCAC enabled
 
@@ -376,9 +428,17 @@ Figure 4-69 Index advice with no RCAC
 
 <!-- image -->
 
+Chapter 4. Implementing Row and Column Access Control: Banking example
+
+77
+
 ```
 THEN C . CUSTOMER_TAX_ID WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'TELLER' ) = 1 THEN ( 'XXX-XX-' CONCAT QSYS2 . SUBSTR ( C . CUSTOMER_TAX_ID , 8 , 4 ) ) WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_TAX_ID ELSE 'XXX-XX-XXXX' END ENABLE ; CREATE MASK BANK_SCHEMA.MASK_DRIVERS_LICENSE_ON_CUSTOMERS ON BANK_SCHEMA.CUSTOMERS AS C FOR COLUMN CUSTOMER_DRIVERS_LICENSE_NUMBER RETURN CASE WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'ADMIN' ) = 1 THEN C . CUSTOMER_DRIVERS_LICENSE_NUMBER WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'TELLER' ) = 1 THEN C . CUSTOMER_DRIVERS_LICENSE_NUMBER WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_DRIVERS_LICENSE_NUMBER ELSE '*************' END ENABLE ; CREATE MASK BANK_SCHEMA.MASK_LOGIN_ID_ON_CUSTOMERS ON BANK_SCHEMA.CUSTOMERS AS C FOR COLUMN CUSTOMER_LOGIN_ID RETURN CASE WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'ADMIN' ) = 1 THEN C . CUSTOMER_LOGIN_ID WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_LOGIN_ID ELSE '*****' END ENABLE ; CREATE MASK BANK_SCHEMA.MASK_SECURITY_QUESTION_ON_CUSTOMERS ON BANK_SCHEMA.CUSTOMERS AS C FOR COLUMN CUSTOMER_SECURITY_QUESTION RETURN CASE WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'ADMIN' ) = 1 THEN C . CUSTOMER_SECURITY_QUESTION WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_SECURITY_QUESTION ELSE '*****' END ENABLE ; CREATE MASK BANK_SCHEMA.MASK_SECURITY_QUESTION_ANSWER_ON_CUSTOMERS ON BANK_SCHEMA.CUSTOMERS AS C FOR COLUMN CUSTOMER_SECURITY_QUESTION_ANSWER RETURN CASE WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'ADMIN' ) = 1 THEN C . CUSTOMER_SECURITY_QUESTION_ANSWER WHEN QSYS2 . VERIFY_GROUP_FOR_USER ( SESSION_USER , 'CUSTOMER' ) = 1 THEN C . CUSTOMER_SECURITY_QUESTION_ANSWER ELSE '*****' END ENABLE ; ALTER TABLE BANK_SCHEMA.CUSTOMERS ACTIVATE ROW ACCESS CONTROL ACTIVATE COLUMN ACCESS CONTROL ;
 ```
+
+124
+
+Row and Column Access Control Support in IBM DB2 for i
 
 Back cover
 
@@ -405,3 +465,5 @@ BUILDING TECHNICAL INFORMATION BASED ON PRACTICAL EXPERIENCE
 IBM Redbooks are developed by the IBM International Technical Support Organization. Experts from IBM, Customers and Partners from around the world create timely technical information based on realistic scenarios. Specific recommendations are provided to help you implement IT solutions more effectively in your environment.
 
 For more information: ibm.com /redbooks
+
+REDP-5110-00

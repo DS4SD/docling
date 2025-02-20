@@ -13,4 +13,5 @@
 <section_header_level_1><loc_270><loc_240><loc_327><loc_247>Elastic Stop Nut</section_header_level_1>
 <text><loc_270><loc_249><loc_465><loc_264>The elastic stop nut is a standard nut with the height increased to accommodate a fiber locking collar. This</text>
 <picture><loc_270><loc_272><loc_470><loc_447><caption><loc_270><loc_452><loc_405><loc_459>Figure 7-27. Stainless steel self-locking nut.</caption></picture>
+<page_footer><loc_453><loc_470><loc_472><loc_478>7-45</page_footer>
 </doctag>
