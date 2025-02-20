@@ -1,3 +1,9 @@
+## [v2.24.0](https://github.com/DS4SD/docling/releases/tag/v2.24.0) - 2025-02-20
+
+### Feature
+
+* Implement new reading-order model ([#916](https://github.com/DS4SD/docling/issues/916)) ([`c93e369`](https://github.com/DS4SD/docling/commit/c93e36988f1e1e461477223143c2c1fb2162d11f))
+
 ## [v2.23.1](https://github.com/DS4SD/docling/releases/tag/v2.23.1) - 2025-02-20
 
 ### Fix
