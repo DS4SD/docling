@@ -1,4 +1,3 @@
-import json
 import os
 from io import BytesIO
 from pathlib import Path
@@ -8,6 +7,8 @@ from docling_core.types.doc import DoclingDocument
 from docling.datamodel.base_models import DocumentStream, InputFormat
 from docling.datamodel.document import ConversionResult
 from docling.document_converter import DocumentConverter
+
+from .verify_utils import verify_document
 
 GENERATE = False
 
@@ -61,8 +62,7 @@ def test_e2e_pubmed_conversions(use_stream=False):
             pred_itxt, str(gt_path) + ".itxt"
         ), "export to indented-text"
 
-        pred_json: str = json.dumps(doc.export_to_dict(), indent=2)
-        assert verify_export(pred_json, str(gt_path) + ".json"), "export to json"
+        assert verify_document(doc, str(gt_path) + ".json", GENERATE), "export to json"
 
 
 def test_e2e_pubmed_conversions_stream():

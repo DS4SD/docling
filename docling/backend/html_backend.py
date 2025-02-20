@@ -5,9 +5,11 @@ from typing import Optional, Union, cast
 
 from bs4 import BeautifulSoup, NavigableString, PageElement, Tag
 from docling_core.types.doc import (
+    DocItem,
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
+    GroupItem,
     GroupLabel,
     TableCell,
     TableData,
@@ -32,10 +34,9 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         # Initialise the parents for the hierarchy
         self.max_levels = 10
         self.level = 0
-        self.parents = {}  # type: ignore
+        self.parents: dict[int, Optional[Union[DocItem, GroupItem]]] = {}
         for i in range(0, self.max_levels):
             self.parents[i] = None
-        self.labels = {}  # type: ignore
 
         try:
             if isinstance(self.path_or_stream, BytesIO):
@@ -111,11 +112,6 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         return
 
     def analyze_tag(self, tag: Tag, doc: DoclingDocument) -> None:
-        if tag.name in self.labels:
-            self.labels[tag.name] += 1
-        else:
-            self.labels[tag.name] = 1
-
         if tag.name in ["h1", "h2", "h3", "h4", "h5", "h6"]:
             self.handle_header(tag, doc)
         elif tag.name in ["p"]:
@@ -238,8 +234,12 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         """Handles listitem tags (li)."""
         nested_list = element.find(["ul", "ol"])
 
-        parent_list_label = self.parents[self.level].label
-        index_in_list = len(self.parents[self.level].children) + 1
+        parent = self.parents[self.level]
+        if parent is None:
+            _log.warning(f"list-item has no parent in DoclingDocument: {element}")
+            return
+        parent_label: str = parent.label
+        index_in_list = len(parent.children) + 1
 
         if nested_list:
             # Text in list item can be hidden within hierarchy, hence
@@ -251,7 +251,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
             marker = ""
             enumerated = False
-            if parent_list_label == GroupLabel.ORDERED_LIST:
+            if parent_label == GroupLabel.ORDERED_LIST:
                 marker = str(index_in_list)
                 enumerated = True
 
@@ -261,7 +261,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     text=text,
                     enumerated=enumerated,
                     marker=marker,
-                    parent=self.parents[self.level],
+                    parent=parent,
                 )
                 self.level += 1
 
@@ -275,14 +275,14 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
             marker = ""
             enumerated = False
-            if parent_list_label == GroupLabel.ORDERED_LIST:
+            if parent_label == GroupLabel.ORDERED_LIST:
                 marker = f"{str(index_in_list)}."
                 enumerated = True
             doc.add_list_item(
                 text=text,
                 enumerated=enumerated,
                 marker=marker,
-                parent=self.parents[self.level],
+                parent=parent,
             )
         else:
             _log.warning(f"list-item has no text: {element}")

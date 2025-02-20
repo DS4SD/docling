@@ -1,4 +1,5 @@
 import json
+import os
 import warnings
 from pathlib import Path
 from typing import List, Optional
@@ -457,3 +458,17 @@ def verify_conversion_result_v2(
         assert verify_dt(
             doc_pred_dt, doc_true_dt, fuzzy=fuzzy
         ), f"Mismatch in DocTags prediction for {input_path}"
+
+
+def verify_document(pred_doc: DoclingDocument, gtfile: str, generate: bool = False):
+
+    if not os.path.exists(gtfile) or generate:
+        with open(gtfile, "w") as fw:
+            json.dump(pred_doc.export_to_dict(), fw, indent=2)
+
+        return True
+    else:
+        with open(gtfile) as fr:
+            true_doc = DoclingDocument.model_validate_json(fr.read())
+
+        return verify_docitems(pred_doc, true_doc, fuzzy=False)

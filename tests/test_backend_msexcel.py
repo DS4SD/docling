@@ -1,4 +1,3 @@
-import json
 import os
 from pathlib import Path
 
@@ -6,7 +5,7 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import ConversionResult, DoclingDocument
 from docling.document_converter import DocumentConverter
 
-from .verify_utils import verify_docitems
+from .verify_utils import verify_document
 
 GENERATE = False
 
@@ -44,20 +43,6 @@ def verify_export(pred_text: str, gtfile: str):
         return pred_text == true_text
 
 
-def verify_document(pred_doc: DoclingDocument, gtfile: str):
-
-    if not os.path.exists(gtfile) or GENERATE:
-        with open(gtfile, "w") as fw:
-            json.dump(pred_doc.export_to_dict(), fw, indent=2)
-
-        return True
-    else:
-        with open(gtfile, "r") as fr:
-            true_doc = DoclingDocument.model_validate_json(fr.read())
-
-        return verify_docitems(pred_doc, true_doc, fuzzy=False)
-
-
 def test_e2e_xlsx_conversions():
 
     xlsx_paths = get_xlsx_paths()
@@ -84,4 +69,6 @@ def test_e2e_xlsx_conversions():
             pred_itxt, str(gt_path) + ".itxt"
         ), "export to indented-text"
 
-        assert verify_document(doc, str(gt_path) + ".json"), "document document"
+        assert verify_document(
+            doc, str(gt_path) + ".json", GENERATE
+        ), "document document"

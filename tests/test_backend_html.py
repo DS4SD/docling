@@ -1,4 +1,3 @@
-import json
 import os
 from pathlib import Path
 
@@ -11,6 +10,8 @@ from docling.datamodel.document import (
     SectionHeaderItem,
 )
 from docling.document_converter import DocumentConverter
+
+from .verify_utils import verify_document
 
 GENERATE = False
 
@@ -66,7 +67,7 @@ def verify_export(pred_text: str, gtfile: str):
         return True
 
     else:
-        with open(gtfile, "r") as fr:
+        with open(gtfile) as fr:
             true_text = fr.read()
 
         assert pred_text == true_text, f"pred_text!=true_text for {gtfile}"
@@ -99,5 +100,4 @@ def test_e2e_html_conversions():
             pred_itxt, str(gt_path) + ".itxt"
         ), "export to indented-text"
 
-        pred_json: str = json.dumps(doc.export_to_dict(), indent=2)
-        assert verify_export(pred_json, str(gt_path) + ".json"), "export to json"
+        assert verify_document(doc, str(gt_path) + ".json", GENERATE)
