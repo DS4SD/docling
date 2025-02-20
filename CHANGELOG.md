@@ -1,3 +1,13 @@
+## [v2.23.1](https://github.com/DS4SD/docling/releases/tag/v2.23.1) - 2025-02-20
+
+### Fix
+
+* Runtime error when Pandas Series is not always of string type ([#1024](https://github.com/DS4SD/docling/issues/1024)) ([`6796f0a`](https://github.com/DS4SD/docling/commit/6796f0a13263281cd48712b3c71579bfd81bb0d1))
+
+### Documentation
+
+* Revamp picture description example ([#1015](https://github.com/DS4SD/docling/issues/1015)) ([`27c0400`](https://github.com/DS4SD/docling/commit/27c04007bc1be7a6f6c90aaf04ea9f4ff8eb1f3d))
+
 ## [v2.23.0](https://github.com/DS4SD/docling/releases/tag/v2.23.0) - 2025-02-17
 
 ### Feature
