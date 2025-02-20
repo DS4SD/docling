@@ -114,7 +114,7 @@ def test_patent_groundtruth(patents, groundtruth):
         json_path = path.with_suffix(".json")
         if json_path.stem in gt_names:
             assert verify_document(
-                doc, str(json_path), False
+                doc, str(json_path), GENERATE
             ), f"JSON file mismatch against groundtruth {json_path}"
         itxt_name = path.stem + ".itxt"
         if itxt_name in gt_names:
