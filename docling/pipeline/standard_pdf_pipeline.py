@@ -27,7 +27,6 @@ from docling.models.document_picture_classifier import (
     DocumentPictureClassifier,
     DocumentPictureClassifierOptions,
 )
-from docling.models.ds_glm_model import GlmModel, GlmOptions
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
 from docling.models.ocr_mac_model import OcrMacModel
@@ -40,6 +39,7 @@ from docling.models.picture_description_api_model import PictureDescriptionApiMo
 from docling.models.picture_description_base_model import PictureDescriptionBaseModel
 from docling.models.picture_description_vlm_model import PictureDescriptionVlmModel
 from docling.models.rapid_ocr_model import RapidOcrModel
+from docling.models.readingorder_model import ReadingOrderModel, ReadingOrderOptions
 from docling.models.table_structure_model import TableStructureModel
 from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
 from docling.models.tesseract_ocr_model import TesseractOcrModel
@@ -76,7 +76,7 @@ class StandardPdfPipeline(PaginatedPipeline):
             or self.pipeline_options.generate_table_images
         )
 
-        self.glm_model = GlmModel(options=GlmOptions())
+        self.glm_model = ReadingOrderModel(options=ReadingOrderOptions())
 
         if (ocr_model := self.get_ocr_model(artifacts_path=artifacts_path)) is None:
             raise RuntimeError(
