@@ -1,9 +1,10 @@
 import logging
 from io import BytesIO
 from pathlib import Path
-from typing import Optional, Union, cast
+from typing import Final, Optional, Union, cast
 
 from bs4 import BeautifulSoup, NavigableString, PageElement, Tag
+from bs4.element import PreformattedString
 from docling_core.types.doc import (
     DocItem,
     DocItemLabel,
@@ -22,12 +23,29 @@ from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
 
+# tags that generate NodeItem elements
+TAGS_FOR_NODE_ITEMS: Final = [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "p",
+    "pre",
+    "ul",
+    "ol",
+    "li",
+    "table",
+    "figure",
+    "img",
+]
+
 
 class HTMLDocumentBackend(DeclarativeDocumentBackend):
     @override
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
-        _log.debug("About to init HTML backend...")
         self.soup: Optional[Tag] = None
         # HTML file:
         self.path_or_stream = path_or_stream
@@ -88,6 +106,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             assert self.soup is not None
             content = self.soup.body or self.soup
             # Replace <br> tags with newline characters
+            # TODO: remove style to avoid losing text from tags like i, b, span, ...
             for br in content("br"):
                 br.replace_with(NavigableString("\n"))
             self.walk(content, doc)
@@ -99,6 +118,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
     def walk(self, tag: Tag, doc: DoclingDocument) -> None:
         # Iterate over elements in the body of the document
+        text: str = ""
         for element in tag.children:
             if isinstance(element, Tag):
                 try:
@@ -108,6 +128,25 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                         f"Error processing child from tag{tag.name}: {exc_child}"
                     )
                     raise exc_child
+            elif isinstance(element, NavigableString) and not isinstance(
+                element, PreformattedString
+            ):
+                # Floating text outside paragraphs or analyzed tags
+                text += element
+                siblings: list[Tag] = [
+                    item for item in element.next_siblings if isinstance(item, Tag)
+                ]
+                if element.next_sibling is None or any(
+                    [item.name in TAGS_FOR_NODE_ITEMS for item in siblings]
+                ):
+                    text = text.strip()
+                    if text and tag.name in ["div"]:
+                        doc.add_text(
+                            parent=self.parents[self.level],
+                            label=DocItemLabel.PARAGRAPH,
+                            text=text,
+                        )
+                    text = ""
 
         return
 
@@ -158,7 +197,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         text = element.text.strip()
 
         if hlevel == 1:
-            for key, val in self.parents.items():
+            for key in self.parents.keys():
                 self.parents[key] = None
 
             self.level = 1
