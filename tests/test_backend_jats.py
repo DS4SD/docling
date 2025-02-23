@@ -8,7 +8,7 @@ from docling.datamodel.base_models import DocumentStream, InputFormat
 from docling.datamodel.document import ConversionResult
 from docling.document_converter import DocumentConverter
 
-from .verify_utils import verify_document
+from .verify_utils import verify_document, verify_export
 
 GENERATE = False
 
@@ -22,18 +22,6 @@ def get_pubmed_paths():
 def get_converter():
     converter = DocumentConverter(allowed_formats=[InputFormat.XML_JATS])
     return converter
-
-
-def verify_export(pred_text: str, gtfile: str):
-    if not os.path.exists(gtfile) or GENERATE:
-        with open(gtfile, "w") as fw:
-            fw.write(pred_text)
-        return True
-    else:
-        with open(gtfile, "r") as fr:
-            true_text = fr.read()
-        assert pred_text == true_text, f"pred_text!=true_text for {gtfile}"
-        return pred_text == true_text
 
 
 def test_e2e_pubmed_conversions(use_stream=False):
