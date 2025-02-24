@@ -1,6 +1,6 @@
 {
   "schema_name": "DoclingDocument",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "example_04",
   "origin": {
     "mimetype": "text/html",
@@ -10,6 +10,7 @@
   "furniture": {
     "self_ref": "#/furniture",
     "children": [],
+    "content_layer": "furniture",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -20,6 +21,7 @@
         "$ref": "#/texts/0"
       }
     ],
+    "content_layer": "body",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -35,6 +37,7 @@
           "$ref": "#/tables/0"
         }
       ],
+      "content_layer": "body",
       "label": "title",
       "prov": [],
       "orig": "Data Table with Rowspan and Colspan",
@@ -49,6 +52,7 @@
         "$ref": "#/texts/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
@@ -325,5 +329,6 @@
     }
   ],
   "key_value_items": [],
+  "form_items": [],
   "pages": {}
 }

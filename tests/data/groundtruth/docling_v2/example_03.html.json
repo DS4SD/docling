@@ -1,6 +1,6 @@
 {
   "schema_name": "DoclingDocument",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "example_03",
   "origin": {
     "mimetype": "text/html",
@@ -10,6 +10,7 @@
   "furniture": {
     "self_ref": "#/furniture",
     "children": [],
+    "content_layer": "furniture",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -20,6 +21,7 @@
         "$ref": "#/texts/0"
       }
     ],
+    "content_layer": "body",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -37,6 +39,7 @@
           "$ref": "#/texts/8"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -53,6 +56,7 @@
           "$ref": "#/texts/7"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -69,6 +73,7 @@
           "$ref": "#/texts/12"
         }
       ],
+      "content_layer": "body",
       "name": "ordered list",
       "label": "ordered_list"
     },
@@ -85,6 +90,7 @@
           "$ref": "#/texts/11"
         }
       ],
+      "content_layer": "body",
       "name": "ordered list",
       "label": "ordered_list"
     }
@@ -106,6 +112,7 @@
           "$ref": "#/texts/13"
         }
       ],
+      "content_layer": "body",
       "label": "title",
       "prov": [],
       "orig": "Example Document",
@@ -121,6 +128,7 @@
           "$ref": "#/texts/2"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Introduction",
@@ -133,6 +141,7 @@
         "$ref": "#/texts/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "This is the first paragraph of the introduction.",
@@ -154,6 +163,7 @@
           "$ref": "#/groups/2"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Background",
@@ -166,6 +176,7 @@
         "$ref": "#/texts/3"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Some background information here.",
@@ -181,6 +192,7 @@
           "$ref": "#/groups/1"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "First item in unordered list",
@@ -194,6 +206,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Nested item 1",
@@ -207,6 +220,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Nested item 2",
@@ -220,6 +234,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Second item in unordered list",
@@ -237,6 +252,7 @@
           "$ref": "#/groups/3"
         }
       ],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "First item in ordered list",
@@ -250,6 +266,7 @@
         "$ref": "#/groups/3"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Nested ordered item 1",
@@ -263,6 +280,7 @@
         "$ref": "#/groups/3"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Nested ordered item 2",
@@ -276,6 +294,7 @@
         "$ref": "#/groups/2"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Second item in ordered list",
@@ -293,6 +312,7 @@
           "$ref": "#/tables/0"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Data Table",
@@ -308,6 +328,7 @@
         "$ref": "#/texts/13"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],
@@ -620,5 +641,6 @@
     }
   ],
   "key_value_items": [],
+  "form_items": [],
   "pages": {}
 }
