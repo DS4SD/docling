@@ -313,16 +313,28 @@ class VlmPipeline(PaginatedPipeline):
             tokens = [
                 token
                 for token in tokens
-                if not (token.startswith("<loc_") or token in ["<otsl>", "</otsl>"])
-                # if not (token.startswith(DocumentToken.BEG_LOC) or token in [DocumentToken.BEG_OTSL, DocumentToken.END_OTSL])
+                if not (
+                    token.startswith(rf"<{DocumentToken.LOC.value}")
+                    or token
+                    in [
+                        rf"<{DocumentToken.OTSL.value}>",
+                        rf"</{DocumentToken.OTSL.value}>",
+                    ]
+                )
             ]
             # Split the string by those tokens to get the in-between text
             text_parts = re.split(pattern, s)
             text_parts = [
                 token
                 for token in text_parts
-                if not (token.startswith("<loc_") or token in ["<otsl>", "</otsl>"])
-                # if not (token.startswith(DocumentToken.BEG_LOC) or token in [DocumentToken.BEG_OTSL, DocumentToken.END_OTSL])
+                if not (
+                    token.startswith(rf"<{DocumentToken.LOC.value}")
+                    or token
+                    in [
+                        rf"<{DocumentToken.OTSL.value}>",
+                        rf"</{DocumentToken.OTSL.value}>",
+                    ]
+                )
             ]
             # Remove any empty or purely whitespace strings from text_parts
             text_parts = [part for part in text_parts if part.strip()]
@@ -372,8 +384,9 @@ class VlmPipeline(PaginatedPipeline):
                 rf"{DocItemLabel.PAGE_FOOTER}|{DocItemLabel.FORMULA}|"
                 rf"{DocItemLabel.CAPTION}|{DocItemLabel.PICTURE}|"
                 rf"{DocItemLabel.LIST_ITEM}|{DocItemLabel.FOOTNOTE}|{DocItemLabel.CODE}|"
-                rf"{DocItemLabel.SECTION_HEADER}_level_1|otsl)>.*?</(?P=tag)>"
+                rf"{DocItemLabel.SECTION_HEADER}_level_1|{DocumentToken.OTSL.value})>.*?</(?P=tag)>"
             )
+
             # DocumentToken.OTSL
             pattern = re.compile(tag_pattern, re.DOTALL)
 
@@ -390,11 +403,11 @@ class VlmPipeline(PaginatedPipeline):
                 if bbox:
                     bounding_boxes.append((bbox, color))
 
-                if tag_name == "otsl":
+                if tag_name == DocumentToken.OTSL.value:
                     table_data = parse_table_content(full_chunk)
                     doc.add_table(data=table_data)
 
-                elif tag_name == "picture":
+                elif tag_name == DocItemLabel.PICTURE:
                     text_caption_content = extract_inner_text(full_chunk)
                     if image:
                         if bbox:
