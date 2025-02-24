@@ -133,7 +133,7 @@ docling = "docling.cli.main:app"
 docling-tools = "docling.cli.tools:app"
 
 [tool.poetry.plugins."docling"]
-"docling_ocr_engines" = "docling.models.plugins.ocr_engines"
+"docling_defaults" = "docling.models.plugins.defaults"
 
 [build-system]
 requires = ["poetry-core"]

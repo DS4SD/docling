@@ -10,16 +10,7 @@ from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
 from docling.datamodel.base_models import AssembledUnit, Page
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import (
-    EasyOcrOptions,
-    OcrMacOptions,
-    PdfPipelineOptions,
-    PictureDescriptionApiOptions,
-    PictureDescriptionVlmOptions,
-    RapidOcrOptions,
-    TesseractCliOcrOptions,
-    TesseractOcrOptions,
-)
+from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.code_formula_model import CodeFormulaModel, CodeFormulaModelOptions
@@ -27,23 +18,16 @@ from docling.models.document_picture_classifier import (
     DocumentPictureClassifier,
     DocumentPictureClassifierOptions,
 )
-from docling.models.easyocr_model import EasyOcrModel
-from docling.models.factories import get_ocr_factory
+from docling.models.factories import get_ocr_factory, get_picture_description_factory
 from docling.models.layout_model import LayoutModel
-from docling.models.ocr_mac_model import OcrMacModel
 from docling.models.page_assemble_model import PageAssembleModel, PageAssembleOptions
 from docling.models.page_preprocessing_model import (
     PagePreprocessingModel,
     PagePreprocessingOptions,
 )
-from docling.models.picture_description_api_model import PictureDescriptionApiModel
 from docling.models.picture_description_base_model import PictureDescriptionBaseModel
-from docling.models.picture_description_vlm_model import PictureDescriptionVlmModel
-from docling.models.rapid_ocr_model import RapidOcrModel
 from docling.models.readingorder_model import ReadingOrderModel, ReadingOrderOptions
 from docling.models.table_structure_model import TableStructureModel
-from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
-from docling.models.tesseract_ocr_model import TesseractOcrModel
 from docling.pipeline.base_pipeline import PaginatedPipeline
 from docling.utils.model_downloader import download_models
 from docling.utils.profiling import ProfilingScope, TimeRecorder
@@ -162,10 +146,8 @@ class StandardPdfPipeline(PaginatedPipeline):
         return output_dir
 
     def get_ocr_model(self, artifacts_path: Optional[Path] = None) -> BaseOcrModel:
-        ocr_factory = get_ocr_factory()
-        ocr_engine_cls = ocr_factory.get_class(
-            options=self.pipeline_options.ocr_options
-        )
+        factory = get_ocr_factory()
+        ocr_engine_cls = factory.get_class(options=self.pipeline_options.ocr_options)
 
         return ocr_engine_cls(
             enabled=self.pipeline_options.do_ocr,
@@ -177,26 +159,19 @@ class StandardPdfPipeline(PaginatedPipeline):
     def get_picture_description_model(
         self, artifacts_path: Optional[Path] = None
     ) -> Optional[PictureDescriptionBaseModel]:
-        if isinstance(
-            self.pipeline_options.picture_description_options,
-            PictureDescriptionApiOptions,
-        ):
-            return PictureDescriptionApiModel(
-                enabled=self.pipeline_options.do_picture_description,
-                enable_remote_services=self.pipeline_options.enable_remote_services,
-                options=self.pipeline_options.picture_description_options,
-            )
-        elif isinstance(
-            self.pipeline_options.picture_description_options,
-            PictureDescriptionVlmOptions,
-        ):
-            return PictureDescriptionVlmModel(
-                enabled=self.pipeline_options.do_picture_description,
-                artifacts_path=artifacts_path,
-                options=self.pipeline_options.picture_description_options,
-                accelerator_options=self.pipeline_options.accelerator_options,
-            )
-        return None
+        factory = get_picture_description_factory()
+
+        options_cls = factory.get_class(
+            options=self.pipeline_options.picture_description_options
+        )
+
+        return options_cls(
+            enabled=self.pipeline_options.do_ocr,
+            enable_remote_services=self.pipeline_options.enable_remote_services,
+            artifacts_path=artifacts_path,
+            options=self.pipeline_options.picture_description_options,
+            accelerator_options=self.pipeline_options.accelerator_options,
+        )
 
     def initialize_page(self, conv_res: ConversionResult, page: Page) -> Page:
         with TimeRecorder(conv_res, "page_init"):

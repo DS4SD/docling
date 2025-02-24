@@ -1,6 +1,5 @@
 import logging
 
-from docling.datamodel.pipeline_options import OcrOptions
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.factories.base_factory import BaseFactory
 
