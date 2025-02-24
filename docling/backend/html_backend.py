@@ -172,7 +172,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         elif tag.name == "figure":
             self.handle_figure(tag, doc)
         elif tag.name == "img":
-            self.handle_image(doc)
+            self.handle_image(tag, doc)
         else:
             self.walk(tag, doc)
 
@@ -507,6 +507,8 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 content_layer=self.content_layer
             )
 
-    def handle_image(self, doc: DoclingDocument) -> None:
+    def handle_image(self, element: Tag, doc: DoclingDocument) -> None:
         """Handles image tags (img)."""
+        _log.warning(f"ignoring <img> tags at the moment: {element}")
+        
         doc.add_picture(parent=self.parents[self.level], caption=None, content_layer=self.content_layer)
