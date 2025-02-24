@@ -1,6 +1,6 @@
 {
   "schema_name": "DoclingDocument",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "unit_test_01",
   "origin": {
     "mimetype": "text/html",
@@ -10,6 +10,7 @@
   "furniture": {
     "self_ref": "#/furniture",
     "children": [],
+    "content_layer": "furniture",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -20,6 +21,7 @@
         "$ref": "#/texts/0"
       }
     ],
+    "content_layer": "body",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -34,6 +36,7 @@
           "$ref": "#/texts/4"
         }
       ],
+      "content_layer": "body",
       "name": "header-3",
       "label": "section"
     }
@@ -52,6 +55,7 @@
           "$ref": "#/texts/3"
         }
       ],
+      "content_layer": "body",
       "label": "title",
       "prov": [],
       "orig": "Title",
@@ -67,6 +71,7 @@
           "$ref": "#/texts/2"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "section-1",
@@ -79,6 +84,7 @@
         "$ref": "#/texts/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "section-1.1",
@@ -101,6 +107,7 @@
           "$ref": "#/texts/6"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "section-2",
@@ -113,6 +120,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "section-2.0.1",
@@ -125,6 +133,7 @@
         "$ref": "#/texts/3"
       },
       "children": [],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "section-2.2",
@@ -137,6 +146,7 @@
         "$ref": "#/texts/3"
       },
       "children": [],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "section-2.3",
@@ -147,5 +157,6 @@
   "pictures": [],
   "tables": [],
   "key_value_items": [],
+  "form_items": [],
   "pages": {}
 }

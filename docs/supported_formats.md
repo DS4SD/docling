@@ -13,6 +13,7 @@ Below you can find a listing of all supported input and output formats.
 | Markdown | |
 | AsciiDoc | |
 | HTML, XHTML | |
+| CSV | |
 | PNG, JPEG, TIFF, BMP | Image formats |
 
 Schema-specific support:
@@ -20,7 +21,7 @@ Schema-specific support:
 | Format | Description |
 |--------|-------------|
 | USPTO XML | XML format followed by [USPTO](https://www.uspto.gov/patents) patents |
-| PMC XML | XML format followed by [PubMed Central®](https://pmc.ncbi.nlm.nih.gov/) articles |
+| JATS XML | XML format followed by [JATS](https://jats.nlm.nih.gov/) articles |
 | Docling JSON | JSON-serialized [Docling Document](./concepts/docling_document.md) |
 
 ## Supported output formats

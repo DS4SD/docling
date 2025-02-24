@@ -4,7 +4,7 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
-source = "tests/data/amt_handbook_sample.pdf"
+source = "tests/data/pdf/amt_handbook_sample.pdf"
 
 pipeline_options = PdfPipelineOptions()
 pipeline_options.images_scale = 2

@@ -9,7 +9,7 @@ from docling.datamodel.settings import DocumentLimits
 
 def test_in_doc_from_valid_path():
 
-    test_doc_path = Path("./tests/data/2206.01062.pdf")
+    test_doc_path = Path("./tests/data/pdf/2206.01062.pdf")
     doc = _make_input_doc(test_doc_path)
     assert doc.valid == True
 
@@ -24,7 +24,7 @@ def test_in_doc_from_invalid_path():
 
 def test_in_doc_from_valid_buf():
 
-    buf = BytesIO(Path("./tests/data/2206.01062.pdf").open("rb").read())
+    buf = BytesIO(Path("./tests/data/pdf/2206.01062.pdf").open("rb").read())
     stream = DocumentStream(name="my_doc.pdf", stream=buf)
 
     doc = _make_input_doc_from_stream(stream)
@@ -41,7 +41,7 @@ def test_in_doc_from_invalid_buf():
 
 
 def test_in_doc_with_page_range():
-    test_doc_path = Path("./tests/data/2206.01062.pdf")
+    test_doc_path = Path("./tests/data/pdf/2206.01062.pdf")
     limits = DocumentLimits()
     limits.page_range = (1, 10)
 
@@ -81,10 +81,10 @@ def test_guess_format(tmp_path):
     temp_dir.mkdir()
 
     # Valid PDF
-    buf = BytesIO(Path("./tests/data/2206.01062.pdf").open("rb").read())
+    buf = BytesIO(Path("./tests/data/pdf/2206.01062.pdf").open("rb").read())
     stream = DocumentStream(name="my_doc.pdf", stream=buf)
     assert dci._guess_format(stream) == InputFormat.PDF
-    doc_path = Path("./tests/data/2206.01062.pdf")
+    doc_path = Path("./tests/data/pdf/2206.01062.pdf")
     assert dci._guess_format(doc_path) == InputFormat.PDF
 
     # Valid MS Office
@@ -108,6 +108,15 @@ def test_guess_format(tmp_path):
     doc_path = Path("./tests/data/md/wiki.md")
     assert dci._guess_format(doc_path) == InputFormat.MD
 
+    # Valid CSV
+    buf = BytesIO(Path("./tests/data/csv/csv-comma.csv").open("rb").read())
+    stream = DocumentStream(name="csv-comma.csv", stream=buf)
+    assert dci._guess_format(stream) == InputFormat.CSV
+    stream = DocumentStream(name="test-comma", stream=buf)
+    assert dci._guess_format(stream) == InputFormat.CSV
+    doc_path = Path("./tests/data/csv/csv-comma.csv")
+    assert dci._guess_format(doc_path) == InputFormat.CSV
+
     # Valid XML USPTO patent
     buf = BytesIO(Path("./tests/data/uspto/ipa20110039701.xml").open("rb").read())
     stream = DocumentStream(name="ipa20110039701.xml", stream=buf)
@@ -121,24 +130,24 @@ def test_guess_format(tmp_path):
     doc_path = Path("./tests/data/uspto/pftaps057006474.txt")
     assert dci._guess_format(doc_path) == InputFormat.XML_USPTO
 
-    # Valid XML PubMed
-    buf = BytesIO(Path("./tests/data/pubmed/elife-56337.xml").open("rb").read())
+    # Valid XML JATS
+    buf = BytesIO(Path("./tests/data/jats/elife-56337.xml").open("rb").read())
     stream = DocumentStream(name="elife-56337.xml", stream=buf)
-    assert dci._guess_format(stream) == InputFormat.XML_PUBMED
-    doc_path = Path("./tests/data/pubmed/elife-56337.xml")
-    assert dci._guess_format(doc_path) == InputFormat.XML_PUBMED
+    assert dci._guess_format(stream) == InputFormat.XML_JATS
+    doc_path = Path("./tests/data/jats/elife-56337.xml")
+    assert dci._guess_format(doc_path) == InputFormat.XML_JATS
 
-    buf = BytesIO(Path("./tests/data/pubmed/elife-56337.nxml").open("rb").read())
+    buf = BytesIO(Path("./tests/data/jats/elife-56337.nxml").open("rb").read())
     stream = DocumentStream(name="elife-56337.nxml", stream=buf)
-    assert dci._guess_format(stream) == InputFormat.XML_PUBMED
-    doc_path = Path("./tests/data/pubmed/elife-56337.nxml")
-    assert dci._guess_format(doc_path) == InputFormat.XML_PUBMED
+    assert dci._guess_format(stream) == InputFormat.XML_JATS
+    doc_path = Path("./tests/data/jats/elife-56337.nxml")
+    assert dci._guess_format(doc_path) == InputFormat.XML_JATS
 
-    buf = BytesIO(Path("./tests/data/pubmed/elife-56337.txt").open("rb").read())
+    buf = BytesIO(Path("./tests/data/jats/elife-56337.txt").open("rb").read())
     stream = DocumentStream(name="elife-56337.txt", stream=buf)
-    assert dci._guess_format(stream) == InputFormat.XML_PUBMED
-    doc_path = Path("./tests/data/pubmed/elife-56337.txt")
-    assert dci._guess_format(doc_path) == InputFormat.XML_PUBMED
+    assert dci._guess_format(stream) == InputFormat.XML_JATS
+    doc_path = Path("./tests/data/jats/elife-56337.txt")
+    assert dci._guess_format(doc_path) == InputFormat.XML_JATS
 
     # Valid XML, non-supported flavor
     xml_content = (

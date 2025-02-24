@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import Any, Generic, Iterable, Optional
 
-from docling_core.types.doc import BoundingBox, DoclingDocument, NodeItem, TextItem
+from docling_core.types.doc import BoundingBox, DocItem, DoclingDocument, NodeItem
 from typing_extensions import TypeVar
 
 from docling.datamodel.base_models import ItemAndImageEnrichmentElement, Page
 from docling.datamodel.document import ConversionResult
+from docling.datamodel.settings import settings
 
 
 class BasePageModel(ABC):
@@ -20,6 +21,8 @@ EnrichElementT = TypeVar("EnrichElementT", default=NodeItem)
 
 
 class GenericEnrichmentModel(ABC, Generic[EnrichElementT]):
+
+    elements_batch_size: int = settings.perf.elements_batch_size
 
     @abstractmethod
     def is_processable(self, doc: DoclingDocument, element: NodeItem) -> bool:
@@ -61,7 +64,7 @@ class BaseItemAndImageEnrichmentModel(
         if not self.is_processable(doc=conv_res.document, element=element):
             return None
 
-        assert isinstance(element, TextItem)
+        assert isinstance(element, DocItem)
         element_prov = element.prov[0]
 
         bbox = element_prov.bbox

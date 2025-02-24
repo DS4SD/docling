@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-from typing import Annotated, Tuple
+from typing import Annotated, Optional, Tuple
 
 from pydantic import BaseModel, PlainValidator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -60,6 +60,9 @@ class AppSettings(BaseSettings):
 
     perf: BatchConcurrencySettings
     debug: DebugSettings
+
+    cache_dir: Path = Path.home() / ".cache" / "docling"
+    artifacts_path: Optional[Path] = None
 
 
 settings = AppSettings(perf=BatchConcurrencySettings(), debug=DebugSettings())
