@@ -114,7 +114,6 @@ class VlmPipeline(PaginatedPipeline):
         self.keep_images = (
             self.pipeline_options.generate_page_images
             or self.pipeline_options.generate_picture_images
-            or self.pipeline_options.generate_table_images
         )
 
         self.build_pipe = [
@@ -144,10 +143,7 @@ class VlmPipeline(PaginatedPipeline):
             conv_res.document = self._turn_tags_into_doc(conv_res.pages)
 
             # Generate images of the requested element types
-            if (
-                self.pipeline_options.generate_picture_images
-                or self.pipeline_options.generate_table_images
-            ):
+            if self.pipeline_options.generate_picture_images:
                 scale = self.pipeline_options.images_scale
                 for element, _level in conv_res.document.iterate_items():
                     if not isinstance(element, DocItem) or len(element.prov) == 0:
@@ -155,9 +151,6 @@ class VlmPipeline(PaginatedPipeline):
                     if (
                         isinstance(element, PictureItem)
                         and self.pipeline_options.generate_picture_images
-                    ) or (
-                        isinstance(element, TableItem)
-                        and self.pipeline_options.generate_table_images
                     ):
                         page_ix = element.prov[0].page_no - 1
                         page = conv_res.pages[page_ix]
