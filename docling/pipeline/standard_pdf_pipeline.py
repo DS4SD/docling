@@ -166,7 +166,7 @@ class StandardPdfPipeline(PaginatedPipeline):
         )
 
         return options_cls(
-            enabled=self.pipeline_options.do_ocr,
+            enabled=self.pipeline_options.do_picture_description,
             enable_remote_services=self.pipeline_options.enable_remote_services,
             artifacts_path=artifacts_path,
             options=self.pipeline_options.picture_description_options,
