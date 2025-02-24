@@ -374,7 +374,7 @@ class VlmPipeline(PaginatedPipeline):
                 rf"{DocItemLabel.LIST_ITEM}|{DocItemLabel.FOOTNOTE}|{DocItemLabel.CODE}|"
                 rf"{DocItemLabel.SECTION_HEADER}_level_1|otsl)>.*?</(?P=tag)>"
             )
-
+            # DocumentToken.OTSL
             pattern = re.compile(tag_pattern, re.DOTALL)
 
             # Go through each match in order

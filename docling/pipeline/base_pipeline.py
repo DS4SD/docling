@@ -206,6 +206,7 @@ class PaginatedPipeline(BasePipeline):  # TODO this is a bad name.
 
         if conv_res.input._backend:
             conv_res.input._backend.unload()
+
         return conv_res
 
     def _determine_status(self, conv_res: ConversionResult) -> ConversionStatus:
