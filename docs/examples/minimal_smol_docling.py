@@ -64,8 +64,10 @@ for source in sources:
     print("")
     print(res.document.export_to_markdown())
 
-    # with (out_path / f"{res.input.file.stem}.html").open("w") as fp:
-    #     fp.write(res.document.export_to_html())
+    for page in res.pages:
+        print("")
+        print("Predicted page in DOCTAGS:")
+        print(page.predictions.doctags.tag_string)
 
     res.document.save_as_html(
         filename=Path("{}/{}.html".format(out_path, res.input.file.stem)),
