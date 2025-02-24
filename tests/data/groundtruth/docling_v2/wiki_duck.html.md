@@ -1,9 +1,15 @@
+Main menu
+
+Navigation
+
 - Main page
 - Contents
 - Current events
 - Random article
 - About Wikipedia
 - Contact us
+
+Contribute
 
 - Help
 - Learn to edit
@@ -22,6 +28,9 @@
         - Log in
         - Create account
         - Log in
+
+Pages for logged out editors
+
         - Contributions
         - Talk
 
@@ -193,9 +202,17 @@
     - Read
     - View source
     - View history
+
+Tools
+
+Actions
+
     - Read
     - View source
     - View history
+
+General
+
     - What links here
     - Related changes
     - Upload file
@@ -206,12 +223,28 @@
     - Get shortened URL
     - Download QR code
     - Wikidata item
+
+Print/export
+
     - Download as PDF
     - Printable version
+
+In other projects
+
     - Wikimedia Commons
     - Wikiquote
 
+Appearance
+
 <!-- image -->
+
+From Wikipedia, the free encyclopedia
+
+Common name for many species of bird
+
+This article is about the bird. For duck as a food, see . For other uses, see .
+
+"Duckling" redirects here. For other uses, see .
 
 | Duck                           | Duck                           |
 |--------------------------------|--------------------------------|
@@ -482,9 +515,15 @@ The 1992 Disney film The Mighty Ducks, starring Emilio Estevez, chose the duck a
 
 <!-- image -->
 
+Retrieved from ""
+
+:
+
 - Ducks
 - Game birds
 - Bird common names
+
+Hidden categories:
 
 - All accuracy disputes
 - Accuracy disputes from February 2020
