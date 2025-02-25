@@ -3,8 +3,6 @@ import time
 from pathlib import Path
 from typing import Iterable, List, Optional
 
-from transformers import AutoModelForVision2Seq
-
 from docling.datamodel.base_models import Page, VlmPrediction
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
@@ -36,9 +34,9 @@ class HuggingFaceVlmModel(BasePageModel):
         if self.enabled:
             import torch
             from transformers import (  # type: ignore
+                AutoModelForVision2Seq,
                 AutoProcessor,
                 BitsAndBytesConfig,
-                Idefics3ForConditionalGeneration,
             )
 
             device = decide_device(accelerator_options.device)
