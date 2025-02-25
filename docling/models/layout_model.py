@@ -73,8 +73,6 @@ class LayoutModel(BasePageModel):
             artifact_path=str(artifacts_path),
             device=device,
             num_threads=accelerator_options.num_threads,
-            base_threshold=0.6,
-            blacklist_classes={"Form", "Key-Value Region", "Picture"}, # Use this to disable picture recognition (trying to force to identify only text)
         )
 
     @staticmethod
