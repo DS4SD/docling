@@ -41,6 +41,7 @@ class AcceleratorOptions(BaseSettings):
 
     num_threads: int = 4
     device: Union[str, AcceleratorDevice] = "auto"
+    cuda_use_flash_attention2: bool = False
 
     @field_validator("device")
     def validate_device(cls, value):

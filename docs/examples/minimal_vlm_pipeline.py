@@ -6,6 +6,7 @@ import yaml
 
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import (
+    AcceleratorDevice,
     VlmPipelineOptions,
     granite_vision_vlm_conversion_options,
     smoldocling_vlm_conversion_options,
@@ -24,9 +25,13 @@ pipeline_options.generate_page_images = True
 # If force_backend_text = True, text from backend will be used instead of generated text
 pipeline_options.force_backend_text = False
 
+## Enable flash_attention_2 with CUDA:
+# pipeline_options.accelerator_options.device = AcceleratorDevice.CUDA
+# pipeline_options.accelerator_options.cuda_use_flash_attention2 = True
+
 pipeline_options.vlm_options = smoldocling_vlm_conversion_options
 
-# Choose alternative VLM models:
+## Choose alternative VLM models:
 # pipeline_options.vlm_options = granite_vision_vlm_conversion_options
 
 from docling_core.types.doc import DocItemLabel, ImageRefMode
