@@ -3,12 +3,14 @@ import time
 from pathlib import Path
 from typing import Iterable, List, Optional
 
-from docling.datamodel.base_models import DocTagsPrediction, Page
+from transformers import AutoModelForVision2Seq
+
+from docling.datamodel.base_models import Page, VlmPrediction
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     AcceleratorDevice,
     AcceleratorOptions,
-    SmolDoclingOptions,
+    HuggingFaceVlmOptions,
 )
 from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
@@ -18,18 +20,18 @@ from docling.utils.profiling import TimeRecorder
 _log = logging.getLogger(__name__)
 
 
-class SmolDoclingModel(BasePageModel):
-
-    _repo_id: str = "ds4sd/SmolDocling-256M-preview"
+class HuggingFaceVlmModel(BasePageModel):
 
     def __init__(
         self,
         enabled: bool,
         artifacts_path: Optional[Path],
         accelerator_options: AcceleratorOptions,
-        vlm_options: SmolDoclingOptions,
+        vlm_options: HuggingFaceVlmOptions,
     ):
         self.enabled = enabled
+
+        self.vlm_options = vlm_options
 
         if self.enabled:
             import torch
@@ -42,17 +44,17 @@ class SmolDoclingModel(BasePageModel):
             device = decide_device(accelerator_options.device)
             self.device = device
 
-            _log.debug("Available device for SmolDocling: {}".format(device))
+            _log.debug("Available device for HuggingFace VLM: {}".format(device))
 
-            repo_cache_folder = self._repo_id.replace("/", "--")
+            repo_cache_folder = vlm_options.repo_id.replace("/", "--")
 
             # PARAMETERS:
             if artifacts_path is None:
-                artifacts_path = self.download_models()
+                artifacts_path = self.download_models(self.vlm_options.repo_id)
             elif (artifacts_path / repo_cache_folder).exists():
                 artifacts_path = artifacts_path / repo_cache_folder
 
-            self.param_question = vlm_options.question  # "Perform Layout Analysis."
+            self.param_question = vlm_options.prompt  # "Perform Layout Analysis."
             self.param_quantization_config = BitsAndBytesConfig(
                 load_in_8bit=vlm_options.load_in_8bit,  # True,
                 llm_int8_threshold=vlm_options.llm_int8_threshold,  # 6.0
@@ -61,22 +63,27 @@ class SmolDoclingModel(BasePageModel):
 
             self.processor = AutoProcessor.from_pretrained(artifacts_path)
             if not self.param_quantized:
-                self.vlm_model = Idefics3ForConditionalGeneration.from_pretrained(
+                self.vlm_model = AutoModelForVision2Seq.from_pretrained(
                     artifacts_path,
-                    # device_map=device,
                     torch_dtype=torch.bfloat16,
-                )
-                self.vlm_model = self.vlm_model.to(device)
+                    # _attn_implementation=(
+                    #    "flash_attention_2" if self.device.startswith("cuda") else "eager"
+                    # ),
+                ).to(self.device)
+
             else:
-                self.vlm_model = Idefics3ForConditionalGeneration.from_pretrained(
+                self.vlm_model = AutoModelForVision2Seq.from_pretrained(
                     artifacts_path,
-                    # device_map=device,
                     torch_dtype="auto",
                     quantization_config=self.param_quantization_config,
-                ).to(device)
+                    # _attn_implementation=(
+                    #    "flash_attention_2" if self.device.startswith("cuda") else "eager"
+                    # ),
+                ).to(self.device)
 
     @staticmethod
     def download_models(
+        repo_id: str,
         local_dir: Optional[Path] = None,
         force: bool = False,
         progress: bool = False,
@@ -87,7 +94,7 @@ class SmolDoclingModel(BasePageModel):
         if not progress:
             disable_progress_bars()
         download_path = snapshot_download(
-            repo_id=SmolDoclingModel._repo_id,
+            repo_id=repo_id,
             force_download=force,
             local_dir=local_dir,
             # revision="v0.0.1",
@@ -155,13 +162,13 @@ class SmolDoclingModel(BasePageModel):
                     num_tokens = len(generated_ids[0])
                     page_tags = generated_texts
 
-                    inference_time = time.time() - start_time
-                    tokens_per_second = num_tokens / generation_time
+                    # inference_time = time.time() - start_time
+                    # tokens_per_second = num_tokens / generation_time
                     # print("")
                     # print(f"Page Inference Time: {inference_time:.2f} seconds")
                     # print(f"Total tokens on page: {num_tokens:.2f}")
                     # print(f"Tokens/sec: {tokens_per_second:.2f}")
                     # print("")
-                    page.predictions.doctags = DocTagsPrediction(tag_string=page_tags)
+                    page.predictions.vlm_response = VlmPrediction(text=page_tags)
 
                 yield page

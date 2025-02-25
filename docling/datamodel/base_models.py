@@ -154,8 +154,8 @@ class LayoutPrediction(BaseModel):
     clusters: List[Cluster] = []
 
 
-class DocTagsPrediction(BaseModel):
-    tag_string: str = ""
+class VlmPrediction(BaseModel):
+    text: str = ""
 
 
 class ContainerElement(
@@ -201,7 +201,7 @@ class PagePredictions(BaseModel):
     tablestructure: Optional[TableStructurePrediction] = None
     figures_classification: Optional[FigureClassificationPrediction] = None
     equations_prediction: Optional[EquationPrediction] = None
-    doctags: Optional[DocTagsPrediction] = None
+    vlm_response: Optional[VlmPrediction] = None
 
 
 PageElement = Union[TextElement, Table, FigureElement, ContainerElement]

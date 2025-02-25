@@ -5,7 +5,11 @@ from pathlib import Path
 import yaml
 
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import SmolDoclingOptions, VlmPipelineOptions
+from docling.datamodel.pipeline_options import (
+    VlmPipelineOptions,
+    granite_vision_vlm_conversion_options,
+    smoldocling_vlm_conversion_options,
+)
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.pipeline.vlm_pipeline import VlmPipeline
 
@@ -19,16 +23,9 @@ pipeline_options = VlmPipelineOptions()  # artifacts_path="~/local_model_artifac
 pipeline_options.generate_page_images = True
 # If force_backend_text = True, text from backend will be used instead of generated text
 pipeline_options.force_backend_text = False
-# pipeline_options.do_vlm = True - use False to disable VLM model (i.e. SmallDocling), extra python imports will not be performed
 
-vlm_options = SmolDoclingOptions(
-    # question="Convert this page to docling.",
-    # load_in_8bit=True,
-    # llm_int8_threshold=6.0,
-    # quantized=False,
-)
-
-pipeline_options.vlm_options = vlm_options
+# pipeline_options.vlm_options = smoldocling_vlm_conversion_options
+pipeline_options.vlm_options = granite_vision_vlm_conversion_options
 
 from docling_core.types.doc import DocItemLabel, ImageRefMode
 from docling_core.types.doc.document import DEFAULT_EXPORT_LABELS
@@ -67,7 +64,7 @@ for source in sources:
     for page in res.pages:
         print("")
         print("Predicted page in DOCTAGS:")
-        print(page.predictions.doctags.tag_string)
+        print(page.predictions.vlm_response.text)
 
     res.document.save_as_html(
         filename=Path("{}/{}.html".format(out_path, res.input.file.stem)),

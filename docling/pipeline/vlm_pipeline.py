@@ -2,6 +2,7 @@ import itertools
 import logging
 import re
 import warnings
+from io import BytesIO
 
 # from io import BytesIO
 from pathlib import Path
@@ -26,12 +27,17 @@ from docling_core.types.doc import (
 from docling_core.types.doc.tokens import DocumentToken, TableToken
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
+from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
-from docling.datamodel.base_models import Page
-from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import PdfPipelineOptions, VlmPipelineOptions
+from docling.datamodel.base_models import InputFormat, Page
+from docling.datamodel.document import ConversionResult, InputDocument
+from docling.datamodel.pipeline_options import (
+    PdfPipelineOptions,
+    ResponseFormat,
+    VlmPipelineOptions,
+)
 from docling.datamodel.settings import settings
-from docling.models.smol_docling_model import SmolDoclingModel
+from docling.models.hf_vlm_model import HuggingFaceVlmModel
 from docling.pipeline.base_pipeline import PaginatedPipeline
 from docling.utils.profiling import ProfilingScope, TimeRecorder
 
@@ -68,57 +74,14 @@ class VlmPipeline(PaginatedPipeline):
         # force_backend_text = True - get text from backend using bounding boxes predicted by SmolDoclingss
         self.force_backend_text = pipeline_options.force_backend_text
 
-        ###############################################
-        # Tag definitions and color mappings
-        ###############################################
-
-        # Maps the recognized tag to a Docling label.
-        # Code items will be given DocItemLabel.CODE
-        self.tag_to_doclabel = {
-            "title": DocItemLabel.TITLE,
-            "document_index": DocItemLabel.DOCUMENT_INDEX,
-            "otsl": DocItemLabel.TABLE,
-            "section_header_level_1": DocItemLabel.SECTION_HEADER,
-            "checkbox_selected": DocItemLabel.CHECKBOX_SELECTED,
-            "checkbox_unselected": DocItemLabel.CHECKBOX_UNSELECTED,
-            "text": DocItemLabel.TEXT,
-            "page_header": DocItemLabel.PAGE_HEADER,
-            "page_footer": DocItemLabel.PAGE_FOOTER,
-            "formula": DocItemLabel.FORMULA,
-            "caption": DocItemLabel.CAPTION,
-            "picture": DocItemLabel.PICTURE,
-            "list_item": DocItemLabel.LIST_ITEM,
-            "footnote": DocItemLabel.FOOTNOTE,
-            "code": DocItemLabel.CODE,
-        }
-
-        # Maps each tag to an associated bounding box color.
-        self.tag_to_color = {
-            "title": "blue",
-            "document_index": "darkblue",
-            "otsl": "green",
-            "section_header_level_1": "purple",
-            "checkbox_selected": "black",
-            "checkbox_unselected": "gray",
-            "text": "red",
-            "page_header": "orange",
-            "page_footer": "cyan",
-            "formula": "pink",
-            "caption": "magenta",
-            "picture": "yellow",
-            "list_item": "brown",
-            "footnote": "darkred",
-            "code": "lightblue",
-        }
-
         self.keep_images = (
             self.pipeline_options.generate_page_images
             or self.pipeline_options.generate_picture_images
         )
 
         self.build_pipe = [
-            SmolDoclingModel(
-                enabled=pipeline_options.do_vlm,
+            HuggingFaceVlmModel(
+                enabled=True,
                 artifacts_path=artifacts_path,
                 accelerator_options=pipeline_options.accelerator_options,
                 vlm_options=self.pipeline_options.vlm_options,
@@ -140,7 +103,21 @@ class VlmPipeline(PaginatedPipeline):
     def _assemble_document(self, conv_res: ConversionResult) -> ConversionResult:
         with TimeRecorder(conv_res, "doc_assemble", scope=ProfilingScope.DOCUMENT):
 
-            conv_res.document = self._turn_tags_into_doc(conv_res.pages)
+            if (
+                self.pipeline_options.vlm_options.response_format
+                == ResponseFormat.DOCTAGS
+            ):
+                conv_res.document = self._turn_tags_into_doc(conv_res.pages)
+            elif (
+                self.pipeline_options.vlm_options.response_format
+                == ResponseFormat.MARKDOWN
+            ):
+                conv_res.document = self._turn_md_into_doc(conv_res)
+
+            else:
+                raise RuntimeError(
+                    f"Unsupported VLM response format {self.pipeline_options.vlm_options.response_format}"
+                )
 
             # Generate images of the requested element types
             if self.pipeline_options.generate_picture_images:
@@ -170,7 +147,67 @@ class VlmPipeline(PaginatedPipeline):
 
         return conv_res
 
+    def _turn_md_into_doc(self, conv_res):
+        predicted_text = ""
+        for pg_idx, page in enumerate(conv_res.pages):
+            if page.predictions.vlm_response:
+                predicted_text += page.predictions.vlm_response.text + "\n\n"
+        response_bytes = BytesIO(predicted_text.encode("utf8"))
+        out_doc = InputDocument(
+            path_or_stream=response_bytes,
+            filename=conv_res.input.file.name,
+            format=InputFormat.MD,
+            backend=MarkdownDocumentBackend,
+        )
+        backend = MarkdownDocumentBackend(
+            in_doc=out_doc,
+            path_or_stream=response_bytes,
+        )
+        return backend.convert()
+
     def _turn_tags_into_doc(self, pages: list[Page]) -> DoclingDocument:
+        ###############################################
+        # Tag definitions and color mappings
+        ###############################################
+
+        # Maps the recognized tag to a Docling label.
+        # Code items will be given DocItemLabel.CODE
+        tag_to_doclabel = {
+            "title": DocItemLabel.TITLE,
+            "document_index": DocItemLabel.DOCUMENT_INDEX,
+            "otsl": DocItemLabel.TABLE,
+            "section_header_level_1": DocItemLabel.SECTION_HEADER,
+            "checkbox_selected": DocItemLabel.CHECKBOX_SELECTED,
+            "checkbox_unselected": DocItemLabel.CHECKBOX_UNSELECTED,
+            "text": DocItemLabel.TEXT,
+            "page_header": DocItemLabel.PAGE_HEADER,
+            "page_footer": DocItemLabel.PAGE_FOOTER,
+            "formula": DocItemLabel.FORMULA,
+            "caption": DocItemLabel.CAPTION,
+            "picture": DocItemLabel.PICTURE,
+            "list_item": DocItemLabel.LIST_ITEM,
+            "footnote": DocItemLabel.FOOTNOTE,
+            "code": DocItemLabel.CODE,
+        }
+
+        # Maps each tag to an associated bounding box color.
+        tag_to_color = {
+            "title": "blue",
+            "document_index": "darkblue",
+            "otsl": "green",
+            "section_header_level_1": "purple",
+            "checkbox_selected": "black",
+            "checkbox_unselected": "gray",
+            "text": "red",
+            "page_header": "orange",
+            "page_footer": "cyan",
+            "formula": "pink",
+            "caption": "magenta",
+            "picture": "yellow",
+            "list_item": "brown",
+            "footnote": "darkred",
+            "code": "lightblue",
+        }
 
         def extract_bounding_box(text_chunk: str) -> Optional[BoundingBox]:
             """Extracts <loc_...> bounding box coords from the chunk, normalized by / 500."""
@@ -357,8 +394,8 @@ class VlmPipeline(PaginatedPipeline):
         for pg_idx, page in enumerate(pages):
             xml_content = ""
             predicted_text = ""
-            if page.predictions.doctags:
-                predicted_text = page.predictions.doctags.tag_string
+            if page.predictions.vlm_response:
+                predicted_text = page.predictions.vlm_response.text
             image = page.image
             page_no = pg_idx + 1
             bounding_boxes = []
@@ -396,8 +433,8 @@ class VlmPipeline(PaginatedPipeline):
                 tag_name = match.group("tag")
 
                 bbox = extract_bounding_box(full_chunk)
-                doc_label = self.tag_to_doclabel.get(tag_name, DocItemLabel.PARAGRAPH)
-                color = self.tag_to_color.get(tag_name, "white")
+                doc_label = tag_to_doclabel.get(tag_name, DocItemLabel.PARAGRAPH)
+                color = tag_to_color.get(tag_name, "white")
 
                 # Store bounding box + color
                 if bbox:

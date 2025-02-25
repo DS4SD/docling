@@ -254,11 +254,43 @@ granite_picture_description = PictureDescriptionVlmOptions(
 )
 
 
-class SmolDoclingOptions(BaseModel):
-    question: str = "Convert this page to docling."
+class BaseVlmOptions(BaseModel):
+    kind: str
+    prompt: str
+
+
+class ResponseFormat(str, Enum):
+    DOCTAGS = "doctags"
+    MARKDOWN = "markdown"
+
+
+class HuggingFaceVlmOptions(BaseVlmOptions):
+    kind: Literal["hf_model_options"] = "hf_model_options"
+
+    repo_id: str
     load_in_8bit: bool = True
     llm_int8_threshold: float = 6.0
     quantized: bool = False
+
+    response_format: ResponseFormat
+
+    @property
+    def repo_cache_folder(self) -> str:
+        return self.repo_id.replace("/", "--")
+
+
+smoldocling_vlm_conversion_options = HuggingFaceVlmOptions(
+    repo_id="ds4sd/SmolDocling-256M-preview",
+    prompt="Convert this page to docling.",
+    response_format=ResponseFormat.DOCTAGS,
+)
+
+granite_vision_vlm_conversion_options = HuggingFaceVlmOptions(
+    repo_id="ibm-granite/granite-vision-3.1-2b-preview",
+    # prompt="OCR the full page to markdown.",
+    prompt="OCR this image.",
+    response_format=ResponseFormat.MARKDOWN,
+)
 
 
 # Define an enum for the backend options
@@ -300,13 +332,11 @@ class PaginatedPipelineOptions(PipelineOptions):
 
 class VlmPipelineOptions(PaginatedPipelineOptions):
     artifacts_path: Optional[Union[Path, str]] = None
-    do_vlm: bool = True  # True: perform inference of Visual Language Model
-
     force_backend_text: bool = (
         False  # (To be used with vlms, or other generative models)
     )
     # If True, text from backend will be used instead of generated text
-    vlm_options: Union[SmolDoclingOptions,] = Field(SmolDoclingOptions())
+    vlm_options: Union[HuggingFaceVlmOptions] = smoldocling_vlm_conversion_options
 
 
 class PdfPipelineOptions(PaginatedPipelineOptions):
@@ -336,8 +366,6 @@ class PdfPipelineOptions(PaginatedPipelineOptions):
         Union[PictureDescriptionApiOptions, PictureDescriptionVlmOptions],
         Field(discriminator="kind"),
     ] = smolvlm_picture_description
-
-    vlm_options: Union[SmolDoclingOptions,] = Field(SmolDoclingOptions())
 
     images_scale: float = 1.0
     generate_page_images: bool = False
