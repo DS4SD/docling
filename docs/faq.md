@@ -132,9 +132,45 @@ This is a collection of FAQ collected from the user questions on <https://github
     ```
 
 
-??? Some images are missing from MS Word and Powerpoint"
+??? question "Some images are missing from MS Word and Powerpoint"
 
     ### Some images are missing from MS Word and Powerpoint
 
     The image processing library used by Docling is able to handle embedded WMF images only on Windows platform.
     If you are on other operaring systems, these images will be ignored.
+
+
+??? question "`HybridChunker` triggers warning: 'Token indices sequence length is longer than the specified maximum sequence length for this model'"
+
+    ### `HybridChunker` triggers warning: 'Token indices sequence length is longer than the specified maximum sequence length for this model'
+
+    **TLDR**:
+    In the context of the `HybridChunker`, this is a known & ancitipated "false alarm".
+
+    **Details**:
+
+    Using the [`HybridChunker`](./concepts/chunking.md#hybrid-chunker) often triggers a warning like this:
+    > Token indices sequence length is longer than the specified maximum sequence length for this model (530 > 512). Running this sequence through the model will result in indexing errors
+
+    This is a warning that is emitted by transformers, saying that actually *running this sequence through the model* will result in indexing errors, i.e. the problematic case is only if one indeed passes the particular sequence through the (embedding) model.
+
+    In our case though, this occurs as a "false alarm", since what happens is the following:
+
+    - the chunker invokes the tokenizer on a potentially long sequence (e.g. 530 tokens as mentioned in the warning) in order to count its tokens, i.e. to assess if it is short enough. At this point transformers already emits the warning above!
+    - whenever the sequence at hand is oversized, the chunker proceeds to split it (but the transformers warning has already been shown nonetheless)
+
+    What is important is the actual token length of the produced chunks.
+    The snippet below can be used for getting the actual maximum chunk size (for users wanting to confirm that this does not exceed the model limit):
+
+    ```python
+    max_len = 0
+    for i, chunk in enumerate(chunks):
+        ser_txt = chunker.serialize(chunk=chunk)
+        ser_tokens = len(tokenizer.tokenize(ser_txt, max_len_length=None))
+        if ser_tokens > max_len:
+            max_len = ser_tokens
+        print(f"{i}\t{ser_tokens}\t{repr(ser_txt[:100])}...")
+    print(f"{max_len=}")
+    ```
+
+    Source: Issue [docling-core#119](https://github.com/DS4SD/docling-core/issues/119)
