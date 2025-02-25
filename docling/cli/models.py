@@ -32,7 +32,17 @@ class _AvailableModels(str, Enum):
     CODE_FORMULA = "code_formula"
     PICTURE_CLASSIFIER = "picture_classifier"
     SMOLVLM = "smolvlm"
+    GRANITE_VISION = "granite_vision"
     EASYOCR = "easyocr"
+
+
+_default_models = [
+    _AvailableModels.LAYOUT,
+    _AvailableModels.TABLEFORMER,
+    _AvailableModels.CODE_FORMULA,
+    _AvailableModels.PICTURE_CLASSIFIER,
+    _AvailableModels.EASYOCR,
+]
 
 
 @app.command("download")
@@ -73,7 +83,7 @@ def download(
             datefmt="[%X]",
             handlers=[RichHandler(show_level=False, show_time=False, markup=True)],
         )
-    to_download = models or [m for m in _AvailableModels]
+    to_download = models or _default_models
     output_dir = download_models(
         output_dir=output_dir,
         force=force,
@@ -83,6 +93,7 @@ def download(
         with_code_formula=_AvailableModels.CODE_FORMULA in to_download,
         with_picture_classifier=_AvailableModels.PICTURE_CLASSIFIER in to_download,
         with_smolvlm=_AvailableModels.SMOLVLM in to_download,
+        with_granite_vision=_AvailableModels.GRANITE_VISION in to_download,
         with_easyocr=_AvailableModels.EASYOCR in to_download,
     )
 
