@@ -24,8 +24,10 @@ pipeline_options.generate_page_images = True
 # If force_backend_text = True, text from backend will be used instead of generated text
 pipeline_options.force_backend_text = False
 
-# pipeline_options.vlm_options = smoldocling_vlm_conversion_options
-pipeline_options.vlm_options = granite_vision_vlm_conversion_options
+pipeline_options.vlm_options = smoldocling_vlm_conversion_options
+
+# Choose alternative VLM models:
+# pipeline_options.vlm_options = granite_vision_vlm_conversion_options
 
 from docling_core.types.doc import DocItemLabel, ImageRefMode
 from docling_core.types.doc.document import DEFAULT_EXPORT_LABELS
