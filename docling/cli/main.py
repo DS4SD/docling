@@ -366,8 +366,10 @@ def convert(
         export_txt = OutputFormat.TEXT in to_formats
         export_doctags = OutputFormat.DOCTAGS in to_formats
 
-        ocr_options_class = ocr_factory.get_options_class(kind=str(ocr_engine.value))  # type: ignore
-        ocr_options = ocr_options_class(force_full_page_ocr=force_ocr)
+        ocr_options = ocr_factory.create_options(
+            kind=str(ocr_engine.value),  # type:ignore
+            force_full_page_ocr=force_ocr,
+        )
 
         ocr_lang_list = _split_list(ocr_lang)
         if ocr_lang_list is not None:

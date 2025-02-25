@@ -39,25 +39,20 @@ class BaseFactory(Generic[A], metaclass=ABCMeta):
     def classes(self):
         return self._classes
 
-    def get_class(self, options: BaseOptions, *args, **kwargs) -> Type[A]:
+    def create_instance(self, options: BaseOptions, *args, **kwargs) -> A:
         try:
-            return self._classes[type(options)]
+            _cls = self._classes[type(options)]
+            return _cls(*args, **kwargs)
         except KeyError:
-            return self.on_class_not_found(options.kind, *args, **kwargs)
+            raise RuntimeError(self._err_msg_on_class_not_found(options.kind))
 
-    def get_class_by_kind(self, kind: str, *args, **kwargs) -> Type[A]:
-        for opt, cls in self._classes.items():
-            if opt.kind == kind:
-                return cls
-        return self.on_class_not_found(kind, *args, **kwargs)
+    def create_options(self, kind: str, *args, **kwargs) -> BaseOptions:
+        for opt_cls, _ in self._classes.items():
+            if opt_cls.kind == kind:
+                return opt_cls(*args, **kwargs)
+        raise RuntimeError(self._err_msg_on_class_not_found(kind))
 
-    def get_options_class(self, kind: str, *args, **kwargs) -> Type[BaseOptions]:
-        for opt, cls in self._classes.items():
-            if opt.kind == kind:
-                return opt
-        return self.on_class_not_found(kind, *args, **kwargs)
-
-    def on_class_not_found(self, kind: str, *args, **kwargs):
+    def _err_msg_on_class_not_found(self, kind: str):
         msg = []
 
         for opt, cls in self._classes.items():
@@ -65,9 +60,7 @@ class BaseFactory(Generic[A], metaclass=ABCMeta):
 
         msg_str = "\n".join(msg)
 
-        raise RuntimeError(
-            f"No class found with the name {kind!r}, known classes are:\n{msg_str}"
-        )
+        return f"No class found with the name {kind!r}, known classes are:\n{msg_str}"
 
     def register(self, cls: Type[A]):
         opt_type = cls.get_options_type()

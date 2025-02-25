@@ -147,12 +147,10 @@ class StandardPdfPipeline(PaginatedPipeline):
 
     def get_ocr_model(self, artifacts_path: Optional[Path] = None) -> BaseOcrModel:
         factory = get_ocr_factory()
-        ocr_engine_cls = factory.get_class(options=self.pipeline_options.ocr_options)
-
-        return ocr_engine_cls(
+        return factory.create_instance(
+            options=self.pipeline_options.ocr_options,
             enabled=self.pipeline_options.do_ocr,
             artifacts_path=artifacts_path,
-            options=self.pipeline_options.ocr_options,
             accelerator_options=self.pipeline_options.accelerator_options,
         )
 
@@ -160,16 +158,11 @@ class StandardPdfPipeline(PaginatedPipeline):
         self, artifacts_path: Optional[Path] = None
     ) -> Optional[PictureDescriptionBaseModel]:
         factory = get_picture_description_factory()
-
-        options_cls = factory.get_class(
-            options=self.pipeline_options.picture_description_options
-        )
-
-        return options_cls(
+        return factory.create_instance(
+            options=self.pipeline_options.picture_description_options,
             enabled=self.pipeline_options.do_picture_description,
             enable_remote_services=self.pipeline_options.enable_remote_services,
             artifacts_path=artifacts_path,
-            options=self.pipeline_options.picture_description_options,
             accelerator_options=self.pipeline_options.accelerator_options,
         )
 
