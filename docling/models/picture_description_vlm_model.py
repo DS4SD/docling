@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Iterable, Optional, Union
 import os
-
 from PIL import Image
 
 from docling.datamodel.pipeline_options import (
