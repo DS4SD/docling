@@ -63,6 +63,7 @@ class HuggingFaceVlmModel(BasePageModel):
             if not self.param_quantized:
                 self.vlm_model = AutoModelForVision2Seq.from_pretrained(
                     artifacts_path,
+                    device_map=device,
                     torch_dtype=torch.bfloat16,
                     _attn_implementation=(
                         "flash_attention_2"
@@ -70,11 +71,12 @@ class HuggingFaceVlmModel(BasePageModel):
                         and accelerator_options.cuda_use_flash_attention2
                         else "eager"
                     ),
-                ).to(self.device)
+                )  # .to(self.device)
 
             else:
                 self.vlm_model = AutoModelForVision2Seq.from_pretrained(
                     artifacts_path,
+                    device_map=device,
                     torch_dtype="auto",
                     quantization_config=self.param_quantization_config,
                     _attn_implementation=(
