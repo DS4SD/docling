@@ -85,7 +85,7 @@ class HuggingFaceVlmModel(BasePageModel):
                         and accelerator_options.cuda_use_flash_attention2
                         else "eager"
                     ),
-                ).to(self.device)
+                )  # .to(self.device)
 
     @staticmethod
     def download_models(
