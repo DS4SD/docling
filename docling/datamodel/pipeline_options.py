@@ -41,6 +41,7 @@ class AcceleratorOptions(BaseSettings):
 
     num_threads: int = 4
     device: Union[str, AcceleratorDevice] = "auto"
+    cuda_use_flash_attention2: bool = False
 
     @field_validator("device")
     def validate_device(cls, value):
@@ -254,6 +255,45 @@ granite_picture_description = PictureDescriptionVlmOptions(
 )
 
 
+class BaseVlmOptions(BaseModel):
+    kind: str
+    prompt: str
+
+
+class ResponseFormat(str, Enum):
+    DOCTAGS = "doctags"
+    MARKDOWN = "markdown"
+
+
+class HuggingFaceVlmOptions(BaseVlmOptions):
+    kind: Literal["hf_model_options"] = "hf_model_options"
+
+    repo_id: str
+    load_in_8bit: bool = True
+    llm_int8_threshold: float = 6.0
+    quantized: bool = False
+
+    response_format: ResponseFormat
+
+    @property
+    def repo_cache_folder(self) -> str:
+        return self.repo_id.replace("/", "--")
+
+
+smoldocling_vlm_conversion_options = HuggingFaceVlmOptions(
+    repo_id="ds4sd/SmolDocling-256M-preview",
+    prompt="Convert this page to docling.",
+    response_format=ResponseFormat.DOCTAGS,
+)
+
+granite_vision_vlm_conversion_options = HuggingFaceVlmOptions(
+    repo_id="ibm-granite/granite-vision-3.1-2b-preview",
+    # prompt="OCR the full page to markdown.",
+    prompt="OCR this image.",
+    response_format=ResponseFormat.MARKDOWN,
+)
+
+
 # Define an enum for the backend options
 class PdfBackend(str, Enum):
     """Enum of valid PDF backends."""
@@ -285,7 +325,24 @@ class PipelineOptions(BaseModel):
     enable_remote_services: bool = False
 
 
-class PdfPipelineOptions(PipelineOptions):
+class PaginatedPipelineOptions(PipelineOptions):
+    images_scale: float = 1.0
+    generate_page_images: bool = False
+    generate_picture_images: bool = False
+
+
+class VlmPipelineOptions(PaginatedPipelineOptions):
+    artifacts_path: Optional[Union[Path, str]] = None
+
+    generate_page_images: bool = True
+    force_backend_text: bool = (
+        False  # (To be used with vlms, or other generative models)
+    )
+    # If True, text from backend will be used instead of generated text
+    vlm_options: Union[HuggingFaceVlmOptions] = smoldocling_vlm_conversion_options
+
+
+class PdfPipelineOptions(PaginatedPipelineOptions):
     """Options for the PDF pipeline."""
 
     artifacts_path: Optional[Union[Path, str]] = None
@@ -295,6 +352,10 @@ class PdfPipelineOptions(PipelineOptions):
     do_formula_enrichment: bool = False  # True: perform formula OCR, return Latex code
     do_picture_classification: bool = False  # True: classify pictures in documents
     do_picture_description: bool = False  # True: run describe pictures in documents
+    force_backend_text: bool = (
+        False  # (To be used with vlms, or other generative models)
+    )
+    # If True, text from backend will be used instead of generated text
 
     table_structure_options: TableStructureOptions = TableStructureOptions()
     ocr_options: Union[
