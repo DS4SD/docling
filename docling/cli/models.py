@@ -53,18 +53,27 @@ def download(
             ...,
             "-o",
             "--output-dir",
-            help="The directory where all the models are downloaded.",
+            help="The directory where to download the models.",
         ),
     ] = (settings.cache_dir / "models"),
     force: Annotated[
-        bool, typer.Option(..., help="If true, the download will be forced")
+        bool, typer.Option(..., help="If true, the download will be forced.")
     ] = False,
     models: Annotated[
         Optional[list[_AvailableModels]],
         typer.Argument(
-            help=f"Models to download (default behavior: all will be downloaded)",
+            help=f"Models to download (default behavior: a predefined set of models will be downloaded).",
         ),
     ] = None,
+    all: Annotated[
+        bool,
+        typer.Option(
+            ...,
+            "--all",
+            help="If true, all available models will be downloaded (mutually exclusive with passing specific models).",
+            show_default=True,
+        ),
+    ] = False,
     quiet: Annotated[
         bool,
         typer.Option(
@@ -75,6 +84,10 @@ def download(
         ),
     ] = False,
 ):
+    if models and all:
+        raise typer.BadParameter(
+            "Cannot simultaneously set 'all' parameter and specify models to download."
+        )
     if not quiet:
         FORMAT = "%(message)s"
         logging.basicConfig(
@@ -83,7 +96,7 @@ def download(
             datefmt="[%X]",
             handlers=[RichHandler(show_level=False, show_time=False, markup=True)],
         )
-    to_download = models or _default_models
+    to_download = models or ([m for m in _AvailableModels] if all else _default_models)
     output_dir = download_models(
         output_dir=output_dir,
         force=force,
