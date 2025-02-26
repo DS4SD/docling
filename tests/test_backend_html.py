@@ -1,4 +1,4 @@
-import os
+from io import BytesIO
 from pathlib import Path
 
 from docling.backend.html_backend import HTMLDocumentBackend
@@ -39,6 +39,62 @@ def test_heading_levels():
                 found_lvl_3 = True
                 assert item.level == 3
     assert found_lvl_2 and found_lvl_3
+
+
+def test_ordered_lists():
+    test_set: list[tuple[bytes, str]] = []
+
+    test_set.append(
+        (
+            b"<html><body><ol><li>1st item</li><li>2nd item</li></ol></body></html>",
+            "1. 1st item\n2. 2nd item",
+        )
+    )
+    test_set.append(
+        (
+            b'<html><body><ol start="1"><li>1st item</li><li>2nd item</li></ol></body></html>',
+            "1. 1st item\n2. 2nd item",
+        )
+    )
+    test_set.append(
+        (
+            b'<html><body><ol start="2"><li>1st item</li><li>2nd item</li></ol></body></html>',
+            "2. 1st item\n3. 2nd item",
+        )
+    )
+    test_set.append(
+        (
+            b'<html><body><ol start="0"><li>1st item</li><li>2nd item</li></ol></body></html>',
+            "0. 1st item\n1. 2nd item",
+        )
+    )
+    test_set.append(
+        (
+            b'<html><body><ol start="-5"><li>1st item</li><li>2nd item</li></ol></body></html>',
+            "1. 1st item\n2. 2nd item",
+        )
+    )
+    test_set.append(
+        (
+            b'<html><body><ol start="foo"><li>1st item</li><li>2nd item</li></ol></body></html>',
+            "1. 1st item\n2. 2nd item",
+        )
+    )
+
+    for pair in test_set:
+        in_doc = InputDocument(
+            path_or_stream=BytesIO(pair[0]),
+            format=InputFormat.HTML,
+            backend=HTMLDocumentBackend,
+            filename="test",
+        )
+        backend = HTMLDocumentBackend(
+            in_doc=in_doc,
+            path_or_stream=BytesIO(pair[0]),
+        )
+        doc: DoclingDocument = backend.convert()
+        assert doc
+        assert doc.export_to_markdown() == pair[1]
 
 
 def get_html_paths():
