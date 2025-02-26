@@ -11,32 +11,34 @@ from docling.datamodel.pipeline_options import (
     granite_vision_vlm_conversion_options,
     smoldocling_vlm_conversion_options,
 )
+from docling.datamodel.settings import settings
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.pipeline.vlm_pipeline import VlmPipeline
 
 sources = [
-    # "https://arxiv.org/pdf/2408.09869",
     "tests/data/2305.03393v1-pg9-img.png",
-    # "tests/data/2305.03393v1-pg9.pdf",
 ]
 
-pipeline_options = VlmPipelineOptions()  # artifacts_path="~/local_model_artifacts/"
-pipeline_options.generate_page_images = True
+settings.debug.profile_pipeline_timings = True
+## Use experimental VlmPipeline
+pipeline_options = VlmPipelineOptions()
 # If force_backend_text = True, text from backend will be used instead of generated text
 pipeline_options.force_backend_text = False
 
-## Enable flash_attention_2 with CUDA:
+## On GPU systems, enable flash_attention_2 with CUDA:
 # pipeline_options.accelerator_options.device = AcceleratorDevice.CUDA
 # pipeline_options.accelerator_options.cuda_use_flash_attention2 = True
 
+## Pick a VLM model. We choose SmolDocling-256M by default
 pipeline_options.vlm_options = smoldocling_vlm_conversion_options
 
-## Choose alternative VLM models:
+## Alternative VLM models:
 # pipeline_options.vlm_options = granite_vision_vlm_conversion_options
 
 from docling_core.types.doc import DocItemLabel, ImageRefMode
 from docling_core.types.doc.document import DEFAULT_EXPORT_LABELS
 
+## Set up pipeline for PDF or image inputs
 converter = DocumentConverter(
     format_options={
         InputFormat.PDF: PdfFormatOption(
@@ -68,6 +70,12 @@ for source in sources:
     print("")
     print(res.document.export_to_markdown())
 
+    print("------------------------------------------------")
+    print("Timings:")
+    print("------------------------------------------------")
+    print("")
+    print(res.timings)
+
     for page in res.pages:
         print("")
         print("Predicted page in DOCTAGS:")
@@ -81,9 +89,6 @@ for source in sources:
 
     with (out_path / f"{res.input.file.stem}.json").open("w") as fp:
         fp.write(json.dumps(res.document.export_to_dict()))
-
-    with (out_path / f"{res.input.file.stem}.yaml").open("w") as fp:
-        fp.write(yaml.safe_dump(res.document.export_to_dict()))
 
     pg_num = res.document.num_pages()
 

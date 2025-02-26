@@ -116,7 +116,7 @@ class HuggingFaceVlmModel(BasePageModel):
             if not page._backend.is_valid():
                 yield page
             else:
-                with TimeRecorder(conv_res, "smolvlm"):
+                with TimeRecorder(conv_res, "vlm"):
                     assert page.size is not None
 
                     hi_res_image = page.get_image(scale=2.0)  # 144dpi

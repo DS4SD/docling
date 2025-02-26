@@ -69,9 +69,6 @@ accelerate = [
 pillow = ">=10.0.0,<12.0.0"
 tqdm = "^4.65.0"
 
-# transformers = "^4.47.1"
-# accelerate = "^1.2.1"
-
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "^24.4.2"}
 pytest = "^7.2.2"

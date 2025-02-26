@@ -333,6 +333,8 @@ class PaginatedPipelineOptions(PipelineOptions):
 
 class VlmPipelineOptions(PaginatedPipelineOptions):
     artifacts_path: Optional[Union[Path, str]] = None
+
+    generate_page_images: bool = True
     force_backend_text: bool = (
         False  # (To be used with vlms, or other generative models)
     )

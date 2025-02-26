@@ -51,7 +51,7 @@ class VlmPipeline(PaginatedPipeline):
         self.keep_backend = True
 
         warnings.warn(
-            "This API is currently experimental and may change in upcoming versions without notice.",
+            "The VlmPipeline is currently experimental and may change in upcoming versions without notice.",
             category=UserWarning,
             stacklevel=2,
         )
@@ -70,18 +70,18 @@ class VlmPipeline(PaginatedPipeline):
                 "When defined, it must point to a folder containing all models required by the pipeline."
             )
 
-        # force_backend_text = False - use text that is coming from SmolDocling
-        # force_backend_text = True - get text from backend using bounding boxes predicted by SmolDoclingss
-        self.force_backend_text = pipeline_options.force_backend_text
-
-        self.keep_images = (
-            self.pipeline_options.generate_page_images
-            or self.pipeline_options.generate_picture_images
+        # force_backend_text = False - use text that is coming from VLM response
+        # force_backend_text = True - get text from backend using bounding boxes predicted by SmolDocling doctags
+        self.force_backend_text = (
+            pipeline_options.force_backend_text
+            and pipeline_options.vlm_options.response_format == ResponseFormat.DOCTAGS
         )
+
+        self.keep_images = self.pipeline_options.generate_page_images
 
         self.build_pipe = [
             HuggingFaceVlmModel(
-                enabled=True,
+                enabled=True,  # must be always enabled for this pipeline to make sense.
                 artifacts_path=artifacts_path,
                 accelerator_options=pipeline_options.accelerator_options,
                 vlm_options=self.pipeline_options.vlm_options,
@@ -397,6 +397,7 @@ class VlmPipeline(PaginatedPipeline):
             if page.predictions.vlm_response:
                 predicted_text = page.predictions.vlm_response.text
             image = page.image
+
             page_no = pg_idx + 1
             bounding_boxes = []
 
@@ -448,12 +449,13 @@ class VlmPipeline(PaginatedPipeline):
                     text_caption_content = extract_inner_text(full_chunk)
                     if image:
                         if bbox:
-                            width, height = image.size
+                            im_width, im_height = image.size
+
                             crop_box = (
-                                int(bbox.l * width),
-                                int(bbox.t * height),
-                                int(bbox.r * width),
-                                int(bbox.b * height),
+                                int(bbox.l * im_width),
+                                int(bbox.t * im_height),
+                                int(bbox.r * im_width),
+                                int(bbox.b * im_height),
                             )
                             cropped_image = image.crop(crop_box)
                             pic = doc.add_picture(
@@ -461,7 +463,9 @@ class VlmPipeline(PaginatedPipeline):
                                 image=ImageRef.from_pil(image=cropped_image, dpi=72),
                                 prov=(
                                     ProvenanceItem(
-                                        bbox=bbox, charspan=(0, 0), page_no=page_no
+                                        bbox=bbox.resize_by_scale(pg_width, pg_height),
+                                        charspan=(0, 0),
+                                        page_no=page_no,
                                     )
                                 ),
                             )
@@ -501,7 +505,7 @@ class VlmPipeline(PaginatedPipeline):
                         text=text_content,
                         prov=(
                             ProvenanceItem(
-                                bbox=bbox,
+                                bbox=bbox.resize_by_scale(pg_width, pg_height),
                                 charspan=(0, len(text_content)),
                                 page_no=page_no,
                             )
