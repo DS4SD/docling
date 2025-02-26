@@ -53,7 +53,7 @@ def download(
             ...,
             "-o",
             "--output-dir",
-            help="The directory where all the models are downloaded.",
+            help="The directory where to download the models.",
         ),
     ] = (settings.cache_dir / "models"),
     force: Annotated[
@@ -62,7 +62,7 @@ def download(
     models: Annotated[
         Optional[list[_AvailableModels]],
         typer.Argument(
-            help=f"Models to download (default behavior: all will be downloaded)",
+            help=f"Models to download (default behavior: a predefined set of models will be downloaded)",
         ),
     ] = None,
     quiet: Annotated[
