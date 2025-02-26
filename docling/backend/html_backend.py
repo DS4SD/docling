@@ -281,7 +281,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         parent = self.parents[self.level]
         if parent is None:
-            _log.warning(f"list-item has no parent in DoclingDocument: {element}")
+            _log.debug(f"list-item has no parent in DoclingDocument: {element}")
             return
         parent_label: str = parent.label
         index_in_list = len(parent.children) + 1
@@ -338,13 +338,13 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 parent=parent,
             )
         else:
-            _log.warning(f"list-item has no text: {element}")
+            _log.debug(f"list-item has no text: {element}")
 
     @staticmethod
     def parse_table_data(element: Tag) -> Optional[TableData]:
         nested_tables = element.find("table")
         if nested_tables is not None:
-            _log.warning("Skipping nested table.")
+            _log.debug("Skipping nested table.")
             return None
 
         # Count the number of rows (number of <tr> elements)
