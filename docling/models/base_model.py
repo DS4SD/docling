@@ -14,6 +14,8 @@ class BaseModelWithOptions(Protocol):
     @classmethod
     def get_options_type(cls) -> Type[BaseOptions]: ...
 
+    def __init__(self, *, options: BaseOptions, **kwargs): ...
+
 
 class BasePageModel(ABC):
     @abstractmethod

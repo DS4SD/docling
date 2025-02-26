@@ -22,6 +22,7 @@ _log = logging.getLogger(__name__)
 class BaseOcrModel(BasePageModel, BaseModelWithOptions):
     def __init__(
         self,
+        *,
         enabled: bool,
         artifacts_path: Optional[Path],
         options: OcrOptions,

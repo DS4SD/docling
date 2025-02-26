@@ -39,10 +39,10 @@ class BaseFactory(Generic[A], metaclass=ABCMeta):
     def classes(self):
         return self._classes
 
-    def create_instance(self, options: BaseOptions, *args, **kwargs) -> A:
+    def create_instance(self, options: BaseOptions, **kwargs) -> A:
         try:
             _cls = self._classes[type(options)]
-            return _cls(*args, **kwargs)
+            return _cls(options=options, **kwargs)
         except KeyError:
             raise RuntimeError(self._err_msg_on_class_not_found(options.kind))
 

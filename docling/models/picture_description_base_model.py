@@ -32,6 +32,7 @@ class PictureDescriptionBaseModel(
 
     def __init__(
         self,
+        *,
         enabled: bool,
         enable_remote_services: bool,
         artifacts_path: Optional[Union[Path, str]],
