@@ -19,7 +19,6 @@ sources = [
     "tests/data/2305.03393v1-pg9-img.png",
 ]
 
-settings.debug.profile_pipeline_timings = True
 ## Use experimental VlmPipeline
 pipeline_options = VlmPipelineOptions()
 # If force_backend_text = True, text from backend will be used instead of generated text
@@ -69,12 +68,6 @@ for source in sources:
     print("------------------------------------------------")
     print("")
     print(res.document.export_to_markdown())
-
-    print("------------------------------------------------")
-    print("Timings:")
-    print("------------------------------------------------")
-    print("")
-    print(res.timings)
 
     for page in res.pages:
         print("")
