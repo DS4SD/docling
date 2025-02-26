@@ -443,7 +443,17 @@ class VlmPipeline(PaginatedPipeline):
 
                 if tag_name == DocumentToken.OTSL.value:
                     table_data = parse_table_content(full_chunk)
-                    doc.add_table(data=table_data)
+                    bbox = extract_bounding_box(full_chunk)
+
+                    if bbox:
+                        prov = ProvenanceItem(
+                            bbox=bbox.resize_by_scale(pg_width, pg_height),
+                            charspan=(0, 0),
+                            page_no=page_no,
+                        )
+                        doc.add_table(data=table_data, prov=prov)
+                    else:
+                        doc.add_table(data=table_data)
 
                 elif tag_name == DocItemLabel.PICTURE:
                     text_caption_content = extract_inner_text(full_chunk)
