@@ -256,10 +256,16 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 parent=self.parents[self.level], name="list", label=GroupLabel.LIST
             )
         elif element.name == "ol":
+            start_attr = element.get("start")
+            start: int = (
+                int(start_attr)
+                if isinstance(start_attr, str) and start_attr.isnumeric()
+                else 1
+            )
             # create a list group
             self.parents[self.level + 1] = doc.add_group(
                 parent=self.parents[self.level],
-                name="ordered list",
+                name="ordered list" + (f" start {start}" if start != 1 else ""),
                 label=GroupLabel.ORDERED_LIST,
             )
         self.level += 1
@@ -270,15 +276,23 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         self.level -= 1
 
     def handle_list_item(self, element: Tag, doc: DoclingDocument) -> None:
-        """Handles listitem tags (li)."""
+        """Handles list item tags (li)."""
         nested_list = element.find(["ul", "ol"])
 
         parent = self.parents[self.level]
         if parent is None:
-            _log.warning(f"list-item has no parent in DoclingDocument: {element}")
+            _log.debug(f"list-item has no parent in DoclingDocument: {element}")
             return
         parent_label: str = parent.label
         index_in_list = len(parent.children) + 1
+        if (
+            parent_label == GroupLabel.ORDERED_LIST
+            and isinstance(parent, GroupItem)
+            and parent.name
+        ):
+            start_in_list: str = parent.name.split(" ")[-1]
+            start: int = int(start_in_list) if start_in_list.isnumeric() else 1
+            index_in_list += start - 1
 
         if nested_list:
             # Text in list item can be hidden within hierarchy, hence
@@ -324,13 +338,13 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 parent=parent,
             )
         else:
-            _log.warning(f"list-item has no text: {element}")
+            _log.debug(f"list-item has no text: {element}")
 
     @staticmethod
     def parse_table_data(element: Tag) -> Optional[TableData]:
         nested_tables = element.find("table")
         if nested_tables is not None:
-            _log.warning("Skipping nested table.")
+            _log.debug("Skipping nested table.")
             return None
 
         # Count the number of rows (number of <tr> elements)
