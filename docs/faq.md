@@ -150,7 +150,7 @@ This is a collection of FAQ collected from the user questions on <https://github
     **Details**:
 
     Using the [`HybridChunker`](./concepts/chunking.md#hybrid-chunker) often triggers a warning like this:
-    > Token indices sequence length is longer than the specified maximum sequence length for this model (530 > 512). Running this sequence through the model will result in indexing errors
+    > Token indices sequence length is longer than the specified maximum sequence length for this model (531 > 512). Running this sequence through the model will result in indexing errors
 
     This is a warning that is emitted by transformers, saying that actually *running this sequence through the model* will result in indexing errors, i.e. the problematic case is only if one indeed passes the particular sequence through the (embedding) model.
 
@@ -163,14 +163,17 @@ This is a collection of FAQ collected from the user questions on <https://github
     The snippet below can be used for getting the actual maximum chunk size (for users wanting to confirm that this does not exceed the model limit):
 
     ```python
-    max_len = 0
+    chunk_max_len = 0
     for i, chunk in enumerate(chunks):
         ser_txt = chunker.serialize(chunk=chunk)
-        ser_tokens = len(tokenizer.tokenize(ser_txt, max_len_length=None))
-        if ser_tokens > max_len:
-            max_len = ser_tokens
+        ser_tokens = len(tokenizer.tokenize(ser_txt))
+        if ser_tokens > chunk_max_len:
+            chunk_max_len = ser_tokens
         print(f"{i}\t{ser_tokens}\t{repr(ser_txt[:100])}...")
-    print(f"{max_len=}")
+    print(f"Longest chunk yielded: {chunk_max_len} tokens")
+    print(f"Model max length: {tokenizer.model_max_length}")
     ```
+
+    Also see [docling#725](https://github.com/DS4SD/docling/issues/725).
 
     Source: Issue [docling-core#119](https://github.com/DS4SD/docling-core/issues/119)
