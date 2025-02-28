@@ -5,9 +5,11 @@ from docling.backend.msword_backend import MsWordDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import (
     ConversionResult,
+    DocItemLabel,
     DoclingDocument,
     InputDocument,
     SectionHeaderItem,
+    TextItem,
 )
 from docling.document_converter import DocumentConverter
 
@@ -39,6 +41,27 @@ def test_heading_levels():
                 found_lvl_2 = True
                 assert item.level == 2
     assert found_lvl_1 and found_lvl_2
+
+
+def test_page_breaks():
+    for name in "unit_test_headers.docx", "unit_test_lists.docx", "word_sample.docx":
+        in_path = Path("tests/data/docx") / name
+        in_doc = InputDocument(
+            path_or_stream=in_path,
+            format=InputFormat.DOCX,
+            backend=MsWordDocumentBackend,
+        )
+        backend = MsWordDocumentBackend(
+            in_doc=in_doc,
+            path_or_stream=in_path,
+        )
+        doc = backend.convert()
+        assert backend.has_pagination()
+        # These all have two pages
+        assert len(doc.pages) == 2
+        for item, _ in doc.iterate_items():
+            assert item.prov
+            assert item.prov[0].page_no
 
 
 def get_docx_paths():
