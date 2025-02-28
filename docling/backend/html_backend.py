@@ -67,7 +67,8 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     self.soup = BeautifulSoup(html_content, "html.parser")
         except Exception as e:
             raise RuntimeError(
-                f"Could not initialize HTML backend for file with hash {self.document_hash}."
+                "Could not initialize HTML backend for file with "
+                f"hash {self.document_hash}."
             ) from e
 
     @override
@@ -104,18 +105,22 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         _log.debug("Trying to convert HTML...")
 
         if self.is_valid():
-            self.content_layer = ContentLayer.FURNITURE
-
             assert self.soup is not None
             content = self.soup.body or self.soup
             # Replace <br> tags with newline characters
             # TODO: remove style to avoid losing text from tags like i, b, span, ...
             for br in content("br"):
                 br.replace_with(NavigableString("\n"))
+
+            headers = content.find(["h1", "h2", "h3", "h4", "h5", "h6"])
+            self.content_layer = (
+                ContentLayer.BODY if headers is None else ContentLayer.FURNITURE
+            )
             self.walk(content, doc)
         else:
             raise RuntimeError(
-                f"Cannot convert doc with {self.document_hash} because the backend failed to init."
+                f"Cannot convert doc with {self.document_hash} because the backend "
+                "failed to init."
             )
         return doc
 
@@ -147,7 +152,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     if text and tag.name in ["div"]:
                         doc.add_text(
                             parent=self.parents[self.level],
-                            label=DocItemLabel.TEXT,
+                            label=DocItemLabel.PARAGRAPH,
                             text=text,
                             content_layer=self.content_layer,
                         )
@@ -259,11 +264,10 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         if element.text is None:
             return
         text = element.text.strip()
-        label = DocItemLabel.TEXT
         if text:
             doc.add_text(
                 parent=self.parents[self.level],
-                label=label,
+                label=DocItemLabel.PARAGRAPH,
                 text=text,
                 content_layer=self.content_layer,
             )
@@ -533,7 +537,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
     def handle_image(self, element: Tag, doc: DoclingDocument) -> None:
         """Handles image tags (img)."""
-        _log.warning(f"ignoring <img> tags at the moment: {element}")
+        _log.debug(f"ignoring <img> tags at the moment: {element}")
 
         doc.add_picture(
             parent=self.parents[self.level],
