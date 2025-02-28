@@ -81,7 +81,7 @@ def test_ordered_lists():
         )
     )
 
-    for pair in test_set:
+    for idx, pair in enumerate(test_set):
         in_doc = InputDocument(
             path_or_stream=BytesIO(pair[0]),
             format=InputFormat.HTML,
@@ -94,7 +94,7 @@ def test_ordered_lists():
         )
         doc: DoclingDocument = backend.convert()
         assert doc
-        assert doc.export_to_markdown() == pair[1]
+        assert doc.export_to_markdown() == pair[1], f"Error in case {idx}"
 
 
 def get_html_paths():
