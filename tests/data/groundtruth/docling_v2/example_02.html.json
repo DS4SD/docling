@@ -88,7 +88,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "This is the first paragraph of the introduction.",
       "text": "This is the first paragraph of the introduction."
@@ -123,7 +123,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Some background information here.",
       "text": "Some background information here."

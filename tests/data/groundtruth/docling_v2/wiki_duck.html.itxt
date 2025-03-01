@@ -145,13 +145,13 @@ item-0 at level 0: unspecified: group _root_
       item-144 at level 3: list_item: Read
       item-145 at level 3: list_item: View source
       item-146 at level 3: list_item: View history
-    item-147 at level 2: paragraph: Tools
-    item-148 at level 2: paragraph: Actions
+    item-147 at level 2: text: Tools
+    item-148 at level 2: text: Actions
     item-149 at level 2: list: group list
       item-150 at level 3: list_item: Read
       item-151 at level 3: list_item: View source
       item-152 at level 3: list_item: View history
-    item-153 at level 2: paragraph: General
+    item-153 at level 2: text: General
     item-154 at level 2: list: group list
       item-155 at level 3: list_item: What links here
       item-156 at level 3: list_item: Related changes
@@ -163,91 +163,91 @@ item-0 at level 0: unspecified: group _root_
       item-162 at level 3: list_item: Get shortened URL
       item-163 at level 3: list_item: Download QR code
       item-164 at level 3: list_item: Wikidata item
-    item-165 at level 2: paragraph: Print/export
+    item-165 at level 2: text: Print/export
     item-166 at level 2: list: group list
       item-167 at level 3: list_item: Download as PDF
       item-168 at level 3: list_item: Printable version
-    item-169 at level 2: paragraph: In other projects
+    item-169 at level 2: text: In other projects
     item-170 at level 2: list: group list
       item-171 at level 3: list_item: Wikimedia Commons
       item-172 at level 3: list_item: Wikiquote
-    item-173 at level 2: paragraph: Appearance
+    item-173 at level 2: text: Appearance
     item-174 at level 2: picture
-    item-175 at level 2: paragraph: From Wikipedia, the free encyclopedia
-    item-176 at level 2: paragraph: Common name for many species of bird
-    item-177 at level 2: paragraph: This article is about the bird.  ... as a food, see . For other uses, see .
-    item-178 at level 2: paragraph: "Duckling" redirects here. For other uses, see .
+    item-175 at level 2: text: From Wikipedia, the free encyclopedia
+    item-176 at level 2: text: Common name for many species of bird
+    item-177 at level 2: text: This article is about the bird.  ... as a food, see . For other uses, see .
+    item-178 at level 2: text: "Duckling" redirects here. For other uses, see .
     item-179 at level 2: table with [13x2]
-    item-180 at level 2: paragraph: Duck is the common name for nume ... und in both fresh water and sea water.
-    item-181 at level 2: paragraph: Ducks are sometimes confused wit ...  divers, grebes, gallinules and coots.
+    item-180 at level 2: text: Duck is the common name for nume ... und in both fresh water and sea water.
+    item-181 at level 2: text: Ducks are sometimes confused wit ...  divers, grebes, gallinules and coots.
     item-182 at level 2: section_header: Etymology
-      item-183 at level 3: paragraph: The word duck comes from Old Eng ... h duiken and German tauchen 'to dive'.
+      item-183 at level 3: text: The word duck comes from Old Eng ... h duiken and German tauchen 'to dive'.
       item-184 at level 3: picture
         item-184 at level 4: caption: Pacific black duck displaying the characteristic upending "duck"
-      item-185 at level 3: paragraph: This word replaced Old English e ... nskrit ātí 'water bird', among others.
-      item-186 at level 3: paragraph: A duckling is a young duck in do ... , is sometimes labelled as a duckling.
-      item-187 at level 3: paragraph: A male is called a drake and the ... a duck, or in ornithology a hen.[3][4]
+      item-185 at level 3: text: This word replaced Old English e ... nskrit ātí 'water bird', among others.
+      item-186 at level 3: text: A duckling is a young duck in do ... , is sometimes labelled as a duckling.
+      item-187 at level 3: text: A male is called a drake and the ... a duck, or in ornithology a hen.[3][4]
       item-188 at level 3: picture
         item-188 at level 4: caption: Male mallard.
       item-189 at level 3: picture
         item-189 at level 4: caption: Wood ducks.
     item-190 at level 2: section_header: Taxonomy
-      item-191 at level 3: paragraph: All ducks belong to the biologic ... ationships between various species.[9]
+      item-191 at level 3: text: All ducks belong to the biologic ... ationships between various species.[9]
       item-192 at level 3: picture
         item-192 at level 4: caption: Mallard landing in approach
-      item-193 at level 3: paragraph: In most modern classifications,  ... all size and stiff, upright tails.[14]
-      item-194 at level 3: paragraph: A number of other species called ...  shelducks in the tribe Tadornini.[15]
+      item-193 at level 3: text: In most modern classifications,  ... all size and stiff, upright tails.[14]
+      item-194 at level 3: text: A number of other species called ...  shelducks in the tribe Tadornini.[15]
     item-195 at level 2: section_header: Morphology
       item-196 at level 3: picture
         item-196 at level 4: caption: Male Mandarin duck
-      item-197 at level 3: paragraph: The overall body plan of ducks i ... is moult typically precedes migration.
-      item-198 at level 3: paragraph: The drakes of northern species o ... rkscrew shaped vagina to prevent rape.
+      item-197 at level 3: text: The overall body plan of ducks i ... is moult typically precedes migration.
+      item-198 at level 3: text: The drakes of northern species o ... rkscrew shaped vagina to prevent rape.
     item-199 at level 2: section_header: Distribution and habitat
       item-200 at level 3: picture
         item-200 at level 4: caption: Flying steamer ducks in Ushuaia, Argentina
-      item-201 at level 3: paragraph: Ducks have a cosmopolitan distri ... endemic to such far-flung islands.[21]
+      item-201 at level 3: text: Ducks have a cosmopolitan distri ... endemic to such far-flung islands.[21]
       item-202 at level 3: picture
         item-202 at level 4: caption: Female mallard in Cornwall, England
-      item-203 at level 3: paragraph: Some duck species, mainly those  ... t form after localised heavy rain.[23]
+      item-203 at level 3: text: Some duck species, mainly those  ... t form after localised heavy rain.[23]
     item-204 at level 2: section_header: Behaviour
       item-205 at level 3: section_header: Feeding
         item-206 at level 4: picture
           item-206 at level 5: caption: Pecten along the bill
         item-207 at level 4: picture
           item-207 at level 5: caption: Mallard duckling preening
-        item-208 at level 4: paragraph: Ducks eat food sources such as g ... amphibians, worms, and small molluscs.
-        item-209 at level 4: paragraph: Dabbling ducks feed on the surfa ... thers and to hold slippery food items.
-        item-210 at level 4: paragraph: Diving ducks and sea ducks forag ... ave more difficulty taking off to fly.
-        item-211 at level 4: paragraph: A few specialized species such a ... apted to catch and swallow large fish.
-        item-212 at level 4: paragraph: The others have the characterist ... e nostrils come out through hard horn.
-        item-213 at level 4: paragraph: The Guardian published an articl ...  the ducks and pollutes waterways.[25]
+        item-208 at level 4: text: Ducks eat food sources such as g ... amphibians, worms, and small molluscs.
+        item-209 at level 4: text: Dabbling ducks feed on the surfa ... thers and to hold slippery food items.
+        item-210 at level 4: text: Diving ducks and sea ducks forag ... ave more difficulty taking off to fly.
+        item-211 at level 4: text: A few specialized species such a ... apted to catch and swallow large fish.
+        item-212 at level 4: text: The others have the characterist ... e nostrils come out through hard horn.
+        item-213 at level 4: text: The Guardian published an articl ...  the ducks and pollutes waterways.[25]
       item-214 at level 3: section_header: Breeding
         item-215 at level 4: picture
           item-215 at level 5: caption: A Muscovy duckling
-        item-216 at level 4: paragraph: Ducks generally only have one pa ... st and led her ducklings to water.[28]
+        item-216 at level 4: text: Ducks generally only have one pa ... st and led her ducklings to water.[28]
       item-217 at level 3: section_header: Communication
-        item-218 at level 4: paragraph: Female mallard ducks (as well as ... laying calls or quieter contact calls.
-        item-219 at level 4: paragraph: A common urban legend claims tha ... annel television show MythBusters.[32]
+        item-218 at level 4: text: Female mallard ducks (as well as ... laying calls or quieter contact calls.
+        item-219 at level 4: text: A common urban legend claims tha ... annel television show MythBusters.[32]
       item-220 at level 3: section_header: Predators
         item-221 at level 4: picture
           item-221 at level 5: caption: Ringed teal
-        item-222 at level 4: paragraph: Ducks have many predators. Duckl ... or large birds, such as hawks or owls.
-        item-223 at level 4: paragraph: Adult ducks are fast fliers, but ... its speed and strength to catch ducks.
+        item-222 at level 4: text: Ducks have many predators. Duckl ... or large birds, such as hawks or owls.
+        item-223 at level 4: text: Adult ducks are fast fliers, but ... its speed and strength to catch ducks.
     item-224 at level 2: section_header: Relationship with humans
       item-225 at level 3: section_header: Hunting
-        item-226 at level 4: paragraph: Humans have hunted ducks since p ...  evidence of this is uncommon.[35][42]
-        item-227 at level 4: paragraph: In many areas, wild ducks (inclu ... inated by pollutants such as PCBs.[44]
+        item-226 at level 4: text: Humans have hunted ducks since p ...  evidence of this is uncommon.[35][42]
+        item-227 at level 4: text: In many areas, wild ducks (inclu ... inated by pollutants such as PCBs.[44]
       item-228 at level 3: section_header: Domestication
         item-229 at level 4: picture
           item-229 at level 5: caption: Indian Runner ducks, a common breed of domestic ducks
-        item-230 at level 4: paragraph: Ducks have many economic uses, b ... it weighs less than 1 kg (2.2 lb).[48]
+        item-230 at level 4: text: Ducks have many economic uses, b ... it weighs less than 1 kg (2.2 lb).[48]
       item-231 at level 3: section_header: Heraldry
         item-232 at level 4: picture
           item-232 at level 5: caption: Three black-colored ducks in the coat of arms of Maaninka[49]
-        item-233 at level 4: paragraph: Ducks appear on several coats of ... the coat of arms of Föglö (Åland).[51]
+        item-233 at level 4: text: Ducks appear on several coats of ... the coat of arms of Föglö (Åland).[51]
       item-234 at level 3: section_header: Cultural references
-        item-235 at level 4: paragraph: In 2002, psychologist Richard Wi ... 54] and was made into a movie in 1986.
-        item-236 at level 4: paragraph: The 1992 Disney film The Mighty  ...  Ducks minor league baseball team.[55]
+        item-235 at level 4: text: In 2002, psychologist Richard Wi ... 54] and was made into a movie in 1986.
+        item-236 at level 4: text: The 1992 Disney film The Mighty  ...  Ducks minor league baseball team.[55]
     item-237 at level 2: section_header: See also
       item-238 at level 3: list: group list
         item-239 at level 4: list_item: Birds portal
@@ -352,13 +352,13 @@ item-0 at level 0: unspecified: group _root_
         item-338 at level 4: list_item: Ducks at a Distance, by Rob Hine ... uide to identification of US waterfowl
       item-339 at level 3: table with [3x2]
       item-340 at level 3: picture
-      item-341 at level 3: paragraph: Retrieved from ""
-      item-342 at level 3: paragraph: :
+      item-341 at level 3: text: Retrieved from ""
+      item-342 at level 3: text: :
       item-343 at level 3: list: group list
         item-344 at level 4: list_item: Ducks
         item-345 at level 4: list_item: Game birds
         item-346 at level 4: list_item: Bird common names
-      item-347 at level 3: paragraph: Hidden categories:
+      item-347 at level 3: text: Hidden categories:
       item-348 at level 3: list: group list
         item-349 at level 4: list_item: All accuracy disputes
         item-350 at level 4: list_item: Accuracy disputes from February 2020

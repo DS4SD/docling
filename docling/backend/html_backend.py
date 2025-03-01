@@ -152,7 +152,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     if text and tag.name in ["div"]:
                         doc.add_text(
                             parent=self.parents[self.level],
-                            label=DocItemLabel.PARAGRAPH,
+                            label=DocItemLabel.TEXT,
                             text=text,
                             content_layer=self.content_layer,
                         )
@@ -267,7 +267,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         if text:
             doc.add_text(
                 parent=self.parents[self.level],
-                label=DocItemLabel.PARAGRAPH,
+                label=DocItemLabel.TEXT,
                 text=text,
                 content_layer=self.content_layer,
             )
