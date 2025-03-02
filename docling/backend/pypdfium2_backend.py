@@ -42,12 +42,13 @@ class PyPdfiumPageBackend(PdfPageBackend):
 
     def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:
         AREA_THRESHOLD = 0  # 32 * 32
+        page_size = self.get_size()
         with pypdfium2_lock:
             for obj in self._ppage.get_objects(filter=[pdfium_c.FPDF_PAGEOBJ_IMAGE]):
                 pos = obj.get_pos()
                 cropbox = BoundingBox.from_tuple(
                     pos, origin=CoordOrigin.BOTTOMLEFT
-                ).to_top_left_origin(page_height=self.get_size().height)
+                ).to_top_left_origin(page_height=page_size.height)
 
                 if cropbox.area() > AREA_THRESHOLD:
                     cropbox = cropbox.scaled(scale=scale)
@@ -59,9 +60,10 @@ class PyPdfiumPageBackend(PdfPageBackend):
             if not self.text_page:
                 self.text_page = self._ppage.get_textpage()
 
-            if bbox.coord_origin != CoordOrigin.BOTTOMLEFT:
-                bbox = bbox.to_bottom_left_origin(self.get_size().height)
+        if bbox.coord_origin != CoordOrigin.BOTTOMLEFT:
+            bbox = bbox.to_bottom_left_origin(self.get_size().height)
 
+        with pypdfium2_lock:
             text_piece = self.text_page.get_text_bounded(*bbox.as_tuple())
 
         return text_piece
@@ -71,11 +73,12 @@ class PyPdfiumPageBackend(PdfPageBackend):
             if not self.text_page:
                 self.text_page = self._ppage.get_textpage()
 
-            cells = []
-            cell_counter = 0
+        cells = []
+        cell_counter = 0
 
-            page_size = self.get_size()
+        page_size = self.get_size()
 
+        with pypdfium2_lock:
             for i in range(self.text_page.count_rects()):
                 rect = self.text_page.get_rect(i)
                 text_piece = self.text_page.get_text_bounded(*rect)
