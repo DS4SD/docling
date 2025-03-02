@@ -3,6 +3,7 @@ on:
 
 env:
   HF_HUB_DOWNLOAD_TIMEOUT: "60"
+  HF_HUB_ETAG_TIMEOUT: "60"
 
 jobs:
   run-checks:
