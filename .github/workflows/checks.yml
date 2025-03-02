@@ -22,7 +22,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
-          key: huggingface-cache
+          key: huggingface-cache-py${{ matrix.python-version }}
       - uses: ./.github/actions/setup-poetry
         with:
           python-version: ${{ matrix.python-version }}
