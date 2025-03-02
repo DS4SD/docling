@@ -57,6 +57,7 @@ nav:
     - Installation: installation.md
     - Usage: usage.md
     - Supported formats: supported_formats.md
+    - Enrichment features: enrichments.md
     - FAQ: faq.md
     - Docling v2: v2.md
   - Concepts:
