@@ -41,9 +41,9 @@ class PictureDescriptionVlmModel(PictureDescriptionBaseModel):
                 )
 
             # Initialize processor and model
-            self.processor = AutoProcessor.from_pretrained(self.options.repo_id)
+            self.processor = AutoProcessor.from_pretrained(artifacts_path)
             self.model = AutoModelForVision2Seq.from_pretrained(
-                self.options.repo_id,
+                artifacts_path,
                 torch_dtype=torch.bfloat16,
                 _attn_implementation=(
                     "flash_attention_2" if self.device.startswith("cuda") else "eager"

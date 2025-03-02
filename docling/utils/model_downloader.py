@@ -2,7 +2,10 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-from docling.datamodel.pipeline_options import smolvlm_picture_description
+from docling.datamodel.pipeline_options import (
+    granite_picture_description,
+    smolvlm_picture_description,
+)
 from docling.datamodel.settings import settings
 from docling.models.code_formula_model import CodeFormulaModel
 from docling.models.document_picture_classifier import DocumentPictureClassifier
@@ -23,7 +26,8 @@ def download_models(
     with_tableformer: bool = True,
     with_code_formula: bool = True,
     with_picture_classifier: bool = True,
-    with_smolvlm: bool = True,
+    with_smolvlm: bool = False,
+    with_granite_vision: bool = False,
     with_easyocr: bool = True,
 ):
     if output_dir is None:
@@ -69,6 +73,15 @@ def download_models(
         PictureDescriptionVlmModel.download_models(
             repo_id=smolvlm_picture_description.repo_id,
             local_dir=output_dir / smolvlm_picture_description.repo_cache_folder,
+            force=force,
+            progress=progress,
+        )
+
+    if with_granite_vision:
+        _log.info(f"Downloading Granite Vision model...")
+        PictureDescriptionVlmModel.download_models(
+            repo_id=granite_picture_description.repo_id,
+            local_dir=output_dir / granite_picture_description.repo_cache_folder,
             force=force,
             progress=progress,
         )
