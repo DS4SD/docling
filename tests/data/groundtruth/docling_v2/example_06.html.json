@@ -46,7 +46,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "This is a div with text.",
       "text": "This is a div with text."
@@ -58,7 +58,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "This is another div with text.",
       "text": "This is another div with text."
@@ -70,7 +70,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "This is a regular paragraph.",
       "text": "This is a regular paragraph."
@@ -82,7 +82,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "This is a third div\nwith a new line.",
       "text": "This is a third div\nwith a new line."
@@ -94,7 +94,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "This is a fourth div with a bold paragraph.",
       "text": "This is a fourth div with a bold paragraph."

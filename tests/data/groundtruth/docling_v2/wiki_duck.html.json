@@ -138,7 +138,7 @@
           "$ref": "#/texts/7"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -164,7 +164,7 @@
           "$ref": "#/texts/13"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -174,7 +174,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -188,7 +188,7 @@
           "$ref": "#/texts/14"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -198,7 +198,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -215,7 +215,7 @@
           "$ref": "#/texts/16"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -232,7 +232,7 @@
           "$ref": "#/texts/18"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -249,7 +249,7 @@
           "$ref": "#/texts/21"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -263,7 +263,7 @@
           "$ref": "#/texts/22"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "header-1",
       "label": "section"
     },
@@ -304,7 +304,7 @@
           "$ref": "#/texts/42"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -314,7 +314,7 @@
         "$ref": "#/texts/24"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -324,7 +324,7 @@
         "$ref": "#/texts/25"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -334,7 +334,7 @@
         "$ref": "#/texts/26"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -344,7 +344,7 @@
         "$ref": "#/texts/27"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -367,7 +367,7 @@
           "$ref": "#/texts/32"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -377,7 +377,7 @@
         "$ref": "#/texts/29"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -387,7 +387,7 @@
         "$ref": "#/texts/30"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -397,7 +397,7 @@
         "$ref": "#/texts/31"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -407,7 +407,7 @@
         "$ref": "#/texts/32"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -430,7 +430,7 @@
           "$ref": "#/texts/37"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -440,7 +440,7 @@
         "$ref": "#/texts/34"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -450,7 +450,7 @@
         "$ref": "#/texts/35"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -460,7 +460,7 @@
         "$ref": "#/texts/36"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -470,7 +470,7 @@
         "$ref": "#/texts/37"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -480,7 +480,7 @@
         "$ref": "#/texts/38"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -497,7 +497,7 @@
           "$ref": "#/texts/41"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -507,7 +507,7 @@
         "$ref": "#/texts/40"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -517,7 +517,7 @@
         "$ref": "#/texts/41"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -527,7 +527,7 @@
         "$ref": "#/texts/42"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "name": "list",
       "label": "list"
     },
@@ -1623,8 +1623,8 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "body",
-      "label": "paragraph",
+      "content_layer": "furniture",
+      "label": "text",
       "prov": [],
       "orig": "Main menu",
       "text": "Main menu"
@@ -1635,8 +1635,8 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "body",
-      "label": "paragraph",
+      "content_layer": "furniture",
+      "label": "text",
       "prov": [],
       "orig": "Navigation",
       "text": "Navigation"
@@ -1647,7 +1647,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Main page",
@@ -1661,7 +1661,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Contents",
@@ -1675,7 +1675,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Current events",
@@ -1689,7 +1689,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Random article",
@@ -1703,7 +1703,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "About Wikipedia",
@@ -1717,7 +1717,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Contact us",
@@ -1731,8 +1731,8 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "body",
-      "label": "paragraph",
+      "content_layer": "furniture",
+      "label": "text",
       "prov": [],
       "orig": "Contribute",
       "text": "Contribute"
@@ -1743,7 +1743,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Help",
@@ -1757,7 +1757,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Learn to edit",
@@ -1771,7 +1771,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Community portal",
@@ -1785,7 +1785,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Recent changes",
@@ -1799,7 +1799,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Upload file",
@@ -1813,7 +1813,7 @@
         "$ref": "#/groups/3"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Donate",
@@ -1827,7 +1827,7 @@
         "$ref": "#/groups/5"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Create account",
@@ -1841,7 +1841,7 @@
         "$ref": "#/groups/5"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Log in",
@@ -1855,7 +1855,7 @@
         "$ref": "#/groups/6"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Create account",
@@ -1869,7 +1869,7 @@
         "$ref": "#/groups/6"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Log in",
@@ -1883,8 +1883,8 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "body",
-      "label": "paragraph",
+      "content_layer": "furniture",
+      "label": "text",
       "prov": [],
       "orig": "Pages for logged out editors",
       "text": "Pages for logged out editors"
@@ -1895,7 +1895,7 @@
         "$ref": "#/groups/7"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Contributions",
@@ -1909,7 +1909,7 @@
         "$ref": "#/groups/7"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "Talk",
@@ -1927,7 +1927,7 @@
           "$ref": "#/groups/9"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "section_header",
       "prov": [],
       "orig": "Contents",
@@ -1940,7 +1940,7 @@
         "$ref": "#/groups/9"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "(Top)",
@@ -1958,7 +1958,7 @@
           "$ref": "#/groups/10"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "1 Etymology",
@@ -1976,7 +1976,7 @@
           "$ref": "#/groups/11"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "2 Taxonomy",
@@ -1994,7 +1994,7 @@
           "$ref": "#/groups/12"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "3 Morphology",
@@ -2012,7 +2012,7 @@
           "$ref": "#/groups/13"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "4 Distribution and habitat",
@@ -2030,7 +2030,7 @@
           "$ref": "#/groups/14"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "5 Behaviour Toggle Behaviour subsection",
@@ -2048,7 +2048,7 @@
           "$ref": "#/groups/15"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "5.1 Feeding",
@@ -2066,7 +2066,7 @@
           "$ref": "#/groups/16"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "5.2 Breeding",
@@ -2084,7 +2084,7 @@
           "$ref": "#/groups/17"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "5.3 Communication",
@@ -2102,7 +2102,7 @@
           "$ref": "#/groups/18"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "5.4 Predators",
@@ -2120,7 +2120,7 @@
           "$ref": "#/groups/19"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "6 Relationship with humans Toggle Relationship with humans subsection",
@@ -2138,7 +2138,7 @@
           "$ref": "#/groups/20"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "6.1 Hunting",
@@ -2156,7 +2156,7 @@
           "$ref": "#/groups/21"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "6.2 Domestication",
@@ -2174,7 +2174,7 @@
           "$ref": "#/groups/22"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "6.3 Heraldry",
@@ -2192,7 +2192,7 @@
           "$ref": "#/groups/23"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "6.4 Cultural references",
@@ -2210,7 +2210,7 @@
           "$ref": "#/groups/24"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "7 See also",
@@ -2228,7 +2228,7 @@
           "$ref": "#/groups/25"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "8 Notes Toggle Notes subsection",
@@ -2246,7 +2246,7 @@
           "$ref": "#/groups/26"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "8.1 Citations",
@@ -2264,7 +2264,7 @@
           "$ref": "#/groups/27"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "8.2 Sources",
@@ -2282,7 +2282,7 @@
           "$ref": "#/groups/28"
         }
       ],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "list_item",
       "prov": [],
       "orig": "9 External links",
@@ -4377,7 +4377,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Tools",
       "text": "Tools"
@@ -4389,7 +4389,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Actions",
       "text": "Actions"
@@ -4443,7 +4443,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "General",
       "text": "General"
@@ -4595,7 +4595,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Print/export",
       "text": "Print/export"
@@ -4635,7 +4635,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "In other projects",
       "text": "In other projects"
@@ -4675,7 +4675,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Appearance",
       "text": "Appearance"
@@ -4687,7 +4687,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "From Wikipedia, the free encyclopedia",
       "text": "From Wikipedia, the free encyclopedia"
@@ -4699,7 +4699,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Common name for many species of bird",
       "text": "Common name for many species of bird"
@@ -4711,7 +4711,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "This article is about the bird. For duck as a food, see . For other uses, see .",
       "text": "This article is about the bird. For duck as a food, see . For other uses, see ."
@@ -4723,7 +4723,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "\"Duckling\" redirects here. For other uses, see .",
       "text": "\"Duckling\" redirects here. For other uses, see ."
@@ -4735,7 +4735,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Duck is the common name for numerous species of waterfowl in the family Anatidae. Ducks are generally smaller and shorter-necked than swans and geese, which are members of the same family. Divided among several subfamilies, they are a form taxon; they do not represent a monophyletic group (the group of all descendants of a single common ancestral species), since swans and geese are not considered ducks. Ducks are mostly aquatic birds, and may be found in both fresh water and sea water.",
       "text": "Duck is the common name for numerous species of waterfowl in the family Anatidae. Ducks are generally smaller and shorter-necked than swans and geese, which are members of the same family. Divided among several subfamilies, they are a form taxon; they do not represent a monophyletic group (the group of all descendants of a single common ancestral species), since swans and geese are not considered ducks. Ducks are mostly aquatic birds, and may be found in both fresh water and sea water."
@@ -4747,7 +4747,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Ducks are sometimes confused with several types of unrelated water birds with similar forms, such as loons or divers, grebes, gallinules and coots.",
       "text": "Ducks are sometimes confused with several types of unrelated water birds with similar forms, such as loons or divers, grebes, gallinules and coots."
@@ -4794,7 +4794,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "The word duck comes from Old English d\u016bce 'diver', a derivative of the verb *d\u016bcan 'to duck, bend down low as if to get under something, or dive', because of the way many species in the dabbling duck group feed by upending; compare with Dutch duiken and German tauchen 'to dive'.",
       "text": "The word duck comes from Old English d\u016bce 'diver', a derivative of the verb *d\u016bcan 'to duck, bend down low as if to get under something, or dive', because of the way many species in the dabbling duck group feed by upending; compare with Dutch duiken and German tauchen 'to dive'."
@@ -4818,7 +4818,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "This word replaced Old English ened /\u00e6nid 'duck', possibly to avoid confusion with other words, such as ende 'end' with similar forms. Other Germanic languages still have similar words for duck, for example, Dutch eend, German Ente and Norwegian and. The word ened /\u00e6nid was inherited from Proto-Indo-European; cf. Latin anas \"duck\", Lithuanian \u00e1ntis 'duck', Ancient Greek \u03bd\u1fc6\u03c3\u03c3\u03b1 /\u03bd\u1fc6\u03c4\u03c4\u03b1 (n\u0113ssa /n\u0113tta) 'duck', and Sanskrit \u0101t\u00ed 'water bird', among others.",
       "text": "This word replaced Old English ened /\u00e6nid 'duck', possibly to avoid confusion with other words, such as ende 'end' with similar forms. Other Germanic languages still have similar words for duck, for example, Dutch eend, German Ente and Norwegian and. The word ened /\u00e6nid was inherited from Proto-Indo-European; cf. Latin anas \"duck\", Lithuanian \u00e1ntis 'duck', Ancient Greek \u03bd\u1fc6\u03c3\u03c3\u03b1 /\u03bd\u1fc6\u03c4\u03c4\u03b1 (n\u0113ssa /n\u0113tta) 'duck', and Sanskrit \u0101t\u00ed 'water bird', among others."
@@ -4830,7 +4830,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "A duckling is a young duck in downy plumage[1] or baby duck,[2] but in the food trade a young domestic duck which has just reached adult size and bulk and its meat is still fully tender, is sometimes labelled as a duckling.",
       "text": "A duckling is a young duck in downy plumage[1] or baby duck,[2] but in the food trade a young domestic duck which has just reached adult size and bulk and its meat is still fully tender, is sometimes labelled as a duckling."
@@ -4842,7 +4842,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "A male is called a drake and the female is called a duck, or in ornithology a hen.[3][4]",
       "text": "A male is called a drake and the female is called a duck, or in ornithology a hen.[3][4]"
@@ -4904,7 +4904,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "All ducks belong to the biological order Anseriformes, a group that contains the ducks, geese and swans, as well as the screamers, and the magpie goose.[5] All except the screamers belong to the biological family Anatidae.[5] Within the family, ducks are split into a variety of subfamilies and 'tribes'. The number and composition of these subfamilies and tribes is the cause of considerable disagreement among taxonomists.[5] Some base their decisions on morphological characteristics, others on shared behaviours or genetic studies.[6][7] The number of suggested subfamilies containing ducks ranges from two to five.[8][9] The significant level of hybridisation that occurs among wild ducks complicates efforts to tease apart the relationships between various species.[9]",
       "text": "All ducks belong to the biological order Anseriformes, a group that contains the ducks, geese and swans, as well as the screamers, and the magpie goose.[5] All except the screamers belong to the biological family Anatidae.[5] Within the family, ducks are split into a variety of subfamilies and 'tribes'. The number and composition of these subfamilies and tribes is the cause of considerable disagreement among taxonomists.[5] Some base their decisions on morphological characteristics, others on shared behaviours or genetic studies.[6][7] The number of suggested subfamilies containing ducks ranges from two to five.[8][9] The significant level of hybridisation that occurs among wild ducks complicates efforts to tease apart the relationships between various species.[9]"
@@ -4928,7 +4928,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "In most modern classifications, the so-called 'true ducks' belong to the subfamily Anatinae, which is further split into a varying number of tribes.[10] The largest of these, the Anatini, contains the 'dabbling' or 'river' ducks \u2013 named for their method of feeding primarily at the surface of fresh water.[11] The 'diving ducks', also named for their primary feeding method, make up the tribe Aythyini.[12] The 'sea ducks' of the tribe Mergini are diving ducks which specialise on fish and shellfish and spend a majority of their lives in saltwater.[13] The tribe Oxyurini contains the 'stifftails', diving ducks notable for their small size and stiff, upright tails.[14]",
       "text": "In most modern classifications, the so-called 'true ducks' belong to the subfamily Anatinae, which is further split into a varying number of tribes.[10] The largest of these, the Anatini, contains the 'dabbling' or 'river' ducks \u2013 named for their method of feeding primarily at the surface of fresh water.[11] The 'diving ducks', also named for their primary feeding method, make up the tribe Aythyini.[12] The 'sea ducks' of the tribe Mergini are diving ducks which specialise on fish and shellfish and spend a majority of their lives in saltwater.[13] The tribe Oxyurini contains the 'stifftails', diving ducks notable for their small size and stiff, upright tails.[14]"
@@ -4940,7 +4940,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "A number of other species called ducks are not considered to be 'true ducks', and are typically placed in other subfamilies or tribes. The whistling ducks are assigned either to a tribe (Dendrocygnini) in the subfamily Anatinae or the subfamily Anserinae,[15] or to their own subfamily (Dendrocygninae) or family (Dendrocyganidae).[9][16] The freckled duck of Australia is either the sole member of the tribe Stictonettini in the subfamily Anserinae,[15] or in its own family, the Stictonettinae.[9] The shelducks make up the tribe Tadornini in the family Anserinae in some classifications,[15] and their own subfamily, Tadorninae, in others,[17] while the steamer ducks are either placed in the family Anserinae in the tribe Tachyerini[15] or lumped with the shelducks in the tribe Tadorini.[9] The perching ducks make up in the tribe Cairinini in the subfamily Anserinae in some classifications, while that tribe is eliminated in other classifications and its members assigned to the tribe Anatini.[9] The torrent duck is generally included in the subfamily Anserinae in the monotypic tribe Merganettini,[15] but is sometimes included in the tribe Tadornini.[18] The pink-eared duck is sometimes included as a true duck either in the tribe Anatini[15] or the tribe Malacorhynchini,[19] and other times is included with the shelducks in the tribe Tadornini.[15]",
       "text": "A number of other species called ducks are not considered to be 'true ducks', and are typically placed in other subfamilies or tribes. The whistling ducks are assigned either to a tribe (Dendrocygnini) in the subfamily Anatinae or the subfamily Anserinae,[15] or to their own subfamily (Dendrocygninae) or family (Dendrocyganidae).[9][16] The freckled duck of Australia is either the sole member of the tribe Stictonettini in the subfamily Anserinae,[15] or in its own family, the Stictonettinae.[9] The shelducks make up the tribe Tadornini in the family Anserinae in some classifications,[15] and their own subfamily, Tadorninae, in others,[17] while the steamer ducks are either placed in the family Anserinae in the tribe Tachyerini[15] or lumped with the shelducks in the tribe Tadorini.[9] The perching ducks make up in the tribe Cairinini in the subfamily Anserinae in some classifications, while that tribe is eliminated in other classifications and its members assigned to the tribe Anatini.[9] The torrent duck is generally included in the subfamily Anserinae in the monotypic tribe Merganettini,[15] but is sometimes included in the tribe Tadornini.[18] The pink-eared duck is sometimes included as a true duck either in the tribe Anatini[15] or the tribe Malacorhynchini,[19] and other times is included with the shelducks in the tribe Tadornini.[15]"
@@ -4987,7 +4987,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "The overall body plan of ducks is elongated and broad, and they are also relatively long-necked, albeit not as long-necked as the geese and swans. The body shape of diving ducks varies somewhat from this in being more rounded. The bill is usually broad and contains serrated pectens, which are particularly well defined in the filter-feeding species. In the case of some fishing species the bill is long and strongly serrated. The scaled legs are strong and well developed, and generally set far back on the body, more so in the highly aquatic species. The wings are very strong and are generally short and pointed, and the flight of ducks requires fast continuous strokes, requiring in turn strong wing muscles. Three species of steamer duck are almost flightless, however. Many species of duck are temporarily flightless while moulting; they seek out protected habitat with good food supplies during this period. This moult typically precedes migration.",
       "text": "The overall body plan of ducks is elongated and broad, and they are also relatively long-necked, albeit not as long-necked as the geese and swans. The body shape of diving ducks varies somewhat from this in being more rounded. The bill is usually broad and contains serrated pectens, which are particularly well defined in the filter-feeding species. In the case of some fishing species the bill is long and strongly serrated. The scaled legs are strong and well developed, and generally set far back on the body, more so in the highly aquatic species. The wings are very strong and are generally short and pointed, and the flight of ducks requires fast continuous strokes, requiring in turn strong wing muscles. Three species of steamer duck are almost flightless, however. Many species of duck are temporarily flightless while moulting; they seek out protected habitat with good food supplies during this period. This moult typically precedes migration."
@@ -4999,7 +4999,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "The drakes of northern species often have extravagant plumage, but that is moulted in summer to give a more female-like appearance, the \"eclipse\" plumage. Southern resident species typically show less sexual dimorphism, although there are exceptions such as the paradise shelduck of New Zealand, which is both strikingly sexually dimorphic and in which the female's plumage is brighter than that of the male. The plumage of juvenile birds generally resembles that of the female. Female ducks have evolved to have a corkscrew shaped vagina to prevent rape.",
       "text": "The drakes of northern species often have extravagant plumage, but that is moulted in summer to give a more female-like appearance, the \"eclipse\" plumage. Southern resident species typically show less sexual dimorphism, although there are exceptions such as the paradise shelduck of New Zealand, which is both strikingly sexually dimorphic and in which the female's plumage is brighter than that of the male. The plumage of juvenile birds generally resembles that of the female. Female ducks have evolved to have a corkscrew shaped vagina to prevent rape."
@@ -5049,7 +5049,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Ducks have a cosmopolitan distribution, and are found on every continent except Antarctica.[5] Several species manage to live on subantarctic islands, including South Georgia and the Auckland Islands.[20] Ducks have reached a number of isolated oceanic islands, including the Hawaiian Islands, Micronesia and the Gal\u00e1pagos Islands, where they are often vagrants and less often residents.[21][22] A handful are endemic to such far-flung islands.[21]",
       "text": "Ducks have a cosmopolitan distribution, and are found on every continent except Antarctica.[5] Several species manage to live on subantarctic islands, including South Georgia and the Auckland Islands.[20] Ducks have reached a number of isolated oceanic islands, including the Hawaiian Islands, Micronesia and the Gal\u00e1pagos Islands, where they are often vagrants and less often residents.[21][22] A handful are endemic to such far-flung islands.[21]"
@@ -5073,7 +5073,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Some duck species, mainly those breeding in the temperate and Arctic Northern Hemisphere, are migratory; those in the tropics are generally not. Some ducks, particularly in Australia where rainfall is erratic, are nomadic, seeking out the temporary lakes and pools that form after localised heavy rain.[23]",
       "text": "Some duck species, mainly those breeding in the temperate and Arctic Northern Hemisphere, are migratory; those in the tropics are generally not. Some ducks, particularly in Australia where rainfall is erratic, are nomadic, seeking out the temporary lakes and pools that form after localised heavy rain.[23]"
@@ -5173,7 +5173,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Ducks eat food sources such as grasses, aquatic plants, fish, insects, small amphibians, worms, and small molluscs.",
       "text": "Ducks eat food sources such as grasses, aquatic plants, fish, insects, small amphibians, worms, and small molluscs."
@@ -5185,7 +5185,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Dabbling ducks feed on the surface of water or on land, or as deep as they can reach by up-ending without completely submerging.[24] Along the edge of the bill, there is a comb-like structure called a pecten. This strains the water squirting from the side of the bill and traps any food. The pecten is also used to preen feathers and to hold slippery food items.",
       "text": "Dabbling ducks feed on the surface of water or on land, or as deep as they can reach by up-ending without completely submerging.[24] Along the edge of the bill, there is a comb-like structure called a pecten. This strains the water squirting from the side of the bill and traps any food. The pecten is also used to preen feathers and to hold slippery food items."
@@ -5197,7 +5197,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Diving ducks and sea ducks forage deep underwater. To be able to submerge more easily, the diving ducks are heavier than dabbling ducks, and therefore have more difficulty taking off to fly.",
       "text": "Diving ducks and sea ducks forage deep underwater. To be able to submerge more easily, the diving ducks are heavier than dabbling ducks, and therefore have more difficulty taking off to fly."
@@ -5209,7 +5209,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "A few specialized species such as the mergansers are adapted to catch and swallow large fish.",
       "text": "A few specialized species such as the mergansers are adapted to catch and swallow large fish."
@@ -5221,7 +5221,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "The others have the characteristic wide flat bill adapted to dredging-type jobs such as pulling up waterweed, pulling worms and small molluscs out of mud, searching for insect larvae, and bulk jobs such as dredging out, holding, turning head first, and swallowing a squirming frog. To avoid injury when digging into sediment it has no cere, but the nostrils come out through hard horn.",
       "text": "The others have the characteristic wide flat bill adapted to dredging-type jobs such as pulling up waterweed, pulling worms and small molluscs out of mud, searching for insect larvae, and bulk jobs such as dredging out, holding, turning head first, and swallowing a squirming frog. To avoid injury when digging into sediment it has no cere, but the nostrils come out through hard horn."
@@ -5233,7 +5233,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "The Guardian published an article advising that ducks should not be fed with bread because it damages the health of the ducks and pollutes waterways.[25]",
       "text": "The Guardian published an article advising that ducks should not be fed with bread because it damages the health of the ducks and pollutes waterways.[25]"
@@ -5277,7 +5277,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Ducks generally only have one partner at a time, although the partnership usually only lasts one year.[26] Larger species and the more sedentary species (like fast-river specialists) tend to have pair-bonds that last numerous years.[27] Most duck species breed once a year, choosing to do so in favourable conditions (spring/summer or wet seasons). Ducks also tend to make a nest before breeding, and, after hatching, lead their ducklings to water. Mother ducks are very caring and protective of their young, but may abandon some of their ducklings if they are physically stuck in an area they cannot get out of (such as nesting in an enclosed courtyard) or are not prospering due to genetic defects or sickness brought about by hypothermia, starvation, or disease. Ducklings can also be orphaned by inconsistent late hatching where a few eggs hatch after the mother has abandoned the nest and led her ducklings to water.[28]",
       "text": "Ducks generally only have one partner at a time, although the partnership usually only lasts one year.[26] Larger species and the more sedentary species (like fast-river specialists) tend to have pair-bonds that last numerous years.[27] Most duck species breed once a year, choosing to do so in favourable conditions (spring/summer or wet seasons). Ducks also tend to make a nest before breeding, and, after hatching, lead their ducklings to water. Mother ducks are very caring and protective of their young, but may abandon some of their ducklings if they are physically stuck in an area they cannot get out of (such as nesting in an enclosed courtyard) or are not prospering due to genetic defects or sickness brought about by hypothermia, starvation, or disease. Ducklings can also be orphaned by inconsistent late hatching where a few eggs hatch after the mother has abandoned the nest and led her ducklings to water.[28]"
@@ -5309,7 +5309,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Female mallard ducks (as well as several other species in the genus Anas, such as the American and Pacific black ducks, spot-billed duck, northern pintail and common teal) make the classic \"quack\" sound while males make a similar but raspier sound that is sometimes written as \"breeeeze\",[29][self-published source?] but, despite widespread misconceptions, most species of duck do not \"quack\".[30] In general, ducks make a range of calls, including whistles, cooing, yodels and grunts. For example, the scaup \u2013 which are diving ducks \u2013 make a noise like \"scaup\" (hence their name). Calls may be loud displaying calls or quieter contact calls.",
       "text": "Female mallard ducks (as well as several other species in the genus Anas, such as the American and Pacific black ducks, spot-billed duck, northern pintail and common teal) make the classic \"quack\" sound while males make a similar but raspier sound that is sometimes written as \"breeeeze\",[29][self-published source?] but, despite widespread misconceptions, most species of duck do not \"quack\".[30] In general, ducks make a range of calls, including whistles, cooing, yodels and grunts. For example, the scaup \u2013 which are diving ducks \u2013 make a noise like \"scaup\" (hence their name). Calls may be loud displaying calls or quieter contact calls."
@@ -5321,7 +5321,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "A common urban legend claims that duck quacks do not echo; however, this has been proven to be false. This myth was first debunked by the Acoustics Research Centre at the University of Salford in 2003 as part of the British Association's Festival of Science.[31] It was also debunked in one of the earlier episodes of the popular Discovery Channel television show MythBusters.[32]",
       "text": "A common urban legend claims that duck quacks do not echo; however, this has been proven to be false. This myth was first debunked by the Acoustics Research Centre at the University of Salford in 2003 as part of the British Association's Festival of Science.[31] It was also debunked in one of the earlier episodes of the popular Discovery Channel television show MythBusters.[32]"
@@ -5368,7 +5368,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Ducks have many predators. Ducklings are particularly vulnerable, since their inability to fly makes them easy prey not only for predatory birds but also for large fish like pike, crocodilians, predatory testudines such as the alligator snapping turtle, and other aquatic hunters, including fish-eating birds such as herons. Ducks' nests are raided by land-based predators, and brooding females may be caught unaware on the nest by mammals, such as foxes, or large birds, such as hawks or owls.",
       "text": "Ducks have many predators. Ducklings are particularly vulnerable, since their inability to fly makes them easy prey not only for predatory birds but also for large fish like pike, crocodilians, predatory testudines such as the alligator snapping turtle, and other aquatic hunters, including fish-eating birds such as herons. Ducks' nests are raided by land-based predators, and brooding females may be caught unaware on the nest by mammals, such as foxes, or large birds, such as hawks or owls."
@@ -5380,7 +5380,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Adult ducks are fast fliers, but may be caught on the water by large aquatic predators including big fish such as the North American muskie and the European pike. In flight, ducks are safe from all but a few predators such as humans and the peregrine falcon, which uses its speed and strength to catch ducks.",
       "text": "Adult ducks are fast fliers, but may be caught on the water by large aquatic predators including big fish such as the North American muskie and the European pike. In flight, ducks are safe from all but a few predators such as humans and the peregrine falcon, which uses its speed and strength to catch ducks."
@@ -5438,7 +5438,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Humans have hunted ducks since prehistoric times. Excavations of middens in California dating to 7800 \u2013 6400 BP have turned up bones of ducks, including at least one now-extinct flightless species.[33] Ducks were captured in \"significant numbers\" by Holocene inhabitants of the lower Ohio River valley, suggesting they took advantage of the seasonal bounty provided by migrating waterfowl.[34] Neolithic hunters in locations as far apart as the Caribbean,[35] Scandinavia,[36] Egypt,[37] Switzerland,[38] and China relied on ducks as a source of protein for some or all of the year.[39] Archeological evidence shows that M\u0101ori people in New Zealand hunted the flightless Finsch's duck, possibly to extinction, though rat predation may also have contributed to its fate.[40] A similar end awaited the Chatham duck, a species with reduced flying capabilities which went extinct shortly after its island was colonised by Polynesian settlers.[41] It is probable that duck eggs were gathered by Neolithic hunter-gathers as well, though hard evidence of this is uncommon.[35][42]",
       "text": "Humans have hunted ducks since prehistoric times. Excavations of middens in California dating to 7800 \u2013 6400 BP have turned up bones of ducks, including at least one now-extinct flightless species.[33] Ducks were captured in \"significant numbers\" by Holocene inhabitants of the lower Ohio River valley, suggesting they took advantage of the seasonal bounty provided by migrating waterfowl.[34] Neolithic hunters in locations as far apart as the Caribbean,[35] Scandinavia,[36] Egypt,[37] Switzerland,[38] and China relied on ducks as a source of protein for some or all of the year.[39] Archeological evidence shows that M\u0101ori people in New Zealand hunted the flightless Finsch's duck, possibly to extinction, though rat predation may also have contributed to its fate.[40] A similar end awaited the Chatham duck, a species with reduced flying capabilities which went extinct shortly after its island was colonised by Polynesian settlers.[41] It is probable that duck eggs were gathered by Neolithic hunter-gathers as well, though hard evidence of this is uncommon.[35][42]"
@@ -5450,7 +5450,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "In many areas, wild ducks (including ducks farmed and released into the wild) are hunted for food or sport,[43] by shooting, or by being trapped using duck decoys. Because an idle floating duck or a duck squatting on land cannot react to fly or move quickly, \"a sitting duck\" has come to mean \"an easy target\". These ducks may be contaminated by pollutants such as PCBs.[44]",
       "text": "In many areas, wild ducks (including ducks farmed and released into the wild) are hunted for food or sport,[43] by shooting, or by being trapped using duck decoys. Because an idle floating duck or a duck squatting on land cannot react to fly or move quickly, \"a sitting duck\" has come to mean \"an easy target\". These ducks may be contaminated by pollutants such as PCBs.[44]"
@@ -5494,7 +5494,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Ducks have many economic uses, being farmed for their meat, eggs, and feathers (particularly their down). Approximately 3 billion ducks are slaughtered each year for meat worldwide.[45] They are also kept and bred by aviculturists and often displayed in zoos. Almost all the varieties of domestic ducks are descended from the mallard (Anas platyrhynchos), apart from the Muscovy duck (Cairina moschata).[46][47] The Call duck is another example of a domestic duck breed. Its name comes from its original use established by hunters, as a decoy to attract wild mallards from the sky, into traps set for them on the ground. The call duck is the world's smallest domestic duck breed, as it weighs less than 1\u00a0kg (2.2\u00a0lb).[48]",
       "text": "Ducks have many economic uses, being farmed for their meat, eggs, and feathers (particularly their down). Approximately 3 billion ducks are slaughtered each year for meat worldwide.[45] They are also kept and bred by aviculturists and often displayed in zoos. Almost all the varieties of domestic ducks are descended from the mallard (Anas platyrhynchos), apart from the Muscovy duck (Cairina moschata).[46][47] The Call duck is another example of a domestic duck breed. Its name comes from its original use established by hunters, as a decoy to attract wild mallards from the sky, into traps set for them on the ground. The call duck is the world's smallest domestic duck breed, as it weighs less than 1\u00a0kg (2.2\u00a0lb).[48]"
@@ -5538,7 +5538,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Ducks appear on several coats of arms, including the coat of arms of Lub\u0101na (Latvia)[50] and the coat of arms of F\u00f6gl\u00f6 (\u00c5land).[51]",
       "text": "Ducks appear on several coats of arms, including the coat of arms of Lub\u0101na (Latvia)[50] and the coat of arms of F\u00f6gl\u00f6 (\u00c5land).[51]"
@@ -5570,7 +5570,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "In 2002, psychologist Richard Wiseman and colleagues at the University of Hertfordshire, UK, finished a year-long LaughLab experiment, concluding that of all animals, ducks attract the most humor and silliness; he said, \"If you're going to tell a joke involving an animal, make it a duck.\"[52] The word \"duck\" may have become an inherently funny word in many languages, possibly because ducks are seen as silly in their looks or behavior. Of the many ducks in fiction, many are cartoon characters, such as Walt Disney's Donald Duck, and Warner Bros.' Daffy Duck. Howard the Duck started as a comic book character in 1973[53][54] and was made into a movie in 1986.",
       "text": "In 2002, psychologist Richard Wiseman and colleagues at the University of Hertfordshire, UK, finished a year-long LaughLab experiment, concluding that of all animals, ducks attract the most humor and silliness; he said, \"If you're going to tell a joke involving an animal, make it a duck.\"[52] The word \"duck\" may have become an inherently funny word in many languages, possibly because ducks are seen as silly in their looks or behavior. Of the many ducks in fiction, many are cartoon characters, such as Walt Disney's Donald Duck, and Warner Bros.' Daffy Duck. Howard the Duck started as a comic book character in 1973[53][54] and was made into a movie in 1986."
@@ -5582,7 +5582,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "The 1992 Disney film The Mighty Ducks, starring Emilio Estevez, chose the duck as the mascot for the fictional youth hockey team who are protagonists of the movie, based on the duck being described as a fierce fighter. This led to the duck becoming the nickname and mascot for the eventual National Hockey League professional team of the Anaheim Ducks, who were founded with the name the Mighty Ducks of Anaheim.[citation needed] The duck is also the nickname of the University of Oregon sports teams as well as the Long Island Ducks minor league baseball team.[55]",
       "text": "The 1992 Disney film The Mighty Ducks, starring Emilio Estevez, chose the duck as the mascot for the fictional youth hockey team who are protagonists of the movie, based on the duck being described as a fierce fighter. This led to the duck becoming the nickname and mascot for the eventual National Hockey League professional team of the Anaheim Ducks, who were founded with the name the Mighty Ducks of Anaheim.[citation needed] The duck is also the nickname of the University of Oregon sports teams as well as the Long Island Ducks minor league baseball team.[55]"
@@ -6995,7 +6995,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Retrieved from \"\"",
       "text": "Retrieved from \"\""
@@ -7007,7 +7007,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": ":",
       "text": ":"
@@ -7061,7 +7061,7 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "paragraph",
+      "label": "text",
       "prov": [],
       "orig": "Hidden categories:",
       "text": "Hidden categories:"
@@ -7592,7 +7592,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "picture",
       "prov": [],
       "captions": [],
@@ -7606,7 +7606,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "picture",
       "prov": [],
       "captions": [],
@@ -7620,7 +7620,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "body",
+      "content_layer": "furniture",
       "label": "picture",
       "prov": [],
       "captions": [],
