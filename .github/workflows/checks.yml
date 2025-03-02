@@ -1,6 +1,9 @@
 on:
   workflow_call:
 
+env:
+  HF_HUB_DOWNLOAD_TIMEOUT: "60"
+
 jobs:
   run-checks:
     runs-on: ubuntu-latest
