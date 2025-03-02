@@ -14,6 +14,11 @@ jobs:
       - name: Set TESSDATA_PREFIX
         run: |
           echo "TESSDATA_PREFIX=$(dpkg -L tesseract-ocr-eng | grep tessdata$)" >> "$GITHUB_ENV"
+      - name: Cache Hugging Face models
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: huggingface-cache
       - uses: ./.github/actions/setup-poetry
         with:
           python-version: ${{ matrix.python-version }}
