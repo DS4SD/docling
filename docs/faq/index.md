@@ -149,7 +149,7 @@ This is a collection of FAQ collected from the user questions on <https://github
 
     **Details**:
 
-    Using the [`HybridChunker`](./concepts/chunking.md#hybrid-chunker) often triggers a warning like this:
+    Using the [`HybridChunker`](../concepts/chunking.md#hybrid-chunker) often triggers a warning like this:
     > Token indices sequence length is longer than the specified maximum sequence length for this model (531 > 512). Running this sequence through the model will result in indexing errors
 
     This is a warning that is emitted by transformers, saying that actually *running this sequence through the model* will result in indexing errors, i.e. the problematic case is only if one indeed passes the particular sequence through the (embedding) model.

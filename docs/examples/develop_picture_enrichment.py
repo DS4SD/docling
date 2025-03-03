@@ -1,6 +1,6 @@
 # WARNING
 # This example demonstrates only how to develop a new enrichment model.
-# It does not run thr actual picture classifier model.
+# It does not run the actual picture classifier model.
 
 import logging
 from pathlib import Path

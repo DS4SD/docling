@@ -6,10 +6,10 @@ The following table provides an overview of the default enrichment models availa
 
 | Feature | Parameter | Processed item | Description |
 | ------- | --------- | ---------------| ----------- |
-| Code understanding | `do_code_enrichment` | `CodeItem` | See [docs below](#code-understanding). | 
-| Formula understanding | `do_formula_enrichment` | `TextItem` with label `FORMULA` | See [docs below](#formula-understanding). | 
-| Picrure classification | `do_picture_classification` | `PictureItem` | See [docs below](#picture-classification). | 
-| Picture description | `do_picture_description` | `PictureItem` | See [docs below](#picture-description). | 
+| Code understanding | `do_code_enrichment` | `CodeItem` | See [docs below](#code-understanding). |
+| Formula understanding | `do_formula_enrichment` | `TextItem` with label `FORMULA` | See [docs below](#formula-understanding). |
+| Picrure classification | `do_picture_classification` | `PictureItem` | See [docs below](#picture-classification). |
+| Picture description | `do_picture_description` | `PictureItem` | See [docs below](#picture-description). |
 
 
 ## Enrichments details
@@ -204,7 +204,7 @@ pipeline_options.picture_description_options = PictureDescriptionApiOptions(
 
 End-to-end code snippets for cloud providers are available in the examples section:
 
-- [IBM watsonx.ai](./examples/pictures_description_api.py)
+- [IBM watsonx.ai](../examples/pictures_description_api.py)
 
 
 ## Develop new enrichment models
@@ -212,5 +212,5 @@ End-to-end code snippets for cloud providers are available in the examples secti
 Beside looking at the implementation of all the models listed above, the Docling documentation has a few examples
 dedicated to the implementation of enrichment models.
 
-- [Develop picture enrichment](./examples/develop_picture_enrichment.py)
-- [Develop formula enrichment](./examples/develop_formula_understanding.py)
+- [Develop picture enrichment](../examples/develop_picture_enrichment.py)
+- [Develop formula enrichment](../examples/develop_formula_understanding.py)
