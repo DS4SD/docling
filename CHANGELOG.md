@@ -1,3 +1,14 @@
+## [v2.25.1](https://github.com/DS4SD/docling/releases/tag/v2.25.1) - 2025-03-03
+
+### Fix
+
+* Enable locks for threadsafe pdfium ([#1052](https://github.com/DS4SD/docling/issues/1052)) ([`8dc0562`](https://github.com/DS4SD/docling/commit/8dc0562542299cf972d14eeeb4393e50b589c8ad))
+* **html:** Use 'start' attribute when parsing ordered lists from HTML docs ([#1062](https://github.com/DS4SD/docling/issues/1062)) ([`de7b963`](https://github.com/DS4SD/docling/commit/de7b963b09a34916f0a8d99649269aeb37db1408))
+
+### Documentation
+
+* Improve docs on token limit warning triggered by HybridChunker ([#1077](https://github.com/DS4SD/docling/issues/1077)) ([`db3ceef`](https://github.com/DS4SD/docling/commit/db3ceefd4ae6251a97e333bcb03051698b3fa71a))
+
 ## [v2.25.0](https://github.com/DS4SD/docling/releases/tag/v2.25.0) - 2025-02-26
 
 ### Feature
