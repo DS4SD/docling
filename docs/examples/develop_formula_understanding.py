@@ -1,6 +1,6 @@
 # WARNING
 # This example demonstrates only how to develop a new enrichment model.
-# It does not run thr actual formula understanding model.
+# It does not run the actual formula understanding model.
 
 import logging
 from pathlib import Path

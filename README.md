@@ -123,6 +123,6 @@ For individual model usage, please refer to the model licenses found in the orig
 
 Docling has been brought to you by IBM.
 
-[supported_formats]: https://ds4sd.github.io/docling/supported_formats/
+[supported_formats]: https://ds4sd.github.io/docling/usage/supported_formats/
 [docling_document]: https://ds4sd.github.io/docling/concepts/docling_document/
 [integrations]: https://ds4sd.github.io/docling/integrations/

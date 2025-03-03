@@ -1,6 +1,6 @@
 Docling can parse various documents formats into a unified representation (Docling
 Document), which it can export to different formats too — check out
-[Architecture](./concepts/architecture.md) for more details.
+[Architecture](../concepts/architecture.md) for more details.
 
 Below you can find a listing of all supported input and output formats.
 
@@ -22,7 +22,7 @@ Schema-specific support:
 |--------|-------------|
 | USPTO XML | XML format followed by [USPTO](https://www.uspto.gov/patents) patents |
 | JATS XML | XML format followed by [JATS](https://jats.nlm.nih.gov/) articles |
-| Docling JSON | JSON-serialized [Docling Document](./concepts/docling_document.md) |
+| Docling JSON | JSON-serialized [Docling Document](../concepts/docling_document.md) |
 
 ## Supported output formats
 

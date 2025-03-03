@@ -22,7 +22,7 @@ A simple example would look like this:
 docling https://arxiv.org/pdf/2206.01062
 ```
 
-To see all available options (export formats etc.) run `docling --help`. More details in the [CLI reference page](./reference/cli.md).
+To see all available options (export formats etc.) run `docling --help`. More details in the [CLI reference page](../reference/cli.md).
 
 ### Advanced options
 
@@ -104,7 +104,7 @@ The options in this list require the explicit `enable_remote_services=True` when
 
 #### Adjust pipeline features
 
-The example file [custom_convert.py](./examples/custom_convert.py) contains multiple ways
+The example file [custom_convert.py](../examples/custom_convert.py) contains multiple ways
 one can adjust the conversion pipeline and features.
 
 ##### Control PDF table extraction options
@@ -183,13 +183,13 @@ You can limit the CPU threads used by Docling by setting the environment variabl
 
 !!! note
 
-    This section discusses directly invoking a [backend](./concepts/architecture.md),
+    This section discusses directly invoking a [backend](../concepts/architecture.md),
     i.e. using a low-level API. This should only be done when necessary. For most cases,
     using a `DocumentConverter` (high-level API) as discussed in the sections above
     should suffice — and is the recommended way.
 
-By default, Docling will try to identify the document format to apply the appropriate conversion backend (see the list of [supported formats](./supported_formats.md)).
-You can restrict the `DocumentConverter` to a set of allowed document formats, as shown in the [Multi-format conversion](./examples/run_with_formats.py) example.
+By default, Docling will try to identify the document format to apply the appropriate conversion backend (see the list of [supported formats](../supported_formats.md)).
+You can restrict the `DocumentConverter` to a set of allowed document formats, as shown in the [Multi-format conversion](../examples/run_with_formats.py) example.
 Alternatively, you can also use the specific backend that matches your document content. For instance, you can use `HTMLDocumentBackend` for HTML pages:
 
 ```python
@@ -214,9 +214,9 @@ print(dl_doc.export_to_markdown())
 
 ## Chunking
 
-You can chunk a Docling document using a [chunker](concepts/chunking.md), such as a
+You can chunk a Docling document using a [chunker](../concepts/chunking.md), such as a
 `HybridChunker`, as shown below (for more details check out
-[this example](examples/hybrid_chunking.ipynb)):
+[this example](../examples/hybrid_chunking.ipynb)):
 
 ```python
 from docling.document_converter import DocumentConverter
