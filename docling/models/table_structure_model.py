@@ -95,7 +95,7 @@ class TableStructureModel(BasePageModel):
             repo_id="ds4sd/docling-models",
             force_download=force,
             local_dir=local_dir,
-            revision="v2.1.0",
+            revision="refs/pr/7",
         )
 
         return Path(download_path)
