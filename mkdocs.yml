@@ -54,11 +54,14 @@ theme:
 nav:
   - Home:
     - "Docling": index.md
-    - Installation: installation.md
-    - Usage: usage.md
-    - Supported formats: supported_formats.md
-    - FAQ: faq.md
-    - Docling v2: v2.md
+    - Installation:
+      - Installation: installation/index.md
+    - Usage:
+      - Usage: usage/index.md
+      - Supported formats: usage/supported_formats.md
+      - Enrichment features: usage/enrichments.md
+    - FAQ:
+      - FAQ: faq/index.md
   - Concepts:
     - Concepts: concepts/index.md
     - Architecture: concepts/architecture.md
@@ -72,11 +75,8 @@ nav:
       - "Batch conversion": examples/batch_convert.py
       - "Multi-format conversion": examples/run_with_formats.py
       - "Figure export": examples/export_figures.py
-      - "Figure enrichment": examples/develop_picture_enrichment.py
       - "Table export": examples/export_tables.py
       - "Multimodal export": examples/export_multimodal.py
-      - "Annotate picture with local vlm": examples/pictures_description.ipynb
-      - "Annotate picture with remote vlm": examples/pictures_description_api.py
       - "Force full page OCR": examples/full_page_ocr.py
       - "Automatic OCR language detection with tesseract": examples/tesseract_lang_detection.py
       - "RapidOCR with custom OCR models": examples/rapidocr_with_custom_models.py
@@ -90,6 +90,12 @@ nav:
       - examples/rag_haystack.ipynb
       - examples/rag_langchain.ipynb
       - examples/rag_llamaindex.ipynb
+    - 🖼️ Picture annotation:
+      - "Annotate picture with local VLM": examples/pictures_description.ipynb
+      - "Annotate picture with remote VLM": examples/pictures_description_api.py
+    - ✨ Enrichment development:
+      - "Figure enrichment": examples/develop_picture_enrichment.py
+      - "Formula enrichment": examples/develop_formula_understanding.py
     - 🗂️ More examples:
       - examples/rag_weaviate.ipynb
       - RAG with Granite [↗]: https://github.com/ibm-granite-community/granite-snack-cookbook/blob/main/recipes/RAG/Granite_Docling_RAG.ipynb
