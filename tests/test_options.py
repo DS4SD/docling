@@ -17,7 +17,7 @@ from docling.document_converter import DocumentConverter, PdfFormatOption
 
 @pytest.fixture
 def test_doc_path():
-    return Path("./tests/data/2206.01062.pdf")
+    return Path("./tests/data/pdf/2206.01062.pdf")
 
 
 def get_converters_with_table_options():
@@ -103,6 +103,20 @@ def test_e2e_conversions(test_doc_path):
         doc_result: ConversionResult = converter.convert(test_doc_path)
 
         assert doc_result.status == ConversionStatus.SUCCESS
+
+
+def test_page_range(test_doc_path):
+    converter = DocumentConverter()
+    doc_result: ConversionResult = converter.convert(test_doc_path, page_range=(9, 9))
+
+    assert doc_result.status == ConversionStatus.SUCCESS
+    assert doc_result.input.page_count == 9
+    assert doc_result.document.num_pages() == 1
+
+    doc_result: ConversionResult = converter.convert(
+        test_doc_path, page_range=(10, 10), raises_on_error=False
+    )
+    assert doc_result.status == ConversionStatus.FAILURE
 
 
 def test_ocr_coverage_threshold(test_doc_path):

@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Iterable, List, Literal, Optional, Tuple, Union
 
+import numpy as np
 from docling_core.types.doc import (
     DoclingDocument,
     NodeItem,
@@ -55,12 +56,13 @@ class DocumentPictureClassifier(BaseEnrichmentModel):
         Processes a batch of elements and adds classification annotations.
     """
 
+    _model_repo_folder = "ds4sd--DocumentFigureClassifier"
     images_scale = 2
 
     def __init__(
         self,
         enabled: bool,
-        artifacts_path: Optional[Union[Path, str]],
+        artifacts_path: Optional[Path],
         options: DocumentPictureClassifierOptions,
         accelerator_options: AcceleratorOptions,
     ):
@@ -88,24 +90,25 @@ class DocumentPictureClassifier(BaseEnrichmentModel):
             )
 
             if artifacts_path is None:
-                artifacts_path = self.download_models_hf()
+                artifacts_path = self.download_models()
             else:
-                artifacts_path = Path(artifacts_path)
+                artifacts_path = artifacts_path / self._model_repo_folder
 
             self.document_picture_classifier = DocumentFigureClassifierPredictor(
-                artifacts_path=artifacts_path,
+                artifacts_path=str(artifacts_path),
                 device=device,
                 num_threads=accelerator_options.num_threads,
             )
 
     @staticmethod
-    def download_models_hf(
-        local_dir: Optional[Path] = None, force: bool = False
+    def download_models(
+        local_dir: Optional[Path] = None, force: bool = False, progress: bool = False
     ) -> Path:
         from huggingface_hub import snapshot_download
         from huggingface_hub.utils import disable_progress_bars
 
-        disable_progress_bars()
+        if not progress:
+            disable_progress_bars()
         download_path = snapshot_download(
             repo_id="ds4sd/DocumentFigureClassifier",
             force_download=force,
@@ -159,7 +162,7 @@ class DocumentPictureClassifier(BaseEnrichmentModel):
                 yield element
             return
 
-        images: List[Image.Image] = []
+        images: List[Union[Image.Image, np.ndarray]] = []
         elements: List[PictureItem] = []
         for el in element_batch:
             assert isinstance(el, PictureItem)

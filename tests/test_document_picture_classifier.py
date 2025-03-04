@@ -37,7 +37,7 @@ def get_converter():
 
 
 def test_picture_classifier():
-    pdf_path = Path("tests/data/picture_classification.pdf")
+    pdf_path = Path("tests/data/pdf/picture_classification.pdf")
     converter = get_converter()
 
     print(f"converting {pdf_path}")

@@ -219,10 +219,27 @@ def convert(
         bool,
         typer.Option(..., help="Enable the formula enrichment model in the pipeline."),
     ] = False,
+    enrich_picture_classes: Annotated[
+        bool,
+        typer.Option(
+            ...,
+            help="Enable the picture classification enrichment model in the pipeline.",
+        ),
+    ] = False,
+    enrich_picture_description: Annotated[
+        bool,
+        typer.Option(..., help="Enable the picture description model in the pipeline."),
+    ] = False,
     artifacts_path: Annotated[
         Optional[Path],
         typer.Option(..., help="If provided, the location of the model artifacts."),
     ] = None,
+    enable_remote_services: Annotated[
+        bool,
+        typer.Option(
+            ..., help="Must be enabled when using models connecting to remote services."
+        ),
+    ] = False,
     abort_on_error: Annotated[
         bool,
         typer.Option(
@@ -369,12 +386,15 @@ def convert(
 
         accelerator_options = AcceleratorOptions(num_threads=num_threads, device=device)
         pipeline_options = PdfPipelineOptions(
+            enable_remote_services=enable_remote_services,
             accelerator_options=accelerator_options,
             do_ocr=ocr,
             ocr_options=ocr_options,
             do_table_structure=True,
             do_code_enrichment=enrich_code,
             do_formula_enrichment=enrich_formula,
+            do_picture_description=enrich_picture_description,
+            do_picture_classification=enrich_picture_classes,
             document_timeout=document_timeout,
         )
         pipeline_options.table_structure_options.do_cell_matching = (
