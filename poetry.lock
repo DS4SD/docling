@@ -869,6 +869,7 @@ files = [
 ]
 
 [[package]]
+name = "docling-core"
 version = "2.20.0"
 description = "A python library to define and validate data types in Docling."
 optional = false
