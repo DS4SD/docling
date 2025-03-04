@@ -1,6 +1,6 @@
 {
   "schema_name": "DoclingDocument",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "name": "equations",
   "origin": {
     "mimetype": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -10,6 +10,7 @@
   "furniture": {
     "self_ref": "#/furniture",
     "children": [],
+    "content_layer": "furniture",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -17,13 +18,7 @@
     "self_ref": "#/body",
     "children": [
       {
-        "$ref": "#/texts/0"
-      },
-      {
-        "$ref": "#/texts/1"
-      },
-      {
-        "$ref": "#/texts/2"
+        "$ref": "#/groups/0"
       },
       {
         "$ref": "#/texts/3"
@@ -56,13 +51,7 @@
         "$ref": "#/texts/12"
       },
       {
-        "$ref": "#/texts/13"
-      },
-      {
-        "$ref": "#/texts/14"
-      },
-      {
-        "$ref": "#/texts/15"
+        "$ref": "#/groups/1"
       },
       {
         "$ref": "#/texts/16"
@@ -101,49 +90,126 @@
         "$ref": "#/texts/27"
       },
       {
-        "$ref": "#/texts/28"
+        "$ref": "#/groups/2"
       },
       {
-        "$ref": "#/texts/29"
+        "$ref": "#/texts/31"
+      },
+      {
+        "$ref": "#/texts/32"
+      },
+      {
+        "$ref": "#/texts/33"
+      },
+      {
+        "$ref": "#/texts/34"
+      },
+      {
+        "$ref": "#/texts/35"
       }
     ],
+    "content_layer": "body",
     "name": "_root_",
     "label": "unspecified"
   },
-  "groups": [],
+  "groups": [
+    {
+      "self_ref": "#/groups/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/0"
+        },
+        {
+          "$ref": "#/texts/1"
+        },
+        {
+          "$ref": "#/texts/2"
+        }
+      ],
+      "content_layer": "body",
+      "name": "group",
+      "label": "inline"
+    },
+    {
+      "self_ref": "#/groups/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/13"
+        },
+        {
+          "$ref": "#/texts/14"
+        },
+        {
+          "$ref": "#/texts/15"
+        }
+      ],
+      "content_layer": "body",
+      "name": "group",
+      "label": "inline"
+    },
+    {
+      "self_ref": "#/groups/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/28"
+        },
+        {
+          "$ref": "#/texts/29"
+        },
+        {
+          "$ref": "#/texts/30"
+        }
+      ],
+      "content_layer": "body",
+      "name": "group",
+      "label": "inline"
+    }
+  ],
   "texts": [
     {
       "self_ref": "#/texts/0",
       "parent": {
-        "$ref": "#/body"
+        "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
-      "orig": "This is a word document and this is an inline equation: $A= \\pi r^{2} $. If instead, I want an equation by line, I can do this:",
-      "text": "This is a word document and this is an inline equation: $A= \\pi r^{2} $. If instead, I want an equation by line, I can do this:"
+      "orig": "This is a word document and this is an inline equation: ",
+      "text": "This is a word document and this is an inline equation: "
     },
     {
       "self_ref": "#/texts/1",
       "parent": {
-        "$ref": "#/body"
+        "$ref": "#/groups/0"
       },
       "children": [],
-      "label": "paragraph",
+      "content_layer": "body",
+      "label": "formula",
       "prov": [],
-      "orig": "",
-      "text": ""
+      "orig": "A= \\pi r^{2} ",
+      "text": "A= \\pi r^{2} "
     },
     {
       "self_ref": "#/texts/2",
       "parent": {
-        "$ref": "#/body"
+        "$ref": "#/groups/0"
       },
       "children": [],
-      "label": "formula",
+      "content_layer": "body",
+      "label": "paragraph",
       "prov": [],
-      "orig": "a^{2}+b^{2}=c^{2} \\text{ \\texttimes } 23",
-      "text": "a^{2}+b^{2}=c^{2} \\text{ \\texttimes } 23"
+      "orig": ". If instead, I want an equation by line, I can do this:",
+      "text": ". If instead, I want an equation by line, I can do this:"
     },
     {
       "self_ref": "#/texts/3",
@@ -151,10 +217,11 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
-      "orig": "And that is an equation by itself. Cheers!",
-      "text": "And that is an equation by itself. Cheers!"
+      "orig": "",
+      "text": ""
     },
     {
       "self_ref": "#/texts/4",
@@ -162,10 +229,11 @@
         "$ref": "#/body"
       },
       "children": [],
-      "label": "paragraph",
+      "content_layer": "body",
+      "label": "formula",
       "prov": [],
-      "orig": "",
-      "text": ""
+      "orig": "a^{2}+b^{2}=c^{2} \\text{ \\texttimes } 23",
+      "text": "a^{2}+b^{2}=c^{2} \\text{ \\texttimes } 23"
     },
     {
       "self_ref": "#/texts/5",
@@ -173,10 +241,11 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
-      "orig": "This is another equation:",
-      "text": "This is another equation:"
+      "orig": "And that is an equation by itself. Cheers!",
+      "text": "And that is an equation by itself. Cheers!"
     },
     {
       "self_ref": "#/texts/6",
@@ -184,10 +253,11 @@
         "$ref": "#/body"
       },
       "children": [],
-      "label": "formula",
+      "content_layer": "body",
+      "label": "paragraph",
       "prov": [],
-      "orig": "f\\left(x\\right)=a_{0}+\\sum_{n=1}^{ \\infty }\\left(a_{n}\\cos(\\frac{n \\pi x}{L})+b_{n}\\sin(\\frac{n \\pi x}{L})\\right)",
-      "text": "f\\left(x\\right)=a_{0}+\\sum_{n=1}^{ \\infty }\\left(a_{n}\\cos(\\frac{n \\pi x}{L})+b_{n}\\sin(\\frac{n \\pi x}{L})\\right)"
+      "orig": "",
+      "text": ""
     },
     {
       "self_ref": "#/texts/7",
@@ -195,10 +265,11 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
-      "orig": "",
-      "text": ""
+      "orig": "This is another equation:",
+      "text": "This is another equation:"
     },
     {
       "self_ref": "#/texts/8",
@@ -206,10 +277,11 @@
         "$ref": "#/body"
       },
       "children": [],
-      "label": "paragraph",
+      "content_layer": "body",
+      "label": "formula",
       "prov": [],
-      "orig": "This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text.",
-      "text": "This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text."
+      "orig": "f\\left(x\\right)=a_{0}+\\sum_{n=1}^{ \\infty }\\left(a_{n}\\cos(\\frac{n \\pi x}{L})+b_{n}\\sin(\\frac{n \\pi x}{L})\\right)",
+      "text": "f\\left(x\\right)=a_{0}+\\sum_{n=1}^{ \\infty }\\left(a_{n}\\cos(\\frac{n \\pi x}{L})+b_{n}\\sin(\\frac{n \\pi x}{L})\\right)"
     },
     {
       "self_ref": "#/texts/9",
@@ -217,6 +289,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -228,10 +301,11 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
-      "orig": "",
-      "text": ""
+      "orig": "This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text.",
+      "text": "This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text."
     },
     {
       "self_ref": "#/texts/11",
@@ -239,10 +313,11 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
-      "orig": "This is a word document and this is an inline equation: $A= \\pi r^{2} $. If instead, I want an equation by line, I can do this:",
-      "text": "This is a word document and this is an inline equation: $A= \\pi r^{2} $. If instead, I want an equation by line, I can do this:"
+      "orig": "",
+      "text": ""
     },
     {
       "self_ref": "#/texts/12",
@@ -250,6 +325,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -258,35 +334,38 @@
     {
       "self_ref": "#/texts/13",
       "parent": {
-        "$ref": "#/body"
+        "$ref": "#/groups/1"
       },
       "children": [],
-      "label": "formula",
+      "content_layer": "body",
+      "label": "paragraph",
       "prov": [],
-      "orig": "\\left(x+a\\right)^{n}=\\sum_{k=0}^{n}\\left(\\genfrac{}{}{0pt}{}{n}{k}\\right)x^{k}a^{n-k}",
-      "text": "\\left(x+a\\right)^{n}=\\sum_{k=0}^{n}\\left(\\genfrac{}{}{0pt}{}{n}{k}\\right)x^{k}a^{n-k}"
+      "orig": "This is a word document and this is an inline equation: ",
+      "text": "This is a word document and this is an inline equation: "
     },
     {
       "self_ref": "#/texts/14",
       "parent": {
-        "$ref": "#/body"
+        "$ref": "#/groups/1"
       },
       "children": [],
-      "label": "paragraph",
+      "content_layer": "body",
+      "label": "formula",
       "prov": [],
-      "orig": "",
-      "text": ""
+      "orig": "A= \\pi r^{2} ",
+      "text": "A= \\pi r^{2} "
     },
     {
       "self_ref": "#/texts/15",
       "parent": {
-        "$ref": "#/body"
+        "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
-      "orig": "And that is an equation by itself. Cheers!",
-      "text": "And that is an equation by itself. Cheers!"
+      "orig": ". If instead, I want an equation by line, I can do this:",
+      "text": ". If instead, I want an equation by line, I can do this:"
     },
     {
       "self_ref": "#/texts/16",
@@ -294,6 +373,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -305,10 +385,11 @@
         "$ref": "#/body"
       },
       "children": [],
-      "label": "paragraph",
+      "content_layer": "body",
+      "label": "formula",
       "prov": [],
-      "orig": "This is another equation:",
-      "text": "This is another equation:"
+      "orig": "\\left(x+a\\right)^{n}=\\sum_{k=0}^{n}\\left(\\genfrac{}{}{0pt}{}{n}{k}\\right)x^{k}a^{n-k}",
+      "text": "\\left(x+a\\right)^{n}=\\sum_{k=0}^{n}\\left(\\genfrac{}{}{0pt}{}{n}{k}\\right)x^{k}a^{n-k}"
     },
     {
       "self_ref": "#/texts/18",
@@ -316,6 +397,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -327,10 +409,11 @@
         "$ref": "#/body"
       },
       "children": [],
-      "label": "formula",
+      "content_layer": "body",
+      "label": "paragraph",
       "prov": [],
-      "orig": "\\left(1+x\\right)^{n}=1+\\frac{nx}{1!}+\\frac{n\\left(n-1\\right)x^{2}}{2!}+ \\text{ \\textellipsis } ",
-      "text": "\\left(1+x\\right)^{n}=1+\\frac{nx}{1!}+\\frac{n\\left(n-1\\right)x^{2}}{2!}+ \\text{ \\textellipsis } "
+      "orig": "And that is an equation by itself. Cheers!",
+      "text": "And that is an equation by itself. Cheers!"
     },
     {
       "self_ref": "#/texts/20",
@@ -338,6 +421,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -349,10 +433,11 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
-      "orig": "This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text.",
-      "text": "This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text."
+      "orig": "This is another equation:",
+      "text": "This is another equation:"
     },
     {
       "self_ref": "#/texts/22",
@@ -360,6 +445,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -371,10 +457,11 @@
         "$ref": "#/body"
       },
       "children": [],
-      "label": "paragraph",
+      "content_layer": "body",
+      "label": "formula",
       "prov": [],
-      "orig": "",
-      "text": ""
+      "orig": "\\left(1+x\\right)^{n}=1+\\frac{nx}{1!}+\\frac{n\\left(n-1\\right)x^{2}}{2!}+ \\text{ \\textellipsis }",
+      "text": "\\left(1+x\\right)^{n}=1+\\frac{nx}{1!}+\\frac{n\\left(n-1\\right)x^{2}}{2!}+ \\text{ \\textellipsis }"
     },
     {
       "self_ref": "#/texts/24",
@@ -382,10 +469,11 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
-      "orig": "This is a word document and this is an inline equation: $A= \\pi r^{2} $. If instead, I want an equation by line, I can do this:",
-      "text": "This is a word document and this is an inline equation: $A= \\pi r^{2} $. If instead, I want an equation by line, I can do this:"
+      "orig": "",
+      "text": ""
     },
     {
       "self_ref": "#/texts/25",
@@ -393,10 +481,11 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
-      "orig": "",
-      "text": ""
+      "orig": "This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text.",
+      "text": "This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text. This is text."
     },
     {
       "self_ref": "#/texts/26",
@@ -404,10 +493,11 @@
         "$ref": "#/body"
       },
       "children": [],
-      "label": "formula",
+      "content_layer": "body",
+      "label": "paragraph",
       "prov": [],
-      "orig": "e^{x}=1+\\frac{x}{1!}+\\frac{x^{2}}{2!}+\\frac{x^{3}}{3!}+ \\text{ \\textellipsis } , - \\infty  < x <  \\infty ",
-      "text": "e^{x}=1+\\frac{x}{1!}+\\frac{x^{2}}{2!}+\\frac{x^{3}}{3!}+ \\text{ \\textellipsis } , - \\infty  < x <  \\infty "
+      "orig": "",
+      "text": ""
     },
     {
       "self_ref": "#/texts/27",
@@ -415,6 +505,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -423,20 +514,94 @@
     {
       "self_ref": "#/texts/28",
       "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "paragraph",
+      "prov": [],
+      "orig": "This is a word document and this is an inline equation: ",
+      "text": "This is a word document and this is an inline equation: "
+    },
+    {
+      "self_ref": "#/texts/29",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "formula",
+      "prov": [],
+      "orig": "A= \\pi r^{2} ",
+      "text": "A= \\pi r^{2} "
+    },
+    {
+      "self_ref": "#/texts/30",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "paragraph",
+      "prov": [],
+      "orig": ". If instead, I want an equation by line, I can do this:",
+      "text": ". If instead, I want an equation by line, I can do this:"
+    },
+    {
+      "self_ref": "#/texts/31",
+      "parent": {
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
+      "label": "paragraph",
+      "prov": [],
+      "orig": "",
+      "text": ""
+    },
+    {
+      "self_ref": "#/texts/32",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "formula",
+      "prov": [],
+      "orig": "e^{x}=1+\\frac{x}{1!}+\\frac{x^{2}}{2!}+\\frac{x^{3}}{3!}+ \\text{ \\textellipsis } , - \\infty  < x <  \\infty",
+      "text": "e^{x}=1+\\frac{x}{1!}+\\frac{x^{2}}{2!}+\\frac{x^{3}}{3!}+ \\text{ \\textellipsis } , - \\infty  < x <  \\infty"
+    },
+    {
+      "self_ref": "#/texts/33",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "paragraph",
+      "prov": [],
+      "orig": "",
+      "text": ""
+    },
+    {
+      "self_ref": "#/texts/34",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "And that is an equation by itself. Cheers!",
       "text": "And that is an equation by itself. Cheers!"
     },
     {
-      "self_ref": "#/texts/29",
+      "self_ref": "#/texts/35",
       "parent": {
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -446,5 +611,6 @@
   "pictures": [],
   "tables": [],
   "key_value_items": [],
+  "form_items": [],
   "pages": {}
 }

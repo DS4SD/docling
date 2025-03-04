@@ -268,4 +268,4 @@ LIM_TO = ("\\rightarrow", "\\to")
 
 LIM_UPP = "\\overset{{{lim}}}{{{text}}}"
 
-M = "\\begin{{matrix}}{text}\end{{matrix}}"
+M = "\\begin{{matrix}}{text}\\end{{matrix}}"

@@ -8,7 +8,7 @@ On 23/01/2025
 import lxml.etree as ET
 from pylatexenc.latexencode import UnicodeToLatexEncoder
 
-from docling.backend.docx_latex.latex_dict import (
+from docling.backend.docx.latex.latex_dict import (
     ALN,
     ARR,
     BACKSLASH,

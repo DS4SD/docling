@@ -26,7 +26,7 @@ from PIL import Image, UnidentifiedImageError
 from typing_extensions import override
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
-from docling.backend.docx_latex.omml import oMath2Latex
+from docling.backend.docx.latex.omml import oMath2Latex
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
@@ -164,7 +164,6 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     ) -> DoclingDocument:
         for element in body:
             tag_name = etree.QName(element).localname
-
             # Check for Inline Images (blip elements)
             namespaces = {
                 "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
@@ -262,6 +261,24 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         else:
             return label, None
 
+    def handle_equations_in_text(self, element, text):
+        only_texts = []
+        only_equations = []
+        texts_and_equations = []
+        for subt in element.iter():
+            tag_name = etree.QName(subt).localname
+            if tag_name == "t" and "math" not in subt.tag:
+                only_texts.append(subt.text)
+                texts_and_equations.append(subt.text)
+            elif "oMath" in subt.tag and "oMathPara" not in subt.tag:
+                latex_equation = str(oMath2Latex(subt))
+                only_equations.append(latex_equation)
+                texts_and_equations.append(latex_equation)
+
+        if "".join(only_texts) != text:
+            return text
+
+        return "".join(texts_and_equations), only_equations
 
     def handle_text_elements(
         self,
@@ -272,7 +289,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         paragraph = Paragraph(element, docx_obj)
 
         raw_text = paragraph.text
-        text = self.handle_equations_in_text(element=element, text=raw_text)
+        text, equations = self.handle_equations_in_text(element=element, text=raw_text)
 
         if text is None:
             return
@@ -326,36 +343,57 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             self.parents[0] = doc.add_text(
                 parent=None, label=DocItemLabel.TITLE, text=text
             )
-
         elif "Heading" in p_style_id:
             self.add_header(doc, p_level, text)
 
-        elif p_style_id in [
-            "Subtitle",
-            "Author",
-            "ListParagraph",
-            "ListBullet",
-            "Quote",
-        ]:
-            level = self.get_level()
-            doc.add_text(
-                label=DocItemLabel.PARAGRAPH, parent=self.parents[level - 1], text=text
-            )
-
-        elif (raw_text is None or len(raw_text) == 0) and len(text) > 0:
-            # Standalone equation
-            # Entities in which all text comes from equations
-            level = self.get_level()
-            if text.strip().startswith("$") and text.strip().endswith("$"):
-                text = text.strip()[1:-1]
-            doc.add_text(
-                label=DocItemLabel.FORMULA, parent=self.parents[level - 1], text=text
-            )
+        elif len(equations) > 0:
+            if (raw_text is None or len(raw_text) == 0) and len(text) > 0:
+                # Standalone equation
+                level = self.get_level()
+                doc.add_text(
+                    label=DocItemLabel.FORMULA,
+                    parent=self.parents[level - 1],
+                    text=text,
+                )
+            else:
+                # Inline equation
+                level = self.get_level()
+                inline_equation = doc.add_group(
+                    label=GroupLabel.INLINE, parent=self.parents[level - 1]
+                )
+                text_tmp = text
+                for eq in equations:
+                    if len(text_tmp) == 0:
+                        break
+                    pre_eq_text = text_tmp.split(eq, maxsplit=1)[0]
+                    text_tmp = text_tmp.split(eq, maxsplit=1)[1]
+                    if len(pre_eq_text) > 0:
+                        doc.add_text(
+                            label=DocItemLabel.PARAGRAPH,
+                            parent=inline_equation,
+                            text=pre_eq_text,
+                        )
+                    doc.add_text(
+                        label=DocItemLabel.FORMULA,
+                        parent=inline_equation,
+                        text=eq,
+                    )
+                if len(text_tmp) > 0:
+                    doc.add_text(
+                        label=DocItemLabel.PARAGRAPH,
+                        parent=inline_equation,
+                        text=text_tmp,
+                    )
 
         elif p_style_id in [
             "Paragraph",
             "Normal",
+            "Subtitle",
+            "Author",
             "DefaultText",
+            "ListParagraph",
+            "ListBullet",
+            "Quote",
         ]:
             level = self.get_level()
             doc.add_text(
@@ -367,8 +405,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # hence we treat all other labels as pure text
             level = self.get_level()
             doc.add_text(
-                label=DocItemLabel.TEXT, parent=self.parents[level - 1], text=text
+                label=DocItemLabel.PARAGRAPH, parent=self.parents[level - 1], text=text
             )
+
         self.update_history(p_style_id, p_level, numid, ilevel)
         return
 
