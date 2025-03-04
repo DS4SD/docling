@@ -13,6 +13,7 @@ from pypdfium2._helpers.misc import PdfiumError
 
 from docling.backend.pdf_backend import PdfDocumentBackend, PdfPageBackend
 from docling.datamodel.base_models import Cell
+from docling.utils.locks import pypdfium2_lock
 
 if TYPE_CHECKING:
     from docling.datamodel.document import InputDocument
@@ -24,6 +25,7 @@ class PyPdfiumPageBackend(PdfPageBackend):
     def __init__(
         self, pdfium_doc: pdfium.PdfDocument, document_hash: str, page_no: int
     ):
+        # Note: lock applied by the caller
         self.valid = True  # No better way to tell from pypdfium.
         try:
             self._ppage: pdfium.PdfPage = pdfium_doc[page_no]
@@ -40,51 +42,57 @@ class PyPdfiumPageBackend(PdfPageBackend):
 
     def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:
         AREA_THRESHOLD = 0  # 32 * 32
-        for obj in self._ppage.get_objects(filter=[pdfium_c.FPDF_PAGEOBJ_IMAGE]):
-            pos = obj.get_pos()
-            cropbox = BoundingBox.from_tuple(
-                pos, origin=CoordOrigin.BOTTOMLEFT
-            ).to_top_left_origin(page_height=self.get_size().height)
+        page_size = self.get_size()
+        with pypdfium2_lock:
+            for obj in self._ppage.get_objects(filter=[pdfium_c.FPDF_PAGEOBJ_IMAGE]):
+                pos = obj.get_pos()
+                cropbox = BoundingBox.from_tuple(
+                    pos, origin=CoordOrigin.BOTTOMLEFT
+                ).to_top_left_origin(page_height=page_size.height)
 
-            if cropbox.area() > AREA_THRESHOLD:
-                cropbox = cropbox.scaled(scale=scale)
+                if cropbox.area() > AREA_THRESHOLD:
+                    cropbox = cropbox.scaled(scale=scale)
 
-                yield cropbox
+                    yield cropbox
 
     def get_text_in_rect(self, bbox: BoundingBox) -> str:
-        if not self.text_page:
-            self.text_page = self._ppage.get_textpage()
+        with pypdfium2_lock:
+            if not self.text_page:
+                self.text_page = self._ppage.get_textpage()
 
         if bbox.coord_origin != CoordOrigin.BOTTOMLEFT:
             bbox = bbox.to_bottom_left_origin(self.get_size().height)
 
-        text_piece = self.text_page.get_text_bounded(*bbox.as_tuple())
+        with pypdfium2_lock:
+            text_piece = self.text_page.get_text_bounded(*bbox.as_tuple())
 
         return text_piece
 
     def get_text_cells(self) -> Iterable[Cell]:
-        if not self.text_page:
-            self.text_page = self._ppage.get_textpage()
+        with pypdfium2_lock:
+            if not self.text_page:
+                self.text_page = self._ppage.get_textpage()
 
         cells = []
         cell_counter = 0
 
         page_size = self.get_size()
 
-        for i in range(self.text_page.count_rects()):
-            rect = self.text_page.get_rect(i)
-            text_piece = self.text_page.get_text_bounded(*rect)
-            x0, y0, x1, y1 = rect
-            cells.append(
-                Cell(
-                    id=cell_counter,
-                    text=text_piece,
-                    bbox=BoundingBox(
-                        l=x0, b=y0, r=x1, t=y1, coord_origin=CoordOrigin.BOTTOMLEFT
-                    ).to_top_left_origin(page_size.height),
+        with pypdfium2_lock:
+            for i in range(self.text_page.count_rects()):
+                rect = self.text_page.get_rect(i)
+                text_piece = self.text_page.get_text_bounded(*rect)
+                x0, y0, x1, y1 = rect
+                cells.append(
+                    Cell(
+                        id=cell_counter,
+                        text=text_piece,
+                        bbox=BoundingBox(
+                            l=x0, b=y0, r=x1, t=y1, coord_origin=CoordOrigin.BOTTOMLEFT
+                        ).to_top_left_origin(page_size.height),
+                    )
                 )
-            )
-            cell_counter += 1
+                cell_counter += 1
 
         # PyPdfium2 produces very fragmented cells, with sub-word level boundaries, in many PDFs.
         # The cell merging code below is to clean this up.
@@ -214,20 +222,24 @@ class PyPdfiumPageBackend(PdfPageBackend):
             padbox.r = page_size.width - padbox.r
             padbox.t = page_size.height - padbox.t
 
-        image = (
-            self._ppage.render(
-                scale=scale * 1.5,
-                rotation=0,  # no additional rotation
-                crop=padbox.as_tuple(),
-            )
-            .to_pil()
-            .resize(size=(round(cropbox.width * scale), round(cropbox.height * scale)))
-        )  # We resize the image from 1.5x the given scale to make it sharper.
+        with pypdfium2_lock:
+            image = (
+                self._ppage.render(
+                    scale=scale * 1.5,
+                    rotation=0,  # no additional rotation
+                    crop=padbox.as_tuple(),
+                )
+                .to_pil()
+                .resize(
+                    size=(round(cropbox.width * scale), round(cropbox.height * scale))
+                )
+            )  # We resize the image from 1.5x the given scale to make it sharper.
 
         return image
 
     def get_size(self) -> Size:
-        return Size(width=self._ppage.get_width(), height=self._ppage.get_height())
+        with pypdfium2_lock:
+            return Size(width=self._ppage.get_width(), height=self._ppage.get_height())
 
     def unload(self):
         self._ppage = None
@@ -239,22 +251,26 @@ class PyPdfiumDocumentBackend(PdfDocumentBackend):
         super().__init__(in_doc, path_or_stream)
 
         try:
-            self._pdoc = pdfium.PdfDocument(self.path_or_stream)
+            with pypdfium2_lock:
+                self._pdoc = pdfium.PdfDocument(self.path_or_stream)
         except PdfiumError as e:
             raise RuntimeError(
                 f"pypdfium could not load document with hash {self.document_hash}"
             ) from e
 
     def page_count(self) -> int:
-        return len(self._pdoc)
+        with pypdfium2_lock:
+            return len(self._pdoc)
 
     def load_page(self, page_no: int) -> PyPdfiumPageBackend:
-        return PyPdfiumPageBackend(self._pdoc, self.document_hash, page_no)
+        with pypdfium2_lock:
+            return PyPdfiumPageBackend(self._pdoc, self.document_hash, page_no)
 
     def is_valid(self) -> bool:
         return self.page_count() > 0
 
     def unload(self):
         super().unload()
-        self._pdoc.close()
-        self._pdoc = None
+        with pypdfium2_lock:
+            self._pdoc.close()
+            self._pdoc = None

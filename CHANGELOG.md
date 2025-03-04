@@ -1,3 +1,30 @@
+## [v2.25.1](https://github.com/DS4SD/docling/releases/tag/v2.25.1) - 2025-03-03
+
+### Fix
+
+* Enable locks for threadsafe pdfium ([#1052](https://github.com/DS4SD/docling/issues/1052)) ([`8dc0562`](https://github.com/DS4SD/docling/commit/8dc0562542299cf972d14eeeb4393e50b589c8ad))
+* **html:** Use 'start' attribute when parsing ordered lists from HTML docs ([#1062](https://github.com/DS4SD/docling/issues/1062)) ([`de7b963`](https://github.com/DS4SD/docling/commit/de7b963b09a34916f0a8d99649269aeb37db1408))
+
+### Documentation
+
+* Improve docs on token limit warning triggered by HybridChunker ([#1077](https://github.com/DS4SD/docling/issues/1077)) ([`db3ceef`](https://github.com/DS4SD/docling/commit/db3ceefd4ae6251a97e333bcb03051698b3fa71a))
+
+## [v2.25.0](https://github.com/DS4SD/docling/releases/tag/v2.25.0) - 2025-02-26
+
+### Feature
+
+* [Experimental] Introduce VLM pipeline using HF AutoModelForVision2Seq, featuring SmolDocling model ([#1054](https://github.com/DS4SD/docling/issues/1054)) ([`3c9fe76`](https://github.com/DS4SD/docling/commit/3c9fe76b706b7714b25d49cb09050c42e3b8c849))
+* **cli:** Add option for downloading all models, refine help messages ([#1061](https://github.com/DS4SD/docling/issues/1061)) ([`ab683e4`](https://github.com/DS4SD/docling/commit/ab683e4fb6df4973d2efda04f00c269a2dc95f5b))
+
+### Fix
+
+* Vlm using artifacts path ([#1057](https://github.com/DS4SD/docling/issues/1057)) ([`e197225`](https://github.com/DS4SD/docling/commit/e1972257399151503d60b4806976c8b9b6911aa8))
+* **html:** Parse text in div elements as TextItem ([#1041](https://github.com/DS4SD/docling/issues/1041)) ([`1b0ead6`](https://github.com/DS4SD/docling/commit/1b0ead69078030a0e4d25b51450ef2aa4a2e79fc))
+
+### Documentation
+
+* Extend chunking docs, add FAQ on token limit ([#1053](https://github.com/DS4SD/docling/issues/1053)) ([`c84b973`](https://github.com/DS4SD/docling/commit/c84b973959a254db22ac9a7dc8810628e4808a2d))
+
 ## [v2.24.0](https://github.com/DS4SD/docling/releases/tag/v2.24.0) - 2025-02-20
 
 ### Feature

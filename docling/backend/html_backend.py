@@ -1,9 +1,10 @@
 import logging
 from io import BytesIO
 from pathlib import Path
-from typing import Optional, Union, cast
+from typing import Final, Optional, Union, cast
 
 from bs4 import BeautifulSoup, NavigableString, PageElement, Tag
+from bs4.element import PreformattedString
 from docling_core.types.doc import (
     DocItem,
     DocItemLabel,
@@ -14,6 +15,7 @@ from docling_core.types.doc import (
     TableCell,
     TableData,
 )
+from docling_core.types.doc.document import ContentLayer
 from typing_extensions import override
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
@@ -22,12 +24,29 @@ from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
 
+# tags that generate NodeItem elements
+TAGS_FOR_NODE_ITEMS: Final = [
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "p",
+    "pre",
+    "ul",
+    "ol",
+    "li",
+    "table",
+    "figure",
+    "img",
+]
+
 
 class HTMLDocumentBackend(DeclarativeDocumentBackend):
     @override
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
-        _log.debug("About to init HTML backend...")
         self.soup: Optional[Tag] = None
         # HTML file:
         self.path_or_stream = path_or_stream
@@ -48,7 +67,8 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     self.soup = BeautifulSoup(html_content, "html.parser")
         except Exception as e:
             raise RuntimeError(
-                f"Could not initialize HTML backend for file with hash {self.document_hash}."
+                "Could not initialize HTML backend for file with "
+                f"hash {self.document_hash}."
             ) from e
 
     @override
@@ -88,17 +108,26 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             assert self.soup is not None
             content = self.soup.body or self.soup
             # Replace <br> tags with newline characters
+            # TODO: remove style to avoid losing text from tags like i, b, span, ...
             for br in content("br"):
                 br.replace_with(NavigableString("\n"))
+
+            headers = content.find(["h1", "h2", "h3", "h4", "h5", "h6"])
+            self.content_layer = (
+                ContentLayer.BODY if headers is None else ContentLayer.FURNITURE
+            )
             self.walk(content, doc)
         else:
             raise RuntimeError(
-                f"Cannot convert doc with {self.document_hash} because the backend failed to init."
+                f"Cannot convert doc with {self.document_hash} because the backend "
+                "failed to init."
             )
         return doc
 
     def walk(self, tag: Tag, doc: DoclingDocument) -> None:
+
         # Iterate over elements in the body of the document
+        text: str = ""
         for element in tag.children:
             if isinstance(element, Tag):
                 try:
@@ -108,6 +137,26 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                         f"Error processing child from tag{tag.name}: {exc_child}"
                     )
                     raise exc_child
+            elif isinstance(element, NavigableString) and not isinstance(
+                element, PreformattedString
+            ):
+                # Floating text outside paragraphs or analyzed tags
+                text += element
+                siblings: list[Tag] = [
+                    item for item in element.next_siblings if isinstance(item, Tag)
+                ]
+                if element.next_sibling is None or any(
+                    [item.name in TAGS_FOR_NODE_ITEMS for item in siblings]
+                ):
+                    text = text.strip()
+                    if text and tag.name in ["div"]:
+                        doc.add_text(
+                            parent=self.parents[self.level],
+                            label=DocItemLabel.TEXT,
+                            text=text,
+                            content_layer=self.content_layer,
+                        )
+                    text = ""
 
         return
 
@@ -127,7 +176,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         elif tag.name == "figure":
             self.handle_figure(tag, doc)
         elif tag.name == "img":
-            self.handle_image(doc)
+            self.handle_image(tag, doc)
         else:
             self.walk(tag, doc)
 
@@ -158,12 +207,17 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         text = element.text.strip()
 
         if hlevel == 1:
-            for key, val in self.parents.items():
+            self.content_layer = ContentLayer.BODY
+
+            for key in self.parents.keys():
                 self.parents[key] = None
 
             self.level = 1
             self.parents[self.level] = doc.add_text(
-                parent=self.parents[0], label=DocItemLabel.TITLE, text=text
+                parent=self.parents[0],
+                label=DocItemLabel.TITLE,
+                text=text,
+                content_layer=self.content_layer,
             )
         else:
             if hlevel > self.level:
@@ -174,6 +228,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                         name=f"header-{i}",
                         label=GroupLabel.SECTION,
                         parent=self.parents[i - 1],
+                        content_layer=self.content_layer,
                     )
                 self.level = hlevel
 
@@ -189,6 +244,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 parent=self.parents[hlevel - 1],
                 text=text,
                 level=hlevel,
+                content_layer=self.content_layer,
             )
 
     def handle_code(self, element: Tag, doc: DoclingDocument) -> None:
@@ -197,16 +253,24 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             return
         text = element.text.strip()
         if text:
-            doc.add_code(parent=self.parents[self.level], text=text)
+            doc.add_code(
+                parent=self.parents[self.level],
+                text=text,
+                content_layer=self.content_layer,
+            )
 
     def handle_paragraph(self, element: Tag, doc: DoclingDocument) -> None:
         """Handles paragraph tags (p)."""
         if element.text is None:
             return
         text = element.text.strip()
-        label = DocItemLabel.PARAGRAPH
         if text:
-            doc.add_text(parent=self.parents[self.level], label=label, text=text)
+            doc.add_text(
+                parent=self.parents[self.level],
+                label=DocItemLabel.TEXT,
+                text=text,
+                content_layer=self.content_layer,
+            )
 
     def handle_list(self, element: Tag, doc: DoclingDocument) -> None:
         """Handles list tags (ul, ol) and their list items."""
@@ -214,14 +278,24 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         if element.name == "ul":
             # create a list group
             self.parents[self.level + 1] = doc.add_group(
-                parent=self.parents[self.level], name="list", label=GroupLabel.LIST
+                parent=self.parents[self.level],
+                name="list",
+                label=GroupLabel.LIST,
+                content_layer=self.content_layer,
             )
         elif element.name == "ol":
+            start_attr = element.get("start")
+            start: int = (
+                int(start_attr)
+                if isinstance(start_attr, str) and start_attr.isnumeric()
+                else 1
+            )
             # create a list group
             self.parents[self.level + 1] = doc.add_group(
                 parent=self.parents[self.level],
-                name="ordered list",
+                name="ordered list" + (f" start {start}" if start != 1 else ""),
                 label=GroupLabel.ORDERED_LIST,
+                content_layer=self.content_layer,
             )
         self.level += 1
 
@@ -231,15 +305,23 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         self.level -= 1
 
     def handle_list_item(self, element: Tag, doc: DoclingDocument) -> None:
-        """Handles listitem tags (li)."""
+        """Handles list item tags (li)."""
         nested_list = element.find(["ul", "ol"])
 
         parent = self.parents[self.level]
         if parent is None:
-            _log.warning(f"list-item has no parent in DoclingDocument: {element}")
+            _log.debug(f"list-item has no parent in DoclingDocument: {element}")
             return
         parent_label: str = parent.label
         index_in_list = len(parent.children) + 1
+        if (
+            parent_label == GroupLabel.ORDERED_LIST
+            and isinstance(parent, GroupItem)
+            and parent.name
+        ):
+            start_in_list: str = parent.name.split(" ")[-1]
+            start: int = int(start_in_list) if start_in_list.isnumeric() else 1
+            index_in_list += start - 1
 
         if nested_list:
             # Text in list item can be hidden within hierarchy, hence
@@ -262,6 +344,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     enumerated=enumerated,
                     marker=marker,
                     parent=parent,
+                    content_layer=self.content_layer,
                 )
                 self.level += 1
 
@@ -283,15 +366,16 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 enumerated=enumerated,
                 marker=marker,
                 parent=parent,
+                content_layer=self.content_layer,
             )
         else:
-            _log.warning(f"list-item has no text: {element}")
+            _log.debug(f"list-item has no text: {element}")
 
     @staticmethod
     def parse_table_data(element: Tag) -> Optional[TableData]:
         nested_tables = element.find("table")
         if nested_tables is not None:
-            _log.warning("Skipping nested table.")
+            _log.debug("Skipping nested table.")
             return None
 
         # Count the number of rows (number of <tr> elements)
@@ -386,7 +470,11 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         table_data = HTMLDocumentBackend.parse_table_data(element)
 
         if table_data is not None:
-            doc.add_table(data=table_data, parent=self.parents[self.level])
+            doc.add_table(
+                data=table_data,
+                parent=self.parents[self.level],
+                content_layer=self.content_layer,
+            )
 
     def get_list_text(self, list_element: Tag, level: int = 0) -> list[str]:
         """Recursively extract text from <ul> or <ol> with proper indentation."""
@@ -426,20 +514,33 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         contains_captions = element.find(["figcaption"])
         if not isinstance(contains_captions, Tag):
-            doc.add_picture(parent=self.parents[self.level], caption=None)
+            doc.add_picture(
+                parent=self.parents[self.level],
+                caption=None,
+                content_layer=self.content_layer,
+            )
         else:
             texts = []
             for item in contains_captions:
                 texts.append(item.text)
 
             fig_caption = doc.add_text(
-                label=DocItemLabel.CAPTION, text=("".join(texts)).strip()
+                label=DocItemLabel.CAPTION,
+                text=("".join(texts)).strip(),
+                content_layer=self.content_layer,
             )
             doc.add_picture(
                 parent=self.parents[self.level],
                 caption=fig_caption,
+                content_layer=self.content_layer,
             )
 
-    def handle_image(self, doc: DoclingDocument) -> None:
+    def handle_image(self, element: Tag, doc: DoclingDocument) -> None:
         """Handles image tags (img)."""
-        doc.add_picture(parent=self.parents[self.level], caption=None)
+        _log.debug(f"ignoring <img> tags at the moment: {element}")
+
+        doc.add_picture(
+            parent=self.parents[self.level],
+            caption=None,
+            content_layer=self.content_layer,
+        )

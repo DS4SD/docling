@@ -12,6 +12,7 @@ from pypdfium2 import PdfPage
 
 from docling.backend.pdf_backend import PdfDocumentBackend, PdfPageBackend
 from docling.datamodel.base_models import Cell, Size
+from docling.utils.locks import pypdfium2_lock
 
 if TYPE_CHECKING:
     from docling.datamodel.document import InputDocument
@@ -182,20 +183,24 @@ class DoclingParseV2PageBackend(PdfPageBackend):
             padbox.r = page_size.width - padbox.r
             padbox.t = page_size.height - padbox.t
 
-        image = (
-            self._ppage.render(
-                scale=scale * 1.5,
-                rotation=0,  # no additional rotation
-                crop=padbox.as_tuple(),
-            )
-            .to_pil()
-            .resize(size=(round(cropbox.width * scale), round(cropbox.height * scale)))
-        )  # We resize the image from 1.5x the given scale to make it sharper.
+        with pypdfium2_lock:
+            image = (
+                self._ppage.render(
+                    scale=scale * 1.5,
+                    rotation=0,  # no additional rotation
+                    crop=padbox.as_tuple(),
+                )
+                .to_pil()
+                .resize(
+                    size=(round(cropbox.width * scale), round(cropbox.height * scale))
+                )
+            )  # We resize the image from 1.5x the given scale to make it sharper.
 
         return image
 
     def get_size(self) -> Size:
-        return Size(width=self._ppage.get_width(), height=self._ppage.get_height())
+        with pypdfium2_lock:
+            return Size(width=self._ppage.get_width(), height=self._ppage.get_height())
 
     def unload(self):
         self._ppage = None
@@ -206,23 +211,24 @@ class DoclingParseV2DocumentBackend(PdfDocumentBackend):
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
 
-        self._pdoc = pdfium.PdfDocument(self.path_or_stream)
-        self.parser = pdf_parser_v2("fatal")
+        with pypdfium2_lock:
+            self._pdoc = pdfium.PdfDocument(self.path_or_stream)
+            self.parser = pdf_parser_v2("fatal")
 
-        success = False
-        if isinstance(self.path_or_stream, BytesIO):
-            success = self.parser.load_document_from_bytesio(
-                self.document_hash, self.path_or_stream
-            )
-        elif isinstance(self.path_or_stream, Path):
-            success = self.parser.load_document(
-                self.document_hash, str(self.path_or_stream)
-            )
+            success = False
+            if isinstance(self.path_or_stream, BytesIO):
+                success = self.parser.load_document_from_bytesio(
+                    self.document_hash, self.path_or_stream
+                )
+            elif isinstance(self.path_or_stream, Path):
+                success = self.parser.load_document(
+                    self.document_hash, str(self.path_or_stream)
+                )
 
-        if not success:
-            raise RuntimeError(
-                f"docling-parse v2 could not load document {self.document_hash}."
-            )
+            if not success:
+                raise RuntimeError(
+                    f"docling-parse v2 could not load document {self.document_hash}."
+                )
 
     def page_count(self) -> int:
         # return len(self._pdoc)  # To be replaced with docling-parse API
@@ -236,9 +242,10 @@ class DoclingParseV2DocumentBackend(PdfDocumentBackend):
         return len_2
 
     def load_page(self, page_no: int) -> DoclingParseV2PageBackend:
-        return DoclingParseV2PageBackend(
-            self.parser, self.document_hash, page_no, self._pdoc[page_no]
-        )
+        with pypdfium2_lock:
+            return DoclingParseV2PageBackend(
+                self.parser, self.document_hash, page_no, self._pdoc[page_no]
+            )
 
     def is_valid(self) -> bool:
         return self.page_count() > 0
@@ -246,5 +253,6 @@ class DoclingParseV2DocumentBackend(PdfDocumentBackend):
     def unload(self):
         super().unload()
         self.parser.unload_document(self.document_hash)
-        self._pdoc.close()
-        self._pdoc = None
+        with pypdfium2_lock:
+            self._pdoc.close()
+            self._pdoc = None
