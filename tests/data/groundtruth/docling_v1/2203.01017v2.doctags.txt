@@ -12,7 +12,7 @@
 </figure>
 <table>
 <location><page_1><loc_52><loc_62><loc_88><loc_71></location>
-<row_0><col_0><col_header>3</col_0><col_1><col_header>1</col_1></row_0>
+<row_0><col_0><col_header>1</col_0></row_0>
 </table>
 <paragraph><location><page_1><loc_52><loc_58><loc_79><loc_60></location>- b. Red-annotation of bounding boxes, Blue-predictions by TableFormer</paragraph>
 <paragraph><location><page_1><loc_52><loc_46><loc_80><loc_47></location>- c. Structure predicted by TableFormer:</paragraph>
@@ -25,11 +25,11 @@
 </figure>
 <table>
 <location><page_1><loc_52><loc_37><loc_88><loc_45></location>
-<row_0><col_0><col_header>0</col_0><col_1><col_header>1</col_1><col_2><col_header>1</col_2><col_3><col_header>2 1</col_3><col_4><col_header>2 1</col_4><col_5><body></col_5></row_0>
-<row_1><col_0><body>3</col_0><col_1><body>4</col_1><col_2><body>5 3</col_2><col_3><body>6</col_3><col_4><body>7</col_4><col_5><body></col_5></row_1>
-<row_2><col_0><body>8</col_0><col_1><body>9</col_1><col_2><body>10</col_2><col_3><body>11</col_3><col_4><body>12</col_4><col_5><body>2</col_5></row_2>
-<row_3><col_0><body></col_0><col_1><body>13</col_1><col_2><body>14</col_2><col_3><body>15</col_3><col_4><body>16</col_4><col_5><body>2</col_5></row_3>
-<row_4><col_0><body></col_0><col_1><body>17</col_1><col_2><body>18</col_2><col_3><body>19</col_3><col_4><body>20</col_4><col_5><body>2</col_5></row_4>
+<row_0><col_0><body>0</col_0><col_1><body>1 2 1</col_1><col_2><body>1 2 1</col_2><col_3><body>1 2 1</col_3><col_4><body>1 2 1</col_4></row_0>
+<row_1><col_0><body>3</col_0><col_1><body>4 3</col_1><col_2><body>5</col_2><col_3><body>6</col_3><col_4><body>7</col_4></row_1>
+<row_2><col_0><body>8 2</col_0><col_1><body>9</col_1><col_2><body>10</col_2><col_3><body>11</col_3><col_4><body>12</col_4></row_2>
+<row_3><col_0><body>13</col_0><col_1><body></col_1><col_2><body>14</col_2><col_3><body>15</col_3><col_4><body>16</col_4></row_3>
+<row_4><col_0><body>17</col_0><col_1><body>18</col_1><col_2><body></col_2><col_3><body>19</col_3><col_4><body>20</col_4></row_4>
 </table>
 <paragraph><location><page_1><loc_50><loc_16><loc_89><loc_26></location>Recently, significant progress has been made with vision based approaches to extract tables in documents. For the sake of completeness, the issue of table extraction from documents is typically decomposed into two separate challenges, i.e. (1) finding the location of the table(s) on a document-page and (2) finding the structure of a given table in the document.</paragraph>
 <paragraph><location><page_1><loc_50><loc_10><loc_89><loc_16></location>The first problem is called table-location and has been previously addressed [30, 38, 19, 21, 23, 26, 8] with stateof-the-art object-detection networks (e.g. YOLO and later on Mask-RCNN [9]). For all practical purposes, it can be</paragraph>
@@ -138,9 +138,9 @@
 <location><page_7><loc_50><loc_62><loc_87><loc_69></location>
 <caption>Table 3: Cell Bounding Box detection results on PubTabNet, and FinTabNet. PP: Post-processing.</caption>
 <row_0><col_0><col_header>Model</col_0><col_1><col_header>Dataset</col_1><col_2><col_header>mAP</col_2><col_3><col_header>mAP (PP)</col_3></row_0>
-<row_1><col_0><body>EDD+BBox</col_0><col_1><body>PubTabNet</col_1><col_2><body>79.2</col_2><col_3><body>82.7</col_3></row_1>
-<row_2><col_0><body>TableFormer</col_0><col_1><body>PubTabNet</col_1><col_2><body>82.1</col_2><col_3><body>86.8</col_3></row_2>
-<row_3><col_0><body>TableFormer</col_0><col_1><body>SynthTabNet</col_1><col_2><body>87.7</col_2><col_3><body>-</col_3></row_3>
+<row_1><col_0><row_header>EDD+BBox</col_0><col_1><body>PubTabNet</col_1><col_2><body>79.2</col_2><col_3><body>82.7</col_3></row_1>
+<row_2><col_0><row_header>TableFormer</col_0><col_1><body>PubTabNet</col_1><col_2><body>82.1</col_2><col_3><body>86.8</col_3></row_2>
+<row_3><col_0><row_header>TableFormer</col_0><col_1><body>SynthTabNet</col_1><col_2><body>87.7</col_2><col_3><body>-</col_3></row_3>
 </table>
 <caption><location><page_7><loc_50><loc_57><loc_89><loc_60></location>Table 3: Cell Bounding Box detection results on PubTabNet, and FinTabNet. PP: Post-processing.</caption>
 <paragraph><location><page_7><loc_50><loc_34><loc_89><loc_54></location>Cell Content. In this section, we evaluate the entire pipeline of recovering a table with content. Here we put our approach to test by capitalizing on extracting content from the PDF cells rather than decoding from images. Tab. 4 shows the TEDs score of HTML code representing the structure of the table along with the content inserted in the data cell and compared with the ground-truth. Our method achieved a 5.3% increase over the state-of-the-art, and commercial solutions. We believe our scores would be higher if the HTML ground-truth matched the extracted PDF cell content. Unfortunately, there are small discrepancies such as spacings around words or special characters with various unicode representations.</paragraph>
@@ -179,7 +179,7 @@
 <row_6><col_0><row_header>第 17 回人工知能学会全国大会 (2003)</col_0><col_1><body>208</col_1><col_2><body>5</col_2><col_3><body>203</col_3><col_4><body>152</col_4><col_5><body>244</col_5></row_6>
 <row_7><col_0><row_header>自然言語処理研究会第 146 〜 155 回</col_0><col_1><body>98</col_1><col_2><body>2</col_2><col_3><body>96</col_3><col_4><body>150</col_4><col_5><body>232</col_5></row_7>
 <row_8><col_0><row_header>WWW から収集した論文</col_0><col_1><body>107</col_1><col_2><body>73</col_2><col_3><body>34</col_3><col_4><body>147</col_4><col_5><body>96</col_5></row_8>
-<row_9><col_0><body></col_0><col_1><body>945</col_1><col_2><body>294</col_2><col_3><body>651</col_3><col_4><body>1122</col_4><col_5><body>955</col_5></row_9>
+<row_9><col_0><row_header>計</col_0><col_1><body>945</col_1><col_2><body>294</col_2><col_3><body>651</col_3><col_4><body>1122</col_4><col_5><body>955</col_5></row_9>
 </table>
 <caption><location><page_8><loc_62><loc_62><loc_90><loc_63></location>Text is aligned to match original for ease of viewing</caption>
 <table>
