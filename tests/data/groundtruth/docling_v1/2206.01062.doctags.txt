@@ -56,7 +56,7 @@
 <table>
 <location><page_4><loc_16><loc_63><loc_84><loc_83></location>
 <caption>Table 1: DocLayNet dataset overview. Along with the frequency of each class label, we present the relative occurrence (as % of row "Total") in the train, test and validation sets. The inter-annotator agreement is computed as the mAP@0.5-0.95 metric between pairwise annotations from the triple-annotated pages, from which we obtain accuracy ranges.</caption>
-<row_0><col_0><body></col_0><col_1><body></col_1><col_2><col_header>% of Total</col_2><col_3><col_header>% of Total</col_3><col_4><col_header>% of Total</col_4><col_5><col_header>% of Total</col_5><col_6><col_header>triple inter-annotator mAP @ 0.5-0.95 (%)</col_6><col_7><col_header>triple inter-annotator mAP @ 0.5-0.95 (%)</col_7><col_8><col_header>triple inter-annotator mAP @ 0.5-0.95 (%)</col_8><col_9><col_header>triple inter-annotator mAP @ 0.5-0.95 (%)</col_9><col_10><col_header>triple inter-annotator mAP @ 0.5-0.95 (%)</col_10><col_11><col_header>triple inter-annotator mAP @ 0.5-0.95 (%)</col_11></row_0>
+<row_0><col_0><body></col_0><col_1><body></col_1><col_2><col_header>% of Total</col_2><col_3><col_header>% of Total</col_3><col_4><col_header>% of Total</col_4><col_5><col_header>triple inter-annotator mAP @ 0.5-0.95 (%)</col_5><col_6><col_header>triple inter-annotator mAP @ 0.5-0.95 (%)</col_6><col_7><col_header>triple inter-annotator mAP @ 0.5-0.95 (%)</col_7><col_8><col_header>triple inter-annotator mAP @ 0.5-0.95 (%)</col_8><col_9><col_header>triple inter-annotator mAP @ 0.5-0.95 (%)</col_9><col_10><col_header>triple inter-annotator mAP @ 0.5-0.95 (%)</col_10><col_11><col_header>triple inter-annotator mAP @ 0.5-0.95 (%)</col_11></row_0>
 <row_1><col_0><col_header>class label</col_0><col_1><col_header>Count</col_1><col_2><col_header>Train</col_2><col_3><col_header>Test</col_3><col_4><col_header>Val</col_4><col_5><col_header>All</col_5><col_6><col_header>Fin</col_6><col_7><col_header>Man</col_7><col_8><col_header>Sci</col_8><col_9><col_header>Law</col_9><col_10><col_header>Pat</col_10><col_11><col_header>Ten</col_11></row_1>
 <row_2><col_0><row_header>Caption</col_0><col_1><body>22524</col_1><col_2><body>2.04</col_2><col_3><body>1.77</col_3><col_4><body>2.32</col_4><col_5><body>84-89</col_5><col_6><body>40-61</col_6><col_7><body>86-92</col_7><col_8><body>94-99</col_8><col_9><body>95-99</col_9><col_10><body>69-78</col_10><col_11><body>n/a</col_11></row_2>
 <row_3><col_0><row_header>Footnote</col_0><col_1><body>6318</col_1><col_2><body>0.60</col_2><col_3><body>0.31</col_3><col_4><body>0.58</col_4><col_5><body>83-91</col_5><col_6><body>n/a</col_6><col_7><body>100</col_7><col_8><body>62-88</col_8><col_9><body>85-94</col_9><col_10><body>n/a</col_10><col_11><body>82-97</col_11></row_3>
@@ -102,7 +102,7 @@
 <table>
 <location><page_6><loc_10><loc_56><loc_47><loc_75></location>
 <row_0><col_0><body></col_0><col_1><col_header>human</col_1><col_2><col_header>MRCNN</col_2><col_3><col_header>MRCNN</col_3><col_4><col_header>FRCNN</col_4><col_5><col_header>YOLO</col_5></row_0>
-<row_1><col_0><body></col_0><col_1><col_header>human</col_1><col_2><col_header>R50</col_2><col_3><col_header>R101</col_3><col_4><col_header>R101</col_4><col_5><col_header>v5x6</col_5></row_1>
+<row_1><col_0><body></col_0><col_1><body></col_1><col_2><col_header>R50</col_2><col_3><col_header>R101</col_3><col_4><col_header>R101</col_4><col_5><col_header>v5x6</col_5></row_1>
 <row_2><col_0><row_header>Caption</col_0><col_1><body>84-89</col_1><col_2><body>68.4</col_2><col_3><body>71.5</col_3><col_4><body>70.1</col_4><col_5><body>77.7</col_5></row_2>
 <row_3><col_0><row_header>Footnote</col_0><col_1><body>83-91</col_1><col_2><body>70.9</col_2><col_3><body>71.8</col_3><col_4><body>73.7</col_4><col_5><body>77.2</col_5></row_3>
 <row_4><col_0><row_header>Formula</col_0><col_1><body>83-85</col_1><col_2><body>60.1</col_2><col_3><body>63.4</col_3><col_4><body>63.5</col_4><col_5><body>66.2</col_5></row_4>
@@ -130,7 +130,7 @@
 <paragraph><location><page_7><loc_9><loc_84><loc_48><loc_89></location>Table 3: Performance of a Mask R-CNN R50 network in mAP@0.5-0.95 scores trained on DocLayNet with different class label sets. The reduced label sets were obtained by either down-mapping or dropping labels.</paragraph>
 <table>
 <location><page_7><loc_13><loc_63><loc_44><loc_81></location>
-<row_0><col_0><col_header>Class-count</col_0><col_1><col_header>11</col_1><col_2><col_header>6</col_2><col_3><col_header>5</col_3><col_4><col_header>4</col_4></row_0>
+<row_0><col_0><body>Class-count</col_0><col_1><col_header>11</col_1><col_2><col_header>6</col_2><col_3><col_header>5</col_3><col_4><col_header>4</col_4></row_0>
 <row_1><col_0><row_header>Caption</col_0><col_1><body>68</col_1><col_2><body>Text</col_2><col_3><body>Text</col_3><col_4><body>Text</col_4></row_1>
 <row_2><col_0><row_header>Footnote</col_0><col_1><body>71</col_1><col_2><body>Text</col_2><col_3><body>Text</col_3><col_4><body>Text</col_4></row_2>
 <row_3><col_0><row_header>Formula</col_0><col_1><body>60</col_1><col_2><body>Text</col_2><col_3><body>Text</col_3><col_4><body>Text</col_4></row_3>
@@ -178,17 +178,17 @@
 <row_1><col_0><col_header>Training on</col_0><col_1><col_header>labels</col_1><col_2><col_header>PLN</col_2><col_3><col_header>DB</col_3><col_4><col_header>DLN</col_4></row_1>
 <row_2><col_0><row_header>PubLayNet (PLN)</col_0><col_1><row_header>Figure</col_1><col_2><body>96</col_2><col_3><body>43</col_3><col_4><body>23</col_4></row_2>
 <row_3><col_0><row_header>PubLayNet (PLN)</col_0><col_1><row_header>Sec-header</col_1><col_2><body>87</col_2><col_3><body>-</col_3><col_4><body>32</col_4></row_3>
-<row_4><col_0><row_header>PubLayNet (PLN)</col_0><col_1><row_header>Table</col_1><col_2><body>95</col_2><col_3><body>24</col_3><col_4><body>49</col_4></row_4>
-<row_5><col_0><row_header>PubLayNet (PLN)</col_0><col_1><row_header>Text</col_1><col_2><body>96</col_2><col_3><body>-</col_3><col_4><body>42</col_4></row_5>
-<row_6><col_0><row_header>PubLayNet (PLN)</col_0><col_1><row_header>total</col_1><col_2><body>93</col_2><col_3><body>34</col_3><col_4><body>30</col_4></row_6>
+<row_4><col_0><body></col_0><col_1><row_header>Table</col_1><col_2><body>95</col_2><col_3><body>24</col_3><col_4><body>49</col_4></row_4>
+<row_5><col_0><body></col_0><col_1><row_header>Text</col_1><col_2><body>96</col_2><col_3><body>-</col_3><col_4><body>42</col_4></row_5>
+<row_6><col_0><body></col_0><col_1><row_header>total</col_1><col_2><body>93</col_2><col_3><body>34</col_3><col_4><body>30</col_4></row_6>
 <row_7><col_0><row_header>DocBank (DB)</col_0><col_1><row_header>Figure</col_1><col_2><body>77</col_2><col_3><body>71</col_3><col_4><body>31</col_4></row_7>
 <row_8><col_0><row_header>DocBank (DB)</col_0><col_1><row_header>Table</col_1><col_2><body>19</col_2><col_3><body>65</col_3><col_4><body>22</col_4></row_8>
 <row_9><col_0><row_header>DocBank (DB)</col_0><col_1><row_header>total</col_1><col_2><body>48</col_2><col_3><body>68</col_3><col_4><body>27</col_4></row_9>
 <row_10><col_0><row_header>DocLayNet (DLN)</col_0><col_1><row_header>Figure</col_1><col_2><body>67</col_2><col_3><body>51</col_3><col_4><body>72</col_4></row_10>
 <row_11><col_0><row_header>DocLayNet (DLN)</col_0><col_1><row_header>Sec-header</col_1><col_2><body>53</col_2><col_3><body>-</col_3><col_4><body>68</col_4></row_11>
-<row_12><col_0><row_header>DocLayNet (DLN)</col_0><col_1><row_header>Table</col_1><col_2><body>87</col_2><col_3><body>43</col_3><col_4><body>82</col_4></row_12>
-<row_13><col_0><row_header>DocLayNet (DLN)</col_0><col_1><row_header>Text</col_1><col_2><body>77</col_2><col_3><body>-</col_3><col_4><body>84</col_4></row_13>
-<row_14><col_0><row_header>DocLayNet (DLN)</col_0><col_1><row_header>total</col_1><col_2><body>59</col_2><col_3><body>47</col_3><col_4><body>78</col_4></row_14>
+<row_12><col_0><body></col_0><col_1><row_header>Table</col_1><col_2><body>87</col_2><col_3><body>43</col_3><col_4><body>82</col_4></row_12>
+<row_13><col_0><body></col_0><col_1><row_header>Text</col_1><col_2><body>77</col_2><col_3><body>-</col_3><col_4><body>84</col_4></row_13>
+<row_14><col_0><body></col_0><col_1><row_header>total</col_1><col_2><body>59</col_2><col_3><body>47</col_3><col_4><body>78</col_4></row_14>
 </table>
 <paragraph><location><page_8><loc_9><loc_44><loc_48><loc_51></location>Section-header , Table and Text . Before training, we either mapped or excluded DocLayNet's other labels as specified in table 3, and also PubLayNet's List to Text . Note that the different clustering of lists (by list-element vs. whole list objects) naturally decreases the mAP score for Text .</paragraph>
 <paragraph><location><page_8><loc_9><loc_26><loc_48><loc_44></location>For comparison of DocBank with DocLayNet, we trained only on Picture and Table clusters of each dataset. We had to exclude Text because successive paragraphs are often grouped together into a single object in DocBank. This paragraph grouping is incompatible with the individual paragraphs of DocLayNet. As can be seen in Table 5, DocLayNet trained models yield better performance compared to the previous datasets. It is noteworthy that the models trained on PubLayNet and DocBank perform very well on their own test set, but have a much lower performance on the foreign datasets. While this also applies to DocLayNet, the difference is far less pronounced. Thus we conclude that DocLayNet trained models are overall more robust and will produce better results for challenging, unseen layouts.</paragraph>

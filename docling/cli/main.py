@@ -210,7 +210,7 @@ def convert(
     table_mode: Annotated[
         TableFormerMode,
         typer.Option(..., help="The mode to use in the table structure model."),
-    ] = TableFormerMode.FAST,
+    ] = TableFormerMode.ACCURATE,
     enrich_code: Annotated[
         bool,
         typer.Option(..., help="Enable the code enrichment model in the pipeline."),
