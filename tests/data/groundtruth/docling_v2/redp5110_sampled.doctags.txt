@@ -2,7 +2,7 @@
 <picture><loc_419><loc_16><loc_479><loc_35></picture>
 <section_header_level_1><loc_29><loc_53><loc_478><loc_105>Row and Column Access Control Support in IBM DB2 for i</section_header_level_1>
 <picture><loc_27><loc_185><loc_478><loc_443></picture>
-<text><loc_235><loc_18><loc_342><loc_32>Front cover</text>
+<picture><loc_259><loc_448><loc_475><loc_489></picture>
 <page_footer><loc_30><loc_474><loc_134><loc_483>ibm.com /redbooks</page_footer>
 <page_break>
 <section_header_level_1><loc_53><loc_47><loc_138><loc_61>Contents</section_header_level_1>

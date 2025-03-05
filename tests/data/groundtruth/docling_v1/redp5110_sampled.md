@@ -6,7 +6,7 @@ Front cover
 
 <!-- image -->
 
-Front cover
+<!-- image -->
 
 ## Contents
 

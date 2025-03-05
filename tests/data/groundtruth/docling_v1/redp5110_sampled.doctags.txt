@@ -7,7 +7,9 @@
 <figure>
 <location><page_1><loc_5><loc_11><loc_96><loc_63></location>
 </figure>
-<paragraph><location><page_1><loc_47><loc_94><loc_68><loc_96></location>Front cover</paragraph>
+<figure>
+<location><page_1><loc_52><loc_2><loc_95><loc_10></location>
+</figure>
 <subtitle-level-1><location><page_2><loc_11><loc_88><loc_28><loc_91></location>Contents</subtitle-level-1>
 <paragraph><location><page_3><loc_11><loc_89><loc_39><loc_91></location>DB2 for i Center of Excellence</paragraph>
 <paragraph><location><page_3><loc_15><loc_80><loc_38><loc_83></location>Solution Brief IBM Systems Lab Services and Training</paragraph>
