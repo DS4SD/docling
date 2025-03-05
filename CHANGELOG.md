@@ -1,3 +1,13 @@
+## [v2.25.2](https://github.com/DS4SD/docling/releases/tag/v2.25.2) - 2025-03-05
+
+### Fix
+
+* Proper handling of orphan IDs in layout postprocessing ([#1118](https://github.com/DS4SD/docling/issues/1118)) ([`c56ab3a`](https://github.com/DS4SD/docling/commit/c56ab3a66b79e0d1b6f4b22880aabb7ee909d9d7))
+
+### Documentation
+
+* Enrichment models ([#1097](https://github.com/DS4SD/docling/issues/1097)) ([`357d41c`](https://github.com/DS4SD/docling/commit/357d41cc47bcf69684643d193ed38f9baaf0d2f1))
+
 ## [v2.25.1](https://github.com/DS4SD/docling/releases/tag/v2.25.1) - 2025-03-03
 
 ### Fix
