@@ -169,7 +169,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         # Skip hidden elements
         if self.is_hidden_element(tag):
             return
-            
+
         if tag.name in ["h1", "h2", "h3", "h4", "h5", "h6"]:
             self.handle_header(tag, doc)
         elif tag.name in ["p"]:
@@ -211,38 +211,38 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         tag = cast(Tag, item)
         if self.is_hidden_element(tag):
             return []
-            
+
         if tag.name not in ["ul", "ol"]:
             for child in tag:
                 # Recursively get the child's text content
                 result.extend(self.extract_text_recursively(child))
 
         return ["".join(result) + " "]
-        
+
     def is_hidden_element(self, tag: Tag) -> bool:
         """Check if an element is hidden based on its class attributes."""
         if not isinstance(tag, Tag):
             return False
-            
+
         # Check for classes that indicate hidden content
         classes = tag.get("class", [])
         if isinstance(classes, str):
             classes = classes.split()
-            
+
         hidden_classes = ["hidden", "d-none", "hide", "invisible", "collapse"]
         for cls in hidden_classes:
             if cls in classes:
                 return True
-                
+
         # Check for style attribute with display:none or visibility:hidden
         style = tag.get("style", "")
         if "display:none" in style or "visibility:hidden" in style:
             return True
-            
+
         # Check hidden attribute
         if tag.has_attr("hidden"):
             return True
-            
+
         return False
 
     def handle_header(self, element: Tag, doc: DoclingDocument) -> None:
@@ -594,7 +594,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         # Skip if the element is hidden
         if self.is_hidden_element(element):
             return
-            
+
         # Find the anchor tag that contains the question text
         anchor = element.find("a")
         if anchor and anchor.text and not self.is_hidden_element(anchor):
@@ -612,12 +612,12 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         # Skip if the element is hidden
         if self.is_hidden_element(element):
             return
-            
+
         # First, find and process the panel-title (question)
         panel_title = element.find("div", class_="panel-title")
         if panel_title and not self.is_hidden_element(panel_title):
             self.handle_panel_title(panel_title, doc)
-        
+
         # Then, find and process the panel-body (answer)
         panel_body = element.find("div", class_="panel-body")
         if panel_body and not self.is_hidden_element(panel_body):
@@ -628,16 +628,16 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 label=GroupLabel.SECTION,
                 content_layer=self.content_layer,
             )
-            
+
             # Save current level
             current_level = self.level
             # Set new parent for content in the panel
             self.level += 1
             self.parents[self.level] = panel_group
-            
+
             # Process panel body content
             self.walk(panel_body, doc)
-            
+
             # Restore previous level
             self.level = current_level
         else:
