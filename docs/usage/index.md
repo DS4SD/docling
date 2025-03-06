@@ -71,6 +71,13 @@ Or using the CLI:
 docling --artifacts-path="/local/path/to/models" FILE
 ```
 
+Or using the `DOCLING_ARTIFACTS_PATH` environment variable:
+
+```sh
+export DOCLING_ARTIFACTS_PATH="/local/path/to/models"
+python my_docling_script.py
+```
+
 #### Using remote services
 
 The main purpose of Docling is to run local models which are not sharing any user data with remote services.
