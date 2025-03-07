@@ -245,7 +245,7 @@ def convert(
         typer.Option(
             ...,
             "--abort-on-error/--no-abort-on-error",
-            help="If enabled, the bitmap content will be processed using OCR.",
+            help="If enabled, the processing will be aborted when the first error is encountered.",
         ),
     ] = False,
     output: Annotated[
