@@ -17,13 +17,13 @@ exec 2> >(tee -a "$LOG_FILE" >&2)
 trap 'echo "Error on line $LINENO"' ERR
 set -e
 
-# --- Validate Docling installation ---
+# --- Define error codes ---
 
-# Check if Docling CLI is installed and in PATH.
-if ! command -v docling &>/dev/null; then
-    echo "Error: Docling CLI is not installed or not in PATH"
-    exit 1
-fi
+readonly ERR_INVALID_INPUT=10
+readonly ERR_URL_INACCESSIBLE=11
+readonly ERR_DOCLING_FAILED=12
+readonly ERR_OUTPUT_MISSING=13
+readonly ERR_STORAGE_FAILED=14
 
 # --- Input parsing ---
 
@@ -36,24 +36,10 @@ INPUT="$(apify actor:get-input || {
 
 DOCUMENT_URL="$(echo "${INPUT}" | jq -r '.documentUrl')"
 OUTPUT_FORMAT="$(echo "${INPUT}" | jq -r '.outputFormat')"
-OUTPUT_NAME="output_file.${OUTPUT_FORMAT}"
-
-# Define error codes.
-readonly ERR_INVALID_INPUT=10
-readonly ERR_URL_INACCESSIBLE=11
-readonly ERR_DOCLING_FAILED=12
-readonly ERR_OUTPUT_MISSING=13
-readonly ERR_STORAGE_FAILED=14
-
-# Update error handling with codes.
-if [ -z "$DOCUMENT_URL" ]; then
-    echo "Error: Missing document URL. Please provide 'documentUrl' in the input"
-    apify actor:push-data "{\"url\": \"${DOCUMENT_URL}\", \"status\": \"error\", \"error\": \"Missing document URL\"}" || true
-    exit $ERR_INVALID_INPUT
-fi
+OCR_ENABLED="$(echo "${INPUT}" | jq -r '.ocr')"
 
 # If no output format is specified, default to 'md'.
-if [ -z "$OUTPUT_FORMAT" ]; then
+if [ -z "$OUTPUT_FORMAT" ] || [ "$OUTPUT_FORMAT" = "null" ]; then
     OUTPUT_FORMAT="md"
     echo "No output format specified. Defaulting to 'md'"
 fi
@@ -62,9 +48,19 @@ fi
 case "$OUTPUT_FORMAT" in md | json | html | text | doctags) ;;
 *)
     echo "Error: Invalid output format '$OUTPUT_FORMAT'. Supported formats are 'md', 'json', 'html', 'text', and 'doctags'"
-    exit 1
+    apify actor:push-data "{\"url\": \"${DOCUMENT_URL}\", \"status\": \"error\", \"error\": \"Invalid output format\"}" || true
+    exit $ERR_INVALID_INPUT
     ;;
 esac
+
+# Set output filename based on format.
+OUTPUT_NAME="output_file.${OUTPUT_FORMAT}"
+
+if [ -z "$DOCUMENT_URL" ] || [ "$DOCUMENT_URL" = "null" ]; then
+    echo "Error: Missing document URL. Please provide 'documentUrl' in the input"
+    apify actor:push-data "{\"status\": \"error\", \"error\": \"Missing document URL\"}" || true
+    exit $ERR_INVALID_INPUT
+fi
 
 # Validate URL is accessible.
 echo "Validating document URL..."
@@ -75,65 +71,81 @@ if ! curl --output /dev/null --silent --head --fail "${DOCUMENT_URL}"; then
     exit $ERR_URL_INACCESSIBLE
 fi
 
-# --- Build Docling command ---
+# --- Create JSON payload for docling-serve API ---
 
-DOC_CONVERT_CMD="docling --verbose '${DOCUMENT_URL}' --to '${OUTPUT_FORMAT}'"
+echo "Creating API request for docling-serve..."
 
-# If OCR is enabled, add the OCR flag to the command.
-if [ "$(echo "${INPUT}" | jq -r '.ocr')" = "true" ]; then
-    DOC_CONVERT_CMD="${DOC_CONVERT_CMD} --ocr"
+# Set OCR flag.
+if [ "$OCR_ENABLED" = "true" ]; then
+    OCR_VALUE="true"
+else
+    OCR_VALUE="false"
 fi
 
-# Print the exact command that will be executed.
-echo "Debug: Command string: $DOC_CONVERT_CMD"
-echo "Debug: Full command: /usr/bin/time -v bash -c \"$DOC_CONVERT_CMD\""
-
-# --- Process document with Docling ---
-
-echo "Processing document with Docling CLI..."
-echo "Running: $DOC_CONVERT_CMD"
-
-# Create a timestamp file to ensure the document is processed only once.
-TIMESTAMP_FILE="/tmp/docling.timestamp"
-touch "$TIMESTAMP_FILE" || {
-    echo "Error: Failed to create timestamp file"
-    exit 1
+# Create a temporary file for the JSON payload.
+REQUEST_FILE="/tmp/docling_request.json"
+cat > "$REQUEST_FILE" << EOF
+{
+    "document_url": "${DOCUMENT_URL}",
+    "output_format": "${OUTPUT_FORMAT}",
+    "ocr": ${OCR_VALUE}
 }
+EOF
 
-echo "Starting document processing with memory monitoring..."
-/usr/bin/time -v bash -c "${DOC_CONVERT_CMD}" 2>&1 | tee -a "$LOG_FILE"
-DOCLING_EXIT_CODE=${PIPESTATUS[0]}
+echo "Request payload:"
+cat "$REQUEST_FILE"
 
-# Check if the command failed and handle the error.
-if [ $DOCLING_EXIT_CODE -ne 0 ]; then
-    echo "Error: Docling command failed with exit code $DOCLING_EXIT_CODE"
-    echo "Memory usage information:"
-    free -h
-    df -h
+# --- Call docling-serve API ---
+
+echo "Calling docling-serve API (localhost:8080/convert)..."
+
+RESPONSE_FILE="/tmp/docling_response.json"
+HTTP_CODE=$(curl -s -o "$RESPONSE_FILE" -w "%{http_code}" -X POST \
+    -H "Content-Type: application/json" \
+    -d @"$REQUEST_FILE" \
+    http://localhost:8080/convert)
+
+echo "API Response Status Code: $HTTP_CODE"
+
+# Check response status code.
+if [ "$HTTP_CODE" -ne 200 ]; then
+    echo "Error: docling-serve API returned error code $HTTP_CODE"
+    if [ -f "$RESPONSE_FILE" ]; then
+        echo "Error response:"
+        cat "$RESPONSE_FILE"
+    fi
+
+    ERROR_MSG=$(jq -r '.error // "Unknown API error"' "$RESPONSE_FILE" 2>/dev/null || echo "Unknown API error")
+
+    apify actor:push-data "{\"url\": \"${DOCUMENT_URL}\", \"status\": \"error\", \"error\": \"${ERROR_MSG}\"}" || true
     exit $ERR_DOCLING_FAILED
 fi
 
-GENERATED_FILE="$(find . -type f -name "*.${OUTPUT_FORMAT}" -newer "$TIMESTAMP_FILE")"
+# --- Process API response ---
 
-# If no generated file is found, exit with an error.
-if [ -z "$GENERATED_FILE" ]; then
-    echo "Error: Could not find generated output file with extension .$OUTPUT_FORMAT"
+echo "Processing API response..."
+
+# Extract content from response and save to output file.
+if ! jq -r '.content' "$RESPONSE_FILE" > "$OUTPUT_NAME" 2>/dev/null; then
+    echo "Error: Failed to parse API response or extract content"
+    echo "Response content:"
+    cat "$RESPONSE_FILE"
+
+    apify actor:push-data "{\"url\": \"${DOCUMENT_URL}\", \"status\": \"error\", \"error\": \"Failed to parse API response\"}" || true
     exit $ERR_OUTPUT_MISSING
 fi
 
-mv "${GENERATED_FILE}" "${OUTPUT_NAME}"
-
-# --- Validate output ---
-
-# If the output file is not found, exit with an error.
+# Validate output file.
 if [ ! -f "$OUTPUT_NAME" ]; then
-    echo "Error: Expected output file '$OUTPUT_NAME' was not generated"
+    echo "Error: Output file was not created"
+    apify actor:push-data "{\"url\": \"${DOCUMENT_URL}\", \"status\": \"error\", \"error\": \"Output file not created\"}" || true
     exit $ERR_OUTPUT_MISSING
 fi
 
-# If the output file is empty, exit with an error.
+# Validate output file is not empty.
 if [ ! -s "$OUTPUT_NAME" ]; then
-    echo "Error: Generated output file '$OUTPUT_NAME' is empty"
+    echo "Error: Output file is empty"
+    apify actor:push-data "{\"url\": \"${DOCUMENT_URL}\", \"status\": \"error\", \"error\": \"Output file is empty\"}" || true
     exit $ERR_OUTPUT_MISSING
 fi
 
@@ -142,7 +154,18 @@ echo "Document successfully processed and exported as '$OUTPUT_FORMAT' to file: 
 # --- Store output and log in key-value store ---
 
 echo "Pushing processed document to key-value store (record key: OUTPUT_RESULT)..."
-apify actor:set-value "OUTPUT_RESULT" --contentType "application/$OUTPUT_FORMAT" <"$OUTPUT_NAME" || {
+
+CONTENT_TYPE=""
+case "$OUTPUT_FORMAT" in
+    md)      CONTENT_TYPE="text/markdown" ;;
+    json)    CONTENT_TYPE="application/json" ;;
+    html)    CONTENT_TYPE="text/html" ;;
+    text)    CONTENT_TYPE="text/plain" ;;
+    doctags) CONTENT_TYPE="application/json" ;;
+    *)       CONTENT_TYPE="text/plain" ;;
+esac
+
+apify actor:set-value "OUTPUT_RESULT" --contentType "$CONTENT_TYPE" < "$OUTPUT_NAME" || {
     echo "Error: Failed to push the output document to the key-value store"
     exit $ERR_STORAGE_FAILED
 }
@@ -154,24 +177,19 @@ apify actor:push-data "{\"url\": \"${DOCUMENT_URL}\", \"output_file\": \"${RESUL
     echo "Warning: Failed to push data to dataset"
 }
 
-if [ -f "$LOG_FILE" ]; then
-    if [ -s "$LOG_FILE" ]; then
-        echo "Log file is not empty, pushing to key-value store (record key: DOCLING_LOG)..."
-        apify actor:set-value "DOCLING_LOG" --contentType "text/plain" <"$LOG_FILE" || {
-            echo "Warning: Failed to push the log file to the key-value store"
-        }
-    else
-        echo "Warning: docling.log file exists but is empty"
-    fi
-else
-    echo "Warning: No docling.log file found"
+# Store logs.
+if [ -f "$LOG_FILE" ] && [ -s "$LOG_FILE" ]; then
+    echo "Pushing log file to key-value store (record key: DOCLING_LOG)..."
+    apify actor:set-value "DOCLING_LOG" --contentType "text/plain" < "$LOG_FILE" || {
+        echo "Warning: Failed to push the log file to the key-value store"
+    }
 fi
 
 # --- Cleanup temporary files ---
 
 cleanup() {
     local exit_code=$?
-    rm -f "$TIMESTAMP_FILE" || true
+    rm -f "$REQUEST_FILE" "$RESPONSE_FILE" || true
     exit $exit_code
 }
 

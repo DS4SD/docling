@@ -1,20 +1,20 @@
 {
   "title": "Docling Actor Input",
-  "description": "Options for running Docling CLI on the Apify platform.",
+  "description": "Options for processing documents with Docling via the docling-serve API.",
   "type": "object",
   "schemaVersion": 1,
   "properties": {
     "documentUrl": {
       "title": "Document URL",
       "type": "string",
-      "description": "URL of the document to process with Docling. Supported formats: images, 'pdf', 'docx', 'pptx', 'xlsx, 'html', 'md', 'xml_pubmed', 'asciidoc', 'xml_uspto'.",
+      "description": "URL of the document to process. Supported formats: PDF, DOCX, PPTX, XLSX, HTML, MD, XML, images, and more.",
       "prefill": "https://arxiv.org/pdf/2408.09869.pdf",
       "editor": "textfield"
     },
     "outputFormat": {
       "title": "Output Format",
       "type": "string",
-      "description": "Specifies the desired output format after processing the document. Supported formats: 'md', 'json', 'html', 'text', 'doctags'.",
+      "description": "Desired output format after processing the document.",
       "enum": ["md", "json", "html", "text", "doctags"],
       "default": "md",
       "editor": "select"
@@ -22,7 +22,7 @@
     "ocr": {
       "title": "Enable OCR",
       "type": "boolean",
-      "description": "If true, OCR will be applied to scanned PDFs for text recognition.",
+      "description": "If enabled, OCR will be applied to scanned documents for text recognition.",
       "default": true
     }
   },
