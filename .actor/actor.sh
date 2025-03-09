@@ -8,25 +8,14 @@ upload_to_kvs() {
     local description="$4"
 
     # Find the Apify CLI command
-    local apify_cmd=""
-    for cmd in "apify" "actor" "/usr/local/bin/apify" "/usr/bin/apify" "/opt/apify/cli/bin/apify"; do
-        if command -v "$cmd" &> /dev/null; then
-            apify_cmd="$cmd"
-            break
-        fi
-    done
+    find_apify_cmd
+    local apify_cmd="$FOUND_APIFY_CMD"
 
     if [ -n "$apify_cmd" ]; then
         echo "Uploading $description to key-value store (key: $key_name)..."
 
         # Create a temporary home directory with write permissions
-        export TMPDIR="/tmp/apify-home-${RANDOM}"
-        mkdir -p "$TMPDIR"
-
-        # Multiple strategies to disable version checking
-        export APIFY_DISABLE_VERSION_CHECK=1
-        export NODE_OPTIONS="--no-warnings"
-        export HOME="$TMPDIR"  # Override home directory to writable location
+        setup_temp_environment
 
         # Use the --no-update-notifier flag if available
         if $apify_cmd --help | grep -q "\--no-update-notifier"; then
@@ -34,7 +23,7 @@ upload_to_kvs() {
                 echo "Successfully uploaded $description to key-value store"
                 local url="https://api.apify.com/v2/key-value-stores/${APIFY_DEFAULT_KEY_VALUE_STORE_ID}/records/$key_name"
                 echo "$description available at: $url"
-                rm -rf "$TMPDIR" 2>/dev/null || true  # Clean up temp dir
+                cleanup_temp_environment
                 return 0
             fi
         else
@@ -43,17 +32,75 @@ upload_to_kvs() {
                 echo "Successfully uploaded $description to key-value store"
                 local url="https://api.apify.com/v2/key-value-stores/${APIFY_DEFAULT_KEY_VALUE_STORE_ID}/records/$key_name"
                 echo "$description available at: $url"
-                rm -rf "$TMPDIR" 2>/dev/null || true  # Clean up temp dir
+                cleanup_temp_environment
                 return 0
             fi
         fi
 
         echo "ERROR: Failed to upload $description to key-value store"
-        rm -rf "$TMPDIR" 2>/dev/null || true  # Clean up temp dir
+        cleanup_temp_environment
         return 1
     else
         echo "ERROR: Apify CLI not found for $description upload"
         return 1
+    fi
+}
+
+# Function to find Apify CLI command
+find_apify_cmd() {
+    FOUND_APIFY_CMD=""
+    for cmd in "apify" "actor" "/usr/local/bin/apify" "/usr/bin/apify" "/opt/apify/cli/bin/apify"; do
+        if command -v "$cmd" &> /dev/null; then
+            FOUND_APIFY_CMD="$cmd"
+            break
+        fi
+    done
+}
+
+# Function to set up temporary environment for Apify CLI
+setup_temp_environment() {
+    export TMPDIR="/tmp/apify-home-${RANDOM}"
+    mkdir -p "$TMPDIR"
+    export APIFY_DISABLE_VERSION_CHECK=1
+    export NODE_OPTIONS="--no-warnings"
+    export HOME="$TMPDIR"  # Override home directory to writable location
+}
+
+# Function to clean up temporary environment
+cleanup_temp_environment() {
+    rm -rf "$TMPDIR" 2>/dev/null || true
+}
+
+# Function to push data to Apify dataset
+push_to_dataset() {
+    local document_url="$1"
+    local result_url="$2"
+
+    # Find Apify CLI command
+    find_apify_cmd
+    local apify_cmd="$FOUND_APIFY_CMD"
+
+    if [ -n "$apify_cmd" ]; then
+        echo "Adding record to dataset..."
+        setup_temp_environment
+
+        # Use the --no-update-notifier flag if available
+        if $apify_cmd --help | grep -q "\--no-update-notifier"; then
+            if $apify_cmd --no-update-notifier actor:push-data "{\"url\": \"${document_url}\", \"output_file\": \"${result_url}\", \"status\": \"success\"}"; then
+                echo "Successfully added record to dataset"
+            else
+                echo "Warning: Failed to add record to dataset"
+            fi
+        else
+            # Fall back to regular command
+            if $apify_cmd actor:push-data "{\"url\": \"${document_url}\", \"output_file\": \"${result_url}\", \"status\": \"success\"}"; then
+                echo "Successfully added record to dataset"
+            else
+                echo "Warning: Failed to add record to dataset"
+            fi
+        fi
+
+        cleanup_temp_environment
     fi
 }
 
@@ -98,6 +145,17 @@ else
     echo "Warning: No build files directory found. Some tools may be unavailable."
 fi
 
+# Copy Python processor script to tools directory
+PYTHON_SCRIPT_PATH="$(dirname "$0")/docling_processor.py"
+if [ -f "$PYTHON_SCRIPT_PATH" ]; then
+    echo "Copying Python processor script to tools directory..."
+    cp "$PYTHON_SCRIPT_PATH" "$TOOLS_DIR/"
+    chmod +x "$TOOLS_DIR/docling_processor.py"
+else
+    echo "ERROR: Python processor script not found at $PYTHON_SCRIPT_PATH"
+    exit 1
+fi
+
 # Check OCR directories and ensure they're writable
 echo "Checking OCR directory permissions..."
 OCR_DIR="/opt/app-root/src/.EasyOCR"
@@ -108,6 +166,7 @@ if [ -d "$OCR_DIR" ]; then
         rm "$OCR_DIR/test_write"
     else
         echo "[✗] OCR directory is not writable, setting up alternative in /tmp"
+
         # Create alternative in /tmp (which is writable)
         mkdir -p "/tmp/.EasyOCR/user_network"
         export EASYOCR_MODULE_PATH="/tmp/.EasyOCR"
@@ -224,41 +283,52 @@ DOCLING_API_ENDPOINT="http://localhost:5001/v1alpha/convert/source"
 echo "Starting document processing..."
 echo "Reading input from Apify..."
 
-INPUT=""
+# Function to handle Actor input detection
+get_actor_input() {
+    local input=""
 
-# Create directory if it doesn't exist
-mkdir -p "/tmp/actor-input" || echo "Warning: Could not create /tmp/actor-input directory"
+    # Create directory if it doesn't exist
+    mkdir -p "/tmp/actor-input" || echo "Warning: Could not create /tmp/actor-input directory" >&2
 
-# List all possible input locations for debugging
-echo "Listing potential input file locations:"
-ls -la "/tmp/actor-input/" 2>/dev/null || echo "Cannot list /tmp/actor-input/"
-ls -la "/input/" 2>/dev/null || echo "Cannot list /input/"
+    # If /tmp/actor-input/INPUT exists as a directory, remove it
+    if [ -d "/tmp/actor-input/INPUT" ]; then
+        echo "Warning: /tmp/actor-input/INPUT exists as a directory. Removing it to create a file." >&2
+        rm -rf "/tmp/actor-input/INPUT"
+    fi
 
-# Check multiple potential locations for input file
-if [ -f "/tmp/actor-input/INPUT" ]; then
-    echo "Found standard Actor input file at /tmp/actor-input/INPUT"
-    echo "Content:"
-    cat "/tmp/actor-input/INPUT"
-    INPUT=$(cat "/tmp/actor-input/INPUT")
-elif [ -f "/input/INPUT" ]; then
-    echo "Found Actor input file at /input/INPUT"
-    echo "Content:"
-    cat "/input/INPUT"
-    INPUT=$(cat "/input/INPUT")
-# Fallback to environment variable
-elif [ -n "$APIFY_INPUT_JSON" ]; then
-    echo "Using APIFY_INPUT_JSON environment variable"
-    INPUT="$APIFY_INPUT_JSON"
-# Last resort: use test input - now defaulting to md as requested
-else
-    echo "No input found, using test input with md format"
-    TEST_INPUT='{"documentUrl":"https://vancura.dev/assets/actor-test/facial-hairstyles-and-filtering-facepiece-respirators.pdf","ocr":true,"outputFormat":"md"}'
-    mkdir -p "/tmp/actor-input"
-    echo "$TEST_INPUT" > "/tmp/actor-input/INPUT"
-    INPUT="$TEST_INPUT"
-fi
+    # Check multiple potential locations for input file
+    if [ -f "/tmp/actor-input/INPUT" ]; then
+        echo "Found standard Actor input file at /tmp/actor-input/INPUT" >&2
+        input=$(cat "/tmp/actor-input/INPUT")
+    elif [ -f "/input/INPUT" ]; then
+        echo "Found Actor input file at /input/INPUT" >&2
+        input=$(cat "/input/INPUT")
 
-echo "Input content: $INPUT"
+    # Fallback to environment variable
+    elif [ -n "$APIFY_INPUT_JSON" ]; then
+        echo "Using APIFY_INPUT_JSON environment variable" >&2
+        input="$APIFY_INPUT_JSON"
+
+    # Last resort: use test input with md format
+    else
+        echo "No input found, using test input with md format" >&2
+        TEST_INPUT='{"documentUrl":"https://vancura.dev/assets/actor-test/facial-hairstyles-and-filtering-facepiece-respirators.pdf","ocr":true,"outputFormat":"md"}'
+        mkdir -p "/tmp/actor-input"
+        echo "$TEST_INPUT" > "/tmp/actor-input/INPUT"
+
+        # Read back the test input to ensure we get clean JSON
+        input=$(cat "/tmp/actor-input/INPUT")
+    fi
+
+    # Return only the JSON content
+    echo "$input"
+}
+
+# Get actor input
+INPUT=$(get_actor_input)
+echo "Input content:" >&2
+echo "$INPUT" >&2  # Send the raw input to stderr for debugging
+echo "$INPUT"      # Send the clean JSON to stdout for processing
 
 # Extract values from INPUT using Python
 echo "Using Python to parse input..."
@@ -271,13 +341,17 @@ if [ -z "$DOCUMENT_URL" ]; then
     echo "ERROR: No document URL provided in input"
 
     # Try to push data to Actor but don't exit if it fails
-    if command -v actor &> /dev/null; then
+    find_apify_cmd
+    apify_cmd="$FOUND_APIFY_CMD"
+    if [ -n "$apify_cmd" ]; then
         echo "Reporting missing document URL to Actor storage..."
-        if actor push-data "{\"status\": \"error\", \"error\": \"No document URL provided in input\"}" 2>&1; then
+        setup_temp_environment
+        if $apify_cmd actor:push-data "{\"status\": \"error\", \"error\": \"No document URL provided in input\"}" 2>&1; then
             echo "Successfully pushed error message to Actor storage"
         else
             echo "Warning: Failed to push error message to Actor storage"
         fi
+        cleanup_temp_environment
     fi
 
     # Use default document URL for testing instead of exiting
@@ -290,410 +364,29 @@ if [ -z "$OUTPUT_FORMAT" ]; then
     OUTPUT_FORMAT="md"
 fi
 
+# Ensure OCR_ENABLED has a valid boolean value
+if [ -z "$OCR_ENABLED" ]; then
+    echo "No OCR setting specified, defaulting to true"
+    OCR_ENABLED="true"
+fi
+
 echo "Input values: documentUrl=$DOCUMENT_URL, outputFormat=$OUTPUT_FORMAT, ocr=$OCR_ENABLED"
 
 # Create the request JSON
 REQUEST_JSON="{\"options\":{\"to_formats\":[\"$OUTPUT_FORMAT\"],\"ocr\":$OCR_ENABLED},\"http_sources\":[{\"url\":\"$DOCUMENT_URL\"}]}"
+echo "Creating request JSON:" >&2
+echo "$REQUEST_JSON" >&2
 echo "$REQUEST_JSON" > "$API_DIR/request.json"
 
-# Send the conversion request
+# Send the conversion request using our Python script
 echo "Sending conversion request to docling-serve API..."
-python -c "
-import json
-import time
-import sys
-import os
-import traceback
+python "$TOOLS_DIR/docling_processor.py" \
+    --api-endpoint "$DOCLING_API_ENDPOINT" \
+    --request-json "$API_DIR/request.json" \
+    --output-dir "$API_DIR" \
+    --output-format "$OUTPUT_FORMAT"
 
-try:
-    # Load request data from temporary location
-    with open('$API_DIR/request.json', 'r') as f:
-        request_data = json.load(f)
-
-    print(f'Request to convert URL: {request_data[\"http_sources\"][0][\"url\"]}')
-    print(f'Output format: {request_data[\"options\"][\"to_formats\"][0]}')
-    print(f'OCR enabled: {request_data[\"options\"][\"ocr\"]}')
-
-    # Try requests first, fall back to urllib
-    try:
-        import requests
-        print('Using requests library for API call')
-
-        # Record start time for timing
-        start_time = time.time()
-        print(f'Starting conversion request at {time.strftime(\"%H:%M:%S\")}')
-
-        response = requests.post(
-            '$DOCLING_API_ENDPOINT',
-            json=request_data,
-            timeout=300  # 5 minutes timeout
-        )
-
-        elapsed = time.time() - start_time
-        print(f'Conversion request completed in {elapsed:.2f} seconds')
-        print(f'Response status code: {response.status_code}')
-
-        # Save the full response for debugging
-        with open('$API_DIR/full_response.txt', 'w') as f:
-            f.write(f'Status code: {response.status_code}\\n')
-            f.write(f'Headers: {response.headers}\\n\\n')
-            f.write(f'Content: {response.text[:10000]}...' if len(response.text) > 10000 else f'Content: {response.text}')
-
-        if response.status_code == 200:
-            with open('$API_DIR/response.json', 'w') as f:
-                f.write(response.text)
-
-            # Parse the response even if it's not valid JSON
-            try:
-                resp_data = response.json()
-                print('Successfully parsed response as JSON')
-
-                # Save detailed diagnostics about the response structure
-                with open('$API_DIR/response_structure.txt', 'w') as f:
-                    f.write(f'Response keys: {list(resp_data.keys())}\\n')
-                    if 'document' in resp_data:
-                        f.write(f'Document keys: {list(resp_data[\"document\"].keys() if resp_data[\"document\"] else [])}\\n')
-
-                        # Check for specific content fields with null safety
-                        doc = resp_data['document'] or {}
-                        if 'html_content' in doc and doc['html_content']:
-                            f.write(f'HTML content length: {len(doc[\"html_content\"])}\\n')
-                        elif 'html_content' in doc:
-                            f.write('HTML content is present but empty or null\\n')
-
-                        if 'md_content' in doc and doc['md_content']:
-                            f.write(f'Markdown content length: {len(doc[\"md_content\"])}\\n')
-                        elif 'md_content' in doc:
-                            f.write('Markdown content is present but empty or null\\n')
-
-                        if 'text_content' in doc and doc['text_content']:
-                            f.write(f'Text content length: {len(doc[\"text_content\"])}\\n')
-                        elif 'text_content' in doc:
-                            f.write('Text content is present but empty or null\\n')
-
-                        if 'json_content' in doc and doc['json_content']:
-                            f.write(f'JSON content length: {len(doc[\"json_content\"])}\\n')
-                        elif 'json_content' in doc:
-                            f.write('JSON content is present but empty or null\\n')
-
-                    if 'outputs' in resp_data:
-                        f.write(f'Outputs count: {len(resp_data[\"outputs\"])}\\n')
-                        if resp_data['outputs']:
-                            f.write(f'First output keys: {list(resp_data[\"outputs\"][0].keys())}\\n')
-                            if 'files' in resp_data['outputs'][0]:
-                                f.write(f'Files count: {len(resp_data[\"outputs\"][0][\"files\"])}\\n')
-                                if resp_data['outputs'][0]['files']:
-                                    f.write(f'First file keys: {list(resp_data[\"outputs\"][0][\"files\"][0].keys())}\\n')
-                                    if 'content' in resp_data['outputs'][0]['files'][0]:
-                                        content_length = len(resp_data['outputs'][0]['files'][0]['content'])
-                                        f.write(f'Content length: {content_length}\\n')
-
-                # Process the response - check for outputs and files
-                if 'outputs' in resp_data and resp_data['outputs']:
-                    output = resp_data['outputs'][0]
-                    print(f'Found {len(resp_data[\"outputs\"])} outputs in response')
-
-                    if 'files' in output and output['files']:
-                        file_data = output['files'][0]
-                        print(f'Found {len(output[\"files\"])} files in output')
-
-                        if 'content' in file_data and file_data['content']:
-                            print(f'Found content in file (length: {len(file_data[\"content\"])})')
-                            with open('$API_DIR/output.$OUTPUT_FORMAT', 'w') as f:
-                                f.write(file_data['content'])
-                            print('CONVERSION SUCCESS')
-                            sys.exit(0)
-                        else:
-                            if 'content' in file_data:
-                                print('Content field exists but is empty')
-                            else:
-                                print('No content field in file data')
-                                print(f'Available fields: {list(file_data.keys())}')
-                    else:
-                        print('No files found in output')
-                        print(f'Available fields: {list(output.keys())}')
-
-                # Alternative response format check - document field
-                elif 'document' in resp_data and resp_data['status'] == 'success':
-                    print('Found alternative response format with document field')
-                    document = resp_data['document'] or {}
-
-                    # Check format fields in document to see what's available
-                    available_formats = []
-                    if 'html_content' in document and document['html_content']:
-                        available_formats.append(('html', document['html_content']))
-                    if 'md_content' in document and document['md_content']:
-                        available_formats.append(('md', document['md_content']))
-                    if 'text_content' in document and document['text_content']:
-                        available_formats.append(('text', document['text_content']))
-                    if 'json_content' in document and document['json_content']:
-                        available_formats.append(('json', document['json_content']))
-
-                    if available_formats:
-                        print(f'Found {len(available_formats)} available formats: {[f[0] for f in available_formats]}')
-
-                        # First try to find the exact requested format
-                        requested_format_match = next((f for f in available_formats if f[0] == '$OUTPUT_FORMAT'.lower()), None)
-
-                        if requested_format_match:
-                            format_type, content = requested_format_match
-                            print(f'Found content in requested format {format_type} (length: {len(content)})')
-                        else:
-                            # If requested format not found, use the first available
-                            format_type, content = available_formats[0]
-                            print(f'Requested format not found, using alternative format {format_type} (length: {len(content)})')
-
-                        # Save the content to the output file with appropriate extension
-                        with open(f'$API_DIR/output.{format_type}', 'w') as f:
-                            f.write(content)
-
-                        # If we're using a different format than requested, also save with requested extension
-                        if format_type != '$OUTPUT_FORMAT'.lower():
-                            print(f'Saving content with requested extension {format_type} -> $OUTPUT_FORMAT')
-                            with open('$API_DIR/output.$OUTPUT_FORMAT', 'w') as f:
-                                f.write(content)
-
-                        print('CONVERSION SUCCESS')
-                        sys.exit(0)
-                    else:
-                        # No content fields found or all are empty
-                        # Check if fields exist but are empty or null
-                        empty_fields = []
-                        if 'html_content' in document and not document['html_content']:
-                            empty_fields.append('html_content')
-                        if 'md_content' in document and not document['md_content']:
-                            empty_fields.append('md_content')
-                        if 'text_content' in document and not document['text_content']:
-                            empty_fields.append('text_content')
-
-                        if empty_fields:
-                            print(f'Found content fields but they are empty or null: {empty_fields}')
-                        else:
-                            print('No content fields found in document')
-
-                        print(f'Available fields in document: {list(document.keys() if document else [])}')
-                else:
-                    print('No outputs found in response')
-                    print(f'Available fields: {list(resp_data.keys())}')
-
-                # Try to extract any alternate formats or metadata
-                if 'metadata' in resp_data:
-                    print('Metadata found in response, saving to file')
-                    with open('$API_DIR/metadata.json', 'w') as f:
-                        json.dump(resp_data['metadata'], f, indent=2)
-
-                print('CONVERSION PARTIAL - Some data available but not complete')
-            except Exception as json_error:
-                print(f'Failed to parse response as JSON: {json_error}')
-                traceback.print_exc()
-
-                # Save raw content as text if JSON parsing fails
-                with open('$API_DIR/output.txt', 'w') as f:
-                    f.write(response.text)
-                print('Saved raw response as text file')
-                print('CONVERSION PARTIAL - Raw response saved')
-        else:
-            print(f'Error response: {response.text[:500]}')
-            print('CONVERSION FAILED')
-
-    except ImportError:
-        # Fall back to urllib
-        import urllib.request
-        import urllib.error
-
-        print('Using urllib library for API call')
-        headers = {'Content-Type': 'application/json'}
-        req_data = json.dumps(request_data).encode('utf-8')
-
-        req = urllib.request.Request(
-            '$DOCLING_API_ENDPOINT',
-            data=req_data,
-            headers=headers,
-            method='POST'
-        )
-
-        try:
-            start_time = time.time()
-            print(f'Starting conversion request at {time.strftime(\"%H:%M:%S\")}')
-
-            with urllib.request.urlopen(req, timeout=300) as response:
-                elapsed = time.time() - start_time
-                print(f'Conversion request completed in {elapsed:.2f} seconds')
-                print(f'Response status: {response.status}')
-
-                if response.status == 200:
-                    response_text = response.read().decode('utf-8')
-
-                    # Save full response for debugging
-                    with open('$API_DIR/full_response.txt', 'w') as f:
-                        f.write(f'Status: {response.status}\\n')
-                        f.write(f'Headers: {response.headers}\\n\\n')
-                        f.write(f'Content: {response_text[:10000]}...' if len(response_text) > 10000 else f'Content: {response_text}')
-
-                    with open('$API_DIR/response.json', 'w') as f:
-                        f.write(response_text)
-
-                    try:
-                        resp_data = json.loads(response_text)
-                        print('Successfully parsed response as JSON')
-
-                        # Save detailed diagnostics about the response structure
-                        with open('$API_DIR/response_structure.txt', 'w') as f:
-                            f.write(f'Response keys: {list(resp_data.keys())}\\n')
-                            if 'document' in resp_data:
-                                f.write(f'Document keys: {list(resp_data[\"document\"].keys() if resp_data[\"document\"] else [])}\\n')
-
-                                # Check for specific content fields with null safety
-                                doc = resp_data['document'] or {}
-                                if 'html_content' in doc and doc['html_content']:
-                                    f.write(f'HTML content length: {len(doc[\"html_content\"])}\\n')
-                                elif 'html_content' in doc:
-                                    f.write('HTML content is present but empty or null\\n')
-
-                                if 'md_content' in doc and doc['md_content']:
-                                    f.write(f'Markdown content length: {len(doc[\"md_content\"])}\\n')
-                                elif 'md_content' in doc:
-                                    f.write('Markdown content is present but empty or null\\n')
-
-                                if 'text_content' in doc and doc['text_content']:
-                                    f.write(f'Text content length: {len(doc[\"text_content\"])}\\n')
-                                elif 'text_content' in doc:
-                                    f.write('Text content is present but empty or null\\n')
-
-                                if 'json_content' in doc and doc['json_content']:
-                                    f.write(f'JSON content length: {len(doc[\"json_content\"])}\\n')
-                                elif 'json_content' in doc:
-                                    f.write('JSON content is present but empty or null\\n')
-
-                            if 'outputs' in resp_data:
-                                f.write(f'Outputs count: {len(resp_data[\"outputs\"])}\\n')
-                                if resp_data['outputs']:
-                                    f.write(f'First output keys: {list(resp_data[\"outputs\"][0].keys())}\\n')
-                                    if 'files' in resp_data['outputs'][0]:
-                                        f.write(f'Files count: {len(resp_data[\"outputs\"][0][\"files\"])}\\n')
-                                        if resp_data['outputs'][0]['files']:
-                                            f.write(f'First file keys: {list(resp_data[\"outputs\"][0][\"files\"][0].keys())}\\n')
-                                            if 'content' in resp_data['outputs'][0]['files'][0]:
-                                                content_length = len(resp_data['outputs'][0]['files'][0]['content'])
-                                                f.write(f'Content length: {content_length}\\n')
-
-                        if 'outputs' in resp_data and resp_data['outputs']:
-                            output = resp_data['outputs'][0]
-                            print(f'Found {len(resp_data[\"outputs\"])} outputs in response')
-
-                            if 'files' in output and output['files']:
-                                file_data = output['files'][0]
-                                print(f'Found {len(output[\"files\"])} files in output')
-
-                                if 'content' in file_data and file_data['content']:
-                                    print(f'Found content in file (length: {len(file_data[\"content\"])})')
-                                    with open('$API_DIR/output.$OUTPUT_FORMAT', 'w') as f:
-                                        f.write(file_data['content'])
-                                    print('CONVERSION SUCCESS')
-                                    sys.exit(0)
-                                else:
-                                    if 'content' in file_data:
-                                        print('Content field exists but is empty')
-                                    else:
-                                        print('No content field in file data')
-                                        print(f'Available fields: {list(file_data.keys())}')
-                            else:
-                                print('No files found in output')
-                                print(f'Available fields: {list(output.keys())}')
-
-                        # Alternative response format check - document field
-                        elif 'document' in resp_data and resp_data['status'] == 'success':
-                            print('Found alternative response format with document field')
-                            document = resp_data['document'] or {}
-
-                            # Check format fields in document to see what's available
-                            available_formats = []
-                            if 'html_content' in document and document['html_content']:
-                                available_formats.append(('html', document['html_content']))
-                            if 'md_content' in document and document['md_content']:
-                                available_formats.append(('md', document['md_content']))
-                            if 'text_content' in document and document['text_content']:
-                                available_formats.append(('text', document['text_content']))
-                            if 'json_content' in document and document['json_content']:
-                                available_formats.append(('json', document['json_content']))
-
-                            if available_formats:
-                                print(f'Found {len(available_formats)} available formats: {[f[0] for f in available_formats]}')
-
-                                # First try to find the exact requested format
-                                requested_format_match = next((f for f in available_formats if f[0] == '$OUTPUT_FORMAT'.lower()), None)
-
-                                if requested_format_match:
-                                    format_type, content = requested_format_match
-                                    print(f'Found content in requested format {format_type} (length: {len(content)})')
-                                else:
-                                    # If requested format not found, use the first available
-                                    format_type, content = available_formats[0]
-                                    print(f'Requested format not found, using alternative format {format_type} (length: {len(content)})')
-
-                                # Save the content to the output file with appropriate extension
-                                with open(f'$API_DIR/output.{format_type}', 'w') as f:
-                                    f.write(content)
-
-                                # If we're using a different format than requested, also save with requested extension
-                                if format_type != '$OUTPUT_FORMAT'.lower():
-                                    print(f'Saving content with requested extension {format_type} -> $OUTPUT_FORMAT')
-                                    with open('$API_DIR/output.$OUTPUT_FORMAT', 'w') as f:
-                                        f.write(content)
-
-                                print('CONVERSION SUCCESS')
-                                sys.exit(0)
-                            else:
-                                # No content fields found or all are empty
-                                # Check if fields exist but are empty or null
-                                empty_fields = []
-                                if 'html_content' in document and not document['html_content']:
-                                    empty_fields.append('html_content')
-                                if 'md_content' in document and not document['md_content']:
-                                    empty_fields.append('md_content')
-                                if 'text_content' in document and not document['text_content']:
-                                    empty_fields.append('text_content')
-
-                                if empty_fields:
-                                    print(f'Found content fields but they are empty or null: {empty_fields}')
-                                else:
-                                    print('No content fields found in document')
-
-                                print(f'Available fields in document: {list(document.keys() if document else [])}')
-                        else:
-                            print('No outputs found in response')
-                            print(f'Available fields: {list(resp_data.keys())}')
-
-                        print('CONVERSION PARTIAL - Some data available but not complete')
-                    except Exception as json_error:
-                        print(f'Failed to parse response as JSON: {json_error}')
-                        traceback.print_exc()
-
-                        # Save raw content as text if JSON parsing fails
-                        with open('$API_DIR/output.txt', 'w') as f:
-                            f.write(response_text)
-                        print('Saved raw response as text file')
-                        print('CONVERSION PARTIAL - Raw response saved')
-                else:
-                    print(f'Error status: {response.status}')
-                    print('CONVERSION FAILED')
-        except urllib.error.HTTPError as e:
-            print(f'HTTP Error: {e.code} - {e.reason}')
-            print(f'Response body: {e.read().decode(\"utf-8\")[:500]}')
-            print('CONVERSION FAILED')
-        except urllib.error.URLError as e:
-            print(f'URL Error: {e.reason}')
-            print('CONVERSION FAILED')
-        except Exception as e:
-            print(f'Unexpected error during urllib request: {e}')
-            traceback.print_exc()
-            print('CONVERSION FAILED')
-except Exception as e:
-    print(f'Error during conversion: {e}')
-    traceback.print_exc()
-    print('CONVERSION FAILED')
-" 2>&1
-
+PYTHON_EXIT_CODE=$?
 
 # --- Check for various potential output files ---
 
@@ -732,46 +425,8 @@ if [ -f "$API_DIR/output.$OUTPUT_FORMAT" ]; then
         echo "Your document is available at: ${RESULT_URL}"
         echo "=============================="
 
-        # Find the Apify CLI again (reusing the function's logic would be better, but for clarity we'll repeat)
-        APIFY_CMD=""
-        for cmd in "apify" "actor" "/usr/local/bin/apify" "/usr/bin/apify" "/opt/apify/cli/bin/apify"; do
-            if command -v "$cmd" &> /dev/null; then
-                APIFY_CMD="$cmd"
-                break
-            fi
-        done
-
-        if [ -n "$APIFY_CMD" ]; then
-            # Add record to dataset with enhanced version check prevention
-            echo "Adding record to dataset..."
-
-            # Create a temporary home directory with write permissions
-            export TMPDIR="/tmp/apify-home-${RANDOM}"
-            mkdir -p "$TMPDIR"
-
-            # Multiple strategies to disable version checking
-            export APIFY_DISABLE_VERSION_CHECK=1
-            export NODE_OPTIONS="--no-warnings"
-            export HOME="$TMPDIR"  # Override home directory to writable location
-
-            # Use the --no-update-notifier flag if available
-            if $APIFY_CMD --help | grep -q "\--no-update-notifier"; then
-                if $APIFY_CMD --no-update-notifier actor:push-data "{\"url\": \"${DOCUMENT_URL}\", \"output_file\": \"${RESULT_URL}\", \"status\": \"success\"}"; then
-                    echo "Successfully added record to dataset"
-                else
-                    echo "Warning: Failed to add record to dataset"
-                fi
-            else
-                # Fall back to regular command
-                if $APIFY_CMD actor:push-data "{\"url\": \"${DOCUMENT_URL}\", \"output_file\": \"${RESULT_URL}\", \"status\": \"success\"}"; then
-                    echo "Successfully added record to dataset"
-                else
-                    echo "Warning: Failed to add record to dataset"
-                fi
-            fi
-
-            rm -rf "$TMPDIR" 2>/dev/null || true  # Clean up temp dir
-        fi
+        # Push data to dataset
+        push_to_dataset "$DOCUMENT_URL" "$RESULT_URL"
     fi
 else
     echo "ERROR: No converted output file found at $API_DIR/output.$OUTPUT_FORMAT"
