@@ -93,7 +93,7 @@ You can run Docling in the cloud without installation using the [Docling Actor](
 ```bash
 apify call vancura/docling -i '{
     "documentUrl": "https://arxiv.org/pdf/2408.09869",
-    "outputFormat": "markdown",
+    "outputFormat": "md",
     "ocr": true
 }'
 ```

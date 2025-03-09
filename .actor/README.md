@@ -24,7 +24,7 @@ This Actor (specification v1) wraps the [Docling project](https://ds4sd.github.i
 
 ## Features
 
-- Leverages the lightweight docling-serve API for efficient document processing
+- Leverages the official docling-serve-cpu Docker image for efficient document processing
 - Processes multiple document formats:
   - PDF documents (scanned or digital)
   - Microsoft Office files (DOCX, XLSX, PPTX)
@@ -49,7 +49,7 @@ This Actor (specification v1) wraps the [Docling project](https://ds4sd.github.i
    - The URL of the document.
    - Output format (`md`, `json`, `html`, `text`, or `doctags`).
    - OCR boolean toggle.
-4. The Actor will run and produce its outputs in the default key-value store under the key `OUTPUT_RESULT`.
+4. The Actor will run and produce its outputs in the default key-value store under the key `OUTPUT`.
 
 ### Using Apify API
 
@@ -102,7 +102,7 @@ The Actor provides three types of outputs:
 1. **Processed Document** - The Actor will provide the direct URL to your result in the run log, looking like:
 
    ```text
-   You can find your results at: 'https://api.apify.com/v2/key-value-stores/[YOUR_STORE_ID]/records/OUTPUT_RESULT'
+   You can find your results at: 'https://api.apify.com/v2/key-value-stores/[YOUR_STORE_ID]/records/OUTPUT'
    ```
 
 2. **Processing Log** - Available in the key-value store as `DOCLING_LOG`
@@ -117,13 +117,13 @@ You can access the results in several ways:
 1. **Direct URL** (shown in Actor run logs):
 
 ```text
-https://api.apify.com/v2/key-value-stores/[STORE_ID]/records/OUTPUT_RESULT
+https://api.apify.com/v2/key-value-stores/[STORE_ID]/records/OUTPUT
 ```
 
 2. **Programmatically** via Apify CLI:
 
 ```bash
-apify key-value-stores get-value OUTPUT_RESULT
+apify key-value-stores get-value OUTPUT
 ```
 
 3. **Dataset** - Check the "Dataset" tab in the Actor run details to see processing metadata
@@ -182,7 +182,7 @@ apify key-value-stores get-record DOCLING_LOG
 
 ## Performance & Resources
 
-- **Docker Image Size**: ~600 MB
+- **Docker Image Size**: ~4GB
 - **Memory Requirements**:
   - Minimum: 2 GB RAM
   - Recommended: 4 GB RAM for large or complex documents
@@ -234,8 +234,12 @@ If you wish to develop or modify this Actor locally:
 3. The Actor files are located in the `.actor` directory:
    - `Dockerfile` - Defines the container environment
    - `actor.json` - Actor configuration and metadata
-   - `actor.sh` - Main execution script
+   - `actor.sh` - Main execution script that starts the docling-serve API and orchestrates document processing
    - `input_schema.json` - Input parameter definitions
+   - `dataset_schema.json` - Dataset output format definition
+   - `docling_processor.py` - Python script handling API communication with docling-serve
+   - `CHANGELOG.md` - Change log documenting all notable changes
+   - `README.md` - This documentation
 4. Run the Actor locally using:
 
    ```bash
@@ -246,27 +250,42 @@ If you wish to develop or modify this Actor locally:
 
 ```text
 .actor/
-├── Dockerfile          # Container definition
-├── actor.json          # Actor metadata
-├── actor.sh            # Execution script
-├── input_schema.json   # Input parameters
-└── README.md           # This documentation
+├── Dockerfile           # Container definition
+├── actor.json           # Actor metadata
+├── actor.sh             # Execution script (also starts docling-serve API)
+├── input_schema.json    # Input parameters
+├── dataset_schema.json  # Dataset output format definition
+├── docling_processor.py # Python script for API communication
+├── CHANGELOG.md         # Version history and changes
+└── README.md            # This documentation
 ```
 
 ## Architecture
 
-This Actor uses a lightweight architecture based on the official `ds4sd/docling-serve` Docker image:
+This Actor uses a lightweight architecture based on the official `quay.io/ds4sd/docling-serve-cpu` Docker image:
 
-- **Base Image**: `ds4sd/docling-serve:latest` (~600MB)
-- **API Communication**: Uses the RESTful API provided by docling-serve on port 8080
+- **Base Image**: `quay.io/ds4sd/docling-serve-cpu:latest` (~4GB)
+- **Multi-Stage Build**: Uses a multi-stage Docker build to include only necessary tools
+- **API Communication**: Uses the RESTful API provided by docling-serve
 - **Request Flow**:
-  1. Actor receives the input parameters
-  2. Creates a JSON payload for the docling-serve API
-  3. Makes a POST request to the /convert endpoint
-  4. Processes the response and stores it in the key-value store
-- **Dependencies**: 
+  1. The actor script starts the docling-serve API on port 5001
+  2. Performs health checks to ensure the API is running
+  3. Processes the input parameters
+  4. Creates a JSON payload for the docling-serve API with proper format:
+     ```json
+     {
+       "options": {
+         "to_formats": ["md"],
+         "do_ocr": true
+       },
+       "http_sources": [{"url": "https://example.com/document.pdf"}]
+     }
+     ```
+  5. Makes a POST request to the `/v1alpha/convert/source` endpoint
+  6. Processes the response and stores it in the key-value store
+- **Dependencies**:
   - Node.js for Apify CLI
-  - Essential Linux tools (curl, jq, etc.)
+  - Essential tools (curl, jq, etc.) copied from build stage
 - **Security**: Runs as a non-root user for enhanced security
 
 ## License
@@ -275,7 +294,7 @@ This wrapper project is under the MIT License, matching the original Docling lic
 
 ## Acknowledgments
 
-- [Docling](https://ds4sd.github.io/docling/) and [docling-serve](https://github.com/DS4SD/docling-serve) by IBM
+- [Docling](https://ds4sd.github.io/docling/) and [docling-serve-cpu](https://quay.io/repository/ds4sd/docling-serve-cpu) by IBM
 - [Apify](https://apify.com/?fpr=docling) for the serverless actor environment
 
 ## Security Considerations
