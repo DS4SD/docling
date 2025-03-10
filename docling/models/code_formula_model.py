@@ -124,7 +124,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
             repo_id="ds4sd/CodeFormula",
             force_download=force,
             local_dir=local_dir,
-            revision="v1.0.1",
+            revision="v1.0.2",
         )
 
         return Path(download_path)
@@ -175,7 +175,7 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
                 - The second element is the extracted language if a match is found;
                 otherwise, `None`.
         """
-        pattern = r"^<_([^>]+)_>\s*(.*)"
+        pattern = r"^<_([^_>]+)_>\s(.*)"
         match = re.match(pattern, input_string, flags=re.DOTALL)
         if match:
             language = str(match.group(1))  # the captured programming language
