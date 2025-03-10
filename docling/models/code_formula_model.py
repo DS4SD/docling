@@ -207,38 +207,6 @@ class CodeFormulaModel(BaseItemAndImageEnrichmentModel):
         except ValueError:
             return CodeLanguageLabel.UNKNOWN
 
-    # def _pad_image_with_edge_color(self, img: Union[Image.Image, np.ndarray], padding: tuple) -> Image.Image:
-    #     """
-    #     Pads the image with different padding sizes per side, filled with the outermost pixels.
-
-    #     Parameters:
-    #     ----------
-    #         img : PIL.Image
-    #             The original image.
-    #         padding : tuple
-    #             Padding amounts as (left, top, right, bottom).
-
-    #     Returns:
-    #     ---------
-    #         PIL.Image: The padded image.
-    #     """
-    #     if isinstance(img, np.ndarray):
-    #         img = Image.fromarray(img)
-
-    #     left, top, right, bottom = padding
-
-    #     img_np = np.array(img)
-
-    #     if img_np.ndim == 2:
-    #         # Grayscale
-    #         pad_width = ((top, bottom), (left, right))
-    #     else:
-    #         # RGB or RGBA
-    #         pad_width = ((top, bottom), (left, right), (0, 0))
-
-    #     padded_np = np.pad(img_np, pad_width=pad_width, mode='edge')
-
-    #     return Image.fromarray(padded_np, img.mode)
     def _get_most_frequent_edge_color(self, pil_img: Image.Image):
         """
         Compute the most frequent color along the outer edges of a PIL image.
