@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
 from docling_core.types.doc import BoundingBox, CoordOrigin
-from docling_parse.document import PageBoundaryType, ParsedPdfPage
+from docling_parse.document import PdfPageBoundaryType, SegmentedPdfPage
 from docling_parse.pdf_parser import DoclingPdfParser, PdfDocument
 from docling_parse.pdf_parsers import pdf_parser_v2
 from PIL import Image, ImageDraw
@@ -22,7 +22,7 @@ _log = logging.getLogger(__name__)
 
 
 class DoclingParseV3PageBackend(PdfPageBackend):
-    def __init__(self, parsed_page: ParsedPdfPage, page_obj: PdfPage):
+    def __init__(self, parsed_page: SegmentedPdfPage, page_obj: PdfPage):
         self._ppage = page_obj
         self._dpage = parsed_page
         self.valid = parsed_page is not None
@@ -39,7 +39,7 @@ class DoclingParseV3PageBackend(PdfPageBackend):
             1  # FIX - Replace with param in get_text_in_rect across backends (optional)
         )
 
-        for i, cell in enumerate(self._dpage.sanitized.cells):
+        for i, cell in enumerate(self._dpage.textline_cells):
             cell_bbox = (
                 cell.rect.to_bounding_box()
                 .to_top_left_origin(page_height=page_size.height)
@@ -61,7 +61,7 @@ class DoclingParseV3PageBackend(PdfPageBackend):
 
         page_size = self.get_size()
 
-        for i, cell in enumerate(self._dpage.sanitized.cells):
+        for i, cell in enumerate(self._dpage.textline_cells):
             cell_bbox = cell.rect.to_bounding_box()
 
             if cell_bbox.r < cell_bbox.l:
@@ -101,7 +101,7 @@ class DoclingParseV3PageBackend(PdfPageBackend):
     def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:
         AREA_THRESHOLD = 0  # 32 * 32
 
-        images = self._dpage.sanitized.bitmap_resources
+        images = self._dpage.bitmap_resources
 
         for img in images:
             cropbox = img.rect.to_bounding_box().to_top_left_origin(
@@ -149,8 +149,8 @@ class DoclingParseV3PageBackend(PdfPageBackend):
 
     def get_size(self) -> Size:
         return Size(
-            width=self._dpage.sanitized.dimension.width,
-            height=self._dpage.sanitized.dimension.height,
+            width=self._dpage.dimension.width,
+            height=self._dpage.dimension.height,
         )
 
     def unload(self):
@@ -183,9 +183,16 @@ class DoclingParseV3DocumentBackend(PdfDocumentBackend):
 
         return len_2
 
-    def load_page(self, page_no: int) -> DoclingParseV3PageBackend:
+    def load_page(
+        self, page_no: int, create_words: bool = True, create_textlines: bool = True
+    ) -> DoclingParseV3PageBackend:
         return DoclingParseV3PageBackend(
-            self.dp_doc.get_page(page_no + 1), self._pdoc[page_no]
+            self.dp_doc.get_page(
+                page_no + 1,
+                create_words=create_words,
+                create_textlines=create_textlines,
+            ),
+            self._pdoc[page_no],
         )
 
     def is_valid(self) -> bool:

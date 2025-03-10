@@ -4,9 +4,7 @@ import zipfile
 from pathlib import Path
 from typing import Iterable, List, Optional
 
-import httpx
 import numpy
-import torch
 from docling_core.types.doc import BoundingBox, CoordOrigin
 
 from docling.datamodel.base_models import Cell, OcrCell, Page

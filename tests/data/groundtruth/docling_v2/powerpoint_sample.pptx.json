@@ -1,6 +1,6 @@
 {
   "schema_name": "DoclingDocument",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "powerpoint_sample",
   "origin": {
     "mimetype": "application/vnd.ms-powerpoint",
@@ -10,6 +10,7 @@
   "furniture": {
     "self_ref": "#/furniture",
     "children": [],
+    "content_layer": "furniture",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -26,6 +27,7 @@
         "$ref": "#/groups/2"
       }
     ],
+    "content_layer": "body",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -46,6 +48,7 @@
           "$ref": "#/tables/0"
         }
       ],
+      "content_layer": "body",
       "name": "slide-0",
       "label": "chapter"
     },
@@ -74,6 +77,7 @@
           "$ref": "#/texts/7"
         }
       ],
+      "content_layer": "body",
       "name": "slide-1",
       "label": "chapter"
     },
@@ -105,6 +109,7 @@
           "$ref": "#/groups/7"
         }
       ],
+      "content_layer": "body",
       "name": "slide-2",
       "label": "chapter"
     },
@@ -124,6 +129,7 @@
           "$ref": "#/texts/10"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "ordered_list"
     },
@@ -146,6 +152,7 @@
           "$ref": "#/texts/14"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -162,6 +169,7 @@
           "$ref": "#/texts/17"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -181,6 +189,7 @@
           "$ref": "#/texts/21"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "ordered_list"
     },
@@ -200,6 +209,7 @@
           "$ref": "#/texts/24"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     }
@@ -211,6 +221,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "title",
       "prov": [
         {
@@ -237,6 +248,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [
         {
@@ -263,6 +275,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "title",
       "prov": [
         {
@@ -289,6 +302,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [
         {
@@ -315,6 +329,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [
         {
@@ -341,6 +356,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [
         {
@@ -367,6 +383,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [
         {
@@ -393,6 +410,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [
         {
@@ -419,6 +437,7 @@
         "$ref": "#/groups/3"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -447,6 +466,7 @@
         "$ref": "#/groups/3"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -475,6 +495,7 @@
         "$ref": "#/groups/3"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -503,6 +524,7 @@
         "$ref": "#/groups/4"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -531,6 +553,7 @@
         "$ref": "#/groups/4"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -559,6 +582,7 @@
         "$ref": "#/groups/4"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -587,6 +611,7 @@
         "$ref": "#/groups/4"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -615,6 +640,7 @@
         "$ref": "#/groups/2"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [
         {
@@ -641,6 +667,7 @@
         "$ref": "#/groups/5"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -669,6 +696,7 @@
         "$ref": "#/groups/5"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -697,6 +725,7 @@
         "$ref": "#/groups/2"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [
         {
@@ -723,6 +752,7 @@
         "$ref": "#/groups/6"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -751,6 +781,7 @@
         "$ref": "#/groups/6"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -779,6 +810,7 @@
         "$ref": "#/groups/6"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -807,6 +839,7 @@
         "$ref": "#/groups/7"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -835,6 +868,7 @@
         "$ref": "#/groups/7"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -863,6 +897,7 @@
         "$ref": "#/groups/7"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [
         {
@@ -894,6 +929,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [
         {

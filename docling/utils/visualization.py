@@ -43,6 +43,11 @@ def draw_clusters(
             y0 *= scale_x
             y1 *= scale_y
 
+            if y1 <= y0:
+                y1, y0 = y0, y1
+            if x1 <= x0:
+                x1, x0 = x0, x1
+
             cluster_fill_color = (*list(DocItemLabel.get_color(c.label)), 70)
             cluster_outline_color = (
                 *list(DocItemLabel.get_color(c.label)),

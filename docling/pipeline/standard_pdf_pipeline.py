@@ -14,6 +14,8 @@ from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     OcrMacOptions,
     PdfPipelineOptions,
+    PictureDescriptionApiOptions,
+    PictureDescriptionVlmOptions,
     RapidOcrOptions,
     TesseractCliOcrOptions,
     TesseractOcrOptions,
@@ -25,7 +27,6 @@ from docling.models.document_picture_classifier import (
     DocumentPictureClassifier,
     DocumentPictureClassifierOptions,
 )
-from docling.models.ds_glm_model import GlmModel, GlmOptions
 from docling.models.easyocr_model import EasyOcrModel
 from docling.models.layout_model import LayoutModel
 from docling.models.ocr_mac_model import OcrMacModel
@@ -34,7 +35,11 @@ from docling.models.page_preprocessing_model import (
     PagePreprocessingModel,
     PagePreprocessingOptions,
 )
+from docling.models.picture_description_api_model import PictureDescriptionApiModel
+from docling.models.picture_description_base_model import PictureDescriptionBaseModel
+from docling.models.picture_description_vlm_model import PictureDescriptionVlmModel
 from docling.models.rapid_ocr_model import RapidOcrModel
+from docling.models.readingorder_model import ReadingOrderModel, ReadingOrderOptions
 from docling.models.table_structure_model import TableStructureModel
 from docling.models.tesseract_ocr_cli_model import TesseractOcrCliModel
 from docling.models.tesseract_ocr_model import TesseractOcrModel
@@ -56,6 +61,14 @@ class StandardPdfPipeline(PaginatedPipeline):
         artifacts_path: Optional[Path] = None
         if pipeline_options.artifacts_path is not None:
             artifacts_path = Path(pipeline_options.artifacts_path).expanduser()
+        elif settings.artifacts_path is not None:
+            artifacts_path = Path(settings.artifacts_path).expanduser()
+
+        if artifacts_path is not None and not artifacts_path.is_dir():
+            raise RuntimeError(
+                f"The value of {artifacts_path=} is not valid. "
+                "When defined, it must point to a folder containing all models required by the pipeline."
+            )
 
         self.keep_images = (
             self.pipeline_options.generate_page_images
@@ -63,7 +76,7 @@ class StandardPdfPipeline(PaginatedPipeline):
             or self.pipeline_options.generate_table_images
         )
 
-        self.glm_model = GlmModel(options=GlmOptions())
+        self.glm_model = ReadingOrderModel(options=ReadingOrderOptions())
 
         if (ocr_model := self.get_ocr_model(artifacts_path=artifacts_path)) is None:
             raise RuntimeError(
@@ -95,8 +108,17 @@ class StandardPdfPipeline(PaginatedPipeline):
             PageAssembleModel(options=PageAssembleOptions()),
         ]
 
+        # Picture description model
+        if (
+            picture_description_model := self.get_picture_description_model(
+                artifacts_path=artifacts_path
+            )
+        ) is None:
+            raise RuntimeError(
+                f"The specified picture description kind is not supported: {pipeline_options.picture_description_options.kind}."
+            )
+
         self.enrichment_pipe = [
-            # Other models working on `NodeItem` elements in the DoclingDocument
             # Code Formula Enrichment Model
             CodeFormulaModel(
                 enabled=pipeline_options.do_code_enrichment
@@ -115,11 +137,14 @@ class StandardPdfPipeline(PaginatedPipeline):
                 options=DocumentPictureClassifierOptions(),
                 accelerator_options=pipeline_options.accelerator_options,
             ),
+            # Document Picture description
+            picture_description_model,
         ]
 
         if (
             self.pipeline_options.do_formula_enrichment
             or self.pipeline_options.do_code_enrichment
+            or self.pipeline_options.do_picture_description
         ):
             self.keep_backend = True
 
@@ -172,6 +197,30 @@ class StandardPdfPipeline(PaginatedPipeline):
             return OcrMacModel(
                 enabled=self.pipeline_options.do_ocr,
                 options=self.pipeline_options.ocr_options,
+            )
+        return None
+
+    def get_picture_description_model(
+        self, artifacts_path: Optional[Path] = None
+    ) -> Optional[PictureDescriptionBaseModel]:
+        if isinstance(
+            self.pipeline_options.picture_description_options,
+            PictureDescriptionApiOptions,
+        ):
+            return PictureDescriptionApiModel(
+                enabled=self.pipeline_options.do_picture_description,
+                enable_remote_services=self.pipeline_options.enable_remote_services,
+                options=self.pipeline_options.picture_description_options,
+            )
+        elif isinstance(
+            self.pipeline_options.picture_description_options,
+            PictureDescriptionVlmOptions,
+        ):
+            return PictureDescriptionVlmModel(
+                enabled=self.pipeline_options.do_picture_description,
+                artifacts_path=artifacts_path,
+                options=self.pipeline_options.picture_description_options,
+                accelerator_options=self.pipeline_options.accelerator_options,
             )
         return None
 

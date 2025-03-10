@@ -1,6 +1,6 @@
 {
   "schema_name": "DoclingDocument",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "powerpoint_with_image",
   "origin": {
     "mimetype": "application/vnd.ms-powerpoint",
@@ -10,6 +10,7 @@
   "furniture": {
     "self_ref": "#/furniture",
     "children": [],
+    "content_layer": "furniture",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -20,6 +21,7 @@
         "$ref": "#/groups/0"
       }
     ],
+    "content_layer": "body",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -40,6 +42,7 @@
           "$ref": "#/pictures/0"
         }
       ],
+      "content_layer": "body",
       "name": "slide-0",
       "label": "chapter"
     }
@@ -51,6 +54,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "title",
       "prov": [
         {
@@ -77,6 +81,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [
         {
@@ -105,6 +110,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [
         {

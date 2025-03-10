@@ -47,6 +47,6 @@ Docling simplifies document processing, parsing diverse formats — including ad
 
 Docling has been brought to you by IBM.
 
-[supported_formats]: ./supported_formats.md
+[supported_formats]: ./usage/supported_formats.md
 [docling_document]: ./concepts/docling_document.md
 [integrations]: ./integrations/index.md

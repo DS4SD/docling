@@ -1,3 +1,7 @@
+# WARNING
+# This example demonstrates only how to develop a new enrichment model.
+# It does not run the actual formula understanding model.
+
 import logging
 from pathlib import Path
 from typing import Iterable
@@ -68,7 +72,7 @@ class ExampleFormulaUnderstandingPipeline(StandardPdfPipeline):
 def main():
     logging.basicConfig(level=logging.INFO)
 
-    input_doc_path = Path("./tests/data/2203.01017v2.pdf")
+    input_doc_path = Path("./tests/data/pdf/2203.01017v2.pdf")
 
     pipeline_options = ExampleFormulaUnderstandingPipelineOptions()
     pipeline_options.do_formula_understanding = True

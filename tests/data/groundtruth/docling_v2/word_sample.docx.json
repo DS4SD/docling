@@ -1,6 +1,6 @@
 {
   "schema_name": "DoclingDocument",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "word_sample",
   "origin": {
     "mimetype": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -10,6 +10,7 @@
   "furniture": {
     "self_ref": "#/furniture",
     "children": [],
+    "content_layer": "furniture",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -23,6 +24,7 @@
         "$ref": "#/texts/1"
       }
     ],
+    "content_layer": "body",
     "name": "_root_",
     "label": "unspecified"
   },
@@ -43,6 +45,7 @@
           "$ref": "#/texts/8"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -62,6 +65,7 @@
           "$ref": "#/texts/12"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     },
@@ -81,6 +85,7 @@
           "$ref": "#/texts/22"
         }
       ],
+      "content_layer": "body",
       "name": "list",
       "label": "list"
     }
@@ -92,6 +97,7 @@
         "$ref": "#/body"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Summer activities",
@@ -116,6 +122,7 @@
           "$ref": "#/texts/4"
         }
       ],
+      "content_layer": "body",
       "label": "title",
       "prov": [],
       "orig": "Swimming in the lake",
@@ -127,6 +134,7 @@
         "$ref": "#/texts/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Duck",
@@ -138,6 +146,7 @@
         "$ref": "#/texts/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Figure 1: This is a cute duckling",
@@ -168,6 +177,7 @@
           "$ref": "#/texts/14"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Let\u2019s swim!",
@@ -180,6 +190,7 @@
         "$ref": "#/texts/4"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "To get started with swimming, first lay down in a water and try not to drown:",
@@ -191,6 +202,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "You can relax and look around",
@@ -204,6 +216,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Paddle about",
@@ -217,6 +230,7 @@
         "$ref": "#/groups/0"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Enjoy summer warmth",
@@ -230,6 +244,7 @@
         "$ref": "#/texts/4"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Also, don\u2019t forget:",
@@ -241,6 +256,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Wear sunglasses",
@@ -254,6 +270,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Don\u2019t forget to drink water",
@@ -267,6 +284,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Use sun cream",
@@ -280,6 +298,7 @@
         "$ref": "#/texts/4"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Hmm, what else\u2026",
@@ -313,6 +332,7 @@
           "$ref": "#/groups/2"
         }
       ],
+      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "Let\u2019s eat",
@@ -325,6 +345,7 @@
         "$ref": "#/texts/14"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "After we had a good day of swimming in the lake, it\u2019s important to eat something nice",
@@ -336,6 +357,7 @@
         "$ref": "#/texts/14"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "I like to eat leaves",
@@ -347,6 +369,7 @@
         "$ref": "#/texts/14"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "Here are some interesting things a respectful duck could eat:",
@@ -358,6 +381,7 @@
         "$ref": "#/texts/14"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "",
@@ -369,6 +393,7 @@
         "$ref": "#/texts/14"
       },
       "children": [],
+      "content_layer": "body",
       "label": "paragraph",
       "prov": [],
       "orig": "And let\u2019s add another list in the end:",
@@ -380,6 +405,7 @@
         "$ref": "#/groups/2"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Leaves",
@@ -393,6 +419,7 @@
         "$ref": "#/groups/2"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Berries",
@@ -406,6 +433,7 @@
         "$ref": "#/groups/2"
       },
       "children": [],
+      "content_layer": "body",
       "label": "list_item",
       "prov": [],
       "orig": "Grain",
@@ -421,6 +449,7 @@
         "$ref": "#/texts/1"
       },
       "children": [],
+      "content_layer": "body",
       "label": "picture",
       "prov": [],
       "captions": [],
@@ -445,6 +474,7 @@
         "$ref": "#/texts/14"
       },
       "children": [],
+      "content_layer": "body",
       "label": "table",
       "prov": [],
       "captions": [],

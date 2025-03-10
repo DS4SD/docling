@@ -114,7 +114,9 @@ class TesseractOcrCliModel(BaseOcrModel):
         # _log.info("df: ", df.head())
 
         # Filter rows that contain actual text (ignore header or empty rows)
-        df_filtered = df[df["text"].notnull() & (df["text"].str.strip() != "")]
+        df_filtered = df[
+            df["text"].notnull() & (df["text"].apply(str).str.strip() != "")
+        ]
 
         return df_filtered
 
