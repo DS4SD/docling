@@ -99,7 +99,7 @@ class TableStructureOptions(BaseModel):
         #        are merged across table columns.
         # False: Let table structure model define the text cells, ignore PDF cells.
     )
-    mode: TableFormerMode = TableFormerMode.FAST
+    mode: TableFormerMode = TableFormerMode.ACCURATE
 
 
 class OcrOptions(BaseModel):
