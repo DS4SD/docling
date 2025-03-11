@@ -6,9 +6,8 @@ from typing import TYPE_CHECKING, Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
 from docling_core.types.doc import BoundingBox, CoordOrigin
-from docling_parse.document import PdfPageBoundaryType, SegmentedPdfPage
+from docling_core.types.doc.page import SegmentedPdfPage
 from docling_parse.pdf_parser import DoclingPdfParser, PdfDocument
-from docling_parse.pdf_parsers import pdf_parser_v2
 from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage
 
