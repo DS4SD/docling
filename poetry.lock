@@ -898,7 +898,7 @@ chunking = ["semchunk (>=2.2.0,<3.0.0)", "transformers (>=4.34.0,<5.0.0)"]
 type = "git"
 url = "https://github.com/DS4SD/docling-core"
 reference = "cau/docling-parse-types"
-resolved_reference = "31db5b0225a4baa8be5f26cc50050cf4bc845204"
+resolved_reference = "5f404c0270408ba794c18f8d6923cfa9f2980d73"
 
 [[package]]
 name = "docling-ibm-models"

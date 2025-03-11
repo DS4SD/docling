@@ -6,13 +6,13 @@ from typing import TYPE_CHECKING, Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
 from docling_core.types.doc import BoundingBox, CoordOrigin
-from docling_core.types.doc.page import SegmentedPdfPage
+from docling_core.types.doc.page import SegmentedPdfPage, TextCell
 from docling_parse.pdf_parser import DoclingPdfParser, PdfDocument
 from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage
 
 from docling.backend.pdf_backend import PdfDocumentBackend, PdfPageBackend
-from docling.datamodel.base_models import Cell, Size
+from docling.datamodel.base_models import Size
 
 if TYPE_CHECKING:
     from docling.datamodel.document import InputDocument
@@ -54,48 +54,15 @@ class DoclingParseV3PageBackend(PdfPageBackend):
 
         return text_piece
 
-    def get_text_cells(self) -> Iterable[Cell]:
-        cells: List[Cell] = []
-        cell_counter = 0
+    def get_segmented_page(self) -> Optional[SegmentedPdfPage]:
+        return self._dpage
 
+    def get_text_cells(self) -> Iterable[TextCell]:
         page_size = self.get_size()
 
-        for i, cell in enumerate(self._dpage.textline_cells):
-            cell_bbox = cell.rect.to_bounding_box()
+        [tc.to_top_left_origin(page_size.height) for tc in self._dpage.textline_cells]
 
-            if cell_bbox.r < cell_bbox.l:
-                cell_bbox.r, cell_bbox.l = cell_bbox.l, cell_bbox.r
-            if cell_bbox.b > cell_bbox.t:
-                cell_bbox.b, cell_bbox.t = cell_bbox.t, cell_bbox.b
-
-            text_piece = cell.text
-            cells.append(
-                Cell(
-                    id=cell_counter,
-                    text=text_piece,
-                    bbox=cell_bbox.to_top_left_origin(page_size.height),
-                )
-            )
-            cell_counter += 1
-
-        def draw_clusters_and_cells():
-            image = (
-                self.get_page_image()
-            )  # make new image to avoid drawing on the saved ones
-            draw = ImageDraw.Draw(image)
-            for c in cells:
-                x0, y0, x1, y1 = c.bbox.as_tuple()
-                cell_color = (
-                    random.randint(30, 140),
-                    random.randint(30, 140),
-                    random.randint(30, 140),
-                )
-                draw.rectangle([(x0, y0), (x1, y1)], outline=cell_color)
-            image.show()
-
-        # draw_clusters_and_cells()
-
-        return cells
+        return self._dpage.textline_cells
 
     def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:
         AREA_THRESHOLD = 0  # 32 * 32

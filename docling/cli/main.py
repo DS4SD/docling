@@ -14,8 +14,8 @@ from docling_core.types.doc import ImageRefMode
 from docling_core.utils.file import resolve_source_to_path
 from pydantic import TypeAdapter
 
-from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.docling_parse_v2_backend import DoclingParseV2DocumentBackend
+from docling.backend.docling_parse_v3_backend import DoclingParseV3DocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import (
@@ -412,12 +412,12 @@ def convert(
         if artifacts_path is not None:
             pipeline_options.artifacts_path = artifacts_path
 
-        if pdf_backend == PdfBackend.DLPARSE_V1:
-            backend: Type[PdfDocumentBackend] = DoclingParseDocumentBackend
-        elif pdf_backend == PdfBackend.DLPARSE_V2:
+        if pdf_backend == PdfBackend.DLPARSE_V2:
             backend = DoclingParseV2DocumentBackend
+        elif pdf_backend == PdfBackend.DLPARSE_V3:
+            backend = DoclingParseV3DocumentBackend  # type: ignore
         elif pdf_backend == PdfBackend.PYPDFIUM2:
-            backend = PyPdfiumDocumentBackend
+            backend = PyPdfiumDocumentBackend  # type: ignore
         else:
             raise RuntimeError(f"Unexpected PDF backend type {pdf_backend}")
 
