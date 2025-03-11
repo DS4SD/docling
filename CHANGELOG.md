@@ -1,3 +1,21 @@
+## [v2.26.0](https://github.com/DS4SD/docling/releases/tag/v2.26.0) - 2025-03-11
+
+### Feature
+
+* Use new TableFormer model weights and default to accurate model version ([#1100](https://github.com/DS4SD/docling/issues/1100)) ([`eb97357`](https://github.com/DS4SD/docling/commit/eb97357b0560b59c14a8be3fb52d6a1362ad0a1d))
+
+### Fix
+
+* **CLI:** Fix help message for abort options ([#1130](https://github.com/DS4SD/docling/issues/1130)) ([`4d64c4c`](https://github.com/DS4SD/docling/commit/4d64c4c0b67b23f53d4ea21fb754455840fe4556))
+
+### Documentation
+
+* Add description of DOCLING_ARTIFACTS_PATH env var ([#1124](https://github.com/DS4SD/docling/issues/1124)) ([`e1c49ad`](https://github.com/DS4SD/docling/commit/e1c49ad72710ff76c1b0574bb4d2bdab93077902))
+
+### Performance
+
+* New revision code formula model and document picture classifier ([#1140](https://github.com/DS4SD/docling/issues/1140)) ([`5e30381`](https://github.com/DS4SD/docling/commit/5e30381c0dd3b4f9e3b2d8af3863ed51fa51194a))
+
 ## [v2.25.2](https://github.com/DS4SD/docling/releases/tag/v2.25.2) - 2025-03-05
 
 ### Fix
