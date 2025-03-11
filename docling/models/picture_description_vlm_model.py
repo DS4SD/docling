@@ -1,10 +1,11 @@
 from pathlib import Path
-from typing import Iterable, Optional, Union
+from typing import Iterable, Optional, Type, Union
 
 from PIL import Image
 
 from docling.datamodel.pipeline_options import (
     AcceleratorOptions,
+    PictureDescriptionBaseOptions,
     PictureDescriptionVlmOptions,
 )
 from docling.models.picture_description_base_model import PictureDescriptionBaseModel
@@ -13,14 +14,25 @@ from docling.utils.accelerator_utils import decide_device
 
 class PictureDescriptionVlmModel(PictureDescriptionBaseModel):
 
+    @classmethod
+    def get_options_type(cls) -> Type[PictureDescriptionBaseOptions]:
+        return PictureDescriptionVlmOptions
+
     def __init__(
         self,
         enabled: bool,
+        enable_remote_services: bool,
         artifacts_path: Optional[Union[Path, str]],
         options: PictureDescriptionVlmOptions,
         accelerator_options: AcceleratorOptions,
     ):
-        super().__init__(enabled=enabled, options=options)
+        super().__init__(
+            enabled=enabled,
+            enable_remote_services=enable_remote_services,
+            artifacts_path=artifacts_path,
+            options=options,
+            accelerator_options=accelerator_options,
+        )
         self.options: PictureDescriptionVlmOptions
 
         if self.enabled:

@@ -1,6 +1,7 @@
 import logging
+from abc import abstractmethod
 from pathlib import Path
-from typing import Any, Iterable, List, Optional, Union
+from typing import Any, Iterable, List, Optional, Type, Union
 
 from docling_core.types.doc import (
     DoclingDocument,
@@ -13,20 +14,30 @@ from docling_core.types.doc.document import (  # TODO: move import to docling_co
 )
 from PIL import Image
 
-from docling.datamodel.pipeline_options import PictureDescriptionBaseOptions
+from docling.datamodel.pipeline_options import (
+    AcceleratorOptions,
+    PictureDescriptionBaseOptions,
+)
 from docling.models.base_model import (
     BaseItemAndImageEnrichmentModel,
+    BaseModelWithOptions,
     ItemAndImageEnrichmentElement,
 )
 
 
-class PictureDescriptionBaseModel(BaseItemAndImageEnrichmentModel):
+class PictureDescriptionBaseModel(
+    BaseItemAndImageEnrichmentModel, BaseModelWithOptions
+):
     images_scale: float = 2.0
 
     def __init__(
         self,
+        *,
         enabled: bool,
+        enable_remote_services: bool,
+        artifacts_path: Optional[Union[Path, str]],
         options: PictureDescriptionBaseOptions,
+        accelerator_options: AcceleratorOptions,
     ):
         self.enabled = enabled
         self.options = options
@@ -62,3 +73,8 @@ class PictureDescriptionBaseModel(BaseItemAndImageEnrichmentModel):
                 PictureDescriptionData(text=output, provenance=self.provenance)
             )
             yield item
+
+    @classmethod
+    @abstractmethod
+    def get_options_type(cls) -> Type[PictureDescriptionBaseOptions]:
+        pass
