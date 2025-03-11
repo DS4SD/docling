@@ -134,7 +134,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     self.analyze_tag(cast(Tag, element), doc)
                 except Exception as exc_child:
                     _log.error(
-                        f"Error processing child from tag{tag.name}: {exc_child}"
+                        f"Error processing child from tag {tag.name}: {repr(exc_child)}"
                     )
                     raise exc_child
             elif isinstance(element, NavigableString) and not isinstance(
@@ -347,11 +347,11 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     content_layer=self.content_layer,
                 )
                 self.level += 1
-
-            self.walk(element, doc)
-
-            self.parents[self.level + 1] = None
-            self.level -= 1
+                self.walk(element, doc)
+                self.parents[self.level + 1] = None
+                self.level -= 1
+            else:
+                self.walk(element, doc)
 
         elif element.text.strip():
             text = element.text.strip()
