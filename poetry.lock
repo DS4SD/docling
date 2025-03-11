@@ -951,7 +951,7 @@ tabulate = ">=0.9.0,<1.0.0"
 type = "git"
 url = "https://github.com/DS4SD/docling-parse"
 reference = "cau/api-move-to-docling-core"
-resolved_reference = "7b86ebb18a448f3071d09a0b355adea5cf4d815a"
+resolved_reference = "339ee42d8269bab856fd32ec9dfc0e04988bc6c3"
 
 [[package]]
 name = "docutils"
