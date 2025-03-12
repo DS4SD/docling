@@ -213,7 +213,7 @@
 <page_footer><loc_81><loc_477><loc_277><loc_482>Row and Column Access Control Support in IBM DB2 for i</page_footer>
 <page_break>
 <text><loc_235><loc_18><loc_338><loc_32>Back cover</text>
-<section_header_level_1><loc_22><loc_48><loc_365><loc_89>Row and Column Access Control Support in IBM DB2 for i</section_header_level_1>
+<section_header_level_1><loc_22><loc_46><loc_365><loc_89>Row and Column Access Control Support in IBM DB2 for i</section_header_level_1>
 <text><loc_22><loc_153><loc_104><loc_168>Implement roles and separation of duties</text>
 <text><loc_22><loc_179><loc_98><loc_204>Leverage row permissions on the database</text>
 <text><loc_125><loc_153><loc_339><loc_204>This IBM Redpaper publication provides information about the IBM i 7.2 feature of IBM DB2 for i Row and Column Access Control (RCAC). It offers a broad description of the function and advantages of controlling access to data in a comprehensive and transparent way. This publication helps you understand the capabilities of RCAC and provides examples of defining, creating, and implementing the row permissions and column masks in a relational database environment.</text>
