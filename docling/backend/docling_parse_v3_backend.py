@@ -62,6 +62,26 @@ class DoclingParseV3PageBackend(PdfPageBackend):
 
         [tc.to_top_left_origin(page_size.height) for tc in self._dpage.textline_cells]
 
+        for cell in self._dpage.textline_cells:
+            rect = cell.rect
+
+            if rect.r_x2 < rect.r_x0:
+                rect.r_x0, rect.r_x2 = rect.r_x2, rect.r_x0
+                rect.r_y3, rect.r_y1 = rect.r_y1, rect.r_y3
+
+            # rect.r_x2, rect.r_x3 = rect.r_x3, rect.r_x2
+
+            # if rect.r_y2 > rect.r_y0:
+            #    rect.r_y2, rect.r_y0 = rect.r_y0, rect.r_y2
+            #    rect.r_y3, rect.r_y1 = rect.r_y1, rect.r_y3
+
+            assert (
+                rect.to_bounding_box().l <= rect.to_bounding_box().r
+            ), f"left is > right on bounding box {rect.to_bounding_box()} of rect {rect}"
+            assert (
+                rect.to_bounding_box().t <= rect.to_bounding_box().b
+            ), f"top is > bottom on bounding box {rect.to_bounding_box()} of rect {rect}"
+
         return self._dpage.textline_cells
 
     def get_bitmap_rects(self, scale: float = 1) -> Iterable[BoundingBox]:

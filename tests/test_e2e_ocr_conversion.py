@@ -19,8 +19,8 @@ from docling.document_converter import DocumentConverter, PdfFormatOption
 
 from .verify_utils import verify_conversion_result_v1, verify_conversion_result_v2
 
-GENERATE_V1 = False
-GENERATE_V2 = False
+GENERATE_V1 = True
+GENERATE_V2 = True
 
 
 def get_pdf_paths():
