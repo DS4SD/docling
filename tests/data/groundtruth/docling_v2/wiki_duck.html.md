@@ -140,40 +140,40 @@
 - Article
 - Talk
 
-    - Read
-    - View source
-    - View history
+- Read
+- View source
+- View history
 
 Tools
 
 Actions
 
-    - Read
-    - View source
-    - View history
+- Read
+- View source
+- View history
 
 General
 
-    - What links here
-    - Related changes
-    - Upload file
-    - Special pages
-    - Permanent link
-    - Page information
-    - Cite this page
-    - Get shortened URL
-    - Download QR code
-    - Wikidata item
+- What links here
+- Related changes
+- Upload file
+- Special pages
+- Permanent link
+- Page information
+- Cite this page
+- Get shortened URL
+- Download QR code
+- Wikidata item
 
 Print/export
 
-    - Download as PDF
-    - Printable version
+- Download as PDF
+- Printable version
 
 In other projects
 
-    - Wikimedia Commons
-    - Wikiquote
+- Wikimedia Commons
+- Wikiquote
 
 Appearance
 
