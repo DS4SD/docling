@@ -99,7 +99,22 @@
       "children": [],
       "content_layer": "body",
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            17
+          ]
+        }
+      ],
       "orig": "Summer activities",
       "text": "Summer activities"
     },
@@ -124,7 +139,22 @@
       ],
       "content_layer": "body",
       "label": "title",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            20
+          ]
+        }
+      ],
       "orig": "Swimming in the lake",
       "text": "Swimming in the lake"
     },
@@ -136,7 +166,22 @@
       "children": [],
       "content_layer": "body",
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            4
+          ]
+        }
+      ],
       "orig": "Duck",
       "text": "Duck"
     },
@@ -148,7 +193,22 @@
       "children": [],
       "content_layer": "body",
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            33
+          ]
+        }
+      ],
       "orig": "Figure 1: This is a cute duckling",
       "text": "Figure 1: This is a cute duckling"
     },
@@ -179,7 +239,22 @@
       ],
       "content_layer": "body",
       "label": "section_header",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
       "orig": "Let\u2019s swim!",
       "text": "Let\u2019s swim!",
       "level": 1
@@ -192,7 +267,22 @@
       "children": [],
       "content_layer": "body",
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            77
+          ]
+        }
+      ],
       "orig": "To get started with swimming, first lay down in a water and try not to drown:",
       "text": "To get started with swimming, first lay down in a water and try not to drown:"
     },
@@ -204,7 +294,22 @@
       "children": [],
       "content_layer": "body",
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            29
+          ]
+        }
+      ],
       "orig": "You can relax and look around",
       "text": "You can relax and look around",
       "enumerated": false,
@@ -218,7 +323,22 @@
       "children": [],
       "content_layer": "body",
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            12
+          ]
+        }
+      ],
       "orig": "Paddle about",
       "text": "Paddle about",
       "enumerated": false,
@@ -232,7 +352,22 @@
       "children": [],
       "content_layer": "body",
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            19
+          ]
+        }
+      ],
       "orig": "Enjoy summer warmth",
       "text": "Enjoy summer warmth",
       "enumerated": false,
@@ -246,7 +381,22 @@
       "children": [],
       "content_layer": "body",
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            19
+          ]
+        }
+      ],
       "orig": "Also, don\u2019t forget:",
       "text": "Also, don\u2019t forget:"
     },
@@ -258,7 +408,22 @@
       "children": [],
       "content_layer": "body",
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            15
+          ]
+        }
+      ],
       "orig": "Wear sunglasses",
       "text": "Wear sunglasses",
       "enumerated": false,
@@ -272,7 +437,22 @@
       "children": [],
       "content_layer": "body",
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            27
+          ]
+        }
+      ],
       "orig": "Don\u2019t forget to drink water",
       "text": "Don\u2019t forget to drink water",
       "enumerated": false,
@@ -286,7 +466,22 @@
       "children": [],
       "content_layer": "body",
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            13
+          ]
+        }
+      ],
       "orig": "Use sun cream",
       "text": "Use sun cream",
       "enumerated": false,
@@ -300,7 +495,22 @@
       "children": [],
       "content_layer": "body",
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            15
+          ]
+        }
+      ],
       "orig": "Hmm, what else\u2026",
       "text": "Hmm, what else\u2026"
     },
@@ -334,7 +544,22 @@
       ],
       "content_layer": "body",
       "label": "section_header",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            9
+          ]
+        }
+      ],
       "orig": "Let\u2019s eat",
       "text": "Let\u2019s eat",
       "level": 2
@@ -347,7 +572,22 @@
       "children": [],
       "content_layer": "body",
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            85
+          ]
+        }
+      ],
       "orig": "After we had a good day of swimming in the lake, it\u2019s important to eat something nice",
       "text": "After we had a good day of swimming in the lake, it\u2019s important to eat something nice"
     },
@@ -359,7 +599,22 @@
       "children": [],
       "content_layer": "body",
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            20
+          ]
+        }
+      ],
       "orig": "I like to eat leaves",
       "text": "I like to eat leaves"
     },
@@ -371,7 +626,22 @@
       "children": [],
       "content_layer": "body",
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            61
+          ]
+        }
+      ],
       "orig": "Here are some interesting things a respectful duck could eat:",
       "text": "Here are some interesting things a respectful duck could eat:"
     },
@@ -383,7 +653,22 @@
       "children": [],
       "content_layer": "body",
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "orig": "",
       "text": ""
     },
@@ -395,7 +680,22 @@
       "children": [],
       "content_layer": "body",
       "label": "paragraph",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            38
+          ]
+        }
+      ],
       "orig": "And let\u2019s add another list in the end:",
       "text": "And let\u2019s add another list in the end:"
     },
@@ -407,7 +707,22 @@
       "children": [],
       "content_layer": "body",
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            6
+          ]
+        }
+      ],
       "orig": "Leaves",
       "text": "Leaves",
       "enumerated": false,
@@ -421,7 +736,22 @@
       "children": [],
       "content_layer": "body",
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            7
+          ]
+        }
+      ],
       "orig": "Berries",
       "text": "Berries",
       "enumerated": false,
@@ -435,7 +765,22 @@
       "children": [],
       "content_layer": "body",
       "label": "list_item",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            5
+          ]
+        }
+      ],
       "orig": "Grain",
       "text": "Grain",
       "enumerated": false,
@@ -451,7 +796,22 @@
       "children": [],
       "content_layer": "body",
       "label": "picture",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 397.0,
+            "b": 397.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
       "captions": [],
       "references": [],
       "footnotes": [],
@@ -476,7 +836,22 @@
       "children": [],
       "content_layer": "body",
       "label": "table",
-      "prov": [],
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 0.0,
+            "t": 0.0,
+            "r": 0.0,
+            "b": 0.0,
+            "coord_origin": "TOPLEFT"
+          },
+          "charspan": [
+            0,
+            120
+          ]
+        }
+      ],
       "captions": [],
       "references": [],
       "footnotes": [],
@@ -787,5 +1162,20 @@
     }
   ],
   "key_value_items": [],
-  "pages": {}
+  "pages": {
+    "1": {
+      "size": {
+        "width": 612.0,
+        "height": 792.0
+      },
+      "page_no": 1
+    },
+    "2": {
+      "size": {
+        "width": 612.0,
+        "height": 792.0
+      },
+      "page_no": 2
+    }
+  }
 }

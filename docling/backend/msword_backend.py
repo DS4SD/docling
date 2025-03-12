@@ -5,12 +5,15 @@ from pathlib import Path
 from typing import Any, Optional, Union
 
 from docling_core.types.doc import (
+    BoundingBox,
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
     GroupLabel,
     ImageRef,
     NodeItem,
+    ProvenanceItem,
+    Size,
     TableCell,
     TableData,
 )
@@ -30,6 +33,8 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
+NO_BBOX = BoundingBox(l=0, t=0, r=0, b=0)
+NO_SIZE = Size(width=0, height=0)
 
 
 class MsWordDocumentBackend(DeclarativeDocumentBackend):
@@ -57,6 +62,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         self.level = 0
         self.listIter = 0
+        self.page_no = 0
+        self.prev_hard_break = False
 
         self.history: dict[str, Any] = {
             "names": [None],
@@ -85,7 +92,19 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     @classmethod
     @override
     def supports_pagination(cls) -> bool:
-        return False
+        # FIXME: This is only true for *some* Word documents, see `has_pagination` below.
+        return True
+
+    def has_pagination(self) -> bool:
+        """Can we supply pagination for this particular Word docunent?"""
+        if self.docx_obj is None:
+            return False
+        return (
+            self.docx_obj.element.find(
+                ".//w:lastRenderedPageBreak", namespaces=self.docx_obj.element.nsmap
+            )
+            is not None
+        )
 
     @override
     def unload(self):
@@ -161,6 +180,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         docx_obj: DocxDocument,
         doc: DoclingDocument,
     ) -> DoclingDocument:
+        if self.has_pagination():
+            self.page_no = 1
+            doc.add_page(page_no=self.page_no, size=NO_SIZE)
+        else:
+            self.page_no = 0
         for element in body:
             tag_name = etree.QName(element).localname
             # Check for Inline Images (blip elements)
@@ -193,6 +217,10 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             elif tag_name in ["p"]:
                 # "tcPr", "sectPr"
                 self.handle_text_elements(element, docx_obj, doc)
+            elif tag_name == "sectPr":
+                # Final section in the document
+                # Apply section information to this and all preceding pages
+                self.handle_section(element, docx_obj, doc)
             else:
                 _log.debug(f"Ignoring element in DOCX with tag: {tag_name}")
         return doc
@@ -260,6 +288,23 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         else:
             return label, None
 
+    def handle_section(self, element, docx_obj, doc):
+        if self.page_no == 0:
+            # No pagination, no pages, no problems!
+            return
+        pgsz = element.find("w:pgSz", element.nsmap)
+        if pgsz is None:
+            _log.warning("No page size information in section")
+            return
+        ns = pgsz.nsmap["w"]
+        width = pgsz.attrib[f"{{{ns}}}w"]
+        height = pgsz.attrib[f"{{{ns}}}h"]
+        size = Size(width=int(width) / 20, height=int(height) / 20)
+        # Do all pages created up to now
+        for page in doc.pages.values():
+            if page.size is NO_SIZE:
+                page.size = size
+
     def handle_text_elements(
         self,
         element: BaseOxmlElement,
@@ -267,10 +312,43 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         doc: DoclingDocument,
     ) -> None:
         paragraph = Paragraph(element, docx_obj)
-
+        sectpr = element.find(".//w:sectPr", element.nsmap)
+        # Apply section information to this and all preceding pages
+        if sectpr:
+            self.handle_section(element, docx_obj, doc)
+        start_page = self.page_no
+        if start_page:
+            # Somewhat complex logic - sometimes we have only hard
+            # breaks, sometimes we have only soft breaks, sometimes we
+            # have both (in adjacent paragraphs).
+            hard_break = element.findall(".//w:br[@w:type='page']", element.nsmap)
+            soft_break = element.findall(".//w:lastRenderedPageBreak", element.nsmap)
+            _log.debug(
+                "paragraph (hard breaks %r, soft breaks %r, prev_hard_break %r): %s",
+                hard_break,
+                soft_break,
+                self.prev_hard_break,
+                paragraph.text,
+            )
+            if hard_break:
+                self.prev_hard_break = True
+                self.page_no += 1
+                doc.add_page(page_no=self.page_no, size=NO_SIZE)
+            elif soft_break and not self.prev_hard_break:
+                self.page_no += 1
+                doc.add_page(page_no=self.page_no, size=NO_SIZE)
         if paragraph.text is None:
             return
+        # If this paragraph has text then cancel a pending hard break
+        if paragraph.text:
+            self.prev_hard_break = False
         text = paragraph.text.strip()
+        if start_page:
+            prov = ProvenanceItem(
+                page_no=start_page, bbox=NO_BBOX, charspan=(0, len(text))
+            )
+        else:
+            prov = None
 
         # Common styles for bullet and numbered lists.
         # "List Bullet", "List Number", "List Paragraph"
@@ -295,6 +373,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 ilevel,
                 text,
                 is_numbered,
+                prov,
             )
             self.update_history(p_style_id, p_level, numid, ilevel)
             return
@@ -318,10 +397,10 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             for key in range(len(self.parents)):
                 self.parents[key] = None
             self.parents[0] = doc.add_text(
-                parent=None, label=DocItemLabel.TITLE, text=text
+                parent=None, label=DocItemLabel.TITLE, text=text, prov=prov
             )
         elif "Heading" in p_style_id:
-            self.add_header(doc, p_level, text)
+            self.add_header(doc, p_level, text, prov)
 
         elif p_style_id in [
             "Paragraph",
@@ -335,7 +414,10 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         ]:
             level = self.get_level()
             doc.add_text(
-                label=DocItemLabel.PARAGRAPH, parent=self.parents[level - 1], text=text
+                label=DocItemLabel.PARAGRAPH,
+                parent=self.parents[level - 1],
+                text=text,
+                prov=prov,
             )
 
         else:
@@ -343,14 +425,21 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # hence we treat all other labels as pure text
             level = self.get_level()
             doc.add_text(
-                label=DocItemLabel.PARAGRAPH, parent=self.parents[level - 1], text=text
+                label=DocItemLabel.PARAGRAPH,
+                parent=self.parents[level - 1],
+                text=text,
+                prov=prov,
             )
 
         self.update_history(p_style_id, p_level, numid, ilevel)
         return
 
     def add_header(
-        self, doc: DoclingDocument, curr_level: Optional[int], text: str
+        self,
+        doc: DoclingDocument,
+        curr_level: Optional[int],
+        text: str,
+        prov: Union[ProvenanceItem, None] = None,
     ) -> None:
         level = self.get_level()
         if isinstance(curr_level, int):
@@ -372,12 +461,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 parent=self.parents[curr_level - 1],
                 text=text,
                 level=curr_level,
+                prov=prov,
             )
         else:
             self.parents[self.level] = doc.add_heading(
                 parent=self.parents[self.level - 1],
                 text=text,
                 level=1,
+                prov=prov,
             )
         return
 
@@ -388,6 +479,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         ilevel: int,
         text: str,
         is_numbered: bool = False,
+        prov: Union[ProvenanceItem, None] = None,
     ) -> None:
         enum_marker = ""
 
@@ -410,6 +502,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 enumerated=is_numbered,
                 parent=self.parents[level],
                 text=text,
+                prov=prov,
             )
 
         elif (
@@ -446,6 +539,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 enumerated=is_numbered,
                 parent=self.parents[self.level_at_new_list + ilevel],
                 text=text,
+                prov=prov,
             )
 
         elif (
@@ -468,6 +562,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 enumerated=is_numbered,
                 parent=self.parents[self.level_at_new_list + ilevel],
                 text=text,
+                prov=prov,
             )
             self.listIter = 0
 
@@ -482,6 +577,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 enumerated=is_numbered,
                 parent=self.parents[level - 1],
                 text=text,
+                prov=prov,
             )
         return
 
@@ -505,6 +601,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         data = TableData(num_rows=num_rows, num_cols=num_cols)
         cell_set: set[CT_Tc] = set()
+        start_page = self.page_no
+        text_len = 0
         for row_idx, row in enumerate(table.rows):
             _log.debug(f"Row index {row_idx} with {len(row.cells)} populated cells")
             col_idx = 0
@@ -531,6 +629,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     )
                 _log.debug(f"  spanned before row {spanned_idx}")
 
+                # If this cell has text then cancel a pending hard break
+                if cell.text:
+                    self.prev_hard_break = False
+                text_len += len(cell.text)
+
                 table_cell = TableCell(
                     text=cell.text,
                     row_span=spanned_idx - row_idx,
@@ -545,8 +648,27 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 data.table_cells.append(table_cell)
                 col_idx += cell.grid_span
 
+            # NOTE: Page numbers will be very inaccurate since a
+            # table can definitely be split across pages (but
+            # individual TableCells have no provenance and thus no
+            # page number)
+            if start_page:
+                soft_break = row._element.findall(
+                    ".//w:lastRenderedPageBreak", row._element.nsmap
+                )
+                _log.debug("row (page breaks %r): %s", soft_break, row)
+                if soft_break and not self.prev_hard_break:
+                    self.page_no += 1
+                    doc.add_page(page_no=self.page_no, size=NO_SIZE)
+
+        if start_page:
+            prov = ProvenanceItem(
+                page_no=start_page, bbox=NO_BBOX, charspan=(0, text_len)
+            )
+        else:
+            prov = None
         level = self.get_level()
-        doc.add_table(data=data, parent=self.parents[level - 1])
+        doc.add_table(data=data, parent=self.parents[level - 1], prov=prov)
         return
 
     def handle_pictures(
@@ -563,20 +685,36 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             return image_data
 
         level = self.get_level()
+        prov = None
         # Open the BytesIO object with PIL to create an Image
         try:
             image_data = get_docx_image(drawing_blip)
             image_bytes = BytesIO(image_data)
             pil_image = Image.open(image_bytes)
+            if self.page_no:
+                width, height = pil_image.size
+                prov = ProvenanceItem(
+                    page_no=self.page_no,
+                    bbox=BoundingBox(l=0, t=0, r=width, b=height),
+                    charspan=(0, 0),
+                )
             doc.add_picture(
                 parent=self.parents[level - 1],
                 image=ImageRef.from_pil(image=pil_image, dpi=72),
                 caption=None,
+                prov=prov,
             )
         except (UnidentifiedImageError, OSError) as e:
             _log.warning("Warning: image cannot be loaded by Pillow")
+            if self.page_no:
+                prov = ProvenanceItem(
+                    page_no=self.page_no,
+                    bbox=NO_BBOX,
+                    charspan=(0, 0),
+                )
             doc.add_picture(
                 parent=self.parents[level - 1],
                 caption=None,
+                prov=prov,
             )
         return
