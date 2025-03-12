@@ -65,9 +65,9 @@ class DoclingParseV3PageBackend(PdfPageBackend):
         for cell in self._dpage.textline_cells:
             rect = cell.rect
 
-            if rect.r_x2 < rect.r_x0:
-                rect.r_x0, rect.r_x2 = rect.r_x2, rect.r_x0
-                rect.r_y3, rect.r_y1 = rect.r_y1, rect.r_y3
+            # if rect.r_x2 < rect.r_x0:
+            #    rect.r_x0, rect.r_x2 = rect.r_x2, rect.r_x0
+            #    rect.r_y3, rect.r_y1 = rect.r_y1, rect.r_y3
 
             # rect.r_x2, rect.r_x3 = rect.r_x3, rect.r_x2
 

@@ -299,6 +299,7 @@ class PdfBackend(str, Enum):
     """Enum of valid PDF backends."""
 
     PYPDFIUM2 = "pypdfium2"
+    DLPARSE_V1 = "dlparse_v1"
     DLPARSE_V2 = "dlparse_v2"
     DLPARSE_V3 = "dlparse_v3"
 
@@ -381,3 +382,5 @@ class PdfPipelineOptions(PaginatedPipelineOptions):
             "before conversion and then use the `TableItem.get_image` function."
         ),
     )
+
+    generate_parsed_pages: bool = False

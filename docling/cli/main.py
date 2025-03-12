@@ -412,7 +412,9 @@ def convert(
         if artifacts_path is not None:
             pipeline_options.artifacts_path = artifacts_path
 
-        if pdf_backend == PdfBackend.DLPARSE_V2:
+        if pdf_backend == PdfBackend.DLPARSE_V1:
+            backend = DoclingParseV2DocumentBackend
+        elif pdf_backend == PdfBackend.DLPARSE_V2:
             backend = DoclingParseV2DocumentBackend
         elif pdf_backend == PdfBackend.DLPARSE_V3:
             backend = DoclingParseV3DocumentBackend  # type: ignore
