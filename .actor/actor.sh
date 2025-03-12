@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PATH=$PATH:/build-files/node_modules/.bin
+
 # Function to upload content to the key-value store
 upload_to_kvs() {
     local content_file="$1"
@@ -129,6 +131,10 @@ echo "Python version: $(python --version 2>&1)"
 echo "Docling-serve path: $(which docling-serve 2>/dev/null || echo 'Not found')"
 echo "Working directory: $(pwd)"
 
+# --- Get input ---
+
+echo "Getting Apify ActorInput"
+INPUT=$(apify actor get-input 2>/dev/null)
 
 # --- Setup tools ---
 
@@ -283,49 +289,6 @@ DOCLING_API_ENDPOINT="http://localhost:5001/v1alpha/convert/source"
 echo "Starting document processing..."
 echo "Reading input from Apify..."
 
-# Function to handle Actor input detection
-get_actor_input() {
-    local input=""
-
-    # Create directory if it doesn't exist
-    mkdir -p "/tmp/actor-input" || echo "Warning: Could not create /tmp/actor-input directory" >&2
-
-    # If /tmp/actor-input/INPUT exists as a directory, remove it
-    if [ -d "/tmp/actor-input/INPUT" ]; then
-        echo "Warning: /tmp/actor-input/INPUT exists as a directory. Removing it to create a file." >&2
-        rm -rf "/tmp/actor-input/INPUT"
-    fi
-
-    # Check multiple potential locations for input file
-    if [ -f "/tmp/actor-input/INPUT" ]; then
-        echo "Found standard Actor input file at /tmp/actor-input/INPUT" >&2
-        input=$(cat "/tmp/actor-input/INPUT")
-    elif [ -f "/input/INPUT" ]; then
-        echo "Found Actor input file at /input/INPUT" >&2
-        input=$(cat "/input/INPUT")
-
-    # Fallback to environment variable
-    elif [ -n "$APIFY_INPUT_JSON" ]; then
-        echo "Using APIFY_INPUT_JSON environment variable" >&2
-        input="$APIFY_INPUT_JSON"
-
-    # Last resort: use test input with md format
-    else
-        echo "No input found, using test input with md format" >&2
-        TEST_INPUT='{"documentUrl":"https://vancura.dev/assets/actor-test/facial-hairstyles-and-filtering-facepiece-respirators.pdf","ocr":true,"outputFormat":"md"}'
-        mkdir -p "/tmp/actor-input"
-        echo "$TEST_INPUT" > "/tmp/actor-input/INPUT"
-
-        # Read back the test input to ensure we get clean JSON
-        input=$(cat "/tmp/actor-input/INPUT")
-    fi
-
-    # Return only the JSON content
-    echo "$input"
-}
-
-# Get actor input
-INPUT=$(get_actor_input)
 echo "Input content:" >&2
 echo "$INPUT" >&2  # Send the raw input to stderr for debugging
 echo "$INPUT"      # Send the clean JSON to stdout for processing
