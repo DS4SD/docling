@@ -340,47 +340,4 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
             except:
                 _log.error("could not extract the image from excel sheets")
 
-        """
-        for idx, chart in enumerate(sheet._charts):  # type: ignore
-            try:
-                chart_path = f"chart_{idx + 1}.png"
-                _log.info(
-                    f"Chart found, but dynamic rendering is required for: {chart_path}"
-                )
-
-                _log.info(f"Chart {idx + 1}:")
-
-                # Chart type
-                # _log.info(f"Type: {type(chart).__name__}")
-                print(f"Type: {type(chart).__name__}")
-
-                # Extract series data
-                for series_idx, series in enumerate(chart.series):
-                    #_log.info(f"Series {series_idx + 1}:")
-                    print(f"Series {series_idx + 1} type: {type(series).__name__}")
-                    #print(f"x-values: {series.xVal}")
-                    #print(f"y-values: {series.yVal}")
-
-                    print(f"xval type: {type(series.xVal).__name__}")
-
-                    xvals = []
-                    for _ in series.xVal.numLit.pt:
-                        print(f"xval type: {type(_).__name__}")
-                        if hasattr(_, 'v'):
-                            xvals.append(_.v)
-
-                    print(f"x-values: {xvals}")
-
-                    yvals = []
-                    for _ in series.yVal:
-                        if hasattr(_, 'v'):
-                            yvals.append(_.v)
-
-                    print(f"y-values: {yvals}")
-
-            except Exception as exc:
-                print(exc)
-                continue
-        """
-
         return doc
