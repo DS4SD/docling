@@ -8,7 +8,7 @@ To get started, check out the [step-by-step guide in LangChain][guide].
 - 📦 [LangChain Docling integration PyPI][pypi]
 
 [docs]: https://python.langchain.com/docs/integrations/providers/docling/
-[github]: https://github.com/DS4SD/docling-langchain
+[github]: https://github.com/docling-project/docling-langchain
 [guide]: https://python.langchain.com/docs/integrations/document_loaders/docling/
 [example]: ../examples/rag_langchain.ipynb
 [pypi]: https://pypi.org/project/langchain-docling/
