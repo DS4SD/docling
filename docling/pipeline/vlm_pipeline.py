@@ -414,15 +414,17 @@ class VlmPipeline(PaginatedPipeline):
             4. Tracks bounding boxes + color in a separate list for later visualization.
             """
 
-            # Regex for all recognized tags
+            # Regex for root level recognized tags
             tag_pattern = (
                 rf"<(?P<tag>{DocItemLabel.TITLE}|{DocItemLabel.DOCUMENT_INDEX}|"
                 rf"{DocItemLabel.CHECKBOX_UNSELECTED}|{DocItemLabel.CHECKBOX_SELECTED}|"
                 rf"{DocItemLabel.TEXT}|{DocItemLabel.PAGE_HEADER}|"
                 rf"{DocItemLabel.PAGE_FOOTER}|{DocItemLabel.FORMULA}|"
                 rf"{DocItemLabel.CAPTION}|{DocItemLabel.PICTURE}|"
-                rf"{DocItemLabel.LIST_ITEM}|{DocItemLabel.FOOTNOTE}|{DocItemLabel.CODE}|"
-                rf"{DocItemLabel.SECTION_HEADER}_level_1|{DocumentToken.OTSL.value})>.*?</(?P=tag)>"
+                rf"{DocItemLabel.FOOTNOTE}|{DocItemLabel.CODE}|"
+                rf"{DocItemLabel.SECTION_HEADER}_level_1|"
+                rf"{DocumentToken.ORDERED_LIST.value}|{DocumentToken.UNORDERED_LIST.value}|"
+                rf"{DocumentToken.OTSL.value})>.*?</(?P=tag)>"
             )
 
             # DocumentToken.OTSL
@@ -504,6 +506,50 @@ class VlmPipeline(PaginatedPipeline):
                                     parent=None,
                                 )
                                 pic.captions.append(caption_item.get_ref())
+                elif tag_name in [
+                    DocumentToken.ORDERED_LIST.value,
+                    DocumentToken.UNORDERED_LIST.value,
+                ]:
+                    list_label = GroupLabel.LIST
+                    enum_marker = ""
+                    enum_value = 0
+                    if tag_name == DocumentToken.ORDERED_LIST.value:
+                        list_label = GroupLabel.ORDERED_LIST
+
+                    list_item_pattern = (
+                        rf"<(?P<tag>{DocItemLabel.LIST_ITEM})>.*?</(?P=tag)>"
+                    )
+                    li_pattern = re.compile(list_item_pattern, re.DOTALL)
+                    # Add list group:
+                    new_list = doc.add_group(label=list_label, name="list")
+                    # Pricess list items
+                    for li_match in li_pattern.finditer(full_chunk):
+                        enum_value += 1
+                        if tag_name == DocumentToken.ORDERED_LIST.value:
+                            enum_marker = str(enum_value) + "."
+
+                        li_full_chunk = li_match.group(0)
+                        li_bbox = extract_bounding_box(li_full_chunk) if image else None
+                        if self.force_backend_text:
+                            text_content = extract_text_from_backend(page, bbox)
+                        else:
+                            text_content = extract_inner_text(li_full_chunk)
+                        # Add list item
+                        doc.add_list_item(
+                            marker=enum_marker,
+                            enumerated=(tag_name == DocumentToken.ORDERED_LIST.value),
+                            parent=new_list,
+                            text=text_content,
+                            prov=(
+                                ProvenanceItem(
+                                    bbox=li_bbox.resize_by_scale(pg_width, pg_height),
+                                    charspan=(0, len(text_content)),
+                                    page_no=page_no,
+                                )
+                                if li_bbox
+                                else None
+                            ),
+                        )
                 else:
                     # For everything else, treat as text
                     if self.force_backend_text:
