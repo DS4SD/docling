@@ -999,7 +999,7 @@ class PatentUsptoGrantAps(PatentUspto):
                     parent=self.parents[self.level],
                 )
 
-            last_claim.text += f" {value}" if last_claim.text else value
+            last_claim.text += f" {value.strip()}" if last_claim.text else value.strip()
 
         elif field == self.Field.CAPTION.value and section in (
             self.Section.SUMMARY.value,
