@@ -94,9 +94,13 @@ You can run Docling in the cloud without installation using the [Docling Actor](
 
 ```bash
 apify call vancura/docling -i '{
-    "documentUrl": "https://arxiv.org/pdf/2408.09869",
-    "outputFormat": "md",
-    "ocr": true
+  "options": {
+    "to_formats": ["md", "json", "html", "text", "doctags"]
+  },
+  "http_sources": [
+    {"url": "https://vancura.dev/assets/actor-test/facial-hairstyles-and-filtering-facepiece-respirators.pdf"},
+    {"url": "https://arxiv.org/pdf/2408.09869"}
+  ]
 }'
 ```
 

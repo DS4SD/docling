@@ -55,23 +55,31 @@ This Actor (specification v1) wraps the [Docling project](https://ds4sd.github.i
 
 ```bash
 curl --request POST \
-  --url "https://api.apify.com/v2/acts/username~actorname/run" \
+  --url "https://api.apify.com/v2/acts/vancura~docling/run" \
   --header 'Content-Type: application/json' \
   --header 'Authorization: Bearer YOUR_API_TOKEN' \
   --data '{
-    "documentUrl": "https://arxiv.org/pdf/2408.09869.pdf",
-    "outputFormat": "md",
-    "ocr": true
-  }'
+  "options": {
+    "to_formats": ["md", "json", "html", "text", "doctags"]
+  },
+  "http_sources": [
+    {"url": "https://vancura.dev/assets/actor-test/facial-hairstyles-and-filtering-facepiece-respirators.pdf"},
+    {"url": "https://arxiv.org/pdf/2408.09869"}
+  ]
+}'
 ```
 
 ### Using Apify CLI
 
 ```bash
-apify call username/actorname --input='{
-    "documentUrl": "https://arxiv.org/pdf/2408.09869.pdf",
-    "outputFormat": "md",
-    "ocr": true
+apify call vancura/docling --input='{
+  "options": {
+    "to_formats": ["md", "json", "html", "text", "doctags"]
+  },
+  "http_sources": [
+    {"url": "https://vancura.dev/assets/actor-test/facial-hairstyles-and-filtering-facepiece-respirators.pdf"},
+    {"url": "https://arxiv.org/pdf/2408.09869"}
+  ]
 }'
 ```
 
@@ -79,19 +87,22 @@ apify call username/actorname --input='{
 
 The Actor accepts a JSON schema matching the file `.actor/input_schema.json`. Below is a summary of the fields:
 
-| Field          | Type    | Required | Default  | Description                                                                                               |
-|----------------|---------|----------|----------|-----------------------------------------------------------------------------------------------------------|
-| `documentUrl`  | string  | Yes      | None     | URL of the document (PDF, image, DOCX, etc.) to be processed. Must be directly accessible via public URL. |
-| `outputFormat` | string  | No       | `md`     | Desired output format. One of `md`, `json`, `html`, `text`, or `doctags`.                                 |
-| `ocr`          | boolean | No       | `true`   | If set to true, OCR will be applied to scanned PDFs or images for text recognition.                       |
+| Field          | Type    | Required | Default  | Description                                                                   |
+|----------------|---------|----------|----------|-------------------------------------------------------------------------------|
+| `http_sources` | object  | Yes      | None     | https://github.com/DS4SD/docling-serve?tab=readme-ov-file#url-endpoint        |
+| `options`      | object  | No       | None     | https://github.com/DS4SD/docling-serve?tab=readme-ov-file#common-parameters   |
 
 ### Example Input
 
 ```json
 {
-    "documentUrl": "https://arxiv.org/pdf/2408.09869.pdf",
-    "outputFormat": "md",
-    "ocr": false
+  "options": {
+    "to_formats": ["md", "json", "html", "text", "doctags"]
+  },
+  "http_sources": [
+    {"url": "https://vancura.dev/assets/actor-test/facial-hairstyles-and-filtering-facepiece-respirators.pdf"},
+    {"url": "https://arxiv.org/pdf/2408.09869"}
+  ]
 }
 ```
 
@@ -99,7 +110,7 @@ The Actor accepts a JSON schema matching the file `.actor/input_schema.json`. Be
 
 The Actor provides three types of outputs:
 
-1. **Processed Document** - The Actor will provide the direct URL to your result in the run log, looking like:
+1. **Processed Documents in a ZIP** - The Actor will provide the direct URL to your result in the run log, looking like:
 
    ```text
    You can find your results at: 'https://api.apify.com/v2/key-value-stores/[YOUR_STORE_ID]/records/OUTPUT'
@@ -108,8 +119,7 @@ The Actor provides three types of outputs:
 2. **Processing Log** - Available in the key-value store as `DOCLING_LOG`
 
 3. **Dataset Record** - Contains processing metadata with:
-   - Input document URL
-   - Direct link to the processed output
+   - Direct link to the processed output zip file
    - Processing status
 
 You can access the results in several ways:
@@ -219,7 +229,6 @@ Common issues and solutions:
 
 The Actor implements comprehensive error handling:
 
-- Input validation for document URLs and parameters
 - Detailed error messages in `DOCLING_LOG`
 - Proper exit codes for different failure scenarios
 - Automatic cleanup on failure
@@ -237,7 +246,6 @@ If you wish to develop or modify this Actor locally:
    - `actor.sh` - Main execution script that starts the docling-serve API and orchestrates document processing
    - `input_schema.json` - Input parameter definitions
    - `dataset_schema.json` - Dataset output format definition
-   - `docling_processor.py` - Python script handling API communication with docling-serve
    - `CHANGELOG.md` - Change log documenting all notable changes
    - `README.md` - This documentation
 4. Run the Actor locally using:
