@@ -1,14 +1,15 @@
+import re
 import sys
 from pathlib import Path
-import re
 
 # Add the root directory to the system path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from docling_core.types.doc.document import ContentLayer
+
 from docling.backend.html_backend import HTMLDocumentBackend
 from docling.datamodel.base_models import InputFormat
-from docling_core.types.doc.document import ContentLayer
-from docling.datamodel.document import InputDocument, DoclingDocument
+from docling.datamodel.document import DoclingDocument, InputDocument
 
 
 def test_is_hidden_element():

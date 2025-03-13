@@ -1,7 +1,7 @@
 import logging
 from io import BytesIO
 from pathlib import Path
-from typing import Final, Optional, Union, cast
+from typing import Any, Final, List, Optional, Union, cast
 
 from bs4 import BeautifulSoup, NavigableString, PageElement, Tag
 from bs4.element import PreformattedString
@@ -187,10 +187,18 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         elif tag.name == "img":
             self.handle_image(tag, doc)
         # Special handling for accordion panel titles (Bootstrap)
-        elif tag.name == "div" and "panel-title" in tag.get("class", []):
+        elif (
+            tag.name == "div"
+            and isinstance(tag.get("class"), (list, str))
+            and self._has_class(tag, "panel-title")
+        ):
             self.handle_panel_title(tag, doc)
         # Special handling for entire accordion panels
-        elif tag.name == "div" and "panel" in tag.get("class", []):
+        elif (
+            tag.name == "div"
+            and isinstance(tag.get("class"), (list, str))
+            and self._has_class(tag, "panel")
+        ):
             self.handle_panel(tag, doc)
         else:
             self.walk(tag, doc)
@@ -219,24 +227,31 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         return ["".join(result) + " "]
 
+    def _has_class(self, tag: Tag, class_name: str) -> bool:
+        """Helper method to check if a tag has a specific class."""
+        tag_classes = tag.get("class")
+        if tag_classes is None:
+            return False
+        if isinstance(tag_classes, str):
+            return class_name in tag_classes.split()
+        return class_name in tag_classes
+
     def is_hidden_element(self, tag: Tag) -> bool:
         """Check if an element is hidden based on its class attributes."""
         if not isinstance(tag, Tag):
             return False
 
         # Check for classes that indicate hidden content
-        classes = tag.get("class", [])
-        if isinstance(classes, str):
-            classes = classes.split()
-
         hidden_classes = ["hidden", "d-none", "hide", "invisible", "collapse"]
         for cls in hidden_classes:
-            if cls in classes:
+            if self._has_class(tag, cls):
                 return True
 
         # Check for style attribute with display:none or visibility:hidden
-        style = tag.get("style", "")
-        if "display:none" in style or "visibility:hidden" in style:
+        style = tag.get("style")
+        if isinstance(style, str) and (
+            "display:none" in style or "visibility:hidden" in style
+        ):
             return True
 
         # Check hidden attribute
@@ -596,9 +611,14 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             return
 
         # Find the anchor tag that contains the question text
-        anchor = element.find("a")
-        if anchor and anchor.text and not self.is_hidden_element(anchor):
-            question_text = anchor.text.strip()
+        anchor_elem = element.find("a")
+        if (
+            anchor_elem
+            and isinstance(anchor_elem, Tag)
+            and anchor_elem.text
+            and not self.is_hidden_element(anchor_elem)
+        ):
+            question_text = anchor_elem.text.strip()
             # Add the question as a proper text item
             doc.add_text(
                 parent=self.parents[self.level],
@@ -614,13 +634,21 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             return
 
         # First, find and process the panel-title (question)
-        panel_title = element.find("div", class_="panel-title")
-        if panel_title and not self.is_hidden_element(panel_title):
-            self.handle_panel_title(panel_title, doc)
+        panel_title_elem = element.find("div", class_="panel-title")
+        if (
+            panel_title_elem
+            and isinstance(panel_title_elem, Tag)
+            and not self.is_hidden_element(panel_title_elem)
+        ):
+            self.handle_panel_title(panel_title_elem, doc)
 
         # Then, find and process the panel-body (answer)
-        panel_body = element.find("div", class_="panel-body")
-        if panel_body and not self.is_hidden_element(panel_body):
+        panel_body_elem = element.find("div", class_="panel-body")
+        if (
+            panel_body_elem
+            and isinstance(panel_body_elem, Tag)
+            and not self.is_hidden_element(panel_body_elem)
+        ):
             # Create a group for the answer
             panel_group = doc.add_group(
                 parent=self.parents[self.level],
@@ -636,7 +664,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             self.parents[self.level] = panel_group
 
             # Process panel body content
-            self.walk(panel_body, doc)
+            self.walk(panel_body_elem, doc)
 
             # Restore previous level
             self.level = current_level
