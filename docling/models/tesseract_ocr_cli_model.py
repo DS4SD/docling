@@ -233,6 +233,7 @@ class TesseractOcrCliModel(BaseOcrModel):
                                 index=ix,
                                 text=text,
                                 orig=text,
+                                from_ocr=True,
                                 confidence=conf / 100.0,
                                 rect=BoundingRectangle.from_bounding_box(
                                     BoundingBox.from_tuple(

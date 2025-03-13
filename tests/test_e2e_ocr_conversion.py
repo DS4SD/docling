@@ -17,10 +17,11 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
+from .test_data_gen_flag import GEN_TEST_DATA
 from .verify_utils import verify_conversion_result_v1, verify_conversion_result_v2
 
-GENERATE_V1 = False
-GENERATE_V2 = False
+GENERATE_V1 = GEN_TEST_DATA
+GENERATE_V2 = GEN_TEST_DATA
 
 
 def get_pdf_paths():

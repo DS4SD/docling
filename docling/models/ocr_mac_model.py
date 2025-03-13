@@ -99,6 +99,7 @@ class OcrMacModel(BaseOcrModel):
                                     index=ix,
                                     text=text,
                                     orig=text,
+                                    from_ocr=True,
                                     confidence=confidence,
                                     rect=BoundingRectangle.from_bounding_box(
                                         BoundingBox.from_tuple(

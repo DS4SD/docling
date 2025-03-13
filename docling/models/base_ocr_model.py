@@ -165,9 +165,7 @@ class BaseOcrModel(BasePageModel):
             if y1 <= y0:
                 y1, y0 = y0, y1
 
-            color = "magenta"
-            if isinstance(tc, PdfTextCell):
-                color = "gray"
+            color = "magenta" if tc.from_ocr else "gray"
 
             draw.rectangle([(x0, y0), (x1, y1)], outline=color)
 

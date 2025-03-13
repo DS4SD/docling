@@ -91,6 +91,7 @@ class PyPdfiumPageBackend(PdfPageBackend):
                         index=cell_counter,
                         text=text_piece,
                         orig=text_piece,
+                        from_ocr=False,
                         rect=BoundingRectangle.from_bounding_box(
                             BoundingBox(
                                 l=x0,
@@ -185,6 +186,7 @@ class PyPdfiumPageBackend(PdfPageBackend):
                     text=merged_text,
                     orig=merged_text,
                     rect=BoundingRectangle.from_bounding_box(merged_bbox),
+                    from_ocr=False,
                 )
 
             rows = group_rows(cells)

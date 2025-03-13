@@ -870,7 +870,7 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "2.21.2"
+version = "2.22.0"
 description = "A python library to define and validate data types in Docling."
 optional = false
 python-versions = "^3.9"
@@ -898,7 +898,7 @@ chunking = ["semchunk (>=2.2.0,<3.0.0)", "transformers (>=4.34.0,<5.0.0)"]
 type = "git"
 url = "https://github.com/DS4SD/docling-core"
 reference = "cau/docling-parse-types"
-resolved_reference = "8e474a933d8428f26ce3fca667542027ffea1081"
+resolved_reference = "ab290cc9b1e781475e869b1679a33516fbf95c0d"
 
 [[package]]
 name = "docling-ibm-models"
@@ -951,7 +951,7 @@ tabulate = ">=0.9.0,<1.0.0"
 type = "git"
 url = "https://github.com/DS4SD/docling-parse"
 reference = "cau/api-move-to-docling-core"
-resolved_reference = "04096f2b65c19f098b761d16a06e3b42d636e764"
+resolved_reference = "b56b2084946a40a9acb12b7b6eb19d0caf47e3ea"
 
 [[package]]
 name = "docutils"

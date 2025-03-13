@@ -106,6 +106,7 @@ class RapidOcrModel(BaseOcrModel):
                                     text=line[1],
                                     orig=line[1],
                                     confidence=line[2],
+                                    from_ocr=True,
                                     rect=BoundingRectangle.from_bounding_box(
                                         BoundingBox.from_tuple(
                                             coord=(

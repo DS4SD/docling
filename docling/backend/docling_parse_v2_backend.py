@@ -114,6 +114,7 @@ class DoclingParseV2PageBackend(PdfPageBackend):
                     index=cell_counter,
                     text=text_piece,
                     orig=text_piece,
+                    from_ocr=False,
                     rect=BoundingRectangle.from_bounding_box(
                         BoundingBox(
                             # l=x0, b=y0, r=x1, t=y1,

@@ -11,9 +11,10 @@ from docling.datamodel.document import (
 )
 from docling.document_converter import DocumentConverter
 
+from .test_data_gen_flag import GEN_TEST_DATA
 from .verify_utils import verify_document, verify_export
 
-GENERATE = False
+GENERATE = GEN_TEST_DATA
 
 
 def test_heading_levels():

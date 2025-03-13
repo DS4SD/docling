@@ -91,8 +91,8 @@ def generate_multimodal_pages(
                 .to_top_left_origin(page_height=page.size.height)
                 .normalized(page_size=page.size)
             )
-            is_ocr = isinstance(cell, TextCell)
-            ocr_confidence = cell.confidence if isinstance(cell, TextCell) else 1.0
+            is_ocr = cell.from_ocr
+            ocr_confidence = cell.confidence
             cells.append(
                 {
                     "text": cell.text,

@@ -272,9 +272,7 @@ class LayoutPostprocessor:
             next_id = max((c.id for c in self.all_clusters), default=0) + 1
             orphan_clusters = []
             for i, cell in enumerate(unassigned):
-                conf = 1.0
-                if isinstance(cell, TextCell):
-                    conf = cell.confidence
+                conf = cell.confidence
 
                 orphan_clusters.append(
                     Cluster(

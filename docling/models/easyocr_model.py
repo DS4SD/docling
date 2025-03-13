@@ -153,6 +153,7 @@ class EasyOcrModel(BaseOcrModel):
                                 index=ix,
                                 text=line[1],
                                 orig=line[1],
+                                from_ocr=True,
                                 confidence=line[2],
                                 rect=BoundingRectangle.from_bounding_box(
                                     BoundingBox.from_tuple(

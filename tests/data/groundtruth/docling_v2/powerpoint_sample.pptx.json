@@ -1,6 +1,6 @@
 {
   "schema_name": "DoclingDocument",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "name": "powerpoint_sample",
   "origin": {
     "mimetype": "application/vnd.ms-powerpoint",
@@ -2143,6 +2143,7 @@
     }
   ],
   "key_value_items": [],
+  "form_items": [],
   "pages": {
     "1": {
       "size": {
