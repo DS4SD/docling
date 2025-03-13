@@ -1,33 +1,29 @@
 import copy
 import logging
-import random
-import time
+import warnings
 from pathlib import Path
-from typing import Iterable, List
+from typing import Iterable, Optional, Union
 
-from docling_core.types.doc import CoordOrigin, DocItemLabel
+from docling_core.types.doc import DocItemLabel
 from docling_ibm_models.layoutmodel.layout_predictor import LayoutPredictor
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
-from docling.datamodel.base_models import (
-    BoundingBox,
-    Cell,
-    Cluster,
-    LayoutPrediction,
-    Page,
-)
+from docling.datamodel.base_models import BoundingBox, Cluster, LayoutPrediction, Page
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import AcceleratorDevice, AcceleratorOptions
+from docling.datamodel.pipeline_options import AcceleratorOptions
 from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
 from docling.utils.accelerator_utils import decide_device
 from docling.utils.layout_postprocessor import LayoutPostprocessor
 from docling.utils.profiling import TimeRecorder
+from docling.utils.visualization import draw_clusters
 
 _log = logging.getLogger(__name__)
 
 
 class LayoutModel(BasePageModel):
+    _model_repo_folder = "ds4sd--docling-models"
+    _model_path = "model_artifacts/layout"
 
     TEXT_ELEM_LABELS = [
         DocItemLabel.TEXT,
@@ -40,7 +36,7 @@ class LayoutModel(BasePageModel):
         DocItemLabel.PAGE_FOOTER,
         DocItemLabel.CODE,
         DocItemLabel.LIST_ITEM,
-        # "Formula",
+        DocItemLabel.FORMULA,
     ]
     PAGE_HEADER_LABELS = [DocItemLabel.PAGE_HEADER, DocItemLabel.PAGE_FOOTER]
 
@@ -49,14 +45,55 @@ class LayoutModel(BasePageModel):
     FORMULA_LABEL = DocItemLabel.FORMULA
     CONTAINER_LABELS = [DocItemLabel.FORM, DocItemLabel.KEY_VALUE_REGION]
 
-    def __init__(self, artifacts_path: Path, accelerator_options: AcceleratorOptions):
+    def __init__(
+        self, artifacts_path: Optional[Path], accelerator_options: AcceleratorOptions
+    ):
         device = decide_device(accelerator_options.device)
+
+        if artifacts_path is None:
+            artifacts_path = self.download_models() / self._model_path
+        else:
+            # will become the default in the future
+            if (artifacts_path / self._model_repo_folder).exists():
+                artifacts_path = (
+                    artifacts_path / self._model_repo_folder / self._model_path
+                )
+            elif (artifacts_path / self._model_path).exists():
+                warnings.warn(
+                    "The usage of artifacts_path containing directly "
+                    f"{self._model_path} is deprecated. Please point "
+                    "the artifacts_path to the parent containing "
+                    f"the {self._model_repo_folder} folder.",
+                    DeprecationWarning,
+                    stacklevel=3,
+                )
+                artifacts_path = artifacts_path / self._model_path
 
         self.layout_predictor = LayoutPredictor(
             artifact_path=str(artifacts_path),
             device=device,
             num_threads=accelerator_options.num_threads,
         )
+
+    @staticmethod
+    def download_models(
+        local_dir: Optional[Path] = None,
+        force: bool = False,
+        progress: bool = False,
+    ) -> Path:
+        from huggingface_hub import snapshot_download
+        from huggingface_hub.utils import disable_progress_bars
+
+        if not progress:
+            disable_progress_bars()
+        download_path = snapshot_download(
+            repo_id="ds4sd/docling-models",
+            force_download=force,
+            local_dir=local_dir,
+            revision="v2.1.0",
+        )
+
+        return Path(download_path)
 
     def draw_clusters_and_cells_side_by_side(
         self, conv_res, page, clusters, mode_prefix: str, show: bool = False
@@ -82,78 +119,9 @@ class LayoutModel(BasePageModel):
         left_image = copy.deepcopy(page.image)
         right_image = copy.deepcopy(page.image)
 
-        # Function to draw clusters on an image
-        def draw_clusters(image, clusters):
-            draw = ImageDraw.Draw(image, "RGBA")
-            # Create a smaller font for the labels
-            try:
-                font = ImageFont.truetype("arial.ttf", 12)
-            except OSError:
-                # Fallback to default font if arial is not available
-                font = ImageFont.load_default()
-            for c_tl in clusters:
-                all_clusters = [c_tl, *c_tl.children]
-                for c in all_clusters:
-                    # Draw cells first (underneath)
-                    cell_color = (0, 0, 0, 40)  # Transparent black for cells
-                    for tc in c.cells:
-                        cx0, cy0, cx1, cy1 = tc.bbox.as_tuple()
-                        cx0 *= scale_x
-                        cx1 *= scale_x
-                        cy0 *= scale_x
-                        cy1 *= scale_y
-
-                        draw.rectangle(
-                            [(cx0, cy0), (cx1, cy1)],
-                            outline=None,
-                            fill=cell_color,
-                        )
-                    # Draw cluster rectangle
-                    x0, y0, x1, y1 = c.bbox.as_tuple()
-                    x0 *= scale_x
-                    x1 *= scale_x
-                    y0 *= scale_x
-                    y1 *= scale_y
-
-                    cluster_fill_color = (*list(DocItemLabel.get_color(c.label)), 70)
-                    cluster_outline_color = (
-                        *list(DocItemLabel.get_color(c.label)),
-                        255,
-                    )
-                    draw.rectangle(
-                        [(x0, y0), (x1, y1)],
-                        outline=cluster_outline_color,
-                        fill=cluster_fill_color,
-                    )
-                    # Add label name and confidence
-                    label_text = f"{c.label.name} ({c.confidence:.2f})"
-                    # Create semi-transparent background for text
-                    text_bbox = draw.textbbox((x0, y0), label_text, font=font)
-                    text_bg_padding = 2
-                    draw.rectangle(
-                        [
-                            (
-                                text_bbox[0] - text_bg_padding,
-                                text_bbox[1] - text_bg_padding,
-                            ),
-                            (
-                                text_bbox[2] + text_bg_padding,
-                                text_bbox[3] + text_bg_padding,
-                            ),
-                        ],
-                        fill=(255, 255, 255, 180),  # Semi-transparent white
-                    )
-                    # Draw text
-                    draw.text(
-                        (x0, y0),
-                        label_text,
-                        fill=(0, 0, 0, 255),  # Solid black
-                        font=font,
-                    )
-
         # Draw clusters on both images
-        draw_clusters(left_image, left_clusters)
-        draw_clusters(right_image, right_clusters)
+        draw_clusters(left_image, left_clusters, scale_x, scale_y)
+        draw_clusters(right_image, right_clusters, scale_x, scale_y)
         # Combine the images side by side
         combined_width = left_image.width * 2
         combined_height = left_image.height
@@ -182,10 +150,12 @@ class LayoutModel(BasePageModel):
             else:
                 with TimeRecorder(conv_res, "layout"):
                     assert page.size is not None
+                    page_image = page.get_image(scale=1.0)
+                    assert page_image is not None
 
                     clusters = []
                     for ix, pred_item in enumerate(
-                        self.layout_predictor.predict(page.get_image(scale=1.0))
+                        self.layout_predictor.predict(page_image)
                     ):
                         label = DocItemLabel(
                             pred_item["label"]

@@ -1,10 +1,11 @@
-import json
 import os
 from pathlib import Path
 
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import ConversionResult
+from docling.datamodel.document import ConversionResult, DoclingDocument
 from docling.document_converter import DocumentConverter
+
+from .verify_utils import verify_document, verify_export
 
 GENERATE = False
 
@@ -24,22 +25,6 @@ def get_converter():
     converter = DocumentConverter(allowed_formats=[InputFormat.PPTX])
 
     return converter
-
-
-def verify_export(pred_text: str, gtfile: str):
-
-    if not os.path.exists(gtfile) or GENERATE:
-        with open(gtfile, "w") as fw:
-            fw.write(pred_text)
-
-        return True
-
-    else:
-        with open(gtfile, "r") as fr:
-            true_text = fr.read()
-
-        assert pred_text == true_text, "pred_itxt==true_itxt"
-        return pred_text == true_text
 
 
 def test_e2e_pptx_conversions():
@@ -68,5 +53,6 @@ def test_e2e_pptx_conversions():
             pred_itxt, str(gt_path) + ".itxt"
         ), "export to indented-text"
 
-        pred_json: str = json.dumps(doc.export_to_dict(), indent=2)
-        assert verify_export(pred_json, str(gt_path) + ".json"), "export to json"
+        assert verify_document(
+            doc, str(gt_path) + ".json", GENERATE
+        ), "document document"

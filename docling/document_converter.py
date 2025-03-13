@@ -1,21 +1,24 @@
 import logging
+import math
 import sys
 import time
 from functools import partial
 from pathlib import Path
-from typing import Dict, Iterable, Iterator, List, Optional, Type, Union
+from typing import Dict, Iterable, Iterator, List, Optional, Tuple, Type, Union
 
 from pydantic import BaseModel, ConfigDict, model_validator, validate_call
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.asciidoc_backend import AsciiDocBackend
+from docling.backend.csv_backend import CsvDocumentBackend
 from docling.backend.docling_parse_v2_backend import DoclingParseV2DocumentBackend
 from docling.backend.html_backend import HTMLDocumentBackend
+from docling.backend.json.docling_json_backend import DoclingJSONBackend
 from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.msexcel_backend import MsExcelDocumentBackend
 from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
 from docling.backend.msword_backend import MsWordDocumentBackend
-from docling.backend.xml.pubmed_backend import PubMedDocumentBackend
+from docling.backend.xml.jats_backend import JatsDocumentBackend
 from docling.backend.xml.uspto_backend import PatentUsptoDocumentBackend
 from docling.datamodel.base_models import (
     ConversionStatus,
@@ -30,7 +33,12 @@ from docling.datamodel.document import (
     _DocumentConversionInput,
 )
 from docling.datamodel.pipeline_options import PipelineOptions
-from docling.datamodel.settings import DocumentLimits, settings
+from docling.datamodel.settings import (
+    DEFAULT_PAGE_RANGE,
+    DocumentLimits,
+    PageRange,
+    settings,
+)
 from docling.exceptions import ConversionError
 from docling.pipeline.base_pipeline import BasePipeline
 from docling.pipeline.simple_pipeline import SimplePipeline
@@ -52,6 +60,11 @@ class FormatOption(BaseModel):
         if self.pipeline_options is None:
             self.pipeline_options = self.pipeline_cls.get_default_options()
         return self
+
+
+class CsvFormatOption(FormatOption):
+    pipeline_cls: Type = SimplePipeline
+    backend: Type[AbstractDocumentBackend] = CsvDocumentBackend
 
 
 class ExcelFormatOption(FormatOption):
@@ -89,9 +102,9 @@ class PatentUsptoFormatOption(FormatOption):
     backend: Type[PatentUsptoDocumentBackend] = PatentUsptoDocumentBackend
 
 
-class XMLPubMedFormatOption(FormatOption):
+class XMLJatsFormatOption(FormatOption):
     pipeline_cls: Type = SimplePipeline
-    backend: Type[AbstractDocumentBackend] = PubMedDocumentBackend
+    backend: Type[AbstractDocumentBackend] = JatsDocumentBackend
 
 
 class ImageFormatOption(FormatOption):
@@ -106,6 +119,9 @@ class PdfFormatOption(FormatOption):
 
 def _get_default_option(format: InputFormat) -> FormatOption:
     format_to_default_options = {
+        InputFormat.CSV: FormatOption(
+            pipeline_cls=SimplePipeline, backend=CsvDocumentBackend
+        ),
         InputFormat.XLSX: FormatOption(
             pipeline_cls=SimplePipeline, backend=MsExcelDocumentBackend
         ),
@@ -127,14 +143,17 @@ def _get_default_option(format: InputFormat) -> FormatOption:
         InputFormat.XML_USPTO: FormatOption(
             pipeline_cls=SimplePipeline, backend=PatentUsptoDocumentBackend
         ),
-        InputFormat.XML_PUBMED: FormatOption(
-            pipeline_cls=SimplePipeline, backend=PubMedDocumentBackend
+        InputFormat.XML_JATS: FormatOption(
+            pipeline_cls=SimplePipeline, backend=JatsDocumentBackend
         ),
         InputFormat.IMAGE: FormatOption(
             pipeline_cls=StandardPdfPipeline, backend=DoclingParseV2DocumentBackend
         ),
         InputFormat.PDF: FormatOption(
             pipeline_cls=StandardPdfPipeline, backend=DoclingParseV2DocumentBackend
+        ),
+        InputFormat.JSON_DOCLING: FormatOption(
+            pipeline_cls=SimplePipeline, backend=DoclingJSONBackend
         ),
     }
     if (options := format_to_default_options.get(format)) is not None:
@@ -180,6 +199,7 @@ class DocumentConverter:
         raises_on_error: bool = True,
         max_num_pages: int = sys.maxsize,
         max_file_size: int = sys.maxsize,
+        page_range: PageRange = DEFAULT_PAGE_RANGE,
     ) -> ConversionResult:
         all_res = self.convert_all(
             source=[source],
@@ -187,6 +207,7 @@ class DocumentConverter:
             max_num_pages=max_num_pages,
             max_file_size=max_file_size,
             headers=headers,
+            page_range=page_range,
         )
         return next(all_res)
 
@@ -198,10 +219,12 @@ class DocumentConverter:
         raises_on_error: bool = True,  # True: raises on first conversion error; False: does not raise on conv error
         max_num_pages: int = sys.maxsize,
         max_file_size: int = sys.maxsize,
+        page_range: PageRange = DEFAULT_PAGE_RANGE,
     ) -> Iterator[ConversionResult]:
         limits = DocumentLimits(
             max_num_pages=max_num_pages,
             max_file_size=max_file_size,
+            page_range=page_range,
         )
         conv_input = _DocumentConversionInput(
             path_or_stream_iterator=source, limits=limits, headers=headers

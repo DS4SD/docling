@@ -26,6 +26,7 @@ _log = logging.getLogger(__name__)
 
 from typing import Any, List
 
+from PIL import Image as PILImage
 from pydantic import BaseModel
 
 
@@ -44,7 +45,6 @@ class ExcelTable(BaseModel):
 
 
 class MsExcelDocumentBackend(DeclarativeDocumentBackend):
-
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
 
@@ -326,49 +326,61 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend):
         self, doc: DoclingDocument, sheet: Worksheet
     ) -> DoclingDocument:
 
-        # FIXME: mypy does not agree with _images ...
+        # Iterate over byte images in the sheet
+        for idx, image in enumerate(sheet._images):  # type: ignore
+
+            try:
+                pil_image = PILImage.open(image.ref)
+
+                doc.add_picture(
+                    parent=self.parents[0],
+                    image=ImageRef.from_pil(image=pil_image, dpi=72),
+                    caption=None,
+                )
+            except:
+                _log.error("could not extract the image from excel sheets")
+
         """
-        # Iterate over images in the sheet
-        for idx, image in enumerate(sheet._images):  # Access embedded images
+        for idx, chart in enumerate(sheet._charts):  # type: ignore
+            try:
+                chart_path = f"chart_{idx + 1}.png"
+                _log.info(
+                    f"Chart found, but dynamic rendering is required for: {chart_path}"
+                )
 
-            image_bytes = BytesIO(image.ref.blob)
-            pil_image = Image.open(image_bytes)
-
-            doc.add_picture(
-                parent=self.parents[0],
-                image=ImageRef.from_pil(image=pil_image, dpi=72),
-                caption=None,
-            )
-        """
-
-        # FIXME: mypy does not agree with _charts ...
-        """
-        for idx, chart in enumerate(sheet._charts):  # Access embedded charts
-            chart_path = f"chart_{idx + 1}.png"
-            _log.info(
-                f"Chart found, but dynamic rendering is required for: {chart_path}"
-            )
-
-            _log.info(f"Chart {idx + 1}:")
-        
-            # Chart type
-            _log.info(f"Type: {type(chart).__name__}")
-            
-            # Title
-            if chart.title:
-                _log.info(f"Title: {chart.title}")
-            else:
-                _log.info("No title")
-            
-            # Data series
-            for series in chart.series:
-                _log.info(" => series ...")
-                _log.info(f"Data Series: {series.title}")
-                _log.info(f"Values: {series.values}")
-                _log.info(f"Categories: {series.categories}")
+                _log.info(f"Chart {idx + 1}:")
                 
-            # Position
-            # _log.info(f"Anchor Cell: {chart.anchor}")
+                # Chart type
+                # _log.info(f"Type: {type(chart).__name__}")
+                print(f"Type: {type(chart).__name__}")
+
+                # Extract series data
+                for series_idx, series in enumerate(chart.series):
+                    #_log.info(f"Series {series_idx + 1}:")
+                    print(f"Series {series_idx + 1} type: {type(series).__name__}")
+                    #print(f"x-values: {series.xVal}")
+                    #print(f"y-values: {series.yVal}")
+
+                    print(f"xval type: {type(series.xVal).__name__}")
+                    
+                    xvals = []
+                    for _ in series.xVal.numLit.pt:
+                        print(f"xval type: {type(_).__name__}")
+                        if hasattr(_, 'v'):
+                            xvals.append(_.v)
+
+                    print(f"x-values: {xvals}")
+                            
+                    yvals = []
+                    for _ in series.yVal:
+                        if hasattr(_, 'v'):
+                            yvals.append(_.v)
+                            
+                    print(f"y-values: {yvals}")                    
+                    
+            except Exception as exc:
+                print(exc)
+                continue
         """
 
         return doc

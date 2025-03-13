@@ -1,15 +1,19 @@
-import json
-import os
+from io import BytesIO
 from pathlib import Path
+
+import pytest
 
 from docling.backend.html_backend import HTMLDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import (
     ConversionResult,
+    DoclingDocument,
     InputDocument,
     SectionHeaderItem,
 )
 from docling.document_converter import DocumentConverter
+
+from .verify_utils import verify_document, verify_export
 
 GENERATE = False
 
@@ -39,12 +43,72 @@ def test_heading_levels():
     assert found_lvl_2 and found_lvl_3
 
 
+@pytest.mark.skip(
+    "Temporarily disabled since docling-core>=2.21.0 does not support ordered lists "
+    "with custom start value"
+)
+def test_ordered_lists():
+    test_set: list[tuple[bytes, str]] = []
+
+    test_set.append(
+        (
+            b"<html><body><ol><li>1st item</li><li>2nd item</li></ol></body></html>",
+            "1. 1st item\n2. 2nd item",
+        )
+    )
+    test_set.append(
+        (
+            b'<html><body><ol start="1"><li>1st item</li><li>2nd item</li></ol></body></html>',
+            "1. 1st item\n2. 2nd item",
+        )
+    )
+    test_set.append(
+        (
+            b'<html><body><ol start="2"><li>1st item</li><li>2nd item</li></ol></body></html>',
+            "2. 1st item\n3. 2nd item",
+        )
+    )
+    test_set.append(
+        (
+            b'<html><body><ol start="0"><li>1st item</li><li>2nd item</li></ol></body></html>',
+            "0. 1st item\n1. 2nd item",
+        )
+    )
+    test_set.append(
+        (
+            b'<html><body><ol start="-5"><li>1st item</li><li>2nd item</li></ol></body></html>',
+            "1. 1st item\n2. 2nd item",
+        )
+    )
+    test_set.append(
+        (
+            b'<html><body><ol start="foo"><li>1st item</li><li>2nd item</li></ol></body></html>',
+            "1. 1st item\n2. 2nd item",
+        )
+    )
+
+    for idx, pair in enumerate(test_set):
+        in_doc = InputDocument(
+            path_or_stream=BytesIO(pair[0]),
+            format=InputFormat.HTML,
+            backend=HTMLDocumentBackend,
+            filename="test",
+        )
+        backend = HTMLDocumentBackend(
+            in_doc=in_doc,
+            path_or_stream=BytesIO(pair[0]),
+        )
+        doc: DoclingDocument = backend.convert()
+        assert doc
+        assert doc.export_to_markdown() == pair[1], f"Error in case {idx}"
+
+
 def get_html_paths():
 
     # Define the directory you want to search
     directory = Path("./tests/data/html/")
 
-    # List all PDF files in the directory and its subdirectories
+    # List all HTML files in the directory and its subdirectories
     html_files = sorted(directory.rglob("*.html"))
     return html_files
 
@@ -54,22 +118,6 @@ def get_converter():
     converter = DocumentConverter(allowed_formats=[InputFormat.HTML])
 
     return converter
-
-
-def verify_export(pred_text: str, gtfile: str):
-
-    if not os.path.exists(gtfile) or GENERATE:
-        with open(gtfile, "w") as fw:
-            fw.write(pred_text)
-
-        return True
-
-    else:
-        with open(gtfile, "r") as fr:
-            true_text = fr.read()
-
-        assert pred_text == true_text, f"pred_text!=true_text for {gtfile}"
-        return pred_text == true_text
 
 
 def test_e2e_html_conversions():
@@ -98,5 +146,4 @@ def test_e2e_html_conversions():
             pred_itxt, str(gt_path) + ".itxt"
         ), "export to indented-text"
 
-        pred_json: str = json.dumps(doc.export_to_dict(), indent=2)
-        assert verify_export(pred_json, str(gt_path) + ".json"), "export to json"
+        assert verify_document(doc, str(gt_path) + ".json", GENERATE)

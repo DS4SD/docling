@@ -203,6 +203,7 @@ class LayoutPostprocessor:
         """Initialize processor with cells and spatial indices."""
         self.cells = cells
         self.page_size = page_size
+        self.all_clusters = clusters
         self.regular_clusters = [
             c for c in clusters if c.label not in self.SPECIAL_TYPES
         ]
@@ -267,7 +268,7 @@ class LayoutPostprocessor:
         # Handle orphaned cells
         unassigned = self._find_unassigned_cells(clusters)
         if unassigned:
-            next_id = max((c.id for c in clusters), default=0) + 1
+            next_id = max((c.id for c in self.all_clusters), default=0) + 1
             orphan_clusters = []
             for i, cell in enumerate(unassigned):
                 conf = 1.0
