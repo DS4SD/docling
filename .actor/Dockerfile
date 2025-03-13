@@ -6,8 +6,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /build/bin /build/lib/node_modules \
-    && cp /usr/local/bin/node /build/bin/
-
+    && cp /usr/local/bin/node /build/bin/    
 # Set working directory
 WORKDIR /build
 
@@ -37,8 +36,11 @@ ENV PYTHONUNBUFFERED=1 \
 USER root
 WORKDIR /app
 
-# Create all required directories and fix permissions in a single layer
-RUN mkdir -p /build-files \
+# Install required tools and create directories in a single layer
+RUN dnf install -y \
+    jq \
+    && dnf clean all \
+    && mkdir -p /build-files \
              /tmp \
              /tmp/actor-input \
              /tmp/actor-output \
@@ -67,6 +69,7 @@ RUN chmod +x .actor/actor.sh
 
 # Copy the build files from builder
 COPY --from=builder --chown=1000:1000 /build /build-files
+
 
 # Switch to non-root user
 USER 1000

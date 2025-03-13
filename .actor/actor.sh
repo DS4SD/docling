@@ -75,8 +75,11 @@ cleanup_temp_environment() {
 
 # Function to push data to Apify dataset
 push_to_dataset() {
-    local document_url="$1"
-    local result_url="$2"
+    # Example usage: push_to_dataset "$RESULT_URL" "$OUTPUT_SIZE" "zip"
+
+    local result_url="$1"
+    local size="$2"
+    local format="$3"
 
     # Find Apify CLI command
     find_apify_cmd
@@ -88,14 +91,14 @@ push_to_dataset() {
 
         # Use the --no-update-notifier flag if available
         if $apify_cmd --help | grep -q "\--no-update-notifier"; then
-            if $apify_cmd --no-update-notifier actor:push-data "{\"url\": \"${document_url}\", \"output_file\": \"${result_url}\", \"status\": \"success\"}"; then
+            if $apify_cmd --no-update-notifier actor:push-data "{\"output_file\": \"${result_url}\", \"format\": \"${format}\", \"size\": \"${size}\", \"status\": \"success\"}"; then
                 echo "Successfully added record to dataset"
             else
                 echo "Warning: Failed to add record to dataset"
             fi
         else
             # Fall back to regular command
-            if $apify_cmd actor:push-data "{\"url\": \"${document_url}\", \"output_file\": \"${result_url}\", \"status\": \"success\"}"; then
+            if $apify_cmd actor:push-data "{\"output_file\": \"${result_url}\", \"format\": \"${format}\", \"size\": \"${size}\", \"status\": \"success\"}"; then
                 echo "Successfully added record to dataset"
             else
                 echo "Warning: Failed to add record to dataset"
@@ -133,7 +136,7 @@ echo "Working directory: $(pwd)"
 
 # --- Get input ---
 
-echo "Getting Apify ActorInput"
+echo "Getting Apify Actor Input"
 INPUT=$(apify actor get-input 2>/dev/null)
 
 # --- Setup tools ---
@@ -293,72 +296,36 @@ echo "Input content:" >&2
 echo "$INPUT" >&2  # Send the raw input to stderr for debugging
 echo "$INPUT"      # Send the clean JSON to stdout for processing
 
-# Extract values from INPUT using Python
-echo "Using Python to parse input..."
-DOCUMENT_URL="$(echo "$INPUT" | python -c "import sys, json; print(json.load(sys.stdin).get('documentUrl', ''))")"
-OUTPUT_FORMAT="$(echo "$INPUT" | python -c "import sys, json; print(json.load(sys.stdin).get('outputFormat', 'md'))")"
-OCR_ENABLED="$(echo "$INPUT" | python -c "import sys, json; print(str(json.load(sys.stdin).get('ocr', True)).lower())")"
-
-# Validate input schema should already enforce this, but double-check
-if [ -z "$DOCUMENT_URL" ]; then
-    echo "ERROR: No document URL provided in input"
-
-    # Try to push data to Actor but don't exit if it fails
-    find_apify_cmd
-    apify_cmd="$FOUND_APIFY_CMD"
-    if [ -n "$apify_cmd" ]; then
-        echo "Reporting missing document URL to Actor storage..."
-        setup_temp_environment
-        if $apify_cmd actor:push-data "{\"status\": \"error\", \"error\": \"No document URL provided in input\"}" 2>&1; then
-            echo "Successfully pushed error message to Actor storage"
-        else
-            echo "Warning: Failed to push error message to Actor storage"
-        fi
-        cleanup_temp_environment
-    fi
-
-    # Use default document URL for testing instead of exiting
-    echo "Using a default document URL for testing: https://arxiv.org/pdf/2408.09869"
-    DOCUMENT_URL="https://arxiv.org/pdf/2408.09869"
-fi
-
-if [ -z "$OUTPUT_FORMAT" ]; then
-    echo "No output format specified, defaulting to 'md'"
-    OUTPUT_FORMAT="md"
-fi
-
-# Ensure OCR_ENABLED has a valid boolean value
-if [ -z "$OCR_ENABLED" ]; then
-    echo "No OCR setting specified, defaulting to true"
-    OCR_ENABLED="true"
-fi
-
-echo "Input values: documentUrl=$DOCUMENT_URL, outputFormat=$OUTPUT_FORMAT, ocr=$OCR_ENABLED"
-
 # Create the request JSON
-REQUEST_JSON="{\"options\":{\"to_formats\":[\"$OUTPUT_FORMAT\"],\"ocr\":$OCR_ENABLED},\"http_sources\":[{\"url\":\"$DOCUMENT_URL\"}]}"
+
+REQUEST_JSON=$(echo $INPUT | jq '.options += {"return_as_file": true}')
+
 echo "Creating request JSON:" >&2
 echo "$REQUEST_JSON" >&2
 echo "$REQUEST_JSON" > "$API_DIR/request.json"
 
-# Send the conversion request using our Python script
-echo "Sending conversion request to docling-serve API..."
-python "$TOOLS_DIR/docling_processor.py" \
-    --api-endpoint "$DOCLING_API_ENDPOINT" \
-    --request-json "$API_DIR/request.json" \
-    --output-dir "$API_DIR" \
-    --output-format "$OUTPUT_FORMAT"
 
-PYTHON_EXIT_CODE=$?
+# Send the conversion request using our Python script
+#echo "Sending conversion request to docling-serve API..."
+#python "$TOOLS_DIR/docling_processor.py" \
+#    --api-endpoint "$DOCLING_API_ENDPOINT" \
+#    --request-json "$API_DIR/request.json" \
+#    --output-dir "$API_DIR" \
+#    --output-format "$OUTPUT_FORMAT"
+
+echo "Curl the Docling API"
+curl -s -H "content-type: application/json" -X POST --data-binary @$API_DIR/request.json -o $API_DIR/output.zip $DOCLING_API_ENDPOINT
+
+CURL_EXIT_CODE=$?
 
 # --- Check for various potential output files ---
 
 echo "Checking for output files..."
-if [ -f "$API_DIR/output.$OUTPUT_FORMAT" ]; then
+if [ -f "$API_DIR/output.zip" ]; then
     echo "Conversion completed successfully! Output file found."
 
     # Get content from the converted file
-    OUTPUT_SIZE=$(wc -c < "$API_DIR/output.$OUTPUT_FORMAT")
+    OUTPUT_SIZE=$(wc -c < "$API_DIR/output.zip")
     echo "Output file found with size: $OUTPUT_SIZE bytes"
 
     # Calculate the access URL for result display
@@ -366,22 +333,14 @@ if [ -f "$API_DIR/output.$OUTPUT_FORMAT" ]; then
 
     echo "=============================="
     echo "PROCESSING COMPLETE!"
-    echo "Document URL: ${DOCUMENT_URL}"
-    echo "Output format: ${OUTPUT_FORMAT}"
     echo "Output size: ${OUTPUT_SIZE} bytes"
     echo "=============================="
 
     # Set the output content type based on format
-    CONTENT_TYPE="text/plain"
-    case "$OUTPUT_FORMAT" in
-        md) CONTENT_TYPE="text/markdown" ;;
-        html) CONTENT_TYPE="text/html" ;;
-        json) CONTENT_TYPE="application/json" ;;
-        text) CONTENT_TYPE="text/plain" ;;
-    esac
+    CONTENT_TYPE="application/zip"
 
     # Upload the document content using our function
-    upload_to_kvs "$API_DIR/output.$OUTPUT_FORMAT" "OUTPUT" "$CONTENT_TYPE" "Document content"
+    upload_to_kvs "$API_DIR/output.zip" "OUTPUT" "$CONTENT_TYPE" "Document content"
 
     # Only proceed with dataset record if document upload succeeded
     if [ $? -eq 0 ]; then
@@ -389,10 +348,10 @@ if [ -f "$API_DIR/output.$OUTPUT_FORMAT" ]; then
         echo "=============================="
 
         # Push data to dataset
-        push_to_dataset "$DOCUMENT_URL" "$RESULT_URL"
+        push_to_dataset "$RESULT_URL" "$OUTPUT_SIZE" "zip"
     fi
 else
-    echo "ERROR: No converted output file found at $API_DIR/output.$OUTPUT_FORMAT"
+    echo "ERROR: No converted output file found at $API_DIR/output.zip"
 
     # Create error metadata
     ERROR_METADATA="{\"status\":\"error\",\"error\":\"No converted output file found\",\"documentUrl\":\"$DOCUMENT_URL\"}"
