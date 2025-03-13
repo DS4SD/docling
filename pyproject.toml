@@ -2,23 +2,43 @@
 name = "docling"
 version = "2.26.0"  # DO NOT EDIT, updated automatically
 description = "SDK and CLI for parsing PDF, DOCX, HTML, and more, to a unified document representation for powering downstream workflows such as gen AI applications."
-authors = ["Christoph Auer <cau@zurich.ibm.com>", "Michele Dolfi <dol@zurich.ibm.com>", "Maxim Lysak <mly@zurich.ibm.com>", "Nikos Livathinos <nli@zurich.ibm.com>", "Ahmed Nassar <ahn@zurich.ibm.com>", "Panos Vagenas <pva@zurich.ibm.com>", "Peter Staar <taa@zurich.ibm.com>"]
+authors = [
+  "Christoph Auer <cau@zurich.ibm.com>",
+  "Michele Dolfi <dol@zurich.ibm.com>",
+  "Maxim Lysak <mly@zurich.ibm.com>",
+  "Nikos Livathinos <nli@zurich.ibm.com>",
+  "Ahmed Nassar <ahn@zurich.ibm.com>",
+  "Panos Vagenas <pva@zurich.ibm.com>",
+  "Peter Staar <taa@zurich.ibm.com>",
+]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/DS4SD/docling"
 homepage = "https://github.com/DS4SD/docling"
-keywords= ["docling", "convert", "document", "pdf", "docx", "html", "markdown", "layout model", "segmentation", "table structure", "table former"]
- classifiers = [
-     "License :: OSI Approved :: MIT License",
-     "Operating System :: MacOS :: MacOS X",
-     "Operating System :: POSIX :: Linux",
-     "Development Status :: 5 - Production/Stable",
-     "Intended Audience :: Developers",
-     "Intended Audience :: Science/Research",
-     "Topic :: Scientific/Engineering :: Artificial Intelligence",
-     "Programming Language :: Python :: 3"
- ]
-packages = [{include = "docling"}]
+keywords = [
+  "docling",
+  "convert",
+  "document",
+  "pdf",
+  "docx",
+  "html",
+  "markdown",
+  "layout model",
+  "segmentation",
+  "table structure",
+  "table former",
+]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: MacOS :: MacOS X",
+  "Operating System :: POSIX :: Linux",
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Programming Language :: Python :: 3",
+]
+packages = [{ include = "docling" }]
 
 [tool.poetry.dependencies]
 ######################
@@ -40,7 +60,7 @@ certifi = ">=2024.7.4"
 rtree = "^1.3.0"
 scipy = [
   { version = "^1.6.0", markers = "python_version >= '3.10'" },
-  { version = ">=1.6.0,<1.14.0", markers = "python_version < '3.10'" }
+  { version = ">=1.6.0,<1.14.0", markers = "python_version < '3.10'" },
 ]
 typer = "^0.12.5"
 python-docx = "^1.1.2"
@@ -56,21 +76,22 @@ onnxruntime = [
   # 1.19.2 is the last version with python3.9 support,
   # see https://github.com/microsoft/onnxruntime/releases/tag/v1.20.0
   { version = ">=1.7.0,<1.20.0", optional = true, markers = "python_version < '3.10'" },
-  { version = "^1.7.0", optional = true, markers = "python_version >= '3.10'" }
+  { version = "^1.7.0", optional = true, markers = "python_version >= '3.10'" },
 ]
 
 transformers = [
-  {markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'", version = "^4.46.0", optional = true },
-  {markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'", version = "~4.42.0", optional = true }
+  { markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'", version = "^4.46.0", optional = true },
+  { markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'", version = "~4.42.0", optional = true },
 ]
 accelerate = [
-  {markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'", version = "^1.2.1", optional = true },
+  { markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'", version = "^1.2.1", optional = true },
 ]
 pillow = ">=10.0.0,<12.0.0"
 tqdm = "^4.65.0"
+pylatexenc = "^2.10"
 
 [tool.poetry.group.dev.dependencies]
-black = {extras = ["jupyter"], version = "^24.4.2"}
+black = { extras = ["jupyter"], version = "^24.4.2" }
 pytest = "^7.2.2"
 pre-commit = "^3.7.1"
 mypy = "^1.10.1"
@@ -93,7 +114,7 @@ types-tqdm = "^4.67.0.20241221"
 mkdocs-material = "^9.5.40"
 mkdocs-jupyter = "^0.25.0"
 mkdocs-click = "^0.8.1"
-mkdocstrings = {extras = ["python"], version = "^0.27.0"}
+mkdocstrings = { extras = ["python"], version = "^0.27.0" }
 griffe-pydantic = "^1.1.0"
 
 [tool.poetry.group.examples.dependencies]
@@ -108,8 +129,8 @@ optional = true
 
 [tool.poetry.group.constraints.dependencies]
 numpy = [
-    { version = ">=1.24.4,<3.0.0", markers = 'python_version >= "3.10"' },
-    { version = ">=1.24.4,<2.1.0", markers = 'python_version < "3.10"' },
+  { version = ">=1.24.4,<3.0.0", markers = 'python_version >= "3.10"' },
+  { version = ">=1.24.4,<2.1.0", markers = 'python_version < "3.10"' },
 ]
 
 [tool.poetry.group.mac_intel]
@@ -117,12 +138,12 @@ optional = true
 
 [tool.poetry.group.mac_intel.dependencies]
 torch = [
-  {markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'", version = "^2.2.2"},
-  {markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'", version = "~2.2.2"}
+  { markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'", version = "^2.2.2" },
+  { markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'", version = "~2.2.2" },
 ]
 torchvision = [
-  {markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'", version = "^0"},
-  {markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'", version = "~0.17.2"}
+  { markers = "sys_platform != 'darwin' or platform_machine != 'x86_64'", version = "^0" },
+  { markers = "sys_platform == 'darwin' and platform_machine == 'x86_64'", version = "~0.17.2" },
 ]
 
 [tool.poetry.extras]
@@ -147,7 +168,7 @@ include = '\.pyi?$'
 [tool.isort]
 profile = "black"
 line_length = 88
-py_version=39
+py_version = 39
 
 [tool.mypy]
 pretty = true
@@ -158,18 +179,19 @@ python_version = "3.10"
 
 [[tool.mypy.overrides]]
 module = [
-    "docling_parse.*",
-    "pypdfium2.*",
-    "networkx.*",
-    "scipy.*",
-    "filetype.*",
-    "tesserocr.*",
-    "docling_ibm_models.*",
-    "easyocr.*",
-    "ocrmac.*",
-    "lxml.*",
-    "huggingface_hub.*",
-    "transformers.*",
+  "docling_parse.*",
+  "pypdfium2.*",
+  "networkx.*",
+  "scipy.*",
+  "filetype.*",
+  "tesserocr.*",
+  "docling_ibm_models.*",
+  "easyocr.*",
+  "ocrmac.*",
+  "lxml.*",
+  "huggingface_hub.*",
+  "transformers.*",
+  "pylatexenc.*",
 ]
 ignore_missing_imports = true
 
