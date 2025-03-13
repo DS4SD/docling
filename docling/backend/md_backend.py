@@ -136,7 +136,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                         end_row_offset_idx=trow_ind + row_span,
                         start_col_offset_idx=tcol_ind,
                         end_col_offset_idx=tcol_ind + col_span,
-                        col_header=False,
+                        column_header=trow_ind == 0,
                         row_header=False,
                     )
                     tcells.append(icell)

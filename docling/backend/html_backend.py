@@ -457,7 +457,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     end_row_offset_idx=row_idx + row_span,
                     start_col_offset_idx=col_idx,
                     end_col_offset_idx=col_idx + col_span,
-                    col_header=col_header,
+                    column_header=col_header,
                     row_header=((not col_header) and html_cell.name == "th"),
                 )
                 data.table_cells.append(table_cell)

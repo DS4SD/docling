@@ -601,7 +601,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     end_row_offset_idx=row.grid_cols_before + spanned_idx,
                     start_col_offset_idx=col_idx,
                     end_col_offset_idx=col_idx + cell.grid_span,
-                    col_header=False,
+                    column_header=row.grid_cols_before + row_idx == 0,
                     row_header=False,
                 )
                 data.table_cells.append(table_cell)

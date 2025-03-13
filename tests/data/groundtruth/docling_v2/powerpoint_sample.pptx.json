@@ -960,7 +960,7 @@
             "start_col_offset_idx": 1,
             "end_col_offset_idx": 4,
             "text": "Class1",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -972,7 +972,7 @@
             "start_col_offset_idx": 4,
             "end_col_offset_idx": 7,
             "text": "Class2",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -1385,7 +1385,7 @@
               "start_col_offset_idx": 1,
               "end_col_offset_idx": 4,
               "text": "Class1",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -1397,7 +1397,7 @@
               "start_col_offset_idx": 1,
               "end_col_offset_idx": 4,
               "text": "Class1",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -1409,7 +1409,7 @@
               "start_col_offset_idx": 1,
               "end_col_offset_idx": 4,
               "text": "Class1",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -1421,7 +1421,7 @@
               "start_col_offset_idx": 4,
               "end_col_offset_idx": 7,
               "text": "Class2",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -1433,7 +1433,7 @@
               "start_col_offset_idx": 4,
               "end_col_offset_idx": 7,
               "text": "Class2",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -1445,7 +1445,7 @@
               "start_col_offset_idx": 4,
               "end_col_offset_idx": 7,
               "text": "Class2",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             }
@@ -2143,6 +2143,7 @@
     }
   ],
   "key_value_items": [],
+  "form_items": [],
   "pages": {
     "1": {
       "size": {
