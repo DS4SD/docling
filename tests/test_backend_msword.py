@@ -90,4 +90,8 @@ def test_e2e_docx_conversions():
 
         if docx_path.name == "word_tables.docx":
             pred_html: str = doc.export_to_html()
-            assert verify_export(pred_html, str(gt_path) + ".html"), "export to html"
+            assert verify_export(
+                pred_text=pred_html,
+                gtfile=str(gt_path) + ".html",
+                generate=GENERATE,
+            ), "export to html"

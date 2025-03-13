@@ -176,7 +176,7 @@
             "start_col_offset_idx": 0,
             "end_col_offset_idx": 1,
             "text": "Tab1",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -188,7 +188,7 @@
             "start_col_offset_idx": 1,
             "end_col_offset_idx": 2,
             "text": "Tab2",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -200,7 +200,7 @@
             "start_col_offset_idx": 2,
             "end_col_offset_idx": 3,
             "text": "Tab3",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -289,7 +289,7 @@
               "start_col_offset_idx": 0,
               "end_col_offset_idx": 1,
               "text": "Tab1",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -301,7 +301,7 @@
               "start_col_offset_idx": 1,
               "end_col_offset_idx": 2,
               "text": "Tab2",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -313,7 +313,7 @@
               "start_col_offset_idx": 2,
               "end_col_offset_idx": 3,
               "text": "Tab3",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             }
@@ -399,5 +399,6 @@
     }
   ],
   "key_value_items": [],
+  "form_items": [],
   "pages": {}
 }

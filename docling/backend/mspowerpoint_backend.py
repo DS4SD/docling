@@ -346,7 +346,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                         end_row_offset_idx=row_idx + row_span,
                         start_col_offset_idx=col_idx,
                         end_col_offset_idx=col_idx + col_span,
-                        col_header=False,
+                        column_header=row_idx == 0,
                         row_header=False,
                     )
                     if len(cell.text.strip()) > 0:
