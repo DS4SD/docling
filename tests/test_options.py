@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from docling.backend.docling_parse_v3_backend import DoclingParseV3DocumentBackend
+from docling.backend.docling_parse_v4_backend import DoclingParseV4DocumentBackend
 from docling.datamodel.base_models import ConversionStatus, InputFormat
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
@@ -33,7 +33,7 @@ def get_converters_with_table_options():
                 format_options={
                     InputFormat.PDF: PdfFormatOption(
                         pipeline_options=pipeline_options,
-                        backend=DoclingParseV3DocumentBackend,
+                        backend=DoclingParseV4DocumentBackend,
                     )
                 }
             )

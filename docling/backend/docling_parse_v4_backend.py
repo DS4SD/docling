@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 _log = logging.getLogger(__name__)
 
 
-class DoclingParseV3PageBackend(PdfPageBackend):
+class DoclingParseV4PageBackend(PdfPageBackend):
     def __init__(self, parsed_page: SegmentedPdfPage, page_obj: PdfPage):
         self._ppage = page_obj
         self._dpage = parsed_page
@@ -144,7 +144,7 @@ class DoclingParseV3PageBackend(PdfPageBackend):
         self._dpage = None
 
 
-class DoclingParseV3DocumentBackend(PdfDocumentBackend):
+class DoclingParseV4DocumentBackend(PdfDocumentBackend):
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
 
@@ -171,8 +171,8 @@ class DoclingParseV3DocumentBackend(PdfDocumentBackend):
 
     def load_page(
         self, page_no: int, create_words: bool = True, create_textlines: bool = True
-    ) -> DoclingParseV3PageBackend:
-        return DoclingParseV3PageBackend(
+    ) -> DoclingParseV4PageBackend:
+        return DoclingParseV4PageBackend(
             self.dp_doc.get_page(
                 page_no + 1,
                 create_words=create_words,

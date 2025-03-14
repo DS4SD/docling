@@ -15,7 +15,7 @@ from docling_core.utils.file import resolve_source_to_path
 from pydantic import TypeAdapter
 
 from docling.backend.docling_parse_v2_backend import DoclingParseV2DocumentBackend
-from docling.backend.docling_parse_v3_backend import DoclingParseV3DocumentBackend
+from docling.backend.docling_parse_v4_backend import DoclingParseV4DocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import (
@@ -416,8 +416,8 @@ def convert(
             backend = DoclingParseV2DocumentBackend
         elif pdf_backend == PdfBackend.DLPARSE_V2:
             backend = DoclingParseV2DocumentBackend
-        elif pdf_backend == PdfBackend.DLPARSE_V3:
-            backend = DoclingParseV3DocumentBackend  # type: ignore
+        elif pdf_backend == PdfBackend.DLPARSE_V4:
+            backend = DoclingParseV4DocumentBackend  # type: ignore
         elif pdf_backend == PdfBackend.PYPDFIUM2:
             backend = PyPdfiumDocumentBackend  # type: ignore
         else:

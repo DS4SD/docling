@@ -2,9 +2,9 @@ from pathlib import Path
 
 import pytest
 
-from docling.backend.docling_parse_v3_backend import (
-    DoclingParseV3DocumentBackend,
-    DoclingParseV3PageBackend,
+from docling.backend.docling_parse_v4_backend import (
+    DoclingParseV4DocumentBackend,
+    DoclingParseV4PageBackend,
 )
 from docling.datamodel.base_models import BoundingBox, InputFormat
 from docling.datamodel.document import InputDocument
@@ -19,7 +19,7 @@ def _get_backend(pdf_doc):
     in_doc = InputDocument(
         path_or_stream=pdf_doc,
         format=InputFormat.PDF,
-        backend=DoclingParseV3DocumentBackend,
+        backend=DoclingParseV4DocumentBackend,
     )
 
     doc_backend = in_doc._backend
@@ -34,7 +34,7 @@ def test_text_cell_counts():
     for page_index in range(0, doc_backend.page_count()):
         last_cell_count = None
         for i in range(10):
-            page_backend: DoclingParseV3PageBackend = doc_backend.load_page(0)
+            page_backend: DoclingParseV4PageBackend = doc_backend.load_page(0)
             cells = list(page_backend.get_text_cells())
 
             if last_cell_count is None:
@@ -49,7 +49,7 @@ def test_text_cell_counts():
 
 def test_get_text_from_rect(test_doc_path):
     doc_backend = _get_backend(test_doc_path)
-    page_backend: DoclingParseV3PageBackend = doc_backend.load_page(0)
+    page_backend: DoclingParseV4PageBackend = doc_backend.load_page(0)
 
     # Get the title text of the DocLayNet paper
     textpiece = page_backend.get_text_in_rect(
@@ -62,7 +62,7 @@ def test_get_text_from_rect(test_doc_path):
 
 def test_crop_page_image(test_doc_path):
     doc_backend = _get_backend(test_doc_path)
-    page_backend: DoclingParseV3PageBackend = doc_backend.load_page(0)
+    page_backend: DoclingParseV4PageBackend = doc_backend.load_page(0)
 
     # Crop out "Figure 1" from the DocLayNet paper
     im = page_backend.get_page_image(
