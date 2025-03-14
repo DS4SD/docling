@@ -108,8 +108,8 @@ class DoclingParsePageBackend(PdfPageBackend):
                             t=y1 * page_size.height / parser_height,
                             coord_origin=CoordOrigin.BOTTOMLEFT,
                         )
-                    ),
-                ).to_top_left_origin(page_size.height),
+                    ).to_top_left_origin(page_size.height),
+                )
             )
 
             cell_counter += 1

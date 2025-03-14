@@ -14,6 +14,7 @@ from docling_core.types.doc import ImageRefMode
 from docling_core.utils.file import resolve_source_to_path
 from pydantic import TypeAdapter
 
+from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.docling_parse_v2_backend import DoclingParseV2DocumentBackend
 from docling.backend.docling_parse_v4_backend import DoclingParseV4DocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
@@ -412,8 +413,9 @@ def convert(
         if artifacts_path is not None:
             pipeline_options.artifacts_path = artifacts_path
 
+        backend: Type[PdfDocumentBackend]
         if pdf_backend == PdfBackend.DLPARSE_V1:
-            backend = DoclingParseV2DocumentBackend
+            backend = DoclingParseDocumentBackend
         elif pdf_backend == PdfBackend.DLPARSE_V2:
             backend = DoclingParseV2DocumentBackend
         elif pdf_backend == PdfBackend.DLPARSE_V4:

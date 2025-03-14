@@ -31,7 +31,7 @@ def converter():
     converter = DocumentConverter(
         format_options={
             InputFormat.PDF: PdfFormatOption(
-                pipeline_options=pipeline_options, backend=DoclingParseV4DocumentBackend
+                pipeline_options=pipeline_options,
             )
         }
     )
