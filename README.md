@@ -21,6 +21,7 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![License MIT](https://img.shields.io/github/license/docling-project/docling)](https://opensource.org/licenses/MIT)
 [![PyPI Downloads](https://static.pepy.tech/badge/docling/month)](https://pepy.tech/projects/docling)
+[![Docling Actor](https://apify.com/actor-badge?actor=vancura/docling?fpr=docling)](https://apify.com/vancura/docling)
 
 Docling simplifies document processing, parsing diverse formats — including advanced PDF understanding — and providing seamless integrations with the gen AI ecosystem.
 
@@ -84,6 +85,32 @@ demonstrating how to address different application use cases with Docling.
 To further accelerate your AI application development, check out Docling's native
 [integrations](https://docling-project.github.io/docling/integrations/) with popular frameworks
 and tools.
+
+## Apify Actor
+
+<a href="https://apify.com/vancura/docling?fpr=docling"><img src="https://apify.com/ext/run-on-apify.png" alt="Run Docling Actor on Apify" width="176" height="39" /></a>
+
+You can run Docling in the cloud without installation using the [Docling Actor](https://apify.com/vancura/docling?fpr=docling) on Apify platform. Simply provide a document URL and get the processed result:
+
+```bash
+apify call vancura/docling -i '{
+  "options": {
+    "to_formats": ["md", "json", "html", "text", "doctags"]
+  },
+  "http_sources": [
+    {"url": "https://vancura.dev/assets/actor-test/facial-hairstyles-and-filtering-facepiece-respirators.pdf"},
+    {"url": "https://arxiv.org/pdf/2408.09869"}
+  ]
+}'
+```
+
+The Actor stores results in:
+
+* Processed document in key-value store (`OUTPUT_RESULT`)
+* Processing logs (`DOCLING_LOG`)
+* Dataset record with result URL and status
+
+Read more about the [Docling Actor](.actor/README.md), including how to use it via the Apify API and CLI.
 
 ## Get help and support
 
