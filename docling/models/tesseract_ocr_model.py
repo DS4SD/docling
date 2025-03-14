@@ -31,14 +31,14 @@ class TesseractOcrModel(BaseOcrModel):
                 "Note that tesserocr might have to be manually compiled for working with "
                 "your Tesseract installation. The Docling documentation provides examples for it. "
                 "Alternatively, Docling has support for other OCR engines. See the documentation: "
-                "https://ds4sd.github.io/docling/installation/"
+                "https://docling-project.github.io/docling/installation/"
             )
             missing_langs_errmsg = (
                 "tesserocr is not correctly configured. No language models have been detected. "
                 "Please ensure that the TESSDATA_PREFIX envvar points to tesseract languages dir. "
                 "You can find more information how to setup other OCR engines in Docling "
                 "documentation: "
-                "https://ds4sd.github.io/docling/installation/"
+                "https://docling-project.github.io/docling/installation/"
             )
 
             try:
