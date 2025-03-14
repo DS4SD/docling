@@ -13,6 +13,7 @@ from docling.utils.profiling import TimeRecorder
 
 class PagePreprocessingOptions(BaseModel):
     images_scale: Optional[float]
+    create_parsed_page: bool
 
 
 class PagePreprocessingModel(BasePageModel):
@@ -54,6 +55,9 @@ class PagePreprocessingModel(BasePageModel):
         assert page._backend is not None
 
         page.cells = list(page._backend.get_text_cells())
+
+        if self.options.create_parsed_page:
+            page.parsed_page = page._backend.get_segmented_page()
 
         # DEBUG code:
         def draw_text_boxes(image, cells, show: bool = False):

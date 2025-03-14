@@ -4,10 +4,11 @@ from pathlib import Path
 from typing import Iterable, Optional, Set, Union
 
 from docling_core.types.doc import BoundingBox, Size
+from docling_core.types.doc.page import SegmentedPdfPage, TextCell
 from PIL import Image
 
 from docling.backend.abstract_backend import PaginatedDocumentBackend
-from docling.datamodel.base_models import Cell, InputFormat
+from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
 
@@ -17,7 +18,11 @@ class PdfPageBackend(ABC):
         pass
 
     @abstractmethod
-    def get_text_cells(self) -> Iterable[Cell]:
+    def get_segmented_page(self) -> Optional[SegmentedPdfPage]:
+        pass
+
+    @abstractmethod
+    def get_text_cells(self) -> Iterable[TextCell]:
         pass
 
     @abstractmethod

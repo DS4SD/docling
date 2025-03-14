@@ -5,6 +5,7 @@ from typing import Iterable, Optional, Union
 
 import numpy
 from docling_core.types.doc import BoundingBox, DocItemLabel, TableCell
+from docling_core.types.doc.page import BoundingRectangle
 from docling_ibm_models.tableformer.data_management.tf_predictor import TFPredictor
 from PIL import ImageDraw
 
@@ -129,7 +130,7 @@ class TableStructureModel(BasePageModel):
             draw.rectangle([(x0, y0), (x1, y1)], outline="red")
 
             for cell in table_element.cluster.cells:
-                x0, y0, x1, y1 = cell.bbox.as_tuple()
+                x0, y0, x1, y1 = cell.rect.to_bounding_box().as_tuple()
                 x0 *= scale_x
                 x1 *= scale_x
                 y0 *= scale_x
@@ -223,11 +224,19 @@ class TableStructureModel(BasePageModel):
                                 # Only allow non empty stings (spaces) into the cells of a table
                                 if len(c.text.strip()) > 0:
                                     new_cell = copy.deepcopy(c)
-                                    new_cell.bbox = new_cell.bbox.scaled(
-                                        scale=self.scale
+                                    new_cell.rect = BoundingRectangle.from_bounding_box(
+                                        new_cell.rect.to_bounding_box().scaled(
+                                            scale=self.scale
+                                        )
                                     )
 
-                                    tokens.append(new_cell.model_dump())
+                                    tokens.append(
+                                        {
+                                            "id": new_cell.index,
+                                            "text": new_cell.text,
+                                            "bbox": new_cell.rect.to_bounding_box().model_dump(),
+                                        }
+                                    )
                             page_input["tokens"] = tokens
 
                             tf_output = self.tf_predictor.multi_table_predict(

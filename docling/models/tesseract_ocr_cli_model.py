@@ -8,8 +8,9 @@ from typing import Iterable, List, Optional, Tuple
 
 import pandas as pd
 from docling_core.types.doc import BoundingBox, CoordOrigin
+from docling_core.types.doc.page import BoundingRectangle, TextCell
 
-from docling.datamodel.base_models import Cell, OcrCell, Page
+from docling.datamodel.base_models import Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import TesseractCliOcrOptions
 from docling.datamodel.settings import settings
@@ -228,18 +229,22 @@ class TesseractOcrCliModel(BaseOcrModel):
                             t = b + h
                             r = l + w
 
-                            cell = OcrCell(
-                                id=ix,
+                            cell = TextCell(
+                                index=ix,
                                 text=text,
+                                orig=text,
+                                from_ocr=True,
                                 confidence=conf / 100.0,
-                                bbox=BoundingBox.from_tuple(
-                                    coord=(
-                                        (l / self.scale) + ocr_rect.l,
-                                        (b / self.scale) + ocr_rect.t,
-                                        (r / self.scale) + ocr_rect.l,
-                                        (t / self.scale) + ocr_rect.t,
-                                    ),
-                                    origin=CoordOrigin.TOPLEFT,
+                                rect=BoundingRectangle.from_bounding_box(
+                                    BoundingBox.from_tuple(
+                                        coord=(
+                                            (l / self.scale) + ocr_rect.l,
+                                            (b / self.scale) + ocr_rect.t,
+                                            (r / self.scale) + ocr_rect.l,
+                                            (t / self.scale) + ocr_rect.t,
+                                        ),
+                                        origin=CoordOrigin.TOPLEFT,
+                                    )
                                 ),
                             )
                             all_ocr_cells.append(cell)

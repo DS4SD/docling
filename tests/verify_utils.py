@@ -79,8 +79,8 @@ def verify_cells(doc_pred_pages: List[Page], doc_true_pages: List[Page]):
             pred_text = cell_pred_item.text
             assert true_text == pred_text, f"{true_text}!={pred_text}"
 
-            true_bbox = cell_true_item.bbox.as_tuple()
-            pred_bbox = cell_pred_item.bbox.as_tuple()
+            true_bbox = cell_true_item.rect.to_bounding_box().as_tuple()
+            pred_bbox = cell_pred_item.rect.to_bounding_box().as_tuple()
             assert (
                 true_bbox == pred_bbox
             ), f"bbox is not the same: {true_bbox} != {pred_bbox}"

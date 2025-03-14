@@ -27,13 +27,13 @@ Front cover
 | 1.3.2 New controls: Row and Column Access Control. . . . . . . . . . . . . . . . . . . . . . . . . . .                                                        | 5                                                                                                                                       |
 | Chapter 2. Roles and separation of duties . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                             | 7                                                                                                                                       |
 | 2.1 Roles . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                     | 8                                                                                                                                       |
-| 2.1.1 DDM and DRDA application server access: QIBM\_DB\_DDMDRDA . . . . . . . . . . .                                                                           | 8                                                                                                                                       |
-| 2.1.2 Toolbox application server access: QIBM\_DB\_ZDA. . . . . . . . . . . . . . . . . . . . . . . .                                                           | 8                                                                                                                                       |
-| 2.1.3 Database Administrator function: QIBM\_DB\_SQLADM . . . . . . . . . . . . . . . . . . . . .                                                               | 9                                                                                                                                       |
-| 2.1.4 Database Information function: QIBM\_DB\_SYSMON                                                                                                           | . . . . . . . . . . . . . . . . . . . . . . 9                                                                                           |
-| 2.1.5 Security Administrator function: QIBM\_DB\_SECADM . . . . . . . . . . . . . . . . . . . . . .                                                             | 9                                                                                                                                       |
+| 2.1.1 DDM and DRDA application server access: QIBM_DB_DDMDRDA . . . . . . . . . . .                                                                           | 8                                                                                                                                       |
+| 2.1.2 Toolbox application server access: QIBM_DB_ZDA. . . . . . . . . . . . . . . . . . . . . . . .                                                           | 8                                                                                                                                       |
+| 2.1.3 Database Administrator function: QIBM_DB_SQLADM . . . . . . . . . . . . . . . . . . . . .                                                               | 9                                                                                                                                       |
+| 2.1.4 Database Information function: QIBM_DB_SYSMON                                                                                                           | . . . . . . . . . . . . . . . . . . . . . . 9                                                                                           |
+| 2.1.5 Security Administrator function: QIBM_DB_SECADM . . . . . . . . . . . . . . . . . . . . . .                                                             | 9                                                                                                                                       |
 | 2.1.6 Change Function Usage CL command . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                                      | 10                                                                                                                                      |
-| 2.1.7 Verifying function usage IDs for RCAC with the FUNCTION\_USAGE view . . . . .                                                                            | 10                                                                                                                                      |
+| 2.1.7 Verifying function usage IDs for RCAC with the FUNCTION_USAGE view . . . . .                                                                            | 10                                                                                                                                      |
 | 2.2 Separation of duties . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10                             |                                                                                                                                         |
 | Chapter 3. Row and Column Access Control                                                                                                                      | . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13                                                                    |
 | 3.1 Explanation of RCAC and the concept of access control . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . | 14                                                                                                                                      |
@@ -42,11 +42,11 @@ Front cover
 | 3.2 Special registers and built-in global variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                           | 18                                                                                                                                      |
 | 3.2.1 Special registers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                   | 18                                                                                                                                      |
 | 3.2.2 Built-in global variables . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                     | 19                                                                                                                                      |
-| 3.3 VERIFY\_GROUP\_FOR\_USER function . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                                    | 20                                                                                                                                      |
+| 3.3 VERIFY_GROUP_FOR_USER function . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                                    | 20                                                                                                                                      |
 | 3.4 Establishing and controlling accessibility by using the RCAC rule text . . . . . . . . . . . . .                                                          | 21                                                                                                                                      |
 | Human resources example . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                           |                                                                                                                                         |
 | 3.6                                                                                                                                                           | 22                                                                                                                                      |
-| 3.6.1 Assigning the QIBM\_DB\_SECADM function ID to the consultants. . . . . . . . . . . .                                                                      | 23 23                                                                                                                                   |
+| 3.6.1 Assigning the QIBM_DB_SECADM function ID to the consultants. . . . . . . . . . . .                                                                      | 23 23                                                                                                                                   |
 | 3.6.2 Creating group profiles for the users and their roles . . . . . . . . . . . . . . . . . . . . . . .                                                     |                                                                                                                                         |
 | 3.6.3 Demonstrating data access without RCAC . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                                      | 24                                                                                                                                      |
 | 3.6.4 Defining and creating row permissions . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .                                                 | 25                                                                                                                                      |
@@ -188,10 +188,10 @@ Table 2-1 FUNCTION\_USAGE view
 
 | Column name   | Data type   | Description                                                                                                                                                           |
 |---------------|-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| FUNCTION\_ID   | VARCHAR(30) | ID of the function.                                                                                                                                                   |
-| USER\_NAME     | VARCHAR(10) | Name of the user profile that has a usage setting for this  function.                                                                                                 |
-| USAGE         | VARCHAR(7)  | Usage setting: GLYPH&lt;SM590000&gt; ALLOWED: The user profile is allowed to use the function. GLYPH&lt;SM590000&gt; DENIED: The user profile is not allowed to use the function. |
-| USER\_TYPE     | VARCHAR(5)  | Type of user profile: GLYPH&lt;SM590000&gt; USER: The user profile is a user. GLYPH&lt;SM590000&gt; GROUP: The user profile is a group.                                           |
+| FUNCTION_ID   | VARCHAR(30) | ID of the function.                                                                                                                                                   |
+| USER_NAME     | VARCHAR(10) | Name of the user profile that has a usage setting for this  function.                                                                                                 |
+| USAGE         | VARCHAR(7)  | Usage setting: GLYPH<SM590000> ALLOWED: The user profile is allowed to use the function. GLYPH<SM590000> DENIED: The user profile is not allowed to use the function. |
+| USER_TYPE     | VARCHAR(5)  | Type of user profile: GLYPH<SM590000> USER: The user profile is a user. GLYPH<SM590000> GROUP: The user profile is a group.                                           |
 
 To discover who has authorization to define and manage RCAC, you can use the query that is shown in Example 2-1.
 
@@ -235,7 +235,7 @@ Table 2-2 shows a comparison of the different function usage IDs and *JOBCTL aut
 
 Table 2-2 Comparison of the different function usage IDs and *JOBCTL authority
 
-| User action                                                                    | *JOBCTL   | QIBM\_DB\_SECADM   | QIBM\_DB\_SQLADM   | QIBM\_DB\_SYSMON   | No Authority   |
+| User action                                                                    | *JOBCTL   | QIBM_DB_SECADM   | QIBM_DB_SQLADM   | QIBM_DB_SYSMON   | No Authority   |
 |--------------------------------------------------------------------------------|-----------|------------------|------------------|------------------|----------------|
 | SET CURRENT DEGREE  (SQL statement)                                            | X         |                  | X                |                  |                |
 | CHGQRYA  command targeting a different user’s job                              | X         |                  | X                |                  |                |
@@ -262,9 +262,9 @@ Table 3-1 Special registers and their corresponding values
 
 | Special register     | Corresponding value                                                                                                                   |
 |----------------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| USER or SESSION\_USER | The effective user of the thread excluding adopted authority.                                                                         |
-| CURRENT\_USER         | The effective user of the thread including adopted authority. When no adopted  authority is present, this has the same value as USER. |
-| SYSTEM\_USER          | The authorization ID that initiated the connection.                                                                                   |
+| USER or SESSION_USER | The effective user of the thread excluding adopted authority.                                                                         |
+| CURRENT_USER         | The effective user of the thread including adopted authority. When no adopted  authority is present, this has the same value as USER. |
+| SYSTEM_USER          | The authorization ID that initiated the connection.                                                                                   |
 
 Figure 3-5 shows the difference in the special register values when an adopted authority is used:
 
@@ -290,15 +290,15 @@ Table 3-2 Built-in global variables
 
 | Global variable       | Type         | Description                                                    |
 |-----------------------|--------------|----------------------------------------------------------------|
-| CLIENT\_HOST           | VARCHAR(255) | Host name of the current client as returned by the system      |
-| CLIENT\_IPADDR         | VARCHAR(128) | IP address of the current client as returned by the system     |
-| CLIENT\_PORT           | INTEGER      | Port used by the current client to communicate with the server |
-| PACKAGE\_NAME          | VARCHAR(128) | Name of the currently running package                          |
-| PACKAGE\_SCHEMA        | VARCHAR(128) | Schema name of the currently running package                   |
-| PACKAGE\_VERSION       | VARCHAR(64)  | Version identifier of the currently running package            |
-| ROUTINE\_SCHEMA        | VARCHAR(128) | Schema name of the currently running routine                   |
-| ROUTINE\_SPECIFIC\_NAME | VARCHAR(128) | Name of the currently running routine                          |
-| ROUTINE\_TYPE          | CHAR(1)      | Type of the currently running routine                          |
+| CLIENT_HOST           | VARCHAR(255) | Host name of the current client as returned by the system      |
+| CLIENT_IPADDR         | VARCHAR(128) | IP address of the current client as returned by the system     |
+| CLIENT_PORT           | INTEGER      | Port used by the current client to communicate with the server |
+| PACKAGE_NAME          | VARCHAR(128) | Name of the currently running package                          |
+| PACKAGE_SCHEMA        | VARCHAR(128) | Schema name of the currently running package                   |
+| PACKAGE_VERSION       | VARCHAR(64)  | Version identifier of the currently running package            |
+| ROUTINE_SCHEMA        | VARCHAR(128) | Schema name of the currently running routine                   |
+| ROUTINE_SPECIFIC_NAME | VARCHAR(128) | Name of the currently running routine                          |
+| ROUTINE_TYPE          | CHAR(1)      | Type of the currently running routine                          |
 
 ## 3.3 VERIFY\_GROUP\_FOR\_USER function
 

@@ -5,9 +5,10 @@ from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import ConversionResult, DoclingDocument
 from docling.document_converter import DocumentConverter
 
+from .test_data_gen_flag import GEN_TEST_DATA
 from .verify_utils import verify_document, verify_export
 
-GENERATE = False
+GENERATE = GEN_TEST_DATA
 
 
 def get_pptx_paths():

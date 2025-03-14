@@ -301,6 +301,7 @@ class PdfBackend(str, Enum):
     PYPDFIUM2 = "pypdfium2"
     DLPARSE_V1 = "dlparse_v1"
     DLPARSE_V2 = "dlparse_v2"
+    DLPARSE_V4 = "dlparse_v4"
 
 
 # Define an enum for the ocr engines
@@ -381,3 +382,5 @@ class PdfPipelineOptions(PaginatedPipelineOptions):
             "before conversion and then use the `TableItem.get_image` function."
         ),
     )
+
+    generate_parsed_pages: bool = False

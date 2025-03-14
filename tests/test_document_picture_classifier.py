@@ -2,7 +2,7 @@ from pathlib import Path
 
 from docling_core.types.doc import PictureClassificationData
 
-from docling.backend.docling_parse_v2_backend import DoclingParseV2DocumentBackend
+from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import PdfPipelineOptions
@@ -26,7 +26,6 @@ def get_converter():
     converter = DocumentConverter(
         format_options={
             InputFormat.PDF: PdfFormatOption(
-                backend=DoclingParseV2DocumentBackend,
                 pipeline_cls=StandardPdfPipeline,
                 pipeline_options=pipeline_options,
             )

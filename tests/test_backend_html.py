@@ -13,9 +13,10 @@ from docling.datamodel.document import (
 )
 from docling.document_converter import DocumentConverter
 
+from .test_data_gen_flag import GEN_TEST_DATA
 from .verify_utils import verify_document, verify_export
 
-GENERATE = False
+GENERATE = GEN_TEST_DATA
 
 
 def test_heading_levels():
@@ -137,7 +138,9 @@ def test_e2e_html_conversions():
         doc: DoclingDocument = conv_result.document
 
         pred_md: str = doc.export_to_markdown()
-        assert verify_export(pred_md, str(gt_path) + ".md"), "export to md"
+        assert verify_export(
+            pred_md, str(gt_path) + ".md", generate=GENERATE
+        ), "export to md"
 
         pred_itxt: str = doc._export_to_indented_text(
             max_text_len=70, explicit_tables=False

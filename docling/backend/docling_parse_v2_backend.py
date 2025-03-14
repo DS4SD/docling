@@ -6,12 +6,13 @@ from typing import TYPE_CHECKING, Iterable, List, Optional, Union
 
 import pypdfium2 as pdfium
 from docling_core.types.doc import BoundingBox, CoordOrigin
+from docling_core.types.doc.page import BoundingRectangle, SegmentedPdfPage, TextCell
 from docling_parse.pdf_parsers import pdf_parser_v2
 from PIL import Image, ImageDraw
 from pypdfium2 import PdfPage
 
 from docling.backend.pdf_backend import PdfDocumentBackend, PdfPageBackend
-from docling.datamodel.base_models import Cell, Size
+from docling.datamodel.base_models import Size
 from docling.utils.locks import pypdfium2_lock
 
 if TYPE_CHECKING:
@@ -78,8 +79,11 @@ class DoclingParseV2PageBackend(PdfPageBackend):
 
         return text_piece
 
-    def get_text_cells(self) -> Iterable[Cell]:
-        cells: List[Cell] = []
+    def get_segmented_page(self) -> Optional[SegmentedPdfPage]:
+        return None
+
+    def get_text_cells(self) -> Iterable[TextCell]:
+        cells: List[TextCell] = []
         cell_counter = 0
 
         if not self.valid:
@@ -106,16 +110,20 @@ class DoclingParseV2PageBackend(PdfPageBackend):
 
             text_piece = cell_data[cells_header.index("text")]
             cells.append(
-                Cell(
-                    id=cell_counter,
+                TextCell(
+                    index=cell_counter,
                     text=text_piece,
-                    bbox=BoundingBox(
-                        # l=x0, b=y0, r=x1, t=y1,
-                        l=x0 * page_size.width / parser_width,
-                        b=y0 * page_size.height / parser_height,
-                        r=x1 * page_size.width / parser_width,
-                        t=y1 * page_size.height / parser_height,
-                        coord_origin=CoordOrigin.BOTTOMLEFT,
+                    orig=text_piece,
+                    from_ocr=False,
+                    rect=BoundingRectangle.from_bounding_box(
+                        BoundingBox(
+                            # l=x0, b=y0, r=x1, t=y1,
+                            l=x0 * page_size.width / parser_width,
+                            b=y0 * page_size.height / parser_height,
+                            r=x1 * page_size.width / parser_width,
+                            t=y1 * page_size.height / parser_height,
+                            coord_origin=CoordOrigin.BOTTOMLEFT,
+                        )
                     ).to_top_left_origin(page_size.height),
                 )
             )
