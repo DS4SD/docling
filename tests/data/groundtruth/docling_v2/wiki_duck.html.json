@@ -7914,7 +7914,7 @@
             "start_col_offset_idx": 0,
             "end_col_offset_idx": 2,
             "text": "Duck\n",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -7950,7 +7950,7 @@
             "start_col_offset_idx": 0,
             "end_col_offset_idx": 2,
             "text": "Scientific classification \n",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -8130,7 +8130,7 @@
             "start_col_offset_idx": 0,
             "end_col_offset_idx": 2,
             "text": "Subfamilies\n",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -8159,7 +8159,7 @@
               "start_col_offset_idx": 0,
               "end_col_offset_idx": 2,
               "text": "Duck\n",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -8171,7 +8171,7 @@
               "start_col_offset_idx": 0,
               "end_col_offset_idx": 2,
               "text": "Duck\n",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             }
@@ -8237,7 +8237,7 @@
               "start_col_offset_idx": 0,
               "end_col_offset_idx": 2,
               "text": "Scientific classification \n",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -8249,7 +8249,7 @@
               "start_col_offset_idx": 0,
               "end_col_offset_idx": 2,
               "text": "Scientific classification \n",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             }
@@ -8445,7 +8445,7 @@
               "start_col_offset_idx": 0,
               "end_col_offset_idx": 2,
               "text": "Subfamilies\n",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -8457,7 +8457,7 @@
               "start_col_offset_idx": 0,
               "end_col_offset_idx": 2,
               "text": "Subfamilies\n",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             }
@@ -8513,7 +8513,7 @@
             "start_col_offset_idx": 0,
             "end_col_offset_idx": 2,
             "text": "Authority control databases ",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -8578,7 +8578,7 @@
               "start_col_offset_idx": 0,
               "end_col_offset_idx": 2,
               "text": "Authority control databases ",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -8590,7 +8590,7 @@
               "start_col_offset_idx": 0,
               "end_col_offset_idx": 2,
               "text": "Authority control databases ",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             }

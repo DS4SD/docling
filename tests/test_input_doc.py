@@ -179,7 +179,7 @@ def test_guess_format(tmp_path):
     # Non-Docling JSON
     # TODO: Docling JSON is currently the single supported JSON flavor and the pipeline
     # will try to validate *any* JSON (based on suffix/MIME) as Docling JSON; proper
-    # disambiguation seen as part of https://github.com/DS4SD/docling/issues/802
+    # disambiguation seen as part of https://github.com/docling-project/docling/issues/802
     test_str = "{}"
     stream = DocumentStream(name="test.json", stream=BytesIO(f"{test_str}".encode()))
     assert dci._guess_format(stream) == InputFormat.JSON_DOCLING

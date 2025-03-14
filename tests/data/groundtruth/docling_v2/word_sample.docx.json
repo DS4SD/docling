@@ -490,7 +490,7 @@
             "start_col_offset_idx": 0,
             "end_col_offset_idx": 1,
             "text": "",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -502,7 +502,7 @@
             "start_col_offset_idx": 1,
             "end_col_offset_idx": 2,
             "text": "Food",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -514,7 +514,7 @@
             "start_col_offset_idx": 2,
             "end_col_offset_idx": 3,
             "text": "Calories per portion",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -639,7 +639,7 @@
               "start_col_offset_idx": 0,
               "end_col_offset_idx": 1,
               "text": "",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -651,7 +651,7 @@
               "start_col_offset_idx": 1,
               "end_col_offset_idx": 2,
               "text": "Food",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -663,7 +663,7 @@
               "start_col_offset_idx": 2,
               "end_col_offset_idx": 3,
               "text": "Calories per portion",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             }

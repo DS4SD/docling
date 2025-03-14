@@ -51,7 +51,7 @@
             "start_col_offset_idx": 0,
             "end_col_offset_idx": 1,
             "text": "Index",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -63,7 +63,7 @@
             "start_col_offset_idx": 1,
             "end_col_offset_idx": 2,
             "text": "Customer Id",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -75,7 +75,7 @@
             "start_col_offset_idx": 2,
             "end_col_offset_idx": 3,
             "text": "First Name",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -87,7 +87,7 @@
             "start_col_offset_idx": 3,
             "end_col_offset_idx": 4,
             "text": "Last Name",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -99,7 +99,7 @@
             "start_col_offset_idx": 4,
             "end_col_offset_idx": 5,
             "text": "Company",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -111,7 +111,7 @@
             "start_col_offset_idx": 5,
             "end_col_offset_idx": 6,
             "text": "City",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -123,7 +123,7 @@
             "start_col_offset_idx": 6,
             "end_col_offset_idx": 7,
             "text": "Country",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -135,7 +135,7 @@
             "start_col_offset_idx": 7,
             "end_col_offset_idx": 8,
             "text": "Phone 1",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -147,7 +147,7 @@
             "start_col_offset_idx": 8,
             "end_col_offset_idx": 9,
             "text": "Phone 2",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -159,7 +159,7 @@
             "start_col_offset_idx": 9,
             "end_col_offset_idx": 10,
             "text": "Email",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -171,7 +171,7 @@
             "start_col_offset_idx": 10,
             "end_col_offset_idx": 11,
             "text": "Subscription Date",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -183,7 +183,7 @@
             "start_col_offset_idx": 11,
             "end_col_offset_idx": 12,
             "text": "Website",
-            "column_header": false,
+            "column_header": true,
             "row_header": false,
             "row_section": false
           },
@@ -920,7 +920,7 @@
               "start_col_offset_idx": 0,
               "end_col_offset_idx": 1,
               "text": "Index",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -932,7 +932,7 @@
               "start_col_offset_idx": 1,
               "end_col_offset_idx": 2,
               "text": "Customer Id",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -944,7 +944,7 @@
               "start_col_offset_idx": 2,
               "end_col_offset_idx": 3,
               "text": "First Name",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -956,7 +956,7 @@
               "start_col_offset_idx": 3,
               "end_col_offset_idx": 4,
               "text": "Last Name",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -968,7 +968,7 @@
               "start_col_offset_idx": 4,
               "end_col_offset_idx": 5,
               "text": "Company",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -980,7 +980,7 @@
               "start_col_offset_idx": 5,
               "end_col_offset_idx": 6,
               "text": "City",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -992,7 +992,7 @@
               "start_col_offset_idx": 6,
               "end_col_offset_idx": 7,
               "text": "Country",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -1004,7 +1004,7 @@
               "start_col_offset_idx": 7,
               "end_col_offset_idx": 8,
               "text": "Phone 1",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -1016,7 +1016,7 @@
               "start_col_offset_idx": 8,
               "end_col_offset_idx": 9,
               "text": "Phone 2",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -1028,7 +1028,7 @@
               "start_col_offset_idx": 9,
               "end_col_offset_idx": 10,
               "text": "Email",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -1040,7 +1040,7 @@
               "start_col_offset_idx": 10,
               "end_col_offset_idx": 11,
               "text": "Subscription Date",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             },
@@ -1052,7 +1052,7 @@
               "start_col_offset_idx": 11,
               "end_col_offset_idx": 12,
               "text": "Website",
-              "column_header": false,
+              "column_header": true,
               "row_header": false,
               "row_section": false
             }

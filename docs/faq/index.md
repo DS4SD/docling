@@ -1,6 +1,6 @@
 # FAQ
 
-This is a collection of FAQ collected from the user questions on <https://github.com/DS4SD/docling/discussions>.
+This is a collection of FAQ collected from the user questions on <https://github.com/docling-project/docling/discussions>.
 
 
 ??? question "Is Python 3.13 supported?"
@@ -41,7 +41,7 @@ This is a collection of FAQ collected from the user questions on <https://github
     ]
     ```
 
-    Source: Issue [#283](https://github.com/DS4SD/docling/issues/283#issuecomment-2465035868)
+    Source: Issue [#283](https://github.com/docling-project/docling/issues/283#issuecomment-2465035868)
 
 
 ??? question "Are text styles (bold, underline, etc) supported?"
@@ -74,7 +74,7 @@ This is a collection of FAQ collected from the user questions on <https://github
     )
     ```
 
-    Source: Issue [#326](https://github.com/DS4SD/docling/issues/326)
+    Source: Issue [#326](https://github.com/docling-project/docling/issues/326)
 
 
 ??? question " Which model weights are needed to run Docling?"
@@ -84,7 +84,7 @@ This is a collection of FAQ collected from the user questions on <https://github
 
     For processing PDF documents, Docling requires the model weights from <https://huggingface.co/ds4sd/docling-models>.
 
-    When OCR is enabled, some engines also require model artifacts. For example EasyOCR, for which Docling has [special pipeline options](https://github.com/DS4SD/docling/blob/main/docling/datamodel/pipeline_options.py#L68) to control the runtime behavior.
+    When OCR is enabled, some engines also require model artifacts. For example EasyOCR, for which Docling has [special pipeline options](https://github.com/docling-project/docling/blob/main/docling/datamodel/pipeline_options.py#L68) to control the runtime behavior.
 
 
 ??? question "SSL error downloading model weights"
@@ -174,6 +174,6 @@ This is a collection of FAQ collected from the user questions on <https://github
     print(f"Model max length: {tokenizer.model_max_length}")
     ```
 
-    Also see [docling#725](https://github.com/DS4SD/docling/issues/725).
+    Also see [docling#725](https://github.com/docling-project/docling/issues/725).
 
-    Source: Issue [docling-core#119](https://github.com/DS4SD/docling-core/issues/119)
+    Source: Issue [docling-core#119](https://github.com/docling-project/docling-core/issues/119)

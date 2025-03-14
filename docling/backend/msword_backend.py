@@ -26,6 +26,7 @@ from PIL import Image, UnidentifiedImageError
 from typing_extensions import override
 
 from docling.backend.abstract_backend import DeclarativeDocumentBackend
+from docling.backend.docx.latex.omml import oMath2Latex
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
@@ -260,6 +261,25 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         else:
             return label, None
 
+    def handle_equations_in_text(self, element, text):
+        only_texts = []
+        only_equations = []
+        texts_and_equations = []
+        for subt in element.iter():
+            tag_name = etree.QName(subt).localname
+            if tag_name == "t" and "math" not in subt.tag:
+                only_texts.append(subt.text)
+                texts_and_equations.append(subt.text)
+            elif "oMath" in subt.tag and "oMathPara" not in subt.tag:
+                latex_equation = str(oMath2Latex(subt))
+                only_equations.append(latex_equation)
+                texts_and_equations.append(latex_equation)
+
+        if "".join(only_texts) != text:
+            return text
+
+        return "".join(texts_and_equations), only_equations
+
     def handle_text_elements(
         self,
         element: BaseOxmlElement,
@@ -268,9 +288,12 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     ) -> None:
         paragraph = Paragraph(element, docx_obj)
 
-        if paragraph.text is None:
+        raw_text = paragraph.text
+        text, equations = self.handle_equations_in_text(element=element, text=raw_text)
+
+        if text is None:
             return
-        text = paragraph.text.strip()
+        text = text.strip()
 
         # Common styles for bullet and numbered lists.
         # "List Bullet", "List Number", "List Paragraph"
@@ -322,6 +345,45 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             )
         elif "Heading" in p_style_id:
             self.add_header(doc, p_level, text)
+
+        elif len(equations) > 0:
+            if (raw_text is None or len(raw_text) == 0) and len(text) > 0:
+                # Standalone equation
+                level = self.get_level()
+                doc.add_text(
+                    label=DocItemLabel.FORMULA,
+                    parent=self.parents[level - 1],
+                    text=text,
+                )
+            else:
+                # Inline equation
+                level = self.get_level()
+                inline_equation = doc.add_group(
+                    label=GroupLabel.INLINE, parent=self.parents[level - 1]
+                )
+                text_tmp = text
+                for eq in equations:
+                    if len(text_tmp) == 0:
+                        break
+                    pre_eq_text = text_tmp.split(eq, maxsplit=1)[0]
+                    text_tmp = text_tmp.split(eq, maxsplit=1)[1]
+                    if len(pre_eq_text) > 0:
+                        doc.add_text(
+                            label=DocItemLabel.PARAGRAPH,
+                            parent=inline_equation,
+                            text=pre_eq_text,
+                        )
+                    doc.add_text(
+                        label=DocItemLabel.FORMULA,
+                        parent=inline_equation,
+                        text=eq,
+                    )
+                if len(text_tmp) > 0:
+                    doc.add_text(
+                        label=DocItemLabel.PARAGRAPH,
+                        parent=inline_equation,
+                        text=text_tmp,
+                    )
 
         elif p_style_id in [
             "Paragraph",
@@ -539,7 +601,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     end_row_offset_idx=row.grid_cols_before + spanned_idx,
                     start_col_offset_idx=col_idx,
                     end_col_offset_idx=col_idx + cell.grid_span,
-                    col_header=False,
+                    column_header=row.grid_cols_before + row_idx == 0,
                     row_header=False,
                 )
                 data.table_cells.append(table_cell)

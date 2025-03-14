@@ -71,19 +71,19 @@
     </head>
 <h2>Test with tables</h2>
 <p>A uniform table</p>
-<table><tbody><tr><td>Header 0.0</td><td>Header 0.1</td><td>Header 0.2</td></tr><tr><td>Cell 1.0</td><td>Cell 1.1</td><td>Cell 1.2</td></tr><tr><td>Cell 2.0</td><td>Cell 2.1</td><td>Cell 2.2</td></tr></tbody></table>
+<table><tbody><tr><th>Header 0.0</th><th>Header 0.1</th><th>Header 0.2</th></tr><tr><td>Cell 1.0</td><td>Cell 1.1</td><td>Cell 1.2</td></tr><tr><td>Cell 2.0</td><td>Cell 2.1</td><td>Cell 2.2</td></tr></tbody></table>
 <p></p>
 <p>A non-uniform table with horizontal spans</p>
-<table><tbody><tr><td>Header 0.0</td><td>Header 0.1</td><td>Header 0.2</td></tr><tr><td>Cell 1.0</td><td colspan="2">Merged Cell 1.1 1.2</td></tr><tr><td>Cell 2.0</td><td colspan="2">Merged Cell 2.1 2.2</td></tr></tbody></table>
+<table><tbody><tr><th>Header 0.0</th><th>Header 0.1</th><th>Header 0.2</th></tr><tr><td>Cell 1.0</td><td colspan="2">Merged Cell 1.1 1.2</td></tr><tr><td>Cell 2.0</td><td colspan="2">Merged Cell 2.1 2.2</td></tr></tbody></table>
 <p></p>
 <p>A non-uniform table with horizontal spans in inner columns</p>
-<table><tbody><tr><td>Header 0.0</td><td>Header 0.1</td><td>Header 0.2</td><td>Header 0.3</td></tr><tr><td>Cell 1.0</td><td colspan="2">Merged Cell 1.1 1.2</td><td>Cell 1.3</td></tr><tr><td>Cell 2.0</td><td colspan="2">Merged Cell 2.1 2.2</td><td>Cell 2.3</td></tr></tbody></table>
+<table><tbody><tr><th>Header 0.0</th><th>Header 0.1</th><th>Header 0.2</th><th>Header 0.3</th></tr><tr><td>Cell 1.0</td><td colspan="2">Merged Cell 1.1 1.2</td><td>Cell 1.3</td></tr><tr><td>Cell 2.0</td><td colspan="2">Merged Cell 2.1 2.2</td><td>Cell 2.3</td></tr></tbody></table>
 <p></p>
 <p>A non-uniform table with vertical spans</p>
-<table><tbody><tr><td>Header 0.0</td><td>Header 0.1</td><td>Header 0.2</td></tr><tr><td>Cell 1.0</td><td rowspan="2">Merged Cell 1.1 2.1</td><td>Cell 1.2</td></tr><tr><td>Cell 2.0</td><td>Cell 2.2</td></tr><tr><td>Cell 3.0</td><td rowspan="2">Merged Cell 3.1 4.1</td><td>Cell 3.2</td></tr><tr><td>Cell 4.0</td><td>Cell 4.2</td></tr></tbody></table>
+<table><tbody><tr><th>Header 0.0</th><th>Header 0.1</th><th>Header 0.2</th></tr><tr><td>Cell 1.0</td><td rowspan="2">Merged Cell 1.1 2.1</td><td>Cell 1.2</td></tr><tr><td>Cell 2.0</td><td>Cell 2.2</td></tr><tr><td>Cell 3.0</td><td rowspan="2">Merged Cell 3.1 4.1</td><td>Cell 3.2</td></tr><tr><td>Cell 4.0</td><td>Cell 4.2</td></tr></tbody></table>
 <p></p>
 <p>A non-uniform table with all kinds of spans and empty cells</p>
-<table><tbody><tr><td>Header 0.0</td><td>Header 0.1</td><td>Header 0.2</td><td></td><td></td></tr><tr><td>Cell 1.0</td><td rowspan="2">Merged Cell 1.1 2.1</td><td>Cell 1.2</td><td></td><td></td></tr><tr><td>Cell 2.0</td><td>Cell 2.2</td><td></td><td></td></tr><tr><td>Cell 3.0</td><td rowspan="2">Merged Cell 3.1 4.1</td><td>Cell 3.2</td><td rowspan="3"></td><td></td></tr><tr><td>Cell 4.0</td><td>Cell 4.2</td><td rowspan="2">Merged Cell 4.4 5.4</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan="5"></td></tr><tr><td></td><td></td><td></td><td></td><td>Cell 8.4</td></tr></tbody></table>
+<table><tbody><tr><th>Header 0.0</th><th>Header 0.1</th><th>Header 0.2</th><th></th><th></th></tr><tr><td>Cell 1.0</td><td rowspan="2">Merged Cell 1.1 2.1</td><td>Cell 1.2</td><td></td><td></td></tr><tr><td>Cell 2.0</td><td>Cell 2.2</td><td></td><td></td></tr><tr><td>Cell 3.0</td><td rowspan="2">Merged Cell 3.1 4.1</td><td>Cell 3.2</td><td rowspan="3"></td><td></td></tr><tr><td>Cell 4.0</td><td>Cell 4.2</td><td rowspan="2">Merged Cell 4.4 5.4</td></tr><tr><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan="5"></td></tr><tr><td></td><td></td><td></td><td></td><td>Cell 8.4</td></tr></tbody></table>
 <p></p>
 <p></p>
 </html>
