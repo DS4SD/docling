@@ -82,7 +82,7 @@ This is a collection of FAQ collected from the user questions on <https://github
 
     Model weights are needed for the AI models used in the PDF pipeline. Other document types (docx, pptx, etc) do not have any such requirement.
 
-    For processing PDF documents, Docling requires the model weights from <https://huggingface.co/docling-project/docling-models>.
+    For processing PDF documents, Docling requires the model weights from <https://huggingface.co/ds4sd/docling-models>.
 
     When OCR is enabled, some engines also require model artifacts. For example EasyOCR, for which Docling has [special pipeline options](https://github.com/docling-project/docling/blob/main/docling/datamodel/pipeline_options.py#L68) to control the runtime behavior.
 
