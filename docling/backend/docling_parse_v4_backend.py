@@ -145,7 +145,7 @@ class DoclingParseV4DocumentBackend(PdfDocumentBackend):
 
         if not success:
             raise RuntimeError(
-                f"docling-parse v2 could not load document {self.document_hash}."
+                f"docling-parse v4 could not load document {self.document_hash}."
             )
 
     def page_count(self) -> int:

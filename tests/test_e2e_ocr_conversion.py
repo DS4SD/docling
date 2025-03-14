@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 from typing import List
 
+from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
 from docling.backend.docling_parse_v4_backend import DoclingParseV4DocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import ConversionResult
@@ -45,6 +46,7 @@ def get_converter(ocr_options: OcrOptions):
         format_options={
             InputFormat.PDF: PdfFormatOption(
                 pipeline_options=pipeline_options,
+                backend=DoclingParseDocumentBackend,
             )
         }
     )

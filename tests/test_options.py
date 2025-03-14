@@ -34,9 +34,7 @@ def get_converters_with_table_options():
 
             converter = DocumentConverter(
                 format_options={
-                    InputFormat.PDF: PdfFormatOption(
-                        pipeline_options=pipeline_options,
-                    )
+                    InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
                 }
             )
 
