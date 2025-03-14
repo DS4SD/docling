@@ -26,7 +26,7 @@ class OcrMacModel(BaseOcrModel):
                 "ocrmac is not correctly installed. "
                 "Please install it via `pip install ocrmac` to use this OCR engine. "
                 "Alternatively, Docling has support for other OCR engines. See the documentation: "
-                "https://ds4sd.github.io/docling/installation/"
+                "https://docling-project.github.io/docling/installation/"
             )
             try:
                 from ocrmac import ocrmac

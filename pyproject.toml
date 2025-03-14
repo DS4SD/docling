@@ -13,8 +13,8 @@ authors = [
 ]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/DS4SD/docling"
-homepage = "https://github.com/DS4SD/docling"
+repository = "https://github.com/docling-project/docling"
+homepage = "https://github.com/docling-project/docling"
 keywords = [
   "docling",
   "convert",

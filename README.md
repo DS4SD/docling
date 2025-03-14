@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/ds4sd/docling">
-    <img loading="lazy" alt="Docling" src="https://github.com/DS4SD/docling/raw/main/docs/assets/docling_processing.png" width="100%"/>
+  <a href="https://github.com/docling-project/docling">
+    <img loading="lazy" alt="Docling" src="https://github.com/docling-project/docling/raw/main/docs/assets/docling_processing.png" width="100%"/>
   </a>
 </p>
 
@@ -11,7 +11,7 @@
 </p>
 
 [![arXiv](https://img.shields.io/badge/arXiv-2408.09869-b31b1b.svg)](https://arxiv.org/abs/2408.09869)
-[![Docs](https://img.shields.io/badge/docs-live-brightgreen)](https://ds4sd.github.io/docling/)
+[![Docs](https://img.shields.io/badge/docs-live-brightgreen)](https://docling-project.github.io/docling/)
 [![PyPI version](https://img.shields.io/pypi/v/docling)](https://pypi.org/project/docling/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/docling)](https://pypi.org/project/docling/)
 [![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
@@ -19,7 +19,7 @@
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 [![Pydantic v2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json)](https://pydantic.dev)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
-[![License MIT](https://img.shields.io/github/license/DS4SD/docling)](https://opensource.org/licenses/MIT)
+[![License MIT](https://img.shields.io/github/license/docling-project/docling)](https://opensource.org/licenses/MIT)
 [![PyPI Downloads](https://static.pepy.tech/badge/docling/month)](https://pepy.tech/projects/docling)
 
 Docling simplifies document processing, parsing diverse formats — including advanced PDF understanding — and providing seamless integrations with the gen AI ecosystem.
@@ -51,7 +51,7 @@ pip install docling
 
 Works on macOS, Linux and Windows environments. Both x86_64 and arm64 architectures.
 
-More [detailed installation instructions](https://ds4sd.github.io/docling/installation/) are available in the docs.
+More [detailed installation instructions](https://docling-project.github.io/docling/installation/) are available in the docs.
 
 ## Getting started
 
@@ -66,28 +66,28 @@ result = converter.convert(source)
 print(result.document.export_to_markdown())  # output: "## Docling Technical Report[...]"
 ```
 
-More [advanced usage options](https://ds4sd.github.io/docling/usage/) are available in
+More [advanced usage options](https://docling-project.github.io/docling/usage/) are available in
 the docs.
 
 ## Documentation
 
-Check out Docling's [documentation](https://ds4sd.github.io/docling/), for details on
+Check out Docling's [documentation](https://docling-project.github.io/docling/), for details on
 installation, usage, concepts, recipes, extensions, and more.
 
 ## Examples
 
-Go hands-on with our [examples](https://ds4sd.github.io/docling/examples/),
+Go hands-on with our [examples](https://docling-project.github.io/docling/examples/),
 demonstrating how to address different application use cases with Docling.
 
 ## Integrations
 
 To further accelerate your AI application development, check out Docling's native
-[integrations](https://ds4sd.github.io/docling/integrations/) with popular frameworks
+[integrations](https://docling-project.github.io/docling/integrations/) with popular frameworks
 and tools.
 
 ## Get help and support
 
-Please feel free to connect with us using the [discussion section](https://github.com/DS4SD/docling/discussions).
+Please feel free to connect with us using the [discussion section](https://github.com/docling-project/docling/discussions).
 
 ## Technical report
 
@@ -95,7 +95,7 @@ For more details on Docling's inner workings, check out the [Docling Technical R
 
 ## Contributing
 
-Please read [Contributing to Docling](https://github.com/DS4SD/docling/blob/main/CONTRIBUTING.md) for details.
+Please read [Contributing to Docling](https://github.com/docling-project/docling/blob/main/CONTRIBUTING.md) for details.
 
 ## References
 
@@ -123,6 +123,6 @@ For individual model usage, please refer to the model licenses found in the orig
 
 Docling has been brought to you by IBM.
 
-[supported_formats]: https://ds4sd.github.io/docling/usage/supported_formats/
-[docling_document]: https://ds4sd.github.io/docling/concepts/docling_document/
-[integrations]: https://ds4sd.github.io/docling/integrations/
+[supported_formats]: https://docling-project.github.io/docling/usage/supported_formats/
+[docling_document]: https://docling-project.github.io/docling/concepts/docling_document/
+[integrations]: https://docling-project.github.io/docling/integrations/
