@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
+from docling.backend.docling_parse_v4_backend import DoclingParseV4DocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
@@ -30,7 +31,7 @@ def get_converter():
         format_options={
             InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options),
             InputFormat.IMAGE: PdfFormatOption(
-                pipeline_options=pipeline_options, backend=DoclingParseDocumentBackend
+                pipeline_options=pipeline_options,
             ),
         }
     )

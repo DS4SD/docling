@@ -13,6 +13,7 @@ from pypdfium2 import PdfPage
 
 from docling.backend.pdf_backend import PdfDocumentBackend, PdfPageBackend
 from docling.datamodel.base_models import Size
+from docling.utils.locks import pypdfium2_lock
 
 if TYPE_CHECKING:
     from docling.datamodel.document import InputDocument
@@ -138,9 +139,10 @@ class DoclingParseV4DocumentBackend(PdfDocumentBackend):
     def __init__(self, in_doc: "InputDocument", path_or_stream: Union[BytesIO, Path]):
         super().__init__(in_doc, path_or_stream)
 
-        self._pdoc = pdfium.PdfDocument(self.path_or_stream)
+        with pypdfium2_lock:
+            self._pdoc = pdfium.PdfDocument(self.path_or_stream)
         self.parser = DoclingPdfParser(loglevel="fatal")
-        self.dp_doc: PdfDocument = self.parser.load(path_or_stream=path_or_stream)
+        self.dp_doc: PdfDocument = self.parser.load(path_or_stream=self.path_or_stream)
         success = self.dp_doc is not None
 
         if not success:
@@ -162,14 +164,15 @@ class DoclingParseV4DocumentBackend(PdfDocumentBackend):
     def load_page(
         self, page_no: int, create_words: bool = True, create_textlines: bool = True
     ) -> DoclingParseV4PageBackend:
-        return DoclingParseV4PageBackend(
-            self.dp_doc.get_page(
-                page_no + 1,
-                create_words=create_words,
-                create_textlines=create_textlines,
-            ),
-            self._pdoc[page_no],
-        )
+        with pypdfium2_lock:
+            return DoclingParseV4PageBackend(
+                self.dp_doc.get_page(
+                    page_no + 1,
+                    create_words=create_words,
+                    create_textlines=create_textlines,
+                ),
+                self._pdoc[page_no],
+            )
 
     def is_valid(self) -> bool:
         return self.page_count() > 0
@@ -177,5 +180,6 @@ class DoclingParseV4DocumentBackend(PdfDocumentBackend):
     def unload(self):
         super().unload()
         self.dp_doc.unload()
-        self._pdoc.close()
+        with pypdfium2_lock:
+            self._pdoc.close()
         self._pdoc = None
