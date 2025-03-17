@@ -182,12 +182,18 @@ class DocumentConverter:
             )
             for format in self.allowed_formats
         }
-        self.initialized_pipelines: Dict[Tuple[Type[BasePipeline], str], BasePipeline] = {}
+        self.initialized_pipelines: Dict[
+            Tuple[Type[BasePipeline], str], BasePipeline
+        ] = {}
 
     def _get_pipeline_options_hash(self, pipeline_options: PipelineOptions) -> str:
         """Generate a hash of pipeline options to use as part of the cache key."""
-        options_str = str(pipeline_options.model_dump() if hasattr(pipeline_options, 'model_dump') else pipeline_options)
-        return hashlib.md5(options_str.encode('utf-8')).hexdigest()
+        options_str = str(
+            pipeline_options.model_dump()
+            if hasattr(pipeline_options, "model_dump")
+            else pipeline_options
+        )
+        return hashlib.md5(options_str.encode("utf-8")).hexdigest()
 
     def initialize_pipeline(self, format: InputFormat):
         """Initialize the conversion pipeline for the selected format."""
@@ -299,10 +305,16 @@ class DocumentConverter:
         cache_key = (pipeline_class, options_hash)
 
         if cache_key not in self.initialized_pipelines:
-            _log.info(f"Initializing pipeline for {pipeline_class.__name__} with options hash {options_hash}")
-            self.initialized_pipelines[cache_key] = pipeline_class(pipeline_options=pipeline_options)
+            _log.info(
+                f"Initializing pipeline for {pipeline_class.__name__} with options hash {options_hash}"
+            )
+            self.initialized_pipelines[cache_key] = pipeline_class(
+                pipeline_options=pipeline_options
+            )
         else:
-            _log.debug(f"Reusing cached pipeline for {pipeline_class.__name__} with options hash {options_hash}")
+            _log.debug(
+                f"Reusing cached pipeline for {pipeline_class.__name__} with options hash {options_hash}"
+            )
 
         return self.initialized_pipelines[cache_key]
 
