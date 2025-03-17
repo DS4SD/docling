@@ -3,16 +3,11 @@ from pathlib import Path
 
 import pytest
 
-from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
-from docling.backend.docling_parse_v4_backend import DoclingParseV4DocumentBackend
 from docling.datamodel.base_models import DocumentStream, InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
-from .test_data_gen_flag import GEN_TEST_DATA
 from .verify_utils import verify_conversion_result_v1, verify_conversion_result_v2
-
-GENERATE = GEN_TEST_DATA
 
 
 def get_pdf_path():
@@ -47,10 +42,14 @@ def test_convert_path(converter: DocumentConverter):
 
     doc_result = converter.convert(pdf_path)
     verify_conversion_result_v1(
-        input_path=pdf_path, doc_result=doc_result, generate=GENERATE
+        input_path=pdf_path,
+        doc_result=doc_result,
+        generate=False,  # already covered on other test
     )
     verify_conversion_result_v2(
-        input_path=pdf_path, doc_result=doc_result, generate=GENERATE
+        input_path=pdf_path,
+        doc_result=doc_result,
+        generate=False,  # already covered on other test
     )
 
 
@@ -64,8 +63,12 @@ def test_convert_stream(converter: DocumentConverter):
 
     doc_result = converter.convert(stream)
     verify_conversion_result_v1(
-        input_path=pdf_path, doc_result=doc_result, generate=GENERATE
+        input_path=pdf_path,
+        doc_result=doc_result,
+        generate=False,  # already covered on other test
     )
     verify_conversion_result_v2(
-        input_path=pdf_path, doc_result=doc_result, generate=GENERATE
+        input_path=pdf_path,
+        doc_result=doc_result,
+        generate=False,  # already covered on other test
     )
