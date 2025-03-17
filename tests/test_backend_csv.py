@@ -58,7 +58,11 @@ def test_e2e_valid_csv_conversions():
             pred_itxt, str(gt_path) + ".itxt"
         ), "export to indented-text"
 
-        assert verify_document(doc, str(gt_path) + ".json"), "export to json"
+        assert verify_document(
+            pred_doc=doc,
+            gtfile=str(gt_path) + ".json",
+            generate=GENERATE,
+        ), "export to json"
 
 
 def test_e2e_invalid_csv_conversions():

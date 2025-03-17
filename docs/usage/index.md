@@ -71,6 +71,13 @@ Or using the CLI:
 docling --artifacts-path="/local/path/to/models" FILE
 ```
 
+Or using the `DOCLING_ARTIFACTS_PATH` environment variable:
+
+```sh
+export DOCLING_ARTIFACTS_PATH="/local/path/to/models"
+python my_docling_script.py
+```
+
 #### Using remote services
 
 The main purpose of Docling is to run local models which are not sharing any user data with remote services.
@@ -128,7 +135,7 @@ doc_converter = DocumentConverter(
 )
 ```
 
-Since docling 1.16.0: You can control which TableFormer mode you want to use. Choose between `TableFormerMode.FAST` (default) and `TableFormerMode.ACCURATE` (better, but slower) to receive better quality with difficult table structures.
+Since docling 1.16.0: You can control which TableFormer mode you want to use. Choose between `TableFormerMode.FAST` (faster but less accurate) and `TableFormerMode.ACCURATE` (default) to receive better quality with difficult table structures.
 
 ```python
 from docling.datamodel.base_models import InputFormat

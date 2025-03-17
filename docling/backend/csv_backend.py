@@ -111,7 +111,7 @@ class CsvDocumentBackend(DeclarativeDocumentBackend):
                             end_row_offset_idx=row_idx + 1,
                             start_col_offset_idx=col_idx,
                             end_col_offset_idx=col_idx + 1,
-                            col_header=row_idx == 0,  # First row as header
+                            column_header=row_idx == 0,  # First row as header
                             row_header=False,
                         )
                         table_data.table_cells.append(cell)

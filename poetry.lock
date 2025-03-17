@@ -870,13 +870,13 @@ files = [
 
 [[package]]
 name = "docling-core"
-version = "2.20.0"
+version = "2.22.0"
 description = "A python library to define and validate data types in Docling."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "docling_core-2.20.0-py3-none-any.whl", hash = "sha256:72f50fce277b7bb51f4134f443240c041582184305c3bcaabdea13fc5550f160"},
-    {file = "docling_core-2.20.0.tar.gz", hash = "sha256:9733581c15f5a9b5e3a6cb74fa995cc4078ff16668007f86c5f75d1ea9180d7f"},
+    {file = "docling_core-2.22.0-py3-none-any.whl", hash = "sha256:d74d351024d016f46a09f171fb9d2d78809b132e18e25176af517ac4203c858c"},
+    {file = "docling_core-2.22.0.tar.gz", hash = "sha256:5e4bf15884560a5dc66482206f875d152701bb809f0ed52bbbe86133e0d559e2"},
 ]
 
 [package.dependencies]
@@ -4817,6 +4817,16 @@ files = [
 windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
+name = "pylatexenc"
+version = "2.10"
+description = "Simple LaTeX parser providing latex-to-unicode and unicode-to-latex conversion"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pylatexenc-2.10.tar.gz", hash = "sha256:3dd8fd84eb46dc30bee1e23eaab8d8fb5a7f507347b23e5f38ad9675c84f40d3"},
+]
+
+[[package]]
 name = "pylint"
 version = "2.17.7"
 description = "python code static checker"
@@ -7851,4 +7861,4 @@ vlm = ["accelerate", "transformers", "transformers"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "59424e63947e6c22fceab0a3fe6f1e9ebb72abfe369708a1f55d4daf2593f433"
+content-hash = "2bd40b14b7d7ce6ed8bb4e8b0d22f498e9b42033f4382d2f655099e9af4f5f7a"

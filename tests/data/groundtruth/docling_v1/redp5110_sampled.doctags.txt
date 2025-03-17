@@ -7,7 +7,9 @@
 <figure>
 <location><page_1><loc_5><loc_11><loc_96><loc_63></location>
 </figure>
-<paragraph><location><page_1><loc_47><loc_94><loc_68><loc_96></location>Front cover</paragraph>
+<figure>
+<location><page_1><loc_52><loc_2><loc_95><loc_10></location>
+</figure>
 <subtitle-level-1><location><page_2><loc_11><loc_88><loc_28><loc_91></location>Contents</subtitle-level-1>
 <paragraph><location><page_3><loc_11><loc_89><loc_39><loc_91></location>DB2 for i Center of Excellence</paragraph>
 <paragraph><location><page_3><loc_15><loc_80><loc_38><loc_83></location>Solution Brief IBM Systems Lab Services and Training</paragraph>
@@ -128,7 +130,7 @@
 <table>
 <location><page_9><loc_11><loc_9><loc_89><loc_50></location>
 <caption>Table 2-2 Comparison of the different function usage IDs and *JOBCTL authority</caption>
-<row_0><col_0><row_header>User action</col_0><col_1><body>*JOBCTL</col_1><col_2><body>QIBM_DB_SECADM</col_2><col_3><body>QIBM_DB_SQLADM</col_3><col_4><body>QIBM_DB_SYSMON</col_4><col_5><body>No Authority</col_5></row_0>
+<row_0><col_0><body>User action</col_0><col_1><col_header>*JOBCTL</col_1><col_2><col_header>QIBM_DB_SECADM</col_2><col_3><col_header>QIBM_DB_SQLADM</col_3><col_4><col_header>QIBM_DB_SYSMON</col_4><col_5><col_header>No Authority</col_5></row_0>
 <row_1><col_0><row_header>SET CURRENT DEGREE  (SQL statement)</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_1>
 <row_2><col_0><row_header>CHGQRYA  command targeting a different user’s job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_2>
 <row_3><col_0><row_header>STRDBMON  or  ENDDBMON  commands targeting a different user’s job</col_0><col_1><body>X</col_1><col_2><body></col_2><col_3><body>X</col_3><col_4><body></col_4><col_5><body></col_5></row_3>

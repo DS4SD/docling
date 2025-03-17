@@ -121,7 +121,7 @@ def download(
             "Using the CLI:",
             f"`docling --artifacts-path={output_dir} FILE`",
             "\n",
-            "Using Python: see the documentation at <https://ds4sd.github.io/docling/usage>.",
+            "Using Python: see the documentation at <https://docling-project.github.io/docling/usage>.",
         )
 
 
