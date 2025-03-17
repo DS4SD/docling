@@ -8,6 +8,7 @@ from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import DocumentStream, InputFormat
 from docling.datamodel.document import InputDocument, _DocumentConversionInput
 from docling.datamodel.settings import DocumentLimits
+from docling.document_converter import PdfFormatOption
 
 
 def test_in_doc_from_valid_path():
@@ -227,7 +228,7 @@ def _make_input_doc(path):
     in_doc = InputDocument(
         path_or_stream=path,
         format=InputFormat.PDF,
-        backend=DoclingParseV4DocumentBackend,
+        backend=PdfFormatOption().backend,  # use default
     )
     return in_doc
 
@@ -237,6 +238,6 @@ def _make_input_doc_from_stream(doc_stream):
         path_or_stream=doc_stream.stream,
         format=InputFormat.PDF,
         filename=doc_stream.name,
-        backend=DoclingParseV4DocumentBackend,
+        backend=PdfFormatOption().backend,  # use default
     )
     return in_doc
