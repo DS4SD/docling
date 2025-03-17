@@ -1,42 +1,28 @@
-import itertools
 import logging
-import re
 import warnings
 from io import BytesIO
 
 # from io import BytesIO
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional, Union, cast
 
-from docling_core.types import DoclingDocument
-from docling_core.types.doc.document import DocTagsDocument
-from docling_core.types.doc import (
+# from docling_core.types import DoclingDocument
+from docling_core.types.doc import (  # DocItemLabel,; DoclingDocument,; GroupLabel,; ImageRefMode,; ProvenanceItem,; Size,; TableCell,; TableData,; TableItem,
     BoundingBox,
     DocItem,
-    DocItemLabel,
-    DoclingDocument,
-    GroupLabel,
     ImageRef,
-    ImageRefMode,
     PictureItem,
-    ProvenanceItem,
-    Size,
-    TableCell,
-    TableData,
-    TableItem,
 )
+from docling_core.types.doc.document import DocTagsDocument
 from docling_core.types.doc.tokens import DocumentToken, TableToken
+from PIL import Image as PILImage
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
 from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
 from docling.datamodel.base_models import InputFormat, Page
 from docling.datamodel.document import ConversionResult, InputDocument
-from docling.datamodel.pipeline_options import (
-    PdfPipelineOptions,
-    ResponseFormat,
-    VlmPipelineOptions,
-)
+from docling.datamodel.pipeline_options import ResponseFormat, VlmPipelineOptions
 from docling.datamodel.settings import settings
 from docling.models.hf_vlm_model import HuggingFaceVlmModel
 from docling.pipeline.base_pipeline import PaginatedPipeline
@@ -112,12 +98,19 @@ class VlmPipeline(PaginatedPipeline):
                 image_list = []
                 for page in conv_res.pages:
                     predicted_doctags = ""
+                    img = PILImage.new("RGB", (1, 1), "rgb(255,255,255)")
                     if page.predictions.vlm_response:
                         predicted_doctags = page.predictions.vlm_response.text
-                    image_list.append(page.image)
+                    if page.image:
+                        img = page.image
+                    image_list.append(img)
                     doctags_list.append(predicted_doctags)
 
-                doctags_doc = DocTagsDocument.from_doctags_and_image_pairs(doctags_list, image_list)
+                doctags_list_c = cast(List[Union[Path, str]], doctags_list)
+                image_list_c = cast(List[Union[Path, PILImage.Image]], image_list)
+                doctags_doc = DocTagsDocument.from_doctags_and_image_pairs(
+                    doctags_list_c, image_list_c
+                )
                 conv_res.document.load_from_doctags(doctags_doc)
                 # USE THIS TO FORCE BACKEND TEXT
                 # if self.force_backend_text:
