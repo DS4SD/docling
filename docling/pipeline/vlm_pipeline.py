@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Optional
 
 from docling_core.types import DoclingDocument
+from docling_core.types.doc.document import DocTagsDocument
 from docling_core.types.doc import (
     BoundingBox,
     DocItem,
@@ -108,6 +109,11 @@ class VlmPipeline(PaginatedPipeline):
                 == ResponseFormat.DOCTAGS
             ):
                 conv_res.document = self._turn_tags_into_doc(conv_res.pages)
+                # doctags_doc = DocTagsDocument.from_doctags_and_image_pairs([doctags], [image])
+                # conv_res.document.load_from_doctags(doctags_doc)
+                # USE THIS TO FORCE BACKEND TEXT
+                # if self.force_backend_text:
+                #     text_content = extract_text_from_backend(page, bbox)
             elif (
                 self.pipeline_options.vlm_options.response_format
                 == ResponseFormat.MARKDOWN
