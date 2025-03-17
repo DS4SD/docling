@@ -8,7 +8,7 @@ The following table provides an overview of the default enrichment models availa
 | ------- | --------- | ---------------| ----------- |
 | Code understanding | `do_code_enrichment` | `CodeItem` | See [docs below](#code-understanding). |
 | Formula understanding | `do_formula_enrichment` | `TextItem` with label `FORMULA` | See [docs below](#formula-understanding). |
-| Picrure classification | `do_picture_classification` | `PictureItem` | See [docs below](#picture-classification). |
+| Picture classification | `do_picture_classification` | `PictureItem` | See [docs below](#picture-classification). |
 | Picture description | `do_picture_description` | `PictureItem` | See [docs below](#picture-description). |
 
 
