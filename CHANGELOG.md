@@ -1,3 +1,22 @@
+## [v2.27.0](https://github.com/docling-project/docling/releases/tag/v2.27.0) - 2025-03-18
+
+### Feature
+
+* Add factory for ocr engines via plugins ([#1010](https://github.com/docling-project/docling/issues/1010)) ([`6eaae3c`](https://github.com/docling-project/docling/commit/6eaae3cba034599020dc06ebdad3bc3ff0b5a8eb))
+* Add DoclingParseV4 backend, using high-level docling-parse API ([#905](https://github.com/docling-project/docling/issues/905)) ([`3960b19`](https://github.com/docling-project/docling/commit/3960b199d63d0e9d660aeb0cbced02b38bb0b593))
+* **actor:** Docling Actor on Apify infrastructure ([#875](https://github.com/docling-project/docling/issues/875)) ([`772487f`](https://github.com/docling-project/docling/commit/772487f9c91ad2ee53c591c314c72443f9cbfd23))
+* Equations to latex in MSWord backend (with inline groups) ([#1114](https://github.com/docling-project/docling/issues/1114)) ([`6eb718f`](https://github.com/docling-project/docling/commit/6eb718f8493038d1b4b6ae836df5a24aa13cd17e))
+
+### Fix
+
+* **html:** Handle nested empty lists ([#1154](https://github.com/docling-project/docling/issues/1154)) ([`f94da44`](https://github.com/docling-project/docling/commit/f94da44ec5c7a8c92b9dd60e4df5dc945ed6d1ea))
+* Use first table row as col headers ([#1156](https://github.com/docling-project/docling/issues/1156)) ([`0945973`](https://github.com/docling-project/docling/commit/0945973b79d67b74281aba5102ee985ac1de74ea))
+* Pass tests, update docling-core to 2.22.0 ([#1150](https://github.com/docling-project/docling/issues/1150)) ([`aa92a57`](https://github.com/docling-project/docling/commit/aa92a57fa9e7228e894efb9050a0cdb9f287ebfd))
+
+### Documentation
+
+* Fix spelling of picture in usage ([#1165](https://github.com/docling-project/docling/issues/1165)) ([`7e01798`](https://github.com/docling-project/docling/commit/7e01798417c424c05685e0ff5f6f89f70dc3bfcd))
+
 ## [v2.26.0](https://github.com/docling-project/docling/releases/tag/v2.26.0) - 2025-03-11
 
 ### Feature
