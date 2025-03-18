@@ -1,12 +1,20 @@
 from abc import ABC, abstractmethod
-from typing import Any, Generic, Iterable, Optional
+from typing import Any, Generic, Iterable, Optional, Protocol, Type
 
 from docling_core.types.doc import BoundingBox, DocItem, DoclingDocument, NodeItem
 from typing_extensions import TypeVar
 
 from docling.datamodel.base_models import ItemAndImageEnrichmentElement, Page
 from docling.datamodel.document import ConversionResult
+from docling.datamodel.pipeline_options import BaseOptions
 from docling.datamodel.settings import settings
+
+
+class BaseModelWithOptions(Protocol):
+    @classmethod
+    def get_options_type(cls) -> Type[BaseOptions]: ...
+
+    def __init__(self, *, options: BaseOptions, **kwargs): ...
 
 
 class BasePageModel(ABC):

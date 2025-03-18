@@ -2,7 +2,7 @@ import logging
 import warnings
 import zipfile
 from pathlib import Path
-from typing import Iterable, List, Optional
+from typing import Iterable, List, Optional, Type
 
 import numpy
 from docling_core.types.doc import BoundingBox, CoordOrigin
@@ -14,6 +14,7 @@ from docling.datamodel.pipeline_options import (
     AcceleratorDevice,
     AcceleratorOptions,
     EasyOcrOptions,
+    OcrOptions,
 )
 from docling.datamodel.settings import settings
 from docling.models.base_ocr_model import BaseOcrModel
@@ -34,7 +35,12 @@ class EasyOcrModel(BaseOcrModel):
         options: EasyOcrOptions,
         accelerator_options: AcceleratorOptions,
     ):
-        super().__init__(enabled=enabled, options=options)
+        super().__init__(
+            enabled=enabled,
+            artifacts_path=artifacts_path,
+            options=options,
+            accelerator_options=accelerator_options,
+        )
         self.options: EasyOcrOptions
 
         self.scale = 3  # multiplier for 72 dpi == 216 dpi.
@@ -180,3 +186,7 @@ class EasyOcrModel(BaseOcrModel):
                     self.draw_ocr_rects_and_cells(conv_res, page, ocr_rects)
 
                 yield page
+
+    @classmethod
+    def get_options_type(cls) -> Type[OcrOptions]:
+        return EasyOcrOptions

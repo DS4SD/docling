@@ -88,6 +88,7 @@ accelerate = [
 ]
 pillow = ">=10.0.0,<12.0.0"
 tqdm = "^4.65.0"
+pluggy = "^1.0.0"
 pylatexenc = "^2.10"
 
 [tool.poetry.group.dev.dependencies]
@@ -155,6 +156,9 @@ rapidocr = ["rapidocr-onnxruntime", "onnxruntime"]
 [tool.poetry.scripts]
 docling = "docling.cli.main:app"
 docling-tools = "docling.cli.tools:app"
+
+[tool.poetry.plugins."docling"]
+"docling_defaults" = "docling.models.plugins.defaults"
 
 [build-system]
 requires = ["poetry-core"]
