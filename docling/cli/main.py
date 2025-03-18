@@ -410,7 +410,7 @@ def convert(
         export_doctags = OutputFormat.DOCTAGS in to_formats
 
         ocr_factory = get_ocr_factory(allow_external_plugins=allow_external_plugins)
-        ocr_options: OcrOptions = ocr_factory.create_options(
+        ocr_options: OcrOptions = ocr_factory.create_options(  # type: ignore
             kind=ocr_engine,
             force_full_page_ocr=force_ocr,
         )
