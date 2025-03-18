@@ -1,5 +1,6 @@
 import logging
-from typing import Iterable
+from pathlib import Path
+from typing import Iterable, Optional, Type
 
 import numpy
 from docling_core.types.doc import BoundingBox, CoordOrigin
@@ -10,6 +11,7 @@ from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     AcceleratorDevice,
     AcceleratorOptions,
+    OcrOptions,
     RapidOcrOptions,
 )
 from docling.datamodel.settings import settings
@@ -24,10 +26,16 @@ class RapidOcrModel(BaseOcrModel):
     def __init__(
         self,
         enabled: bool,
+        artifacts_path: Optional[Path],
         options: RapidOcrOptions,
         accelerator_options: AcceleratorOptions,
     ):
-        super().__init__(enabled=enabled, options=options)
+        super().__init__(
+            enabled=enabled,
+            artifacts_path=artifacts_path,
+            options=options,
+            accelerator_options=accelerator_options,
+        )
         self.options: RapidOcrOptions
 
         self.scale = 3  # multiplier for 72 dpi == 216 dpi.
@@ -135,3 +143,7 @@ class RapidOcrModel(BaseOcrModel):
                     self.draw_ocr_rects_and_cells(conv_res, page, ocr_rects)
 
                 yield page
+
+    @classmethod
+    def get_options_type(cls) -> Type[OcrOptions]:
+        return RapidOcrOptions

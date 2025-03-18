@@ -2,7 +2,7 @@ import copy
 import logging
 from abc import abstractmethod
 from pathlib import Path
-from typing import Iterable, List
+from typing import Iterable, List, Optional, Type
 
 import numpy as np
 from docling_core.types.doc import BoundingBox, CoordOrigin
@@ -13,15 +13,22 @@ from scipy.ndimage import binary_dilation, find_objects, label
 
 from docling.datamodel.base_models import Page
 from docling.datamodel.document import ConversionResult
-from docling.datamodel.pipeline_options import OcrOptions
+from docling.datamodel.pipeline_options import AcceleratorOptions, OcrOptions
 from docling.datamodel.settings import settings
-from docling.models.base_model import BasePageModel
+from docling.models.base_model import BaseModelWithOptions, BasePageModel
 
 _log = logging.getLogger(__name__)
 
 
-class BaseOcrModel(BasePageModel):
-    def __init__(self, enabled: bool, options: OcrOptions):
+class BaseOcrModel(BasePageModel, BaseModelWithOptions):
+    def __init__(
+        self,
+        *,
+        enabled: bool,
+        artifacts_path: Optional[Path],
+        options: OcrOptions,
+        accelerator_options: AcceleratorOptions,
+    ):
         self.enabled = enabled
         self.options = options
 
@@ -185,4 +192,9 @@ class BaseOcrModel(BasePageModel):
     def __call__(
         self, conv_res: ConversionResult, page_batch: Iterable[Page]
     ) -> Iterable[Page]:
+        pass
+
+    @classmethod
+    @abstractmethod
+    def get_options_type(cls) -> Type[OcrOptions]:
         pass
