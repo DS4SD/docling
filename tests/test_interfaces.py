@@ -4,13 +4,15 @@ from pathlib import Path
 import pytest
 
 from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
+from docling.backend.docling_parse_v4_backend import DoclingParseV4DocumentBackend
 from docling.datamodel.base_models import DocumentStream, InputFormat
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
 
+from .test_data_gen_flag import GEN_TEST_DATA
 from .verify_utils import verify_conversion_result_v1, verify_conversion_result_v2
 
-GENERATE = False
+GENERATE = GEN_TEST_DATA
 
 
 def get_pdf_path():
@@ -30,7 +32,8 @@ def converter():
     converter = DocumentConverter(
         format_options={
             InputFormat.PDF: PdfFormatOption(
-                pipeline_options=pipeline_options, backend=DoclingParseDocumentBackend
+                pipeline_options=pipeline_options,
+                backend=DoclingParseDocumentBackend,
             )
         }
     )

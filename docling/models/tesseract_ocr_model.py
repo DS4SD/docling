@@ -2,8 +2,9 @@ import logging
 from typing import Iterable
 
 from docling_core.types.doc import BoundingBox, CoordOrigin
+from docling_core.types.doc.page import BoundingRectangle, TextCell
 
-from docling.datamodel.base_models import Cell, OcrCell, Page
+from docling.datamodel.base_models import Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import TesseractOcrOptions
 from docling.datamodel.settings import settings
@@ -173,13 +174,17 @@ class TesseractOcrModel(BaseOcrModel):
                             top = (box["y"] + box["h"]) / self.scale
 
                             cells.append(
-                                OcrCell(
-                                    id=ix,
+                                TextCell(
+                                    index=ix,
                                     text=text,
+                                    orig=text,
+                                    from_ocr=True,
                                     confidence=confidence,
-                                    bbox=BoundingBox.from_tuple(
-                                        coord=(left, top, right, bottom),
-                                        origin=CoordOrigin.TOPLEFT,
+                                    rect=BoundingRectangle.from_bounding_box(
+                                        BoundingBox.from_tuple(
+                                            coord=(left, top, right, bottom),
+                                            origin=CoordOrigin.TOPLEFT,
+                                        ),
                                     ),
                                 )
                             )

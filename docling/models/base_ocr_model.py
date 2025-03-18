@@ -6,11 +6,12 @@ from typing import Iterable, List
 
 import numpy as np
 from docling_core.types.doc import BoundingBox, CoordOrigin
+from docling_core.types.doc.page import BoundingRectangle, PdfTextCell, TextCell
 from PIL import Image, ImageDraw
 from rtree import index
 from scipy.ndimage import binary_dilation, find_objects, label
 
-from docling.datamodel.base_models import Cell, OcrCell, Page
+from docling.datamodel.base_models import Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import OcrOptions
 from docling.datamodel.settings import settings
@@ -104,11 +105,13 @@ class BaseOcrModel(BasePageModel):
         p.dimension = 2
         idx = index.Index(properties=p)
         for i, cell in enumerate(programmatic_cells):
-            idx.insert(i, cell.bbox.as_tuple())
+            idx.insert(i, cell.rect.to_bounding_box().as_tuple())
 
         def is_overlapping_with_existing_cells(ocr_cell):
             # Query the R-tree to get overlapping rectangles
-            possible_matches_index = list(idx.intersection(ocr_cell.bbox.as_tuple()))
+            possible_matches_index = list(
+                idx.intersection(ocr_cell.rect.to_bounding_box().as_tuple())
+            )
 
             return (
                 len(possible_matches_index) > 0
@@ -125,10 +128,7 @@ class BaseOcrModel(BasePageModel):
         """
         if self.options.force_full_page_ocr:
             # If a full page OCR is forced, use only the OCR cells
-            cells = [
-                Cell(id=c_ocr.id, text=c_ocr.text, bbox=c_ocr.bbox)
-                for c_ocr in ocr_cells
-            ]
+            cells = ocr_cells
             return cells
 
         ## Remove OCR cells which overlap with programmatic cells.
@@ -156,7 +156,7 @@ class BaseOcrModel(BasePageModel):
 
         # Draw OCR and programmatic cells
         for tc in page.cells:
-            x0, y0, x1, y1 = tc.bbox.as_tuple()
+            x0, y0, x1, y1 = tc.rect.to_bounding_box().as_tuple()
             y0 *= scale_x
             y1 *= scale_y
             x0 *= scale_x
@@ -165,9 +165,8 @@ class BaseOcrModel(BasePageModel):
             if y1 <= y0:
                 y1, y0 = y0, y1
 
-            color = "gray"
-            if isinstance(tc, OcrCell):
-                color = "magenta"
+            color = "magenta" if tc.from_ocr else "gray"
+
             draw.rectangle([(x0, y0), (x1, y1)], outline=color)
 
         if show:

@@ -1,10 +1,14 @@
 from io import BytesIO
 from pathlib import Path
 
+from docling.backend.docling_parse_backend import DoclingParseDocumentBackend
+from docling.backend.docling_parse_v2_backend import DoclingParseV2DocumentBackend
+from docling.backend.docling_parse_v4_backend import DoclingParseV4DocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
 from docling.datamodel.base_models import DocumentStream, InputFormat
 from docling.datamodel.document import InputDocument, _DocumentConversionInput
 from docling.datamodel.settings import DocumentLimits
+from docling.document_converter import PdfFormatOption
 
 
 def test_in_doc_from_valid_path():
@@ -40,7 +44,39 @@ def test_in_doc_from_invalid_buf():
     assert doc.valid == False
 
 
+def test_image_in_pdf_backend():
+
+    in_doc = InputDocument(
+        path_or_stream=Path("tests/data/2305.03393v1-pg9-img.png"),
+        format=InputFormat.IMAGE,
+        backend=PyPdfiumDocumentBackend,
+    )
+
+    assert in_doc.valid
+    in_doc = InputDocument(
+        path_or_stream=Path("tests/data/2305.03393v1-pg9-img.png"),
+        format=InputFormat.IMAGE,
+        backend=DoclingParseDocumentBackend,
+    )
+    assert in_doc.valid
+
+    in_doc = InputDocument(
+        path_or_stream=Path("tests/data/2305.03393v1-pg9-img.png"),
+        format=InputFormat.IMAGE,
+        backend=DoclingParseV2DocumentBackend,
+    )
+    assert in_doc.valid
+
+    in_doc = InputDocument(
+        path_or_stream=Path("tests/data/2305.03393v1-pg9-img.png"),
+        format=InputFormat.IMAGE,
+        backend=DoclingParseV4DocumentBackend,
+    )
+    assert in_doc.valid
+
+
 def test_in_doc_with_page_range():
+
     test_doc_path = Path("./tests/data/pdf/2206.01062.pdf")
     limits = DocumentLimits()
     limits.page_range = (1, 10)
@@ -192,7 +228,7 @@ def _make_input_doc(path):
     in_doc = InputDocument(
         path_or_stream=path,
         format=InputFormat.PDF,
-        backend=PyPdfiumDocumentBackend,
+        backend=PdfFormatOption().backend,  # use default
     )
     return in_doc
 
@@ -202,6 +238,6 @@ def _make_input_doc_from_stream(doc_stream):
         path_or_stream=doc_stream.stream,
         format=InputFormat.PDF,
         filename=doc_stream.name,
-        backend=PyPdfiumDocumentBackend,
+        backend=PdfFormatOption().backend,  # use default
     )
     return in_doc

@@ -6,8 +6,9 @@ from typing import Iterable, List, Optional
 
 import numpy
 from docling_core.types.doc import BoundingBox, CoordOrigin
+from docling_core.types.doc.page import BoundingRectangle, TextCell
 
-from docling.datamodel.base_models import Cell, OcrCell, Page
+from docling.datamodel.base_models import Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     AcceleratorDevice,
@@ -148,18 +149,22 @@ class EasyOcrModel(BaseOcrModel):
                         del im
 
                         cells = [
-                            OcrCell(
-                                id=ix,
+                            TextCell(
+                                index=ix,
                                 text=line[1],
+                                orig=line[1],
+                                from_ocr=True,
                                 confidence=line[2],
-                                bbox=BoundingBox.from_tuple(
-                                    coord=(
-                                        (line[0][0][0] / self.scale) + ocr_rect.l,
-                                        (line[0][0][1] / self.scale) + ocr_rect.t,
-                                        (line[0][2][0] / self.scale) + ocr_rect.l,
-                                        (line[0][2][1] / self.scale) + ocr_rect.t,
-                                    ),
-                                    origin=CoordOrigin.TOPLEFT,
+                                rect=BoundingRectangle.from_bounding_box(
+                                    BoundingBox.from_tuple(
+                                        coord=(
+                                            (line[0][0][0] / self.scale) + ocr_rect.l,
+                                            (line[0][0][1] / self.scale) + ocr_rect.t,
+                                            (line[0][2][0] / self.scale) + ocr_rect.l,
+                                            (line[0][2][1] / self.scale) + ocr_rect.t,
+                                        ),
+                                        origin=CoordOrigin.TOPLEFT,
+                                    )
                                 ),
                             )
                             for ix, line in enumerate(result)
