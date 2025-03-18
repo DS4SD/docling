@@ -12,6 +12,7 @@ from docling_core.types.doc import (  # DocItemLabel,; DoclingDocument,; GroupLa
     DocItem,
     ImageRef,
     PictureItem,
+    TextItem,
 )
 from docling_core.types.doc.document import DocTagsDocument
 from docling_core.types.doc.tokens import DocumentToken, TableToken
@@ -87,6 +88,19 @@ class VlmPipeline(PaginatedPipeline):
 
         return page
 
+    def extract_text_from_backend(self, page: Page, bbox: BoundingBox | None) -> str:
+        # Convert bounding box normalized to 0-100 into page coordinates for cropping
+        text = ""
+        if bbox:
+            if page.size:
+                # bbox.l = bbox.l * page.size.width
+                # bbox.t = bbox.t * page.size.height
+                # bbox.r = bbox.r * page.size.width
+                # bbox.b = bbox.b * page.size.height
+                if page._backend:
+                    text = page._backend.get_text_in_rect(bbox)
+        return text
+
     def _assemble_document(self, conv_res: ConversionResult) -> ConversionResult:
         with TimeRecorder(conv_res, "doc_assemble", scope=ProfilingScope.DOCUMENT):
 
@@ -112,9 +126,27 @@ class VlmPipeline(PaginatedPipeline):
                     doctags_list_c, image_list_c
                 )
                 conv_res.document.load_from_doctags(doctags_doc)
-                # USE THIS TO FORCE BACKEND TEXT
-                # if self.force_backend_text:
-                #     text_content = extract_text_from_backend(page, bbox)
+
+                # If forced backend text, replace model predicted text with backend one
+                if page.size:
+                    if self.force_backend_text:
+                        scale = self.pipeline_options.images_scale
+                        for element, _level in conv_res.document.iterate_items():
+                            if (
+                                not isinstance(element, TextItem)
+                                or len(element.prov) == 0
+                            ):
+                                continue
+                            crop_bbox = (
+                                element.prov[0]
+                                .bbox.scaled(scale=scale)
+                                .to_top_left_origin(
+                                    page_height=page.size.height * scale
+                                )
+                            )
+                            txt = self.extract_text_from_backend(page, crop_bbox)
+                            element.text = txt
+                            element.orig = txt
             elif (
                 self.pipeline_options.vlm_options.response_format
                 == ResponseFormat.MARKDOWN
