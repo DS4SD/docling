@@ -25,7 +25,7 @@ def draw_clusters(
             # Draw cells first (underneath)
             cell_color = (0, 0, 0, 40)  # Transparent black for cells
             for tc in c.cells:
-                cx0, cy0, cx1, cy1 = tc.bbox.as_tuple()
+                cx0, cy0, cx1, cy1 = tc.rect.to_bounding_box().as_tuple()
                 cx0 *= scale_x
                 cx1 *= scale_x
                 cy0 *= scale_x
