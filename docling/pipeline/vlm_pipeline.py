@@ -93,10 +93,6 @@ class VlmPipeline(PaginatedPipeline):
         text = ""
         if bbox:
             if page.size:
-                # bbox.l = bbox.l * page.size.width
-                # bbox.t = bbox.t * page.size.height
-                # bbox.r = bbox.r * page.size.width
-                # bbox.b = bbox.b * page.size.height
                 if page._backend:
                     text = page._backend.get_text_in_rect(bbox)
         return text
