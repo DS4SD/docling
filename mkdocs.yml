@@ -111,6 +111,7 @@ nav:
       - "LlamaIndex": integrations/llamaindex.md
       - "txtai": integrations/txtai.md
     - ⭐️ Featured:
+      - "Apify": integrations/apify.md
       - "Data Prep Kit": integrations/data_prep_kit.md
       - "InstructLab": integrations/instructlab.md
       - "NVIDIA": integrations/nvidia.md
