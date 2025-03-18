@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Iterable, Optional, Union
-
+import os
 from PIL import Image
 
 from docling.datamodel.pipeline_options import (
@@ -59,18 +59,24 @@ class PictureDescriptionVlmModel(PictureDescriptionBaseModel):
         force: bool = False,
         progress: bool = False,
     ) -> Path:
-        from huggingface_hub import snapshot_download
-        from huggingface_hub.utils import disable_progress_bars
-
-        if not progress:
-            disable_progress_bars()
-        download_path = snapshot_download(
-            repo_id=repo_id,
-            force_download=force,
-            local_dir=local_dir,
-        )
-
-        return Path(download_path)
+         # Check if repo_id is a local path and exists
+        if os.path.exists(repo_id):
+            # If it exists, return the path directly
+            return Path(repo_id)
+        else:
+             # If it doesn't exist, download the repository
+            from huggingface_hub import snapshot_download
+            from huggingface_hub.utils import disable_progress_bars
+    
+            if not progress:
+                disable_progress_bars()
+            download_path = snapshot_download(
+                repo_id=repo_id,
+                force_download=force,
+                local_dir=local_dir,
+            )
+    
+            return Path(download_path)
 
     def _annotate_images(self, images: Iterable[Image.Image]) -> Iterable[str]:
         from transformers import GenerationConfig
