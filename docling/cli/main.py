@@ -9,6 +9,7 @@ import warnings
 from pathlib import Path
 from typing import Annotated, Dict, Iterable, List, Optional, Type
 
+import rich.table
 import typer
 from docling_core.types.doc import ImageRefMode
 from docling_core.utils.file import resolve_source_to_path
@@ -29,6 +30,7 @@ from docling.datamodel.pipeline_options import (
     AcceleratorDevice,
     AcceleratorOptions,
     EasyOcrOptions,
+    OcrOptions,
     PdfBackend,
     PdfPipelineOptions,
     TableFormerMode,
@@ -43,10 +45,11 @@ warnings.filterwarnings(action="ignore", category=FutureWarning, module="easyocr
 _log = logging.getLogger(__name__)
 from rich.console import Console
 
+console = Console()
 err_console = Console(stderr=True)
 
-ocr_factory = get_ocr_factory()
-ocr_engines_enum = ocr_factory.get_enum()
+ocr_factory_internal = get_ocr_factory(allow_external_plugins=False)
+ocr_engines_enum_internal = ocr_factory_internal.get_enum()
 
 app = typer.Typer(
     name="Docling",
@@ -71,6 +74,24 @@ def version_callback(value: bool):
         print(f"Docling Parse version: {docling_parse_version}")
         print(f"Python: {py_impl_version} ({py_lang_version})")
         print(f"Platform: {platform_str}")
+        raise typer.Exit()
+
+
+def show_external_plugins_callback(value: bool):
+    if value:
+        ocr_factory_all = get_ocr_factory(allow_external_plugins=True)
+        table = rich.table.Table(title="Available OCR engines")
+        table.add_column("Name", justify="right")
+        table.add_column("Plugin")
+        table.add_column("Package")
+        for meta in ocr_factory_all.registered_meta.values():
+            if not meta.module.startswith("docling."):
+                table.add_row(
+                    f"[bold]{meta.kind}[/bold]",
+                    meta.plugin_name,
+                    meta.module.split(".")[0],
+                )
+        rich.print(table)
         raise typer.Exit()
 
 
@@ -191,10 +212,16 @@ def convert(
             help="Replace any existing text with OCR generated text over the full content.",
         ),
     ] = False,
-    ocr_engine: Annotated[  # type: ignore
-        ocr_engines_enum,
-        # ocr_factory.get_registered_enum(),
-        typer.Option(..., help="The OCR engine to use."),
+    ocr_engine: Annotated[
+        str,
+        typer.Option(
+            ...,
+            help=(
+                f"The OCR engine to use. When --allow-external-plugins is *not* set, the available values are: "
+                f"{', '.join((o.value for o in ocr_engines_enum_internal))}. "
+                f"Use the option --show-external-plugins to see the options allowed with external plugins."
+            ),
+        ),
     ] = EasyOcrOptions.kind,
     ocr_lang: Annotated[
         Optional[str],
@@ -237,6 +264,21 @@ def convert(
         bool,
         typer.Option(
             ..., help="Must be enabled when using models connecting to remote services."
+        ),
+    ] = False,
+    allow_external_plugins: Annotated[
+        bool,
+        typer.Option(
+            ..., help="Must be enabled for loading modules from third-party plugins."
+        ),
+    ] = False,
+    show_external_plugins: Annotated[
+        bool,
+        typer.Option(
+            ...,
+            help="List the third-party plugins which are available when the option --allow-external-plugins is set.",
+            callback=show_external_plugins_callback,
+            is_eager=True,
         ),
     ] = False,
     abort_on_error: Annotated[
@@ -366,8 +408,9 @@ def convert(
         export_txt = OutputFormat.TEXT in to_formats
         export_doctags = OutputFormat.DOCTAGS in to_formats
 
-        ocr_options = ocr_factory.create_options(
-            kind=str(ocr_engine.value),  # type:ignore
+        ocr_factory = get_ocr_factory(allow_external_plugins=allow_external_plugins)
+        ocr_options: OcrOptions = ocr_factory.create_options(
+            kind=ocr_engine,
             force_full_page_ocr=force_ocr,
         )
 
@@ -377,6 +420,7 @@ def convert(
 
         accelerator_options = AcceleratorOptions(num_threads=num_threads, device=device)
         pipeline_options = PdfPipelineOptions(
+            allow_external_plugins=allow_external_plugins,
             enable_remote_services=enable_remote_services,
             accelerator_options=accelerator_options,
             do_ocr=ocr,

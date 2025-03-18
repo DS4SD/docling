@@ -322,6 +322,7 @@ class PipelineOptions(BaseModel):
     document_timeout: Optional[float] = None
     accelerator_options: AcceleratorOptions = AcceleratorOptions()
     enable_remote_services: bool = False
+    allow_external_plugins: bool = False
 
 
 class PaginatedPipelineOptions(PipelineOptions):
