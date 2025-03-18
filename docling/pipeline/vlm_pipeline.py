@@ -1,21 +1,12 @@
 import logging
 import warnings
 from io import BytesIO
-
-# from io import BytesIO
 from pathlib import Path
 from typing import List, Optional, Union, cast
 
 # from docling_core.types import DoclingDocument
-from docling_core.types.doc import (  # DocItemLabel,; DoclingDocument,; GroupLabel,; ImageRefMode,; ProvenanceItem,; Size,; TableCell,; TableData,; TableItem,
-    BoundingBox,
-    DocItem,
-    ImageRef,
-    PictureItem,
-    TextItem,
-)
+from docling_core.types.doc import BoundingBox, DocItem, ImageRef, PictureItem, TextItem
 from docling_core.types.doc.document import DocTagsDocument
-from docling_core.types.doc.tokens import DocumentToken, TableToken
 from PIL import Image as PILImage
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
