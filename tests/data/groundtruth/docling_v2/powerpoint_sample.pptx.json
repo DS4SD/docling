@@ -443,6 +443,7 @@
         "$ref": "#/groups/1"
       },
       "children": [],
+      "content_layer": "furniture",
       "label": "text",
       "prov": [
         {
@@ -958,6 +959,7 @@
         "$ref": "#/groups/2"
       },
       "children": [],
+      "content_layer": "furniture",
       "label": "text",
       "prov": [
         {

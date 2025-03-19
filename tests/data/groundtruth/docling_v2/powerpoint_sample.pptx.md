@@ -25,8 +25,6 @@ And baz things
 
 A rectangle shape with this text inside.
 
-Some notes on the second slide.
-
 1. List item4
 2. List item5
 3. List item6
@@ -50,6 +48,3 @@ Maybe a list?
 - l1 
 - l2
 - l3
-
-Final notes on the third slide.
-Second line of notes.

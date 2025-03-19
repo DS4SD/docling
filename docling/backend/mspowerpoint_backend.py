@@ -16,6 +16,7 @@ from docling_core.types.doc import (
     TableCell,
     TableData,
 )
+from docling_core.types.doc.document import ContentLayer
 from PIL import Image, UnidentifiedImageError
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
@@ -435,6 +436,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                         parent=parent_slide,
                         text=notes_text,
                         prov=prov,
+                        content_layer=ContentLayer.FURNITURE,
                     )
 
         return doc
