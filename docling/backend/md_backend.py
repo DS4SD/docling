@@ -11,10 +11,10 @@ import marko.ext
 import marko.ext.gfm
 import marko.inline
 from docling_core.types.doc import (
-    DocItem,
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
+    GroupItem,
     GroupLabel,
     NodeItem,
     TableCell,
@@ -33,6 +33,27 @@ _log = logging.getLogger(__name__)
 _MARKER_BODY = "DOCLING_DOC_MD_HTML_EXPORT"
 _START_MARKER = f"#_#_{_MARKER_BODY}_START_#_#"
 _STOP_MARKER = f"#_#_{_MARKER_BODY}_STOP_#_#"
+
+
+def extract_text_recursive(children: list[marko.element.Element]):
+    strings: List[str] = []
+
+    # Define a recursive function to traverse the tree
+    def traverse(nodes: list[marko.element.Element]):
+        for node in nodes:
+            # Check if the node has a "children" attribute
+            if hasattr(node, "children"):
+                # If "children" is a list, continue traversal
+                if isinstance(node.children, list):
+                    traverse(node.children)
+                # If "children" is text, add it to header text
+                elif isinstance(node.children, str):
+                    strings.append(node.children)
+
+    traverse(children)
+
+    # Return result
+    return "".join(strings)
 
 
 class MarkdownDocumentBackend(DeclarativeDocumentBackend):
@@ -175,8 +196,8 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         doc: DoclingDocument,
         visited: Set[marko.element.Element],
         parent_item: Optional[NodeItem] = None,
+        index: int = 0,
     ):
-
         if element in visited:
             return
 
@@ -195,22 +216,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
 
             # Header could have arbitrary inclusion of bold, italic or emphasis,
             # hence we need to traverse the tree to get full text of a header
-            strings: List[str] = []
-
-            # Define a recursive function to traverse the tree
-            def traverse(node: marko.block.BlockElement):
-                # Check if the node has a "children" attribute
-                if hasattr(node, "children"):
-                    # If "children" is a list, continue traversal
-                    if isinstance(node.children, list):
-                        for child in node.children:
-                            traverse(child)
-                    # If "children" is text, add it to header text
-                    elif isinstance(node.children, str):
-                        strings.append(node.children)
-
-            traverse(element)
-            snippet_text = "".join(strings)
+            snippet_text = extract_text_recursive(list(element.children))
             if len(snippet_text) > 0:
                 parent_item = doc.add_text(
                     label=doc_label, parent=parent_item, text=snippet_text
@@ -237,19 +243,30 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             self._process_inline_text(parent_item, doc)
             _log.debug(" - List item")
 
-            first_child = element.children[0]
-            snippet_text = str(first_child.children[0].children)  # type: ignore
+            text_children = [
+                child
+                for child in element.children
+                if not isinstance(child, marko.block.List)
+            ]
+
+            snippet_text = extract_text_recursive(text_children)
             is_numbered = False
             if (
                 parent_item is not None
-                and isinstance(parent_item, DocItem)
+                and isinstance(parent_item, GroupItem)
                 and parent_item.label == GroupLabel.ORDERED_LIST
             ):
                 is_numbered = True
-            doc.add_list_item(
-                enumerated=is_numbered, parent=parent_item, text=snippet_text
-            )
-            visited.add(first_child)
+            if len(snippet_text) > 0:
+                marker = f"{index + 1}." if is_numbered else "-"
+                doc.add_list_item(
+                    enumerated=is_numbered,
+                    parent=parent_item,
+                    text=snippet_text,
+                    marker=marker,
+                )
+            for child in text_children:
+                visited.add(child)
 
         elif isinstance(element, marko.inline.Image):
             self._close_table(doc)
@@ -335,13 +352,14 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         if hasattr(element, "children") and not isinstance(
             element, processed_block_types
         ):
-            for child in element.children:
+            for index, child in enumerate(element.children):
                 self._iterate_elements(
                     element=child,
                     depth=depth + 1,
                     doc=doc,
                     visited=visited,
                     parent_item=parent_item,
+                    index=index,
                 )
 
     def is_valid(self) -> bool:
