@@ -263,6 +263,11 @@ class ResponseFormat(str, Enum):
     MARKDOWN = "markdown"
 
 
+class InferenceFramework(str, Enum):
+    MLX = "mlx"
+    TRANSFORMERS = "transformers"
+
+
 class HuggingFaceVlmOptions(BaseVlmOptions):
     kind: Literal["hf_model_options"] = "hf_model_options"
 
@@ -271,6 +276,7 @@ class HuggingFaceVlmOptions(BaseVlmOptions):
     llm_int8_threshold: float = 6.0
     quantized: bool = False
 
+    inference_framework: InferenceFramework
     response_format: ResponseFormat
 
     @property
@@ -278,10 +284,19 @@ class HuggingFaceVlmOptions(BaseVlmOptions):
         return self.repo_id.replace("/", "--")
 
 
+smoldocling_vlm_mlx_conversion_options = HuggingFaceVlmOptions(
+    repo_id="ds4sd/SmolDocling-256M-preview-mlx-bf16",
+    prompt="Convert this page to docling.",
+    response_format=ResponseFormat.DOCTAGS,
+    inference_framework=InferenceFramework.MLX,
+)
+
+
 smoldocling_vlm_conversion_options = HuggingFaceVlmOptions(
     repo_id="ds4sd/SmolDocling-256M-preview",
     prompt="Convert this page to docling.",
     response_format=ResponseFormat.DOCTAGS,
+    inference_framework=InferenceFramework.TRANSFORMERS,
 )
 
 granite_vision_vlm_conversion_options = HuggingFaceVlmOptions(
@@ -289,6 +304,7 @@ granite_vision_vlm_conversion_options = HuggingFaceVlmOptions(
     # prompt="OCR the full page to markdown.",
     prompt="OCR this image.",
     response_format=ResponseFormat.MARKDOWN,
+    inference_framework=InferenceFramework.TRANSFORMERS,
 )
 
 

@@ -14,8 +14,13 @@ from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
 from docling.datamodel.base_models import InputFormat, Page
 from docling.datamodel.document import ConversionResult, InputDocument
-from docling.datamodel.pipeline_options import ResponseFormat, VlmPipelineOptions
+from docling.datamodel.pipeline_options import (
+    InferenceFramework,
+    ResponseFormat,
+    VlmPipelineOptions,
+)
 from docling.datamodel.settings import settings
+from docling.models.hf_mlx_model import HuggingFaceMlxModel
 from docling.models.hf_vlm_model import HuggingFaceVlmModel
 from docling.pipeline.base_pipeline import PaginatedPipeline
 from docling.utils.profiling import ProfilingScope, TimeRecorder
@@ -58,14 +63,27 @@ class VlmPipeline(PaginatedPipeline):
 
         self.keep_images = self.pipeline_options.generate_page_images
 
-        self.build_pipe = [
-            HuggingFaceVlmModel(
-                enabled=True,  # must be always enabled for this pipeline to make sense.
-                artifacts_path=artifacts_path,
-                accelerator_options=pipeline_options.accelerator_options,
-                vlm_options=self.pipeline_options.vlm_options,
-            ),
-        ]
+        if (
+            self.pipeline_options.vlm_options.inference_framework
+            == InferenceFramework.MLX
+        ):
+            self.build_pipe = [
+                HuggingFaceMlxModel(
+                    enabled=True,  # must be always enabled for this pipeline to make sense.
+                    artifacts_path=artifacts_path,
+                    accelerator_options=pipeline_options.accelerator_options,
+                    vlm_options=self.pipeline_options.vlm_options,
+                ),
+            ]
+        else:
+            self.build_pipe = [
+                HuggingFaceVlmModel(
+                    enabled=True,  # must be always enabled for this pipeline to make sense.
+                    artifacts_path=artifacts_path,
+                    accelerator_options=pipeline_options.accelerator_options,
+                    vlm_options=self.pipeline_options.vlm_options,
+                ),
+            ]
 
         self.enrichment_pipe = [
             # Other models working on `NodeItem` elements in the DoclingDocument
