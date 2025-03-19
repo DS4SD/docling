@@ -91,7 +91,9 @@ class VlmPipeline(PaginatedPipeline):
 
         return page
 
-    def extract_text_from_backend(self, page: Page, bbox: BoundingBox | None) -> str:
+    def extract_text_from_backend(
+        self, page: Page, bbox: Union[BoundingBox | None]
+    ) -> str:
         # Convert bounding box normalized to 0-100 into page coordinates for cropping
         text = ""
         if bbox:
