@@ -32,9 +32,15 @@ class HuggingFaceMlxModel(BasePageModel):
         self.vlm_options = vlm_options
 
         if self.enabled:
-            from mlx_vlm import generate, load  # type: ignore
-            from mlx_vlm.prompt_utils import apply_chat_template  # type: ignore
-            from mlx_vlm.utils import load_config, stream_generate  # type: ignore
+
+            try:
+                from mlx_vlm import generate, load  # type: ignore
+                from mlx_vlm.prompt_utils import apply_chat_template  # type: ignore
+                from mlx_vlm.utils import load_config, stream_generate  # type: ignore
+            except ImportError:
+                raise ImportError(
+                    "mlx-vlm is not installed. Please install it via `pip install mlx-vlm` to use MLX VLM models."
+                )
 
             repo_cache_folder = vlm_options.repo_id.replace("/", "--")
             self.apply_chat_template = apply_chat_template
@@ -113,7 +119,6 @@ class HuggingFaceMlxModel(BasePageModel):
                         verbose=False,
                     ):
                         output += token.text
-                        print(token.text, end="")
                         if "</doctag>" in token.text:
                             break
 

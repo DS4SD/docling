@@ -308,6 +308,11 @@ granite_vision_vlm_conversion_options = HuggingFaceVlmOptions(
 )
 
 
+class VlmModelType(str, Enum):
+    SMOLDOCLING = "smoldocling"
+    GRANITE_VISION = "granite_vision"
+
+
 # Define an enum for the backend options
 class PdfBackend(str, Enum):
     """Enum of valid PDF backends."""
@@ -343,13 +348,14 @@ class PipelineOptions(BaseModel):
 
 
 class PaginatedPipelineOptions(PipelineOptions):
+    artifacts_path: Optional[Union[Path, str]] = None
+
     images_scale: float = 1.0
     generate_page_images: bool = False
     generate_picture_images: bool = False
 
 
 class VlmPipelineOptions(PaginatedPipelineOptions):
-    artifacts_path: Optional[Union[Path, str]] = None
 
     generate_page_images: bool = True
     force_backend_text: bool = (
@@ -362,7 +368,6 @@ class VlmPipelineOptions(PaginatedPipelineOptions):
 class PdfPipelineOptions(PaginatedPipelineOptions):
     """Options for the PDF pipeline."""
 
-    artifacts_path: Optional[Union[Path, str]] = None
     do_table_structure: bool = True  # True: perform table structure extraction
     do_ocr: bool = True  # True: perform OCR, replace programmatic PDF text
     do_code_enrichment: bool = False  # True: perform code OCR
@@ -393,3 +398,8 @@ class PdfPipelineOptions(PaginatedPipelineOptions):
     )
 
     generate_parsed_pages: bool = False
+
+
+class PdfPipeline(str, Enum):
+    STANDARD = "standard"
+    VLM = "vlm"
