@@ -10,6 +10,7 @@ from docling.datamodel.pipeline_options import (
     VlmPipelineOptions,
     granite_vision_vlm_conversion_options,
     smoldocling_vlm_conversion_options,
+    smoldocling_vlm_mlx_conversion_options,
 )
 from docling.datamodel.settings import settings
 from docling.document_converter import DocumentConverter, PdfFormatOption
@@ -29,7 +30,10 @@ pipeline_options.force_backend_text = False
 # pipeline_options.accelerator_options.cuda_use_flash_attention2 = True
 
 ## Pick a VLM model. We choose SmolDocling-256M by default
-pipeline_options.vlm_options = smoldocling_vlm_conversion_options
+# pipeline_options.vlm_options = smoldocling_vlm_conversion_options
+
+## Pick a VLM model. Fast Apple Silicon friendly implementation for SmolDocling-256M via MLX
+pipeline_options.vlm_options = smoldocling_vlm_mlx_conversion_options
 
 ## Alternative VLM models:
 # pipeline_options.vlm_options = granite_vision_vlm_conversion_options
