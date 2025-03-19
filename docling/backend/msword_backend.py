@@ -276,7 +276,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 texts_and_equations.append(latex_equation)
 
         if "".join(only_texts).strip() != text.strip():
-            return text, only_equations
+            # If we are not able to reconstruct the initial raw text
+            # do not try to parse equations and return the original
+            return text, []
 
         return "".join(texts_and_equations), only_equations
 
