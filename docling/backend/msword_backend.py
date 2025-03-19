@@ -275,8 +275,10 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 only_equations.append(latex_equation)
                 texts_and_equations.append(latex_equation)
 
-        if "".join(only_texts) != text:
-            return text
+        if "".join(only_texts).strip() != text.strip():
+            # If we are not able to reconstruct the initial raw text
+            # do not try to parse equations and return the original
+            return text, []
 
         return "".join(texts_and_equations), only_equations
 
@@ -365,6 +367,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 for eq in equations:
                     if len(text_tmp) == 0:
                         break
+
                     pre_eq_text = text_tmp.split(eq, maxsplit=1)[0]
                     text_tmp = text_tmp.split(eq, maxsplit=1)[1]
                     if len(pre_eq_text) > 0:
