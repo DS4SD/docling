@@ -112,23 +112,30 @@ class DoclingParseV4PageBackend(PdfPageBackend):
             padbox.r = page_size.width - padbox.r
             padbox.t = page_size.height - padbox.t
 
-        image = (
-            self._ppage.render(
-                scale=scale * 1.5,
-                rotation=0,  # no additional rotation
-                crop=padbox.as_tuple(),
-            )
-            .to_pil()
-            .resize(size=(round(cropbox.width * scale), round(cropbox.height * scale)))
-        )  # We resize the image from 1.5x the given scale to make it sharper.
+        with pypdfium2_lock:
+            image = (
+                self._ppage.render(
+                    scale=scale * 1.5,
+                    rotation=0,  # no additional rotation
+                    crop=padbox.as_tuple(),
+                )
+                .to_pil()
+                .resize(
+                    size=(round(cropbox.width * scale), round(cropbox.height * scale))
+                )
+            )  # We resize the image from 1.5x the given scale to make it sharper.
 
         return image
 
     def get_size(self) -> Size:
-        return Size(
-            width=self._dpage.dimension.width,
-            height=self._dpage.dimension.height,
-        )
+        with pypdfium2_lock:
+            return Size(width=self._ppage.get_width(), height=self._ppage.get_height())
+
+        # TODO: Take width and height from docling-parse.
+        # return Size(
+        #    width=self._dpage.dimension.width,
+        #    height=self._dpage.dimension.height,
+        # )
 
     def unload(self):
         self._ppage = None

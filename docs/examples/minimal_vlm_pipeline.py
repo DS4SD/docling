@@ -17,7 +17,8 @@ from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.pipeline.vlm_pipeline import VlmPipeline
 
 sources = [
-    "tests/data/2305.03393v1-pg9-img.png",
+    # "tests/data/2305.03393v1-pg9-img.png",
+    "tests/data/pdf/2305.03393v1-pg9.pdf",
 ]
 
 ## Use experimental VlmPipeline
@@ -73,10 +74,12 @@ for source in sources:
     print("")
     print(res.document.export_to_markdown())
 
+    doctags = ""
     for page in res.pages:
         print("")
         print("Predicted page in DOCTAGS:")
         print(page.predictions.vlm_response.text)
+        doctags += page.predictions.vlm_response.text
 
     res.document.save_as_html(
         filename=Path("{}/{}.html".format(out_path, res.input.file.stem)),
@@ -86,6 +89,12 @@ for source in sources:
 
     with (out_path / f"{res.input.file.stem}.json").open("w") as fp:
         fp.write(json.dumps(res.document.export_to_dict()))
+
+    with (out_path / f"{res.input.file.stem}.md").open("w") as fp:
+        fp.write(res.document.export_to_markdown())
+
+    with (out_path / f"{res.input.file.stem}.doctag").open("w") as fp:
+        fp.write(doctags)
 
     pg_num = res.document.num_pages()
 
