@@ -35,7 +35,7 @@ Docling simplifies document processing, parsing diverse formats — including ad
 * 🔒 Local execution capabilities for sensitive data and air-gapped environments
 * 🤖 Plug-and-play [integrations][integrations] incl. LangChain, LlamaIndex, Crew AI & Haystack for agentic AI
 * 🔍 Extensive OCR support for scanned PDFs and images
-* 🥚 Support of Visual Language Models ([SmolDocling](https://huggingface.co/ds4sd/SmolDocling-256M-preview))
+* 🥚 Support of Visual Language Models ([SmolDocling](https://huggingface.co/ds4sd/SmolDocling-256M-preview)) 🆕
 * 💻 Simple and convenient CLI
 
 ### Coming soon
@@ -57,7 +57,7 @@ More [detailed installation instructions](https://docling-project.github.io/docl
 
 ## Getting started
 
-To convert individual documents, use `convert()`, for example:
+To convert individual documents with python, use `convert()`, for example:
 
 ```python
 from docling.document_converter import DocumentConverter
@@ -70,6 +70,22 @@ print(result.document.export_to_markdown())  # output: "## Docling Technical Rep
 
 More [advanced usage options](https://docling-project.github.io/docling/usage/) are available in
 the docs.
+
+## CLI
+
+Docling has a built-in CLI to run conversions.
+
+```bash
+docling https://arxiv.org/pdf/2206.01062
+```
+
+You can also use 🥚[SmolDocling](https://huggingface.co/ds4sd/SmolDocling-256M-preview) and other VLMs via Docling CLI:
+```bash
+docling --pipeline vlm --vlm-model smoldocling https://arxiv.org/pdf/2206.01062
+```
+This will use MLX acceleration on supported Apple Silicon hardware.
+
+Read more [here](https://docling-project.github.io/docling/usage/)
 
 ## Documentation
 

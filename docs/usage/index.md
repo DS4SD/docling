@@ -17,10 +17,15 @@ print(result.document.export_to_markdown())  # output: "### Docling Technical Re
 
 You can also use Docling directly from your command line to convert individual files —be it local or by URL— or whole directories.
 
-A simple example would look like this:
 ```console
 docling https://arxiv.org/pdf/2206.01062
 ```
+You can also use 🥚[SmolDocling](https://huggingface.co/ds4sd/SmolDocling-256M-preview) and other VLMs via Docling CLI:
+```bash
+docling --pipeline vlm --vlm-model smoldocling https://arxiv.org/pdf/2206.01062
+```
+This will use MLX acceleration on supported Apple Silicon hardware.
+
 
 To see all available options (export formats etc.) run `docling --help`. More details in the [CLI reference page](../reference/cli.md).
 

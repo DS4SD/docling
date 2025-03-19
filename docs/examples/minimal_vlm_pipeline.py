@@ -10,13 +10,15 @@ from docling.datamodel.pipeline_options import (
     VlmPipelineOptions,
     granite_vision_vlm_conversion_options,
     smoldocling_vlm_conversion_options,
+    smoldocling_vlm_mlx_conversion_options,
 )
 from docling.datamodel.settings import settings
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.pipeline.vlm_pipeline import VlmPipeline
 
 sources = [
-    "tests/data/2305.03393v1-pg9-img.png",
+    # "tests/data/2305.03393v1-pg9-img.png",
+    "tests/data/pdf/2305.03393v1-pg9.pdf",
 ]
 
 ## Use experimental VlmPipeline
@@ -29,7 +31,10 @@ pipeline_options.force_backend_text = False
 # pipeline_options.accelerator_options.cuda_use_flash_attention2 = True
 
 ## Pick a VLM model. We choose SmolDocling-256M by default
-pipeline_options.vlm_options = smoldocling_vlm_conversion_options
+# pipeline_options.vlm_options = smoldocling_vlm_conversion_options
+
+## Pick a VLM model. Fast Apple Silicon friendly implementation for SmolDocling-256M via MLX
+pipeline_options.vlm_options = smoldocling_vlm_mlx_conversion_options
 
 ## Alternative VLM models:
 # pipeline_options.vlm_options = granite_vision_vlm_conversion_options
@@ -63,9 +68,6 @@ for source in sources:
 
     res = converter.convert(source)
 
-    print("------------------------------------------------")
-    print("MD:")
-    print("------------------------------------------------")
     print("")
     print(res.document.export_to_markdown())
 
@@ -83,8 +85,17 @@ for source in sources:
     with (out_path / f"{res.input.file.stem}.json").open("w") as fp:
         fp.write(json.dumps(res.document.export_to_dict()))
 
-    pg_num = res.document.num_pages()
+    res.document.save_as_json(
+        out_path / f"{res.input.file.stem}.md",
+        image_mode=ImageRefMode.PLACEHOLDER,
+    )
 
+    res.document.save_as_markdown(
+        out_path / f"{res.input.file.stem}.md",
+        image_mode=ImageRefMode.PLACEHOLDER,
+    )
+
+    pg_num = res.document.num_pages()
     print("")
     inference_time = time.time() - start_time
     print(

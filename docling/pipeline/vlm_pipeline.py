@@ -14,8 +14,13 @@ from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.backend.pdf_backend import PdfDocumentBackend
 from docling.datamodel.base_models import InputFormat, Page
 from docling.datamodel.document import ConversionResult, InputDocument
-from docling.datamodel.pipeline_options import ResponseFormat, VlmPipelineOptions
+from docling.datamodel.pipeline_options import (
+    InferenceFramework,
+    ResponseFormat,
+    VlmPipelineOptions,
+)
 from docling.datamodel.settings import settings
+from docling.models.hf_mlx_model import HuggingFaceMlxModel
 from docling.models.hf_vlm_model import HuggingFaceVlmModel
 from docling.pipeline.base_pipeline import PaginatedPipeline
 from docling.utils.profiling import ProfilingScope, TimeRecorder
@@ -28,12 +33,6 @@ class VlmPipeline(PaginatedPipeline):
     def __init__(self, pipeline_options: VlmPipelineOptions):
         super().__init__(pipeline_options)
         self.keep_backend = True
-
-        warnings.warn(
-            "The VlmPipeline is currently experimental and may change in upcoming versions without notice.",
-            category=UserWarning,
-            stacklevel=2,
-        )
 
         self.pipeline_options: VlmPipelineOptions
 
@@ -58,14 +57,27 @@ class VlmPipeline(PaginatedPipeline):
 
         self.keep_images = self.pipeline_options.generate_page_images
 
-        self.build_pipe = [
-            HuggingFaceVlmModel(
-                enabled=True,  # must be always enabled for this pipeline to make sense.
-                artifacts_path=artifacts_path,
-                accelerator_options=pipeline_options.accelerator_options,
-                vlm_options=self.pipeline_options.vlm_options,
-            ),
-        ]
+        if (
+            self.pipeline_options.vlm_options.inference_framework
+            == InferenceFramework.MLX
+        ):
+            self.build_pipe = [
+                HuggingFaceMlxModel(
+                    enabled=True,  # must be always enabled for this pipeline to make sense.
+                    artifacts_path=artifacts_path,
+                    accelerator_options=pipeline_options.accelerator_options,
+                    vlm_options=self.pipeline_options.vlm_options,
+                ),
+            ]
+        else:
+            self.build_pipe = [
+                HuggingFaceVlmModel(
+                    enabled=True,  # must be always enabled for this pipeline to make sense.
+                    artifacts_path=artifacts_path,
+                    accelerator_options=pipeline_options.accelerator_options,
+                    vlm_options=self.pipeline_options.vlm_options,
+                ),
+            ]
 
         self.enrichment_pipe = [
             # Other models working on `NodeItem` elements in the DoclingDocument
@@ -79,7 +91,9 @@ class VlmPipeline(PaginatedPipeline):
 
         return page
 
-    def extract_text_from_backend(self, page: Page, bbox: BoundingBox | None) -> str:
+    def extract_text_from_backend(
+        self, page: Page, bbox: Union[BoundingBox, None]
+    ) -> str:
         # Convert bounding box normalized to 0-100 into page coordinates for cropping
         text = ""
         if bbox:
