@@ -68,18 +68,13 @@ for source in sources:
 
     res = converter.convert(source)
 
-    print("------------------------------------------------")
-    print("MD:")
-    print("------------------------------------------------")
     print("")
     print(res.document.export_to_markdown())
 
-    doctags = ""
     for page in res.pages:
         print("")
         print("Predicted page in DOCTAGS:")
         print(page.predictions.vlm_response.text)
-        doctags += page.predictions.vlm_response.text
 
     res.document.save_as_html(
         filename=Path("{}/{}.html".format(out_path, res.input.file.stem)),
@@ -90,14 +85,17 @@ for source in sources:
     with (out_path / f"{res.input.file.stem}.json").open("w") as fp:
         fp.write(json.dumps(res.document.export_to_dict()))
 
-    with (out_path / f"{res.input.file.stem}.md").open("w") as fp:
-        fp.write(res.document.export_to_markdown())
+    res.document.save_as_json(
+        out_path / f"{res.input.file.stem}.md",
+        image_mode=ImageRefMode.PLACEHOLDER,
+    )
 
-    with (out_path / f"{res.input.file.stem}.doctag").open("w") as fp:
-        fp.write(doctags)
+    res.document.save_as_markdown(
+        out_path / f"{res.input.file.stem}.md",
+        image_mode=ImageRefMode.PLACEHOLDER,
+    )
 
     pg_num = res.document.num_pages()
-
     print("")
     inference_time = time.time() - start_time
     print(
