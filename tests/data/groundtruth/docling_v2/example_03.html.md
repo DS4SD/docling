@@ -16,7 +16,7 @@ Some background information here.
 1. First item in ordered list
     1. Nested ordered item 1
     2. Nested ordered item 2
-3. Second item in ordered list
+2. Second item in ordered list
 
 ### Data Table
 
