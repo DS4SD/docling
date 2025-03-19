@@ -154,7 +154,7 @@ def main():
 
     conv_results = doc_converter.convert_all(
         input_doc_paths,
-        raises_on_error=True,  # to let conversion run through all and examine results at the end
+        raises_on_error=False,  # to let conversion run through all and examine results at the end
     )
     success_count, partial_success_count, failure_count = export_documents(
         conv_results, output_dir=Path("scratch")
