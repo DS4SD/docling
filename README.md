@@ -81,7 +81,7 @@ docling https://arxiv.org/pdf/2206.01062
 
 You can also use 🥚[SmolDocling](https://huggingface.co/ds4sd/SmolDocling-256M-preview) via Docling CLI:
 ```bash
-docling --pipeline vlm --vlm-model smoldocling tests/data/pdf/2305.03393v1-pg9.pdf
+docling --pipeline vlm --vlm-model smoldocling https://arxiv.org/pdf/2206.01062
 ```
 This will use MLX acceleration on supported Apple Silicon hardware.
 Read more [here](https://docling-project.github.io/docling/usage/)
