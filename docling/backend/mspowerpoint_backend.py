@@ -16,6 +16,7 @@ from docling_core.types.doc import (
     TableCell,
     TableData,
 )
+from docling_core.types.doc.document import ContentLayer
 from PIL import Image, UnidentifiedImageError
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
@@ -420,5 +421,22 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             # Loop through each shape in the slide
             for shape in slide.shapes:
                 handle_shapes(shape, parent_slide, slide_ind, doc, slide_size)
+
+            # Handle notes slide
+            if slide.has_notes_slide:
+                notes_slide = slide.notes_slide
+                notes_text = notes_slide.notes_text_frame.text.strip()
+                if notes_text:
+                    bbox = BoundingBox(l=0, t=0, r=0, b=0)
+                    prov = ProvenanceItem(
+                        page_no=slide_ind + 1, charspan=[0, len(notes_text)], bbox=bbox
+                    )
+                    doc.add_text(
+                        label=DocItemLabel.TEXT,
+                        parent=parent_slide,
+                        text=notes_text,
+                        prov=prov,
+                        content_layer=ContentLayer.FURNITURE,
+                    )
 
         return doc
