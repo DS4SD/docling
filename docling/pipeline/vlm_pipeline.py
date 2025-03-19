@@ -34,12 +34,6 @@ class VlmPipeline(PaginatedPipeline):
         super().__init__(pipeline_options)
         self.keep_backend = True
 
-        warnings.warn(
-            "The VlmPipeline is currently experimental and may change in upcoming versions without notice.",
-            category=UserWarning,
-            stacklevel=2,
-        )
-
         self.pipeline_options: VlmPipelineOptions
 
         artifacts_path: Optional[Path] = None

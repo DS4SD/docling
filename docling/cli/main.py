@@ -32,13 +32,21 @@ from docling.datamodel.pipeline_options import (
     AcceleratorOptions,
     EasyOcrOptions,
     OcrOptions,
+    PaginatedPipelineOptions,
     PdfBackend,
+    PdfPipeline,
     PdfPipelineOptions,
     TableFormerMode,
+    VlmModelType,
+    VlmPipelineOptions,
+    granite_vision_vlm_conversion_options,
+    smoldocling_vlm_conversion_options,
+    smoldocling_vlm_mlx_conversion_options,
 )
 from docling.datamodel.settings import settings
 from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
 from docling.models.factories import get_ocr_factory
+from docling.pipeline.vlm_pipeline import VlmPipeline
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
 warnings.filterwarnings(action="ignore", category=FutureWarning, module="easyocr")
@@ -200,6 +208,14 @@ def convert(
             help="Image export mode for the document (only in case of JSON, Markdown or HTML). With `placeholder`, only the position of the image is marked in the output. In `embedded` mode, the image is embedded as base64 encoded string. In `referenced` mode, the image is exported in PNG format and referenced from the main exported document.",
         ),
     ] = ImageRefMode.EMBEDDED,
+    pipeline: Annotated[
+        PdfPipeline,
+        typer.Option(..., help="Choose the pipeline to process PDF or image files."),
+    ] = PdfPipeline.STANDARD,
+    vlm_model: Annotated[
+        VlmModelType,
+        typer.Option(..., help="Choose the VLM model to use with PDF or image files."),
+    ] = VlmModelType.SMOLDOCLING,
     ocr: Annotated[
         bool,
         typer.Option(
@@ -420,50 +436,77 @@ def convert(
             ocr_options.lang = ocr_lang_list
 
         accelerator_options = AcceleratorOptions(num_threads=num_threads, device=device)
-        pipeline_options = PdfPipelineOptions(
-            allow_external_plugins=allow_external_plugins,
-            enable_remote_services=enable_remote_services,
-            accelerator_options=accelerator_options,
-            do_ocr=ocr,
-            ocr_options=ocr_options,
-            do_table_structure=True,
-            do_code_enrichment=enrich_code,
-            do_formula_enrichment=enrich_formula,
-            do_picture_description=enrich_picture_description,
-            do_picture_classification=enrich_picture_classes,
-            document_timeout=document_timeout,
-        )
-        pipeline_options.table_structure_options.do_cell_matching = (
-            True  # do_cell_matching
-        )
-        pipeline_options.table_structure_options.mode = table_mode
+        pipeline_options: PaginatedPipelineOptions
 
-        if image_export_mode != ImageRefMode.PLACEHOLDER:
-            pipeline_options.generate_page_images = True
-            pipeline_options.generate_picture_images = (
-                True  # FIXME: to be deprecated in verson 3
+        if pipeline == PdfPipeline.STANDARD:
+            pipeline_options = PdfPipelineOptions(
+                allow_external_plugins=allow_external_plugins,
+                enable_remote_services=enable_remote_services,
+                accelerator_options=accelerator_options,
+                do_ocr=ocr,
+                ocr_options=ocr_options,
+                do_table_structure=True,
+                do_code_enrichment=enrich_code,
+                do_formula_enrichment=enrich_formula,
+                do_picture_description=enrich_picture_description,
+                do_picture_classification=enrich_picture_classes,
+                document_timeout=document_timeout,
             )
-            pipeline_options.images_scale = 2
+            pipeline_options.table_structure_options.do_cell_matching = (
+                True  # do_cell_matching
+            )
+            pipeline_options.table_structure_options.mode = table_mode
+
+            if image_export_mode != ImageRefMode.PLACEHOLDER:
+                pipeline_options.generate_page_images = True
+                pipeline_options.generate_picture_images = (
+                    True  # FIXME: to be deprecated in verson 3
+                )
+                pipeline_options.images_scale = 2
+
+            backend: Type[PdfDocumentBackend]
+            if pdf_backend == PdfBackend.DLPARSE_V1:
+                backend = DoclingParseDocumentBackend
+            elif pdf_backend == PdfBackend.DLPARSE_V2:
+                backend = DoclingParseV2DocumentBackend
+            elif pdf_backend == PdfBackend.DLPARSE_V4:
+                backend = DoclingParseV4DocumentBackend  # type: ignore
+            elif pdf_backend == PdfBackend.PYPDFIUM2:
+                backend = PyPdfiumDocumentBackend  # type: ignore
+            else:
+                raise RuntimeError(f"Unexpected PDF backend type {pdf_backend}")
+
+            pdf_format_option = PdfFormatOption(
+                pipeline_options=pipeline_options,
+                backend=backend,  # pdf_backend
+            )
+        elif pipeline == PdfPipeline.VLM:
+            pipeline_options = VlmPipelineOptions()
+
+            if vlm_model == VlmModelType.GRANITE_VISION:
+                pipeline_options.vlm_options = granite_vision_vlm_conversion_options
+            elif vlm_model == VlmModelType.SMOLDOCLING:
+                pipeline_options.vlm_options = smoldocling_vlm_conversion_options
+                if sys.platform == "darwin":
+                    try:
+                        import mlx_vlm
+
+                        pipeline_options.vlm_options = (
+                            smoldocling_vlm_mlx_conversion_options
+                        )
+                    except ImportError:
+                        _log.warning(
+                            "To run SmolDocling faster, please install mlx-vlm:\n"
+                            "pip install mlx-vlm"
+                        )
+
+            pdf_format_option = PdfFormatOption(
+                pipeline_cls=VlmPipeline, pipeline_options=pipeline_options
+            )
 
         if artifacts_path is not None:
             pipeline_options.artifacts_path = artifacts_path
 
-        backend: Type[PdfDocumentBackend]
-        if pdf_backend == PdfBackend.DLPARSE_V1:
-            backend = DoclingParseDocumentBackend
-        elif pdf_backend == PdfBackend.DLPARSE_V2:
-            backend = DoclingParseV2DocumentBackend
-        elif pdf_backend == PdfBackend.DLPARSE_V4:
-            backend = DoclingParseV4DocumentBackend  # type: ignore
-        elif pdf_backend == PdfBackend.PYPDFIUM2:
-            backend = PyPdfiumDocumentBackend  # type: ignore
-        else:
-            raise RuntimeError(f"Unexpected PDF backend type {pdf_backend}")
-
-        pdf_format_option = PdfFormatOption(
-            pipeline_options=pipeline_options,
-            backend=backend,  # pdf_backend
-        )
         format_options: Dict[InputFormat, FormatOption] = {
             InputFormat.PDF: pdf_format_option,
             InputFormat.IMAGE: pdf_format_option,

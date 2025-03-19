@@ -192,6 +192,7 @@ module = [
   "docling_ibm_models.*",
   "easyocr.*",
   "ocrmac.*",
+  "mlx_vlm.*",
   "lxml.*",
   "huggingface_hub.*",
   "transformers.*",
