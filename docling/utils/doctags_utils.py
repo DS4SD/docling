@@ -38,6 +38,7 @@ def remove_doctags_content(doctags: str, images: list[PILImage.Image]) -> str:
             page_items[page_no].append(ser.serialize(item=item))
         else:
             page_items[page_no] = [ser.serialize(item=item)]
-    pages = [ser.serialize_page(parts=parts) for parts in page_items.values()]
+    sorted_items = [page_items[key] for key in sorted(page_items.keys())]
+    pages = [ser.serialize_page(parts=parts) for parts in sorted_items]
 
     return ser.serialize_doc(pages=pages).text
