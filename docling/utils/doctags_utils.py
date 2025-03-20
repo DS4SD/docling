@@ -22,6 +22,4 @@ def remove_doctags_content(doctags: list[str], images: list[PILImage.Image]) -> 
     dt_params = DocTagsParams(add_content=False)
     ser = DocTagsDocSerializer(params=dt_params, doc=doc)
     items = [ser.serialize(item=item) for item, _ in doc.iterate_items()]
-    dt_params = DocTagsParams(add_content=False)
-    ser = DocTagsDocSerializer(params=dt_params, doc=doc)
     return ser.serialize_doc(pages=items).text
