@@ -1,12 +1,13 @@
 from pathlib import Path
 from typing import cast
 
+from docling_core.experimental.serializer.base import SerializationResult
 from docling_core.experimental.serializer.doctags import (
     DocTagsDocSerializer,
     DocTagsParams,
 )
 from docling_core.types.doc import DoclingDocument, Size
-from docling_core.types.doc.document import DocTagsDocument
+from docling_core.types.doc.document import DocItem, DocTagsDocument
 from PIL import Image as PILImage
 
 
@@ -16,10 +17,22 @@ def remove_doctags_content(doctags: list[str], images: list[PILImage.Image]) -> 
     )
     doc = DoclingDocument(name="dummy")
     doc.load_from_doctags(doctags_doc)
+
     for idx, image in enumerate(images):
         size = Size(width=float(image.width), height=float(image.height))
         doc.add_page(page_no=idx + 1, size=size)
     dt_params = DocTagsParams(add_content=False)
     ser = DocTagsDocSerializer(params=dt_params, doc=doc)
-    items = [ser.serialize(item=item) for item, _ in doc.iterate_items()]
-    return ser.serialize_doc(pages=items).text
+    page_items: dict[int, list[SerializationResult]]
+    page_items = {}
+    for item, _ in doc.iterate_items():
+        if not isinstance(item, DocItem):
+            continue
+        page_no = cast(DocItem, item).prov[0].page_no
+        if page_no in page_items:
+            page_items[page_no].append(ser.serialize(item=item))
+        else:
+            page_items[page_no] = [ser.serialize(item=item)]
+    pages = [ser.serialize_page(parts=parts) for parts in page_items.values()]
+
+    return ser.serialize_doc(pages=pages).text
