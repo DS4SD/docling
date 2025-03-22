@@ -151,6 +151,35 @@ class RapidOcrOptions(OcrOptions):
     )
 
 
+class OnnxtrOcrOptions(OcrOptions):
+    """Options for the Onnxtr engine."""
+
+    kind: ClassVar[Literal["onnxtr"]] = "onnxtr"
+
+    lang: List[str] = ["en", "fr"]
+    # word confidence threshold for the recognition model
+    confidence_score: float = 0.7
+    # detection model objectness score threshold 'fast algorithm'
+    objectness_score: float = 0.3
+
+    # NOTE: This can be also a hf hub model
+    det_arch: str = "fast_base"
+    reco_arch: str = "crnn_vgg16_bn"
+    reco_bs: int = 512
+    auto_correct_orientation: bool = False
+    preserve_aspect_ratio: bool = True
+    symmetric_pad: bool = True
+    paragraph_break: float = 0.035
+    load_in_8_bit: bool = False
+    # Ref.: https://onnxruntime.ai/docs/api/python/api_summary.html
+    providers: list[tuple[str, dict[str, Any]]] | list[str] | None = None
+    session_options: Any = None
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+
+
 class EasyOcrOptions(OcrOptions):
     """Options for the EasyOCR engine."""
 
