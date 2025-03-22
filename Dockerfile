@@ -4,7 +4,7 @@ ENV GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no"
 
 RUN apt-get update \
     && apt-get install -y libgl1 libglib2.0-0 curl wget git procps \
-    && apt-get clean
+    && rm -rf /var/lib/apt/lists/*
 
 # This will install torch with *only* cpu support
 # Remove the --extra-index-url part if you want to install all the gpu requirements
