@@ -617,12 +617,9 @@ class XBRLBackendOptions(BaseBackendOptions):
     ZIP that bundles the instance and all taxonomy files together).
 
     For ``ZIP_XBRL`` the ``taxonomy`` field is not required — the ZIP already
-    contains everything.  Both ``enable_local_fetch`` and
-    ``enable_remote_fetch`` default to ``False`` and must be set explicitly,
-    following the same security policy as the rest of the XBRL backend.  For a
-    self-contained ZIP you only need ``enable_local_fetch=True``; set
-    ``enable_remote_fetch=True`` as well only when the ZIP references external
-    taxonomy elements that are not bundled.
+    contains everything, and no fetch option needs to be set.  Set
+    ``enable_remote_fetch=True`` only when the ZIP references external taxonomy
+    elements that are not bundled.
     """
 
     kind: Annotated[Literal["xbrl"], Field("xbrl", exclude=True, repr=False)] = "xbrl"
@@ -645,8 +642,12 @@ class XBRLBackendOptions(BaseBackendOptions):
         PositiveInt,
         Field(
             description=(
-                "Maximum uncompressed size in bytes for any single taxonomy package"
-                " member extracted from the XBRL ZIP archive."
+                "Maximum uncompressed size in bytes for any single nested taxonomy"
+                " package ZIP extracted from a ``ZIP_XBRL`` input archive."
+                " Does not limit the instance document itself."
+                " Has no effect for ``XML_XBRL`` input with an external taxonomy"
+                " directory, where Arelle receives the taxonomy ZIPs directly"
+                " without Docling extracting them."
             )
         ),
     ] = 64 * 1024 * 1024  # 64 MiB
@@ -654,9 +655,10 @@ class XBRLBackendOptions(BaseBackendOptions):
         PositiveInt,
         Field(
             description=(
-                "Maximum cumulative uncompressed size in bytes of all taxonomy"
-                " package members extracted from the XBRL ZIP archive during"
-                " processing."
+                "Maximum cumulative uncompressed size in bytes of all nested taxonomy"
+                " package ZIPs extracted from a ``ZIP_XBRL`` input archive."
+                " Has no effect for ``XML_XBRL`` input with an external taxonomy"
+                " directory."
             )
         ),
     ] = 256 * 1024 * 1024  # 256 MiB
@@ -664,8 +666,10 @@ class XBRLBackendOptions(BaseBackendOptions):
         PositiveInt,
         Field(
             description=(
-                "Maximum number of taxonomy package ZIP members to extract from"
-                " the XBRL ZIP archive."
+                "Maximum number of nested taxonomy package ZIPs to extract from"
+                " a ``ZIP_XBRL`` input archive."
+                " Has no effect for ``XML_XBRL`` input with an external taxonomy"
+                " directory."
             )
         ),
     ] = 100

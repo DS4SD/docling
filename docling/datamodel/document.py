@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: MIT
 
 import csv
-import importlib.util
 import json
 import logging
 import platform
@@ -78,6 +77,7 @@ from docling.datamodel.base_models import (
 from docling.datamodel.settings import DocumentLimits
 from docling.datamodel.xbrl_models import (
     IXBRL_SNIFF_BYTES,
+    XBRL_AVAILABLE,
     is_ixbrl,
     scan_xbrl_zip_entries,
 )
@@ -90,8 +90,6 @@ if TYPE_CHECKING:
     from docling.datamodel.base_models import BaseFormatOption
 
 _log = logging.getLogger(__name__)
-
-_ARELLE_AVAILABLE: bool = importlib.util.find_spec("arelle") is not None
 
 layout_label_to_ds_type = {
     DocItemLabel.TITLE: "title",
@@ -810,11 +808,11 @@ class _DocumentConversionInput(BaseModel):
             obj_ext = obj.suffix[1:].lower() if obj.suffix else ""
             ext_mime = _DocumentConversionInput._mime_from_extension(obj_ext)
             # HTML files have no binary magic bytes, so filetype always returns
-            # None for them.  When Arelle is installed we need a short read to
+            # None for them.  When XBRL is available we need a short read to
             # sniff for iXBRL markers; reuse those bytes for filetype so the
             # file is opened only once.
             if (
-                _ARELLE_AVAILABLE
+                XBRL_AVAILABLE
                 and ext_mime is not None
                 and ext_mime.lower() == "text/html"
             ):
@@ -873,7 +871,7 @@ class _DocumentConversionInput(BaseModel):
         mime = mime or _DocumentConversionInput._detect_csv(content)
         mime = mime or "text/plain"
         if (
-            _ARELLE_AVAILABLE
+            XBRL_AVAILABLE
             and mime.lower() == "text/html"
             and is_ixbrl(content[:IXBRL_SNIFF_BYTES])
         ):
