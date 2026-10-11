@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 import csv
+import importlib.util
 import json
 import logging
 import platform
@@ -77,7 +78,6 @@ from docling.datamodel.base_models import (
 from docling.datamodel.settings import DocumentLimits
 from docling.datamodel.xbrl_models import (
     IXBRL_SNIFF_BYTES,
-    XBRL_AVAILABLE,
     is_ixbrl,
     scan_xbrl_zip_entries,
 )
@@ -90,6 +90,8 @@ if TYPE_CHECKING:
     from docling.datamodel.base_models import BaseFormatOption
 
 _log = logging.getLogger(__name__)
+
+_ARELLE_AVAILABLE: bool = importlib.util.find_spec("arelle") is not None
 
 layout_label_to_ds_type = {
     DocItemLabel.TITLE: "title",
@@ -803,24 +805,15 @@ class _DocumentConversionInput(BaseModel):
                 return InputFormat.XML_DOCLANG
             if _DocumentConversionInput._has_dclx_extension(obj.name):
                 return InputFormat.DCLX
+            mime = filetype.guess_mime(str(obj))
             # Lower-cased so that an upper-case extension (NOTES.VTT, page.HTML)
             # maps to its format the same way it does for a DocumentStream.
             obj_ext = obj.suffix[1:].lower() if obj.suffix else ""
-            ext_mime = _DocumentConversionInput._mime_from_extension(obj_ext)
-            # HTML files have no binary magic bytes, so filetype always returns
-            # None for them.  When XBRL is available we need a short read to
-            # sniff for iXBRL markers; reuse those bytes for filetype so the
-            # file is opened only once.
-            if (
-                XBRL_AVAILABLE
-                and ext_mime is not None
-                and ext_mime.lower() == "text/html"
-            ):
-                with obj.open("rb") as f:
-                    content = f.read(IXBRL_SNIFF_BYTES)
-                mime = filetype.guess_mime(content) or ext_mime
-            else:
-                mime = filetype.guess_mime(str(obj)) or ext_mime
+            if mime is None:
+                mime = _DocumentConversionInput._mime_from_extension(obj_ext)
+            _html_sniff_needed = _ARELLE_AVAILABLE and (
+                mime is not None and mime.lower() == "text/html"
+            )
             needs_content_sniff = mime is None or (
                 mime is not None
                 and mime.lower()
@@ -833,6 +826,9 @@ class _DocumentConversionInput(BaseModel):
             if needs_content_sniff:
                 with obj.open("rb") as f:
                     content = f.read(4096)
+            elif _html_sniff_needed:
+                with obj.open("rb") as f:
+                    content = f.read(IXBRL_SNIFF_BYTES)
             if mime is not None and mime.lower() == "application/zip":
                 mime = _DocumentConversionInput._detect_zip_mime(obj, obj.name) or mime
 
@@ -871,7 +867,7 @@ class _DocumentConversionInput(BaseModel):
         mime = mime or _DocumentConversionInput._detect_csv(content)
         mime = mime or "text/plain"
         if (
-            XBRL_AVAILABLE
+            _ARELLE_AVAILABLE
             and mime.lower() == "text/html"
             and is_ixbrl(content[:IXBRL_SNIFF_BYTES])
         ):

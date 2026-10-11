@@ -45,6 +45,13 @@ excluded from instance-document candidate searches.
 XBRL_INSTANCE_NS: Final[bytes] = b"http://www.xbrl.org/2003/instance"
 """Namespace URI that identifies a traditional XBRL instance document."""
 
+IXBRL_SNIFF_BYTES: Final[int] = 512
+"""Number of bytes read from the document head when sniffing for iXBRL markers.
+
+All iXBRL markers appear in the opening ``<html>`` tag, so 512 bytes is
+sufficient for a reliable detection.
+"""
+
 _XBRL_IXBRL_SUFFIXES: Final[tuple[str, ...]] = (".htm", ".html", ".xhtml")
 _XBRL_INSTANCE_XML_SUFFIXES: Final[tuple[str, ...]] = (".xml", ".xbrl")
 
@@ -54,10 +61,10 @@ def scan_xbrl_zip_entries(
 ) -> tuple[list[tuple[int, str]], list[str]]:
     """Scan an open ZIP archive for XBRL instance document candidates.
 
-    Reads the first few kilobytes of each candidate member to distinguish
-    inline XBRL (iXBRL) from traditional XBRL instance files.  Taxonomy
-    linkbase files (``_cal``, ``_def``, ``_lab``, ``_pre``) and ``.xsd``
-    schema files are excluded from consideration.
+    Reads the first :data:`IXBRL_SNIFF_BYTES` bytes of each candidate member
+    to distinguish inline XBRL (iXBRL) from traditional XBRL instance files.
+    Taxonomy linkbase files (``_cal``, ``_def``, ``_lab``, ``_pre``) and
+    ``.xsd`` schema files are excluded from consideration.
 
     Args:
         zf: An already-open :class:`zipfile.ZipFile` to inspect.
@@ -67,8 +74,8 @@ def scan_xbrl_zip_entries(
 
         * ``ixbrl_candidates`` is a list of ``(file_size, entry_name)`` tuples
           for members that carry ``ix:`` namespace markers.
-        * ``xml_candidates`` is a list of entry names whose first 512 bytes
-          contain the XBRL 2003 instance namespace URI.
+        * ``xml_candidates`` is a list of entry names whose head contains
+          the XBRL 2003 instance namespace URI.
     """
     ixbrl_candidates: list[tuple[int, str]] = []
     xml_candidates: list[str] = []
@@ -81,12 +88,12 @@ def scan_xbrl_zip_entries(
             continue
         if any(name_lower.endswith(suf) for suf in _XBRL_IXBRL_SUFFIXES):
             with zf.open(name) as fh:
-                head = fh.read(4096)
+                head = fh.read(IXBRL_SNIFF_BYTES)
             if any(marker in head for marker in IXBRL_MARKERS):
                 ixbrl_candidates.append((zf.getinfo(name).file_size, name))
         elif any(name_lower.endswith(suf) for suf in _XBRL_INSTANCE_XML_SUFFIXES):
             with zf.open(name) as fh:
-                head = fh.read(512)
+                head = fh.read(IXBRL_SNIFF_BYTES)
             if XBRL_INSTANCE_NS in head:
                 xml_candidates.append(name)
 
