@@ -3117,19 +3117,15 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 # Restart deeper counters whose numbering templates depend on
                 # this heading level (e.g. "Tabell %1.%7"). Unrelated list
                 # counters sharing the same numId should retain their state.
-                heading_placeholder = re.compile(
-                    rf"%{heading_ilevel + 1}(?!\d)"
-                )
-                for (counter_numid, counter_ilevel) in list(self.list_counters):
+                heading_placeholder = re.compile(rf"%{heading_ilevel + 1}(?!\d)")
+                for counter_numid, counter_ilevel in list(self.list_counters):
                     if counter_numid != numid or counter_ilevel <= heading_ilevel:
                         continue
                     counter_level = self._get_level_element(
                         counter_numid, counter_ilevel
                     )
                     lvl_text_element = (
-                        counter_level.find(
-                            "w:lvlText", namespaces=_OOXML_NAMESPACES
-                        )
+                        counter_level.find("w:lvlText", namespaces=_OOXML_NAMESPACES)
                         if counter_level is not None
                         else None
                     )
