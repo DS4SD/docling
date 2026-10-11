@@ -44,12 +44,8 @@ from docling.backend.abstract_backend import DeclarativeDocumentBackend
 from docling.backend.html_backend import HTMLDocumentBackend
 from docling.datamodel.backend_options import HTMLBackendOptions, XBRLBackendOptions
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import (
-    IXBRL_MARKERS,
-    XBRL_INSTANCE_NS,
-    XBRL_TAXONOMY_LINKBASE_SUFFIXES,
-    InputDocument,
-)
+from docling.datamodel.document import InputDocument
+from docling.datamodel.xbrl_models import scan_xbrl_zip_entries
 from docling.exceptions import DocumentLoadError, OperationNotAllowed, SecurityError
 
 _XBRL_AVAILABLE: bool = False
@@ -116,40 +112,20 @@ def _remove_transient_packages(
 def _find_instance_entry(zf: zipfile.ZipFile) -> str:
     """Return the ZIP entry name of the primary XBRL instance document.
 
-    The function inspects the first few kilobytes of each candidate file in the
-    archive to distinguish iXBRL (``.htm``/``.html``/``.xhtml`` with ``ix:``
-    markers) from traditional XBRL instances (``.xml``/``.xbrl`` with the
-    XBRL 2003 instance namespace).  Taxonomy linkbase and schema files are
-    excluded from consideration.
+    Delegates candidate detection to :func:`scan_xbrl_zip_entries`.  When
+    multiple iXBRL documents are present (e.g. a primary report plus separate
+    notes), the largest one is returned as the primary instance.
 
-    When multiple iXBRL documents are present (e.g. a primary report plus
-    separate notes), the largest one is returned as the primary instance.
+    Args:
+        zf: An already-open :class:`zipfile.ZipFile` to inspect.
+
+    Returns:
+        The entry name of the primary XBRL instance document.
 
     Raises:
         ValueError: When no XBRL instance document is found in the archive.
     """
-    _IXBRL_SUFFIXES = (".htm", ".html", ".xhtml")
-    _INSTANCE_XML_SUFFIXES = (".xml", ".xbrl")
-
-    ixbrl_candidates: list[tuple[int, str]] = []
-    xml_candidates: list[str] = []
-
-    for name in zf.namelist():
-        name_lower = name.lower()
-        if any(name_lower.endswith(suf) for suf in XBRL_TAXONOMY_LINKBASE_SUFFIXES):
-            continue
-        if name_lower.endswith(".xsd"):
-            continue
-        if any(name_lower.endswith(suf) for suf in _IXBRL_SUFFIXES):
-            with zf.open(name) as f:
-                head = f.read(4096)
-            if any(marker in head for marker in IXBRL_MARKERS):
-                ixbrl_candidates.append((zf.getinfo(name).file_size, name))
-        elif any(name_lower.endswith(suf) for suf in _INSTANCE_XML_SUFFIXES):
-            with zf.open(name) as f:
-                head = f.read(512)
-            if XBRL_INSTANCE_NS in head:
-                xml_candidates.append(name)
+    ixbrl_candidates, xml_candidates = scan_xbrl_zip_entries(zf)
 
     # Prefer iXBRL; fall back to traditional XML instance.
     if ixbrl_candidates:
