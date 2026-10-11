@@ -271,11 +271,24 @@ class LayoutPostprocessor:
                 break
             prev_count = len(clusters)
 
-            # Resolve same-label overlaps before cell-based bbox adjustment.
-            # Repeat each iteration to catch overlaps that persist after adjustment.
-            clusters = self._remove_overlapping_clusters(
-                clusters, "regular", same_label_only=True
-            )
+            # Resolve nested section headers before adjusting their bounding
+            # boxes. Cell assignment can shrink nested headers so their original
+            # overlap is no longer detectable.
+            section_headers = [
+                cluster
+                for cluster in clusters
+                if cluster.label == DocItemLabel.SECTION_HEADER
+            ]
+            if section_headers:
+                resolved_headers = self._remove_overlapping_clusters(
+                    section_headers, "regular", same_label_only=True
+                )
+                header_ids = {cluster.id for cluster in section_headers}
+                clusters = self._sort_clusters(
+                    [c for c in clusters if c.id not in header_ids] + resolved_headers,
+                    mode="id",
+                )
+
             clusters = self._adjust_cluster_bboxes(clusters)
             clusters = self._remove_overlapping_clusters(clusters, "regular")
 
