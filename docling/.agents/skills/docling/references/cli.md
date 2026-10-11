@@ -7,7 +7,8 @@ file the agent cannot open directly — PDFs above all, but also DOCX, PPTX, XLS
 HTML, Markdown, AsciiDoc, CSV, images, audio, and XML.
 
 Authoritative flag list: <https://docling-project.github.io/docling/reference/cli/>
-(or `docling --help`). This file is a task-oriented summary.
+(or `docling --help`). Both `docling` and `docling-tools` accept `-h` as a short
+help flag, including on subcommands. This file is a task-oriented summary.
 
 ## Basics
 
@@ -151,6 +152,14 @@ Pre-download models and point the CLI at them for air-gapped runs:
 ```bash
 docling-tools models download --output-dir /models   # fetch model artifacts
 docling report.pdf --artifacts-path /models --output /tmp/
+```
+
+For native Whisper ASR, prefetch a selected OpenAI-format checkpoint. Plain
+`--all` excludes ASR models; `--all --asr` includes all native Whisper sizes.
+
+```bash
+docling-tools models download whisper_tiny --output-dir /models
+docling --asr-model whisper_tiny_native --artifacts-path /models audio.wav
 ```
 
 `--artifacts-path` overrides the default Hugging Face cache; you can also set
