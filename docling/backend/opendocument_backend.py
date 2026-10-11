@@ -19,6 +19,7 @@ Known gaps to improve:
 
 from __future__ import annotations
 
+import functools
 import logging
 import re
 from collections.abc import Callable
@@ -215,6 +216,9 @@ class _OdfBaseBackend(DeclarativeDocumentBackend):
         self.odf_obj: OdfDocument = _load_odf_document(
             path_or_stream, self.document_hash
         )
+        # get_style() runs an XPath query over the whole document and is called for
+        # every paragraph and text run; styles do not change during conversion.
+        self.odf_obj.get_style = functools.cache(self.odf_obj.get_style)  # type: ignore[method-assign]
         if self._odf_type and self.odf_obj.get_type() != self._odf_type:
             raise RuntimeError(
                 f"Expected an OpenDocument {self._odf_type!r} but got "
