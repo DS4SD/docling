@@ -3113,6 +3113,34 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 self.list_counters[(numid, heading_ilevel)] = self.numbered_headers[
                     add_level
                 ]
+
+                # Restart deeper counters whose numbering templates depend on
+                # this heading level (e.g. "Tabell %1.%7"). Unrelated list
+                # counters sharing the same numId should retain their state.
+                heading_placeholder = re.compile(
+                    rf"%{heading_ilevel + 1}(?!\d)"
+                )
+                for (counter_numid, counter_ilevel) in list(self.list_counters):
+                    if counter_numid != numid or counter_ilevel <= heading_ilevel:
+                        continue
+                    counter_level = self._get_level_element(
+                        counter_numid, counter_ilevel
+                    )
+                    lvl_text_element = (
+                        counter_level.find(
+                            "w:lvlText", namespaces=_OOXML_NAMESPACES
+                        )
+                        if counter_level is not None
+                        else None
+                    )
+                    lvl_text = (
+                        lvl_text_element.get(self.XML_KEY)
+                        if lvl_text_element is not None
+                        else None
+                    )
+                    if lvl_text and heading_placeholder.search(lvl_text):
+                        self.list_counters[(counter_numid, counter_ilevel)] = 0
+
                 # A heading may seed a counter used by a later list template
                 # with the same numId (e.g. "Tabell %1.%7"). Don't let the
                 # first list item reset that shared numbering sequence.

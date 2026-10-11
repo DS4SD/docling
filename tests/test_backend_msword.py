@@ -1236,14 +1236,35 @@ def test_numbered_heading_syncs_list_counter(docx_paths, monkeypatch):
     lvl_text.set(qn("w:val"), "Tabell %1.%7")
     level.append(lvl_text)
 
+    unrelated_level = OxmlElement("w:lvl")
+    unrelated_lvl_text = OxmlElement("w:lvlText")
+    unrelated_lvl_text.set(qn("w:val"), "%8")
+    unrelated_level.append(unrelated_lvl_text)
+
     monkeypatch.setattr(
         backend,
         "_get_level_element",
-        lambda numid, ilvl: level,
+        lambda numid, ilvl: unrelated_level if ilvl == 7 else level,
     )
 
     backend._get_list_counter(200, 6)
     assert backend._build_enum_marker(200, 6) == "Tabell 2.1"
+
+    # A new chapter should restart dependent caption counters while preserving
+    # unrelated deeper counters sharing the same numId.
+    backend.list_counters[(200, 7)] = 4
+    backend._add_heading(
+        doc,
+        curr_level=1,
+        text="Third chapter",
+        is_numbered_style=True,
+        numid=200,
+        ilevel=0,
+    )
+    assert backend.list_counters[(200, 7)] == 4
+
+    backend._get_list_counter(200, 6)
+    assert backend._build_enum_marker(200, 6) == "Tabell 3.1"
 
 
 def test_custom_caption_numbering_is_added_to_paragraph_text(docx_paths, monkeypatch):
