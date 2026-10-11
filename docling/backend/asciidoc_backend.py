@@ -185,6 +185,7 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
 
         in_list = False
         in_table = False
+        in_delimited_table = False
 
         text_data: list[str] = []
         table_data: list[list[str]] = []
@@ -217,6 +218,9 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
 
             line = block
             stripped_line = line.strip()
+            if in_delimited_table and self._continue_table(table_data, line):
+                continue
+
             in_list, last_list_item, list_continuation = self._close_list_if_needed(
                 line=line,
                 in_list=in_list,
@@ -331,9 +335,11 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                     )
                     caption_data = []
                     in_table = False
+                    in_delimited_table = False
                     table_data = []
                 else:
                     in_table = True
+                    in_delimited_table = True
 
             elif self._is_table_line(line):  # within a table
                 in_table = True
@@ -712,6 +718,22 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
         # A cell may be the only one on its line: vertical AsciiDoc tables
         # commonly write one cell per line, so a second "|" is not required.
         return re.match(rf"^{_CELL_SPEC}\|", line) is not None
+
+    @classmethod
+    def _continue_table(cls, table_data: list[list[str]], line: str) -> bool:
+        """Consume a line between |=== delimiters that is not a row.
+
+        A blank line only separates rows, and a line without a leading "|"
+        continues the cell above it. Returns False for any other line.
+        """
+        stripped = line.strip()
+        if stripped == "|===" or cls._is_table_line(line):
+            return False
+        if stripped and not table_data:
+            return False
+        if stripped:
+            table_data[-1][-1] = f"{table_data[-1][-1]} {stripped}".lstrip()
+        return True
 
     @staticmethod
     def _parse_table_line(line):
