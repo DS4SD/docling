@@ -322,15 +322,15 @@ def _serial_to_iso(text: str, date1904: bool) -> str:
 
 
 def _build_chart_table(
-    categories: list[str], columns: list[tuple[str, list[str]]]
+    categories: list[str], columns: list[tuple[str, list[str]]], corner: str = ""
 ) -> Optional[TableData]:
     """Build the data table of a chart from its categories and series.
 
     Layout produced (categories down the first column, one column per series):
 
-        | <blank> | <series 0 name> | <series 1 name> | ...
-        | cat_0   | val_0,0         | val_1,0         | ...
-        | cat_1   | val_0,1         | val_1,1         | ...
+        | <corner> | <series 0 name> | <series 1 name> | ...
+        | cat_0    | val_0,0         | val_1,0         | ...
+        | cat_1    | val_0,1         | val_1,1         | ...
 
     The declared category range can far exceed the plotted data (e.g. a chart
     referencing whole Excel columns declares ~1M categories for a handful of
@@ -342,6 +342,8 @@ def _build_chart_table(
     Args:
         categories: Category labels, one per data row.
         columns: ``(series name, values)`` pairs, one per chart series.
+        corner: Text of the top-left header cell, such as the title of the
+            category axis.
 
     Returns:
         A TableData, or None when no data row is populated.
@@ -371,7 +373,7 @@ def _build_chart_table(
     num_rows = num_data_rows + 1
     cells: list[TableCell] = []
 
-    header_labels = [""] + [name for name, _ in columns]
+    header_labels = [corner] + [name for name, _ in columns]
     for col_idx, label in enumerate(header_labels):
         cells.append(
             TableCell(
@@ -1481,11 +1483,37 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             )
         return _is_date_format(format_code)
 
-    def _category_labels(self, chart: Any, x_chart: Any, plot: Any) -> list[str]:
+    @staticmethod
+    def _axis_title_text(axis: Any) -> str:
+        """Return the title text of a chart axis, or "" when it has none.
+
+        The XML is read directly, because python-pptx's ``axis_title`` adds a
+        title element to an axis without one. A title linked to a cell keeps its
+        text in the cell cache instead of in rich text.
+
+        Args:
+            axis: A ``c:catAx``, ``c:dateAx`` or ``c:valAx`` element.
+
+        Returns:
+            The title text, with one space between paragraphs.
+        """
+        paragraphs = [
+            "".join(paragraph.xpath(".//a:t/text()")).strip()
+            for paragraph in axis.xpath("./c:title/c:tx/c:rich/a:p")
+        ]
+        text = " ".join(paragraph for paragraph in paragraphs if paragraph)
+        if not text:
+            text = "".join(axis.xpath("./c:title/c:tx/c:strRef//c:v/text()"))
+        return text.strip()
+
+    def _category_labels(
+        self, chart: Any, axis: Any, x_chart: Any, plot: Any
+    ) -> list[str]:
         """Return the category labels of a plot, with dates in ISO 8601.
 
         Args:
             chart: A python-pptx ``Chart`` object.
+            axis: The plot's category axis, or None.
             x_chart: The plot element, such as ``c:barChart``.
             plot: The python-pptx plot read from ``x_chart``.
 
@@ -1493,7 +1521,6 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             One label per category.
         """
         labels = [self._cell_text(category) for category in plot.categories]
-        axis = self._category_axis(chart, x_chart)
         if axis is None or not self._categories_are_dates(axis, x_chart):
             return labels
         date1904 = bool(chart.element.date_1904)
@@ -1511,7 +1538,8 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
 
         The series of every plot become columns in drawing order, so a
         combination chart keeps its line series next to its column series.
-        The categories come from the first plot that has them. A plot that
+        The categories come from the first plot that has them, and the title of
+        that plot's category axis goes in the top-left cell. A plot that
         python-pptx cannot read is skipped with a warning.
 
         Args:
@@ -1523,6 +1551,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             populated data row.
         """
         categories: list[str] = []
+        corner = ""
         columns: list[tuple[str, list[str]]] = []
         for x_chart, plot in plots:
             if plot is None:
@@ -1533,7 +1562,9 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                 )
                 continue
             if not categories:
-                categories = self._category_labels(chart, x_chart, plot)
+                axis = self._category_axis(chart, x_chart)
+                categories = self._category_labels(chart, axis, x_chart, plot)
+                corner = self._axis_title_text(axis) if axis is not None else ""
             for series in plot.series:
                 name = self._cell_text(series.name) if series.name is not None else ""
                 values = [self._cell_text(v) for v in series.values]
@@ -1541,7 +1572,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
 
         if not columns:
             return None
-        return _build_chart_table(categories, columns)
+        return _build_chart_table(categories, columns, corner)
 
     def _handle_chart(self, shape, parent_slide, slide_ind, doc, slide_size):
         """Add a native chart shape as a classified PictureItem with its data.
@@ -1550,10 +1581,10 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         classification and (b) the chart's plotted numbers reconstructed as a
         TableData. A combination chart gets one prediction per plot type, and
         the back-most plot gives the main one. The chart title, if any, becomes
-        the picture caption. When
-        ``render_chart_images`` is enabled and LibreOffice is available, a
-        rendered image is attached; on any rendering failure the picture keeps
-        its classification and data without an image.
+        the picture caption. When ``render_chart_images`` is enabled and
+        LibreOffice is available, a rendered image is attached; on any
+        rendering failure the picture keeps its classification and data without
+        an image.
 
         Args:
             shape: The python-pptx graphic-frame shape holding the chart.

@@ -32,7 +32,9 @@ _LINES = {
 }
 
 
-def _save_combo_chart_deck(path: Path, second_plot: str = "lineChart") -> None:
+def _save_combo_chart_deck(
+    path: Path, second_plot: str = "lineChart", linked_axis_title: bool = False
+) -> None:
     """Save a deck whose chart draws columns and a second plot on a second axis.
 
     python-pptx writes single-plot charts only, so the chart starts as clustered
@@ -43,7 +45,10 @@ def _save_combo_chart_deck(path: Path, second_plot: str = "lineChart") -> None:
     "Volume-High-Low-Close" chart, for which python-pptx has no plot class.
 
     The second plot's category axis is hidden. It is a text axis with its own
-    ``General`` number format, so it shows serial numbers, not dates.
+    ``General`` number format, so it shows serial numbers, not dates. The
+    category axis is titled "Region Position" and the value axes "Bar Sales".
+    With ``linked_axis_title`` the category axis title is linked to a cell, so
+    its text is in a cell cache instead of in rich text.
     """
     import copy
 
@@ -68,8 +73,22 @@ def _save_combo_chart_deck(path: Path, second_plot: str = "lineChart") -> None:
         Inches(6),
         chart_data,
     ).chart
+    chart.category_axis.has_title = True
+    chart.category_axis.axis_title.text_frame.text = "Region Position"
+    chart.value_axis.has_title = True
+    chart.value_axis.axis_title.text_frame.text = "Bar Sales"
 
     plot_area = chart.element.chart.plotArea
+    if linked_axis_title:
+        title_text = plot_area.find(qn("c:dateAx")).find(qn("c:title")).find(qn("c:tx"))
+        title_text.remove(title_text.find(qn("c:rich")))
+        str_ref = etree.SubElement(title_text, qn("c:strRef"))
+        etree.SubElement(str_ref, qn("c:f")).text = "Sheet1!$A$1"
+        str_cache = etree.SubElement(str_ref, qn("c:strCache"))
+        etree.SubElement(str_cache, qn("c:ptCount")).set("val", "1")
+        point = etree.SubElement(str_cache, qn("c:pt"))
+        point.set("idx", "0")
+        etree.SubElement(point, qn("c:v")).text = "Region Position"
     bar_chart = plot_area.find(qn("c:barChart"))
     second = etree.Element(qn(f"c:{second_plot}"))
     if second_plot == "lineChart":
@@ -186,6 +205,21 @@ def test_date_axis_categories_are_iso_dates(tmp_path: Path):
     grid = _grid(_only_chart(path))
 
     assert [row[0] for row in grid[1:]] == [month.isoformat() for month in _MONTHS]
+
+
+@pytest.mark.parametrize("linked", [False, True], ids=["rich-text", "cell-linked"])
+def test_category_axis_title_heads_the_category_column(tmp_path: Path, linked: bool):
+    """The category axis title fills the top-left cell of the data table.
+
+    That cell was always empty. A title linked to a cell is read from the cell
+    cache. The value axis titles have no column to head, so they stay out.
+    """
+    path = tmp_path / "combo_chart.pptx"
+    _save_combo_chart_deck(path, linked_axis_title=linked)
+
+    grid = _grid(_only_chart(path))
+
+    assert grid[0] == ["Region Position", *_BARS, *_LINES]
 
 
 @pytest.mark.parametrize(
