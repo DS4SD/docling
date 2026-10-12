@@ -255,6 +255,96 @@ def _last_populated_row(
     return -1
 
 
+def _build_chart_table(
+    categories: list[str], columns: list[tuple[str, list[str]]]
+) -> Optional[TableData]:
+    """Build the data table of a chart from its categories and series.
+
+    Layout produced (categories down the first column, one column per series):
+
+        | <blank> | <series 0 name> | <series 1 name> | ...
+        | cat_0   | val_0,0         | val_1,0         | ...
+        | cat_1   | val_0,1         | val_1,1         | ...
+
+    The declared category range can far exceed the plotted data (e.g. a chart
+    referencing whole Excel columns declares ~1M categories for a handful of
+    points), so trailing rows whose category label and every series value are
+    empty are trimmed and the table is sized by populated data instead. As a
+    backstop for genuinely huge charts, the emitted table is additionally capped
+    at ``_MAX_CHART_TABLE_CELLS`` cells.
+
+    Args:
+        categories: Category labels, one per data row.
+        columns: ``(series name, values)`` pairs, one per chart series.
+
+    Returns:
+        A TableData, or None when no data row is populated.
+    """
+    num_data_rows = max([len(categories)] + [len(values) for _, values in columns])
+    if num_data_rows == 0:
+        return None
+
+    # Trim trailing rows that carry no data at all; interior gaps are kept.
+    num_data_rows = _last_populated_row(categories, columns, num_data_rows) + 1
+    if num_data_rows == 0:
+        return None
+
+    num_cols = 1 + len(columns)
+    if num_data_rows * num_cols > _MAX_CHART_TABLE_CELLS:
+        capped_rows = max(1, _MAX_CHART_TABLE_CELLS // num_cols)
+        _log.warning(
+            "Truncating chart data table from %d to %d data rows: "
+            "%d cells would exceed the %d-cell cap.",
+            num_data_rows,
+            capped_rows,
+            num_data_rows * num_cols,
+            _MAX_CHART_TABLE_CELLS,
+        )
+        num_data_rows = capped_rows
+
+    num_rows = num_data_rows + 1
+    cells: list[TableCell] = []
+
+    header_labels = [""] + [name for name, _ in columns]
+    for col_idx, label in enumerate(header_labels):
+        cells.append(
+            TableCell(
+                text=label,
+                row_span=1,
+                col_span=1,
+                start_row_offset_idx=0,
+                end_row_offset_idx=1,
+                start_col_offset_idx=col_idx,
+                end_col_offset_idx=col_idx + 1,
+                column_header=True,
+                row_header=False,
+            )
+        )
+    for data_row in range(num_data_rows):
+        row_idx = data_row + 1
+        category = categories[data_row] if data_row < len(categories) else ""
+        row_texts = [category] + [
+            (values[data_row] if data_row < len(values) else "")
+            for _, values in columns
+        ]
+        for col_idx, text in enumerate(row_texts):
+            cells.append(
+                TableCell(
+                    text=text,
+                    row_span=1,
+                    col_span=1,
+                    start_row_offset_idx=row_idx,
+                    end_row_offset_idx=row_idx + 1,
+                    start_col_offset_idx=col_idx,
+                    end_col_offset_idx=col_idx + 1,
+                    column_header=False,
+                    row_header=(col_idx == 0),
+                )
+            )
+
+    return TableData(num_rows=num_rows, num_cols=num_cols, table_cells=cells)
+
+
 class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBackend):
     """Backend for parsing PowerPoint presentations (PPTX and PPT files).
 
@@ -1223,23 +1313,10 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
     def _chart_to_table_data(self, chart: Any) -> Optional[TableData]:
         """Reconstruct a chart's underlying data grid as a TableData.
 
-        Layout produced (categories down the first column, one column per series):
-
-            | <blank> | <series 0 name> | <series 1 name> | ...
-            | cat_0   | val_0,0         | val_1,0         | ...
-            | cat_1   | val_0,1         | val_1,1         | ...
-
         Unlike the Excel backend, python-pptx exposes the plotted numbers
         directly on each series (``series.values``) and the shared category
         labels on the plot (``plot.categories``) — no workbook reference
-        resolution is needed.
-
-        The declared category range can far exceed the plotted data (e.g. a
-        chart referencing whole Excel columns declares ~1M categories for a
-        handful of points), so trailing rows whose category label and every
-        series value are empty are trimmed and the table is sized by populated
-        data instead. As a backstop for genuinely huge charts, the emitted
-        table is additionally capped at ``_MAX_CHART_TABLE_CELLS`` cells.
+        resolution is needed. ``_build_chart_table`` lays the table out.
 
         Args:
             chart: A python-pptx ``Chart`` object.
@@ -1263,69 +1340,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             values = [self._cell_text(v) for v in series.values]
             columns.append((name, values))
 
-        num_data_rows = max([len(categories)] + [len(values) for _, values in columns])
-        if num_data_rows == 0:
-            return None
-
-        # Trim trailing rows that carry no data at all; interior gaps are kept.
-        num_data_rows = _last_populated_row(categories, columns, num_data_rows) + 1
-        if num_data_rows == 0:
-            return None
-
-        num_cols = 1 + len(columns)
-        if num_data_rows * num_cols > _MAX_CHART_TABLE_CELLS:
-            capped_rows = max(1, _MAX_CHART_TABLE_CELLS // num_cols)
-            _log.warning(
-                "Truncating chart data table from %d to %d data rows: "
-                "%d cells would exceed the %d-cell cap.",
-                num_data_rows,
-                capped_rows,
-                num_data_rows * num_cols,
-                _MAX_CHART_TABLE_CELLS,
-            )
-            num_data_rows = capped_rows
-
-        num_rows = num_data_rows + 1
-        cells: list[TableCell] = []
-
-        header_labels = [""] + [name for name, _ in columns]
-        for col_idx, label in enumerate(header_labels):
-            cells.append(
-                TableCell(
-                    text=label,
-                    row_span=1,
-                    col_span=1,
-                    start_row_offset_idx=0,
-                    end_row_offset_idx=1,
-                    start_col_offset_idx=col_idx,
-                    end_col_offset_idx=col_idx + 1,
-                    column_header=True,
-                    row_header=False,
-                )
-            )
-        for data_row in range(num_data_rows):
-            row_idx = data_row + 1
-            category = categories[data_row] if data_row < len(categories) else ""
-            row_texts = [category] + [
-                (values[data_row] if data_row < len(values) else "")
-                for _, values in columns
-            ]
-            for col_idx, text in enumerate(row_texts):
-                cells.append(
-                    TableCell(
-                        text=text,
-                        row_span=1,
-                        col_span=1,
-                        start_row_offset_idx=row_idx,
-                        end_row_offset_idx=row_idx + 1,
-                        start_col_offset_idx=col_idx,
-                        end_col_offset_idx=col_idx + 1,
-                        column_header=False,
-                        row_header=(col_idx == 0),
-                    )
-                )
-
-        return TableData(num_rows=num_rows, num_cols=num_cols, table_cells=cells)
+        return _build_chart_table(categories, columns)
 
     def _handle_chart(self, shape, parent_slide, slide_ind, doc, slide_size):
         """Add a native chart shape as a classified PictureItem with its data.

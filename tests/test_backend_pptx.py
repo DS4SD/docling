@@ -9,7 +9,6 @@ import zipfile
 import zlib
 from collections.abc import Iterable
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 from docling_core.types.doc import (
@@ -25,6 +24,7 @@ from docling.backend.docx.drawingml.utils import get_libreoffice_cmd
 from docling.backend.mspowerpoint_backend import (
     _MAX_CHART_TABLE_CELLS,
     MsPowerpointDocumentBackend,
+    _build_chart_table,
     _is_metafile,
     _last_populated_row,
 )
@@ -457,17 +457,6 @@ def _build_inflated_ptcount_pptx(path: Path, declared: int) -> None:
     tmp.unlink()
 
 
-def _backend_under_test() -> MsPowerpointDocumentBackend:
-    """Return a backend instance for direct ``_chart_to_table_data`` calls."""
-    in_doc = InputDocument(
-        path_or_stream=CHART_PPTX,
-        format=InputFormat.PPTX,
-        backend=MsPowerpointDocumentBackend,
-    )
-    assert in_doc.valid
-    return in_doc._backend
-
-
 def test_chart_with_inflated_category_range_trims_trailing_empty_rows(tmp_path):
     """A chart whose declared range exceeds its data is trimmed to populated rows.
 
@@ -515,32 +504,23 @@ def test_last_populated_row_trims_only_trailing_empty_rows():
 
 def test_chart_with_no_populated_data_returns_no_table():
     """A chart whose declared range holds no data at all yields no table."""
-    chart = SimpleNamespace(
-        series=[SimpleNamespace(name="s1", values=[])],
-        plots=[SimpleNamespace(categories=["", "", ""])],
-    )
-    assert _backend_under_test()._chart_to_table_data(chart) is None
+    assert _build_chart_table(["", "", ""], [("s1", [])]) is None
 
 
 def test_chart_data_table_capped_at_max_cells(caplog):
     """Genuinely huge charts are truncated at the cell cap with a warning.
 
-    A stub chart with 60k populated points in 2 series would emit 180k cells;
-    the table is cut to ``_MAX_CHART_TABLE_CELLS`` cells instead of ballooning.
+    60k populated points in 2 series would emit 180k cells; the table is cut to
+    ``_MAX_CHART_TABLE_CELLS`` cells instead of ballooning.
     """
     n_points = 60_000
-    chart = SimpleNamespace(
-        series=[
-            SimpleNamespace(name="s1", values=[float(i) for i in range(n_points)]),
-            SimpleNamespace(name="s2", values=[float(i) for i in range(n_points)]),
-        ],
-        plots=[SimpleNamespace(categories=[f"c{i}" for i in range(n_points)])],
-    )
+    values = [str(i) for i in range(n_points)]
+    categories = [f"c{i}" for i in range(n_points)]
 
     with caplog.at_level(
         logging.WARNING, logger="docling.backend.mspowerpoint_backend"
     ):
-        table_data = _backend_under_test()._chart_to_table_data(chart)
+        table_data = _build_chart_table(categories, [("s1", values), ("s2", values)])
 
     assert table_data is not None
     assert table_data.num_cols == 3
