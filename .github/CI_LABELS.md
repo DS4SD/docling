@@ -96,6 +96,17 @@ ask for more with a PR comment that starts with one of these commands:
 The bot adds a 👀 reaction to confirm the command. Commands from other users
 are ignored.
 
+Users with write access can also start the workflow by hand for one open PR,
+without a comment. This is useful to catch up on PRs after an outage of the
+workflow:
+
+```bash
+gh workflow run "AI PR Triage" -f pr=1234 -f mode=triage
+```
+
+`mode=triage` follows the rules of a push. `mode=review` also forces a full
+review, like `/ai review`.
+
 The comment also summarizes changed reference data in `tests/data/**/groundtruth/`.
 It separates formatting-only and coordinate-only changes from text, table, and
 structure changes.
