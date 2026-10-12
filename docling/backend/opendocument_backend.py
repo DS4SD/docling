@@ -1912,6 +1912,7 @@ class OdpDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
             str(self.path_or_stream) if isinstance(self.path_or_stream, Path) else None
         )
         return load_linked_media(location, self.options, base_path)
+
     @staticmethod
     def _hide_slide(doc: DoclingDocument, slide_group: NodeItem) -> None:
         """Move the content of a hidden slide to the invisible layer.
