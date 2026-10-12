@@ -251,7 +251,7 @@ class HuggingFaceMlxModel(BaseVlmPageModel, HuggingFaceModelDownloadMixin):
                     [image],  # MLX stream_generate expects list of images
                     max_tokens=self.max_tokens,
                     verbose=False,
-                    temp=self.temperature,
+                    temperature=self.temperature,
                 ):
                     # Collect token information
                     if len(token.logprobs.shape) == 1:
