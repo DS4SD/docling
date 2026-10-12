@@ -247,6 +247,31 @@ doc_converter = DocumentConverter(
 
 See [PDF heading levels](./heading_levels.md) for the signals, their precedence and all options.
 
+### PowerPoint charts
+
+A chart on a PowerPoint slide becomes a picture classified by its kind, with
+the data it plots in the picture's `meta.tabular_chart` and its title as the
+caption. The first column of the data holds the categories, under the title of
+the category axis, and each series gets a column. Dates on the category axis
+are written as ISO 8601 dates, such as `2012-01-01`.
+
+A combination chart, such as columns with a line on a secondary axis, gets one
+classification prediction per chart type. The back-most plot comes first, so
+it stays the main prediction, and the series of every plot are in the data:
+
+```python
+from docling.document_converter import DocumentConverter
+
+deck = DocumentConverter().convert("deck.pptx").document
+for picture in deck.pictures:
+    if picture.meta is not None and picture.meta.classification is not None:
+        kinds = [p.class_name for p in picture.meta.classification.predictions]
+        print(kinds)  # for example ['bar_chart', 'line_chart']
+```
+
+The picture itself is empty unless you set `render_chart_images=True` in
+`MsPowerpointBackendOptions`. That draws each chart with LibreOffice.
+
 ### Apple iWork options
 
 Pages (`.pages`), Numbers (`.numbers`) and Keynote (`.key`) share their
