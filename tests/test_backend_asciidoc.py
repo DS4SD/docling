@@ -130,6 +130,65 @@ def test_single_cell_per_line_table_is_not_truncated() -> None:
     assert [item.text for item in doc.texts] == []
 
 
+def test_blank_line_inside_table_does_not_split_it() -> None:
+    # Inside |=== ... |=== a blank line only separates rows: Asciidoctor's own
+    # examples put one after the header row. It used to end the table, so the
+    # header and the body came out as two tables and the second lost the
+    # caption.
+    for src in (
+        b".Formats\n|===\n|Format |Extension\n\n|Markdown |.md\n|JSON |.json\n|===\n",
+        b".Formats\n|===\n\n|Format |Extension\n\n|Markdown |.md\n\n|JSON |.json\n|===\n",
+    ):
+        in_doc = InputDocument(
+            path_or_stream=BytesIO(src),
+            format=InputFormat.ASCIIDOC,
+            backend=AsciiDocBackend,
+            filename="blank-line-table.adoc",
+        )
+        doc = in_doc._backend.convert()
+
+        assert len(doc.tables) == 1
+        table = doc.tables[0]
+        assert (table.data.num_rows, table.data.num_cols) == (3, 2)
+        assert [cell.text for cell in table.data.table_cells] == [
+            "Format",
+            "Extension",
+            "Markdown",
+            ".md",
+            "JSON",
+            ".json",
+        ]
+        assert table.caption_text(doc) == "Formats"
+
+
+def test_wrapped_cell_text_stays_in_its_cell() -> None:
+    # A line without a leading "|" inside a table continues the cell above it.
+    # It used to end the table: the line was dropped and the rows after it
+    # became a second table.
+    src = (
+        b"|===\n|Format |Extension\n|Markdown |.md or\n(also .markdown)\n"
+        b"|JSON |.json\n|===\nAfter.\n"
+    )
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(src),
+        format=InputFormat.ASCIIDOC,
+        backend=AsciiDocBackend,
+        filename="wrapped-cell-table.adoc",
+    )
+    doc = in_doc._backend.convert()
+
+    assert len(doc.tables) == 1
+    assert [cell.text for cell in doc.tables[0].data.table_cells] == [
+        "Format",
+        "Extension",
+        "Markdown",
+        ".md or (also .markdown)",
+        "JSON",
+        ".json",
+    ]
+    assert [item.text for item in doc.texts] == ["After."]
+
+
 def test_escaped_pipe_stays_inside_its_cell() -> None:
     # A backslash-escaped pipe is cell content: Asciidoctor partitions cells on
     # unescaped pipes only and drops the backslash from the output. Splitting on
