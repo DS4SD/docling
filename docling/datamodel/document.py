@@ -975,6 +975,8 @@ class _DocumentConversionInput(BaseModel):
         Returns:
             The XBRL ZIP MIME type string, or None if no XBRL instance is found.
         """
+        if not XBRL_AVAILABLE:
+            return None
         try:
             with zipfile.ZipFile(source) as zf:
                 names = zf.namelist()
