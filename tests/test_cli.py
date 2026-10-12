@@ -334,7 +334,6 @@ def test_cli_from_odf_expands_to_open_document_formats(
             allowed_formats: list[InputFormat],
             format_options: dict[InputFormat, PdfFormatOption],
         ) -> None:
-            self.format_to_options = format_options
             nonlocal captured_allowed_formats
             captured_allowed_formats = allowed_formats
 
@@ -385,7 +384,6 @@ def test_cli_picture_description_max_new_tokens(
             allowed_formats: list[InputFormat],
             format_options: dict[InputFormat, PdfFormatOption],
         ) -> None:
-            self.format_to_options = format_options
             nonlocal captured_pdf_option
             captured_pdf_option = format_options[InputFormat.PDF]
 
@@ -439,7 +437,6 @@ def test_cli_vlm_max_new_tokens(
             allowed_formats: list[InputFormat],
             format_options: dict[InputFormat, PdfFormatOption],
         ) -> None:
-            self.format_to_options = format_options
             nonlocal captured_pdf_option
             captured_pdf_option = format_options[InputFormat.PDF]
 
@@ -536,7 +533,7 @@ def test_cli_from_latex_keeps_any_source_in_place(tmp_path, monkeypatch):
 
     class _FakeDocumentConverter:
         def __init__(self, *, allowed_formats, format_options):
-            self.format_to_options = format_options
+            pass
 
         def convert_all(
             self,
@@ -1011,7 +1008,7 @@ def test_cli_directory_includes_gif_images(tmp_path, monkeypatch):
 
     class _FakeDocumentConverter:
         def __init__(self, *, allowed_formats, format_options):
-            self.format_to_options = format_options
+            pass
 
         def convert_all(
             self,
@@ -1046,7 +1043,6 @@ def test_cli_applies_video_options_to_videos_in_a_directory(tmp_path, monkeypatc
 
     class _FakeDocumentConverter:
         def __init__(self, *, allowed_formats, format_options):
-            self.format_to_options = format_options
             captured.update(format_options)
 
         def convert_all(
@@ -1119,7 +1115,6 @@ def test_cli_accepts_threaded_docling_parse_backend(
             allowed_formats: list[InputFormat],
             format_options: dict[InputFormat, PdfFormatOption],
         ) -> None:
-            self.format_to_options = format_options
             nonlocal captured_backend
             nonlocal captured_backend_options
             pdf_option = format_options[InputFormat.PDF]
@@ -1213,7 +1208,6 @@ def test_cli_routes_pdf_backend_for_legacy_and_vlm(
             allowed_formats: list[InputFormat],
             format_options: dict[InputFormat, PdfFormatOption],
         ) -> None:
-            self.format_to_options = format_options
             pdf_option = format_options[InputFormat.PDF]
             image_option = format_options[InputFormat.IMAGE]
             captured["pipeline"] = pdf_option.pipeline_cls.__name__
@@ -1263,7 +1257,6 @@ def _capture_cli_ocr_options(monkeypatch, extra_args, tmp_path):
 
     class _FakeDocumentConverter:
         def __init__(self, *, allowed_formats, format_options):
-            self.format_to_options = format_options
             pdf_option = format_options[InputFormat.PDF]
             captured["ocr_options"] = pdf_option.pipeline_options.ocr_options
 
@@ -1340,7 +1333,7 @@ def _capture_cli_page_range(monkeypatch, extra_args, tmp_path):
 
     class _FakeDocumentConverter:
         def __init__(self, *, allowed_formats, format_options):
-            self.format_to_options = format_options
+            pass
 
         def convert_all(
             self,
@@ -1439,7 +1432,6 @@ def test_cli_passes_accelerator_options_to_vlm_pipeline(
             allowed_formats: list[InputFormat],
             format_options: dict[InputFormat, PdfFormatOption],
         ) -> None:
-            self.format_to_options = format_options
             nonlocal captured_pipeline_options
             pdf_option = format_options[InputFormat.PDF]
             assert format_options[InputFormat.IMAGE].pipeline_options is (
@@ -1494,7 +1486,6 @@ def _capture_cli_engine_options(monkeypatch, extra_args, tmp_path, option_name):
 
     class _FakeDocumentConverter:
         def __init__(self, *, allowed_formats, format_options):
-            self.format_to_options = format_options
             pdf_option = format_options[InputFormat.PDF]
             captured["option"] = getattr(pdf_option.pipeline_options, option_name)
 
@@ -1659,7 +1650,6 @@ def _capture_cli_asr_pipeline_options(monkeypatch, extra_args, tmp_path):
 
     class _FakeDocumentConverter:
         def __init__(self, *, allowed_formats, format_options):
-            self.format_to_options = format_options
             audio_option = format_options[InputFormat.AUDIO]
             captured["asr_pipeline_options"] = audio_option.pipeline_options
 
@@ -1734,7 +1724,6 @@ def test_cli_native_pipeline_defaults_to_pdf_only(
 
     class _FakeDocumentConverter:
         def __init__(self, *, allowed_formats, format_options):
-            self.format_to_options = format_options
             captured_formats.extend(allowed_formats)
 
         def convert_all(
@@ -1787,7 +1776,6 @@ def test_cli_native_pipeline_parser_threads(
 
     class _FakeDocumentConverter:
         def __init__(self, *, allowed_formats, format_options):
-            self.format_to_options = format_options
             pdf_option = format_options[InputFormat.PDF]
             captured["pipeline_options"] = pdf_option.pipeline_options
             captured["backend_options"] = pdf_option.backend_options

@@ -1249,6 +1249,7 @@ def convert(  # noqa: C901
         PdfFormatOption,
         PowerpointFormatOption,
         WordFormatOption,
+        _get_default_option,
     )
     from docling.pipeline.asr_pipeline import AsrPipeline
     from docling.pipeline.legacy_standard_pdf_pipeline import LegacyStandardPdfPipeline
@@ -1789,16 +1790,20 @@ def convert(  # noqa: C901
             pipeline_options.artifacts_path = artifacts_path
             asr_pipeline_options.artifacts_path = artifacts_path
 
-        doc_converter = DocumentConverter(
-            allowed_formats=from_formats,
-            format_options=format_options,
-        )
-        # Apply the CLI policy to every format, including defaults, before initialization.
-        for format_option in doc_converter.format_to_options.values():
+        # Apply the CLI policy to every allowed format, including defaults.
+        for input_format in from_formats:
+            if input_format not in format_options:
+                format_options[input_format] = _get_default_option(input_format)
+        for format_option in format_options.values():
             if format_option.pipeline_options is not None:
                 format_option.pipeline_options.allow_external_plugins = (
                     allow_external_plugins
                 )
+
+        doc_converter = DocumentConverter(
+            allowed_formats=from_formats,
+            format_options=format_options,
+        )
 
         start_time = time.time()
 
