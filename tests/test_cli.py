@@ -97,6 +97,14 @@ def test_cli_help():
     assert "DOCLING_SERVICE_URL" in result.output
 
 
+@pytest.mark.parametrize("args", [["-h"], ["convert", "-h"], ["convert-remote", "-h"]])
+def test_cli_short_help(args: list[str]) -> None:
+    result = runner.invoke(app, args)
+
+    assert result.exit_code == 0
+    assert "Usage" in result.output
+
+
 def test_cli_convert_help():
     result = runner.invoke(app, ["convert", "--help"], terminal_width=200)
     assert result.exit_code == 0

@@ -27,6 +27,25 @@ BCP-47 tags behind the `iso:` prefix:
 $ docling-tools models download easyocr --easyocr-lang iso:zh-Hans --easyocr-lang ja
 ```
 
+To prefetch an OpenAI-format Whisper checkpoint for native ASR, select its model
+name. The file is stored directly in the output directory, so the directory can
+be copied to an artifact store and used with `--artifacts-path`:
+
+```sh
+docling-tools models download whisper_tiny --output-dir /models
+docling --asr-model whisper_tiny_native --artifacts-path /models audio.wav
+```
+
+`docling-tools models download --all` does not include ASR models. Add `--asr`
+to prefetch all native Whisper model sizes and English-only variants:
+
+```sh
+docling-tools models download --all --asr --output-dir /models
+```
+
+This requires the `asr` extra and downloads OpenAI-format checkpoints. It does
+not prefetch Transformers-format, MLX, or WhisperS2T models.
+
 Alternatively, models can be programmatically downloaded using `docling.utils.model_downloader.download_models()`.
 
 Also, you can use `download-hf-repo` parameter to download arbitrary models from HuggingFace by specifying repo id:

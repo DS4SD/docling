@@ -75,6 +75,30 @@ class _AvailableModels(str, Enum):
     RAPIDOCR = "rapidocr"
     EASYOCR = "easyocr"
     NEMOTRON_OCR_V2 = "nemotron_ocr_v2"
+    WHISPER_TINY = "whisper_tiny"
+    WHISPER_TINY_EN = "whisper_tiny_en"
+    WHISPER_BASE = "whisper_base"
+    WHISPER_BASE_EN = "whisper_base_en"
+    WHISPER_SMALL = "whisper_small"
+    WHISPER_SMALL_EN = "whisper_small_en"
+    WHISPER_MEDIUM = "whisper_medium"
+    WHISPER_MEDIUM_EN = "whisper_medium_en"
+    WHISPER_LARGE = "whisper_large"
+    WHISPER_TURBO = "whisper_turbo"
+
+
+_WHISPER_MODELS = {
+    _AvailableModels.WHISPER_TINY: "tiny",
+    _AvailableModels.WHISPER_TINY_EN: "tiny.en",
+    _AvailableModels.WHISPER_BASE: "base",
+    _AvailableModels.WHISPER_BASE_EN: "base.en",
+    _AvailableModels.WHISPER_SMALL: "small",
+    _AvailableModels.WHISPER_SMALL_EN: "small.en",
+    _AvailableModels.WHISPER_MEDIUM: "medium",
+    _AvailableModels.WHISPER_MEDIUM_EN: "medium.en",
+    _AvailableModels.WHISPER_LARGE: "large",
+    _AvailableModels.WHISPER_TURBO: "turbo",
+}
 
 
 _default_models = [
@@ -113,6 +137,12 @@ def download(
             "--all",
             help="If true, all available models will be downloaded (mutually exclusive with passing specific models).",
             show_default=True,
+        ),
+    ] = False,
+    asr: Annotated[
+        bool,
+        typer.Option(
+            ..., "--asr", help="With --all, also download native Whisper ASR models."
         ),
     ] = False,
     quiet: Annotated[
@@ -173,6 +203,8 @@ def download(
         raise typer.BadParameter(
             "Cannot simultaneously set 'all' parameter and specify models to download."
         )
+    if asr and not all:
+        raise typer.BadParameter("--asr requires --all", param_hint="--asr")
     if not quiet:
         logging.basicConfig(
             level=logging.INFO,
@@ -180,7 +212,11 @@ def download(
             datefmt="[%X]",
             handlers=[RichHandler(show_level=False, show_time=False, markup=True)],
         )
-    to_download = models or (list(_AvailableModels) if all else _default_models)
+    to_download = models or (
+        [model for model in _AvailableModels if asr or model not in _WHISPER_MODELS]
+        if all
+        else _default_models
+    )
     if easyocr_lang is not None:
         if _AvailableModels.EASYOCR not in to_download:
             raise typer.BadParameter(
@@ -257,6 +293,9 @@ def download(
         with_easyocr=_AvailableModels.EASYOCR in to_download,
         easyocr_languages=easyocr_lang,
         with_nemotron_ocr=_AvailableModels.NEMOTRON_OCR_V2 in to_download,
+        whisper_models=[
+            _WHISPER_MODELS[model] for model in to_download if model in _WHISPER_MODELS
+        ],
     )
 
     if quiet:
