@@ -231,12 +231,8 @@ class XBRLDocumentBackend(DeclarativeDocumentBackend):
                         total_pkg_bytes = 0
                         for info in zf.infolist():
                             member = info.filename
-                            if (
-                                not member.lower().endswith(".zip")
-                                or member == entry_name
-                            ):
+                            if not member.lower().endswith(".zip"):
                                 continue
-                            # Reject oversized members before decompression.
                             if info.file_size > options.max_file_bytes:
                                 raise SecurityError(
                                     f"Taxonomy package member too large to extract: {member!r}"
@@ -252,11 +248,9 @@ class XBRLDocumentBackend(DeclarativeDocumentBackend):
                                     "Too many taxonomy package members in XBRL ZIP"
                                 )
                             pkg_dir.mkdir(exist_ok=True)
-                            pkg_on_disk = (pkg_dir / Path(member).name).resolve()
-                            if not pkg_on_disk.is_relative_to(pkg_dir.resolve()):
-                                raise SecurityError(
-                                    f"ZIP slip attempt in taxonomy package: {member!r}"
-                                )
+                            # .name strips any directory component, preventing
+                            # path traversal from a malicious member filename.
+                            pkg_on_disk = pkg_dir / Path(member).name
                             pkg_on_disk.write_bytes(zf.read(member))
                             zip_paths.append(str(pkg_on_disk))
                     if zip_paths:
