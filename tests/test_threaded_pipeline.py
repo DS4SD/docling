@@ -3,6 +3,7 @@
 
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import pytest
@@ -25,6 +26,7 @@ from docling.pipeline.standard_pdf_pipeline import (
     StandardPdfPipeline,
     ThreadedItem,
     ThreadedPipelineStage,
+    ThreadedQueue,
 )
 
 _TEST_FILES = [
@@ -205,6 +207,40 @@ def test_threaded_pipeline_stage_shutdown_timeout():
         release.set()
         if stage._thread is not None:
             stage._thread.join(timeout=5.0)
+
+
+def test_threaded_pipeline_model_raises_timeout():
+    """A model's own TimeoutError fails the page instead of being retried forever."""
+
+    class TimingOutModel:
+        def __call__(self, conv_res, pages):
+            raise TimeoutError("remote model timed out")
+
+    output = ThreadedQueue(10)
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        stage = ThreadedPipelineStage(
+            name="timing_out",
+            model=TimingOutModel(),
+            batch_size=1,
+            batch_timeout=0.05,
+            queue_max_size=10,
+            model_executor=executor,
+        )
+        stage.add_output_queue(output)
+        stage.start()
+        try:
+            stage.input_queue.put(
+                ThreadedItem(
+                    payload=Page(page_no=1), run_id=1, page_no=1, conv_res=None
+                )
+            )
+            processed = output.get_batch(1, timeout=5.0)
+        finally:
+            stage.stop()
+
+    assert len(processed) == 1
+    assert processed[0].is_failed
+    assert isinstance(processed[0].error, TimeoutError)
 
 
 _MODEL_ATTRS = {

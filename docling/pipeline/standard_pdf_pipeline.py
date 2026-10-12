@@ -27,7 +27,7 @@ from collections import defaultdict, deque
 from concurrent.futures import (
     Future,
     ThreadPoolExecutor,
-    TimeoutError as FuturesTimeoutError,
+    wait,
 )
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -276,15 +276,11 @@ class ThreadedPipelineStage:
         self._model_call = self._model_executor.submit(
             lambda: list(self.model(conv_res, pages))
         )
-        while True:
-            try:
-                return self._model_call.result(timeout=0.5)
-            except FuturesTimeoutError:
-                if not self._running:
-                    self._model_call.cancel()
-                    raise RuntimeError(
-                        f"Stage {self.name} stopped during its model call"
-                    )
+        while not wait([self._model_call], timeout=0.5).done:
+            if not self._running:
+                self._model_call.cancel()
+                raise RuntimeError(f"Stage {self.name} stopped during its model call")
+        return self._model_call.result()
 
     # ---------------------------------------------------------------- wiring
     def add_output_queue(self, q: ThreadedQueue) -> None:
