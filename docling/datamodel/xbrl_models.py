@@ -45,11 +45,13 @@ excluded from instance-document candidate searches.
 XBRL_INSTANCE_NS: Final[bytes] = b"http://www.xbrl.org/2003/instance"
 """Namespace URI that identifies a traditional XBRL instance document."""
 
-IXBRL_SNIFF_BYTES: Final[int] = 512
+IXBRL_SNIFF_BYTES: Final[int] = 1024
 """Number of bytes read from the document head when sniffing for iXBRL markers.
 
-All iXBRL markers appear in the opening ``<html>`` tag, so 512 bytes is
-sufficient for a reliable detection.
+iXBRL markers appear in the opening ``<html>`` tag, but XML declarations and
+HTML comments that precede the tag can easily consume several hundred bytes.
+1024 bytes provides a comfortable margin while remaining negligible compared
+to the size of a real iXBRL document.
 """
 
 _XBRL_IXBRL_SUFFIXES: Final[tuple[str, ...]] = (".htm", ".html", ".xhtml")
