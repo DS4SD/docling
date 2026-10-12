@@ -17,12 +17,12 @@ from docling_core.types.doc import (
 from docling_core.types.doc.document import PictureDescriptionData
 from PIL import Image
 
+from docling.backend.image_backend import _to_rgb
 from docling.datamodel.accelerator_options import AcceleratorOptions
 from docling.datamodel.base_models import ApiImageRequestResult
 from docling.datamodel.pipeline_options import (
     PictureDescriptionBaseOptions,
 )
-from docling.datamodel.progress import EnrichmentStep
 from docling.models.base_model import (
     BaseItemAndImageEnrichmentModel,
     BaseModelWithOptions,
@@ -36,7 +36,6 @@ _USAGE_META_FIELD_NAME = "usage"
 class PictureDescriptionBaseModel(
     BaseItemAndImageEnrichmentModel, BaseModelWithOptions
 ):
-    progress_step = EnrichmentStep.PICTURE_DESCRIPTION
     images_scale: float = 2.0
 
     def __init__(
@@ -105,10 +104,7 @@ class PictureDescriptionBaseModel(
                 describe_image = False
             if describe_image:
                 elements.append(el.item)
-                img = el.image
-                if img.mode == "P" and isinstance(img.info.get("transparency"), bytes):
-                    img = img.convert("RGBA")
-                images.append(img.convert("RGB"))
+                images.append(_to_rgb(el.image))
 
         outputs = self._annotate_images(images)
 
