@@ -1151,33 +1151,45 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             drawingml_els = [x for x in _raw_drawingml_els if not _in_textbox(x)]
             vml_images = [x for x in _raw_vml_images if not _in_textbox(x)]
 
-            # Check for textbox content - check multiple textbox formats
-            # Only process if the element hasn't been processed before
-            if element not in self.processed_textbox_elements:
+            # Check for textbox content - check multiple textbox formats.
+            # Skip container elements (tbl, sdt) that recursively walk their
+            # children, as descendant XPaths would otherwise extract textboxes
+            # before the table or SDT is processed and duplicate them later.
+            if (
+                tag_name not in {"tbl", "sdt"}
+                and element not in self.processed_textbox_elements
+            ):
                 # Modern Word textboxes
                 txbx_xpath = etree.XPath(
                     ".//w:txbxContent|.//v:textbox//w:p",
                     namespaces=_OOXML_NAMESPACES,
                 )
-                textbox_elements = txbx_xpath(element)
+                raw_textbox_elements = txbx_xpath(element)
 
                 # No modern textboxes found, check for alternate/legacy textbox formats
-                if not textbox_elements:
+                if not raw_textbox_elements:
                     # Additional checks for textboxes in DrawingML and VML formats
                     alt_txbx_xpath = etree.XPath(
                         ".//wps:txbx//w:p|.//w10:wrap//w:p|.//v:textbox//w:txbxContent//w:p",
                         namespaces=_OOXML_NAMESPACES,
                     )
-                    textbox_elements = alt_txbx_xpath(element)
+                    raw_textbox_elements = alt_txbx_xpath(element)
 
                     # Check for shape text that's not in a standard textbox
-                    if not textbox_elements:
+                    if not raw_textbox_elements:
                         shape_text_xpath = etree.XPath(
                             ".//a:bodyPr/ancestor::*//a:t|.//a:txBody//a:t",
                             namespaces=_OOXML_NAMESPACES,
                         )
-                        shape_text_elements = shape_text_xpath(element)
+                        shape_text_elements = [
+                            el
+                            for el in shape_text_xpath(element)
+                            if el not in self.processed_textbox_elements
+                        ]
                         if shape_text_elements:
+                            self.processed_textbox_elements.add(element)
+                            for st_element in shape_text_elements:
+                                self.processed_textbox_elements.add(st_element)
                             # Create custom text elements from shape text
                             text_content = " ".join(
                                 [t.text for t in shape_text_elements if t.text]
@@ -1200,12 +1212,21 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                                     content_layer=self.content_layer,
                                 )
 
+                textbox_elements = [
+                    el
+                    for el in raw_textbox_elements
+                    if el not in self.processed_textbox_elements
+                ]
                 if textbox_elements:
                     # Mark the parent element as processed
                     self.processed_textbox_elements.add(element)
-                    # Also mark all found textbox elements as processed
+                    # Also mark all found textbox elements and their paragraphs as processed
                     for tb_element in textbox_elements:
                         self.processed_textbox_elements.add(tb_element)
+                        for desc_p in tb_element.findall(
+                            ".//w:p", namespaces=_OOXML_NAMESPACES
+                        ):
+                            self.processed_textbox_elements.add(desc_p)
 
                     _log.debug(
                         f"Found textbox content with {len(textbox_elements)} elements"
@@ -3620,6 +3641,15 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         return False
 
+    def _has_textbox(self, element: BaseOxmlElement) -> bool:
+        """Check if a docx element holds any textbox or shape text content."""
+        txbx_xpath = etree.XPath(
+            ".//w:txbxContent|.//v:textbox//w:p|.//wps:txbx//w:p|.//w10:wrap//w:p"
+            "|.//a:bodyPr/ancestor::*//a:t|.//a:txBody//a:t",
+            namespaces=_OOXML_NAMESPACES,
+        )
+        return bool(txbx_xpath(element))
+
     def _is_rich_table_cell(self, cell: _Cell) -> bool:
         """Determine whether a docx cell should be parsed as a Docling RichTableCell.
 
@@ -3653,7 +3683,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             tag = child.tag.split("}")[-1]
             if tag not in allowed_tags:
                 return True
-        if self._has_blip(tc):
+        if self._has_blip(tc) or self._has_textbox(tc):
             return True
 
         # paragraph must contain runs with no run-properties

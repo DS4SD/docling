@@ -2028,6 +2028,98 @@ def test_numbering_inside_a_textbox_does_not_number_its_anchor(tmp_path):
     assert labels["Anchor paragraph, plain body text."] == DocItemLabel.TEXT
 
 
+def _anchor_vml_textbox(paragraph, text: str) -> None:
+    """Anchor a plain VML textbox holding ``text`` in ``paragraph``."""
+    w_ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    pict_xml = (
+        f'<w:r xmlns:w="{w_ns}" xmlns:v="{_VML_NS}">'
+        '<w:pict><v:shape id="s1" style="width:100pt;height:40pt">'
+        f"<v:textbox><w:txbxContent><w:p><w:r><w:t>{text}</w:t></w:r></w:p>"
+        "</w:txbxContent></v:textbox></v:shape></w:pict></w:r>"
+    )
+    paragraph._p.append(etree.fromstring(pict_xml))
+
+
+def _anchor_word_mc_textbox(paragraph, text: str) -> None:
+    """Anchor a Word mc:AlternateContent (DrawingML + VML fallback) textbox."""
+    w_ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    mc_ns = "http://schemas.openxmlformats.org/markup-compatibility/2006"
+    wp_ns = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+    a_ns = "http://schemas.openxmlformats.org/drawingml/2006/main"
+    wps_ns = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
+    mc_xml = (
+        f'<w:r xmlns:w="{w_ns}" xmlns:v="{_VML_NS}" xmlns:mc="{mc_ns}" '
+        f'xmlns:wp="{wp_ns}" xmlns:a="{a_ns}" xmlns:wps="{wps_ns}">'
+        '<mc:AlternateContent><mc:Choice Requires="wps">'
+        "<w:drawing><wp:anchor><a:graphic>"
+        f'<a:graphicData uri="{wps_ns}">'
+        f"<wps:wsp><wps:txbx><w:txbxContent><w:p><w:r><w:t>{text}</w:t></w:r></w:p>"
+        "</w:txbxContent></wps:txbx></wps:wsp></a:graphicData></a:graphic>"
+        "</wp:anchor></w:drawing></mc:Choice><mc:Fallback>"
+        '<w:pict><v:shape id="s1"><v:textbox><w:txbxContent>'
+        f"<w:p><w:r><w:t>{text}</w:t></w:r></w:p>"
+        "</w:txbxContent></v:textbox></v:shape></w:pict>"
+        "</mc:Fallback></mc:AlternateContent></w:r>"
+    )
+    paragraph._p.append(etree.fromstring(mc_xml))
+
+
+@pytest.mark.parametrize(
+    ("kind", "marker"),
+    [
+        ("vml_single_para", "MARKA"),
+        ("vml_multi_para", "MARKA"),
+        ("word_mc_alternate", "MARKW"),
+    ],
+)
+def test_textbox_in_table_cell_is_emitted_once_inside_cell(
+    tmp_path, kind: str, marker: str
+):
+    """A textbox anchored in a table cell must stay inside its cell and not be
+    emitted a second time before the table (regression for #4569).
+    """
+    document = Document()
+    document.add_paragraph("debut")
+    table = document.add_table(rows=2, cols=2)
+    table.cell(0, 1).text = "b"
+    table.cell(1, 0).text = "c"
+    table.cell(1, 1).text = "d"
+
+    cell0 = table.cell(0, 0)
+    if kind == "word_mc_alternate":
+        _anchor_word_mc_textbox(cell0.paragraphs[0], marker)
+    else:
+        _anchor_vml_textbox(cell0.paragraphs[0], marker)
+        if kind == "vml_multi_para":
+            cell0.add_paragraph("")
+
+    document.add_paragraph("fin")
+
+    doc = _convert_built(document, tmp_path)
+    md = doc.export_to_markdown()
+
+    assert md.count(marker) == 1
+    assert [t.text for t in doc.texts if t.text.strip()] == ["debut", marker, "fin"]
+    table_lines = [line for line in md.splitlines() if line.startswith("|")]
+    assert any(marker in line and "b" in line for line in table_lines)
+
+
+def test_textbox_in_single_cell_table_preserves_order_and_is_not_duplicated(tmp_path):
+    """A 1x1 layout table unwraps its cell into the body; a textbox anchored in
+    a later paragraph of that cell must appear once, after earlier paragraphs.
+    """
+    document = Document()
+    table = document.add_table(rows=1, cols=1)
+    cell = table.cell(0, 0)
+    cell.paragraphs[0].text = "First paragraph in cell"
+    second_para = cell.add_paragraph()
+    _anchor_vml_textbox(second_para, "Textbox in second paragraph")
+
+    doc = _convert_built(document, tmp_path)
+    texts = [t.text for t in doc.texts if t.text.strip()]
+    assert texts == ["First paragraph in cell", "Textbox in second paragraph"]
+
+
 def test_list_returning_to_starting_level_zero_still_works(documents):
     """Control case: levels 0, 1, 2, 1 must keep working unchanged."""
 

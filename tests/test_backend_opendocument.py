@@ -1898,3 +1898,48 @@ def test_odt_extensionless_path_is_not_read(tmp_path: Path):
     assert "/etc/passwd" not in files_opened, (
         "ODF backend attempted to open an extension-less system path"
     )
+
+
+def test_odp_hidden_slide_goes_to_invisible_layer(tmp_path: Path):
+    """A hidden slide (``presentation:visibility="hidden"``) is left out of the export.
+
+    Its content stays available in ``ContentLayer.INVISIBLE``, the same as a
+    hidden ODS sheet.
+    """
+    doc = OdfDocument("presentation")
+    body = doc.body
+    body.clear()
+    hidden_style = Style("drawing-page", name="dp_hidden")
+    properties = Element.from_tag("style:drawing-page-properties")
+    properties.set_attribute("presentation:visibility", "hidden")
+    hidden_style.append(properties)
+    doc.insert_style(hidden_style, automatic=True)
+    for index, (name, text, style_name) in enumerate(
+        [
+            ("Visible slide", "Presented text", None),
+            ("Hidden slide", "Backup text", "dp_hidden"),
+        ]
+    ):
+        page = DrawPage(f"page{index + 1}", name=name)
+        if style_name is not None:
+            page.set_attribute("draw:style-name", style_name)
+        page.append(
+            Frame.text_frame([text], size=("10cm", "2cm"), position=("1cm", "1cm"))
+        )
+        body.append(page)
+    path = tmp_path / "hidden.odp"
+    doc.save(str(path))
+
+    document = (
+        DocumentConverter(allowed_formats=[InputFormat.ODP]).convert(path).document
+    )
+
+    hidden_texts = [
+        item.text
+        for item, _ in document.iterate_items(
+            included_content_layers={ContentLayer.INVISIBLE}
+        )
+        if isinstance(item, TextItem)
+    ]
+    assert document.export_to_markdown() == "# Visible slide\n\nPresented text"
+    assert hidden_texts == ["Hidden slide", "Backup text"]

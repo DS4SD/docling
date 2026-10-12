@@ -80,6 +80,10 @@ DEFAULT_HEADER_FOOTNOTES: Final[str] = "Footnotes"
 DEFAULT_HEADER_REFERENCES: Final[str] = "References"
 DEFAULT_TEXT_ETAL: Final[str] = "et al."
 _XLINK_HREF: Final[str] = "{http://www.w3.org/1999/xlink}href"
+# `list-type` values that number the items, from the JATS 1.3 tag library.
+_ORDERED_LIST_TYPES: Final[frozenset[str]] = frozenset(
+    {"order", "alpha-lower", "alpha-upper", "roman-lower", "roman-upper"}
+)
 
 _RASTER_IMAGE_SUFFIXES: Final[tuple[str, ...]] = (
     ".jpg",
@@ -315,6 +319,12 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
             text += child.tail.replace("\n", " ") if child.tail else ""
 
         return text
+
+    @staticmethod
+    def _get_label(node: etree._Element) -> str:
+        """Return the text of the `<label>` child of `node`, or an empty string."""
+        label = node.find("label")
+        return JatsDocumentBackend._get_text(label).strip() if label is not None else ""
 
     @staticmethod
     def _normalize_whitespace(text: str | None) -> str:
@@ -1295,7 +1305,6 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
             elif child.tag == "list-item":
                 # TODO: address non-paragraph, non-list content inside list-item
                 #       (e.g. disp-formula, fig, table-wrap)
-                # TODO: address list type and item label
                 text_parts: list[str] = []
                 nested_lists: list[etree._Element] = []
 
@@ -1309,6 +1318,9 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
 
                 new_parent = doc.add_list_item(
                     text=text,
+                    enumerated=node.get("list-type", "").strip().lower()
+                    in _ORDERED_LIST_TYPES,
+                    marker=JatsDocumentBackend._get_label(child),
                     parent=parent,
                 )
 
