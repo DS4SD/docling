@@ -177,6 +177,33 @@ def test_predict_merges_detects_wrap_in_either_coord_origin(
     assert ReadingOrderPredictor().predict_merges(sorted_elements=elements) == {0: [1]}
 
 
+def test_predict_merges_skips_heading_that_continues_in_a_column_to_the_left() -> None:
+    # The next fragment is lower, but in another column to the left: not a wrap.
+    page_size = Size(width=612, height=792)
+    elements = [
+        PageElement(
+            cid=cid,
+            label=SH,
+            text=text,
+            page_no=1,
+            page_size=page_size,
+            l=bbox.l,
+            t=bbox.t,
+            r=bbox.r,
+            b=bbox.b,
+            coord_origin=bbox.coord_origin,
+        )
+        for cid, (text, bbox) in enumerate(
+            [
+                ("Functional review of board", BoundingBox(l=320, t=74, r=560, b=84)),
+                ("operations of the board", BoundingBox(l=54, t=88, r=290, b=98)),
+            ]
+        )
+    ]
+
+    assert ReadingOrderPredictor().predict_merges(sorted_elements=elements) == {}
+
+
 @pytest.mark.parametrize(
     ("fragments", "num_pages"),
     [
