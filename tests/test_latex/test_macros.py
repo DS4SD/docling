@@ -448,10 +448,11 @@ def test_latex_href_keeps_text_together():
     backend = LatexDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(latex_content))
     doc = backend.convert()
 
-    assert [t.text for t in doc.texts] == [
-        "About [us](https://example.com)",
-        "Go [there](https://example.com/my_page#top) now.",
-        "See [the site](https://example.com) here",
+    # each link stays in place and its item keeps its kind
+    assert [(t.label, t.text) for t in doc.texts] == [
+        (DocItemLabel.SECTION_HEADER, "About [us](https://example.com)"),
+        (DocItemLabel.TEXT, "Go [there](https://example.com/my_page#top) now."),
+        (DocItemLabel.LIST_ITEM, "See [the site](https://example.com) here"),
     ]
 
 
