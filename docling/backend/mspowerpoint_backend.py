@@ -60,6 +60,7 @@ _PPTX_AVAILABLE: bool = False
 _PPTX_IMPORT_ERROR: ImportError | None = None
 try:  # pragma: no cover - import-time guard
     from pptx import Presentation, presentation
+    from pptx.chart.plot import PlotFactory, PlotTypeInspector
     from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
     from pptx.exc import InvalidXmlError
     from pptx.oxml.ns import qn
@@ -1249,7 +1250,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
     def _chart_type_to_classification(chart_type: Any) -> PictureClassificationLabel:
         """Map a python-pptx ``XL_CHART_TYPE`` to a docling classification label.
 
-        ``chart.chart_type`` is a granular enum (``COLUMN_CLUSTERED``,
+        The type of a plot is a granular enum (``COLUMN_CLUSTERED``,
         ``XY_SCATTER_LINES``, ``THREE_D_PIE``, ...). Rather than enumerate every
         member, we match on the enum member's name by family, mirroring the
         Excel backend's tagname mapping: column/bar variants become BAR_CHART,
@@ -1259,7 +1260,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
 
         Args:
             chart_type: An ``XL_CHART_TYPE`` member, or None when python-pptx
-                cannot determine the type (e.g. combination charts).
+                cannot determine the type of the plot.
 
         Returns:
             The matching PictureClassificationLabel.
@@ -1274,6 +1275,59 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         if "BAR" in name or "COL" in name:
             return PictureClassificationLabel.BAR_CHART
         return PictureClassificationLabel.OTHER_CHART
+
+    @staticmethod
+    def _chart_plots(chart: Any) -> list[tuple[Any, Any]]:
+        """Return each plot of a chart with its plot element, back-most first.
+
+        A combination chart has one plot per chart type, for example a column
+        plot with a line plot drawn over it. python-pptx has no plot class for
+        some types (3-D bar, line and pie, stock, surface, bar-of-pie). Such a
+        plot is returned as None, so that the other plots keep their data.
+
+        Args:
+            chart: A python-pptx ``Chart`` object.
+
+        Returns:
+            ``(plot element, plot)`` pairs in drawing order. The plot is None
+            when python-pptx cannot read its type.
+        """
+        plots: list[tuple[Any, Any]] = []
+        for x_chart in chart.element.chart.plotArea.xCharts:
+            try:
+                plots.append((x_chart, PlotFactory(x_chart, chart)))
+            except ValueError:
+                plots.append((x_chart, None))
+        return plots
+
+    @classmethod
+    def _chart_classifications(
+        cls, plots: list[tuple[Any, Any]]
+    ) -> list[PictureClassificationLabel]:
+        """Return the classification labels of a chart, one per plot type.
+
+        The labels follow the drawing order, so the back-most plot gives the
+        main label. A plot that python-pptx cannot read counts as OTHER_CHART.
+        A label is listed once, even when several plots share it.
+
+        Args:
+            plots: The chart's plots, as returned by ``_chart_plots``.
+
+        Returns:
+            The labels, or ``[OTHER_CHART]`` when the chart has no plot.
+        """
+        labels: list[PictureClassificationLabel] = []
+        for _, plot in plots:
+            chart_type = None
+            if plot is not None:
+                try:
+                    chart_type = PlotTypeInspector.chart_type(plot)
+                except (ValueError, NotImplementedError):
+                    chart_type = None
+            label = cls._chart_type_to_classification(chart_type)
+            if label not in labels:
+                labels.append(label)
+        return labels or [PictureClassificationLabel.OTHER_CHART]
 
     @staticmethod
     def _chart_title_text(chart: Any) -> Optional[str]:
@@ -1310,7 +1364,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             return str(int(value))
         return str(value)
 
-    def _chart_to_table_data(self, chart: Any) -> Optional[TableData]:
+    def _chart_to_table_data(self, plots: list[tuple[Any, Any]]) -> Optional[TableData]:
         """Reconstruct a chart's underlying data grid as a TableData.
 
         Unlike the Excel backend, python-pptx exposes the plotted numbers
@@ -1318,28 +1372,37 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         labels on the plot (``plot.categories``) — no workbook reference
         resolution is needed. ``_build_chart_table`` lays the table out.
 
+        The series of every plot become columns in drawing order, so a
+        combination chart keeps its line series next to its column series.
+        The categories come from the first plot that has them. A plot that
+        python-pptx cannot read is skipped with a warning.
+
         Args:
-            chart: A python-pptx ``Chart`` object.
+            plots: The chart's plots, as returned by ``_chart_plots``.
 
         Returns:
             A TableData, or None if the chart exposes no usable series or no
             populated data row.
         """
-        series_list = list(chart.series)
-        if not series_list:
-            return None
-
-        plots = list(chart.plots)
-        categories: list[str] = (
-            [self._cell_text(cat) for cat in plots[0].categories] if plots else []
-        )
-
+        categories: list[str] = []
         columns: list[tuple[str, list[str]]] = []
-        for series in series_list:
-            name = self._cell_text(series.name) if series.name is not None else ""
-            values = [self._cell_text(v) for v in series.values]
-            columns.append((name, values))
+        for x_chart, plot in plots:
+            if plot is None:
+                _log.warning(
+                    "Skipping the data of a chart plot that python-pptx cannot "
+                    "read: %s",
+                    etree.QName(x_chart).localname,
+                )
+                continue
+            if not categories:
+                categories = [self._cell_text(cat) for cat in plot.categories]
+            for series in plot.series:
+                name = self._cell_text(series.name) if series.name is not None else ""
+                values = [self._cell_text(v) for v in series.values]
+                columns.append((name, values))
 
+        if not columns:
+            return None
         return _build_chart_table(categories, columns)
 
     def _handle_chart(self, shape, parent_slide, slide_ind, doc, slide_size):
@@ -1347,7 +1410,9 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
 
         Each chart becomes a PictureItem whose meta carries (a) the chart-type
         classification and (b) the chart's plotted numbers reconstructed as a
-        TableData. The chart title, if any, becomes the picture caption. When
+        TableData. A combination chart gets one prediction per plot type, and
+        the back-most plot gives the main one. The chart title, if any, becomes
+        the picture caption. When
         ``render_chart_images`` is enabled and LibreOffice is available, a
         rendered image is attached; on any rendering failure the picture keeps
         its classification and data without an image.
@@ -1370,13 +1435,14 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             return
 
         try:
-            chart_type = chart.chart_type
-        except (ValueError, NotImplementedError):
-            chart_type = None
-        classification = self._chart_type_to_classification(chart_type)
+            plots = self._chart_plots(chart)
+        except InvalidXmlError as exc:
+            _log.warning("Could not read the plots of a chart: %s", exc)
+            plots = []
+        labels = self._chart_classifications(plots)
         caption_text = self._chart_title_text(chart)
         try:
-            table_data = self._chart_to_table_data(chart)
+            table_data = self._chart_to_table_data(plots)
         except (AttributeError, ValueError, KeyError) as exc:
             _log.warning("Could not extract chart data: %s", exc)
             table_data = None
@@ -1414,7 +1480,10 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         )
         picture.meta = PictureMeta(
             classification=PictureClassificationMetaField(
-                predictions=[PictureClassificationPrediction(class_name=classification)]
+                predictions=[
+                    PictureClassificationPrediction(class_name=label)
+                    for label in labels
+                ]
             ),
             tabular_chart=(
                 TabularChartMetaField(chart_data=table_data)
