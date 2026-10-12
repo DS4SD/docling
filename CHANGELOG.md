@@ -1,3 +1,20 @@
+## [v2.138.0](https://github.com/docling-project/docling/releases/tag/v2.138.0) - 2026-10-12
+
+### Feature
+
+* **iwork:** Read pictures placed on a Numbers sheet ([#4700](https://github.com/docling-project/docling/issues/4700)) ([`88fbc05`](https://github.com/docling-project/docling/commit/88fbc055771161464463bbd1537747d3ccd0ec5e))
+
+### Fix
+
+* **docx:** Emit textboxes in table cells once inside their cell ([#4757](https://github.com/docling-project/docling/issues/4757)) ([`6bc5770`](https://github.com/docling-project/docling/commit/6bc57702be64a487736178938c10b5c11f4604b1))
+* **jats:** Parse ordered lists and list item labels ([#4770](https://github.com/docling-project/docling/issues/4770)) ([`ad2e0e1`](https://github.com/docling-project/docling/commit/ad2e0e1a4fd3d5b0e709f450befa64811bff14cb))
+* **mlx:** Pass the sampling temperature as `temperature` to mlx-vlm ([#4769](https://github.com/docling-project/docling/issues/4769)) ([`fb0818e`](https://github.com/docling-project/docling/commit/fb0818e3fb9bd24145731de1df18d50de9a715e0))
+* **odf:** Move hidden ODP slides to the invisible content layer ([#4767](https://github.com/docling-project/docling/issues/4767)) ([`807f6df`](https://github.com/docling-project/docling/commit/807f6df69ff8aabf69584a4b6cc2ed0287780ac7))
+* **pptx:** Move hidden shapes to the invisible content layer ([#4733](https://github.com/docling-project/docling/issues/4733)) ([`21588f5`](https://github.com/docling-project/docling/commit/21588f5261d0a5a051102356d9babb35e790f33e))
+* **iwork:** Keep the transparency of pictures ([#4686](https://github.com/docling-project/docling/issues/4686)) ([`3f8384f`](https://github.com/docling-project/docling/commit/3f8384fd7ab34510a66c41ad5ec4fa3897bed7fa))
+* **docx:** Keep footnote text that is not a plain paragraph ([#4735](https://github.com/docling-project/docling/issues/4735)) ([`a8c01dc`](https://github.com/docling-project/docling/commit/a8c01dc6ac269d0232214735819d529cb666e0dd))
+* **html:** Skip the inert content of template tags ([#4715](https://github.com/docling-project/docling/issues/4715)) ([`ed04377`](https://github.com/docling-project/docling/commit/ed04377eae16c84be1aefe8b9bfe42af9ecb2a5b))
+
 ## [v2.137.0](https://github.com/docling-project/docling/releases/tag/v2.137.0) - 2026-10-09
 
 ### Feature
