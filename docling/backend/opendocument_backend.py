@@ -1865,7 +1865,45 @@ class OdpDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
                     text=slide_name,
                 )
             self._walk_slide(page, parent=slide_group, doc=doc)
+            if self._is_slide_hidden(page):
+                self._hide_slide(doc, slide_group)
         return doc
+
+    @staticmethod
+    def _hide_slide(doc: DoclingDocument, slide_group: NodeItem) -> None:
+        """Move the content of a hidden slide to the invisible layer.
+
+        A hidden slide is not presented, so it is kept like a hidden ODS sheet:
+        available, but out of the default exports.
+        """
+        items = [
+            item
+            for item, _ in doc.iterate_items(
+                root=slide_group,
+                with_groups=True,
+                included_content_layers={ContentLayer.BODY},
+            )
+        ]
+        for item in items:
+            item.content_layer = ContentLayer.INVISIBLE
+
+    def _is_slide_hidden(self, page: DrawPage) -> bool:
+        """Return True if the slide is hidden in the presentation.
+
+        Impress marks a hidden slide with ``presentation:visibility="hidden"`` on
+        the ``style:drawing-page-properties`` of the slide's style.
+        """
+        style_name = page.get_attribute("draw:style-name")
+        if not isinstance(style_name, str):
+            return False
+        style = self.odf_obj.get_style("drawing-page", style_name)
+        if style is None:
+            return False
+        properties = style.get_element("style:drawing-page-properties")
+        return (
+            properties is not None
+            and properties.get_attribute("presentation:visibility") == "hidden"
+        )
 
     def _walk_slide(
         self, page: DrawPage, parent: NodeItem, doc: DoclingDocument
