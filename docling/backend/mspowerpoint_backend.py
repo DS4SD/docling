@@ -4,9 +4,12 @@
 from __future__ import annotations
 
 import logging
+import math
+import re
 import shutil
 import warnings
 from dataclasses import dataclass
+from datetime import datetime, time, timedelta
 from io import BytesIO
 from pathlib import Path
 from tempfile import mkdtemp
@@ -110,6 +113,15 @@ to populated rows first; this cap only binds genuinely huge charts. 100k cells
 still admit e.g. a 10k-point, 5-series chart while keeping any single chart's
 markdown output to a few megabytes.
 """
+
+_EXCEL_EPOCH: Final = datetime(1899, 12, 30)
+_EXCEL_1904_EPOCH: Final = datetime(1904, 1, 1)
+"""Day zero of the date serials in a chart's data cache, for the 1900 and the
+1904 date systems. ``c:date1904`` on the chart selects the second one."""
+
+_NUMBER_FORMAT_LITERALS: Final = re.compile(r'"[^"]*"|\\.|\[[^\]]*\]|[_*].')
+"""Parts of an Excel number format that are not format codes: quoted text,
+escaped characters, bracketed colours, locales and conditions, and padding."""
 
 # Windows metafile signatures. A placeable WMF opens with the Aldus magic and an
 # EMF carries " EMF" in the dSignature field of its EMR_HEADER, 40 bytes in.
@@ -254,6 +266,59 @@ def _last_populated_row(
         if category or any(row < len(values) and values[row] for _, values in columns):
             return row
     return -1
+
+
+def _is_date_format(format_code: str) -> bool:
+    """Return True when an Excel number format shows a date.
+
+    A ``d`` or ``y`` code marks a date. An ``m`` code marks a month only when
+    there is no ``h`` or ``s`` code, because ``m`` also means minutes. Time-only
+    formats and ``General`` therefore return False.
+
+    Args:
+        format_code: An Excel number format, such as ``mmm d, yy``.
+
+    Returns:
+        True when the format shows a date.
+    """
+    codes = _NUMBER_FORMAT_LITERALS.sub("", format_code).lower()
+    if "d" in codes or "y" in codes:
+        return True
+    return "m" in codes and "h" not in codes and "s" not in codes
+
+
+def _serial_to_iso(text: str, date1904: bool) -> str:
+    """Write an Excel date serial as an ISO 8601 date, or keep the text.
+
+    A chart caches its date categories as serial numbers, such as ``40909``
+    for 1 January 2012. A whole serial becomes a date (``2012-01-01``). A
+    serial with a time of day becomes a date and time to the second.
+
+    Args:
+        text: A category label from the chart's data cache.
+        date1904: True when the chart uses the 1904 date system.
+
+    Returns:
+        The ISO 8601 text, or ``text`` unchanged when it is not a serial.
+    """
+    try:
+        serial = float(text)
+    except ValueError:
+        return text
+    if not math.isfinite(serial) or serial < 0:
+        return text
+    if date1904:
+        epoch = _EXCEL_1904_EPOCH
+    else:
+        # Excel counts the nonexistent 1900-02-29 as serial 60.
+        epoch = _EXCEL_EPOCH + timedelta(days=1 if serial < 60 else 0)
+    try:
+        moment = epoch + timedelta(seconds=round(serial * 86400))
+    except OverflowError:
+        return text
+    if moment.time() == time(0):
+        return moment.date().isoformat()
+    return moment.isoformat(timespec="seconds")
 
 
 def _build_chart_table(
@@ -1364,7 +1429,79 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             return str(int(value))
         return str(value)
 
-    def _chart_to_table_data(self, plots: list[tuple[Any, Any]]) -> Optional[TableData]:
+    @staticmethod
+    def _category_axis(chart: Any, x_chart: Any) -> Any:
+        """Return the category or date axis that a plot is drawn against.
+
+        The axis is matched by ``c:axId``. ``chart.category_axis`` would return
+        the first ``c:catAx`` even when the plot uses a ``c:dateAx``, so it can
+        pick the hidden axis of a secondary plot.
+
+        Args:
+            chart: A python-pptx ``Chart`` object.
+            x_chart: The plot element, such as ``c:barChart``.
+
+        Returns:
+            The ``c:catAx`` or ``c:dateAx`` element, or None for a plot without
+            one, such as a pie or a scatter plot.
+        """
+        axis_ids = set(x_chart.xpath("./c:axId/@val"))
+        for axis in chart.element.chart.plotArea.xpath("./c:catAx | ./c:dateAx"):
+            if axis_ids.intersection(axis.xpath("./c:axId/@val")):
+                return axis
+        return None
+
+    @staticmethod
+    def _categories_are_dates(axis: Any, x_chart: Any) -> bool:
+        """Return True when an axis shows its categories as dates.
+
+        A date axis always does. A text axis does when its number format is a
+        date format. That format is the axis's own, unless the axis links it to
+        the source data, in which case it is the format of the cached
+        categories.
+
+        Args:
+            axis: The plot's ``c:catAx`` or ``c:dateAx`` element.
+            x_chart: The plot element, such as ``c:barChart``.
+
+        Returns:
+            True when the categories are dates.
+        """
+        if axis.tag == qn("c:dateAx"):
+            return True
+        number_format = axis.find(qn("c:numFmt"))
+        if number_format is not None and number_format.get("sourceLinked") not in (
+            "1",
+            "true",
+        ):
+            format_code = number_format.get("formatCode", "")
+        else:
+            format_code = "".join(
+                x_chart.xpath("./c:ser[1]/c:cat//c:numCache/c:formatCode/text()")
+            )
+        return _is_date_format(format_code)
+
+    def _category_labels(self, chart: Any, x_chart: Any, plot: Any) -> list[str]:
+        """Return the category labels of a plot, with dates in ISO 8601.
+
+        Args:
+            chart: A python-pptx ``Chart`` object.
+            x_chart: The plot element, such as ``c:barChart``.
+            plot: The python-pptx plot read from ``x_chart``.
+
+        Returns:
+            One label per category.
+        """
+        labels = [self._cell_text(category) for category in plot.categories]
+        axis = self._category_axis(chart, x_chart)
+        if axis is None or not self._categories_are_dates(axis, x_chart):
+            return labels
+        date1904 = bool(chart.element.date_1904)
+        return [_serial_to_iso(label, date1904) for label in labels]
+
+    def _chart_to_table_data(
+        self, chart: Any, plots: list[tuple[Any, Any]]
+    ) -> Optional[TableData]:
         """Reconstruct a chart's underlying data grid as a TableData.
 
         Unlike the Excel backend, python-pptx exposes the plotted numbers
@@ -1378,6 +1515,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         python-pptx cannot read is skipped with a warning.
 
         Args:
+            chart: A python-pptx ``Chart`` object.
             plots: The chart's plots, as returned by ``_chart_plots``.
 
         Returns:
@@ -1395,7 +1533,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                 )
                 continue
             if not categories:
-                categories = [self._cell_text(cat) for cat in plot.categories]
+                categories = self._category_labels(chart, x_chart, plot)
             for series in plot.series:
                 name = self._cell_text(series.name) if series.name is not None else ""
                 values = [self._cell_text(v) for v in series.values]
@@ -1442,7 +1580,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         labels = self._chart_classifications(plots)
         caption_text = self._chart_title_text(chart)
         try:
-            table_data = self._chart_to_table_data(plots)
+            table_data = self._chart_to_table_data(chart, plots)
         except (AttributeError, ValueError, KeyError) as exc:
             _log.warning("Could not extract chart data: %s", exc)
             table_data = None

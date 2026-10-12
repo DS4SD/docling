@@ -6,8 +6,12 @@
 import datetime
 import logging
 from pathlib import Path
+from typing import Optional
 
+import pytest
 from docling_core.types.doc import PictureClassificationLabel, PictureItem
+
+from docling.backend.mspowerpoint_backend import _serial_to_iso
 
 from .test_backend_pptx import get_converter
 
@@ -37,6 +41,9 @@ def _save_combo_chart_deck(path: Path, second_plot: str = "lineChart") -> None:
     PowerPoint stores a "Clustered Column - Line on Secondary Axis" chart. With
     ``second_plot="stockChart"`` the second plot is a stock plot, as in a
     "Volume-High-Low-Close" chart, for which python-pptx has no plot class.
+
+    The second plot's category axis is hidden. It is a text axis with its own
+    ``General`` number format, so it shows serial numbers, not dates.
     """
     import copy
 
@@ -80,12 +87,17 @@ def _save_combo_chart_deck(path: Path, second_plot: str = "lineChart") -> None:
     etree.SubElement(second, qn("c:axId")).set("val", "901")
     bar_chart.addnext(second)
 
-    category_axis = plot_area.find(qn("c:dateAx"))
     value_axis = plot_area.find(qn("c:valAx"))
-    secondary_category_axis = copy.deepcopy(category_axis)
-    secondary_category_axis.find(qn("c:axId")).set("val", "900")
-    secondary_category_axis.find(qn("c:delete")).set("val", "1")
-    secondary_category_axis.find(qn("c:crossAx")).set("val", "901")
+    secondary_category_axis = etree.Element(qn("c:catAx"))
+    etree.SubElement(secondary_category_axis, qn("c:axId")).set("val", "900")
+    scaling = etree.SubElement(secondary_category_axis, qn("c:scaling"))
+    etree.SubElement(scaling, qn("c:orientation")).set("val", "minMax")
+    etree.SubElement(secondary_category_axis, qn("c:delete")).set("val", "1")
+    etree.SubElement(secondary_category_axis, qn("c:axPos")).set("val", "b")
+    number_format = etree.SubElement(secondary_category_axis, qn("c:numFmt"))
+    number_format.set("formatCode", "General")
+    number_format.set("sourceLinked", "0")
+    etree.SubElement(secondary_category_axis, qn("c:crossAx")).set("val", "901")
     secondary_value_axis = copy.deepcopy(value_axis)
     secondary_value_axis.find(qn("c:axId")).set("val", "901")
     secondary_value_axis.find(qn("c:crossAx")).set("val", "900")
@@ -158,3 +170,97 @@ def test_unreadable_plot_keeps_the_data_of_the_other_plots(tmp_path: Path, caplo
     ]
     assert _grid(picture)[0][1:] == list(_BARS)
     assert "stockChart" in caplog.text
+
+
+def test_date_axis_categories_are_iso_dates(tmp_path: Path):
+    """Categories on a date axis read as ISO 8601 dates, not as serial numbers.
+
+    The chart caches 1 January 2012 as the serial 40909. The column plot is
+    drawn against a date axis, while the hidden category axis of the line plot
+    is a text axis. The dates therefore depend on finding the column plot's own
+    axis.
+    """
+    path = tmp_path / "combo_chart.pptx"
+    _save_combo_chart_deck(path)
+
+    grid = _grid(_only_chart(path))
+
+    assert [row[0] for row in grid[1:]] == [month.isoformat() for month in _MONTHS]
+
+
+@pytest.mark.parametrize(
+    ("axis_format", "source_linked", "cache_format", "expected"),
+    [
+        ("m/d/yy", "0", "General", ["2012-01-01", "2012-02-01"]),
+        ("General", "1", "mmm d, yy", ["2012-01-01", "2012-02-01"]),
+        (None, None, "mmm d, yy", ["2012-01-01", "2012-02-01"]),
+        ("General", "0", "mmm d, yy", ["40909", "40940"]),
+        ("h:mm", "0", "General", ["40909", "40940"]),
+    ],
+    ids=["axis-date", "linked-date", "no-axis-format", "axis-general", "axis-time"],
+)
+def test_text_axis_categories_follow_the_shown_number_format(
+    tmp_path: Path,
+    axis_format: Optional[str],
+    source_linked: Optional[str],
+    cache_format: str,
+    expected: list[str],
+):
+    """Serial categories on a text axis become dates only when shown as dates.
+
+    The axis shows its own number format, unless it links the format to the
+    source data or has none. A time-only format does not make a date.
+    """
+    from lxml import etree
+    from pptx import Presentation
+    from pptx.chart.data import CategoryChartData
+    from pptx.enum.chart import XL_CHART_TYPE
+    from pptx.oxml.ns import qn
+    from pptx.util import Inches
+
+    chart_data = CategoryChartData()
+    chart_data.categories = [40909, 40940]
+    chart_data.categories.number_format = cache_format
+    chart_data.add_series("Sales", (10, 20))
+    prs = Presentation()
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    chart = slide.shapes.add_chart(
+        XL_CHART_TYPE.COLUMN_CLUSTERED,
+        Inches(1),
+        Inches(1),
+        Inches(6),
+        Inches(4),
+        chart_data,
+    ).chart
+    if axis_format is not None and source_linked is not None:
+        number_format = etree.Element(qn("c:numFmt"))
+        number_format.set("formatCode", axis_format)
+        number_format.set("sourceLinked", source_linked)
+        category_axis = chart.element.chart.plotArea.find(qn("c:catAx"))
+        category_axis.find(qn("c:axPos")).addnext(number_format)
+    path = tmp_path / "serial_categories.pptx"
+    prs.save(path)
+
+    grid = _grid(_only_chart(path))
+
+    assert [row[0] for row in grid[1:]] == expected
+
+
+@pytest.mark.parametrize(
+    ("text", "date1904", "expected"),
+    [
+        ("40909", False, "2012-01-01"),
+        ("40909.0", False, "2012-01-01"),
+        ("39447", True, "2012-01-01"),
+        ("40909.5", False, "2012-01-01T12:00:00"),
+        ("1", False, "1900-01-01"),
+        ("61", False, "1900-03-01"),
+        ("Jan", False, "Jan"),
+        ("", False, ""),
+        ("-1", False, "-1"),
+        ("1e300", False, "1e300"),
+    ],
+)
+def test_serial_to_iso(text: str, date1904: bool, expected: str):
+    """Excel serials map to ISO dates in both date systems; other text stays."""
+    assert _serial_to_iso(text, date1904) == expected
