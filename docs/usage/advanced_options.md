@@ -27,6 +27,25 @@ BCP-47 tags behind the `iso:` prefix:
 $ docling-tools models download easyocr --easyocr-lang iso:zh-Hans --easyocr-lang ja
 ```
 
+To prefetch an OpenAI-format Whisper checkpoint for native ASR, select its model
+name. The file is stored directly in the output directory, so the directory can
+be copied to an artifact store and used with `--artifacts-path`:
+
+```sh
+docling-tools models download whisper_tiny --output-dir /models
+docling --asr-model whisper_tiny_native --artifacts-path /models audio.wav
+```
+
+`docling-tools models download --all` does not include ASR models. Add `--asr`
+to prefetch all native Whisper model sizes and English-only variants:
+
+```sh
+docling-tools models download --all --asr --output-dir /models
+```
+
+This requires the `asr` extra and downloads OpenAI-format checkpoints. It does
+not prefetch Transformers-format, MLX, or WhisperS2T models.
+
 Alternatively, models can be programmatically downloaded using `docling.utils.model_downloader.download_models()`.
 
 Also, you can use `download-hf-repo` parameter to download arbitrary models from HuggingFace by specifying repo id:
@@ -247,6 +266,31 @@ doc_converter = DocumentConverter(
 
 See [PDF heading levels](./heading_levels.md) for the signals, their precedence and all options.
 
+### PowerPoint charts
+
+A chart on a PowerPoint slide becomes a picture classified by its kind, with
+the data it plots in the picture's `meta.tabular_chart` and its title as the
+caption. The first column of the data holds the categories, under the title of
+the category axis, and each series gets a column. Dates on the category axis
+are written as ISO 8601 dates, such as `2012-01-01`.
+
+A combination chart, such as columns with a line on a secondary axis, gets one
+classification prediction per chart type. The back-most plot comes first, so
+it stays the main prediction, and the series of every plot are in the data:
+
+```python
+from docling.document_converter import DocumentConverter
+
+deck = DocumentConverter().convert("deck.pptx").document
+for picture in deck.pictures:
+    if picture.meta is not None and picture.meta.classification is not None:
+        kinds = [p.class_name for p in picture.meta.classification.predictions]
+        print(kinds)  # for example ['bar_chart', 'line_chart']
+```
+
+The picture itself is empty unless you set `render_chart_images=True` in
+`MsPowerpointBackendOptions`. That draws each chart with LibreOffice.
+
 ### Apple iWork options
 
 Pages (`.pages`), Numbers (`.numbers`) and Keynote (`.key`) share their
@@ -292,8 +336,8 @@ print(budget.export_to_markdown(
 
 A chart on a Keynote slide or a Numbers sheet becomes a picture classified by
 its kind, with the data it plots in the picture's `meta.tabular_chart` and its
-title as the caption, which is the shape the PowerPoint backend gives a chart. Keynote keeps
-no picture of a chart, so the picture itself is empty unless you opt into
+title as the caption, which is the shape the PowerPoint backend gives a chart. Neither app keeps
+a picture of a chart, so the picture itself is empty unless you opt into
 `render_chart_images`. That rebuilds each chart from its data as an Office chart
 and draws it with LibreOffice, so it needs a LibreOffice installation. The image
 has the chart's kind, data and title but not its colours or fonts, and a mixed,
@@ -317,9 +361,10 @@ for picture in deck.pictures:
         print(picture.caption_text(deck), picture.meta.tabular_chart.chart_data)
 ```
 
-Charts are read from Keynote 6 and later; a chart in an iWork '09 presentation
-is not read. `render_chart_images` draws Keynote charts only — a Numbers chart
-carries its data and its classification, but no image.
+The same option draws the charts of a Numbers spreadsheet, passed through
+`IWorkNumbersFormatOption` instead. Charts are read from Keynote 6 and later, and
+from Numbers documents of either generation; a chart in an iWork '09
+presentation is not read.
 
 `sheet_names` converts only the sheets it names, and `page_range` narrows the
 selection further, since each sheet is a page:

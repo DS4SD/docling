@@ -549,6 +549,45 @@ def test_add_header_footer_first_page_and_regular(documents):
     )
 
 
+def test_add_header_footer_even_pages(tmp_path):
+    """Even-page headers/footers are extracted when evenAndOddHeaders is enabled.
+
+    Regression test: only the default (odd page) header/footer was visited, so the
+    text of the even-page header/footer was silently dropped. When the setting is
+    off, the even parts are unused by Word and must not be emitted.
+    """
+    from docx import Document
+
+    def _build(path, even_and_odd: bool):
+        d = Document()
+        d.settings.odd_and_even_pages_header_footer = even_and_odd
+        s = d.sections[0]
+        s.header.paragraphs[0].text = "HEADER_DEFAULT_ODD"
+        s.footer.paragraphs[0].text = "FOOTER_DEFAULT_ODD"
+        s.even_page_header.paragraphs[0].text = "HEADER_EVEN"
+        s.even_page_footer.paragraphs[0].text = "FOOTER_EVEN"
+        d.add_paragraph("Body paragraph")
+        d.save(path)
+
+    enabled = tmp_path / "even_headers_enabled.docx"
+    _build(enabled, True)
+    header_texts, footer_texts = _header_footer_texts(
+        get_converter().convert(enabled).document
+    )
+    assert "HEADER_DEFAULT_ODD" in header_texts
+    assert "HEADER_EVEN" in header_texts, "even-page header was dropped"
+    assert "FOOTER_DEFAULT_ODD" in footer_texts
+    assert "FOOTER_EVEN" in footer_texts, "even-page footer was dropped"
+
+    disabled = tmp_path / "even_headers_disabled.docx"
+    _build(disabled, False)
+    header_texts, footer_texts = _header_footer_texts(
+        get_converter().convert(disabled).document
+    )
+    assert header_texts == ["HEADER_DEFAULT_ODD"]
+    assert footer_texts == ["FOOTER_DEFAULT_ODD"]
+
+
 def test_handle_pictures(documents):
     """Test the function _handle_pictures."""
 
@@ -1989,6 +2028,98 @@ def test_numbering_inside_a_textbox_does_not_number_its_anchor(tmp_path):
     assert labels["Anchor paragraph, plain body text."] == DocItemLabel.TEXT
 
 
+def _anchor_vml_textbox(paragraph, text: str) -> None:
+    """Anchor a plain VML textbox holding ``text`` in ``paragraph``."""
+    w_ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    pict_xml = (
+        f'<w:r xmlns:w="{w_ns}" xmlns:v="{_VML_NS}">'
+        '<w:pict><v:shape id="s1" style="width:100pt;height:40pt">'
+        f"<v:textbox><w:txbxContent><w:p><w:r><w:t>{text}</w:t></w:r></w:p>"
+        "</w:txbxContent></v:textbox></v:shape></w:pict></w:r>"
+    )
+    paragraph._p.append(etree.fromstring(pict_xml))
+
+
+def _anchor_word_mc_textbox(paragraph, text: str) -> None:
+    """Anchor a Word mc:AlternateContent (DrawingML + VML fallback) textbox."""
+    w_ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    mc_ns = "http://schemas.openxmlformats.org/markup-compatibility/2006"
+    wp_ns = "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+    a_ns = "http://schemas.openxmlformats.org/drawingml/2006/main"
+    wps_ns = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
+    mc_xml = (
+        f'<w:r xmlns:w="{w_ns}" xmlns:v="{_VML_NS}" xmlns:mc="{mc_ns}" '
+        f'xmlns:wp="{wp_ns}" xmlns:a="{a_ns}" xmlns:wps="{wps_ns}">'
+        '<mc:AlternateContent><mc:Choice Requires="wps">'
+        "<w:drawing><wp:anchor><a:graphic>"
+        f'<a:graphicData uri="{wps_ns}">'
+        f"<wps:wsp><wps:txbx><w:txbxContent><w:p><w:r><w:t>{text}</w:t></w:r></w:p>"
+        "</w:txbxContent></wps:txbx></wps:wsp></a:graphicData></a:graphic>"
+        "</wp:anchor></w:drawing></mc:Choice><mc:Fallback>"
+        '<w:pict><v:shape id="s1"><v:textbox><w:txbxContent>'
+        f"<w:p><w:r><w:t>{text}</w:t></w:r></w:p>"
+        "</w:txbxContent></v:textbox></v:shape></w:pict>"
+        "</mc:Fallback></mc:AlternateContent></w:r>"
+    )
+    paragraph._p.append(etree.fromstring(mc_xml))
+
+
+@pytest.mark.parametrize(
+    ("kind", "marker"),
+    [
+        ("vml_single_para", "MARKA"),
+        ("vml_multi_para", "MARKA"),
+        ("word_mc_alternate", "MARKW"),
+    ],
+)
+def test_textbox_in_table_cell_is_emitted_once_inside_cell(
+    tmp_path, kind: str, marker: str
+):
+    """A textbox anchored in a table cell must stay inside its cell and not be
+    emitted a second time before the table (regression for #4569).
+    """
+    document = Document()
+    document.add_paragraph("debut")
+    table = document.add_table(rows=2, cols=2)
+    table.cell(0, 1).text = "b"
+    table.cell(1, 0).text = "c"
+    table.cell(1, 1).text = "d"
+
+    cell0 = table.cell(0, 0)
+    if kind == "word_mc_alternate":
+        _anchor_word_mc_textbox(cell0.paragraphs[0], marker)
+    else:
+        _anchor_vml_textbox(cell0.paragraphs[0], marker)
+        if kind == "vml_multi_para":
+            cell0.add_paragraph("")
+
+    document.add_paragraph("fin")
+
+    doc = _convert_built(document, tmp_path)
+    md = doc.export_to_markdown()
+
+    assert md.count(marker) == 1
+    assert [t.text for t in doc.texts if t.text.strip()] == ["debut", marker, "fin"]
+    table_lines = [line for line in md.splitlines() if line.startswith("|")]
+    assert any(marker in line and "b" in line for line in table_lines)
+
+
+def test_textbox_in_single_cell_table_preserves_order_and_is_not_duplicated(tmp_path):
+    """A 1x1 layout table unwraps its cell into the body; a textbox anchored in
+    a later paragraph of that cell must appear once, after earlier paragraphs.
+    """
+    document = Document()
+    table = document.add_table(rows=1, cols=1)
+    cell = table.cell(0, 0)
+    cell.paragraphs[0].text = "First paragraph in cell"
+    second_para = cell.add_paragraph()
+    _anchor_vml_textbox(second_para, "Textbox in second paragraph")
+
+    doc = _convert_built(document, tmp_path)
+    texts = [t.text for t in doc.texts if t.text.strip()]
+    assert texts == ["First paragraph in cell", "Textbox in second paragraph"]
+
+
 def test_list_returning_to_starting_level_zero_still_works(documents):
     """Control case: levels 0, 1, 2, 1 must keep working unchanged."""
 
@@ -2070,16 +2201,22 @@ def test_fragment_only_rel_does_not_crash_backend():
     )
     converter = DocumentConverter(allowed_formats=[InputFormat.DOCX])
     result = converter.convert(stream, raises_on_error=True)
-    texts = [
-        item.text
+    text_items = [
+        item
         for item, _ in result.document.iterate_items()
         if isinstance(item, TextItem)
     ]
-    assert "Before internal link after" in "".join(texts)
-    assert all(item.hyperlink is None for item in result.document.texts)
+    assert len(text_items) == 1
+    assert text_items[0].text == "Before internal link after"
+    assert text_items[0].hyperlink is None
 
 
-def _docx_with_notes():
+_PLAIN_FOOTNOTE_BODY = (
+    "<w:p><w:r><w:t>Smith, J. (2020). Example Study.</w:t></w:r></w:p>"
+)
+
+
+def _docx_with_notes(footnote_body: str = _PLAIN_FOOTNOTE_BODY):
     """Build a minimal DOCX with a real footnote and endnote, each preceded by
     Word's own separator/continuationSeparator placeholders (present in every
     Word-authored document, holding no user content).
@@ -2088,6 +2225,11 @@ def _docx_with_notes():
     ``footnotes.xml``/``endnotes.xml`` parts, their content-type overrides, and
     the document relationships pointing at them are injected directly, the same
     way a real Word-authored DOCX is structured.
+
+    Args:
+        footnote_body: The XML of the footnote body. Override it to place the
+            footnote text inside markup that ``python-docx`` does not descend
+            into.
     """
     import zipfile
     from io import BytesIO
@@ -2115,7 +2257,7 @@ def _docx_with_notes():
 <w:footnotes xmlns:w="{w_ns}">
   <w:footnote w:type="separator" w:id="-1"><w:p><w:r><w:separator/></w:r></w:p></w:footnote>
   <w:footnote w:type="continuationSeparator" w:id="0"><w:p><w:r><w:continuationSeparator/></w:r></w:p></w:footnote>
-  <w:footnote w:id="2"><w:p><w:r><w:t>Smith, J. (2020). Example Study.</w:t></w:r></w:p></w:footnote>
+  <w:footnote w:id="2">{footnote_body}</w:footnote>
 </w:footnotes>"""
     endnotes_xml = f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:endnotes xmlns:w="{w_ns}">
@@ -2186,3 +2328,53 @@ def test_footnotes_and_endnotes_are_not_dropped():
     assert len(footnote_items) == 2, (
         "expected exactly one real footnote and one real endnote, no placeholders"
     )
+
+
+@pytest.mark.parametrize(
+    ("note_body", "expected"),
+    [
+        pytest.param(
+            "<w:p><w:ins w:id='10' w:author='A' w:date='2024-01-02T03:04:05Z'>"
+            "<w:r><w:t>inserted footnote text</w:t></w:r></w:ins></w:p>",
+            "inserted footnote text",
+            id="tracked-insertion",
+        ),
+        pytest.param(
+            "<w:p><w:sdt><w:sdtPr/><w:sdtContent>"
+            "<w:r><w:t>sdt footnote text</w:t></w:r>"
+            "</w:sdtContent></w:sdt></w:p>",
+            "sdt footnote text",
+            id="content-control",
+        ),
+        pytest.param(
+            "<w:tbl><w:tblPr/><w:tblGrid><w:gridCol w:w='2000'/></w:tblGrid>"
+            "<w:tr><w:tc><w:tcPr/><w:p><w:r><w:t>note table cell</w:t></w:r></w:p>"
+            "</w:tc></w:tr></w:tbl>",
+            "note table cell",
+            id="table-body",
+        ),
+    ],
+)
+def test_footnote_body_text_is_not_dropped_outside_plain_paragraphs(
+    note_body: str, expected: str
+):
+    """Footnote text must survive when the note body is not a plain paragraph.
+
+    Regression test: the footnote reader only looked at direct ``<w:p>``
+    children of the note and read them with ``python-docx``'s
+    ``Paragraph.text``, which stops at inline wrappers. A tracked insertion, a
+    content control, or a table body therefore dropped the whole note.
+    """
+    stream = DocumentStream(
+        name="notes.docx", stream=_docx_with_notes(footnote_body=note_body)
+    )
+    result = DocumentConverter(allowed_formats=[InputFormat.DOCX]).convert(
+        stream, raises_on_error=True
+    )
+
+    footnote_items = [
+        item.text
+        for item in result.document.texts
+        if item.label == DocItemLabel.FOOTNOTE
+    ]
+    assert expected in footnote_items

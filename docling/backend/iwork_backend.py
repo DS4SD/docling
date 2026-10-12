@@ -86,6 +86,7 @@ from docling.backend.iwork.content import (
 )
 from docling.backend.iwork.iwa import is_encrypted
 from docling.backend.iwork.keynote_content import Presentation, Slide
+from docling.backend.utils.image import normalize_image_for_png
 from docling.datamodel.backend_options import IWorkBackendOptions
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
@@ -122,7 +123,7 @@ _LEGACY_INDEX_MEMBERS = ("index.xml", "index.xml.gz")
 _KEYNOTE_LEGACY_INDEX_MEMBERS = ("index.apxl", "index.apxl.gz")
 
 _CHART_RENDER_HINT = (
-    "LibreOffice is required to render Keynote charts as images "
+    "LibreOffice is required to render iWork charts as images "
     "(render_chart_images=True): each chart is rebuilt as an Office chart for "
     "LibreOffice to draw. Install LibreOffice and make sure `soffice` is on PATH. "
     "Charts still keep their classification and data."
@@ -549,7 +550,7 @@ class IWorkKeynoteDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         doc = DoclingDocument(name=self.file.stem or "file", origin=origin)
         size = Size(width=self._presentation.width, height=self._presentation.height)
 
-        render_chart = self._chart_renderer()
+        render_chart = _chart_renderer(self.options)
         for index, slide in enumerate(self._presentation.slides):
             doc.add_page(page_no=index + 1, size=size)
             group = doc.add_group(name=f"slide-{index}", label=GroupLabel.CHAPTER)
@@ -557,25 +558,29 @@ class IWorkKeynoteDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
 
         return doc
 
-    def _chart_renderer(self) -> _ChartRenderer | None:
-        """Return what draws the presentation's charts, if the caller asked for it.
 
-        Returns:
-            A renderer, or None when rendering is off or cannot run here, which
-            is reported once rather than once per chart.
-        """
-        if not self.options.render_chart_images:
-            return None
-        converter = get_docx_to_pdf_converter()
-        if converter is None:
-            _log.warning(_CHART_RENDER_HINT)
-            return None
+def _chart_renderer(options: IWorkBackendOptions) -> _ChartRenderer | None:
+    """Return what draws a document's charts, if the caller asked for it.
 
-        def render(chart: Chart, geometry: Geometry | None) -> ImageRef | None:
-            image = chart_image.render_chart(chart, geometry, converter)
-            return ImageRef.from_pil(image=image, dpi=72) if image is not None else None
+    Args:
+        options: The backend options, which say whether to draw charts.
 
-        return render
+    Returns:
+        A renderer, or None when rendering is off or cannot run here, which is
+        reported once rather than once per chart.
+    """
+    if not options.render_chart_images:
+        return None
+    converter = get_docx_to_pdf_converter()
+    if converter is None:
+        _log.warning(_CHART_RENDER_HINT)
+        return None
+
+    def render(chart: Chart, geometry: Geometry | None) -> ImageRef | None:
+        image = chart_image.render_chart(chart, geometry, converter)
+        return ImageRef.from_pil(image=image, dpi=72) if image is not None else None
+
+    return render
 
 
 class _ListStack:
@@ -787,7 +792,7 @@ def _add_picture(
     if picture.data is not None:
         try:
             with Image.open(BytesIO(picture.data)) as opened:
-                image = ImageRef.from_pil(image=opened.convert("RGB"), dpi=72)
+                image = ImageRef.from_pil(image=normalize_image_for_png(opened), dpi=72)
         except (OSError, ValueError) as exc:
             # Pages stores whatever the author placed, including formats Pillow
             # has no decoder for. The picture still belongs in the flow.
@@ -1056,9 +1061,9 @@ def _hyperlink(address: str | None) -> AnyUrl | Path | None:
 class IWorkNumbersDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBackend):
     """Extract sheets and tables from Apple Numbers documents of either generation.
 
-    Each sheet becomes a page and a sheet group. Tables and charts on it become
-    table and picture items in the order they are laid out down the page, and
-    each sticky note becomes a comment in the notes layer.
+    Each sheet becomes a page and a sheet group. Tables, charts and pictures on
+    it become table and picture items in the order they are laid out down the
+    page, and each sticky note becomes a comment in the notes layer.
 
     Known limitations:
         * Cell values are read, but the number format beside them is not, so a
@@ -1068,14 +1073,21 @@ class IWorkNumbersDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
           Numbers stores rather than the label it shows; the labels are not
           reachable from the cell. An iWork '09 document stores the label, and
           that is what is read there.
-        * A chart's kind is not read, so every chart is classified as a chart of
-          unspecified kind. The kind is an integer, and the two container
-          generations number them differently; what the chart plots is recovered
-          either way.
+        * A chart becomes a picture classified by its kind, carrying the data it
+          plots as a table and captioned with its title, as on a Keynote slide.
+          Numbers keeps no picture of a chart, so the picture is empty unless
+          ``render_chart_images`` redraws one from that data, without the
+          original's colours and fonts. A mixed, two-axis, bubble or
+          interactive chart is not redrawn, and a mixed or two-axis one is
+          classified as a chart of unspecified kind. A value that is a date or
+          a duration rather than a number is left empty.
         * Only sheet-level comments — the ones Numbers calls sticky notes — are
           read. A comment attached to a cell is stored beside the table rather
           than on the sheet and is not.
-        * Images and shapes are not extracted.
+        * A picture is placed where the sheet puts it, but its caption, its
+          cropping and its accessibility description are not read. A picture in
+          a group takes the frame of the group.
+        * Shapes and text boxes are not extracted.
         * Password-protected documents cannot be read.
         * ``.numbers`` bundles saved as a *directory* package rather than a
           single file are not recognised; the converter cannot address a
@@ -1179,6 +1191,7 @@ class IWorkNumbersDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         )
         doc = DoclingDocument(name=self.file.stem or "file", origin=origin)
 
+        render_chart = _chart_renderer(self.options)
         start_page, end_page = self.page_range
         for index, sheet in enumerate(self._selected_sheets(), start=1):
             # Page numbers are 1-based positions within the selected sheets, so a
@@ -1194,12 +1207,14 @@ class IWorkNumbersDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                 name=sheet.name or f"Sheet {index}",
             )
 
-            # Tables and charts share the sheet canvas, so they are laid out in
-            # one pass down the page rather than one kind after the other.
-            drawn: list[numbers_content.Table | numbers_content.PlacedChart] = [
-                *sheet.tables,
-                *sheet.charts,
-            ]
+            # Tables, charts and pictures share the sheet canvas, so they are
+            # laid out in one pass down the page rather than one kind after the
+            # other.
+            drawn: list[
+                numbers_content.Table
+                | numbers_content.PlacedChart
+                | numbers_content.PlacedPicture
+            ] = [*sheet.tables, *sheet.charts, *sheet.pictures]
             for drawable in sorted(drawn, key=numbers_content.sheet_order):
                 if isinstance(drawable, numbers_content.Table):
                     _add_sheet_table(doc, drawable, parent=group, page_no=index)
@@ -1207,6 +1222,18 @@ class IWorkNumbersDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                     _add_chart(
                         doc,
                         drawable.chart,
+                        parent=group,
+                        prov=_sheet_prov(drawable.geometry, index),
+                        image=(
+                            render_chart(drawable.chart, drawable.geometry)
+                            if render_chart is not None
+                            else None
+                        ),
+                    )
+                elif isinstance(drawable, numbers_content.PlacedPicture):
+                    _add_picture(
+                        doc,
+                        drawable.picture,
                         parent=group,
                         prov=_sheet_prov(drawable.geometry, index),
                     )
@@ -1317,7 +1344,7 @@ def _sheet_extent(sheet: numbers_content.Sheet) -> tuple[float, float]:
     """Return how far a sheet's contents reach, in points from its top left."""
     width = 0.0
     height = 0.0
-    for drawable in (*sheet.tables, *sheet.charts, *sheet.comments):
+    for drawable in (*sheet.tables, *sheet.charts, *sheet.pictures, *sheet.comments):
         if drawable.geometry is None:
             continue
         width = max(width, drawable.geometry.left + drawable.geometry.width)
