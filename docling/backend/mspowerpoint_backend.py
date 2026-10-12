@@ -13,7 +13,18 @@ from datetime import datetime, time, timedelta
 from io import BytesIO
 from pathlib import Path
 from tempfile import mkdtemp
-from typing import Any, Callable, Final, Iterable, Iterator, Literal, Optional, Union
+from typing import (
+    Any,
+    Callable,
+    Final,
+    Iterable,
+    Iterator,
+    Literal,
+    Optional,
+    Sequence,
+    Union,
+)
+from urllib.parse import urlparse
 
 from docling_core.types.doc import (
     BoundingBox,
@@ -35,10 +46,12 @@ from docling_core.types.doc import (
     TableCell,
     TableData,
     TabularChartMetaField,
+    TextItem,
 )
 from docling_core.types.doc.document import ContentLayer
 from lxml import etree
 from PIL import Image, UnidentifiedImageError
+from pydantic import AnyUrl, ValidationError
 from typing_extensions import override
 
 from docling.backend.abstract_backend import (
@@ -64,6 +77,7 @@ _PPTX_IMPORT_ERROR: ImportError | None = None
 try:  # pragma: no cover - import-time guard
     from pptx import Presentation, presentation
     from pptx.chart.plot import PlotFactory, PlotTypeInspector
+    from pptx.enum.action import PP_ACTION
     from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
     from pptx.exc import InvalidXmlError
     from pptx.oxml.ns import qn
@@ -1939,9 +1953,11 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                     return
                 # Handle other text elements, including lists (bullet lists, numbered
                 # lists)
+                first_new_text = len(doc.texts)
                 self._handle_text_elements(
                     shape, parent_slide, slide_ind, doc, slide_size
                 )
+                self._apply_shape_hyperlink(shape, doc.texts[first_new_text:])
                 return
 
             def handle_groups(shape, parent_slide, slide_ind, doc, slide_size):
@@ -1995,6 +2011,45 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         """
         hidden = shape._element.xpath("./*/p:cNvPr/@hidden")
         return bool(hidden) and hidden[0] in ("1", "true")
+
+    @staticmethod
+    def _shape_hyperlink(shape) -> Optional[Union[AnyUrl, Path]]:
+        """Return the link attached to the whole shape, if it has one.
+
+        PowerPoint stores such a link as ``a:hlinkClick`` under the shape's
+        ``p:cNvPr``. Only a link to a URL or a file is returned: other click
+        actions, such as a jump to another slide, also carry a relationship
+        target (``slide2.xml``), but it is not something a reader can follow.
+        """
+        try:
+            click_action = shape.click_action
+            if click_action.action not in (PP_ACTION.HYPERLINK, PP_ACTION.OPEN_FILE):
+                return None
+            address = click_action.hyperlink.address
+        except (AttributeError, KeyError):
+            # No click action on this shape kind, or its relationship is gone.
+            return None
+        if not address:
+            return None
+        if not urlparse(address).scheme:
+            return Path(address)
+        try:
+            return AnyUrl(address)
+        except ValidationError:
+            _log.warning("Skipping malformed hyperlink address: %r", address)
+            return None
+
+    @classmethod
+    def _apply_shape_hyperlink(cls, shape, items: Sequence[TextItem]) -> None:
+        """Give the shape's link to its text items that have no link of their own."""
+        if not items:
+            return
+        hyperlink = cls._shape_hyperlink(shape)
+        if hyperlink is None:
+            return
+        for item in items:
+            if item.hyperlink is None:
+                item.hyperlink = hyperlink
 
     @staticmethod
     def _body_item_refs(doc: DoclingDocument, parent_slide: GroupItem) -> set[str]:
