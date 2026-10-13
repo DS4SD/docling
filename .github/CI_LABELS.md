@@ -50,12 +50,17 @@ sticky comment and sets these labels:
 - `ai:ci-needs-care`: a sensitive path changed (CI, build, dependency, or agent
   instruction files), or the model reported a concern. Read the comment before
   you approve CI.
-- `ai:possible-duplicate`: the model rated an open or earlier PR as a duplicate.
-  Candidates come from shared issue references and overlapping diff hunks.
+- `ai:possible-duplicate`: the model rated an open or merged PR as a
+  duplicate. A closed PR that was not merged, or a small shared part, counts
+  as related, not as a duplicate. Candidates come from shared issue references
+  and overlapping diff hunks.
 
 - `ai:review-lgtm`: the AI first review found no open `blocker`.
 - `ai:review-changes`: the AI first review found a `blocker`. See its inline
   comments.
+
+A review label describes the commit of the last AI review. The triage removes
+it when the PR has a newer commit and no AI review of that commit.
 
 The first review is a `COMMENT` review with inline comments. It never approves
 or requests changes. It uses the severity terms of the
