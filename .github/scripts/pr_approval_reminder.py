@@ -20,9 +20,9 @@ import re
 import subprocess
 import sys
 import urllib.request
-from pathlib import Path
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
 APPROVAL_CONCLUSION = "action_required"
@@ -207,9 +207,7 @@ def build_summary(prs: list[WaitingPr], repo: str, now: datetime) -> str:
                 f" | {markdown_escape(', '.join(pr.workflows))} | {labels} |"
             )
         lines.append("")
-    lines.append(
-        "The `ai:*` labels are advisory. Read the PR before you approve CI."
-    )
+    lines.append("The `ai:*` labels are advisory. Read the PR before you approve CI.")
     return "\n".join(lines) + "\n"
 
 
