@@ -281,7 +281,7 @@ class LayoutPostprocessor:
             ]
             if section_headers:
                 resolved_headers = self._remove_overlapping_clusters(
-                    section_headers, "regular", same_label_only=True
+                    section_headers, "regular"
                 )
                 header_ids = {cluster.id for cluster in section_headers}
                 clusters = self._sort_clusters(
@@ -573,7 +573,6 @@ class LayoutPostprocessor:
         cluster_type: str,
         overlap_threshold: float = 0.8,
         containment_threshold: float = 0.8,
-        same_label_only: bool = False,
     ) -> list[Cluster]:
         if not clusters:
             return []
@@ -597,13 +596,9 @@ class LayoutPostprocessor:
             candidates.discard(cluster.id)
 
             for other_id in candidates:
-                other = valid_clusters[other_id]
-                if same_label_only and cluster.label != other.label:
-                    continue
-
                 if spatial_index.check_overlap(
                     cluster.bbox,
-                    other.bbox,
+                    valid_clusters[other_id].bbox,
                     overlap_threshold,
                     containment_threshold,
                 ):

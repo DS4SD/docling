@@ -7,10 +7,7 @@ from docling_core.types.doc.page import BoundingRectangle, TextCell
 
 from docling.datamodel.base_models import BoundingBox, Cluster, Page
 from docling.datamodel.pipeline_options import LayoutOptions, LayoutPostprocessorOptions
-from docling.utils.layout_postprocessor import (
-    LayoutPostprocessor,
-    SpatialClusterIndex,
-)
+from docling.utils.layout_postprocessor import LayoutPostprocessor
 
 
 def _text_cell(
@@ -176,34 +173,6 @@ def test_nested_same_label_clusters_resolve_before_bbox_adjustment() -> None:
     assert len(result) == 1
     assert result[0].id == outer.id
     assert [cell.index for cell in result[0].cells] == [0, 1]
-
-
-def test_same_label_overlap_pass_keeps_different_labels_separate() -> None:
-    section_header = _cluster(
-        0,
-        BoundingBox(l=0.0, t=0.0, r=100.0, b=100.0),
-        DocItemLabel.SECTION_HEADER,
-        confidence=0.714,
-    )
-    text_cluster = _cluster(
-        1,
-        BoundingBox(l=0.0, t=0.0, r=100.0, b=100.0),
-        DocItemLabel.TEXT,
-        confidence=0.530,
-    )
-
-    postprocessor = object.__new__(LayoutPostprocessor)
-    postprocessor.regular_clusters = []
-    postprocessor.regular_index = SpatialClusterIndex([section_header, text_cluster])
-
-    result = postprocessor._remove_overlapping_clusters(
-        [section_header, text_cluster],
-        "regular",
-        same_label_only=True,
-    )
-
-    assert len(result) == 2
-    assert {cluster.id for cluster in result} == {section_header.id, text_cluster.id}
 
 
 def test_cross_type_overlaps_removes_picture_coinciding_with_table() -> None:
