@@ -14,10 +14,13 @@ from docling_core.types.doc import (
     ContentLayer,
     DocItemLabel,
     GroupItem,
+    GroupLabel,
     ListGroup,
     ListItem,
     PictureClassificationLabel,
     PictureItem,
+    RichTableCell,
+    Script,
     TableItem,
 )
 from docx import Document
@@ -2378,3 +2381,41 @@ def test_footnote_body_text_is_not_dropped_outside_plain_paragraphs(
         if item.label == DocItemLabel.FOOTNOTE
     ]
     assert expected in footnote_items
+
+
+def test_table_cell_with_subscript_and_superscript(tmp_path: Path):
+    doc = Document()
+    table = doc.add_table(rows=1, cols=2)
+    cell0 = table.cell(0, 0)
+    cell0.paragraphs[0].text = "Water"
+
+    cell1 = table.cell(0, 1)
+    p = cell1.paragraphs[0]
+    p.text = ""
+    p.add_run("H")
+    r2 = p.add_run("2")
+    r2.font.subscript = True
+    p.add_run("O")
+
+    docx_path = tmp_path / "table_script.docx"
+    doc.save(docx_path)
+
+    converter = DocumentConverter(allowed_formats=[InputFormat.DOCX])
+    res = converter.convert(docx_path)
+    res_doc = res.document
+
+    assert len(res_doc.tables) == 1
+    tbl = res_doc.tables[0]
+    cell = tbl.data.table_cells[1]
+    assert isinstance(cell, RichTableCell)
+    group = cell.ref.resolve(res_doc)
+    assert group.label == GroupLabel.UNSPECIFIED
+    inline_group = group.children[0].resolve(res_doc)
+    assert inline_group.label == GroupLabel.INLINE
+    runs = [c.resolve(res_doc) for c in inline_group.children]
+    assert len(runs) == 3
+    assert runs[0].text == "H"
+    assert runs[1].text == "2"
+    assert runs[1].formatting is not None
+    assert runs[1].formatting.script == Script.SUB
+    assert runs[2].text == "O"

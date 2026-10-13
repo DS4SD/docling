@@ -38,8 +38,10 @@ from docling_core.types.doc import (
     GroupLabel,
     ImageRef,
     NodeItem,
+    RichTableCell,
     TableCell,
     TableData,
+    TableItem,
     TextItem,
 )
 from docling_core.types.doc.document import Formatting, Script
@@ -98,8 +100,12 @@ _RASTER_IMAGE_SUFFIXES: Final[tuple[str, ...]] = (
 _JATS_FORMAT_TAG_MAP: Final[dict[str, dict[str, bool | Script]]] = {
     "bold": {"bold": True},
     "italic": {"italic": True},
+    "b": {"bold": True},
+    "i": {"italic": True},
     "underline": {"underline": True},
+    "u": {"underline": True},
     "strike": {"strikethrough": True},
+    "s": {"strikethrough": True},
     "sub": {"script": Script.SUB},
     "sup": {"script": Script.SUPER},
 }
@@ -239,12 +245,13 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
             ):
                 self.valid = True
                 return
-            for ent in doc_info.internalDTD.iterentities():
-                if ent.system_url and any(
-                    kwd in ent.system_url for kwd in JATS_DTD_URL
-                ):
-                    self.valid = True
-                    return
+            if doc_info.internalDTD is not None:
+                for ent in doc_info.internalDTD.iterentities():
+                    if ent.system_url and any(
+                        kwd in ent.system_url for kwd in JATS_DTD_URL
+                    ):
+                        self.valid = True
+                        return
         except Exception as exc:
             raise DocumentLoadError(
                 f"Could not initialize JATS backend for file with hash {self.document_hash}."
@@ -900,7 +907,16 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         segments = JatsDocumentBackend._strip_segments(segments)
         if not segments:
             return
-        container = doc.add_inline_group(parent=parent) if len(segments) > 1 else parent
+        has_script = any(
+            s.formatting is not None
+            and getattr(s.formatting, "script", Script.BASELINE) != Script.BASELINE
+            for s in segments
+        )
+        container = (
+            doc.add_inline_group(parent=parent)
+            if (len(segments) > 1 or has_script)
+            else parent
+        )
         for segment in segments:
             doc.add_text(
                 label=segment.label,
@@ -1031,8 +1047,43 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         return
 
     @staticmethod
-    def parse_table_data(element: Tag) -> TableData | None:
-        # TODO, see how to implement proper support for rich tables from HTML backend
+    def _walk_soup_cell(
+        cell: Tag,
+        formatting: Formatting | None = None,
+        hyperlink: AnyUrl | Path | None = None,
+    ) -> list[InlineSegment]:
+        from bs4 import NavigableString
+
+        segments: list[InlineSegment] = []
+        for child in cell.children:
+            if isinstance(child, NavigableString):
+                text = str(child)
+                if text:
+                    JatsDocumentBackend._append_run(
+                        segments, text, formatting, hyperlink
+                    )
+            elif isinstance(child, Tag):
+                current_fmt = JatsDocumentBackend._merge_formatting(
+                    formatting, child.name
+                )
+                current_href = hyperlink
+                if child.name in ("ext-link", "a"):
+                    href = child.get("xlink:href") or child.get("href")
+                    if href:
+                        current_href = JatsDocumentBackend._parse_ext_link_href(href)
+                segments.extend(
+                    JatsDocumentBackend._walk_soup_cell(
+                        child, current_fmt, current_href
+                    )
+                )
+        return segments
+
+    @staticmethod
+    def parse_table_data(
+        element: Tag,
+        doc: DoclingDocument | None = None,
+        table_item: TableItem | None = None,
+    ) -> TableData | None:
         nested_tables = element.find("table")
         if nested_tables is not None:
             _log.debug("Skipping nested table.")
@@ -1124,17 +1175,44 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
                         if row_idx + r < num_rows and col_idx + c < num_cols:
                             grid[row_idx + r][col_idx + c] = text
 
-                table_cell = TableCell(
-                    text=text,
-                    row_span=row_span,
-                    col_span=col_span,
-                    start_row_offset_idx=start_row_span + row_idx,
-                    end_row_offset_idx=start_row_span + row_idx + row_span,
-                    start_col_offset_idx=col_idx,
-                    end_col_offset_idx=col_idx + col_span,
-                    column_header=col_header,
-                    row_header=((not col_header) and html_cell.name == "th"),
+                segments = JatsDocumentBackend._walk_soup_cell(html_cell)
+                has_rich = any(
+                    s.formatting is not None
+                    and getattr(s.formatting, "script", Script.BASELINE)
+                    != Script.BASELINE
+                    for s in segments
                 )
+                if has_rich and doc is not None and table_item is not None:
+                    group = doc.add_group(
+                        label=GroupLabel.UNSPECIFIED,
+                        name=f"rich_cell_group_{len(doc.tables)}_{col_idx}_{start_row_span + row_idx}",
+                        parent=table_item,
+                    )
+                    JatsDocumentBackend._emit_inline(doc, group, segments)
+                    table_cell = RichTableCell(
+                        text=text,
+                        row_span=row_span,
+                        col_span=col_span,
+                        start_row_offset_idx=start_row_span + row_idx,
+                        end_row_offset_idx=start_row_span + row_idx + row_span,
+                        start_col_offset_idx=col_idx,
+                        end_col_offset_idx=col_idx + col_span,
+                        column_header=col_header,
+                        row_header=((not col_header) and html_cell.name == "th"),
+                        ref=group.get_ref(),
+                    )
+                else:
+                    table_cell = TableCell(
+                        text=text,
+                        row_span=row_span,
+                        col_span=col_span,
+                        start_row_offset_idx=start_row_span + row_idx,
+                        end_row_offset_idx=start_row_span + row_idx + row_span,
+                        start_col_offset_idx=col_idx,
+                        end_col_offset_idx=col_idx + col_span,
+                        column_header=col_header,
+                        row_header=((not col_header) and html_cell.name == "th"),
+                    )
                 data.table_cells.append(table_cell)
 
         return data
@@ -1147,8 +1225,6 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         if not isinstance(table_tag, Tag):
             return
 
-        data = JatsDocumentBackend.parse_table_data(table_tag)
-        # TODO: format label vs caption once styling is supported
         label = table_xml_component["label"]
         caption = table_xml_component["caption"]
         table_text: str = f"{label}{' ' if label and caption else ''}{caption}"
@@ -1157,8 +1233,18 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
             if table_text
             else None
         )
+        table_item = doc.add_table(
+            data=TableData(num_rows=0, num_cols=0, table_cells=[]),
+            parent=parent,
+            caption=table_caption,
+        )
+        data = JatsDocumentBackend.parse_table_data(
+            table_tag, doc=doc, table_item=table_item
+        )
         if data is not None:
-            doc.add_table(data=data, parent=parent, caption=table_caption)
+            table_item.data = data
+        else:
+            doc.delete_items(node_items=[table_item])
 
         return
 

@@ -62,6 +62,7 @@ from docling_core.types.doc import (
     GroupLabel,
     ListItem,
     PictureItem,
+    RichTableCell,
     TextItem,
 )
 from docling_core.types.doc.document import Script
@@ -1492,3 +1493,46 @@ def test_jats_empty_article_title_does_not_crash():
     exported = doc.export_to_markdown()
     # Empty title is serialized as an H1 with no text.
     assert exported == "# "
+
+
+def test_jats_table_cell_subscript_and_superscript():
+    body = """
+    <table-wrap id="tbl1">
+      <label>Table 1</label>
+      <caption><p>Chemical Formulas</p></caption>
+      <table>
+        <thead>
+          <tr><th>Formula</th><th>Energy</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>H<sub>2</sub>O</td><td>E=mc<sup>2</sup></td></tr>
+        </tbody>
+      </table>
+    </table-wrap>
+    """
+    doc = convert_jats_body(body)
+    assert len(doc.tables) == 1
+    tbl = doc.tables[0]
+    sub_cell = tbl.data.table_cells[2]
+    sup_cell = tbl.data.table_cells[3]
+
+    assert isinstance(sub_cell, RichTableCell)
+    group_sub = sub_cell.ref.resolve(doc)
+    inline_sub = group_sub.children[0].resolve(doc)
+    runs_sub = [c.resolve(doc) for c in inline_sub.children]
+    assert len(runs_sub) == 3
+    assert runs_sub[0].text == "H"
+    assert runs_sub[1].text == "2"
+    assert runs_sub[1].formatting is not None
+    assert runs_sub[1].formatting.script == Script.SUB
+    assert runs_sub[2].text == "O"
+
+    assert isinstance(sup_cell, RichTableCell)
+    group_sup = sup_cell.ref.resolve(doc)
+    inline_sup = group_sup.children[0].resolve(doc)
+    runs_sup = [c.resolve(doc) for c in inline_sup.children]
+    assert len(runs_sup) == 2
+    assert runs_sup[0].text == "E=mc"
+    assert runs_sup[1].text == "2"
+    assert runs_sup[1].formatting is not None
+    assert runs_sup[1].formatting.script == Script.SUPER

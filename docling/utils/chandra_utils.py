@@ -426,7 +426,10 @@ class _ChandraDocumentBuilder:
             else:
                 # An equation block mixing prose and inline math is text, not one formula.
                 label = DocItemLabel.TEXT
-        if len(merged) > 1:
+        if len(merged) > 1 or any(
+            run.formatting and run.formatting.script in (Script.SUB, Script.SUPER)
+            for run in merged
+        ):
             if label != DocItemLabel.TEXT:
                 parent = self.doc.add_text(
                     label=label,

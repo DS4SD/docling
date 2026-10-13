@@ -1943,3 +1943,55 @@ def test_odp_hidden_slide_goes_to_invisible_layer(tmp_path: Path):
     ]
     assert document.export_to_markdown() == "# Visible slide\n\nPresented text"
     assert hidden_texts == ["Hidden slide", "Backup text"]
+
+
+def test_odt_table_cell_subscript_and_superscript(tmp_path: Path):
+    from odfdo import Cell, Paragraph, Row, Span, Style, Table
+
+    doc = OdfDocument("text")
+    body = doc.body
+    body.clear()
+
+    sub_style = Style("text", name="sub_style")
+    sub_style.set_properties(area="text", **{"style:text-position": "sub 58%"})
+    doc.insert_style(sub_style, automatic=True)
+
+    table = Table("Table1")
+    row = Row()
+
+    c0 = Cell()
+    c0.append(Paragraph("Water"))
+    row.append(c0)
+
+    c1 = Cell()
+    p = Paragraph()
+    p.append("H")
+    p.append(Span("2", style="sub_style"))
+    p.append("O")
+    c1.append(p)
+    row.append(c1)
+
+    table.append(row)
+    body.append(table)
+    path = tmp_path / "table_sub.odt"
+    doc.save(str(path))
+
+    converter = DocumentConverter(allowed_formats=[InputFormat.ODT])
+    res_doc = converter.convert(path).document
+
+    assert len(res_doc.tables) == 1
+    tbl = res_doc.tables[0]
+    assert len(tbl.data.table_cells) == 2
+    cell = tbl.data.table_cells[1]
+    assert isinstance(cell, RichTableCell)
+    group = cell.ref.resolve(res_doc)
+    # The cell's rich group contains the inline group
+    inline_group = group.children[0].resolve(res_doc)
+    assert inline_group.label == GroupLabel.INLINE
+    runs = [c.resolve(res_doc) for c in inline_group.children]
+    assert len(runs) == 3
+    assert runs[0].text == "H"
+    assert runs[1].text == "2"
+    assert runs[1].formatting is not None
+    assert runs[1].formatting.script == Script.SUB
+    assert runs[2].text == "O"
