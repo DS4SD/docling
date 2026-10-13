@@ -14,7 +14,7 @@ import importlib.util
 import math
 from collections.abc import Iterator
 from contextlib import contextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional, Union
@@ -129,8 +129,21 @@ def _read_chars(raw, count: int, pdfium_c) -> list[PdfChar]:
             continue
         if not pdfium_c.FPDFText_GetCharOrigin(raw, index, origin_x, origin_y):
             continue
-        if 0xD800 <= code <= 0xDFFF:  # lone surrogate from a broken ToUnicode map
-            code = 0xFFFD
+        if 0xDC00 <= code <= 0xDFFF and chars and _is_high_surrogate(chars[-1]):
+            # Where wchar_t is 16 bits, PDFium splits a character beyond the BMP (a math
+            # italic x) into a surrogate pair; join the halves.
+            high = chars.pop()
+            chars.append(
+                replace(
+                    high,
+                    text=chr(
+                        0x10000 + ((ord(high.text) - 0xD800) << 10) + (code - 0xDC00)
+                    ),
+                    right=max(high.right, box.right),
+                    top=max(high.top, box.top),
+                )
+            )
+            continue
         size = float(pdfium_c.FPDFText_GetFontSize(raw, index))
         if pdfium_c.FPDFText_GetMatrix(raw, index, matrix):
             size *= math.sqrt(abs(matrix.a * matrix.d - matrix.b * matrix.c))
@@ -148,4 +161,12 @@ def _read_chars(raw, count: int, pdfium_c) -> list[PdfChar]:
                 or abs(angle - 2 * math.pi) <= _MAX_HORIZONTAL_ANGLE,
             )
         )
-    return chars
+    # A half of a surrogate pair left on its own comes from a broken ToUnicode map.
+    return [
+        replace(c, text="\ufffd") if 0xD800 <= ord(c.text) <= 0xDFFF else c
+        for c in chars
+    ]
+
+
+def _is_high_surrogate(char: PdfChar) -> bool:
+    return 0xD800 <= ord(char.text) <= 0xDBFF

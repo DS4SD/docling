@@ -4,7 +4,7 @@
 """Find superscript and subscript text from the size and baseline of PDF characters.
 
 A character is a superscript or subscript when it is drawn smaller than the body text of
-its line and raised or lowered against the body's baseline.
+its line and raised or lowered against the body's baseline, within the line.
 """
 
 from __future__ import annotations
@@ -15,7 +15,7 @@ import statistics
 import unicodedata
 from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Optional, Protocol
+from typing import Protocol
 
 from docling_core.types.doc.document import Script
 
@@ -27,19 +27,19 @@ MIN_SHIFT_POINTS = 0.4
 # Baselines this close (share of the largest size) are the same baseline.
 BASELINE_TOLERANCE = 0.04
 BASELINE_TOLERANCE_POINTS = 0.25
-# Baseline groups at least this share of the largest size can be the body.
+# Baseline groups at least this share of the largest letter size can be the body.
 BODY_SIZE_RATIO = 0.9
-# Largest gap (share of the body size) between a script and the text it marks.
+# Largest distance (share of the body size) between a script and the text it marks.
 TOUCH_GAP = 0.6
-# Letters tighter than this to body letters on both sides sit inside a word ("LaTeX").
+# Letters this close to body letters on both sides sit inside a word ("LaTeX").
 IN_WORD_GAP = 0.15
-# A body of this few letters beside a longer raised run is a drop cap.
-MAX_DROP_CAP = 3
-# A new line starts where the pen moves left, or the baseline jumps, by this share of the size.
-LINE_BACKTRACK = 0.5
-LINE_JUMP = 1.2
+# A new line starts where the baseline moves by this share of the line's size, or where
+# the pen returns to the line's start (within this share of the size; a narrow base
+# letter, as under a stacked script, is wider).
+LINE_JUMP = 0.85
+LINE_START = 0.15
 # Marks raised as footnote references with no letter or digit.
-FOOTNOTE_MARKS = frozenset("*\u2020\u2021\u00a7\u00b6\u2016#")
+FOOTNOTE_MARKS = frozenset("*†‡§¶‖#")
 # Share of an item's characters that must be found among the PDF characters.
 MIN_ALIGNED = 0.8
 # Matching is quadratic, so longer items are skipped.
@@ -95,7 +95,7 @@ class ScriptRun:
 
 
 def script_positions(chars: Sequence[ScriptChar]) -> list[Script]:
-    """Return the script position of each character of one text item, in content order."""
+    """Return the script position of each character, in content order."""
     positions = [Script.BASELINE] * len(chars)
     for line in _split_lines(chars):
         for index, script in _line_scripts(chars, line).items():
@@ -103,26 +103,27 @@ def script_positions(chars: Sequence[ScriptChar]) -> list[Script]:
     return positions
 
 
-def script_runs(
-    text: str, chars: Sequence[ScriptChar], positions: Sequence[Script]
-) -> Optional[list[ScriptRun]]:
+def script_runs(text: str, chars: Sequence[ScriptChar]) -> list[ScriptRun] | None:
     """Split an item's text into baseline, superscript and subscript runs.
 
     The text is matched to the PDF characters first, since it differs from them in
-    ligatures, dashes and spaces. A space between a character and its script that the PDF
-    does not have ("mc 2") is dropped. Runs keep their own whitespace. Returns None when the
-    text has no script or cannot be matched.
+    ligatures, dashes and spaces, and only the matched characters are measured. A space
+    between a character and its script that the PDF does not have ("mc 2") is dropped.
+    Runs keep their own whitespace. Returns None when the text has no script or cannot be
+    matched.
     """
-    if not any(p != Script.BASELINE for p in positions):
-        return None
     mapping = _align(text, chars)
     if mapping is None:
         return None
+    matched = sorted(set(mapping.values()))
+    positions = dict(
+        zip(matched, script_positions([chars[i] for i in matched]), strict=True)
+    )
 
-    roles: list[Optional[Script]] = [None] * len(text)
+    roles: list[Script | None] = [None] * len(text)
     for index, char_index in mapping.items():
         roles[index] = positions[char_index]
-    if not any(r not in (None, Script.BASELINE) for r in roles):
+    if all(r in (None, Script.BASELINE) for r in roles):
         return None
 
     solid = [i for i, ch in enumerate(text) if not ch.isspace()]
@@ -153,16 +154,12 @@ def script_runs(
             and _set_side_by_side(chars, mapping[left], mapping[right])
         ):
             drop.update(gap)
-    for i in range(len(text)):
-        if roles[i] is None:  # leading or trailing whitespace
-            roles[i] = Script.BASELINE
 
     pieces: list[tuple[str, Script, list[int]]] = []
     for i, ch in enumerate(text):
         if i in drop:
             continue
-        role = roles[i]
-        assert role is not None
+        role = roles[i] or Script.BASELINE  # leading or trailing whitespace
         if not pieces or pieces[-1][1] != role:
             pieces.append(("", role, []))
         piece_text, _, piece_chars = pieces[-1]
@@ -177,22 +174,33 @@ def _measurable(char: ScriptChar) -> bool:
 
 
 def _split_lines(chars: Sequence[ScriptChar]) -> list[list[int]]:
-    """Split the measurable characters into visual lines, as lists of indexes."""
+    """Split the measurable characters into visual lines, as lists of indexes.
+
+    A line ends where the baseline moves by most of a line height, or where the pen returns
+    to the line's start. A script stacked over another (x with i below, 2 above) does
+    neither, however wide it is.
+    """
     lines: list[list[int]] = []
     line: list[int] = []
-    previous: Optional[ScriptChar] = None
+    line_size = 0.0
     for index, char in enumerate(chars):
         if not _measurable(char):
             continue
-        if previous is not None and (
-            previous.left - char.left > LINE_BACKTRACK * max(char.size, previous.size)
-            or abs(char.baseline - previous.baseline)
-            > LINE_JUMP * max(char.size, previous.size)
-        ):
-            lines.append(line)
-            line = []
+        if line:
+            size = max(char.size, line_size)
+            previous = chars[line[-1]]
+            returns_to_start = (
+                char.left < previous.left
+                and char.left <= chars[line[0]].left + LINE_START * size
+            )
+            if (
+                abs(char.baseline - previous.baseline) > LINE_JUMP * size
+                or returns_to_start
+            ):
+                lines.append(line)
+                line, line_size = [], 0.0
         line.append(index)
-        previous = char
+        line_size = max(line_size, char.size)
     if line:
         lines.append(line)
     return lines
@@ -217,23 +225,24 @@ def _baseline_groups(chars: Sequence[ScriptChar], line: list[int]) -> list[list[
     return groups
 
 
+def _letter_size(chars: Sequence[ScriptChar], group: list[int]) -> float:
+    """Return the largest size of the group's letters and digits, 0 if it has none."""
+    return max((chars[i].size for i in group if chars[i].text.isalnum()), default=0.0)
+
+
 def _line_scripts(chars: Sequence[ScriptChar], line: list[int]) -> dict[int, Script]:
     """Find the superscript and subscript characters of one visual line."""
-    if len(line) < 2:
-        return {}
     groups = _baseline_groups(chars, line)
     if len(groups) < 2:
         return {}
-    # The body: among the groups in the largest type, the one with the most letters.
-    largest = max(chars[i].size for i in line)
-    candidates = [
-        group
-        for group in groups
-        if max(chars[i].size for i in group) >= BODY_SIZE_RATIO * largest
-    ]
+    # The body: among the groups set in the largest letters, the one with the most
+    # letters. Letters set the size of text; a large symbol (a sum sign) does not.
+    largest = max(_letter_size(chars, group) for group in groups)
+    if largest == 0:
+        return {}
     body = max(
-        candidates,
-        key=lambda group: (sum(chars[i].text.isalnum() for i in group), len(group)),
+        (g for g in groups if _letter_size(chars, g) >= BODY_SIZE_RATIO * largest),
+        key=lambda g: (sum(chars[i].text.isalnum() for i in g), len(g)),
     )
     body_size = statistics.median(chars[i].size for i in body)
     body_baseline = statistics.median(chars[i].baseline for i in body)
@@ -242,59 +251,52 @@ def _line_scripts(chars: Sequence[ScriptChar], line: list[int]) -> dict[int, Scr
     shifted: dict[int, Script] = {}
     for index in line:
         char = chars[index]
-        if char.size > MAX_SCRIPT_SIZE * body_size:
-            continue
         shift = char.baseline - body_baseline
-        if abs(shift) >= min_shift:
+        # A script sits within its line: it is moved by less than its own size. A drop cap
+        # or text from another line is moved further.
+        if (
+            char.size <= MAX_SCRIPT_SIZE * body_size
+            and min_shift <= abs(shift) <= char.size
+        ):
             shifted[index] = Script.SUPER if shift > 0 else Script.SUB
 
-    body_letters = sum(chars[i].text.isalnum() for i in line if i not in shifted)
     scripts: dict[int, Script] = {}
-    position = 0
-    while position < len(line):
-        if line[position] not in shifted:
-            position += 1
-            continue
-        end = position
-        script = shifted[line[position]]
-        while end + 1 < len(line) and shifted.get(line[end + 1]) == script:
-            end += 1
-        run = line[position : end + 1]
-        before = line[position - 1] if position > 0 else None
-        after = line[end + 1] if end + 1 < len(line) else None
-        if _keep_run(chars, run, before, after, shifted, body_size, body_letters):
-            for index in run:
-                scripts[index] = script
-        position = end + 1
+    for script, run in itertools.groupby(line, key=shifted.get):
+        run = list(run)
+        if script is not None and _keep_run(
+            chars, run, line=line, shifted=shifted, body_size=body_size
+        ):
+            scripts.update(dict.fromkeys(run, script))
     return scripts
 
 
 def _keep_run(
     chars: Sequence[ScriptChar],
     run: list[int],
-    before: Optional[int],
-    after: Optional[int],
+    *,
+    line: list[int],
     shifted: dict[int, Script],
     body_size: float,
-    body_letters: int,
 ) -> bool:
     """Tell a script from other small, shifted text on the line."""
-    script = shifted[run[0]]
-    neighbours = []
-    if before is not None:
-        neighbours.append((before, chars[run[0]].left - chars[before].right))
-    if after is not None:
-        neighbours.append((after, chars[after].left - chars[run[-1]].right))
+    position = line.index(run[0])
+    neighbours = [
+        k
+        for k in (
+            line[position - 1] if position > 0 else None,
+            line[position + len(run)] if position + len(run) < len(line) else None,
+        )
+        if k is not None
+    ]
+    distances = [_distance(chars[k], chars, run) for k in neighbours]
 
     # It touches the text it marks, unlike a small page number or URL further along.
     touches_body = any(
-        index not in shifted and -0.5 * body_size <= gap <= TOUCH_GAP * body_size
-        for index, gap in neighbours
+        k not in shifted and d <= TOUCH_GAP * body_size
+        for k, d in zip(neighbours, distances)
     )
     # A subscript and a superscript stacked over one base.
-    stacked = any(
-        index in shifted and shifted[index] != script for index, _ in neighbours
-    )
+    stacked = any(k in shifted and shifted[k] != shifted[run[0]] for k in neighbours)
     if not (touches_body or stacked):
         return False
 
@@ -307,14 +309,20 @@ def _keep_run(
         len(neighbours) == 2
         and all(t.isalpha() for t in text)
         and all(
-            index not in shifted
-            and chars[index].text.isalpha()
-            and gap <= IN_WORD_GAP * body_size
-            for index, gap in neighbours
+            k not in shifted
+            and chars[k].text.isalpha()
+            and d <= IN_WORD_GAP * body_size
+            for k, d in zip(neighbours, distances)
         )
     )
-    drop_cap = len(run) > MAX_DROP_CAP and body_letters <= MAX_DROP_CAP
-    return not (in_word or drop_cap)
+    return not in_word
+
+
+def _distance(char: ScriptChar, chars: Sequence[ScriptChar], run: list[int]) -> float:
+    """Return the horizontal distance between a character and a run, 0 if they overlap."""
+    left = min(chars[i].left for i in run)
+    right = max(chars[i].right for i in run)
+    return max(0.0, char.left - right, left - char.right)
 
 
 def _folded(text: str) -> list[tuple[str, int]]:
@@ -330,10 +338,10 @@ def _folded(text: str) -> list[tuple[str, int]]:
     return out
 
 
-def _align(text: str, chars: Sequence[ScriptChar]) -> Optional[dict[int, int]]:
+def _align(text: str, chars: Sequence[ScriptChar]) -> dict[int, int] | None:
     """Map the characters of ``text`` to PDF character indexes, or None if too few match."""
     ours = _folded(text)
-    theirs = _folded("".join(c.text if len(c.text) == 1 else " " for c in chars))
+    theirs = _folded("".join(c.text for c in chars))
     if not ours:
         return None
     if [a for a, _ in ours] == [b for b, _ in theirs]:

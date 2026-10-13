@@ -97,3 +97,88 @@ def test_disabled_leaves_the_document_unchanged():
     document = _convert(ThreadedDoclingParseDocumentBackend, enabled=False)
     assert not _runs(document)
     assert "E = mc 2 in 1905." in document.export_to_markdown()
+
+
+# One paragraph in Helvetica, as (text, size, rise) runs per line.
+_LINES = [
+    [
+        ("Water is H", 11, 0),
+        ("2", 7, -2),
+        ("O and carbon dioxide is CO", 11, 0),
+        ("2", 7, -2),
+        (" in the air", 11, 0),
+    ],
+    [
+        ("we can see that E = mc", 11, 0),
+        ("2", 7, 4),
+        (" holds on the 21", 11, 0),
+        ("st", 7, 4),
+        (" of June", 11, 0),
+    ],
+    [
+        ("as reported before", 11, 0),
+        ("12", 7, 4),
+        (" and confirmed by the team today", 11, 0),
+    ],
+]
+
+
+def _write_pdf(path: Path, page: str) -> None:
+    """Write a one-page PDF of ``_LINES`` with the given page box entries."""
+    ops = ["BT", "13 TL", "72 700 Td"]
+    for number, line in enumerate(_LINES):
+        if number:
+            ops.append("T*")
+        ops += [f"/F1 {size} Tf {rise} Ts ({text}) Tj" for text, size, rise in line]
+    stream = "\n".join([*ops, "0 Ts", "ET"]).encode()
+    objects = [
+        b"<< /Type /Catalog /Pages 2 0 R >>",
+        b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+        f"<< /Type /Page /Parent 2 0 R {page} /Contents 4 0 R "
+        "/Resources << /Font << /F1 5 0 R >> >> >>".encode(),
+        b"<< /Length %d >>\nstream\n" % len(stream) + stream + b"\nendstream",
+        b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+    ]
+    out = bytearray(b"%PDF-1.4\n")
+    offsets = []
+    for number, body in enumerate(objects, 1):
+        offsets.append(len(out))
+        out += b"%d 0 obj\n" % number + body + b"\nendobj\n"
+    xref = len(out)
+    out += b"xref\n0 %d\n0000000000 65535 f \n" % (len(objects) + 1)
+    out += b"".join(b"%010d 00000 n \n" % offset for offset in offsets)
+    out += b"trailer\n<< /Size %d /Root 1 0 R >>\nstartxref\n%d\n%%%%EOF\n" % (
+        len(objects) + 1,
+        xref,
+    )
+    path.write_bytes(bytes(out))
+
+
+@pytest.mark.parametrize(
+    "backend", [ThreadedDoclingParseDocumentBackend, PyPdfiumDocumentBackend]
+)
+@pytest.mark.parametrize(
+    "page",
+    [
+        pytest.param("/MediaBox [0 0 612 792] /Rotate 90", id="rotated"),
+        # The visible page does not start at the origin of the PDF coordinates.
+        pytest.param("/MediaBox [0 0 700 900] /CropBox [40 60 652 852]", id="cropped"),
+    ],
+)
+def test_matches_characters_on_rotated_and_cropped_pages(tmp_path, backend, page):
+    pdf = tmp_path / "page.pdf"
+    _write_pdf(pdf, page)
+    options = PdfPipelineOptions(do_ocr=False, do_table_structure=False)
+    options.script_position_options = ScriptPositionOptions(enabled=True)
+    converter = DocumentConverter(
+        format_options={
+            InputFormat.PDF: PdfFormatOption(pipeline_options=options, backend=backend)
+        }
+    )
+    assert _scripts(_runs(converter.convert(pdf).document)) == [
+        ("2", Script.SUB),
+        ("2", Script.SUB),
+        ("2", Script.SUPER),
+        ("st", Script.SUPER),
+        ("12", Script.SUPER),
+    ]
