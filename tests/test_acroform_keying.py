@@ -3,7 +3,9 @@
 
 """Behavioral checks of the AcroForm keying on small synthetic pages."""
 
+import random
 from dataclasses import dataclass, field, replace
+from itertools import combinations
 
 import pytest
 from docling_core.types.doc import BoundingBox, DocItemLabel, TableCell
@@ -16,6 +18,7 @@ from docling.models.stages.form_field.keying import (
     assign,
     regions,
     scope_of,
+    solver,
 )
 
 
@@ -625,3 +628,55 @@ def test_key_touching_both_boxes_does_not_decide_a_run():
     _, fields = chosen(page)
     assert ("field_key", [0], "UFID") in fields
     assert ("field_key", [1], "Last Name") in fields
+
+
+def test_penalized_pairs_match_scoring_every_pair(monkeypatch):
+    # penalized_pairs only scores candidates whose boxes meet or whose values
+    # follow each other; it must find what scoring every pair finds.
+    fast = solver.penalized_pairs
+    compared = 0
+
+    def checked(active, proposed, values, key_texts, h):
+        nonlocal compared
+        every = []
+        for a, b in combinations(range(len(active)), 2):
+            first, second = proposed[active[a]], proposed[active[b]]
+            if key_texts[first.key].scope != key_texts[second.key].scope:
+                continue
+            penalty = 3.0 * solver.crossing(first, second, values, key_texts) + (
+                solver.transition_penalty(first, second, values, key_texts, h)
+            )
+            if penalty:
+                every.append((a, b, penalty))
+        found = fast(active, proposed, values, key_texts, h)
+        assert found == every
+        compared += len(every)
+        return found
+
+    monkeypatch.setattr(solver, "penalized_pairs", checked)
+    rng = random.Random(4496)
+    for _ in range(60):
+        columns = rng.randint(1, 4)
+        texts, widgets = [], []
+        for row in range(rng.randint(2, 12)):
+            for column in range(columns):
+                left = 8 + column * 190 / columns + rng.uniform(-3, 3)
+                top = 6 + row * 13 + rng.uniform(-3.5, 3.5)
+                width = rng.uniform(8, 20)
+                if rng.random() < 0.85:
+                    shift = -7 if rng.random() < 0.25 else 0  # a key printed above
+                    key_box = box(left, top + shift, left + width, top + shift + 7)
+                    texts.append(
+                        key_text(len(texts) + 1, f"key {len(texts)}:", key_box)
+                    )
+                start = left if rng.random() < 0.25 else left + width + 2
+                checkbox = rng.random() < 0.5
+                # A flat checkbox: its box may meet no other box on its line.
+                size = (5, 2) if checkbox else (15, 7)
+                value_box = box(start, top, start + size[0], top + size[1])
+                widgets.append(widget(len(widgets), value_box, checkbox=checkbox))
+        if rng.random() < 0.5:  # native order unlike the printed order
+            rng.shuffle(widgets)
+            widgets = [w.model_copy(update={"index": i}) for i, w in enumerate(widgets)]
+        keyed(snapshot(widgets, texts))
+    assert compared > 100
