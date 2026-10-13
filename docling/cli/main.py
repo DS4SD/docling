@@ -146,10 +146,12 @@ from docling.datamodel.settings import DEFAULT_PAGE_RANGE, settings
 from docling.utils.profiling import ProfilingItem
 from docling.utils.progress import ProgressPrinter
 
-# The local model stack (scipy, torch, …) is absent on lightweight installs
-# (docling-slim[service-client] / docling-client).  Guard these imports so the
-# CLI module — and `convert-remote` — remain importable without them.
-_local_model_stack_available: bool
+# The local model stack (scipy, torch, packaging, …) is absent on lightweight
+# installs (docling-slim[service-client] / docling-client). Importing the
+# factories is not enough to detect this: building them loads the built-in
+# plugins, which import the engine modules. Guard both steps so the CLI module
+# — and `convert-remote` — remain importable without the local model stack.
+_local_model_stack_error: ImportError | None = None
 try:
     from docling.models.factories import (
         get_layout_factory,
@@ -157,9 +159,20 @@ try:
         get_table_structure_factory,
     )
 
-    _local_model_stack_available = True
-except ImportError:
-    _local_model_stack_available = False
+    ocr_engines_enum_internal = list(
+        get_ocr_factory(allow_external_plugins=False).get_enum()
+    )
+    layout_engines_enum_internal = list(
+        get_layout_factory(allow_external_plugins=False).get_enum()
+    )
+    table_structure_engines_enum_internal = list(
+        get_table_structure_factory(allow_external_plugins=False).get_enum()
+    )
+except ImportError as exc:
+    _local_model_stack_error = exc
+    ocr_engines_enum_internal = []
+    layout_engines_enum_internal = []
+    table_structure_engines_enum_internal = []
 
 if TYPE_CHECKING:
     from docling.models.factories.base_factory import BaseFactory
@@ -286,22 +299,6 @@ def _expand_from_formats(from_formats: list[str] | None) -> list[InputFormat]:
 
     return list(dict.fromkeys(expanded_formats))
 
-
-if _local_model_stack_available:
-    ocr_factory_internal = get_ocr_factory(allow_external_plugins=False)
-    ocr_engines_enum_internal = ocr_factory_internal.get_enum()
-
-    layout_factory_internal = get_layout_factory(allow_external_plugins=False)
-    layout_engines_enum_internal = layout_factory_internal.get_enum()
-
-    table_structure_factory_internal = get_table_structure_factory(
-        allow_external_plugins=False
-    )
-    table_structure_engines_enum_internal = table_structure_factory_internal.get_enum()
-else:
-    ocr_engines_enum_internal = []
-    layout_engines_enum_internal = []
-    table_structure_engines_enum_internal = []
 
 # Get available VLM presets from the registry
 vlm_preset_ids = VlmConvertOptions.list_preset_ids()
@@ -440,6 +437,22 @@ app = typer.Typer(
 )
 
 
+def _require_local_model_stack(command: str) -> None:
+    """Exit with an install hint when the local model stack is missing."""
+    if _local_model_stack_error is None:
+        return
+    err_console.print(
+        f"[red]Error: `{command}` needs the local conversion stack, "
+        f"which is not installed ({_local_model_stack_error}).[/red]\n\n"
+        "Install the full docling package for local conversion:\n"
+        "    pip install docling\n\n"
+        "To convert with a Docling Serve endpoint instead, use:\n"
+        "    docling convert-remote --help",
+        highlight=False,
+    )
+    raise typer.Exit(1)
+
+
 def logo_callback(value: bool):
     if value:
         print(DOCLING_ASCII_ART)
@@ -465,6 +478,7 @@ def version_callback(value: bool):
 
 def show_external_plugins_callback(value: bool):
     if value:
+        _require_local_model_stack("--show-external-plugins")
         ocr_factory_all = get_ocr_factory(allow_external_plugins=True)
         layout_factory_all = get_layout_factory(allow_external_plugins=True)
         table_factory_all = get_table_structure_factory(allow_external_plugins=True)
@@ -1253,6 +1267,8 @@ def convert(  # noqa: C901
         ),
     ] = None,
 ):
+    _require_local_model_stack("docling convert")
+
     # Heavy backend/converter/pipeline imports are deferred to here so the CLI
     # (and `convert-remote`) stay importable without the local PDF stack
     # (pypdfium2 / docling_parse). Only local `convert` needs them.
