@@ -846,14 +846,13 @@ class ReadingOrderModel:
     ) -> None:
         field_item = out_doc.add_field_item(parent=parent)
         if item.key_text and item.key_bbox is not None:
-            self._add_field_key(
-                item,
+            out_doc.add_field_key(
+                text=item.key_text,
                 prov=ProvenanceItem(
                     page_no=page_no,
                     charspan=(0, len(item.key_text)),
                     bbox=item.key_bbox.to_bottom_left_origin(page_height),
                 ),
-                out_doc=out_doc,
                 parent=field_item,
             )
         self._add_field_values(
@@ -863,35 +862,6 @@ class ReadingOrderModel:
             page_no=page_no,
             page_height=page_height,
         )
-
-    @staticmethod
-    def _add_field_key(
-        item: FieldItemPrediction,
-        *,
-        prov: ProvenanceItem,
-        out_doc: DoclingDocument,
-        parent: NodeItem,
-    ) -> None:
-        """The item's key; a heading or formula key keeps its role inside it.
-
-        Such a key holds no text of its own: the heading or formula child
-        carries the text and the location, so nothing is printed twice.
-        """
-        if item.key_layout_label == DocItemLabel.SECTION_HEADER:
-            key = out_doc.add_field_key(text="", parent=parent)
-            out_doc.add_field_heading(text=item.key_text, prov=prov, parent=key)
-        elif item.key_layout_label == DocItemLabel.FORMULA:
-            # As other formulas: the text is filled by formula enrichment.
-            key = out_doc.add_field_key(text="", parent=parent)
-            out_doc.add_text(
-                label=DocItemLabel.FORMULA,
-                text="",
-                orig=item.key_text,
-                prov=prov,
-                parent=key,
-            )
-        else:
-            out_doc.add_field_key(text=item.key_text, prov=prov, parent=parent)
 
     def _add_field_values(
         self,

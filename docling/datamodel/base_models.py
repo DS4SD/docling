@@ -444,12 +444,8 @@ class FieldItemPrediction(BaseModel):
     # a single value. hint_text is extra context emitted as a field hint:
     # outside detected tables, an aligned header along the other axis of a
     # grid of like values. Items in a table cell never carry a hint.
-    # key_layout_label is the layout label of the block the key came from when
-    # the key is that whole block; a section header or formula keeps its role
-    # inside the key.
     key_text: str = ""
     key_bbox: BoundingBox | None = None
-    key_layout_label: DocItemLabel | None = None
     values: list[FieldValuePrediction] = []
     hint_text: str = ""
 

@@ -1125,27 +1125,17 @@ def test_list_item_host_keeps_the_list_made_of_list_items() -> None:
 
 
 @pytest.mark.parametrize(
-    ("label", "widget", "inner_label", "inner_tag"),
+    ("label", "widget"),
     [
         # A text box beside a heading, and a checkbox inside one: a heading
         # never hosts a field in place, so both go to a field region.
-        (
-            DocItemLabel.SECTION_HEADER,
-            "beside",
-            DocItemLabel.FIELD_HEADING,
-            "<key><field_heading>",
-        ),
-        (
-            DocItemLabel.SECTION_HEADER,
-            "inside",
-            DocItemLabel.FIELD_HEADING,
-            "<key><field_heading>",
-        ),
-        (DocItemLabel.FORMULA, "beside", DocItemLabel.FORMULA, "<key><formula>"),
+        (DocItemLabel.SECTION_HEADER, "beside"),
+        (DocItemLabel.SECTION_HEADER, "inside"),
+        (DocItemLabel.FORMULA, "beside"),
     ],
 )
-def test_heading_or_formula_key_keeps_its_role_inside_the_key(
-    label: DocItemLabel, widget: str, inner_label: DocItemLabel, inner_tag: str
+def test_heading_or_formula_key_is_a_plain_key_in_a_field_region(
+    label: DocItemLabel, widget: str
 ) -> None:
     key = _text_cluster(1, BoundingBox(l=10, t=10, r=60, b=20), "Applicant name")
     key.label = label
@@ -1172,13 +1162,10 @@ def test_heading_or_formula_key_keeps_its_role_inside_the_key(
     assert isinstance(item.parent.resolve(doc), FieldRegionItem)
     field_key = item.children[0].resolve(doc)
     assert field_key.label == DocItemLabel.FIELD_KEY
-    assert field_key.text == ""
-    (inner,) = [child.resolve(doc) for child in field_key.children]
-    assert inner.label == inner_label
-    assert inner.orig == "Applicant name"
-    assert inner.prov
-    doclang = "".join(DocLangDocSerializer(doc=doc).serialize().text.split())
-    assert inner_tag in doclang
+    assert field_key.text == "Applicant name"
+    assert field_key.prov
+    assert not field_key.children
+    assert "Applicant name" in doc.export_to_markdown()
 
 
 @pytest.mark.parametrize("boundary", ["ordinary", "zero_area", "table_scope"])

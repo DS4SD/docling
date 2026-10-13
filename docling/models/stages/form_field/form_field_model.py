@@ -56,7 +56,7 @@ _log = logging.getLogger(__name__)
 # Paragraphs that may host an item in place. Code, and captions or footnotes
 # attached to a table or picture, take reading-order paths that ignore
 # TextElement.field_item. A section header or formula that is a key goes to a
-# field region instead, where the key keeps it as a heading or formula.
+# field region instead.
 INLINE_HOSTS = set(TEXT_ELEM_LABELS) - {
     DocItemLabel.CODE,
     DocItemLabel.CAPTION,
@@ -218,32 +218,6 @@ def _cell_units(
         for (table, rows, columns), members in cells.items()
     ]
     return placed, rest
-
-
-def _mark_key_layout_labels(
-    units: list[_Unit],
-    sources: dict[int, tuple[int, int]],
-    page: Page,
-    unsure: set[int],
-) -> None:
-    """Record the layout label of each key that is one whole layout block."""
-    assert page.predictions.layout is not None
-    found = _walk(page.predictions.layout.clusters)
-    for unit in units:
-        if unit.consumed is None:
-            continue
-        clusters = {sources[atom][0] for atom in unit.consumed.atoms}
-        if len(clusters) != 1:
-            continue
-        (cluster_id,) = clusters
-        cluster = found.get(cluster_id)
-        if (
-            cluster is not None
-            and cluster_id not in unsure
-            and {sources[atom][1] for atom in unit.consumed.atoms}
-            == _printable(cluster)
-        ):
-            unit.item.key_layout_label = cluster.label
 
 
 def _inline_hosts(
@@ -515,7 +489,6 @@ class PdfFormFieldModel(BasePageModel):
         values = [self._normalize_widget(v.native, v.bbox) for v in assignment.values]
         sources, unsure = _atom_sources(assignment)
         units = _build_units(assignment, values)
-        _mark_key_layout_labels(units, sources, page, unsure)
         in_cells, rest = _cell_units(units, assignment)
         hosts = _inline_hosts(rest, assignment, sources, page, unsure)
         regions = _place(rest, hosts, assignment, page)
