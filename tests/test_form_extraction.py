@@ -258,7 +258,9 @@ def test_field_mapping_assembly_and_materialization_preserve_regions_and_order()
         for element in page.assembled.elements
         if isinstance(element, FieldRegionElement)
     ]
-    assert len(region_elements) == 4
+    # Only the two FORM blocks left in the layout become region elements;
+    # the other two regions' fields are placed by the reading order.
+    assert len(region_elements) == 2
     assert region_elements[0].id == form_1.id
     assert region_elements[0].cluster.bbox == form_1.bbox
     assert region_elements[0].cluster.children == [visible_child]

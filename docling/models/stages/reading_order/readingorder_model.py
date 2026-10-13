@@ -666,15 +666,20 @@ class ReadingOrderModel:
             rel.cid for rel in ro_elements if rel.ref.cref in rich_picture_refs
         )
         page_no_to_pages = {p.page_no: p for p in conv_res.pages}
-        # Page-wide field regions stay in the model's input, so the text keeps
-        # the order it gets with them, but the model does not place their
-        # fields: these come by page and are placed by geometry.
-        page_wide_refs: set[str] = set()
-        page_wide: dict[int, list[FieldItemPrediction]] = defaultdict(list)
-        for region in conv_res.assembled.elements:
-            if isinstance(region, FieldRegionElement) and region.page_wide:
-                page_wide_refs.add(self._element_ref(region))
-                page_wide[region.page_no].extend(region.items)
+        # Fields that no assembled block carries (no FORM region, no host
+        # paragraph) are not in the model's input: they come by page and are
+        # placed between the blocks by geometry.
+        loose: dict[int, list[FieldItemPrediction]] = defaultdict(list)
+        for page in conv_res.pages:
+            for region in page.predictions.field_regions:
+                source = id_to_elem.get(
+                    f"#/{page.page_no}/{region.source_container_id}"
+                )
+                if not (
+                    isinstance(source, FieldRegionElement)
+                    or getattr(source, "field_item", None) is not None
+                ):
+                    loose[page.page_no].extend(region.items)
 
         def add_fields(
             page_no: int, items: list[FieldItemPrediction], parent: NodeItem | None
@@ -714,7 +719,7 @@ class ReadingOrderModel:
             siblings = [
                 rel
                 for rel in ordered_siblings[parent_ref]
-                if rel.cid not in skippable_cids and rel.ref.cref not in page_wide_refs
+                if rel.cid not in skippable_cids
             ]
             for entry in self._interleave_fields(siblings, fields or {}, id_to_elem):
                 if isinstance(entry, tuple):
@@ -814,7 +819,7 @@ class ReadingOrderModel:
                     container_item = out_doc.add_group(label=group_label, parent=parent)
                     materialize_siblings(rel.ref.cref, container_item)
 
-        materialize_siblings(None, None, page_wide)
+        materialize_siblings(None, None, loose)
 
         return out_doc
 

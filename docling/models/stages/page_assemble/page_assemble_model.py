@@ -200,7 +200,6 @@ class PageAssembleModel(BasePageModel):
                         for region in page.predictions.field_regions
                         if region.source_container_id is not None
                     }
-                    assembled_field_sources: set[int] = set()
 
                     for cluster in page.predictions.layout.clusters:
                         # _log.info("Cluster label seen:", cluster.label)
@@ -220,7 +219,6 @@ class PageAssembleModel(BasePageModel):
                             field_item = None
                             if inline_region is not None and inline_region.items:
                                 field_item = inline_region.items[0]
-                                assembled_field_sources.add(cluster.id)
                             text_el = TextElement(
                                 label=cluster.label,
                                 id=cluster.id,
@@ -304,39 +302,8 @@ class PageAssembleModel(BasePageModel):
                                     ),
                                     items=field_region.items,
                                 )
-                                assembled_field_sources.add(cluster.id)
                             elements.append(container_el)
                             body.append(container_el)
-
-                    next_id = (
-                        max(
-                            (
-                                cluster.id
-                                for cluster in page.predictions.layout.clusters
-                            ),
-                            default=0,
-                        )
-                        + 1
-                    )
-                    for field_region in page.predictions.field_regions:
-                        if field_region.source_container_id in assembled_field_sources:
-                            continue
-                        cluster = Cluster(
-                            id=next_id,
-                            label=DocItemLabel.FIELD_REGION,
-                            bbox=field_region.bbox,
-                        )
-                        field_element = FieldRegionElement(
-                            label=DocItemLabel.FIELD_REGION,
-                            id=next_id,
-                            page_no=page.page_no,
-                            cluster=cluster,
-                            items=field_region.items,
-                            page_wide=True,
-                        )
-                        elements.append(field_element)
-                        body.append(field_element)
-                        next_id += 1
 
                     page.assembled = AssembledUnit(
                         elements=elements, headers=headers, body=body
