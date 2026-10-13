@@ -761,3 +761,31 @@ def test_email_process_attachments_respects_max_attachments():
 
     # No attachment is processed, so the converted attachment content is absent.
     assert "Revenue rose to 12 million dollars." not in markdown
+    # The skipped attachment still leaves a note under the "Attachments" heading.
+    assert "1 more attachment skipped" in markdown
+
+
+def test_email_process_attachments_notes_attachments_over_the_limit():
+    in_path = Path("tests/data/email/sources/msg_with_attachment.msg")
+    backend = _email_backend(
+        in_path, EmailBackendOptions(process_attachments=True, max_attachments=1)
+    )
+
+    markdown = backend.convert().export_to_markdown()
+
+    assert "This is a test attachment file." in markdown
+    assert "could not be parsed" not in markdown
+    assert "1 more attachment skipped" in markdown
+
+
+def test_email_attachments_share_one_converter():
+    """All emails reuse one attachment converter and its loaded pipelines.
+
+    A new converter per email built the pipelines again, and so loaded the
+    layout and OCR models again, for every email in a batch.
+    """
+    first = EmailDocumentBackend._build_attachment_converter()
+    second = EmailDocumentBackend._build_attachment_converter()
+
+    assert first is not None
+    assert first is second

@@ -397,10 +397,10 @@ class EmailDocumentBackend(DeclarativeDocumentBackend):
         # The converter (entrypoints layer) is injected via
         # register_attachment_converter_factory so this core-layer backend never
         # imports it. Returns None when no factory has been registered, in which
-        # case attachments are listed instead of parsed. One converter is built
-        # per email and reused across its attachments (pipelines are cached per
-        # converter instance); it uses default options, so a nested email
-        # attachment is parsed but its own attachments are not recursed.
+        # case attachments are listed instead of parsed. The registered factory
+        # returns one shared converter, so its pipelines load once per process.
+        # It uses default options, so a nested email attachment is parsed but
+        # its own attachments are not recursed.
         if _attachment_converter_factory is None:
             return None
         return _attachment_converter_factory()
@@ -444,9 +444,7 @@ class EmailDocumentBackend(DeclarativeDocumentBackend):
         converter: DocumentConverter,
     ) -> None:
         total_bytes = 0
-        for index, attachment in enumerate(attachments):
-            if index >= self.options.max_attachments:
-                break
+        for index, attachment in enumerate(attachments[: self.options.max_attachments]):
             filename = self._attachment_filename(index, attachment)
             label = self._attachment_label(index, attachment)
             section = doc.add_heading(text=filename, level=3)
@@ -480,6 +478,14 @@ class EmailDocumentBackend(DeclarativeDocumentBackend):
                 )
             else:
                 doc.add_document(child, parent=section)
+
+        skipped = len(attachments) - self.options.max_attachments
+        if skipped > 0:
+            noun = "attachment" if skipped == 1 else "attachments"
+            doc.add_text(
+                label=DocItemLabel.TEXT,
+                text=f"{skipped} more {noun} skipped (exceeds max_attachments).",
+            )
 
     def _add_attachments(self, doc: DoclingDocument) -> None:
         """Append the attachments section, listing or parsing per the options."""

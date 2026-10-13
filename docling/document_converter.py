@@ -9,7 +9,7 @@ import warnings
 from collections.abc import Iterable, Iterator
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
-from functools import partial
+from functools import cache, partial
 from io import BytesIO
 from pathlib import Path
 from typing import Optional, Type, Union
@@ -1042,8 +1042,14 @@ class DocumentConverter:
         return conv_res
 
 
+@cache
+def _attachment_converter() -> DocumentConverter:
+    return DocumentConverter()
+
+
 # The email backend can parse attachments with Docling, but it lives in a lower
 # architecture layer and must not import DocumentConverter directly. Inject a
 # factory here (entrypoints layer) so EmailBackendOptions.process_attachments
-# works while keeping the module-boundary rules satisfied.
-register_attachment_converter_factory(lambda: DocumentConverter())
+# works while keeping the module-boundary rules satisfied. All emails share one
+# converter, so a batch loads the attachment pipelines and models only once.
+register_attachment_converter_factory(_attachment_converter)

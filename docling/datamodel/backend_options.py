@@ -614,7 +614,11 @@ class EmailBackendOptions(BaseBackendOptions):
             "their converted content under an 'Attachments' section, each "
             "attachment as its own subsection. Every supported format is routed "
             "through Docling's own DocumentConverter, so PDF/DOCX/PPTX/XLSX/"
-            "images/HTML/... are handled the same way as standalone documents. "
+            "images/HTML/... go through the same pipelines as standalone "
+            "documents. That converter uses the default options of each format: "
+            "the format_options (for example PdfPipelineOptions for OCR, tables "
+            "or the accelerator) and the allowed_formats of the converter that "
+            "reads the email do not apply to its attachments. "
             "Attachments whose format is unsupported, whose backend dependency "
             "is missing, or that fail to convert fall back to a name/type note. "
             "Opt-in (default False) because it runs the full conversion pipeline "
@@ -626,7 +630,8 @@ class EmailBackendOptions(BaseBackendOptions):
         ge=0,
         description=(
             "Maximum number of attachments to process when process_attachments "
-            "is enabled. Attachments beyond this count are ignored."
+            "is enabled. Attachments beyond this count are not converted, and a "
+            "note gives their number."
         ),
     )
     max_attachment_bytes: int = Field(
