@@ -6,17 +6,28 @@ from pathlib import Path, PurePath
 from unittest.mock import MagicMock
 
 import pytest
+from docling_core.transforms.serializer.doclang import DocLangDocSerializer
 from docling_core.types.doc import (
     BoundingBox,
     DocItemLabel,
     DoclingDocument,
+    ListItem,
     NodeItem,
     RichTableCell,
     Size,
     TableCell,
 )
-from docling_core.types.doc.items.form import FieldItem, FieldValueItem
-from docling_core.types.doc.page import BoundingRectangle, PdfWidget, TextCell
+from docling_core.types.doc.items.form import (
+    FieldItem,
+    FieldRegionItem,
+    FieldValueItem,
+)
+from docling_core.types.doc.page import (
+    BoundingRectangle,
+    PdfHyperlink,
+    PdfWidget,
+    TextCell,
+)
 
 from docling.backend.docling_parse_backend import (
     ThreadedDoclingParseDocumentBackend,
@@ -34,6 +45,7 @@ from docling.datamodel.base_models import (
 from docling.datamodel.document import ConversionResult, InputDocument
 from docling.datamodel.pipeline_options import PdfPipelineOptions
 from docling.document_converter import DocumentConverter, PdfFormatOption
+from docling.models.postprocessing.reading_order_rb import ReadingOrderPredictor
 from docling.models.stages.form_field import form_field_model
 from docling.models.stages.form_field.form_field_model import PdfFormFieldModel
 from docling.models.stages.form_field.keying import PUSHBUTTON_FLAG
@@ -938,6 +950,185 @@ def test_inline_host_is_not_dropped_as_rendered_duplicate() -> None:
     assert region.source_container_id == host.id
     assert [value.text for value in region.items[0].values] == ["Amount 12"]
     assert host in page.predictions.layout.clusters
+
+
+def _host_between_paragraphs(
+    link: str | None = None,
+) -> tuple[Page, Cluster, Cluster, Cluster]:
+    """Three stacked paragraphs; the middle one hosts a checkbox widget.
+
+    ``link`` puts a hyperlink annotation over the hosting paragraph.
+    """
+    host_bbox = BoundingBox(l=10, t=30, r=90, b=40)
+    previous = _text_cluster(
+        1, BoundingBox(l=10, t=10, r=90, b=20), "Applicants who live in"
+    )
+    host = _text_cluster(2, host_bbox, "check here if you rent")
+    following = _text_cluster(
+        3, BoundingBox(l=10, t=50, r=90, b=60), "and attach the lease"
+    )
+    hyperlinks = (
+        []
+        if link is None
+        else [
+            PdfHyperlink(
+                index=0,
+                rect=BoundingRectangle.from_bounding_box(
+                    host_bbox.to_bottom_left_origin(page_height=100)
+                ),
+                uri=link,
+            )
+        ]
+    )
+    page = Page(page_no=1, size=Size(width=100, height=100))
+    page.parsed_page = MagicMock(
+        widgets=[
+            _widget(
+                0,
+                BoundingBox(l=80, t=32, r=86, b=38),
+                "",
+                field_type="/Btn",
+                appearance_state="/Off",
+            )
+        ],
+        hyperlinks=hyperlinks,
+    )
+    page.predictions.layout = LayoutPrediction(clusters=[previous, host, following])
+    return page, previous, host, following
+
+
+@pytest.mark.parametrize("host_is_source", [True, False])
+def test_reading_order_never_merges_an_inline_host(
+    host_is_source: bool, monkeypatch
+) -> None:
+    # predict_merges joins a paragraph to its continuation, and the merged
+    # paragraph is not emitted on its own. A host becomes a field item and takes
+    # no merged text: merged from, its continuation would vanish; merged into,
+    # its widgets would.
+    page, previous, host, following = _host_between_paragraphs()
+    source, target = (host, following) if host_is_source else (previous, host)
+
+    def predict_merges(self, sorted_elements):
+        cids = {element.ref.cref: element.cid for element in sorted_elements}
+        return {cids[f"#/1/{source.id}"]: [cids[f"#/1/{target.id}"]]}
+
+    monkeypatch.setattr(ReadingOrderPredictor, "predict_merges", predict_merges)
+
+    doc = _materialize(page)
+
+    texts = [(text.label, text.text) for text in doc.texts]
+    assert (DocItemLabel.TEXT, "Applicants who live in") in texts
+    assert (DocItemLabel.FIELD_KEY, "check here if you rent") in texts
+    assert (DocItemLabel.TEXT, "and attach the lease") in texts
+    (item,) = doc.field_items
+    assert [child.resolve(doc).label for child in item.children] == [
+        DocItemLabel.FIELD_KEY,
+        DocItemLabel.FIELD_VALUE,
+    ]
+
+
+def test_inline_host_keeps_its_hyperlink() -> None:
+    page, _, _, _ = _host_between_paragraphs(link="https://example.org/rent")
+
+    doc = _materialize(page)
+
+    (key,) = [text for text in doc.texts if text.label == DocItemLabel.FIELD_KEY]
+    assert str(key.hyperlink) == "https://example.org/rent"
+
+
+def test_list_item_host_keeps_the_list_made_of_list_items() -> None:
+    # A list item that hosts a checkbox becomes a field item in place. List
+    # serializers expect list items under a list, so the field item sits in an
+    # empty list item of its own.
+    texts = ["Read the terms first", "I agree to the terms", "Sign below"]
+    clusters = [
+        _text_cluster(n + 1, BoundingBox(l=10, t=10 + 15 * n, r=90, b=20 + 15 * n), t)
+        for n, t in enumerate(texts)
+    ]
+    for cluster in clusters:
+        cluster.label = DocItemLabel.LIST_ITEM
+    page = Page(page_no=1, size=Size(width=100, height=100))
+    page.parsed_page = MagicMock(
+        widgets=[
+            _widget(
+                0,
+                BoundingBox(l=82, t=27, r=88, b=33),
+                "",
+                field_type="/Btn",
+                appearance_state="/Off",
+            )
+        ],
+        hyperlinks=[],
+    )
+    page.predictions.layout = LayoutPrediction(clusters=clusters)
+
+    doc = _materialize(page)
+
+    (group,) = doc.groups
+    children = [child.resolve(doc) for child in group.children]
+    assert all(isinstance(child, ListItem) for child in children)
+    assert [child.text for child in children] == [texts[0], "", texts[2]]
+    (item,) = [grandchild.resolve(doc) for grandchild in children[1].children]
+    assert isinstance(item, FieldItem)
+    key = item.children[0].resolve(doc)
+    assert (key.label, key.text) == (DocItemLabel.FIELD_KEY, texts[1])
+
+
+@pytest.mark.parametrize(
+    ("label", "widget", "inner_label", "inner_tag"),
+    [
+        # A text box beside a heading, and a checkbox inside one: a heading
+        # never hosts a field in place, so both go to a field region.
+        (
+            DocItemLabel.SECTION_HEADER,
+            "beside",
+            DocItemLabel.FIELD_HEADING,
+            "<key><field_heading>",
+        ),
+        (
+            DocItemLabel.SECTION_HEADER,
+            "inside",
+            DocItemLabel.FIELD_HEADING,
+            "<key><field_heading>",
+        ),
+        (DocItemLabel.FORMULA, "beside", DocItemLabel.FORMULA, "<key><formula>"),
+    ],
+)
+def test_heading_or_formula_key_keeps_its_role_inside_the_key(
+    label: DocItemLabel, widget: str, inner_label: DocItemLabel, inner_tag: str
+) -> None:
+    key = _text_cluster(1, BoundingBox(l=10, t=10, r=60, b=20), "Applicant name")
+    key.label = label
+    widgets = (
+        [_widget(0, BoundingBox(l=65, t=10, r=95, b=20), "Jane Doe")]
+        if widget == "beside"
+        else [
+            _widget(
+                0,
+                BoundingBox(l=52, t=12, r=58, b=18),
+                "",
+                field_type="/Btn",
+                appearance_state="/Off",
+            )
+        ]
+    )
+    page = Page(page_no=1, size=Size(width=100, height=100))
+    page.parsed_page = MagicMock(widgets=widgets, hyperlinks=[])
+    page.predictions.layout = LayoutPrediction(clusters=[key])
+
+    doc = _materialize(page)
+
+    (item,) = doc.field_items
+    assert isinstance(item.parent.resolve(doc), FieldRegionItem)
+    field_key = item.children[0].resolve(doc)
+    assert field_key.label == DocItemLabel.FIELD_KEY
+    assert field_key.text == ""
+    (inner,) = [child.resolve(doc) for child in field_key.children]
+    assert inner.label == inner_label
+    assert inner.orig == "Applicant name"
+    assert inner.prov
+    doclang = "".join(DocLangDocSerializer(doc=doc).serialize().text.split())
+    assert inner_tag in doclang
 
 
 @pytest.mark.parametrize("boundary", ["ordinary", "zero_area", "table_scope"])

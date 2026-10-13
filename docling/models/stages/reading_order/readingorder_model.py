@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 from collections.abc import Iterator
+from itertools import takewhile
 from pathlib import Path
 from statistics import median
 
@@ -11,6 +12,7 @@ from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
+    FieldRegionItem,
     GroupItem,
     GroupLabel,
     NodeItem,
@@ -48,6 +50,7 @@ from docling.models.postprocessing.reading_order_rb import (
     SeparatorElement,
     build_page_separators,
 )
+from docling.utils.form_fields import without_whitespace
 from docling.utils.profiling import ProfilingScope, TimeRecorder
 
 
@@ -289,6 +292,26 @@ class ReadingOrderModel:
     def _element_ref(element: BasePageElement) -> str:
         return f"#/{element.page_no}/{element.cluster.id}"
 
+    @staticmethod
+    def _merges_without_hosts(
+        merges: dict[int, list[int]], host_cids: set[int]
+    ) -> dict[int, list[int]]:
+        """Drop the merges that join a paragraph hosting form widgets.
+
+        A host becomes a field item, which takes no merged text, and a merged
+        element is not emitted on its own: a host source would lose its
+        continuation, a host target its widgets. A chain stops before its first
+        host, so the host and what follows it stay separate paragraphs.
+        """
+        kept: dict[int, list[int]] = {}
+        for source, targets in merges.items():
+            if source in host_cids:
+                continue
+            chain = list(takewhile(lambda cid: cid not in host_cids, targets))
+            if chain:
+                kept[source] = chain
+        return kept
+
     @classmethod
     def _match_table_pictures(
         cls,
@@ -450,9 +473,6 @@ class ReadingOrderModel:
         a picture takes the field region into its group instead.
         """
 
-        def normalized(text: str) -> str:
-            return "".join(text.split())
-
         for cell_fields in field_cells:
             index = next(
                 (
@@ -479,7 +499,7 @@ class ReadingOrderModel:
                 parent=parent,
             )
             shown = {
-                normalized(text)
+                without_whitespace(text)
                 for item in cell_fields.items
                 for text in (item.key_text, *(value.text for value in item.values))
             }
@@ -487,7 +507,7 @@ class ReadingOrderModel:
                 existing is not None
                 and not isinstance(existing, RichTableCell)
                 and existing.text.strip()
-                and normalized(existing.text) not in shown
+                and without_whitespace(existing.text) not in shown
             ):
                 doc.add_text(
                     label=DocItemLabel.TEXT,
@@ -599,7 +619,7 @@ class ReadingOrderModel:
         ) -> None:
             split_lists_on_non_list = (
                 isinstance(parent, GroupItem) and parent.label == GroupLabel.FORM_AREA
-            ) or (parent is not None and parent.label == DocItemLabel.FIELD_REGION)
+            ) or isinstance(parent, FieldRegionItem)
             current_list: GroupItem | None = None
             for rel in ordered_siblings[parent_ref]:
                 if rel.cid in skippable_cids:
@@ -734,13 +754,14 @@ class ReadingOrderModel:
     ) -> None:
         field_item = out_doc.add_field_item(parent=parent)
         if item.key_text and item.key_bbox is not None:
-            out_doc.add_field_key(
-                text=item.key_text,
+            self._add_field_key(
+                item,
                 prov=ProvenanceItem(
                     page_no=page_no,
                     charspan=(0, len(item.key_text)),
                     bbox=item.key_bbox.to_bottom_left_origin(page_height),
                 ),
+                out_doc=out_doc,
                 parent=field_item,
             )
         self._add_field_values(
@@ -750,6 +771,35 @@ class ReadingOrderModel:
             page_no=page_no,
             page_height=page_height,
         )
+
+    @staticmethod
+    def _add_field_key(
+        item: FieldItemPrediction,
+        *,
+        prov: ProvenanceItem,
+        out_doc: DoclingDocument,
+        parent: NodeItem,
+    ) -> None:
+        """The item's key; a heading or formula key keeps its role inside it.
+
+        Such a key holds no text of its own: the heading or formula child
+        carries the text and the location, so nothing is printed twice.
+        """
+        if item.key_layout_label == DocItemLabel.SECTION_HEADER:
+            key = out_doc.add_field_key(text="", parent=parent)
+            out_doc.add_field_heading(text=item.key_text, prov=prov, parent=key)
+        elif item.key_layout_label == DocItemLabel.FORMULA:
+            # As other formulas: the text is filled by formula enrichment.
+            key = out_doc.add_field_key(text="", parent=parent)
+            out_doc.add_text(
+                label=DocItemLabel.FORMULA,
+                text="",
+                orig=item.key_text,
+                prov=prov,
+                parent=key,
+            )
+        else:
+            out_doc.add_field_key(text=item.key_text, prov=prov, parent=parent)
 
     def _add_field_values(
         self,
@@ -828,20 +878,29 @@ class ReadingOrderModel:
         label = element.label
         if element.field_item is not None:
             # The paragraph inlines widgets: emit a field_item in this paragraph's
-            # own place -- inside its list when it is a list item, else under the
-            # current parent -- with its text as the key and the widgets as values.
-            # No separate field_region: the item stays where the paragraph was.
+            # own place -- in a list item of its list when it is a list item, else
+            # under the current parent -- with its text as the key and the widgets
+            # as values. No separate field_region: the item stays where the
+            # paragraph was. The list item keeps the list made of list items; it
+            # carries no text or location of its own, the key does.
             if label == DocItemLabel.LIST_ITEM:
                 if current_list is None:
                     current_list = out_doc.add_group(
                         label=GroupLabel.LIST, name="list", parent=parent
                     )
-                item_parent: NodeItem | None = current_list
+                item_parent: NodeItem | None = out_doc.add_list_item(
+                    text="", enumerated=False, parent=current_list
+                )
             else:
                 current_list = None
                 item_parent = parent
             field_item = out_doc.add_field_item(parent=item_parent)
-            out_doc.add_field_key(text=cap_text, prov=prov, parent=field_item)
+            out_doc.add_field_key(
+                text=cap_text,
+                prov=prov,
+                parent=field_item,
+                hyperlink=element.hyperlink,
+            )
             self._add_field_values(
                 element.field_item,
                 out_doc=out_doc,
@@ -1022,6 +1081,15 @@ class ReadingOrderModel:
                     el_merges_mapping.update(
                         self.ro_model.predict_merges(sorted_elements=siblings)
                     )
+            host_cids = {
+                element.cid
+                for element in page_elements
+                if isinstance(
+                    assembled := assembled_by_ref.get(element.ref.cref), TextElement
+                )
+                and assembled.field_item is not None
+            }
+            el_merges_mapping = self._merges_without_hosts(el_merges_mapping, host_cids)
 
             docling_doc: DoclingDocument = self._readingorder_elements_to_docling_doc(
                 conv_res,

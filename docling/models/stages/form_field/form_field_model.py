@@ -48,17 +48,21 @@ from docling.models.stages.form_field.keying import (
     regions,
 )
 from docling.models.stages.form_field.keying.rules import THIN
+from docling.utils.form_fields import without_whitespace
 from docling.utils.profiling import TimeRecorder
 
 _log = logging.getLogger(__name__)
 
 # Paragraphs that may host an item in place. Code, and captions or footnotes
 # attached to a table or picture, take reading-order paths that ignore
-# TextElement.field_item.
+# TextElement.field_item. A section header or formula that is a key goes to a
+# field region instead, where the key keeps it as a heading or formula.
 INLINE_HOSTS = set(TEXT_ELEM_LABELS) - {
     DocItemLabel.CODE,
     DocItemLabel.CAPTION,
     DocItemLabel.FOOTNOTE,
+    DocItemLabel.SECTION_HEADER,
+    DocItemLabel.FORMULA,
     *PAGE_HEADER_LABELS,
 }
 
@@ -214,6 +218,32 @@ def _cell_units(
         for (table, rows, columns), members in cells.items()
     ]
     return placed, rest
+
+
+def _mark_key_layout_labels(
+    units: list[_Unit],
+    sources: dict[int, tuple[int, int]],
+    page: Page,
+    unsure: set[int],
+) -> None:
+    """Record the layout label of each key that is one whole layout block."""
+    assert page.predictions.layout is not None
+    found = _walk(page.predictions.layout.clusters)
+    for unit in units:
+        if unit.consumed is None:
+            continue
+        clusters = {sources[atom][0] for atom in unit.consumed.atoms}
+        if len(clusters) != 1:
+            continue
+        (cluster_id,) = clusters
+        cluster = found.get(cluster_id)
+        if (
+            cluster is not None
+            and cluster_id not in unsure
+            and {sources[atom][1] for atom in unit.consumed.atoms}
+            == _printable(cluster)
+        ):
+            unit.item.key_layout_label = cluster.label
 
 
 def _inline_hosts(
@@ -376,13 +406,9 @@ class PdfFormFieldModel(BasePageModel):
     def __init__(self, *, enabled: bool) -> None:
         self.enabled = enabled
 
-    @staticmethod
-    def _normalize_text(text: str) -> str:
-        return "".join(text.split())
-
     @classmethod
     def _cluster_text(cls, cluster: Cluster) -> str:
-        return cls._normalize_text(
+        return without_whitespace(
             " ".join(cell.text for cell in cluster.cells if cell.text.strip())
         )
 
@@ -417,7 +443,7 @@ class PdfFormFieldModel(BasePageModel):
         matches = [
             (widget_bbox.intersection_over_self(form.bbox), form)
             for form in forms
-            if widget_bbox.intersection_over_self(form.bbox) > WIDGET_COVERAGE
+            if widget_bbox.intersection_over_self(form.bbox) >= WIDGET_COVERAGE
         ]
         if not matches:
             return None
@@ -489,6 +515,7 @@ class PdfFormFieldModel(BasePageModel):
         values = [self._normalize_widget(v.native, v.bbox) for v in assignment.values]
         sources, unsure = _atom_sources(assignment)
         units = _build_units(assignment, values)
+        _mark_key_layout_labels(units, sources, page, unsure)
         in_cells, rest = _cell_units(units, assignment)
         hosts = _inline_hosts(rest, assignment, sources, page, unsure)
         regions = _place(rest, hosts, assignment, page)
@@ -565,7 +592,7 @@ class PdfFormFieldModel(BasePageModel):
         assert page.predictions.layout is not None
         by_text: dict[str, list[BoundingBox]] = {}
         for value in values:
-            text = cls._normalize_text(value.text)
+            text = without_whitespace(value.text)
             if text:
                 by_text.setdefault(text, []).append(value.bbox)
 

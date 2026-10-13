@@ -16,15 +16,15 @@ from docling.models.stages.form_field.keying.geometry import (
     contains,
     gap,
     lettered,
-    overlap,
-    span_overlap,
 )
 from docling.models.stages.form_field.keying.types import (
+    Inputs,
     KeyText,
     Scope,
     Value,
     is_skipped,
 )
+from docling.utils.form_fields import without_whitespace
 
 # Pages with more text atoms than this skip key joining and abstain from
 # free-form keying.
@@ -63,7 +63,7 @@ def scope_of(
         r
         for r in found
         if r.label in {DocItemLabel.TABLE, DocItemLabel.DOCUMENT_INDEX}
-        and overlap(r.bbox, bbox) > 0
+        and r.bbox.intersection_area_with(bbox) > 0
     ]
     if not tables:
         return Scope()
@@ -90,7 +90,7 @@ def paints_value(box: BoundingBox, text: str, values: list[Value]) -> bool:
     """
     return any(
         contains(v.bbox, box)
-        and "".join(text.split()) == "".join((v.native.widget_text or "").split())
+        and without_whitespace(text) == without_whitespace(v.native.widget_text or "")
         for v in values
     )
 
@@ -100,13 +100,7 @@ def inputs(
     found: list[Cluster],
     table_cells: dict[int, list[TableCell]],
     page_height: float,
-) -> tuple[
-    list[Value],
-    list[KeyText],
-    float,
-    dict[int, set[tuple[int, int]]],
-    set[tuple[int, int]],
-]:
+) -> Inputs:
     """Values, key texts, median text height, atom sources, and painted source cells."""
     values = []
     for native in widgets:
@@ -162,7 +156,7 @@ def inputs(
     if len(key_texts) > MAX_KEY_TEXTS:
         # Joining keys compares every pair of blocks; a page this large
         # abstains in assign() anyway.
-        return values, list(key_texts.values()), h, sources, painted_cells
+        return Inputs(values, list(key_texts.values()), h, sources, painted_cells)
     # Rebuild whole keys the layout split into pieces: first the pieces of
     # one text line, then the lines of one key. Joined keys compete
     # with their pieces; they never replace them.
@@ -173,7 +167,7 @@ def inputs(
     )
     for key_text in [*blocks, *stacks(blocks, values, h)]:
         key_texts.setdefault((key_text.atoms, key_text.scope), key_text)
-    return values, list(key_texts.values()), h, sources, painted_cells
+    return Inputs(values, list(key_texts.values()), h, sources, painted_cells)
 
 
 def joined(parts: list[KeyText]) -> KeyText:
@@ -208,8 +202,7 @@ def lines(blocks: list[KeyText], values: list[Value], h: float) -> list[KeyText]
             i
             for i, v in enumerate(values)
             if v.scope == b.scope
-            and span_overlap(b.bbox.l, b.bbox.r, v.bbox.l, v.bbox.r)
-            >= 0.5 * min(b.bbox.width, v.bbox.width)
+            and b.bbox.x_overlap_with(v.bbox) >= 0.5 * min(b.bbox.width, v.bbox.width)
             and gap(b.bbox, v.bbox) <= h
         )
 
@@ -218,7 +211,7 @@ def lines(blocks: list[KeyText], values: list[Value], h: float) -> list[KeyText]
             k
             for k, other in enumerate(blocks)
             if other.scope == b.scope
-            and span_overlap(b.bbox.l, b.bbox.r, other.bbox.l, other.bbox.r) > 0
+            and b.bbox.x_overlap_with(other.bbox) > 0
             and 0 < max(other.bbox.t - b.bbox.b, b.bbox.t - other.bbox.b) <= 0.75 * h
         )
 
@@ -233,8 +226,7 @@ def lines(blocks: list[KeyText], values: list[Value], h: float) -> list[KeyText]
             and b.scope == a.scope
             and min(a.bbox.height, b.bbox.height)
             >= 0.8 * max(a.bbox.height, b.bbox.height)
-            and span_overlap(a.bbox.t, a.bbox.b, b.bbox.t, b.bbox.b)
-            >= 0.8 * min(a.bbox.height, b.bbox.height)
+            and a.bbox.y_overlap_with(b.bbox) >= 0.8 * min(a.bbox.height, b.bbox.height)
             and -0.25 * h <= b.bbox.l - a.bbox.r <= h
         ]
         if right:
@@ -249,7 +241,7 @@ def lines(blocks: list[KeyText], values: list[Value], h: float) -> list[KeyText]
             [k for k, n in nearest.items() if n == j] == [i]
             and nested(below[i], below[j])
             and neighbours[i] == neighbours[j]
-            and not any(overlap(v.bbox, between) > 0 for v in values)
+            and not any(v.bbox.intersection_area_with(between) > 0 for v in values)
         ):
             links[i] = j
     result = []
@@ -290,9 +282,8 @@ def stacks(blocks: list[KeyText], values: list[Value], h: float) -> list[KeyText
             DocItemLabel.TITLE,
         }
         and not any(
-            overlap(b.bbox, v.bbox) > 0
-            and span_overlap(b.bbox.t, b.bbox.b, v.bbox.t, v.bbox.b)
-            >= 0.5 * min(b.bbox.height, v.bbox.height)
+            b.bbox.intersection_area_with(v.bbox) > 0
+            and b.bbox.y_overlap_with(v.bbox) >= 0.5 * min(b.bbox.height, v.bbox.height)
             for v in values
         )
     ]
@@ -301,8 +292,7 @@ def stacks(blocks: list[KeyText], values: list[Value], h: float) -> list[KeyText
         return (
             lower.t > upper.t
             and -0.25 * h <= lower.t - upper.b <= 0.75 * h
-            and span_overlap(upper.l, upper.r, lower.l, lower.r)
-            >= 0.5 * min(upper.width, lower.width)
+            and upper.x_overlap_with(lower) >= 0.5 * min(upper.width, lower.width)
             and min(upper.height, lower.height)
             >= 0.95 * max(upper.height, lower.height)
         )
@@ -312,8 +302,7 @@ def stacks(blocks: list[KeyText], values: list[Value], h: float) -> list[KeyText
             i
             for i, v in enumerate(values)
             if v.scope == b.scope
-            and span_overlap(b.bbox.t, b.bbox.b, v.bbox.t, v.bbox.b)
-            >= 0.5 * min(b.bbox.height, v.bbox.height)
+            and b.bbox.y_overlap_with(v.bbox) >= 0.5 * min(b.bbox.height, v.bbox.height)
         )
         for b in joinable
     ]

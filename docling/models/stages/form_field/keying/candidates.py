@@ -18,9 +18,7 @@ from docling.models.stages.form_field.keying.geometry import (
     gap,
     lettered,
     obstructs,
-    overlap,
     side_of,
-    span_overlap,
 )
 from docling.models.stages.form_field.keying.types import (
     WIDGET_COVERAGE,
@@ -40,12 +38,8 @@ def local_features(
         value = values[i]
         a, b = key_text.bbox, value.bbox
         distance += math.log1p(gap(a, b) / h)
-        xover = max(0.0, min(a.r, b.r) - max(a.l, b.l)) / max(
-            1e-6, min(a.width, b.width)
-        )
-        yover = max(0.0, min(a.b, b.b) - max(a.t, b.t)) / max(
-            1e-6, min(a.height, b.height)
-        )
+        xover = a.x_overlap_with(b) / max(1e-6, min(a.width, b.width))
+        yover = a.y_overlap_with(b) / max(1e-6, min(a.height, b.height))
         misalignment += 0.5 * (1 - max(xover, yover))
         start, end = anchors(a, b)
         obstacles += 4 * sum(
@@ -166,10 +160,8 @@ def foreign(i: int, lane: BoundingBox | None, side: Side, values: list[Value]) -
         return False
     return any(
         j != i
-        and span_overlap(v.bbox.l, v.bbox.r, lane.l, lane.r)
-        >= 0.5 * min(v.bbox.width, lane.width)
-        and span_overlap(v.bbox.t, v.bbox.b, lane.t, lane.b)
-        >= 0.5 * min(v.bbox.height, lane.height)
+        and v.bbox.x_overlap_with(lane) >= 0.5 * min(v.bbox.width, lane.width)
+        and v.bbox.y_overlap_with(lane) >= 0.5 * min(v.bbox.height, lane.height)
         and not siblings(values[i], v, side)
         for j, v in enumerate(values)
     )
@@ -229,12 +221,9 @@ def candidates_for(
                 if (
                     key_text.bbox.b <= union.t
                     and union.t - key_text.bbox.b <= 5 * h
-                    and overlap(
-                        BoundingBox(
-                            l=union.l, r=union.r, t=key_text.bbox.t, b=key_text.bbox.b
-                        ),
-                        key_text.bbox,
-                    )
+                    and BoundingBox(
+                        l=union.l, r=union.r, t=key_text.bbox.t, b=key_text.bbox.b
+                    ).intersection_area_with(key_text.bbox)
                     > 0
                 ):
                     # Any member with its own key above it is a separate field.
@@ -244,8 +233,7 @@ def candidates_for(
                         and lettered(other.text)
                         and other.bbox.b <= member.t
                         and other.bbox.t >= key_text.bbox.t - h
-                        and span_overlap(other.bbox.l, other.bbox.r, member.l, member.r)
-                        >= 0.5 * other.bbox.width
+                        and other.bbox.x_overlap_with(member) >= 0.5 * other.bbox.width
                         for other in key_texts
                         for member in (values[i].bbox for i in members)
                     )
@@ -350,7 +338,7 @@ def answers(
             len(key_text.atoms) == 1
             and key_text.atoms < clause.atoms
             and lettered(key_text.text)
-            and span_overlap(key_text.bbox.t, key_text.bbox.b, box.t, box.b)
+            and key_text.bbox.y_overlap_with(box)
             >= 0.5 * min(key_text.bbox.height, box.height)
             and (key_text.bbox.r <= box.l or key_text.bbox.l >= box.r)
             and gap(key_text.bbox, box) <= h
@@ -375,5 +363,5 @@ def siblings(a: Value, b: Value, side: Side) -> bool:
     if min(x.height, y.height) < 0.8 * max(x.height, y.height):
         return False
     if side in ("left", "right"):
-        return span_overlap(x.t, x.b, y.t, y.b) >= 0.5 * min(x.height, y.height)
-    return span_overlap(x.l, x.r, y.l, y.r) >= 0.5 * min(x.width, y.width)
+        return x.y_overlap_with(y) >= 0.5 * min(x.height, y.height)
+    return x.x_overlap_with(y) >= 0.5 * min(x.width, y.width)

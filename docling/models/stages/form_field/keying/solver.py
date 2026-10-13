@@ -19,7 +19,7 @@ from docling.models.stages.form_field.keying.candidates import (
     candidates_for,
     siblings,
 )
-from docling.models.stages.form_field.keying.geometry import anchors, span_overlap
+from docling.models.stages.form_field.keying.geometry import anchors
 from docling.models.stages.form_field.keying.inputs import (
     MAX_KEY_TEXTS,
     inputs,
@@ -39,6 +39,7 @@ from docling.models.stages.form_field.keying.types import (
     TableSlot,
     Value,
 )
+from docling.utils.layout_postprocessor import UnionFind
 
 # Page size limits. Candidate construction scans every key against every
 # value, and the pairwise penalties every pair of surviving candidates, both in
@@ -103,6 +104,63 @@ def transition_penalty(
     return 0.0
 
 
+def penalized_pairs(
+    active: list[int],
+    proposed: list[Candidate],
+    values: list[Value],
+    key_texts: list[KeyText],
+    h: float,
+) -> list[tuple[int, int, float]]:
+    """Pairs of active columns with a crossing or transition penalty, in order.
+
+    Gives the same pairs as scoring every pair, sorted the same way, without
+    scoring every pair. Every anchor segment lies in the box around its
+    candidate's key and values, so two candidates can only cross where those
+    boxes meet; a transition needs one candidate's first value right after
+    the other's last. Choice groups take neither penalty.
+    """
+    scored = [
+        column
+        for column, index in enumerate(active)
+        if proposed[index].kind != "choice_group"
+    ]
+    boxes = {
+        column: BoundingBox.enclosing_bbox(
+            [
+                key_texts[proposed[active[column]].key].bbox,
+                *(values[i].bbox for i in proposed[active[column]].members),
+            ]
+        )
+        for column in scored
+    }
+    pairs: set[tuple[int, int]] = set()
+    by_left = sorted(scored, key=lambda column: boxes[column].l)
+    for n, x in enumerate(by_left):
+        for y in by_left[n + 1 :]:
+            if boxes[y].l > boxes[x].r:
+                break
+            if boxes[y].t <= boxes[x].b and boxes[x].t <= boxes[y].b:
+                pairs.add((min(x, y), max(x, y)))
+    by_first: dict[int, list[int]] = defaultdict(list)
+    for column in scored:
+        by_first[proposed[active[column]].members[0]].append(column)
+    for x in scored:
+        for y in by_first.get(proposed[active[x]].members[-1] + 1, []):
+            if x != y:
+                pairs.add((min(x, y), max(x, y)))
+    found = []
+    for a, b in sorted(pairs):
+        ca, cb = proposed[active[a]], proposed[active[b]]
+        if key_texts[ca.key].scope != key_texts[cb.key].scope:
+            continue
+        penalty = 3.0 * crossing(ca, cb, values, key_texts) + transition_penalty(
+            ca, cb, values, key_texts, h
+        )
+        if penalty:
+            found.append((a, b, penalty))
+    return found
+
+
 def share_groups(
     columns: list[int],
     proposed: list[Candidate],
@@ -115,13 +173,7 @@ def share_groups(
     group when their values are siblings (transitively, along the line).
     Every other candidate is a group of its own.
     """
-    parent = {column: column for column in columns}
-
-    def root(column: int) -> int:
-        while parent[column] != column:
-            column = parent[column]
-        return column
-
+    uf = UnionFind(columns)
     for x, y in combinations(columns, 2):
         cx, cy = proposed[active[x]], proposed[active[y]]
         if (
@@ -130,11 +182,8 @@ def share_groups(
             and cx.key == cy.key
             and siblings(values[cx.members[0]], values[cy.members[0]], cx.side)
         ):
-            parent[root(x)] = root(y)
-    groups: dict[int, list[int]] = defaultdict(list)
-    for column in columns:
-        groups[root(column)].append(column)
-    return list(groups.values())
+            uf.union(x, y)
+    return list(uf.get_groups().values())
 
 
 def co_owners(a: Candidate, b: Candidate, values: list[Value]) -> bool:
@@ -149,12 +198,12 @@ def co_owners(a: Candidate, b: Candidate, values: list[Value]) -> bool:
     x, y = values[a.members[0]].bbox, values[b.members[0]].bbox
     if values[a.members[0]].checkbox == values[b.members[0]].checkbox:
         return False
-    if span_overlap(x.t, x.b, y.t, y.b) >= 0.5 * min(x.height, y.height):
+    if x.y_overlap_with(y) >= 0.5 * min(x.height, y.height):
         return True
     return (
         a.side == b.side
         and a.side in ("up", "down")
-        and span_overlap(x.l, x.r, y.l, y.r) >= 0.5 * min(x.width, y.width)
+        and x.x_overlap_with(y) >= 0.5 * min(x.width, y.width)
     )
 
 
@@ -231,18 +280,16 @@ def assign(
     detected tables. Nothing passed in is modified.
     """
     found = regions(clusters)
-    values, key_texts, h, sources, painted_cells = inputs(
-        widgets, found, table_cells, page_height
-    )
+    read = inputs(widgets, found, table_cells, page_height)
 
     def keyed_in_tables() -> tuple[list[Candidate], dict[int, TableSlot]]:
         return table_fields(
-            found, table_cells, rules or [], page_height, values, key_texts
+            found, table_cells, rules or [], page_height, read.values, read.key_texts
         )
 
-    assignment = _solve(values, key_texts, h, keyed_in_tables)
-    assignment.sources = sources
-    assignment.painted_cells = painted_cells
+    assignment = _solve(read.values, read.key_texts, read.h, keyed_in_tables)
+    assignment.sources = read.sources
+    assignment.painted_cells = read.painted_cells
     return assignment
 
 
@@ -330,16 +377,7 @@ def _solve(
             first, second = proposed[active[ga[0]]], proposed[active[gb[0]]]
             if not co_owners(first, second, values):
                 constraint({sa: 1, sb: 1}, 0, 1)
-    # Every pair of candidates is compared; MAX_ACTIVE_CANDIDATES bounds this.
-    for a, b in combinations(range(len(active)), 2):
-        ca, cb = proposed[active[a]], proposed[active[b]]
-        if key_texts[ca.key].scope != key_texts[cb.key].scope:
-            continue
-        penalty = 3.0 * crossing(ca, cb, values, key_texts) + transition_penalty(
-            ca, cb, values, key_texts, h
-        )
-        if not penalty:
-            continue
+    for a, b, penalty in penalized_pairs(active, proposed, values, key_texts, h):
         auxiliary = len(costs)
         costs.append(penalty)
         constraint({a: 1, b: 1, auxiliary: -1}, -math.inf, 1)

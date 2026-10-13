@@ -102,6 +102,19 @@ class TableSlot:
 
 
 @dataclass
+class Inputs:
+    """One page's keying inputs, as keying.inputs reads them."""
+
+    values: list[Value]
+    key_texts: list[KeyText]
+    h: float  # Median height of the page's text lines.
+    # Text atom -> the (cluster id, cell index) pairs it was read from.
+    sources: dict[int, set[tuple[int, int]]]
+    # Source cells recognized as painted widget values, separate from key atoms.
+    painted_cells: set[tuple[int, int]]
+
+
+@dataclass
 class Assignment:
     values: list[Value]
     key_texts: list[KeyText]

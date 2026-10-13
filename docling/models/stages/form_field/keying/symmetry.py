@@ -19,13 +19,14 @@ from typing import Literal
 from docling_core.types.doc import BoundingBox
 
 from docling.models.stages.form_field.keying.candidates import siblings
-from docling.models.stages.form_field.keying.geometry import gap, lettered, overlap
+from docling.models.stages.form_field.keying.geometry import gap, lettered
 from docling.models.stages.form_field.keying.types import (
     Candidate,
     KeyText,
     Side,
     Value,
 )
+from docling.utils.layout_postprocessor import UnionFind
 
 # Above the usual gap between a key before and one after a value (a cell
 # difference, 1) and below leaving a value blank (3): a decided run turns
@@ -124,7 +125,7 @@ def neighbours(values: list[Value], axis: Axis) -> dict[int, int]:
         a, b = (i, j) if forward else (j, i)
         corridor = _between(values[a].bbox, values[b].bbox, axis)
         if any(
-            k not in (a, b) and overlap(v.bbox, corridor) > 0
+            k not in (a, b) and v.bbox.intersection_area_with(corridor) > 0
             for k, v in enumerate(values)
         ):
             return None
@@ -289,12 +290,7 @@ def structures(
     between starts another part of the form.
     """
     reach = reaches(candidates, key_texts, values, null_cost)
-    parent = list(range(len(values)))
-
-    def root(i: int) -> int:
-        while parent[i] != i:
-            i = parent[i]
-        return i
+    uf = UnionFind(range(len(values)))
 
     for axis in ("row", "column"):
         after, before = FACING[axis]
@@ -305,9 +301,11 @@ def structures(
             if (j, before) in reach:
                 own |= reach[j, before].atoms
             if _texts_between(values[i], values[j], axis, key_texts) <= own:
-                parent[root(i)] = root(j)
-    groups: dict[int, list[int]] = defaultdict(list)
-    for i, v in enumerate(values):
-        if v.scope.eligible:
-            groups[root(i)].append(i)
-    return [group for group in groups.values() if len(group) >= 3]
+                uf.union(i, j)
+    # neighbours() only pairs values of one scope, so a group shares its
+    # first member's scope.
+    return [
+        group
+        for group in uf.get_groups().values()
+        if len(group) >= 3 and values[group[0]].scope.eligible
+    ]

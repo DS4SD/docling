@@ -25,6 +25,7 @@ from docling.models.stages.form_field.keying.types import (
     TableSlot,
     Value,
 )
+from docling.utils.form_fields import without_whitespace
 
 
 def table_fields(
@@ -159,8 +160,7 @@ def table_fields(
                     by_print = True
                 elif not held:
                     lost_column = not any(
-                        span_overlap(printed.l, printed.r, b.l, b.r) > 0
-                        for b in columns[column]
+                        printed.x_overlap_with(b) > 0 for b in columns[column]
                     )
             home = at(row, column)
             own = next(
@@ -168,8 +168,8 @@ def table_fields(
                     k
                     for k in home
                     if lettered(cells[k][0].text)
-                    and "".join(cells[k][0].text.split())
-                    != "".join((values[i].native.widget_text or "").split())
+                    and without_whitespace(cells[k][0].text)
+                    != without_whitespace(values[i].native.widget_text or "")
                 ),
                 None,
             )

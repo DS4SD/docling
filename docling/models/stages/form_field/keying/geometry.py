@@ -10,13 +10,12 @@ from docling_core.types.doc import BoundingBox
 from docling.models.stages.form_field.keying.types import Side
 
 
-def overlap(a: BoundingBox, b: BoundingBox) -> float:
-    return max(0.0, min(a.r, b.r) - max(a.l, b.l)) * max(
-        0.0, min(a.b, b.b) - max(a.t, b.t)
-    )
-
-
 def contains(outer: BoundingBox, inner: BoundingBox) -> bool:
+    """Whether ``outer`` encloses ``inner``, edges included.
+
+    A boolean with a small tolerance, so a box that touches an edge counts as
+    inside; BoundingBox.intersection_over_self gives a ratio instead.
+    """
     return (
         outer.l <= inner.l + 1e-6
         and outer.t <= inner.t + 1e-6
@@ -30,6 +29,10 @@ def gap(a: BoundingBox, b: BoundingBox) -> float:
 
 
 def span_overlap(lo: float, hi: float, other_lo: float, other_hi: float) -> float:
+    """Overlap of two intervals, for row and column bands that are no boxes.
+
+    Two boxes use BoundingBox.x_overlap_with and y_overlap_with.
+    """
     return max(0.0, min(hi, other_hi) - max(lo, other_lo))
 
 
@@ -44,10 +47,12 @@ def side_of(key_text: BoundingBox, value: BoundingBox) -> tuple[Side, float] | N
     band. Alignment is the shared fraction of the smaller perpendicular extent.
     Purely diagonal keys return None: only group candidates use them.
     """
-    if overlap(key_text, value) >= 0.5 * min(key_text.area(), value.area()):
+    if key_text.intersection_area_with(value) >= 0.5 * min(
+        key_text.area(), value.area()
+    ):
         return "inside", 1.0
-    rows = span_overlap(key_text.t, key_text.b, value.t, value.b)
-    columns = span_overlap(key_text.l, key_text.r, value.l, value.r)
+    rows = key_text.y_overlap_with(value)
+    columns = key_text.x_overlap_with(value)
     if rows > 0 and columns > 0:
         # A partial overlap, typically a key straddling the value's top
         # edge inside the same printed box: use the axis it sticks out along.
