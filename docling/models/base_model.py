@@ -7,6 +7,7 @@ from collections.abc import Iterable
 from typing import (
     TYPE_CHECKING,
     Any,
+    ClassVar,
     Generic,
     Optional,
     Protocol,
@@ -41,6 +42,7 @@ from docling.datamodel.pipeline_options_vlm_model import (
     InlineVlmOptions,
     TransformersPromptStyle,
 )
+from docling.datamodel.progress import EnrichmentStep
 from docling.datamodel.settings import settings
 
 
@@ -172,6 +174,8 @@ EnrichElementT = TypeVar("EnrichElementT", default=NodeItem)
 
 class GenericEnrichmentModel(ABC, Generic[EnrichElementT]):
     elements_batch_size: int = settings.perf.elements_batch_size
+    # Reported in progress events; docling's own models override it.
+    progress_step: ClassVar[EnrichmentStep] = EnrichmentStep.OTHER
 
     @abstractmethod
     def is_processable(self, doc: DoclingDocument, element: NodeItem) -> bool:
