@@ -332,6 +332,7 @@ class PageAssembleModel(BasePageModel):
                             page_no=page.page_no,
                             cluster=cluster,
                             items=field_region.items,
+                            page_wide=True,
                         )
                         elements.append(field_element)
                         body.append(field_element)

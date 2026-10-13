@@ -119,8 +119,15 @@ options and stays as ordinary text. Additional context becomes a field hint.
 A widget inside a detected table goes into its table cell instead (a rich table
 cell holding the field). Its key comes only from text printed in that same
 cell; the table's row and column headers already carry the association.
-Text used as a field key leaves the body text. PDF field names are not used
-as keys.
+Text used as a field key leaves the body text; a section header or formula
+used as a key stays inside the key, as a field heading or a formula. PDF field
+names are not used as keys.
+
+Fields keep the native order of their widgets. Page geometry places them
+among the text printed around them: the reading-order model orders the text
+only, never the widgets. Fields outside a detected form region go in field
+regions of their own between the page's other elements, one region per run
+of consecutive fields.
 
 Here, **key** means text that names one or more field values, and **hint** means
 extra context. **Layout label** means an element class (`DocItemLabel`).

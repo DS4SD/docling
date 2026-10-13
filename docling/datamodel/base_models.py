@@ -480,6 +480,10 @@ class ContainerElement(
 
 class FieldRegionElement(ContainerElement):
     items: list[FieldItemPrediction] = []
+    # Fields outside any FORM region: no layout block. The reading order keeps
+    # the region in the model's input but places each field between the page's
+    # blocks by geometry.
+    page_wide: bool = False
 
 
 class Table(BasePageElement):

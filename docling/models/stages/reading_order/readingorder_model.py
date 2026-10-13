@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: The Docling Contributors
 # SPDX-License-Identifier: MIT
 
+from collections import defaultdict
 from collections.abc import Iterator
 from itertools import takewhile
 from pathlib import Path
@@ -50,7 +51,7 @@ from docling.models.postprocessing.reading_order_rb import (
     SeparatorElement,
     build_page_separators,
 )
-from docling.utils.form_fields import without_whitespace
+from docling.utils.form_fields import text_slots, without_whitespace
 from docling.utils.profiling import ProfilingScope, TimeRecorder
 
 
@@ -291,6 +292,58 @@ class ReadingOrderModel:
     @staticmethod
     def _element_ref(element: BasePageElement) -> str:
         return f"#/{element.page_no}/{element.cluster.id}"
+
+    @staticmethod
+    def _interleave_fields(
+        siblings: list[ReadingOrderPageElement],
+        fields: dict[int, list[FieldItemPrediction]],
+        id_to_elem: dict[str, PageElement],
+    ) -> list[ReadingOrderPageElement | tuple[int, list[FieldItemPrediction]]]:
+        """The siblings with each page's fields placed among them by geometry.
+
+        The siblings keep the model's reading order and the fields their native
+        widget order; text_slots only chooses how the two interleave, from the
+        boxes of the siblings and of each field's key and values. A run of
+        fields comes as one (page number, items) entry. Fields after a page's
+        last sibling come before the next page's siblings.
+        """
+
+        def box(item: FieldItemPrediction) -> BoundingBox:
+            return BoundingBox.enclosing_bbox(
+                [
+                    bbox
+                    for bbox in (item.key_bbox, *(v.bbox for v in item.values))
+                    if bbox is not None
+                ]
+            )
+
+        before: dict[int, tuple[int, list[FieldItemPrediction]]] = {}
+        trailing: dict[int, list[FieldItemPrediction]] = {}
+        for page_no, items in fields.items():
+            on_page = [
+                rel for rel in siblings if id_to_elem[rel.ref.cref].page_no == page_no
+            ]
+            slots = text_slots(
+                [id_to_elem[rel.ref.cref].cluster.bbox for rel in on_page],
+                [box(item) for item in items],
+            )
+            placed = 0
+            for rel, slot in zip(on_page, slots):
+                if slot > placed:
+                    before[rel.cid] = (page_no, items[placed:slot])
+                    placed = slot
+            trailing[page_no] = items[placed:]
+        pending = sorted(page_no for page_no, items in trailing.items() if items)
+        plan: list[ReadingOrderPageElement | tuple[int, list[FieldItemPrediction]]] = []
+        for rel in siblings:
+            while pending and pending[0] < id_to_elem[rel.ref.cref].page_no:
+                page_no = pending.pop(0)
+                plan.append((page_no, trailing[page_no]))
+            if rel.cid in before:
+                plan.append(before[rel.cid])
+            plan.append(rel)
+        plan.extend((page_no, trailing[page_no]) for page_no in pending)
+        return plan
 
     @staticmethod
     def _merges_without_hosts(
@@ -613,17 +666,62 @@ class ReadingOrderModel:
             rel.cid for rel in ro_elements if rel.ref.cref in rich_picture_refs
         )
         page_no_to_pages = {p.page_no: p for p in conv_res.pages}
+        # Page-wide field regions stay in the model's input, so the text keeps
+        # the order it gets with them, but the model does not place their
+        # fields: these come by page and are placed by geometry.
+        page_wide_refs: set[str] = set()
+        page_wide: dict[int, list[FieldItemPrediction]] = defaultdict(list)
+        for region in conv_res.assembled.elements:
+            if isinstance(region, FieldRegionElement) and region.page_wide:
+                page_wide_refs.add(self._element_ref(region))
+                page_wide[region.page_no].extend(region.items)
+
+        def add_fields(
+            page_no: int, items: list[FieldItemPrediction], parent: NodeItem | None
+        ) -> None:
+            """A run of fields: under a field region as they are, else in one."""
+            page_height = page_no_to_pages[page_no].size.height  # type: ignore
+            if not isinstance(parent, FieldRegionItem):
+                parent = out_doc.add_field_region(
+                    prov=ProvenanceItem(
+                        page_no=page_no,
+                        charspan=(0, 0),
+                        bbox=BoundingBox.enclosing_bbox(
+                            [value.bbox for item in items for value in item.values]
+                        ).to_bottom_left_origin(page_height),
+                    ),
+                    parent=parent,
+                )
+            for item in items:
+                self._add_field_item(
+                    item,
+                    out_doc=out_doc,
+                    parent=parent,
+                    page_no=page_no,
+                    page_height=page_height,
+                )
 
         def materialize_siblings(
-            parent_ref: str | None, parent: NodeItem | None
+            parent_ref: str | None,
+            parent: NodeItem | None,
+            fields: dict[int, list[FieldItemPrediction]] | None = None,
         ) -> None:
+            """The siblings in reading order, with each page's fields among them."""
             split_lists_on_non_list = (
                 isinstance(parent, GroupItem) and parent.label == GroupLabel.FORM_AREA
             ) or isinstance(parent, FieldRegionItem)
             current_list: GroupItem | None = None
-            for rel in ordered_siblings[parent_ref]:
-                if rel.cid in skippable_cids:
+            siblings = [
+                rel
+                for rel in ordered_siblings[parent_ref]
+                if rel.cid not in skippable_cids and rel.ref.cref not in page_wide_refs
+            ]
+            for entry in self._interleave_fields(siblings, fields or {}, id_to_elem):
+                if isinstance(entry, tuple):
+                    add_fields(*entry, parent)
+                    current_list = None  # a field ends a list
                     continue
+                rel = entry
                 element = id_to_elem[rel.ref.cref]
                 page_height = page_no_to_pages[element.page_no].size.height  # type: ignore
                 if split_lists_on_non_list and not (
@@ -703,15 +801,9 @@ class ReadingOrderModel:
                         ),
                         parent=parent,
                     )
-                    materialize_siblings(rel.ref.cref, field_region)
-                    for item in element.items:
-                        self._add_field_item(
-                            item,
-                            out_doc=out_doc,
-                            parent=field_region,
-                            page_no=element.page_no,
-                            page_height=page_height,
-                        )
+                    materialize_siblings(
+                        rel.ref.cref, field_region, {element.page_no: element.items}
+                    )
 
                 elif isinstance(element, ContainerElement):
                     group_label = (
@@ -722,7 +814,7 @@ class ReadingOrderModel:
                     container_item = out_doc.add_group(label=group_label, parent=parent)
                     materialize_siblings(rel.ref.cref, container_item)
 
-        materialize_siblings(None, None)
+        materialize_siblings(None, None, page_wide)
 
         return out_doc
 

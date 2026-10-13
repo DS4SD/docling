@@ -77,7 +77,9 @@ Useful `PdfPipelineOptions` / base fields:
 text, using page geometry. The key can be text in or beside its cell, or a
 paragraph that contains the widget. Checkbox and radio option text becomes an
 option key; a shared prompt stays as ordinary text. Additional context becomes
-a field hint. A widget in a detected table goes into its table cell, with a key
+a field hint. A section header or formula used as a key stays inside the key.
+Fields keep their widget order and sit among the surrounding text by page
+geometry. A widget in a detected table goes into its table cell, with a key
 only from text in that same cell. PDF field
 names are not used as keys, and PDF-specific widget metadata is not stored in
 the `DoclingDocument`. Use `generate_parsed_pages=True` to retain raw widgets

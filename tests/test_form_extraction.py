@@ -272,7 +272,10 @@ def test_field_mapping_assembly_and_materialization_preserve_regions_and_order()
         headers=page.assembled.headers,
     )
     doc = ReadingOrderModel(ReadingOrderOptions())(conv_res)
-    assert len(doc.field_regions) == 4
+    # The two fields left outside the layout's FORM regions (the third form is
+    # gone from the layout) are page-wide: placed between the page's blocks by
+    # geometry, one field region per run. Here both sit between the two forms.
+    assert len(doc.field_regions) == 3
     assert len(doc.field_items) == 6
     assert not any(item.label == DocItemLabel.FIELD_KEY for item in doc.texts)
 
@@ -300,9 +303,11 @@ def test_field_mapping_assembly_and_materialization_preserve_regions_and_order()
         values_by_region.append(
             [_value_repr(field.children[0].resolve(doc)) for field in field_items]
         )
-    assert ["first", "third", "tie"] in values_by_region
-    assert [DocItemLabel.CHECKBOX_SELECTED.value] in values_by_region
-    assert [DocItemLabel.CHECKBOX_UNSELECTED.value] in values_by_region
+    assert values_by_region == [
+        ["first", "third", "tie"],
+        [DocItemLabel.CHECKBOX_SELECTED.value, DocItemLabel.CHECKBOX_UNSELECTED.value],
+        ["second"],
+    ]
     doc.validate_document()
 
 
@@ -950,6 +955,51 @@ def test_inline_host_is_not_dropped_as_rendered_duplicate() -> None:
     assert region.source_container_id == host.id
     assert [value.text for value in region.items[0].values] == ["Amount 12"]
     assert host in page.predictions.layout.clusters
+
+
+def _field_region_page(page_wide: bool) -> Page:
+    """Name: [box] / a note / Date: [box], in a FORM region or on the page."""
+    clusters = [
+        _text_cluster(1, BoundingBox(l=10, t=10, r=30, b=20), "Name:"),
+        _text_cluster(2, BoundingBox(l=10, t=30, r=90, b=40), "Write in capitals."),
+        _text_cluster(3, BoundingBox(l=10, t=50, r=30, b=60), "Date:"),
+    ]
+    if not page_wide:
+        form = Cluster(
+            id=4,
+            label=DocItemLabel.FORM,
+            bbox=BoundingBox(l=5, t=5, r=95, b=65),
+            children=clusters,
+        )
+        clusters = [form, *clusters]
+    page = Page(page_no=1, size=Size(width=100, height=100))
+    page.parsed_page = MagicMock(
+        widgets=[
+            _widget(0, BoundingBox(l=35, t=10, r=90, b=20), "Ada"),
+            _widget(1, BoundingBox(l=35, t=50, r=90, b=60), "2026-10-12"),
+        ],
+        hyperlinks=[],
+    )
+    page.predictions.layout = LayoutPrediction(clusters=clusters)
+    return page
+
+
+@pytest.mark.parametrize("page_wide", [False, True])
+def test_fields_go_between_the_text_they_are_printed_between(page_wide: bool) -> None:
+    # The keys leave the text, so the reading order has only the note left.
+    # The note is printed between the two fields, so it is emitted there,
+    # in a FORM region as on the page.
+    doc = _materialize(_field_region_page(page_wide))
+
+    order = []
+    for item, _ in doc.iterate_items(with_groups=False):
+        if isinstance(item, FieldItem):
+            order.append(item.children[0].resolve(doc).text)
+        elif item.label == DocItemLabel.TEXT:
+            order.append(item.text)
+    assert order == ["Name:", "Write in capitals.", "Date:"]
+    # On the page each run of fields has a field region of its own.
+    assert len(doc.field_regions) == (2 if page_wide else 1)
 
 
 def _host_between_paragraphs(
