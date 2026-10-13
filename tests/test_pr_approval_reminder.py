@@ -68,9 +68,15 @@ def test_only_current_head_commits_of_ready_prs_count() -> None:
     assert prs[0].ai_labels == ["ai:ci-safe"]
 
 
-def test_message_groups_by_triage_label_and_escapes_titles() -> None:
+def test_message_puts_care_first_and_escapes_titles() -> None:
     safe = reminder.WaitingPr(
-        1, "fix: a <!channel> & b|c", "u1", "alice", NOW, ["Run CI"], ["ai:ci-safe"]
+        1,
+        "fix(docx): a <!channel> & b|c",
+        "u1",
+        "alice",
+        NOW,
+        ["Run CI"],
+        ["ai:ci-safe"],
     )
     care = reminder.WaitingPr(
         2,
@@ -84,24 +90,28 @@ def test_message_groups_by_triage_label_and_escapes_titles() -> None:
     plain = reminder.WaitingPr(3, "docs: y", "u3", "carol", NOW, ["Run CI"], [])
     payload = reminder.build_message([care, safe, plain], "o/r", NOW)
     sections = [b["text"]["text"] for b in payload["blocks"] if b["type"] == "section"]
-    assert len(sections) == 3
-    assert sections[0].startswith(
-        "*:white_check_mark: AI triage found no CI concern* (1)"
-    )
-    assert "&lt;!channel&gt; &amp; b¦c" in sections[0]
-    assert sections[1].startswith("*:warning: AI triage asks for care* (1)")
-    assert "waiting 3 d · `ai:possible-duplicate`" in sections[1]
-    assert sections[2].startswith("*:grey_question: Not triaged* (1)")
+    assert sections == [
+        "*:warning: Needs care* (1)\n• <u2|#2 x> · 3 d",
+        "*:grey_question: Not triaged* (1)\n• <u3|#3 y> · 0 h",
+        "*:white_check_mark: No CI concern* (1)\n• <u1|#1 a &lt;!channel&gt; &amp; b¦c> · 0 h",
+    ]
+    assert payload["blocks"][0]["text"]["text"].endswith("oldest 3 d")
     assert payload["text"] == "3 PR(s) in o/r wait for a maintainer to approve CI"
 
 
-def test_long_lists_are_split_and_capped() -> None:
+def test_long_groups_link_the_rest_to_the_job_summary() -> None:
     prs = [
         reminder.WaitingPr(n, "t" * 90, f"https://x/{n}", "u", NOW, ["CI"], [])
         for n in range(60)
     ]
-    payload = reminder.build_message(prs, "o/r", NOW)
-    sections = [b for b in payload["blocks"] if b["type"] == "section"]
-    assert len(sections) > 1
-    assert all(len(b["text"]["text"]) <= reminder.MAX_SECTION_CHARS for b in sections)
-    assert "… and 20 more" in payload["blocks"][-2]["elements"][0]["text"]
+    run = "https://github.com/o/r/actions/runs/1"
+    payload = reminder.build_message(prs, "o/r", NOW, run)
+    (section,) = [
+        b["text"]["text"] for b in payload["blocks"] if b["type"] == "section"
+    ]
+    assert section.count("\n• ") == reminder.MAX_PRS_PER_GROUP
+    assert f"<{run}|+55 more>" in section
+    assert f"<{run}|Full list (60 PRs)>" in payload["blocks"][-1]["elements"][0]["text"]
+
+    summary = reminder.build_summary(prs, "o/r", NOW)
+    assert summary.count("| [#") == 60
