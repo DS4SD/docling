@@ -847,7 +847,9 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 formatting, strikethrough=True
             )
 
-        elif isinstance(element, marko.inline.Link):
+        elif isinstance(element, marko.inline.Link | marko.inline.AutoLink):
+            # AutoLink covers <https://url> and the GFM bare-URL form (gfm_el.Url
+            # subclasses AutoLink).
             _log.debug(" - Link: %s", element.children)
             hyperlink = MarkdownDocumentBackend._resolve_link_dest(element.dest)
 

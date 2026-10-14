@@ -1210,6 +1210,34 @@ def test_rich_table_cell_autolinks():
     assert not isinstance(plain_cell, RichTableCell)
 
 
+def test_autolinks_outside_table_cells():
+    """Autolinks in paragraphs, list items and headings keep their hyperlink.
+
+    ``marko.inline.AutoLink`` (``<https://url>``, and the GFM bare URL
+    ``gfm_el.Url``, a subclass of ``AutoLink``) is not a subclass of
+    ``marko.inline.Link``, so it needs its own check, as in table cells.
+    """
+    markdown = (
+        "# Heading <https://example.com/h>\n\n"
+        "See <https://example.com/ab> and https://example.com/gfm.\n\n"
+        "- item <https://example.com/li>\n"
+    )
+    conv_result = get_converter().convert_string(markdown, format=InputFormat.MD)
+    assert conv_result.status == ConversionStatus.SUCCESS
+
+    hyperlinks = {
+        item.text: str(item.hyperlink)
+        for item, _ in conv_result.document.iterate_items()
+        if getattr(item, "hyperlink", None)
+    }
+    assert hyperlinks == {
+        "https://example.com/h": "https://example.com/h",
+        "https://example.com/ab": "https://example.com/ab",
+        "https://example.com/gfm": "https://example.com/gfm",
+        "https://example.com/li": "https://example.com/li",
+    }
+
+
 def test_rich_table_cell_no_stray_body_items():
     """Items created for rich table cells must not appear at the body level."""
     markdown = "| **Bold** | *Italic* | plain |\n| --- | --- | --- |\n| a | b | c |\n"
