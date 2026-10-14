@@ -85,7 +85,7 @@ try:  # pragma: no cover - import-time guard
     from pptx.shapes.autoshape import Shape
     from pptx.shapes.base import BaseShape
     from pptx.shapes.picture import Picture
-    from pptx.text.text import _Run
+    from pptx.text.text import _Paragraph, _Run
 
     _PPTX_AVAILABLE = True
 except ImportError as e:  # pragma: no cover - import-time guard
@@ -1044,7 +1044,10 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
 
     def _get_run_hyperlink_target(self, run: _Run) -> Optional[AnyUrl | Path]:
         """Resolve a run's hyperlink to a URL or local path, or ``None``."""
-        address = run.hyperlink.address
+        try:
+            address = run.hyperlink.address
+        except KeyError:
+            return None
         if not address:
             return None
         if not urlparse(address).scheme:
@@ -1055,7 +1058,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             _log.warning("Skipping malformed hyperlink address: %r", address)
             return None
 
-    def _iter_paragraph_runs(self, paragraph) -> list[_ParagraphRun]:
+    def _iter_paragraph_runs(self, paragraph: _Paragraph) -> list[_ParagraphRun]:
         """Split a paragraph into ``(label, text, formatting, hyperlink)`` units."""
         elements: list[_ParagraphRun] = []
         for e in _iter_paragraph_elements(paragraph._element):
@@ -1145,7 +1148,13 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         return item
 
     def _handle_text_elements(
-        self, shape, parent_slide, slide_ind, doc: DoclingDocument, slide_size
+        self,
+        shape,
+        parent_slide,
+        slide_ind,
+        doc: DoclingDocument,
+        slide_size,
+        paragraph_runs: list[list[_ParagraphRun]],
     ):
         # Lists that are open, outermost first; a deeper paragraph level opens a
         # list nested under the last item of the enclosing one.
@@ -1163,11 +1172,12 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             content_layer = ContentLayer.FURNITURE
 
         # Iterate through paragraphs to build up text
-        for paragraph in shape.text_frame.paragraphs:
+        for paragraph, paragraph_elements in zip(
+            shape.text_frame.paragraphs, paragraph_runs, strict=True
+        ):
             is_a_list, bullet_type = self._is_list_item(paragraph)
             p = paragraph._element
 
-            paragraph_elements = self._iter_paragraph_runs(paragraph)
             has_equations = any(
                 label == DocItemLabel.FORMULA for label, *_ in paragraph_elements
             )
@@ -2088,17 +2098,19 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                 if not shape.has_text_frame:
                     _log.warning("Warning: shape has text but not text_frame")
                     return
-                if not shape.text.strip() and not any(
-                    text
+                paragraph_runs = [
+                    self._iter_paragraph_runs(paragraph)
                     for paragraph in shape.text_frame.paragraphs
-                    for _, text, _, _ in self._iter_paragraph_runs(paragraph)
+                ]
+                if not shape.text.strip() and not any(
+                    text for runs in paragraph_runs for _, text, _, _ in runs
                 ):
                     return
                 # Handle other text elements, including lists (bullet lists, numbered
                 # lists)
                 first_new_text = len(doc.texts)
                 self._handle_text_elements(
-                    shape, parent_slide, slide_ind, doc, slide_size
+                    shape, parent_slide, slide_ind, doc, slide_size, paragraph_runs
                 )
                 self._apply_shape_hyperlink(shape, doc.texts[first_new_text:])
                 return
