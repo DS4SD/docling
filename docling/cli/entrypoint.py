@@ -15,9 +15,11 @@ import docling
 from docling.utils.utils import safe_version
 
 
-def print_version() -> None:
-    """Print the versions of Docling, its components, Python, and the platform."""
+def print_version(*, full: bool = False) -> None:
+    """Print the Docling version, and with ``full`` also its components."""
     print(f"Docling version: {docling.__version__}")
+    if not full:
+        return
     print(f"Docling Core version: {safe_version('docling-core')}")
     print(f"Docling IBM Models version: {safe_version('docling-ibm-models')}")
     print(f"Docling Parse version: {safe_version('docling-parse')}")
@@ -30,8 +32,8 @@ def main() -> None:
     args = sys.argv[1:]
     if args[:1] == ["convert"]:
         args = args[1:]
-    if args == ["--version"]:
-        print_version()
+    if "--version" in args and set(args) <= {"--version", "--full"}:
+        print_version(full="--full" in args)
         return
 
     from docling.cli.main import app
