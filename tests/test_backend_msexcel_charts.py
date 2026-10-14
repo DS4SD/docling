@@ -4,6 +4,7 @@
 """Tests for Excel combination charts: several plots in one chart."""
 
 import datetime
+import logging
 from pathlib import Path
 from typing import Optional
 
@@ -39,6 +40,7 @@ _LINES = {
 def _save_combo_chart_workbook(
     path: Path,
     time_of_day: datetime.time = datetime.time(0),
+    range_end_row: Optional[int] = None,
 ) -> None:
     """Save a workbook whose chart draws columns and lines on a second axis.
 
@@ -47,7 +49,8 @@ def _save_combo_chart_workbook(
     ``c:lineChart`` with the two ratio series on a secondary value axis. Both
     plots share the date categories in column A, which have ``time_of_day``.
     The category axis is titled "Region Position" and the primary value axis
-    "Bar Sales".
+    "Bar Sales". The ranges of the chart end at ``range_end_row``, or at the
+    last data row.
     """
     workbook = Workbook()
     sheet = workbook.worksheets[0]
@@ -58,7 +61,7 @@ def _save_combo_chart_workbook(
             + [v[row] for v in _BARS.values()]
             + [v[row] for v in _LINES.values()]
         )
-    last_row = 1 + len(_MONTHS)
+    last_row = range_end_row or 1 + len(_MONTHS)
     categories = Reference(sheet, min_col=1, min_row=2, max_row=last_row)
 
     bars = BarChart()
@@ -195,3 +198,62 @@ def test_render_workbook_holds_the_data_of_every_plot(tmp_path: Path, monkeypatc
     data_sheet = rendered[0]["Sheet"]
     assert [data_sheet.cell(row=1, column=col).value for col in (6, 7)] == list(_LINES)
     assert data_sheet.cell(row=2, column=6).value == _LINES["Margin"][0]
+
+
+def test_ranges_far_below_the_data_read_only_the_used_rows(tmp_path: Path, caplog):
+    """Ranges that end far below the data stop at the last used row.
+
+    Every range here ends at row 1,000,000. Before, the backend read every
+    cell of every range, and a 6 KB file took minutes and gigabytes of memory
+    to give a table of 1,000,000 rows.
+    """
+    path = tmp_path / "combo_chart.xlsx"
+    _save_combo_chart_workbook(path, range_end_row=1_000_000)
+
+    with caplog.at_level(logging.WARNING, logger="docling.backend.msexcel_backend"):
+        grid = _grid(_only_chart(path))
+
+    assert len(grid) == 1 + len(_MONTHS)
+    assert "Reading only" not in caplog.text
+
+
+def test_chart_reads_at_most_the_cell_cap(tmp_path: Path, monkeypatch, caplog):
+    """The ranges of a chart share the cell cap, so the chart reads at most the cap.
+
+    The categories and the 6 series each get a seventh of the cap. A cap of 70
+    cells stands in for the real one, so each range reads 10 of its 12 rows.
+    """
+    monkeypatch.setattr(msexcel_backend, "MAX_CHART_TABLE_CELLS", 70)
+    path = tmp_path / "combo_chart.xlsx"
+    _save_combo_chart_workbook(path)
+
+    with caplog.at_level(logging.WARNING, logger="docling.backend.msexcel_backend"):
+        grid = _grid(_only_chart(path))
+
+    assert len(grid) == 1 + 10
+    assert grid[10][0] == _MONTHS[9].date().isoformat()
+    assert "Reading only the first 10 of 12 rows" in caplog.text
+
+
+def test_whole_column_range_ends_at_the_last_used_row(tmp_path: Path):
+    """A series that refers to whole columns reads the rows that the sheet uses.
+
+    A range such as ``$B:$B`` has no end row. Before, reading it raised an
+    error, and the chart was lost.
+    """
+    workbook = Workbook()
+    sheet = workbook.worksheets[0]
+    for month, value in (("Jan", 10), ("Feb", 20), ("Mar", 30)):
+        sheet.append([month, value])
+    chart = BarChart()
+    chart.add_data(Reference(sheet, min_col=2, min_row=1, max_row=3))
+    chart.set_categories(Reference(sheet, min_col=1, min_row=1, max_row=3))
+    chart.series[0].val.numRef.f = "'Sheet'!$B:$B"
+    chart.series[0].cat.numRef.f = "'Sheet'!$A:$A"
+    sheet.add_chart(chart, "D2")
+    path = tmp_path / "whole_columns.xlsx"
+    workbook.save(path)
+
+    grid = _grid(_only_chart(path))
+
+    assert grid[1:] == [["Jan", "10"], ["Feb", "20"], ["Mar", "30"]]

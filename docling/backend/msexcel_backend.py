@@ -9,7 +9,7 @@ import posixpath
 import shutil
 import warnings
 from copy import deepcopy
-from datetime import datetime, time, timezone
+from datetime import datetime, timezone
 from io import BytesIO
 from pathlib import Path
 from tempfile import mkdtemp
@@ -52,6 +52,11 @@ from docling.backend.docx.drawingml.utils import (
     convert_to_modern_format,
     crop_whitespace,
     get_docx_to_pdf_converter,
+)
+from docling.backend.utils.charts import (
+    MAX_CHART_TABLE_CELLS,
+    build_chart_table,
+    datetime_to_iso,
 )
 from docling.backend.utils.image import normalize_image_for_png
 from docling.datamodel.backend_options import MsExcelBackendOptions
@@ -371,6 +376,9 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         # Lazy-initialized LibreOffice converter for EMF/WMF images
         self.xlsx_to_pdf_converter: Callable | None = None
         self.xlsx_to_pdf_converter_init: bool = False
+
+        # Last used row of each sheet that a chart range reads, by sheet title
+        self._chart_sheet_rows: dict[str, int] = {}
 
         self.workbook = None
         try:
@@ -1666,11 +1674,16 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         The categories come from the first series that has them, and the title
         of its plot's category axis goes in the top-left cell.
 
+        The table has at most ``MAX_CHART_TABLE_CELLS`` cells, so each column
+        reads at most its share of them from the workbook.
+        ``build_chart_table`` lays the table out.
+
         Args:
             chart: An openpyxl chart object.
 
         Returns:
-            A TableData, or None if the chart exposes no usable series.
+            A TableData, or None if the chart exposes no usable series or no
+            populated data row.
         """
         plot_series = [
             (plot, series)
@@ -1679,13 +1692,14 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         ]
         if not plot_series:
             return None
+        column_cells = max(1, MAX_CHART_TABLE_CELLS // (1 + len(plot_series)))
 
         categories: list[str] = []
         corner = ""
         for plot, series in plot_series:
             cat_ref = self._ref_formula(series.cat) or self._ref_formula(series.xVal)
             if cat_ref:
-                categories = self._resolve_reference(cat_ref)
+                categories = self._resolve_reference(cat_ref, column_cells)
                 corner = self._category_axis_title(plot)
                 break
 
@@ -1693,11 +1707,13 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
 
         for _, series in plot_series:
             value_ref = self._ref_formula(series.val) or self._ref_formula(series.yVal)
-            values = self._resolve_reference(value_ref) if value_ref else []
+            values = (
+                self._resolve_reference(value_ref, column_cells) if value_ref else []
+            )
 
             name_ref = self._ref_formula(series.tx)
             if name_ref:
-                resolved = self._resolve_reference(name_ref)
+                resolved = self._resolve_reference(name_ref, 1)
                 name = resolved[0] if resolved else ""
             elif series.tx is not None and series.tx.v is not None:
                 name = str(series.tx.v)
@@ -1705,52 +1721,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
                 name = ""
             columns.append((name, values))
 
-        num_data_rows = max([len(categories)] + [len(values) for _, values in columns])
-        if num_data_rows == 0:
-            return None
-
-        num_rows = num_data_rows + 1
-        num_cols = 1 + len(columns)
-        cells: list[TableCell] = []
-
-        header_labels = [corner] + [name for name, _ in columns]
-        for col_idx, label in enumerate(header_labels):
-            cells.append(
-                TableCell(
-                    text=label,
-                    row_span=1,
-                    col_span=1,
-                    start_row_offset_idx=0,
-                    end_row_offset_idx=1,
-                    start_col_offset_idx=col_idx,
-                    end_col_offset_idx=col_idx + 1,
-                    column_header=True,
-                    row_header=False,
-                )
-            )
-        for data_row in range(num_data_rows):
-            row_idx = data_row + 1
-            category = categories[data_row] if data_row < len(categories) else ""
-            row_texts = [category] + [
-                (values[data_row] if data_row < len(values) else "")
-                for _, values in columns
-            ]
-            for col_idx, text in enumerate(row_texts):
-                cells.append(
-                    TableCell(
-                        text=text,
-                        row_span=1,
-                        col_span=1,
-                        start_row_offset_idx=row_idx,
-                        end_row_offset_idx=row_idx + 1,
-                        start_col_offset_idx=col_idx,
-                        end_col_offset_idx=col_idx + 1,
-                        column_header=False,
-                        row_header=(col_idx == 0),
-                    )
-                )
-
-        return TableData(num_rows=num_rows, num_cols=num_cols, table_cells=cells)
+        return build_chart_table(categories, columns, corner)
 
     @staticmethod
     def _to_float(text: str) -> float | None:
@@ -1819,7 +1790,8 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         same sheet name, same cell coordinates, cached values — on hidden
         sheets, and the chart is anchored alone on a single visible sheet.
         LibreOffice prints only the visible sheet, so the resulting PDF holds
-        just the chart.
+        just the chart.  The ranges share the ``MAX_CHART_TABLE_CELLS`` cap
+        equally.
 
         Args:
             chart: An openpyxl chart object.
@@ -1856,7 +1828,11 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         chart_sheet.title = "chart_render"
 
         # Every reference must be copied, so this cannot short-circuit.
-        copied = [self._copy_reference_into(standalone, ref) for ref in references]
+        range_cells = max(1, MAX_CHART_TABLE_CELLS // len(references))
+        copied = [
+            self._copy_reference_into(standalone, ref, range_cells)
+            for ref in references
+        ]
         if not any(copied):
             return None
 
@@ -1865,48 +1841,34 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         chart_sheet.add_chart(deepcopy(chart), "A1")
         return standalone
 
-    def _copy_reference_into(self, target: Workbook, ref: str) -> bool:
+    def _copy_reference_into(self, target: Workbook, ref: str, max_cells: int) -> bool:
         """Copy one chart data range into ``target`` on a hidden sheet.
 
         Recreates the referenced sheet by name if needed, hides it, and writes
         the cached cell values at their original coordinates.  Numeric-looking
         text is coerced to numbers so the chart plots it as values rather than
-        labels.
+        labels.  ``_chart_range`` limits the cells that are copied.
 
         Args:
             target: The standalone Workbook being assembled.
             ref: A sheet-qualified range reference, e.g. "'Sheet1'!$B$2:$B$7".
+            max_cells: The largest number of cells to copy.
 
         Returns:
             True when the referenced range was resolved and copied.
         """
-        if self.workbook is None or "!" not in ref:
+        if "!" not in ref:
             return False
+        chart_range = self._chart_range(ref, max_cells)
+        if chart_range is None:
+            return False
+        source_sheet, min_col, min_row, max_col, max_row = chart_range
 
-        sheet_part, cell_range = ref.rsplit("!", 1)
-        sheet_part = sheet_part.strip()
-        if sheet_part.startswith("'") and sheet_part.endswith("'"):
-            sheet_part = sheet_part[1:-1].replace("''", "'")
-        if sheet_part not in self.workbook.sheetnames:
-            _log.debug("Chart references unknown sheet %r", sheet_part)
-            return False
-
-        try:
-            bounds = range_boundaries(cell_range)
-        except Exception:
-            _log.debug("Could not parse chart range %r", cell_range)
-            return False
-        if any(bound is None for bound in bounds):
-            # Open-ended ranges (e.g. "B:B") carry no usable row bounds.
-            _log.debug("Chart range %r is not fully bounded", cell_range)
-            return False
-        min_col, min_row, max_col, max_row = cast(tuple[int, int, int, int], bounds)
-
-        source_sheet = self.workbook[sheet_part]
-        if sheet_part in target.sheetnames:
-            dest_sheet = target[sheet_part]
+        sheet_name = source_sheet.title
+        if sheet_name in target.sheetnames:
+            dest_sheet = target[sheet_name]
         else:
-            dest_sheet = target.create_sheet(sheet_part)
+            dest_sheet = target.create_sheet(sheet_name)
             dest_sheet.sheet_state = "hidden"
 
         for row in range(min_row, max_row + 1):
@@ -1948,26 +1910,30 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
                 return str_ref.f
         return None
 
-    def _resolve_reference(self, ref: str) -> list[str]:
-        """Resolve a chart range reference to a flat list of cell-value strings.
+    def _chart_range(
+        self, ref: str, max_cells: int
+    ) -> tuple[Worksheet, int, int, int, int] | None:
+        """Return the sheet and the cell bounds to read for a chart range.
 
-        Charts point at their data by reference rather than embedding it, e.g.
-        ``"'Duck Observations'!$B$2:$B$7"``.  We split off the (possibly quoted)
-        sheet name, convert the range to bounds with openpyxl's
-        ``range_boundaries``, and read the *cached* values from the workbook
-        (the backend loads with ``data_only=True``, so we get computed numbers,
-        not formulas).  Values are returned in row-major order.
+        A chart can refer to far more cells than its sheet uses, for example a
+        whole column.  The cells below the last used row of the sheet are
+        empty, so a range without an end row, or with more than ``max_cells``
+        cells, stops at that row.  When the range still has more than
+        ``max_cells`` cells, only its first rows are read, so that a crafted
+        range cannot make the backend read millions of cells.
 
         Args:
-            ref: A range reference string, optionally sheet-qualified.
+            ref: A range reference string, optionally sheet-qualified, e.g.
+                "'Sheet1'!$B$2:$B$7".
+            max_cells: The largest number of cells to read.
 
         Returns:
-            The referenced cell values as strings ("" for empty cells, ISO
-            8601 for dates).  Returns an empty list if the sheet is missing
-            (e.g. filtered out) or the reference can't be parsed.
+            ``(sheet, min_col, min_row, max_col, max_row)``, or None when the
+            sheet is missing (e.g. filtered out) or the reference can't be
+            parsed.
         """
         if self.workbook is None:
-            return []
+            return None
 
         if "!" in ref:
             sheet_part, cell_range = ref.rsplit("!", 1)
@@ -1979,15 +1945,65 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
             sheet_name, cell_range = self.workbook.active.title, ref
         if sheet_name not in self.workbook.sheetnames:
             _log.debug("Chart references unknown sheet %r", sheet_name)
-            return []
-
-        target_sheet = self.workbook[sheet_name]
+            return None
+        sheet = self.workbook[sheet_name]
+        if not isinstance(sheet, Worksheet):
+            _log.debug("Chart references chart sheet %r", sheet_name)
+            return None
 
         try:
             min_col, min_row, max_col, max_row = range_boundaries(cell_range)
         except Exception:
             _log.debug("Could not parse chart range %r", cell_range)
+            return None
+        # A whole column ("B:B") or row ("2:2") has no bounds on the other axis.
+        min_col = min_col or 1
+        min_row = min_row or 1
+        if max_col is None:
+            max_col = sheet.max_column
+        read_rows = max(1, max_cells // max(1, max_col - min_col + 1))
+        if max_row is None or max_row - min_row + 1 > read_rows:
+            # Finding the last used row scans every cell of the sheet.
+            if sheet_name not in self._chart_sheet_rows:
+                self._chart_sheet_rows[sheet_name] = sheet.max_row
+            last_row = self._chart_sheet_rows[sheet_name]
+            max_row = last_row if max_row is None else min(max_row, last_row)
+
+        num_rows = max_row - min_row + 1
+        if read_rows < num_rows:
+            _log.warning(
+                "Reading only the first %d of %d rows of chart range %r: "
+                "the chart may read at most %d cells.",
+                read_rows,
+                num_rows,
+                ref,
+                MAX_CHART_TABLE_CELLS,
+            )
+            max_row = min_row + read_rows - 1
+        return sheet, min_col, min_row, max_col, max_row
+
+    def _resolve_reference(self, ref: str, max_cells: int) -> list[str]:
+        """Resolve a chart range reference to a flat list of cell-value strings.
+
+        Charts point at their data by reference rather than embedding it, e.g.
+        ``"'Duck Observations'!$B$2:$B$7"``.  ``_chart_range`` finds the sheet
+        and the bounds to read, and we read the *cached* values from the
+        workbook (the backend loads with ``data_only=True``, so we get computed
+        numbers, not formulas).  Values are returned in row-major order.
+
+        Args:
+            ref: A range reference string, optionally sheet-qualified.
+            max_cells: The largest number of cells to read.
+
+        Returns:
+            The referenced cell values as strings ("" for empty cells, ISO
+            8601 for dates).  Returns an empty list if the sheet is missing
+            (e.g. filtered out) or the reference can't be parsed.
+        """
+        chart_range = self._chart_range(ref, max_cells)
+        if chart_range is None:
             return []
+        target_sheet, min_col, min_row, max_col, max_row = chart_range
 
         values: list[str] = []
         for row in range(min_row, max_row + 1):
@@ -2001,9 +2017,8 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
     def _chart_cell_text(value: Any) -> str:
         """Format a cell value of chart data as text.
 
-        openpyxl reads a cell with a date format as a ``datetime``. A date
-        becomes an ISO 8601 date (``2012-01-01``), and a date with a time of
-        day becomes an ISO 8601 date and time to the second.
+        openpyxl reads a cell with a date format as a ``datetime``, which is
+        written in ISO 8601 with ``datetime_to_iso``.
 
         Args:
             value: A cell value.
@@ -2014,9 +2029,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         if value is None:
             return ""
         if isinstance(value, datetime):
-            if value.time() == time(0):
-                return value.date().isoformat()
-            return value.isoformat(timespec="seconds")
+            return datetime_to_iso(value)
         return str(value)
 
     @staticmethod
