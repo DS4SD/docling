@@ -196,6 +196,21 @@ class MarkdownFormatOption(FormatOption):
     backend: Type[AbstractDocumentBackend] = MarkdownDocumentBackend
     backend_options: Optional[MarkdownBackendOptions] = None
 
+    def backend_options_for_input(
+        self, source: Path | str | DocumentStream
+    ) -> MarkdownBackendOptions | None:
+        options = self.backend_options
+        if (
+            options is None
+            or options.source_uri is not None
+            or isinstance(source, DocumentStream)
+        ):
+            return options
+
+        return MarkdownBackendOptions.model_validate(
+            {**options.model_dump(), "source_uri": source}
+        )
+
 
 class AsciiDocFormatOption(FormatOption):
     pipeline_cls: Type = SimplePipeline
