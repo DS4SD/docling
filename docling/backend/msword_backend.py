@@ -22,6 +22,7 @@ from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
     DocumentOrigin,
+    GroupItem,
     GroupLabel,
     ImageRef,
     ListGroup,
@@ -2778,9 +2779,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         prev_parent: NodeItem | None,
         paragraph_elements: list,
     ) -> NodeItem | None:
+        has_script = any(
+            fmt is not None
+            and getattr(fmt, "script", Script.BASELINE) != Script.BASELINE
+            for _, fmt, _ in paragraph_elements
+        )
         return (
             doc.add_inline_group(parent=prev_parent, content_layer=self.content_layer)
-            if len(paragraph_elements) > 1
+            if (len(paragraph_elements) > 1 or has_script)
             else prev_parent
         )
 
@@ -3616,13 +3622,45 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             parent=docling_table,
             content_layer=content_layer,
         )
+        seen_parents: set[str] = set()
         for prov in provs_in_cell:
-            group_element.children.append(prov)
             pr_item = prov.resolve(doc)
-            item_parent = pr_item.parent.resolve(doc)
-            if pr_item.get_ref() in item_parent.children:
-                item_parent.children.remove(pr_item.get_ref())
-            pr_item.parent = group_element.get_ref()
+            item_parent = pr_item.parent.resolve(doc) if pr_item.parent else None
+            if (
+                item_parent is not None
+                and isinstance(item_parent, GroupItem)
+                and item_parent.label == GroupLabel.INLINE
+            ):
+                if item_parent.self_ref not in seen_parents:
+                    seen_parents.add(item_parent.self_ref)
+                    old_grandparent = (
+                        item_parent.parent.resolve(doc) if item_parent.parent else None
+                    )
+                    if (
+                        old_grandparent
+                        and item_parent.get_ref() in old_grandparent.children
+                    ):
+                        old_grandparent.children.remove(item_parent.get_ref())
+                    item_parent.parent = group_element.get_ref()
+                    group_element.children.append(item_parent.get_ref())
+            else:
+                if (
+                    isinstance(pr_item, TextItem)
+                    and pr_item.formatting
+                    and pr_item.formatting.script in (Script.SUB, Script.SUPER)
+                ):
+                    if item_parent and pr_item.get_ref() in item_parent.children:
+                        item_parent.children.remove(pr_item.get_ref())
+                    inline_group = doc.add_inline_group(
+                        parent=group_element, content_layer=content_layer
+                    )
+                    pr_item.parent = inline_group.get_ref()
+                    inline_group.children.append(pr_item.get_ref())
+                else:
+                    if item_parent and pr_item.get_ref() in item_parent.children:
+                        item_parent.children.remove(pr_item.get_ref())
+                    pr_item.parent = group_element.get_ref()
+                    group_element.children.append(prov)
         ref_for_rich_cell = group_element.get_ref()
         return ref_for_rich_cell
 
@@ -3853,10 +3891,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         # paragraph must contain runs with no run-properties
         for para in paragraphs:
             runs = list(para.iterchildren(f"{_W_NS_CLARK}r"))
+            para_obj = Paragraph(para, self.docx_obj)
             for rn in runs:
-                item: Run = Run(rn, self.docx_obj)
+                item: Run = Run(rn, para_obj)
                 if item is not None:
-                    fm = MsWordDocumentBackend._get_format_from_run(item)
+                    fm = MsWordDocumentBackend._get_format_from_run(item, para_obj)
                     if fm != Formatting():
                         return True
 

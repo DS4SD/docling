@@ -39,10 +39,10 @@ Table 1 Categorization of potential factors influencing pre-TAS results.
 | Agent | Parasite | Parasite | Predominate parasite in district | W. bancrofti & mixed | Binary value | 2018 | Programmatic data |
 | Environment | Vector | Vector | Predominate vector in district | Anopheles & Mansonia | Binary value | 2018 | Country expert |
 | Environment | Geography | Elevation | Elevation measured in meters | >350 | Mean | 2000 | CGIAR-CSI SRTM [9] |
-| Environment | Geography | District area | Area measured in km2 | >2,500 | Maximum sum | Static | Programmatic data |
+| Environment | Geography | District area | Area measured in km 2 | >2,500 | Maximum sum | Static | Programmatic data |
 | Environment | Climate | EVI | Enhanced vegetation index | > 0.3 | Mean | 2015 | MODIS [10] |
 | Environment | Climate | Rainfall | Annual rainfall measured in mm | ≤ 700 | Mean | 2015 | CHIRPS [11] |
-| Environment | Socio-economic | Population density | Number of people per km2 | ≤ 100 | Mean | 2015 | WorldPop [12] |
+| Environment | Socio-economic | Population density | Number of people per km 2 | ≤ 100 | Mean | 2015 | WorldPop [12] |
 | Environment | Socio-economic | Nighttime lights | Nighttime light index from 0 to 63 | >1.5 | Mean | 2015 | VIIRS [13] |
 | Environment | Co-endemicity | Co-endemic for onchocerciasis | Part or all of district is also endemic for onchocerciases | Non-endemic | Binary value | 2018 | Programmatic data |
 | MDA | Drug efficacy | Drug package | DEC-ALB or IVM-ALB | DEC-ALB | Binary value | 2018 | Programmatic data |
