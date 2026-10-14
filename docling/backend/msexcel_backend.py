@@ -9,7 +9,7 @@ import posixpath
 import shutil
 import warnings
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import datetime, time, timezone
 from io import BytesIO
 from pathlib import Path
 from tempfile import mkdtemp
@@ -76,8 +76,10 @@ _OPENPYXL_IMPORT_ERROR: ImportError | None = None
 try:  # pragma: no cover - import-time guard
     from openpyxl import Workbook, load_workbook
     from openpyxl.cell.cell import Cell, MergedCell
+    from openpyxl.chart import DoughnutChart, PieChart, PieChart3D, ProjectedPieChart
     from openpyxl.chart.data_source import AxDataSource, NumDataSource
     from openpyxl.chart.series import SeriesLabel
+    from openpyxl.chart.title import Title
     from openpyxl.chartsheet.chartsheet import Chartsheet
     from openpyxl.drawing.image import Image
     from openpyxl.drawing.spreadsheet_drawing import (
@@ -1453,7 +1455,9 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         ``sheet._charts``.  For every chart we emit a PictureItem whose meta
         carries (a) the chart-type classification and (b) the chart's underlying
         numbers reconstructed as a TableData.  This mirrors the ODF backend so
-        XLSX and ODS charts have the same downstream shape.
+        XLSX and ODS charts have the same downstream shape.  A combination
+        chart gets one prediction per plot type, and the back-most plot gives
+        the main one.
 
         Args:
             doc: The DoclingDocument to update.
@@ -1483,10 +1487,8 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
 
         for chart in charts:
             try:
-                classification = _CHART_TAGNAME_TO_CLASSIFICATION.get(
-                    chart.tagname, PictureClassificationLabel.OTHER_CHART
-                )
-                caption_text = self._chart_title_text(chart)
+                labels = self._chart_classifications(chart)
+                caption_text = self._title_text(chart.title)
                 table_data = self._chart_to_table_data(chart)
 
                 bbox = BoundingBox.from_tuple(
@@ -1540,7 +1542,8 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
                 picture.meta = PictureMeta(
                     classification=PictureClassificationMetaField(
                         predictions=[
-                            PictureClassificationPrediction(class_name=classification)
+                            PictureClassificationPrediction(class_name=label)
+                            for label in labels
                         ]
                     ),
                     tabular_chart=(
@@ -1557,21 +1560,77 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         return doc
 
     @staticmethod
-    def _chart_title_text(chart: Any) -> str | None:
-        """Extract the plain-text title of an openpyxl chart, if any.
+    def _chart_plots(chart: Any) -> list[Any]:
+        """Return the plots of a chart, back-most first.
 
-        A chart title is stored as DrawingML rich text: ``chart.title`` is a
-        Title object whose ``.tx.rich.p`` is a list of paragraphs, each with a
-        list of runs ``.r``, each run carrying its text in ``.t``.  We flatten
-        all runs into a single string.  Returns None when the chart has no title.
+        A combination chart has one plot per chart type, for example a column
+        plot with a line plot drawn over it. openpyxl returns the first plot as
+        the chart, and ``chart.series`` holds only the series of that plot.
+        ``chart._charts`` holds every plot in drawing order, the first one
+        included.
 
         Args:
             chart: An openpyxl chart object (BarChart, LineChart, ...).
 
         Returns:
-            The concatenated title text, or None.
+            The plots, each an openpyxl chart object.
         """
-        title = chart.title
+        return list(chart._charts)
+
+    @classmethod
+    def _chart_classifications(cls, chart: Any) -> list[PictureClassificationLabel]:
+        """Return the classification labels of a chart, one per plot type.
+
+        The labels follow the drawing order, so the back-most plot gives the
+        main label. A label is listed once, even when several plots share it.
+
+        Args:
+            chart: An openpyxl chart object.
+
+        Returns:
+            The labels, or ``[OTHER_CHART]`` when the chart has no plot.
+        """
+        labels: list[PictureClassificationLabel] = []
+        for plot in cls._chart_plots(chart):
+            label = _CHART_TAGNAME_TO_CLASSIFICATION.get(
+                plot.tagname, PictureClassificationLabel.OTHER_CHART
+            )
+            if label not in labels:
+                labels.append(label)
+        return labels or [PictureClassificationLabel.OTHER_CHART]
+
+    @classmethod
+    def _category_axis_title(cls, plot: Any) -> str:
+        """Return the title of the axis that holds a plot's categories.
+
+        That is the category or date axis, or the x axis of a scatter or bubble
+        plot. A pie or doughnut plot has no axis.
+
+        Args:
+            plot: An openpyxl chart object.
+
+        Returns:
+            The title text, or "" when the axis has no title.
+        """
+        if isinstance(plot, (PieChart, PieChart3D, DoughnutChart, ProjectedPieChart)):
+            return ""
+        return cls._title_text(plot.x_axis.title) or ""
+
+    @staticmethod
+    def _title_text(title: Title | str | None) -> str | None:
+        """Extract the plain text of an openpyxl chart or axis title, if any.
+
+        A title is stored as DrawingML rich text: a Title object whose
+        ``.tx.rich.p`` is a list of paragraphs, each with a list of runs
+        ``.r``, each run carrying its text in ``.t``.  We flatten all runs into
+        a single string.
+
+        Args:
+            title: The ``title`` of an openpyxl chart or axis.
+
+        Returns:
+            The concatenated title text, or None when there is no title.
+        """
         if title is None:
             return None
 
@@ -1594,13 +1653,18 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
 
         Layout produced (categories down the first column, one column per series):
 
-            | <blank> | <series 0 name> | <series 1 name> | ...
-            | cat_0   | val_0,0         | val_1,0         | ...
-            | cat_1   | val_0,1         | val_1,1         | ...
+            | <corner> | <series 0 name> | <series 1 name> | ...
+            | cat_0    | val_0,0         | val_1,0         | ...
+            | cat_1    | val_0,1         | val_1,1         | ...
 
         Chart data is stored in openpyxl as *references* back into the workbook
         (e.g. "'Sheet1'!$B$2:$B$7"), which we resolve to cached cell values.
         Scatter charts use ``xVal``/``yVal`` instead of ``cat``/``val``.
+
+        The series of every plot become columns in drawing order, so a
+        combination chart keeps its line series next to its column series.
+        The categories come from the first series that has them, and the title
+        of its plot's category axis goes in the top-left cell.
 
         Args:
             chart: An openpyxl chart object.
@@ -1608,20 +1672,26 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         Returns:
             A TableData, or None if the chart exposes no usable series.
         """
-        series_list = list(chart.series)
-        if not series_list:
+        plot_series = [
+            (plot, series)
+            for plot in self._chart_plots(chart)
+            for series in plot.series
+        ]
+        if not plot_series:
             return None
 
         categories: list[str] = []
-        for series in series_list:
+        corner = ""
+        for plot, series in plot_series:
             cat_ref = self._ref_formula(series.cat) or self._ref_formula(series.xVal)
             if cat_ref:
                 categories = self._resolve_reference(cat_ref)
+                corner = self._category_axis_title(plot)
                 break
 
         columns: list[tuple[str, list[str]]] = []
 
-        for series in series_list:
+        for _, series in plot_series:
             value_ref = self._ref_formula(series.val) or self._ref_formula(series.yVal)
             values = self._resolve_reference(value_ref) if value_ref else []
 
@@ -1643,7 +1713,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         num_cols = 1 + len(columns)
         cells: list[TableCell] = []
 
-        header_labels = [""] + [name for name, _ in columns]
+        header_labels = [corner] + [name for name, _ in columns]
         for col_idx, label in enumerate(header_labels):
             cells.append(
                 TableCell(
@@ -1762,7 +1832,10 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
             return None
 
         references: list[str] = []
-        for series in chart.series:
+        series_list = [
+            series for plot in self._chart_plots(chart) for series in plot.series
+        ]
+        for series in series_list:
             for data_source in (
                 series.cat,
                 series.xVal,
@@ -1889,9 +1962,9 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
             ref: A range reference string, optionally sheet-qualified.
 
         Returns:
-            The referenced cell values as strings ("" for empty cells).  Returns
-            an empty list if the sheet is missing (e.g. filtered out) or the
-            reference can't be parsed.
+            The referenced cell values as strings ("" for empty cells, ISO
+            8601 for dates).  Returns an empty list if the sheet is missing
+            (e.g. filtered out) or the reference can't be parsed.
         """
         if self.workbook is None:
             return []
@@ -1920,9 +1993,31 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         for row in range(min_row, max_row + 1):
             for col in range(min_col, max_col + 1):
                 value = target_sheet.cell(row=row, column=col).value
-                values.append("" if value is None else str(value))
+                values.append(self._chart_cell_text(value))
 
         return values
+
+    @staticmethod
+    def _chart_cell_text(value: Any) -> str:
+        """Format a cell value of chart data as text.
+
+        openpyxl reads a cell with a date format as a ``datetime``. A date
+        becomes an ISO 8601 date (``2012-01-01``), and a date with a time of
+        day becomes an ISO 8601 date and time to the second.
+
+        Args:
+            value: A cell value.
+
+        Returns:
+            The value as a string ("" for None).
+        """
+        if value is None:
+            return ""
+        if isinstance(value, datetime):
+            if value.time() == time(0):
+                return value.date().isoformat()
+            return value.isoformat(timespec="seconds")
+        return str(value)
 
     @staticmethod
     def _find_page_size(
