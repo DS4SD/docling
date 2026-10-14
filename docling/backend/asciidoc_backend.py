@@ -46,7 +46,9 @@ _COMMENT_BLOCK_DELIMITER = "////"
 # "+" or "*", and either number may be omitted, so ".2+" is a rowspan on its
 # own. Requiring at least one of the two keeps a bare "+" from matching.
 _CELL_SPEC: Final = r"(?:(?:\d+(?:\.\d+)?|\.\d+)[*+])*[<^>]?(?:\.[<^>])?[adehlms]?"
-_LIST_ITEM_PATTERN: Final = r"^(\s*)(\*+|-|\.+|\d+\.|\w+\.)\s+(.*)"
+# An ordered marker with a letter has one letter only ("a.", "B."), so a line
+# that starts with an abbreviation such as "Dr." or "Fig." stays text.
+_LIST_ITEM_PATTERN: Final = r"^(\s*)(\*+|-|\.+|\d+\.|[a-zA-Z]\.)\s+(.*)"
 
 
 @dataclass(frozen=True)
