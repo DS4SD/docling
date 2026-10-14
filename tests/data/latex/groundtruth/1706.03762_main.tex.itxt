@@ -32,7 +32,9 @@ item-0 at level 0: unspecified: group _root_
   item-28 at level 1: section_header: Scaled Dot-Product Attention
   item-29 at level 1: text: We call our particular attention ... n to obtain the weights on the values.
   item-30 at level 1: text: In practice, we compute the atte ...   We compute the matrix of outputs as:
-  item-31 at level 1: formula: \mathrm{Attention}(Q, K, V) = \mathrm{softmax}(\frac{QK^T}{\sqrt{d_k}})V
+  item-31 at level 1: formula: \begin{equation}
+   \mathrm{Atte ... rac{QK^T}{\sqrt{d_k}})V
+\end{equation}
   item-32 at level 1: text: The two most commonly used atten ...  optimized matrix multiplication code.
   item-33 at level 1: text: While for small values of $d_k$  ... where it has extremely small gradients
   item-34 at level 1: footnote: To illustrate why the dot produc ... k_i$, has mean $0$ and variance $d_k$.
@@ -65,7 +67,9 @@ item-0 at level 0: unspecified: group _root_
     item-57 at level 2: list_item: Similarly, self-attention layers ... ions.  See Figure[fig:multi-head-att].
   item-58 at level 1: section_header: Position-wise Feed-Forward Networks
   item-59 at level 1: paragraph: In addition to attention sub-lay ... ons with a ReLU activation in between.
-  item-60 at level 1: formula: \mathrm{FFN}(x)=\max(0, xW_1 + b_1) W_2 + b_2
+  item-60 at level 1: formula: \begin{equation}
+   \mathrm{FFN} ... , xW_1 + b_1) W_2 + b_2
+\end{equation}
   item-61 at level 1: text: While the linear transformations ... ayer has dimensionality $d_{ff}=2048$.
   item-62 at level 1: section_header: Embeddings and Softmax
   item-63 at level 1: text: Similarly to other sequence tran ...  weights by $\sqrt{d_{\text{model}}}$.
@@ -94,7 +98,9 @@ item-0 at level 0: unspecified: group _root_
   item-84 at level 1: text: We trained our models on one mac ...  trained for 300,000 steps (3.5 days).
   item-85 at level 1: section_header: Optimizer
   item-86 at level 1: text: We used the Adam optimizer[kingm ... of training, according to the formula:
-  item-87 at level 1: formula: lrate = d_{\text{model}}^{-0.5}  ... ep\_num} \cdot {warmup\_steps}^{-1.5})
+  item-87 at level 1: formula: \begin{equation}
+lrate = d_{\tex ... {warmup\_steps}^{-1.5})
+\end{equation}
   item-88 at level 1: text: This corresponds to increasing t ... number.  We used $warmup\_steps=4000$.
   item-89 at level 1: section_header: Regularization
   item-90 at level 1: text: We employ three types of regularization during training:

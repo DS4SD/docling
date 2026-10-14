@@ -98,6 +98,91 @@ def test_latex_various_math_environments():
     assert len(formulas) >= 3
 
 
+def test_latex_preserves_numbered_and_aligned_math_environments():
+    latex_content = rb"""
+    \documentclass{article}
+    \begin{document}
+    \begin{eqnarray}
+    a&=&b\\
+    c&=&d
+    \end{eqnarray}
+    \begin{equation}
+    x=y\tag{1.2a}
+    \end{equation}
+    \end{document}
+    """
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(latex_content),
+        format=InputFormat.LATEX,
+        backend=LatexDocumentBackend,
+        filename="test.tex",
+    )
+    backend = LatexDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(latex_content))
+    formulas = [
+        item.text
+        for item in backend.convert().texts
+        if item.label == DocItemLabel.FORMULA
+    ]
+
+    assert len(formulas) == 2
+    assert formulas[0].startswith(r"\begin{eqnarray}")
+    assert formulas[0].endswith(r"\end{eqnarray}")
+    assert formulas[1].startswith(r"\begin{equation}")
+    assert r"\tag{1.2a}" in formulas[1]
+
+
+def test_latex_shortcuts_do_not_change_macro_definitions():
+    latex_content = rb"""
+    \documentclass{article}
+    \begin{document}
+    \newcommand{\be}{\begin{equation}}
+    \newcommand{\ee}{\end{equation}}
+    \be x=y \ee
+    \end{document}
+    """
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(latex_content),
+        format=InputFormat.LATEX,
+        backend=LatexDocumentBackend,
+        filename="test.tex",
+    )
+    backend = LatexDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(latex_content))
+    processed = backend._preprocess_custom_macros(backend.latex_text)
+    assert r"\newcommand" not in processed
+    assert backend._custom_macros["be"] == r"\begin{equation}"
+    assert backend._custom_macros["ee"] == r"\end{equation}"
+    assert r"\begin{equation} x=y \end{equation}" in processed
+    formulas = [
+        item.text
+        for item in backend.convert().texts
+        if item.label == DocItemLabel.FORMULA
+    ]
+    assert len(formulas) == 1
+    assert formulas[0].startswith(r"\begin{equation}")
+
+
+def test_latex_expands_nested_zero_argument_macros():
+    latex_content = rb"""
+    \documentclass{article}
+    \newcommand{\Real}{\mathbb{R}}
+    \newcommand{\Rd}{\Real^d}
+    \begin{document}
+    The space $\Rd$ is used here.
+    \end{document}
+    """
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(latex_content),
+        format=InputFormat.LATEX,
+        backend=LatexDocumentBackend,
+        filename="test.tex",
+    )
+    backend = LatexDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(latex_content))
+    doc = backend.convert()
+    text = " ".join(item.text for item in doc.texts)
+    assert r"\mathbb{R}^d" in text
+    assert r"\Real" not in text
+
+
 def test_latex_math_environment():
     """Test math environment (not displaymath)"""
     latex_content = rb"""

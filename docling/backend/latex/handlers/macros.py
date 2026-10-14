@@ -95,14 +95,96 @@ class MacroHandlerMixin:
         def _item_term(self, node: Any) -> str: ...
 
     def _preprocess_custom_macros(self, latex_text: str) -> str:
-        latex_text = re.sub(r"\\be\b", r"\\begin{equation}", latex_text)
-        latex_text = re.sub(r"\\ee\b", r"\\end{equation}", latex_text)
-        latex_text = re.sub(r"\\bea\b", r"\\begin{eqnarray}", latex_text)
-        latex_text = re.sub(r"\\eea\b", r"\\end{eqnarray}", latex_text)
-        latex_text = re.sub(r"\\beq\b", r"\\begin{equation}", latex_text)
-        latex_text = re.sub(r"\\eeq\b", r"\\end{equation}", latex_text)
+        """Expand legacy shortcuts without changing macro definitions."""
+        shortcuts = {
+            "be": r"\begin{equation}",
+            "ee": r"\end{equation}",
+            "bea": r"\begin{eqnarray}",
+            "eea": r"\end{eqnarray}",
+            "beq": r"\begin{equation}",
+            "eeq": r"\end{equation}",
+        }
+        pattern = re.compile(r"\\(?:bea|eea|beq|eeq|be|ee)\b")
 
-        return latex_text
+        def replace(segment: str) -> str:
+            return pattern.sub(lambda match: shortcuts[match.group()[1:]], segment)
+
+        pieces: list[str] = []
+        cursor = 0
+        for start, end in self._macro_definition_spans(latex_text):
+            pieces.append(replace(latex_text[cursor:start]))
+            definition = latex_text[start:end]
+            if definition.startswith(
+                (r"\newcommand", r"\renewcommand", r"\providecommand")
+            ):
+                definition_nodes, _, _ = LatexWalker(
+                    definition, tolerant_parsing=True, latex_context=LATEX_CONTEXT_DB
+                ).get_latex_nodes()
+                self._extract_custom_macros(definition_nodes)
+            pieces.append(re.sub(r"[^\n]", " ", definition))
+            cursor = end
+        pieces.append(replace(latex_text[cursor:]))
+        return "".join(pieces)
+
+    @staticmethod
+    def _macro_definition_spans(text: str) -> list[tuple[int, int]]:
+        """Find balanced definitions that may contain legacy shortcut names."""
+        pattern = re.compile(
+            r"\\(?P<command>newcommand|renewcommand|providecommand|def|edef|gdef|xdef)\b"
+        )
+
+        def skip_space(cursor: int) -> int:
+            while cursor < len(text) and text[cursor].isspace():
+                cursor += 1
+            return cursor
+
+        def group_end(start: int, opening: str, closing: str) -> int:
+            depth = 0
+            index = start
+            while index < len(text):
+                if (
+                    text[index] == "\\"
+                    and index + 1 < len(text)
+                    and text[index + 1] in "{}[]"
+                ):
+                    index += 2
+                    continue
+                if text[index] == opening:
+                    depth += 1
+                elif text[index] == closing:
+                    depth -= 1
+                    if depth == 0:
+                        return index + 1
+                index += 1
+            return len(text)
+
+        spans: list[tuple[int, int]] = []
+        for match in pattern.finditer(text):
+            if spans and match.start() < spans[-1][1]:
+                continue
+            cursor = match.end()
+            if match.group("command") in MACROS_NEWCOMMAND:
+                cursor = skip_space(cursor)
+                if cursor < len(text) and text[cursor] == "*":
+                    cursor += 1
+                cursor = skip_space(cursor)
+                if cursor < len(text) and text[cursor] == "{":
+                    cursor = group_end(cursor, "{", "}")
+                elif cursor < len(text) and text[cursor] == "\\":
+                    cursor += 1
+                    while cursor < len(text) and text[cursor].isalpha():
+                        cursor += 1
+                for _ in range(2):
+                    cursor = skip_space(cursor)
+                    if cursor < len(text) and text[cursor] == "[":
+                        cursor = group_end(cursor, "[", "]")
+            else:
+                while cursor < len(text) and text[cursor] != "{":
+                    cursor += 1
+            cursor = skip_space(cursor)
+            if cursor < len(text) and text[cursor] == "{":
+                spans.append((match.start(), group_end(cursor, "{", "}")))
+        return spans
 
     def _extract_custom_macros(self, nodes, depth: int = 0):
         if nodes is None or depth > 10:
@@ -589,14 +671,18 @@ class MacroHandlerMixin:
         return " ".join(parts)
 
     def _expand_macros(self, latex_str: str) -> str:
-        for macro_name, macro_def in self._custom_macros.items():
-            if self._custom_macro_num_args.get(macro_name, 0) > 0:
-                continue
-            latex_str = re.sub(
-                rf"\\{re.escape(macro_name)}(?![a-zA-Z])",
-                lambda m: macro_def,
-                latex_str,
-            )
+        for _ in range(10):
+            previous = latex_str
+            for macro_name, macro_def in self._custom_macros.items():
+                if self._custom_macro_num_args.get(macro_name, 0) > 0:
+                    continue
+                latex_str = re.sub(
+                    rf"\\{re.escape(macro_name)}(?![a-zA-Z])",
+                    lambda m: macro_def,
+                    latex_str,
+                )
+            if latex_str == previous:
+                break
         return latex_str
 
     def _parse_custom_macro_num_args(self, num_args_arg) -> int:

@@ -1,6 +1,3 @@
-1  
-.001
-
 Thermodynamics of charmed hadrons across chiral crossover from lattice QCD      
 S.Sharma et al.
 

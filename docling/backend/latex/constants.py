@@ -197,12 +197,8 @@ ENV_MATH_DISPLAY_PREFIXES = (
 
 ENV_MATH_CLEAN = frozenset(
     [
-        "equation",
-        "equation*",
         "displaymath",
         "math",
-        "eqnarray",
-        "eqnarray*",
         "dmath",
         "dmath*",
     ]
