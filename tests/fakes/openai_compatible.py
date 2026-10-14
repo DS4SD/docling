@@ -48,6 +48,8 @@ class FakeOpenAiApi:
     completion_tokens: int = 7
     #: Set to omit the usage block, as some gateways do.
     report_usage: bool = True
+    #: Sent as ``choices[0].finish_reason``; "length" means the output was cut.
+    finish_reason: str = "stop"
     #: Held open before responding (or mid-stream, with ``stream_stall_after``),
     #: to drive client read timeouts.
     delay_seconds: float = 0.0
@@ -87,7 +89,7 @@ class FakeOpenAiApi:
                     message=OpenAiChatMessage(
                         role="assistant", content=self.completion
                     ),
-                    finish_reason="stop",
+                    finish_reason=self.finish_reason,
                 )
             ],
             usage=self._usage(),
@@ -129,7 +131,9 @@ class FakeOpenAiApi:
                 "id": "chatcmpl-fake-1",
                 "model": model,
                 "created": 1_700_000_000,
-                "choices": [{"index": 0, "delta": {}, "finish_reason": "stop"}],
+                "choices": [
+                    {"index": 0, "delta": {}, "finish_reason": self.finish_reason}
+                ],
                 "usage": json.loads(usage.model_dump_json()),
             }
             yield f"data: {json.dumps(final)}\n\n".encode()

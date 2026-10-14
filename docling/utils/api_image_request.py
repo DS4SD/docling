@@ -69,7 +69,12 @@ def _failed_streaming_request(reason: str) -> ApiImageStreamingRequestResult:
     Text streamed before the failure is dropped: the output is incomplete, and
     the pipelines treat a failed request as producing no output.
     """
-    return ApiImageStreamingRequestResult(text="", num_tokens=0, error=reason)
+    return ApiImageStreamingRequestResult(
+        text="",
+        num_tokens=0,
+        error=reason,
+        stop_reason=VlmStopReason.INFERENCE_ERROR,
+    )
 
 
 def _extract_text_from_tool_arguments(arguments: str | None) -> str:
@@ -382,6 +387,7 @@ def api_image_request_streaming(
                     full_text = []
                     usage_payload = None
                     num_tokens = None
+                    finish_reason = None
                     # Servers send logprobs per chunk; collect them so the streamed
                     # result exposes the same OpenAiResponseLogprobs as a non-streamed one.
                     logprob_content: list[OpenAiTokenLogprob] = []
@@ -391,7 +397,9 @@ def api_image_request_streaming(
                         token_extract_key=token_extract_key,
                     )
 
-                    def _result() -> ApiImageStreamingRequestResult:
+                    def _result(
+                        stop_reason: VlmStopReason,
+                    ) -> ApiImageStreamingRequestResult:
                         logprobs = None
                         if logprob_content or logprob_refusal:
                             logprobs = OpenAiResponseLogprobs(
@@ -403,6 +411,7 @@ def api_image_request_streaming(
                             num_tokens=num_tokens,
                             usage=usage_payload,
                             logprobs=logprobs,
+                            stop_reason=stop_reason,
                         )
 
                     for raw_line in r.iter_lines(decode_unicode=True):
@@ -430,6 +439,9 @@ def api_image_request_streaming(
                             delta = choice.get("delta") or {}
                             piece = delta.get("content") or ""
                             raw_logprobs = choice.get("logprobs")
+                            # finish_reason is null until the server stops; keep the
+                            # last value it sets.
+                            finish_reason = choice.get("finish_reason") or finish_reason
                         except (KeyError, IndexError) as e:
                             _log.debug("Unexpected SSE chunk shape: %s", e)
                             piece = ""
@@ -463,9 +475,9 @@ def api_image_request_streaming(
                                     # closing the connection when we exit the 'with' block.
                                     # vLLM/OpenAI-compatible servers will detect the client
                                     # disconnect and abort the request server-side.
-                                    return _result()
+                                    return _result(VlmStopReason.STOP_SEQUENCE)
 
-                    return _result()
+                    return _result(_map_stop_reason(finish_reason))
         except Exception as e:
             _log.error(f"Error, could not process request: {e}")
             return _failed_streaming_request(f"{type(e).__name__}: {e}")

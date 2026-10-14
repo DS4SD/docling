@@ -228,6 +228,28 @@ def test_streamed_logprobs_are_collected_in_order(api, endpoint, image):
     ]
 
 
+@pytest.mark.parametrize(
+    ("finish_reason", "expected"),
+    [
+        ("stop", VlmStopReason.END_OF_SEQUENCE),
+        ("length", VlmStopReason.LENGTH),
+        ("content_filter", VlmStopReason.CONTENT_FILTERED),
+    ],
+)
+def test_streaming_reports_the_stop_reason_from_the_final_chunk(
+    api, endpoint, image, finish_reason, expected
+):
+    """A stream cut at the token limit must be told apart from a finished one,
+    as a non-streamed call does."""
+    api.stream_chunks = ["a", "b"]
+    api.finish_reason = finish_reason
+
+    result = api_image_request_streaming(image, "describe", endpoint, model="m")
+
+    assert result.text == "ab"
+    assert result.stop_reason == expected
+
+
 @pytest.mark.parametrize("status", [400, 500])
 def test_streaming_api_errors_do_not_raise_but_are_reported(
     api, endpoint, image, status
@@ -325,6 +347,7 @@ def test_engine_keeps_logprobs_when_a_stopper_aborts_the_stream(api, image):
     assert _sent_body(api)["stream"] is True
     prediction = _prediction_from_engine_output(outputs[0])
     assert prediction.text == "ok loop"
+    assert prediction.stop_reason == VlmStopReason.STOP_SEQUENCE
     assert [(t.text, t.logprob) for t in prediction.generated_tokens] == [
         ("ok ", -0.1),
         ("loop", -0.2),
