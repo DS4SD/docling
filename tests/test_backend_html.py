@@ -677,6 +677,102 @@ def test_text_directly_inside_figure_is_kept(figure: str, expected: list[str]):
     )
 
 
+def test_figure_with_multiple_images_emits_caption_once():
+    html = (
+        b"<html><body>"
+        b"<p>before</p>"
+        b"<figure>"
+        b'<img src="a.png"/>'
+        b'<img src="b.png"/>'
+        b"<figcaption>Figure 1: two panels</figcaption>"
+        b"</figure>"
+        b"</body></html>"
+    )
+
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(html),
+        format=InputFormat.HTML,
+        backend=HTMLDocumentBackend,
+        filename="test",
+    )
+    backend = HTMLDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(html))
+    doc = backend.convert()
+
+    assert len(doc.pictures) == 2
+    captions = [t.text for t in doc.texts if t.label == DocItemLabel.CAPTION]
+    assert captions == ["Figure 1: two panels"]
+
+    # Only the first picture claims the shared figcaption
+    assert len(doc.pictures[0].captions) == 1
+    assert doc.pictures[0].captions[0].resolve(doc).text == "Figure 1: two panels"
+    assert len(doc.pictures[1].captions) == 0
+
+    # Ensure markdown export does not duplicate the caption
+    md = doc.export_to_markdown()
+    assert md.count("Figure 1: two panels") == 1
+
+
+def test_figure_with_multiple_images_and_individual_alt():
+    html = (
+        b"<html><body>"
+        b"<figure>"
+        b'<img src="a.png" alt="Panel A"/>'
+        b'<img src="b.png" alt="Panel B"/>'
+        b"<figcaption>Figure 1: overview</figcaption>"
+        b"</figure>"
+        b"</body></html>"
+    )
+
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(html),
+        format=InputFormat.HTML,
+        backend=HTMLDocumentBackend,
+        filename="test",
+    )
+    backend = HTMLDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(html))
+    doc = backend.convert()
+
+    assert len(doc.pictures) == 2
+    caption_texts = [t.text for t in doc.texts if t.label == DocItemLabel.CAPTION]
+    assert "Figure 1: overview" in caption_texts
+    assert caption_texts.count("Figure 1: overview") == 1
+
+    # First picture gets the figure caption, second keeps its individual alt
+    assert doc.pictures[0].captions[0].resolve(doc).text == "Figure 1: overview"
+    assert len(doc.pictures[1].captions) == 1
+    assert doc.pictures[1].captions[0].resolve(doc).text == "Panel B"
+
+
+def test_multiple_figures_emit_their_own_captions():
+    html = (
+        b"<html><body>"
+        b"<figure>"
+        b'<img src="a.png"/>'
+        b'<img src="b.png"/>'
+        b"<figcaption>Figure 1: two panels</figcaption>"
+        b"</figure>"
+        b"<figure>"
+        b'<img src="c.png"/>'
+        b'<img src="d.png"/>'
+        b"<figcaption>Figure 2: two panels</figcaption>"
+        b"</figure>"
+        b"</body></html>"
+    )
+
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(html),
+        format=InputFormat.HTML,
+        backend=HTMLDocumentBackend,
+        filename="test",
+    )
+    backend = HTMLDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(html))
+    doc = backend.convert()
+
+    assert len(doc.pictures) == 4
+    captions = [t.text for t in doc.texts if t.label == DocItemLabel.CAPTION]
+    assert captions == ["Figure 1: two panels", "Figure 2: two panels"]
+
+
 def test_ordered_lists():
     test_set: list[tuple[bytes, str]] = []
 

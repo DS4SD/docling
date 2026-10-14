@@ -553,6 +553,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         self._tag_name_by_docling_id_cache: dict[str, str] = {}
         self._generated_html_id_counter: int = 0
         self._render_visibility_cache: dict[int, bool] = {}
+        self._seen_figcaptions: set[int] = set()
 
         try:
             raw = (
@@ -998,6 +999,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         # reset context
         self.ctx = _Context()
         self._render_visibility_cache.clear()
+        self._seen_figcaptions.clear()
         self._walk(content, doc)
         return doc
 
@@ -5160,6 +5162,9 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         self, caption_tag: Tag, doc: DoclingDocument
     ) -> Optional[TextItem]:
         """Emit a caption element (<caption> or <figcaption>) as a text item."""
+        if id(caption_tag) in self._seen_figcaptions:
+            return None
+        self._seen_figcaptions.add(id(caption_tag))
         cap_list = self._extract_text_and_hyperlink_recursively(
             caption_tag, find_parent_annotation=True
         )
@@ -5207,7 +5212,11 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         if isinstance(figure, Tag):
             caption_tag = figure.find("figcaption", recursive=False)
-            if isinstance(caption_tag, Tag):
+            if (
+                isinstance(caption_tag, Tag)
+                and id(caption_tag) not in self._seen_figcaptions
+            ):
+                self._seen_figcaptions.add(id(caption_tag))
                 caption = self._extract_text_and_hyperlink_recursively(
                     caption_tag, find_parent_annotation=True
                 )
