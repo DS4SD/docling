@@ -512,6 +512,50 @@ Separate paragraph.
     )
 
 
+def test_different_bullet_markers_are_nested() -> None:
+    # "*" and "-" are different list markers, so a "-" item after a "*" item
+    # opens a nested list, as Asciidoctor renders it. Both used to share one
+    # bullet list. An item returns to the closest enclosing list with its own
+    # marker, also across more than one level ("d" below).
+    source = b"""- a
+* b
+** c
+- d
+
+Separate paragraph.
+
+. one
+* two
+- three
+. four
+"""
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(source),
+        format=InputFormat.ASCIIDOC,
+        backend=AsciiDocBackend,
+        filename="bullet-markers.adoc",
+    )
+    doc = in_doc._backend.convert()
+
+    list_items = {item.text: item for item in doc.texts if isinstance(item, ListItem)}
+    assert list_items["a"].parent == list_items["d"].parent
+    assert list_items["b"].parent.resolve(doc).parent == list_items["a"].get_ref()
+    assert list_items["one"].parent == list_items["four"].parent
+    assert doc.export_to_markdown() == (
+        "- a\n"
+        "    - b\n"
+        "        - c\n"
+        "- d\n"
+        "\n"
+        "Separate paragraph.\n"
+        "\n"
+        "1. one\n"
+        "    - two\n"
+        "        - three\n"
+        "2. four"
+    )
+
+
 def test_literal_block_keeps_its_content_and_following_text() -> None:
     source = b"""= Guide
 
