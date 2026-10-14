@@ -124,6 +124,16 @@ def _warn_headers_without_origin() -> None:
 # Using Unicode Private Use Area to avoid conflicts with actual content
 _BR_SENTINEL = "\ue000"
 
+
+def _resolve_line_breaks(text: str) -> str:
+    """Replace the sentinels of <br> tags with a line break.
+
+    For text that is one paragraph (heading, caption, list item): consecutive <br>
+    tags give one line break.
+    """
+    return re.sub(rf" *{_BR_SENTINEL}[ {_BR_SENTINEL}]*", "\n", text).strip()
+
+
 DEFAULT_IMAGE_WIDTH = 128
 DEFAULT_IMAGE_HEIGHT = 128
 _MHTML_SYNTHETIC_BASE = "thismessage:/"
@@ -231,6 +241,39 @@ _FORM_MARKER_ID_RE: Final = re.compile(r"^key(?P<key_id>[A-Za-z0-9]+)_marker$")
 _FORM_VALUE_ID_RE: Final = re.compile(
     r"^key(?P<key_id>[A-Za-z0-9]+)_value(?P<value_id>[A-Za-z0-9]+)$"
 )
+# A CSS string value of `list-style-type` replaces the rendered bullet or number
+# of a list item, e.g. `<li style="list-style-type: '3. ';">`.
+_LIST_STYLE_STRING_RE: Final = re.compile(
+    r"list-style-type\s*:\s*(?P<quote>['\"])(?P<marker>.*?)(?P=quote)", re.IGNORECASE
+)
+# The `start` attribute of an `<ol>`, by the HTML rules for parsing integers:
+# leading ASCII whitespace, an optional plus sign, and ASCII digits.
+_OL_START_RE: Final = re.compile(r"[ \t\n\f\r]*\+?(?P<digits>[0-9]+)")
+_OL_START_MAX: Final = 2**31 - 1
+
+
+def _parse_ol_start(value: str) -> Optional[int]:
+    """Parse the `start` attribute of an `<ol>`.
+
+    The value follows the HTML rules for parsing integers: only ASCII digits are
+    accepted and any text after the digits is ignored, e.g. `"3."` gives 3.
+    Negative numbers are not supported as list markers.
+
+    Args:
+        value: The value of the `start` attribute.
+
+    Returns:
+        The start number, or `None` if the value is not a valid start number or
+        exceeds the 32-bit integer range, as in browsers.
+    """
+    match = _OL_START_RE.match(value)
+    if match is None:
+        return None
+    digits = match.group("digits").lstrip("0")
+    if len(digits) > len(str(_OL_START_MAX)):
+        return None
+    start = int(digits or "0")
+    return start if start <= _OL_START_MAX else None
 
 
 _CUSTOM_CHECKBOX_CLASSES: Final = {"checkbox", "checkbox-box", "checkbox-input"}
@@ -340,30 +383,23 @@ class AnnotatedText(BaseModel):
 
 class AnnotatedTextList(list):
     def to_single_text_element(self) -> AnnotatedText:
-        current_h = None
         current_text = ""
-        current_f = None
         current_code = False
         current_source_tag_id = None
+        # The single element can only keep a formatting or a hyperlink that
+        # applies to all of its text, e.g. not the link of one word in a heading.
+        text_runs = [at for at in self if at.text.strip()]
+        current_f = text_runs[0].formatting if text_runs else None
+        if any(at.formatting != current_f for at in text_runs):
+            current_f = None
+        current_h = text_runs[0].hyperlink if text_runs else None
+        if any(at.hyperlink != current_h for at in text_runs):
+            current_h = None
         for at in self:
             t = at.text
-            h = at.hyperlink
-            f = at.formatting
             c = at.code
             s = at.source_tag_id
             current_text += t.strip() + " "
-            if f is not None and current_f is None:
-                current_f = f
-            elif f is not None and current_f is not None and f != current_f:
-                _log.warning(
-                    f"Clashing formatting: '{f}' and '{current_f}'! Chose '{current_f}'"
-                )
-            if h is not None and current_h is None:
-                current_h = h
-            elif h is not None and current_h is not None and h != current_h:
-                _log.warning(
-                    f"Clashing hyperlinks: '{h}' and '{current_h}'! Chose '{current_h}'"
-                )
             if s is not None and current_source_tag_id is None:
                 current_source_tag_id = s
             elif (
@@ -379,7 +415,7 @@ class AnnotatedTextList(list):
             current_code = c if c else current_code
 
         return AnnotatedText(
-            text=current_text.strip(),
+            text=_resolve_line_breaks(current_text),
             hyperlink=current_h,
             formatting=current_f,
             code=current_code,
@@ -916,8 +952,24 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 orig=title_text,
                 content_layer=ContentLayer.FURNITURE,
             )
-        # remove script and style tags
-        for tag in self.soup(["script", "noscript", "style"]):
+        # remove the tags whose content is never rendered: script and style hold
+        # metadata, noscript only applies when scripting is disabled, and the
+        # content of a template is an inert fragment until a script clones it. A
+        # template that declares a shadow root with `shadowrootmode` is the
+        # exception: the parser attaches its content to the host element and
+        # browsers render it. Any other value leaves the template inert, and the
+        # old `shadowroot` attribute is inert in current browsers.
+        for tag in self.soup(["script", "noscript", "style", "template"]):
+            if tag.decomposed:
+                # A template earlier in the list already removed this tag.
+                continue
+            if tag.name == "template" and str(
+                tag.get("shadowrootmode", "")
+            ).lower() in {
+                "open",
+                "closed",
+            }:
+                continue
             tag.decompose()
         # remove any hidden tag
         for tag in self.soup(hidden=True):
@@ -935,12 +987,15 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         for br in content("br"):
             br.replace_with(NavigableString(_BR_SENTINEL))
 
-        # Furniture before the first heading rule, except for headers in tables
+        # Furniture before the first heading rule, except for headers in tables and lists
         header = None
         # Find all headers first
         all_headers = content.find_all(["h1", "h2", "h3", "h4", "h5", "h6"])
-        # Keep only those that do NOT have a <table> in a parent chain
-        clean_headers = [h for h in all_headers if not h.find_parent("table")]
+        # Skip headers that become cell or list item text: they never switch the
+        # layer back to body
+        clean_headers = [
+            h for h in all_headers if not self._is_header_in_cell_or_item(h)
+        ]
         # Pick the first header from the remaining
         if len(clean_headers):
             header = clean_headers[0]
@@ -955,6 +1010,20 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         self._render_visibility_cache.clear()
         self._walk(content, doc)
         return doc
+
+    @staticmethod
+    def _is_header_in_cell_or_item(header: Tag) -> bool:
+        """Whether a header is emitted as table cell or list item text.
+
+        Headers that are direct children of <ul>/<ol> (or in a <div> there) and
+        headers in <menu> items are still emitted as headers."""
+        if header.find_parent(["table", "dl"]):
+            return True
+        item = header.find_parent("li")
+        if item is None:
+            return False
+        parent_list = item.find_parent(["ul", "ol", "menu"])
+        return parent_list is not None and parent_list.name in ("ul", "ol")
 
     @staticmethod
     def _get_header_origins(
@@ -1908,6 +1977,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
 
         children = table_cell.find_all(recursive=True)  # all descendants of type Tag
         has_input = any(child.name == "input" for child in children)
+        has_image = any(child.name == "img" for child in children)
         has_custom_checkbox = any(
             self._is_custom_checkbox_tag(child) for child in children
         )
@@ -1948,6 +2018,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                     or bool(anno.hyperlink)
                     or anno.code
                     or has_input
+                    or has_image
                     or has_custom_checkbox
                 )
 
@@ -2473,7 +2544,13 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         else:
             if isinstance(this_href, str) and this_href:
                 old_hyperlink = self.hyperlink
-                this_href = self._resolve_relative_path(this_href)
+                try:
+                    this_href = self._resolve_relative_path(this_href)
+                except ValueError:
+                    # A link is not fetched: a target outside the base
+                    # directory (e.g. "/about" or "../index.html") is kept
+                    # as written instead of failing the conversion.
+                    pass
                 # ugly fix for relative links since pydantic does not support them.
                 try:
                     new_hyperlink = AnyUrl(this_href)
@@ -2841,9 +2918,9 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             tag, ignore_list=True, find_parent_annotation=True
         )
         min_parts = parts.simplify_text_elements()
-        item_text = re.sub(
-            r"\s+|\n+", " ", "".join([el.text for el in min_parts])
-        ).strip()
+        item_text = _resolve_line_breaks(
+            re.sub(r"\s+|\n+", " ", "".join([el.text for el in min_parts]))
+        )
 
         if not item_text:
             return None
@@ -2865,7 +2942,12 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             with self._use_inline_group(min_parts, doc):
                 compacted_parts = self._compact_adjacent_single_char_parts(min_parts)
                 for annotated_text, source_tag_ids in compacted_parts:
-                    text_part = re.sub(r"\s+|\n+", " ", annotated_text.text).strip()
+                    text_part = _resolve_line_breaks(
+                        re.sub(r"\s+|\n+", " ", annotated_text.text)
+                    )
+                    if not text_part:
+                        # The part only held <br> tags
+                        continue
                     clean_text = HTMLDocumentBackend._clean_unicode(text_part)
 
                     # Apply extra formatting if provided
@@ -2910,7 +2992,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         else:
             # Simple content - single text element
             annotated_text = min_parts[0]
-            text = re.sub(r"\s+|\n+", " ", annotated_text.text).strip()
+            text = _resolve_line_breaks(re.sub(r"\s+|\n+", " ", annotated_text.text))
             clean_text = HTMLDocumentBackend._clean_unicode(text)
             prov = self._make_text_prov(
                 text=clean_text,
@@ -2961,11 +3043,12 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     @staticmethod
     def _description_list_children(dl: Tag) -> list[PageElement]:
         """The <dt>/<dd> elements of a <dl>, including those wrapped in a <div>
-        (HTML allows wrapping each group of <dt> and <dd> elements in a <div>)."""
+        (HTML allows wrapping each group of <dt> and <dd> elements in a <div>;
+        accordion markup sometimes nests several)."""
         children: list[PageElement] = []
         for child in dl.find_all(["dt", "dd", "div"], recursive=False):
             if isinstance(child, Tag) and child.name == "div":
-                children.extend(child.find_all(["dt", "dd"], recursive=False))
+                children.extend(HTMLDocumentBackend._description_list_children(child))
             else:
                 children.append(child)
         return children
@@ -2985,8 +3068,8 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             name = "description list"
         elif is_ordered:
             start_attr = tag.get("start")
-            if isinstance(start_attr, str) and start_attr.isnumeric():
-                start = int(start_attr)
+            if isinstance(start_attr, str):
+                start = _parse_ol_start(start_attr)
             name = "ordered list" + (f" start {start}" if start is not None else "")
         else:
             name = "list"
@@ -3136,8 +3219,9 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                         start + list_item_counter if start is not None else None
                     )
 
-                # 1) determine the marker using the counter
-                marker: str = (
+                # 1) determine the marker: an explicit marker set on the item
+                # wins, otherwise use the counter
+                marker: str = self._get_list_style_marker(li) or (
                     f"{start + list_item_counter}."
                     if is_ordered and start is not None
                     else ""
@@ -3178,6 +3262,19 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                         enumerated=is_ordered,
                         marker=marker,
                     )
+                    if list_item is None and any(
+                        not self._has_list_ancestor(elem, li)
+                        for elem in li.find_all(["table", "img"])
+                    ):
+                        # An item without text still holds its table or image
+                        list_item = doc.add_list_item(
+                            text="",
+                            enumerated=is_ordered,
+                            marker=marker,
+                            parent=list_group,
+                            content_layer=self.content_layer,
+                            prov=self._make_text_prov(text="", tag=li),
+                        )
 
                 # Increment counter only when a list item is actually added
                 if list_item:
@@ -3218,6 +3315,20 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             self.parents[self.level + 1] = None
             self.level -= 1
         return added_refs
+
+    @staticmethod
+    def _get_list_style_marker(li: Tag) -> str:
+        """Return the marker that an inline string `list-style-type` sets on `li`.
+
+        Docling's HTML export writes the original marker of a list item this way,
+        so reading it back keeps markers such as `3.` when the HTML is converted
+        again (the Markdown backend does this for files with HTML blocks).
+        """
+        style = li.get("style")
+        if not isinstance(style, str):
+            return ""
+        match = _LIST_STYLE_STRING_RE.search(style)
+        return match.group("marker").strip() if match else ""
 
     @staticmethod
     def get_html_table_row_col(tag: Tag) -> tuple[int, int]:
@@ -3401,7 +3512,12 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             language_hint = self._code_language_hint(tag)
             with self._use_inline_group(annotated_texts, doc) as inline_ref:
                 for annotated_text in annotated_texts:
-                    text_orig = annotated_text.text.strip()
+                    # In preformatted text, each <br> is a newline
+                    text_orig = re.sub(
+                        rf" ?{_BR_SENTINEL} ?", "\n", annotated_text.text
+                    ).strip()
+                    if not text_orig:
+                        continue
                     text_clean = HTMLDocumentBackend._clean_unicode(text_orig)
                     prov = self._make_prov(
                         text=text_clean,
@@ -3824,7 +3940,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     ) -> str:
         def _extract(node: PageElement) -> list[str]:
             if isinstance(node, NavigableString):
-                return [str(node)]
+                return [str(node).replace(_BR_SENTINEL, "\n")]
             if isinstance(node, Tag):
                 if id(node) in excluded_obj_ids:
                     return []
@@ -5154,8 +5270,15 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             )
             return placeholder.get_ref()
 
-        src_loc = self._resolve_relative_path(src_loc)
-        img_ref = self._create_image_ref(src_loc)
+        img_ref: Optional[ImageRef] = None
+        try:
+            src_loc = self._resolve_relative_path(src_loc)
+        except ValueError as e:
+            # The source is not loaded, but the picture is kept, as for an
+            # image file that cannot be read.
+            warnings.warn(f"Could not process an image from {src_loc}: {e}")
+        else:
+            img_ref = self._create_image_ref(src_loc)
 
         docling_pic = doc.add_picture(
             image=img_ref,
@@ -5277,7 +5400,10 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             """Recursively extract text from all child nodes."""
             result: list[str] = []
 
-            if isinstance(item, NavigableString):
+            # Skip comments, CDATA, doctypes and processing instructions
+            if isinstance(item, NavigableString) and not isinstance(
+                item, PreformattedString
+            ):
                 text = str(item).replace(_BR_SENTINEL, "\n")
                 result = [text]
             elif isinstance(item, Tag):

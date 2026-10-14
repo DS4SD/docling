@@ -271,7 +271,10 @@ class EmailDocumentBackend(DeclarativeDocumentBackend):
         ]
 
     def _convert_html_part(self, html: str) -> DoclingDocument:
-        html_stream = BytesIO(html.encode("utf-8"))
+        # The part is already decoded, but its markup can still declare the
+        # original charset in a <meta> tag. The UTF-8 byte order mark makes the
+        # HTML parser use UTF-8 and ignore that declaration.
+        html_stream = BytesIO(html.encode("utf-8-sig"))
         in_doc = InputDocument(
             path_or_stream=html_stream,
             format=InputFormat.HTML,

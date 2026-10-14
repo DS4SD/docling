@@ -7,11 +7,12 @@ import logging
 import re
 import warnings
 import zipfile
+from collections.abc import Iterator
 from contextlib import contextmanager
 from copy import deepcopy
 from io import BytesIO
 from pathlib import Path
-from typing import Any, Callable, Final
+from typing import Any, Callable, Final, NamedTuple
 from urllib.parse import urlparse
 
 from docling_core.types.doc import (
@@ -70,7 +71,7 @@ try:  # pragma: no cover - import-time guard
     from docx.oxml.simpletypes import ST_Merge
     from docx.oxml.table import CT_Tc
     from docx.oxml.xmlchemy import BaseOxmlElement
-    from docx.styles.style import BaseStyle, ParagraphStyle
+    from docx.styles.style import BaseStyle, CharacterStyle, ParagraphStyle
     from docx.table import Table, _Cell
     from docx.text.hyperlink import Hyperlink
     from docx.text.paragraph import Paragraph
@@ -155,6 +156,7 @@ _W10_NS: Final[str] = "urn:schemas-microsoft-com:office:word"
 _A14_NS: Final[str] = "http://schemas.microsoft.com/office/drawing/2010/main"
 _W14_NS: Final[str] = "http://schemas.microsoft.com/office/word/2010/wordml"
 _W_NS_CLARK: Final[str] = f"{{{_W_NS}}}"
+_MC_NS_CLARK: Final[str] = f"{{{_MC_NS}}}"
 
 _OOXML_NAMESPACES: Final[dict[str, str]] = {
     "a": _A_NS,
@@ -647,6 +649,21 @@ def _normalize_strict_ooxml(archive: zipfile.ZipFile) -> BytesIO:
     return normalized
 
 
+class _NestedList(NamedTuple):
+    """A list opened under an open list's item for its larger left indentation.
+
+    ``slot`` and ``start_ilevel`` locate the nested list's own levels in the
+    parents stack; the ``outer_*`` fields describe the item it hangs from, with
+    ``outer_left_indent`` being that item's left indentation in twips.
+    """
+
+    slot: int
+    start_ilevel: int
+    outer_numid: int
+    outer_ilevel: int | None
+    outer_left_indent: int
+
+
 class MsWordDocumentBackend(DeclarativeDocumentBackend):
     """Backend for parsing Word documents (DOCX and DOC files).
 
@@ -822,6 +839,10 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         self.last_list_group: ListGroup | None = None
         self.last_list_group_numid: int | None = None
         self.last_list_group_parent: NodeItem | None = None
+        # Lists nested under an open list's item by left indentation, innermost
+        # last, and the last list item's effective left indentation in twips
+        self.nested_lists: list[_NestedList] = []
+        self.last_list_left_indent: int = 0
         # Set starting content layer
         self.content_layer = ContentLayer.BODY
 
@@ -1080,6 +1101,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         }
         saved_level_at_new_list = self.level_at_new_list
         saved_level_start_ilevel = self.level_start_ilevel
+        saved_nested_lists = self.nested_lists.copy()
+        saved_last_list_left_indent = self.last_list_left_indent
         saved_parents = self.parents.copy()
         # Save and clear list group cache to prevent reuse across table cells
         saved_last_list_group = self.last_list_group
@@ -1093,6 +1116,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             self.history = saved_history
             self.level_at_new_list = saved_level_at_new_list
             self.level_start_ilevel = saved_level_start_ilevel
+            self.nested_lists = saved_nested_lists
+            self.last_list_left_indent = saved_last_list_left_indent
             self.parents = saved_parents
             self.last_list_group = saved_last_list_group
             self.last_list_group_numid = saved_last_list_group_numid
@@ -1136,33 +1161,45 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             drawingml_els = [x for x in _raw_drawingml_els if not _in_textbox(x)]
             vml_images = [x for x in _raw_vml_images if not _in_textbox(x)]
 
-            # Check for textbox content - check multiple textbox formats
-            # Only process if the element hasn't been processed before
-            if element not in self.processed_textbox_elements:
+            # Check for textbox content - check multiple textbox formats.
+            # Skip container elements (tbl, sdt) that recursively walk their
+            # children, as descendant XPaths would otherwise extract textboxes
+            # before the table or SDT is processed and duplicate them later.
+            if (
+                tag_name not in {"tbl", "sdt"}
+                and element not in self.processed_textbox_elements
+            ):
                 # Modern Word textboxes
                 txbx_xpath = etree.XPath(
                     ".//w:txbxContent|.//v:textbox//w:p",
                     namespaces=_OOXML_NAMESPACES,
                 )
-                textbox_elements = txbx_xpath(element)
+                raw_textbox_elements = txbx_xpath(element)
 
                 # No modern textboxes found, check for alternate/legacy textbox formats
-                if not textbox_elements:
+                if not raw_textbox_elements:
                     # Additional checks for textboxes in DrawingML and VML formats
                     alt_txbx_xpath = etree.XPath(
                         ".//wps:txbx//w:p|.//w10:wrap//w:p|.//v:textbox//w:txbxContent//w:p",
                         namespaces=_OOXML_NAMESPACES,
                     )
-                    textbox_elements = alt_txbx_xpath(element)
+                    raw_textbox_elements = alt_txbx_xpath(element)
 
                     # Check for shape text that's not in a standard textbox
-                    if not textbox_elements:
+                    if not raw_textbox_elements:
                         shape_text_xpath = etree.XPath(
                             ".//a:bodyPr/ancestor::*//a:t|.//a:txBody//a:t",
                             namespaces=_OOXML_NAMESPACES,
                         )
-                        shape_text_elements = shape_text_xpath(element)
+                        shape_text_elements = [
+                            el
+                            for el in shape_text_xpath(element)
+                            if el not in self.processed_textbox_elements
+                        ]
                         if shape_text_elements:
+                            self.processed_textbox_elements.add(element)
+                            for st_element in shape_text_elements:
+                                self.processed_textbox_elements.add(st_element)
                             # Create custom text elements from shape text
                             text_content = " ".join(
                                 [t.text for t in shape_text_elements if t.text]
@@ -1185,12 +1222,21 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                                     content_layer=self.content_layer,
                                 )
 
+                textbox_elements = [
+                    el
+                    for el in raw_textbox_elements
+                    if el not in self.processed_textbox_elements
+                ]
                 if textbox_elements:
                     # Mark the parent element as processed
                     self.processed_textbox_elements.add(element)
-                    # Also mark all found textbox elements as processed
+                    # Also mark all found textbox elements and their paragraphs as processed
                     for tb_element in textbox_elements:
                         self.processed_textbox_elements.add(tb_element)
+                        for desc_p in tb_element.findall(
+                            ".//w:p", namespaces=_OOXML_NAMESPACES
+                        ):
+                            self.processed_textbox_elements.add(desc_p)
 
                     _log.debug(
                         f"Found textbox content with {len(textbox_elements)} elements"
@@ -1397,26 +1443,19 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         """
         numId: str | None = None
         ilvl: str | None = None
-        depth = 0
-        while style is not None and depth < self._MAX_STYLE_INHERITANCE_DEPTH:
-            style_elem = getattr(style, "element", None)
-            if style_elem is not None:
-                style_numPr = style_elem.find(f".//{_W_NS_CLARK}numPr")
-                if style_numPr is not None:
-                    if numId is None:
-                        numId_elem = style_numPr.find(f"{_W_NS_CLARK}numId")
-                        if numId_elem is not None:
-                            numId = numId_elem.get(self.XML_KEY)
-                    if ilvl is None:
-                        ilvl_elem = style_numPr.find(f"{_W_NS_CLARK}ilvl")
-                        if ilvl_elem is not None:
-                            ilvl = ilvl_elem.get(self.XML_KEY)
+        for chain_style in self._iter_style_chain(style):
+            style_numPr = chain_style.element.find(f".//{_W_NS_CLARK}numPr")
+            if style_numPr is not None:
+                if numId is None:
+                    numId_elem = style_numPr.find(f"{_W_NS_CLARK}numId")
+                    if numId_elem is not None:
+                        numId = numId_elem.get(self.XML_KEY)
+                if ilvl is None:
+                    ilvl_elem = style_numPr.find(f"{_W_NS_CLARK}ilvl")
+                    if ilvl_elem is not None:
+                        ilvl = ilvl_elem.get(self.XML_KEY)
             if numId is not None and ilvl is not None:
                 break
-            # A malformed basedOn chain can hop to a style type that lacks
-            # base_style; getattr keeps the walk safe.
-            style = getattr(style, "base_style", None)
-            depth += 1
 
         # If numId is found but ilvl is not specified, default to level 0
         if numId is not None and ilvl is None:
@@ -1424,46 +1463,88 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         return numId, ilvl
 
     def _get_level_element(self, numid: int, ilvl: int) -> BaseOxmlElement | None:
-        """Find the level element from the numbering XML for a given numId and ilvl."""
+        """Find a numbering level, following linked numbering styles."""
         try:
             numbering_part = None
+            styles_part = None
             for part in self.docx_obj.part.package.parts:
                 if "numbering" in part.partname:
                     numbering_part = part
-                    break
+                elif part.partname.endswith("/word/styles.xml"):
+                    styles_part = part
 
             if numbering_part is None:
                 return None
 
             numbering_root = numbering_part.element
             namespaces = _OOXML_NAMESPACES
-
             num_element = numbering_root.find(
                 f".//w:num[@w:numId='{numid}']", namespaces=namespaces
             )
             if num_element is None:
                 return None
 
-            abstract_num_id_elem = num_element.find(
-                ".//w:abstractNumId", namespaces=namespaces
-            )
-            if abstract_num_id_elem is None:
-                return None
+            visited_abstract_ids: set[str] = set()
+            for _ in range(self._MAX_STYLE_INHERITANCE_DEPTH):
+                abstract_id_elem = num_element.find(
+                    "w:abstractNumId", namespaces=namespaces
+                )
+                if abstract_id_elem is None:
+                    return None
 
-            abstract_num_id = abstract_num_id_elem.get(self.XML_KEY)
-            if abstract_num_id is None:
-                return None
+                abstract_id = abstract_id_elem.get(self.XML_KEY)
+                if abstract_id is None or abstract_id in visited_abstract_ids:
+                    return None
+                visited_abstract_ids.add(abstract_id)
 
-            abstract_num_element = numbering_root.find(
-                f".//w:abstractNum[@w:abstractNumId='{abstract_num_id}']",
-                namespaces=namespaces,
-            )
-            if abstract_num_element is None:
-                return None
+                abstract_element = numbering_root.find(
+                    f".//w:abstractNum[@w:abstractNumId='{abstract_id}']",
+                    namespaces=namespaces,
+                )
+                if abstract_element is None:
+                    return None
 
-            return abstract_num_element.find(
-                f".//w:lvl[@w:ilvl='{ilvl}']", namespaces=namespaces
-            )
+                level_element = abstract_element.find(
+                    f"w:lvl[@w:ilvl='{ilvl}']", namespaces=namespaces
+                )
+                if level_element is not None:
+                    return level_element
+
+                style_link = abstract_element.find(
+                    "w:numStyleLink", namespaces=namespaces
+                )
+                if style_link is None or styles_part is None:
+                    return None
+
+                style_id = style_link.get(self.XML_KEY)
+                if not style_id:
+                    return None
+
+                style_element = styles_part.element.find(
+                    f".//w:style[@w:styleId='{style_id}']",
+                    namespaces=namespaces,
+                )
+                if style_element is None:
+                    return None
+
+                style_num_id = style_element.find(
+                    "w:pPr/w:numPr/w:numId", namespaces=namespaces
+                )
+                if style_num_id is None:
+                    return None
+
+                linked_num_id = style_num_id.get(self.XML_KEY)
+                if not linked_num_id:
+                    return None
+
+                num_element = numbering_root.find(
+                    f".//w:num[@w:numId='{linked_num_id}']",
+                    namespaces=namespaces,
+                )
+                if num_element is None:
+                    return None
+
+            return None
         except Exception as e:
             _log.debug(f"Error finding level element: {e}")
             return None
@@ -1478,6 +1559,53 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         if num_fmt_element is None:
             return None
         return num_fmt_element.get(self.XML_KEY)
+
+    @classmethod
+    def _iter_style_chain(cls, style: BaseStyle | None) -> Iterator[CharacterStyle]:
+        """Yield ``style`` and its ``basedOn`` ancestors.
+
+        Stops at a style type without ``base_style`` (e.g. a numbering style
+        reached through a malformed chain) and at ``_MAX_STYLE_INHERITANCE_DEPTH``
+        to guard against cycles.
+        """
+        depth = 0
+        while (
+            isinstance(style, CharacterStyle)
+            and depth < cls._MAX_STYLE_INHERITANCE_DEPTH
+        ):
+            yield style
+            style = style.base_style
+            depth += 1
+
+    def _get_list_left_indent(self, paragraph: Paragraph, numid: int, ilvl: int) -> int:
+        """Return a list paragraph's effective left indentation in twips.
+
+        Word takes ``w:ind`` from the paragraph itself, else from its numbering
+        level, else from its style's ``basedOn`` chain. ``w:start`` is the
+        direction-neutral name of ``w:left``. No value at all means 0.
+        """
+
+        def _left(element: BaseOxmlElement | None) -> int | None:
+            if element is None:
+                return None
+            ind = element.find(f"{_W_NS_CLARK}pPr/{_W_NS_CLARK}ind")
+            if ind is None:
+                return None
+            for attr in ("left", "start"):
+                value = self._str_to_int(ind.get(f"{_W_NS_CLARK}{attr}"), None)
+                if value is not None:
+                    return value
+            return None
+
+        left = _left(paragraph._p)
+        if left is None:
+            left = _left(self._get_level_element(numid, ilvl))
+        if left is None:
+            for style in self._iter_style_chain(paragraph.style):
+                left = _left(style.element)
+                if left is not None:
+                    break
+        return left or 0
 
     def _get_start_value(self, numid: int, ilvl: int) -> int:
         """Read the start value from the abstractNum definition."""
@@ -1573,6 +1701,73 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 _format_enum_counter(counter, self._get_level_num_fmt(numid, lvl))
             )
         return ".".join(parts) + "."
+
+    def _get_caption_numbering_marker(
+        self, numid: int, ilevel: int, p_style_id: str
+    ) -> str | None:
+        """Resolve custom caption numbering that should be part of paragraph text."""
+        if p_style_id in ["Title", "Heading", "Code"] or p_style_id.lower().startswith(
+            ("list", "normal")
+        ):
+            return None
+
+        lvl_element = self._get_level_element(numid, ilevel)
+        lvl_text_element = (
+            lvl_element.find("w:lvlText", namespaces=_OOXML_NAMESPACES)
+            if lvl_element is not None
+            else None
+        )
+        lvl_text = (
+            lvl_text_element.get(self.XML_KEY) if lvl_text_element is not None else None
+        )
+        if not lvl_text:
+            return None
+
+        referenced_levels = [
+            int(match) - 1 for match in re.findall(r"%(\d+)", lvl_text)
+        ]
+        literal_prefix = re.sub(r"%(\d+)", "", lvl_text)
+        if not (
+            any(level < ilevel for level in referenced_levels)
+            and any(char.isalpha() for char in literal_prefix)
+        ):
+            return None
+
+        self._get_list_counter(numid, ilevel)
+        return self._build_enum_marker(numid, ilevel)
+
+    def _apply_caption_numbering(
+        self, paragraph_elements, numid, ilevel, p_style_id
+    ) -> bool:
+        """Add custom caption numbering to its text instead of creating a list."""
+        if numid is None or ilevel is None:
+            return False
+
+        marker = self._get_caption_numbering_marker(numid, ilevel, p_style_id)
+        if not marker:
+            return False
+
+        for index, (run_text, formatting, hyperlink) in enumerate(paragraph_elements):
+            if run_text and run_text.strip():
+                paragraph_elements[index] = (
+                    f"{marker} {run_text}",
+                    formatting,
+                    hyperlink,
+                )
+                break
+
+        return True
+
+    @staticmethod
+    def _should_handle_as_list(
+        numid: int | None, ilevel: int | None, p_style_id: str
+    ) -> bool:
+        """Return whether a paragraph should be processed as a structural list."""
+        return (
+            numid is not None
+            and ilevel is not None
+            and p_style_id not in ["Title", "Heading", "Code"]
+        )
 
     def _has_visible_numbering_format(self, numId: int, ilvl: int) -> bool:
         """Return True when numbering.xml defines a visible marker for numId/ilvl."""
@@ -1678,17 +1873,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         Returns:
             True if the style chain marks the paragraph as code.
         """
-        depth = 0
-        while style is not None and depth < self._MAX_STYLE_INHERITANCE_DEPTH:
-            name = (style.name or "").strip().lower()
-            style_id = (style.style_id or "").strip().lower()
+        for chain_style in self._iter_style_chain(style):
+            name = (chain_style.name or "").strip().lower()
+            style_id = (chain_style.style_id or "").strip().lower()
             if name in self._CODE_STYLE_NAMES or style_id in self._CODE_STYLE_IDS:
                 return True
-            # A malformed basedOn chain can hop to a style type (e.g. a
-            # numbering style) that lacks this attribute; getattr keeps
-            # the walk safe.
-            style = getattr(style, "base_style", None)
-            depth += 1
         return False
 
     def _is_in_table_cell(self, paragraph: Paragraph) -> bool:
@@ -1711,18 +1900,15 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             The lowercased font family name, or "" if none applies.
         """
         default_style = self._default_paragraph_style
-        depth = 0
-        while style is not None and depth < self._MAX_STYLE_INHERITANCE_DEPTH:
-            if default_style is not None and style.element is default_style.element:
+        for chain_style in self._iter_style_chain(style):
+            if (
+                default_style is not None
+                and chain_style.element is default_style.element
+            ):
                 return ""
-            font_name = style.font.name
+            font_name = chain_style.font.name
             if font_name:
                 return font_name.strip().lower()
-            # A malformed basedOn chain can hop to a style type (e.g. a
-            # numbering style) that lacks base_style; getattr keeps the
-            # walk safe.
-            style = getattr(style, "base_style", None)
-            depth += 1
         return ""
 
     def _monospaced_char_counts(
@@ -1854,7 +2040,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         name: str = style.name or ""
         base_style_label: str | None = None
         base_style_name: str | None = None
-        if isinstance(base_style := getattr(style, "base_style", None), ParagraphStyle):
+        if isinstance(base_style := style.base_style, ParagraphStyle):
             base_style_label = base_style.style_id
             base_style_name = base_style.name
 
@@ -1988,18 +2174,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                             is_bold = True
                             break
 
-                if (
-                    not is_bold
-                    and paragraph is not None
-                    and paragraph.style is not None
-                ):
-                    current_style = paragraph.style
-                    while current_style is not None:
-                        if current_style.font.bold:
+                if not is_bold and paragraph is not None:
+                    for chain_style in cls._iter_style_chain(paragraph.style):
+                        if chain_style.font.bold:
                             is_bold = True
                             break
-
-                        current_style = getattr(current_style, "base_style", None)
             except Exception:
                 pass
 
@@ -2037,15 +2216,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         Returns:
             An ``AnyUrl`` for a valid URL, a ``Path`` for a scheme-less address,
-            or ``None`` when there is no address or the URL is malformed.
+            or ``None`` when there is no address, the URL is malformed, or the
+            hyperlink's relationship has been removed from the part.
         """
-        relationship_id = hyperlink._hyperlink.rId
-        if relationship_id and relationship_id not in hyperlink.part.rels:
-            # Fragment-only relationships are removed while loading the archive.
-            # Keep their visible text even though the relationship is now absent.
+        try:
+            address = hyperlink.address
+        except KeyError:
+            # Relationship removed from the part (e.g. by _sanitize_docx); drop target.
             return None
-
-        address = hyperlink.address
         if address:
             if not urlparse(address).scheme:
                 return Path(address)
@@ -2328,10 +2506,59 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             else None
         )
 
+    @staticmethod
+    def _is_in_mc_fallback_with_choice_txbx(element: etree._Element) -> bool:
+        """Return True when *element* is inside mc:Fallback whose mc:Choice sibling has a w:txbxContent.
+
+        Word saves a text box under ``mc:AlternateContent`` with two branches:
+
+        - ``mc:Choice`` (DrawingML / ``wps:txbx``) — the preferred branch.
+        - ``mc:Fallback`` (VML / ``v:textbox``) — the legacy fallback.
+
+        Both branches carry identical paragraph content.  When a ``mc:Choice``
+        sibling exists with its own ``w:txbxContent``, every element inside
+        ``mc:Fallback`` is a redundant duplicate and must be skipped during
+        collection to prevent paragraphs from appearing twice in the output.
+
+        Args:
+            element: Any XML element that may be inside mc:Fallback.
+
+        Returns:
+            True if the element is inside mc:Fallback and the enclosing
+            mc:AlternateContent has an mc:Choice sibling with a w:txbxContent.
+        """
+        mc_fallback_tag = f"{_MC_NS_CLARK}Fallback"
+        mc_choice_tag = f"{_MC_NS_CLARK}Choice"
+        mc_alternate_tag = f"{_MC_NS_CLARK}AlternateContent"
+        txbx_content_tag = f"{_W_NS_CLARK}txbxContent"
+
+        fallback = None
+        for ancestor in element.iterancestors():
+            if ancestor.tag == mc_fallback_tag:
+                fallback = ancestor
+            if ancestor.tag == mc_alternate_tag:
+                if fallback is None:
+                    return False
+                # Inside Fallback — skip if mc:Choice has a w:txbxContent.
+                for choice in ancestor:
+                    if choice.tag == mc_choice_tag:
+                        if choice.find(f".//{txbx_content_tag}") is not None:
+                            return True
+                return False
+        return False
+
     def _collect_textbox_paragraphs(
         self, textbox_elements: list[etree._Element]
     ) -> dict[etree._Element | None, list[tuple[etree._Element, int | None]]]:
-        """Collect and organize paragraphs from textbox elements."""
+        """Collect and organize paragraphs from textbox elements.
+
+        Args:
+            textbox_elements: List of textbox-related XML elements to process.
+
+        Returns:
+            A mapping from container element (or None) to a list of
+            ``(paragraph_element, position)`` tuples.
+        """
         # Elements, not their ``id()`` -- see ``processed_textbox_elements``.
         processed_paragraphs: set[etree._Element] = set()
         container_paragraphs: dict[
@@ -2346,8 +2573,12 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             tag_name = etree.QName(element).localname
             processed_paragraphs.add(element)
 
-            # Handle paragraphs directly found (VML textboxes)
+            # Handle paragraphs directly found (VML textboxes).
+            # Skip any element inside mc:Fallback when mc:Choice carries the content.
             if tag_name == "p":
+                if self._is_in_mc_fallback_with_choice_txbx(element):
+                    continue
+
                 # Find the containing textbox or shape element
                 container_id = None
                 for ancestor in element.iterancestors():
@@ -2361,8 +2592,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     (element, self._get_paragraph_position(element))
                 )
 
-            # Handle txbxContent elements (Word DrawingML textboxes)
+            # Handle txbxContent elements (Word DrawingML / VML textboxes).
+            # When Word saves a textbox under mc:AlternateContent it writes
+            # an mc:Choice copy (DrawingML) *and* an mc:Fallback copy (VML)
+            # with identical paragraphs.  Skip any element inside the Fallback
+            # branch so that paragraphs are not collected twice.
             elif tag_name == "txbxContent":
+                if self._is_in_mc_fallback_with_choice_txbx(element):
+                    continue
                 paragraphs = element.findall(".//w:p", namespaces=element.nsmap)
                 container_id = element
                 if container_id not in container_paragraphs:
@@ -2392,7 +2629,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
     def _handle_textbox_content(
         self,
-        textbox_elements: list,
+        textbox_elements: list[etree._Element],
         doc: DoclingDocument,
     ) -> list[RefItem]:
         """Process textbox content and add it to the document structure."""
@@ -2431,27 +2668,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # Add the sorted paragraphs to our processing list
             all_paragraphs.extend(sorted_container_paragraphs)
 
-        # Track processed paragraphs to avoid duplicates
-        processed_paragraphs = set()
-
         # Process all the paragraphs
-        for p, position in all_paragraphs:
-            # Create paragraph object to get text content
-            paragraph = Paragraph(p, self.docx_obj)
-            text_content = paragraph.text.strip()
-
-            if text_content:
-                # Deduplicate AlternateContent by exact text natively
-                if text_content in processed_paragraphs:
-                    continue
-                processed_paragraphs.add(text_content)
-            else:
-                # Preserve empty regions (images) based on position
-                paragraph_id = (text_content, position)
-                if paragraph_id in processed_paragraphs:
-                    continue
-                processed_paragraphs.add(paragraph_id)
-
+        for p, _ in all_paragraphs:
             elem_ref.extend(self._handle_text_elements(p, doc))
 
             # Extract embedded images inside the text box
@@ -2611,14 +2829,15 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         if numid == 0:
             numid = None
 
+        if self._apply_caption_numbering(paragraph_elements, numid, ilevel, p_style_id):
+            numid = None
+            ilevel = None
+
         # Handle lists
-        if (
-            numid is not None
-            and ilevel is not None
-            and p_style_id not in ["Title", "Heading", "Code"]
-        ):
+        if self._should_handle_as_list(numid, ilevel, p_style_id):
             # Check if this is actually a numbered list by examining the numFmt
             is_numbered = self._has_visible_numbering_format(numid, ilevel)
+            left_indent = self._get_list_left_indent(paragraph, numid, ilevel)
 
             # If there are equations in the list item, handle them specially
             if len(equations) > 0:
@@ -2626,6 +2845,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     doc=doc,
                     numid=numid,
                     ilevel=ilevel,
+                    left_indent=left_indent,
                     text=text,
                     equations=equations,
                     is_numbered=is_numbered,
@@ -2635,6 +2855,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     doc=doc,
                     numid=numid,
                     ilevel=ilevel,
+                    left_indent=left_indent,
                     elements=paragraph_elements,
                     is_numbered=is_numbered,
                 )
@@ -2648,7 +2869,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         ):  # Close list. A Code paragraph after a list must close it even if it
             # carries a stray/inherited numId, then be re-parented at body level
             # by the Code branch below (otherwise it nests inside the ListGroup).
-            self.last_numid = self._prev_numid()
+            # Lists nested by left indentation close with the outermost list,
+            # whose group is the one cached below.
+            self.last_numid = (
+                self.nested_lists[0].outer_numid
+                if self.nested_lists and self.level_at_new_list is not None
+                else self._prev_numid()
+            )
+            self.nested_lists = []
             if text and text.strip():
                 # Substantive body text breaks list continuity
                 self._clear_list_group_cache()
@@ -2692,7 +2920,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # next list item opens fresh under this heading.
             self.level_at_new_list = None
             is_numbered_style = self._is_numbered_heading(paragraph)
-            h1 = self._add_heading(doc, p_level, text, is_numbered_style)
+            h1 = self._add_heading(doc, p_level, text, is_numbered_style, numid, ilevel)
             elem_ref.extend(h1)
 
         elif len(equations) > 0:
@@ -2789,31 +3017,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         else:
             self._end_list_on_body_text(text)
-            level = self._get_level()
-            parent = self._create_or_reuse_parent(
-                doc=doc,
-                prev_parent=self.parents.get(level - 1),
-                paragraph_elements=paragraph_elements,
+            elem_ref.extend(
+                self._add_body_text_items(
+                    doc=doc,
+                    paragraph_elements=paragraph_elements,
+                    checkbox_label=checkbox_label,
+                    skip_empty_text=skip_empty_text,
+                )
             )
-            for text, format, hyperlink in paragraph_elements:
-                # Clean checkbox symbols from text if this is a checkbox item
-                clean_text = (
-                    self._clean_checkbox_symbols(text) if checkbox_label else text
-                )
-
-                # Skip empty text items
-                if skip_empty_text and (not clean_text or not clean_text.strip()):
-                    continue
-
-                text_item = doc.add_text(
-                    label=checkbox_label if checkbox_label else DocItemLabel.TEXT,
-                    parent=parent,
-                    text=clean_text,
-                    formatting=format,
-                    hyperlink=hyperlink,
-                    content_layer=self.content_layer,
-                )
-                elem_ref.append(text_item.get_ref())
 
         self._update_history(p_style_id, p_level, numid, ilevel)
 
@@ -2825,12 +3036,47 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         return elem_ref
 
+    def _add_body_text_items(
+        self,
+        doc: DoclingDocument,
+        paragraph_elements: list,
+        checkbox_label,
+        skip_empty_text: bool,
+    ) -> list[RefItem]:
+        """Add ordinary paragraph text items under the current parent."""
+        level = self._get_level()
+        parent = self._create_or_reuse_parent(
+            doc=doc,
+            prev_parent=self.parents.get(level - 1),
+            paragraph_elements=paragraph_elements,
+        )
+        elem_ref: list[RefItem] = []
+
+        for text, formatting, hyperlink in paragraph_elements:
+            clean_text = self._clean_checkbox_symbols(text) if checkbox_label else text
+            if skip_empty_text and (not clean_text or not clean_text.strip()):
+                continue
+
+            text_item = doc.add_text(
+                label=checkbox_label if checkbox_label else DocItemLabel.TEXT,
+                parent=parent,
+                text=clean_text,
+                formatting=formatting,
+                hyperlink=hyperlink,
+                content_layer=self.content_layer,
+            )
+            elem_ref.append(text_item.get_ref())
+
+        return elem_ref
+
     def _add_heading(
         self,
         doc: DoclingDocument,
         curr_level: int | None,
         text: str,
         is_numbered_style: bool = False,
+        numid: int | None = None,
+        ilevel: int | None = None,
     ) -> list[RefItem]:
         elem_ref: list[RefItem] = []
         level = self._get_level()
@@ -2886,6 +3132,43 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
                 text = f"{self.numbered_headers[previous_level]}.{text}"
                 previous_level -= 1
+
+            # Make the heading counter available to numbering templates that
+            # reference this same numId, such as "Table %1.%7". Preserve deeper
+            # list counters: a heading between list items must not restart them.
+            if numid is not None:
+                heading_ilevel = ilevel if ilevel is not None else 0
+                self.list_counters[(numid, heading_ilevel)] = self.numbered_headers[
+                    add_level
+                ]
+
+                # Restart deeper counters whose numbering templates depend on
+                # this heading level (e.g. "Tabell %1.%7"). Unrelated list
+                # counters sharing the same numId should retain their state.
+                heading_placeholder = re.compile(rf"%{heading_ilevel + 1}(?!\d)")
+                for counter_numid, counter_ilevel in list(self.list_counters):
+                    if counter_numid != numid or counter_ilevel <= heading_ilevel:
+                        continue
+                    counter_level = self._get_level_element(
+                        counter_numid, counter_ilevel
+                    )
+                    lvl_text_element = (
+                        counter_level.find("w:lvlText", namespaces=_OOXML_NAMESPACES)
+                        if counter_level is not None
+                        else None
+                    )
+                    lvl_text = (
+                        lvl_text_element.get(self.XML_KEY)
+                        if lvl_text_element is not None
+                        else None
+                    )
+                    if lvl_text and heading_placeholder.search(lvl_text):
+                        self.list_counters[(counter_numid, counter_ilevel)] = 0
+
+                # A heading may seed a counter used by a later list template
+                # with the same numId (e.g. "Tabell %1.%7"). Don't let the
+                # first list item reset that shared numbering sequence.
+                self.started_numids.add(numid)
 
         hd = doc.add_heading(
             parent=self.parents[parent_level],
@@ -3036,7 +3319,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         level_start_ilevel``, e.g. a resumed list whose first post-gap item
         sits at level 1 and later returns to level 0) are clamped to the list
         base so they stay inside the current list instead of mapping below it.
+
+        Inside a list nested by left indentation (see
+        ``_manage_list_structure``), levels are mapped from that nested list's
+        own slot and starting level.
         """
+        if self.nested_lists:
+            nested = self.nested_lists[-1]
+            return nested.slot + max(0, word_ilevel - nested.start_ilevel)
         return self.level_at_new_list + max(0, word_ilevel - self.level_start_ilevel)
 
     def _manage_list_structure(
@@ -3045,6 +3335,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         doc: DoclingDocument,
         numid: int,
         ilevel: int,
+        left_indent: int = 0,
     ) -> tuple[list[RefItem], int]:
         """Manage list structure and return elem_ref and use_level.
 
@@ -3062,10 +3353,19 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         intervening block resumes its numbering instead of restarting at 1
         (see #3896).
 
+        Word's multi-level list styles ("List Bullet 2", "List Number 2", ...)
+        each have their own numId at ``w:ilvl`` 0 and differ only in their left
+        indentation. So when an item of another numId follows an open list's
+        item and has a larger left indentation, its list is nested under that
+        item. A later item of another numId whose left indentation is no larger
+        than that item's closes the nested list again and is placed as if it
+        came right after that item.
+
         Args:
             doc: The DoclingDocument being constructed.
             numid: The numbering ID from the DOCX paragraph properties.
             ilevel: The indentation level from the DOCX paragraph properties.
+            left_indent: The paragraph's effective left indentation in twips.
 
         Returns:
             A tuple containing the list of references to created list groups and
@@ -3073,13 +3373,45 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         """
         elem_ref: list[RefItem] = []
         level = self._get_level()
+        prev_numid = self._prev_numid()
         prev_indent = self._prev_indent()
 
-        if self._prev_numid() is None or (
-            self._prev_numid() == numid and self.level_at_new_list is None
+        if (
+            prev_numid is not None
+            and prev_numid != numid
+            and self.level_at_new_list is not None
+            and isinstance(self.parents.get(level - 1), ListGroup)
+        ):
+            closed: _NestedList | None = None
+            while (
+                self.nested_lists
+                and left_indent <= self.nested_lists[-1].outer_left_indent
+            ):
+                closed = self.nested_lists.pop()
+            if closed is not None:  # Back out to the item it hangs from
+                for k in self.parents:
+                    if k >= closed.slot:
+                        self.parents[k] = None
+                level = self._get_level()
+                prev_numid = closed.outer_numid
+                prev_indent = closed.outer_ilevel
+            elif left_indent > self.last_list_left_indent:  # Nest under the open item
+                self.nested_lists.append(
+                    _NestedList(
+                        slot=level,
+                        start_ilevel=ilevel,
+                        outer_numid=prev_numid,
+                        outer_ilevel=prev_indent,
+                        outer_left_indent=self.last_list_left_indent,
+                    )
+                )
+
+        if prev_numid is None or (
+            prev_numid == numid and self.level_at_new_list is None
         ):  # Open new list
             self.level_at_new_list = level
             self.level_start_ilevel = ilevel
+            self.nested_lists = []
             # Only reset counters the first time a numId is opened. A numId
             # that reappears after an intervening list of a different numId is
             # the same Word list resuming, and must keep its numbering.
@@ -3099,7 +3431,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             self.last_numid = numid
 
         elif (
-            self._prev_numid() == numid
+            prev_numid == numid
             and self.level_at_new_list is not None
             and prev_indent is not None
             and prev_indent < ilevel
@@ -3118,7 +3450,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             use_level = self._slot_for(ilevel)
 
         elif (
-            self._prev_numid() == numid
+            prev_numid == numid
             and self.level_at_new_list is not None
             and prev_indent is not None
             and ilevel < prev_indent
@@ -3128,13 +3460,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     self.parents[k] = None
             use_level = self._slot_for(ilevel)
 
-        elif self._prev_numid() == numid and isinstance(
-            self.parents.get(level - 1), ListGroup
-        ):
+        elif prev_numid == numid and isinstance(self.parents.get(level - 1), ListGroup):
             # Continue existing list
             use_level = level - 1
 
-        elif self._prev_numid() != numid or not isinstance(
+        elif prev_numid != numid or not isinstance(
             self.parents.get(level - 1), ListGroup
         ):
             # New list sequence
@@ -3147,6 +3477,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 use_level = level
                 self.level_at_new_list = use_level
                 self.level_start_ilevel = ilevel
+                self.nested_lists = []
 
             # Only reset counters the first time a numId is opened. A numId
             # that reappears after an intervening list of a different numId is
@@ -3167,6 +3498,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         else:
             use_level = level - 1
 
+        self.last_list_left_indent = left_indent
         return elem_ref, use_level
 
     def _add_list_item(
@@ -3175,6 +3507,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         doc: DoclingDocument,
         numid: int,
         ilevel: int,
+        left_indent: int,
         elements: list,
         is_numbered: bool = False,
     ) -> list[RefItem]:
@@ -3184,6 +3517,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             doc: The DoclingDocument being constructed.
             numid: The numbering ID from the DOCX paragraph properties.
             ilevel: The indentation level from the DOCX paragraph properties.
+            left_indent: The paragraph's effective left indentation in twips.
             elements: List of (text, formatting, hyperlink) tuples representing the paragraph content.
             is_numbered: Whether this is a numbered list (True) or bulleted list (False).
 
@@ -3194,7 +3528,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             return []
 
         elem_ref, use_level = self._manage_list_structure(
-            doc=doc, numid=numid, ilevel=ilevel
+            doc=doc, numid=numid, ilevel=ilevel, left_indent=left_indent
         )
 
         if is_numbered:
@@ -3214,6 +3548,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         doc: DoclingDocument,
         numid: int,
         ilevel: int,
+        left_indent: int,
         text: str,
         equations: list[str],
         is_numbered: bool = False,
@@ -3229,6 +3564,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             doc: The DoclingDocument being constructed.
             numid: The numbering ID from the DOCX paragraph properties.
             ilevel: The indentation level from the DOCX paragraph properties.
+            left_indent: The paragraph's effective left indentation in twips.
             text: The paragraph text with equation placeholders (e.g., "<eq>formula</eq>").
             equations: List of equation strings with markers (e.g., ["<eq>A=B</eq>", ...]).
             is_numbered: Whether this is a numbered list (True) or bulleted list (False).
@@ -3237,7 +3573,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             List of references to created document elements.
         """
         elem_ref, use_level = self._manage_list_structure(
-            doc=doc, numid=numid, ilevel=ilevel
+            doc=doc, numid=numid, ilevel=ilevel, left_indent=left_indent
         )
 
         if is_numbered:
@@ -3476,6 +3812,15 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         return False
 
+    def _has_textbox(self, element: BaseOxmlElement) -> bool:
+        """Check if a docx element holds any textbox or shape text content."""
+        txbx_xpath = etree.XPath(
+            ".//w:txbxContent|.//v:textbox//w:p|.//wps:txbx//w:p|.//w10:wrap//w:p"
+            "|.//a:bodyPr/ancestor::*//a:t|.//a:txBody//a:t",
+            namespaces=_OOXML_NAMESPACES,
+        )
+        return bool(txbx_xpath(element))
+
     def _is_rich_table_cell(self, cell: _Cell) -> bool:
         """Determine whether a docx cell should be parsed as a Docling RichTableCell.
 
@@ -3509,7 +3854,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             tag = child.tag.split("}")[-1]
             if tag not in allowed_tags:
                 return True
-        if self._has_blip(tc):
+        if self._has_blip(tc) or self._has_textbox(tc):
             return True
 
         # paragraph must contain runs with no run-properties
@@ -4156,6 +4501,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         ("linked to previous") from an already-emitted section is skipped so it is not
         duplicated. Sections with different_first_page_header_footer contribute both their
         first-page and their regular header/footer, since both are actually used.
+        When the document enables even/odd headers (``evenAndOddHeaders``), the
+        even-page header/footer of every section is visited as well.
 
         Args:
             docx_obj: A docx Document object to be parsed.
@@ -4195,6 +4542,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             for i in range(-1, self.max_levels):
                 self.parents[i] = None
             self.level = 0
+            # Likewise, lists nested by left indentation in the body end here.
+            self.nested_lists = []
 
             self.parents[0] = doc.add_group(
                 label=GroupLabel.SECTION,
@@ -4208,14 +4557,22 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             self._walk_linear(part._element, doc)
             self.current_part = self.docx_obj.part
 
+        # Even-page headers/footers are only used when the document settings enable
+        # <w:evenAndOddHeaders/>; otherwise the even part is ignored by Word.
+        use_even_pages = docx_obj.settings.odd_and_even_pages_header_footer
+
         for section in docx_obj.sections:
             if section.different_first_page_header_footer:
                 _add_hdr_ftr_part(section.first_page_header, "page header")
             _add_hdr_ftr_part(section.header, "page header")
+            if use_even_pages:
+                _add_hdr_ftr_part(section.even_page_header, "page header")
 
             if section.different_first_page_header_footer:
                 _add_hdr_ftr_part(section.first_page_footer, "page footer")
             _add_hdr_ftr_part(section.footer, "page footer")
+            if use_even_pages:
+                _add_hdr_ftr_part(section.even_page_footer, "page footer")
 
         self._force_new_code_block = True
         self._pending_code_blank_lines = 0
@@ -4241,6 +4598,10 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         reading order by default. Separator/continuation-separator placeholders
         (present in every Word-authored document, holding no user content) are
         skipped.
+
+        The note body is read with the same paragraph reader the body uses, so
+        text inside an inline wrapper (a tracked insertion, a content control)
+        and text inside a table is kept as well.
 
         Args:
             docx_obj: A docx Document object to be parsed.
@@ -4269,8 +4630,12 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     continue
                 texts = [
                     text
-                    for p_elm in note.findall(f"{_W_NS_CLARK}p")
-                    if (text := Paragraph(p_elm, docx_obj).text.strip())
+                    for p_elm in note.findall(f".//{_W_NS_CLARK}p")
+                    if (
+                        text := self._get_paragraph_text(
+                            Paragraph(p_elm, docx_obj)
+                        ).strip()
+                    )
                 ]
                 if not texts:
                     continue

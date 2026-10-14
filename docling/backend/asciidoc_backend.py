@@ -185,12 +185,17 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
 
         in_list = False
         in_table = False
+        in_delimited_table = False
 
         text_data: list[str] = []
         table_data: list[list[str]] = []
         caption_data: list[str] = []
         last_list_item: ListItem | None = None
         list_continuation = False
+        # Whether the list group at each level is ordered, for the list being
+        # parsed. Reset when a new list starts, so a level that holds a section
+        # header is never mistaken for a list.
+        list_numbered: dict[int, bool] = {}
 
         parents: dict[int, Union[GroupItem, None]] = {}
         indents: dict[int, Union[GroupItem, None]] = {}
@@ -217,6 +222,9 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
 
             line = block
             stripped_line = line.strip()
+            if in_delimited_table and self._continue_table(table_data, line):
+                continue
+
             in_list, last_list_item, list_continuation = self._close_list_if_needed(
                 line=line,
                 in_list=in_list,
@@ -294,12 +302,17 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                         parent=parents[level], name="list", label=GroupLabel.LIST
                     )
                     indents[level + 1] = item["indent"]
+                    list_numbered = {level + 1: item["numbered"]}
 
                 elif in_list and item["indent"] > indents[level]:
+                    # A nested list belongs to the item above it. As a sibling
+                    # of the items, it is counted as an item of the outer list,
+                    # and the next ordered item is numbered one too high.
                     parents[level + 1] = doc.add_group(
-                        parent=parents[level], name="list", label=GroupLabel.LIST
+                        parent=last_list_item, name="list", label=GroupLabel.LIST
                     )
                     indents[level + 1] = item["indent"]
+                    list_numbered[level + 1] = item["numbered"]
 
                 elif in_list and item["indent"] < indents[level]:
                     while level > 0 and item["indent"] < indents[level]:
@@ -310,6 +323,15 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                         parents[level] = None
                         indents[level] = None
                         level -= 1
+
+                self._match_list_kind(
+                    doc=doc,
+                    item=item,
+                    parents=parents,
+                    indents=indents,
+                    list_numbered=list_numbered,
+                    last_list_item=last_list_item,
+                )
 
                 last_list_item = doc.add_list_item(
                     item["text"],
@@ -331,9 +353,11 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                     )
                     caption_data = []
                     in_table = False
+                    in_delimited_table = False
                     table_data = []
                 else:
                     in_table = True
+                    in_delimited_table = True
 
             elif self._is_table_line(line):  # within a table
                 in_table = True
@@ -484,8 +508,7 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                 continue
 
             if stripped in cls._CONTENT_BLOCK_DELIMITERS:
-                has_closer = cls._has_matching_closer(lines, i, stripped)
-                if has_closer:
+                if cls._has_matching_closer(lines, i, stripped):
                     # Consume both delimiters; yield inner lines and a trailing
                     # blank so the following text starts a fresh paragraph.
                     i += 1
@@ -494,8 +517,10 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                         i += 1
                     i += 1
                     yield ""
-                elif stripped == "--":
-                    # Stray "--" (no closer): break the paragraph, do not render as text.
+                else:
+                    # Stray delimiter (no closer): break the paragraph, do not
+                    # render as text. The line must be consumed either way;
+                    # leaving `i` on it loops over the same line forever.
                     yield ""
                     i += 1
                 continue
@@ -615,9 +640,49 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
         ):
             return in_list, last_list_item, list_continuation
 
+        # Close every level of the list, not only the innermost one. Otherwise
+        # the text after a nested list is added to the outer list group.
         level = cls._get_current_level(parents)
-        parents[level] = None
+        while (
+            isinstance(group := parents[level], GroupItem)
+            and group.label == GroupLabel.LIST
+        ):
+            parents[level] = None
+            level -= 1
         return False, None, False
+
+    @classmethod
+    def _match_list_kind(
+        cls,
+        *,
+        doc: DoclingDocument,
+        item: dict,
+        parents: dict[int, GroupItem | None],
+        indents: dict[int, GroupItem | None],
+        list_numbered: dict[int, bool],
+        last_list_item: ListItem | None,
+    ) -> None:
+        """Keep ordered items and bullet items out of the same list group.
+
+        AsciiDoc nests lists by marker, not by indentation. The item returns to
+        the enclosing list of its own kind at the same indent, or else opens a
+        nested list under the item above it.
+        """
+        level = cls._get_current_level(parents)
+        if list_numbered.get(level) == item["numbered"]:
+            return
+        if (
+            list_numbered.get(level - 1) == item["numbered"]
+            and indents[level - 1] == item["indent"]
+        ):
+            parents[level] = None
+            indents[level] = None
+        else:
+            parents[level + 1] = doc.add_group(
+                parent=last_list_item, name="list", label=GroupLabel.LIST
+            )
+            indents[level + 1] = item["indent"]
+            list_numbered[level + 1] = item["numbered"]
 
     @staticmethod
     def _flush_text_data(
@@ -713,15 +778,32 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
         # commonly write one cell per line, so a second "|" is not required.
         return re.match(rf"^{_CELL_SPEC}\|", line) is not None
 
+    @classmethod
+    def _continue_table(cls, table_data: list[list[str]], line: str) -> bool:
+        """Consume a line between |=== delimiters that is not a row.
+
+        A blank line only separates rows, and a line without a leading "|"
+        continues the cell above it. Returns False for any other line.
+        """
+        stripped = line.strip()
+        if stripped == "|===" or cls._is_table_line(line):
+            return False
+        if stripped and not table_data:
+            return False
+        if stripped:
+            table_data[-1][-1] = f"{table_data[-1][-1]} {stripped}".lstrip()
+        return True
+
     @staticmethod
     def _parse_table_line(line):
         # Drop cell specifiers glued to a "|" (e.g. "^.^h"); anchored to
         # whitespace so content ending in a style letter (e.g. "Eth") survives.
         line = re.sub(rf"(^|\s){_CELL_SPEC}(?=\|)", r"\1", line)
-        # Split by "|" and remove the leading empty string from the first "|"
-        cells = line.split("|")[1:]
+        # Split on unescaped "|" and remove the leading empty string from the
+        # first "|"; a "\|" is a pipe in the cell text and loses its backslash.
+        cells = re.split(r"(?<!\\)\|", line)[1:]
         # Strip whitespace from each cell (empty cells become empty strings)
-        return [cell.strip() for cell in cells]
+        return [cell.replace("\\|", "|").strip() for cell in cells]
 
     @staticmethod
     def _add_table_if_nonempty(
