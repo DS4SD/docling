@@ -44,8 +44,6 @@ FOOTNOTE_MARKS = frozenset("*†‡§¶‖#")
 MIN_ALIGNED = 0.8
 # Matching is quadratic, so longer items are skipped.
 MAX_ALIGN_CHARS = 5000
-# Gap (share of the size) under which two characters are set side by side.
-MAX_JOIN_GAP = 0.15
 
 _PUNCTUATION_FOLD = str.maketrans(
     {
@@ -107,10 +105,9 @@ def script_runs(text: str, chars: Sequence[ScriptChar]) -> list[ScriptRun] | Non
     """Split an item's text into baseline, superscript and subscript runs.
 
     The text is matched to the PDF characters first, since it differs from them in
-    ligatures, dashes and spaces, and only the matched characters are measured. A space
-    between a character and its script that the PDF does not have ("mc 2") is dropped.
-    Runs keep their own whitespace. Returns None when the text has no script or cannot be
-    matched.
+    ligatures, dashes and spaces, and only the matched characters are measured. As in the
+    Word backend, a run has no whitespace at its edges. Returns None when the text has no
+    script or cannot be matched.
     """
     mapping = _align(text, chars)
     if mapping is None:
@@ -136,30 +133,17 @@ def script_runs(text: str, chars: Sequence[ScriptChar]) -> list[ScriptRun] | Non
         )
         after = next((roles[j] for j in solid[k + 1 :] if roles[j] is not None), None)
         roles[index] = before if before == after and before else Script.BASELINE
-
-    drop: set[int] = set()
+    # Whitespace inside a run belongs to it; whitespace between runs is left out.
     for left, right in itertools.pairwise(solid):
-        gap = range(left + 1, right)
-        if not gap:
-            continue
         if roles[left] == roles[right]:
-            for i in gap:
+            for i in range(left + 1, right):
                 roles[i] = roles[left]
-            continue
-        for i in gap:
-            roles[i] = Script.BASELINE
-        if (
-            left in mapping
-            and right in mapping
-            and _set_side_by_side(chars, mapping[left], mapping[right])
-        ):
-            drop.update(gap)
 
     pieces: list[tuple[str, Script, list[int]]] = []
     for i, ch in enumerate(text):
-        if i in drop:
+        role = roles[i]
+        if role is None:
             continue
-        role = roles[i] or Script.BASELINE  # leading or trailing whitespace
         if not pieces or pieces[-1][1] != role:
             pieces.append(("", role, []))
         piece_text, _, piece_chars = pieces[-1]
@@ -364,11 +348,3 @@ def _align(text: str, chars: Sequence[ScriptChar]) -> dict[int, int] | None:
     if len(mapping) < MIN_ALIGNED * solid:
         return None
     return mapping
-
-
-def _set_side_by_side(chars: Sequence[ScriptChar], left: int, right: int) -> bool:
-    """Tell whether the PDF draws two characters with no space and no gap between them."""
-    if right <= left or any(c.text.isspace() for c in chars[left + 1 : right]):
-        return False
-    a, b = chars[left], chars[right]
-    return b.left - a.right <= MAX_JOIN_GAP * max(a.size, b.size)

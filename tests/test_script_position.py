@@ -175,18 +175,14 @@ def test_footnote_marker_starting_a_tightly_set_line():
     assert _marked(chars) == "thelineaboveit<super>3</super>Notetext"
 
 
-def test_runs_drop_the_space_the_pdf_does_not_have():
+def test_runs_have_no_whitespace_at_their_edges():
+    # As the Word backend's runs: the space between two runs is left to the export.
     chars = _line(("E = mc", 12, 0), ("2", 7, 4.5), (" in 1905.", 12, 0))
-    assert _runs("E = mc 2 in 1905.", chars) == [
+    assert _runs(" E = mc 2 in 1905. ", chars) == [
         ("E = mc", B),
         ("2", SUP),
-        (" in 1905.", B),
+        ("in 1905.", B),
     ]
-
-
-def test_runs_keep_a_space_the_pdf_has():
-    chars = _line(("agrees ", 12, 0), ("12", 7, 4.5))
-    assert _runs("agrees 12", chars) == [("agrees ", B), ("12", SUP)]
 
 
 def test_runs_match_through_ligatures_and_dashes():
@@ -265,7 +261,7 @@ def test_stage_rewrites_paragraphs_and_list_items():
 
     groups = [g for g in document.groups if isinstance(g, InlineGroup)]
     assert [_item_runs(document, g) for g in groups] == [
-        [("E = mc", B), ("2", SUP), (" here", B)],
+        [("E = mc", B), ("2", SUP), ("here", B)],
         [("H", B), ("2", SUB), ("O", B)],
     ]
     # The paragraph is replaced; the list item keeps its marker and holds the runs.
