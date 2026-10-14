@@ -6,12 +6,12 @@
 from __future__ import annotations
 
 import math
-from collections import defaultdict
+from collections import Counter, defaultdict
 from collections.abc import Callable
 from itertools import combinations
 
 import numpy as np
-from docling_core.types.doc import BoundingBox, TableCell
+from docling_core.types.doc import BoundingBox, DocItemLabel, TableCell
 from docling_core.types.doc.page import PdfWidget
 
 from docling.datamodel.base_models import Cluster
@@ -19,7 +19,7 @@ from docling.models.stages.form_field.keying.candidates import (
     candidates_for,
     siblings,
 )
-from docling.models.stages.form_field.keying.geometry import anchors
+from docling.models.stages.form_field.keying.geometry import anchors, contains
 from docling.models.stages.form_field.keying.inputs import (
     MAX_KEY_TEXTS,
     inputs,
@@ -287,10 +287,60 @@ def assign(
             found, table_cells, rules or [], page_height, read.values, read.key_texts
         )
 
-    assignment = _solve(read.values, read.key_texts, read.h, keyed_in_tables)
+    assignment = _solve(
+        read.values,
+        read.key_texts,
+        read.h,
+        keyed_in_tables,
+        in_checkbox_blocks(read.values, read.key_texts, found, read.sources),
+    )
     assignment.sources = read.sources
     assignment.painted_cells = read.painted_cells
     return assignment
+
+
+def in_checkbox_blocks(
+    values: list[Value],
+    key_texts: list[KeyText],
+    found: list[Cluster],
+    sources: dict[int, set[tuple[int, int]]],
+) -> list[Candidate]:
+    """Checkboxes keyed by the text of the checkbox block drawn around them.
+
+    The layout boxes a checkbox together with its label; a block holding
+    exactly one value, a checkbox outside detected tables, is keyed by all of
+    its text, before and outside the search. A block with several values, or
+    text the layout also put in another block, is left to the search.
+    """
+    keyed = []
+    for region in found:
+        if region.label not in {
+            DocItemLabel.CHECKBOX_SELECTED,
+            DocItemLabel.CHECKBOX_UNSELECTED,
+        }:
+            continue
+        inside = [i for i, v in enumerate(values) if contains(region.bbox, v.bbox)]
+        if len(inside) != 1:
+            continue
+        (i,) = inside
+        if not values[i].checkbox or values[i].scope.table is not None:
+            continue
+        atoms = {
+            atom
+            for atom, found_in in sources.items()
+            if any(cluster_id == region.id for cluster_id, _ in found_in)
+        }
+        if not atoms or any(len(sources[atom]) > 1 for atom in atoms):
+            continue
+        keyed += [
+            Candidate((i,), k, "field_key", {})
+            for k, key_text in enumerate(key_texts)
+            if key_text.atoms == atoms
+            and not key_text.stack
+            and key_text.scope == values[i].scope
+        ]
+    once = Counter(c.members[0] for c in keyed)
+    return [c for c in keyed if once[c.members[0]] == 1]
 
 
 def _solve(
@@ -298,6 +348,7 @@ def _solve(
     key_texts: list[KeyText],
     h: float,
     keyed_in_tables: Callable[[], tuple[list[Candidate], dict[int, TableSlot]]],
+    in_blocks: list[Candidate],
 ) -> Assignment:
     if (
         len(key_texts) > MAX_KEY_TEXTS
@@ -311,12 +362,21 @@ def _solve(
             f"skipped: {len(values)} values x {len(key_texts)} key texts exceed the page limit",
             slots,
         )
-    proposed = candidates_for(values, key_texts, h)
+    # A checkbox keyed by its block, and that key's text, take part in no
+    # other association.
+    taken = {c.members[0] for c in in_blocks}
+    used = {atom for c in in_blocks for atom in key_texts[c.key].atoms}
+    proposed = [
+        c
+        for c in candidates_for(values, key_texts, h)
+        if taken.isdisjoint(c.members) and used.isdisjoint(key_texts[c.key].atoms)
+    ]
     # A decided alternating run fixes which key each of its values reads.
     mark_sequences(proposed, sequences(values, key_texts, proposed, NULL_COST, h))
     # Values in detected tables are keyed from their own cells, outside the
     # free-form search: table text never competes with free-form keys.
     tables, slots = keyed_in_tables()
+    tables = in_blocks + tables
     fixed = list(range(len(proposed), len(proposed) + len(tables)))
     # A candidate worse than leaving all its members blank cannot help: all
     # remaining interactions are penalties. Keep the full list for diagnostics.
@@ -352,7 +412,7 @@ def _solve(
         for atom in key_texts[candidate.key].atoms:
             spans[atom][column] = 1.0
     for i, value in enumerate(values):
-        if not value.scope.eligible:
+        if not value.scope.eligible or i in taken:
             continue
         owners[i][len(costs)] = 1.0
         costs.append(NULL_COST)
