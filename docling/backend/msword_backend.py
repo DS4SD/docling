@@ -839,6 +839,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         self.last_list_group: ListGroup | None = None
         self.last_list_group_numid: int | None = None
         self.last_list_group_parent: NodeItem | None = None
+        # Empty paragraphs before a resumed list item, deleted at the end of
+        # convert(); keyed by reference, as a later resume finds them again
+        self._deferred_empty_paragraphs: dict[str, TextItem] = {}
         # Lists nested under an open list's item by left indentation, innermost
         # last, and the last list item's effective left indentation in twips
         self.nested_lists: list[_NestedList] = []
@@ -923,6 +926,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # Reset mappings for a fresh conversion pass
             self.paragraph_comment_map.clear()
             self.paragraph_to_items.clear()
+            self._deferred_empty_paragraphs.clear()
             doc, _ = self._walk_linear(self.docx_obj.element.body, doc)
             self._add_header_footer(self.docx_obj, doc)
             # Add comments and link them to annotated paragraphs
@@ -930,6 +934,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # Add footnotes and endnotes (their body text lives in a separate part;
             # the in-body reference is otherwise silently empty, see docstring below)
             self._add_footnotes_and_endnotes(self.docx_obj, doc)
+            self._delete_deferred_empty_paragraphs(doc)
 
             return doc
         else:
@@ -1048,8 +1053,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     trailing_empty.append(item)
                     continue
                 if item.self_ref == self.last_list_group.self_ref:
-                    if trailing_empty:
-                        doc.delete_items(node_items=trailing_empty)
+                    for empty in trailing_empty:
+                        self._deferred_empty_paragraphs[empty.self_ref] = empty
                     return self.last_list_group
                 break
 
@@ -1066,6 +1071,19 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         self.last_list_group_parent = parent
 
         return list_gr
+
+    def _delete_deferred_empty_paragraphs(self, doc: DoclingDocument) -> None:
+        """Delete the empty paragraphs before resumed list items.
+
+        This runs last: deleting invalidates the item references that table
+        cells and comments collect while the document is walked.
+        """
+        try:
+            doc.delete_items(node_items=list(self._deferred_empty_paragraphs.values()))
+        except ValueError as err:
+            # delete_items raises ValueError when it cannot find an item in the
+            # document tree; keep the paragraphs rather than fail the conversion
+            _log.warning(f"Kept the empty paragraphs before resumed list items: {err}")
 
     def _clear_list_group_cache(self) -> None:
         """Clear the cached list group to prevent reuse across contexts."""
@@ -1132,6 +1150,17 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         added_elements = []
         for element in body:
             tag_name = etree.QName(element).localname
+            # A body-level mc:AlternateContent holds the same blocks twice, in a modern (Choice) and
+            # a legacy (Fallback) form. Walk one branch only, and do it before the image and
+            # text-box detection below: those run over descendants, so on this element they would
+            # read both branches, and again on the chosen branch's own children.
+            if tag_name == "AlternateContent":
+                added_elements.extend(
+                    self._walk_optional_container(
+                        self._select_alternate_content_branch(element), doc
+                    )
+                )
+                continue
             # Check for Inline Images (blip elements)
             _raw_drawing_blip = self.blip_xpath_expr(element)
             _raw_drawingml_els = element.findall(
@@ -1249,10 +1278,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 sdt_content = element.find(
                     "./w:sdtContent", namespaces=_OOXML_NAMESPACES
                 )
-                if sdt_content is not None:
-                    # Recursively walk the SDT content to catch textboxes, tables, and nested structures
-                    _, te = self._walk_linear(sdt_content, doc)
-                    added_elements.extend(te)
+                # Recursively walk the SDT content to catch textboxes, tables, and nested structures
+                added_elements.extend(self._walk_optional_container(sdt_content, doc))
             # Check for Image
             elif drawing_blip:
                 pics = self._handle_pictures(drawing_blip, doc)
@@ -1326,6 +1353,37 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 _log.debug(f"Ignoring element in DOCX with tag: {tag_name}")
 
         return doc, added_elements
+
+    def _walk_optional_container(
+        self, container: BaseOxmlElement | None, doc: DoclingDocument
+    ) -> list[RefItem]:
+        """Walk the children of ``container`` and return the added refs.
+
+        A missing container (``None``) adds nothing.
+        """
+        if container is None:
+            return []
+        _, refs = self._walk_linear(container, doc)
+        return refs
+
+    @staticmethod
+    def _select_alternate_content_branch(
+        element: BaseOxmlElement,
+    ) -> BaseOxmlElement | None:
+        """Pick the branch of an ``mc:AlternateContent`` to read.
+
+        Take the first ``mc:Choice`` whose ``Requires`` prefixes all map to
+        namespaces this backend understands. If none does, take ``mc:Fallback``.
+
+        "Understands" means the namespaces in ``_OOXML_NAMESPACES``, so a Choice that requires
+        another one, such as ``wpg`` or ``w15``, yields to the Fallback.
+        """
+        supported = set(_OOXML_NAMESPACES.values())
+        for choice in element.findall("mc:Choice", namespaces=_OOXML_NAMESPACES):
+            prefixes = (choice.get("Requires") or "").split()
+            if all(choice.nsmap.get(prefix) in supported for prefix in prefixes):
+                return choice
+        return element.find("mc:Fallback", namespaces=_OOXML_NAMESPACES)
 
     def _is_invisible_spacer(self, pil_image: Image.Image | None) -> bool:
         """Check if an image is an invisible layout spacer rather than a meaningful graphic."""
@@ -1414,26 +1472,19 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         """
         numId: str | None = None
         ilvl: str | None = None
-        depth = 0
-        while style is not None and depth < self._MAX_STYLE_INHERITANCE_DEPTH:
-            style_elem = getattr(style, "element", None)
-            if style_elem is not None:
-                style_numPr = style_elem.find(f".//{_W_NS_CLARK}numPr")
-                if style_numPr is not None:
-                    if numId is None:
-                        numId_elem = style_numPr.find(f"{_W_NS_CLARK}numId")
-                        if numId_elem is not None:
-                            numId = numId_elem.get(self.XML_KEY)
-                    if ilvl is None:
-                        ilvl_elem = style_numPr.find(f"{_W_NS_CLARK}ilvl")
-                        if ilvl_elem is not None:
-                            ilvl = ilvl_elem.get(self.XML_KEY)
+        for chain_style in self._iter_style_chain(style):
+            style_numPr = chain_style.element.find(f".//{_W_NS_CLARK}numPr")
+            if style_numPr is not None:
+                if numId is None:
+                    numId_elem = style_numPr.find(f"{_W_NS_CLARK}numId")
+                    if numId_elem is not None:
+                        numId = numId_elem.get(self.XML_KEY)
+                if ilvl is None:
+                    ilvl_elem = style_numPr.find(f"{_W_NS_CLARK}ilvl")
+                    if ilvl_elem is not None:
+                        ilvl = ilvl_elem.get(self.XML_KEY)
             if numId is not None and ilvl is not None:
                 break
-            # A malformed basedOn chain can hop to a style type that lacks
-            # base_style; getattr keeps the walk safe.
-            style = getattr(style, "base_style", None)
-            depth += 1
 
         # If numId is found but ilvl is not specified, default to level 0
         if numId is not None and ilvl is None:
@@ -1538,7 +1589,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             return None
         return num_fmt_element.get(self.XML_KEY)
 
-    def _iter_style_chain(self, style: BaseStyle | None) -> Iterator[CharacterStyle]:
+    @classmethod
+    def _iter_style_chain(cls, style: BaseStyle | None) -> Iterator[CharacterStyle]:
         """Yield ``style`` and its ``basedOn`` ancestors.
 
         Stops at a style type without ``base_style`` (e.g. a numbering style
@@ -1548,7 +1600,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         depth = 0
         while (
             isinstance(style, CharacterStyle)
-            and depth < self._MAX_STYLE_INHERITANCE_DEPTH
+            and depth < cls._MAX_STYLE_INHERITANCE_DEPTH
         ):
             yield style
             style = style.base_style
@@ -1850,17 +1902,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         Returns:
             True if the style chain marks the paragraph as code.
         """
-        depth = 0
-        while style is not None and depth < self._MAX_STYLE_INHERITANCE_DEPTH:
-            name = (style.name or "").strip().lower()
-            style_id = (style.style_id or "").strip().lower()
+        for chain_style in self._iter_style_chain(style):
+            name = (chain_style.name or "").strip().lower()
+            style_id = (chain_style.style_id or "").strip().lower()
             if name in self._CODE_STYLE_NAMES or style_id in self._CODE_STYLE_IDS:
                 return True
-            # A malformed basedOn chain can hop to a style type (e.g. a
-            # numbering style) that lacks this attribute; getattr keeps
-            # the walk safe.
-            style = getattr(style, "base_style", None)
-            depth += 1
         return False
 
     def _is_in_table_cell(self, paragraph: Paragraph) -> bool:
@@ -1883,18 +1929,15 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             The lowercased font family name, or "" if none applies.
         """
         default_style = self._default_paragraph_style
-        depth = 0
-        while style is not None and depth < self._MAX_STYLE_INHERITANCE_DEPTH:
-            if default_style is not None and style.element is default_style.element:
+        for chain_style in self._iter_style_chain(style):
+            if (
+                default_style is not None
+                and chain_style.element is default_style.element
+            ):
                 return ""
-            font_name = style.font.name
+            font_name = chain_style.font.name
             if font_name:
                 return font_name.strip().lower()
-            # A malformed basedOn chain can hop to a style type (e.g. a
-            # numbering style) that lacks base_style; getattr keeps the
-            # walk safe.
-            style = getattr(style, "base_style", None)
-            depth += 1
         return ""
 
     def _monospaced_char_counts(
@@ -2026,7 +2069,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         name: str = style.name or ""
         base_style_label: str | None = None
         base_style_name: str | None = None
-        if isinstance(base_style := getattr(style, "base_style", None), ParagraphStyle):
+        if isinstance(base_style := style.base_style, ParagraphStyle):
             base_style_label = base_style.style_id
             base_style_name = base_style.name
 
@@ -2160,18 +2203,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                             is_bold = True
                             break
 
-                if (
-                    not is_bold
-                    and paragraph is not None
-                    and paragraph.style is not None
-                ):
-                    current_style = paragraph.style
-                    while current_style is not None:
-                        if current_style.font.bold:
+                if not is_bold and paragraph is not None:
+                    for chain_style in cls._iter_style_chain(paragraph.style):
+                        if chain_style.font.bold:
                             is_bold = True
                             break
-
-                        current_style = getattr(current_style, "base_style", None)
             except Exception:
                 pass
 

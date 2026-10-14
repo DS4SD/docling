@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 import glob
+import threading
 from io import BytesIO
 from pathlib import Path
 
@@ -9,6 +10,7 @@ from docling_core.types.doc import (
     CodeItem,
     CodeLanguageLabel,
     DocItemLabel,
+    DoclingDocument,
     ImageRefMode,
     ListItem,
 )
@@ -368,6 +370,33 @@ If the installer fails, check the log file.
     assert "If the installer fails, check the log file." in doc.export_to_markdown()
 
 
+def test_nested_list_belongs_to_the_item_above_it() -> None:
+    # A nested list used to be added next to the items of the outer list
+    # instead of under the item above it. The outer list then counted it as an
+    # item, so "Run the installer" was exported as "3." instead of "2.".
+    source = b""". Download the archive
+.. Pick the file for your platform
+. Run the installer
+"""
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(source),
+        format=InputFormat.ASCIIDOC,
+        backend=AsciiDocBackend,
+        filename="nested-ordered-list.adoc",
+    )
+    doc = in_doc._backend.convert()
+
+    download, pick, run = (item for item in doc.texts if isinstance(item, ListItem))
+    nested_list = pick.parent.resolve(doc)
+    assert nested_list.parent == download.get_ref()
+    assert run.parent == download.parent
+    assert doc.export_to_markdown() == (
+        "1. Download the archive\n"
+        "    1. Pick the file for your platform\n"
+        "2. Run the installer"
+    )
+
+
 def test_nested_bullet_list_keeps_items_nested_and_in_order() -> None:
     # "**" and "***" mark nested bullet items, the same way ".." does for
     # ordered lists. They used to fall through to paragraph text, which lost the
@@ -404,6 +433,128 @@ def test_nested_bullet_list_keeps_items_nested_and_in_order() -> None:
         "        - with cherries\n"
         "    - banana bread\n"
         "- cherry"
+    )
+
+
+def test_text_after_a_nested_list_is_not_part_of_the_list() -> None:
+    # Ending a list used to close only its innermost level, so the paragraph
+    # after a nested list was added to the outer list group, and so was the
+    # next list.
+    source = b"""* apple
+** apple pie
+
+After the list.
+
+* mango
+"""
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(source),
+        format=InputFormat.ASCIIDOC,
+        backend=AsciiDocBackend,
+        filename="nested-list-end.adoc",
+    )
+    doc = in_doc._backend.convert()
+
+    paragraph = next(item for item in doc.texts if item.text == "After the list.")
+    assert paragraph.parent == doc.body.get_ref()
+    mango = next(item for item in doc.texts if item.text == "mango")
+    assert mango.parent.resolve(doc).parent == doc.body.get_ref()
+    assert doc.export_to_markdown() == (
+        "- apple\n    - apple pie\n\nAfter the list.\n\n- mango"
+    )
+
+
+def test_bullet_items_under_an_ordered_list_are_nested() -> None:
+    # AsciiDoc nests lists by marker, not by indentation: a "*" item after a
+    # "." item opens a nested bullet list, and the next "." item returns to the
+    # ordered list, also after a deeper "**" item. Both kinds used to share one
+    # list group, so "a" was exported as item "3." and "z" joined the bullets.
+    source = b""". one
+. two
+
+* a
+** b
+
+Separate paragraph.
+
+. x
+* y
+** y2
+. z
+"""
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(source),
+        format=InputFormat.ASCIIDOC,
+        backend=AsciiDocBackend,
+        filename="mixed-list.adoc",
+    )
+    doc = in_doc._backend.convert()
+
+    list_items = {item.text: item for item in doc.texts if isinstance(item, ListItem)}
+    assert [text for text, item in list_items.items() if item.enumerated] == [
+        "one",
+        "two",
+        "x",
+        "z",
+    ]
+    assert list_items["x"].parent == list_items["z"].parent
+    assert list_items["y"].parent != list_items["x"].parent
+    assert doc.export_to_markdown() == (
+        "1. one\n"
+        "2. two\n"
+        "    - a\n"
+        "        - b\n"
+        "\n"
+        "Separate paragraph.\n"
+        "\n"
+        "1. x\n"
+        "    - y\n"
+        "        - y2\n"
+        "2. z"
+    )
+
+
+def test_different_bullet_markers_are_nested() -> None:
+    # "*" and "-" are different list markers, so a "-" item after a "*" item
+    # opens a nested list, as Asciidoctor renders it. Both used to share one
+    # bullet list. An item returns to the closest enclosing list with its own
+    # marker, also across more than one level ("d" below).
+    source = b"""- a
+* b
+** c
+- d
+
+Separate paragraph.
+
+. one
+* two
+- three
+. four
+"""
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(source),
+        format=InputFormat.ASCIIDOC,
+        backend=AsciiDocBackend,
+        filename="bullet-markers.adoc",
+    )
+    doc = in_doc._backend.convert()
+
+    list_items = {item.text: item for item in doc.texts if isinstance(item, ListItem)}
+    assert list_items["a"].parent == list_items["d"].parent
+    assert list_items["b"].parent.resolve(doc).parent == list_items["a"].get_ref()
+    assert list_items["one"].parent == list_items["four"].parent
+    assert doc.export_to_markdown() == (
+        "- a\n"
+        "    - b\n"
+        "        - c\n"
+        "- d\n"
+        "\n"
+        "Separate paragraph.\n"
+        "\n"
+        "1. one\n"
+        "    - two\n"
+        "        - three\n"
+        "2. four"
     )
 
 
@@ -801,3 +952,45 @@ def test_comment_block_hides_content() -> None:
     texts = [item.text for item, _ in doc.iterate_items()]
     assert not any("hidden" in t for t in texts)
     assert "visible" in texts
+
+
+def _convert_within(src: bytes, seconds: float = 10.0) -> DoclingDocument:
+    """Convert `src`, failing rather than hanging if the parser never returns.
+
+    The work runs on a daemon thread so a parser stuck in a loop cannot hold up
+    the test session: the deadline turns it into a plain assertion failure and
+    the thread dies with the interpreter.
+    """
+    result: list[DoclingDocument] = []
+
+    def run() -> None:
+        in_doc = InputDocument(
+            path_or_stream=BytesIO(src),
+            format=InputFormat.ASCIIDOC,
+            backend=AsciiDocBackend,
+            filename="unclosed.adoc",
+        )
+        result.append(in_doc._backend.convert())
+
+    worker = threading.Thread(target=run, daemon=True)
+    worker.start()
+    worker.join(seconds)
+    assert not worker.is_alive(), (
+        f"convert() did not return within {seconds}s for {src!r}; "
+        "the parser is looping over one line"
+    )
+    return result[0]
+
+
+def test_unclosed_content_block_delimiter_terminates() -> None:
+    # A content block delimiter with no closer used to leave the line cursor in
+    # place, so _iter_blocks looped over that one line forever and convert()
+    # never returned. The delimiter is markup, so it breaks the paragraph and
+    # the text around it survives.
+    for delim in (b"====", b"****", b"____", b"++++", b"--"):
+        doc = _convert_within(b"before\n" + delim + b"\nafter\n")
+
+        texts = [item.text for item, _ in doc.iterate_items()]
+        assert "before" in texts, f"{delim!r}: {texts}"
+        assert "after" in texts, f"{delim!r}: {texts}"
+        assert not any(delim.decode() in t for t in texts), f"{delim!r}: {texts}"

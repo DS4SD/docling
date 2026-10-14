@@ -19,6 +19,7 @@ Known gaps to improve:
 
 from __future__ import annotations
 
+import functools
 import logging
 import re
 from collections.abc import Callable
@@ -215,6 +216,9 @@ class _OdfBaseBackend(DeclarativeDocumentBackend):
         self.odf_obj: OdfDocument = _load_odf_document(
             path_or_stream, self.document_hash
         )
+        # get_style() runs an XPath query over the whole document and is called for
+        # every paragraph and text run; styles do not change during conversion.
+        self.odf_obj.get_style = functools.cache(self.odf_obj.get_style)  # type: ignore[method-assign]
         if self._odf_type and self.odf_obj.get_type() != self._odf_type:
             raise RuntimeError(
                 f"Expected an OpenDocument {self._odf_type!r} but got "
@@ -1409,10 +1413,11 @@ def _add_odf_list(
                 marker=marker,
                 enumerated=current_enumerated,
                 parent=list_group,
-                # Prefer the run-derived text: odfdo's own text_recursive
-                # renders hyperlinked children as "[text](href)" markdown,
-                # which would otherwise leak into the plain item text.
-                text=runs[0].text if runs else text,
+                # Use only the run-derived text: odfdo's own text_recursive
+                # renders hyperlinked children as "[text](href)" markdown, an
+                # image or a chart as "(href)" and a footnote as its citation
+                # and body, which would otherwise leak into the plain item text.
+                text=runs[0].text if runs else "",
                 content_layer=content_layer,
                 formatting=runs[0].formatting if runs else None,
                 hyperlink=runs[0].hyperlink if runs else None,
@@ -2340,26 +2345,21 @@ class OdsDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
     ) -> None:
         """Find and extract images from an ODS sheet."""
         try:
-            # Get all images in the table
-            images = table.get_images()
+            # Pictures anchored to a cell are added with that cell. The ones
+            # anchored to the sheet itself are in <table:shapes>.
+            images = table.get_elements("table:shapes//draw:image")
             for img in images:
                 try:
-                    # Get the image data
-                    image_data = img.get_data()
-                    if image_data:
-                        # Convert to PIL Image
-                        from io import BytesIO
-
-                        pil_image = PILImage.open(BytesIO(image_data))
-
-                        # Try to get position information
-                        # ODF images are typically anchored to cells
+                    image_ref = _image_ref_from_odf_image(
+                        self.odf_obj, img, image_loader=self._image_loader
+                    )
+                    if image_ref is not None:
                         # For now, use a default position
                         anchor = (0, 0, 1, 1)
 
                         doc.add_picture(
                             parent=parent,
-                            image=ImageRef.from_pil(image=pil_image, dpi=72),
+                            image=image_ref,
                             caption=None,
                             prov=ProvenanceItem(
                                 page_no=page_no,

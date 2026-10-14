@@ -17,7 +17,7 @@ from docling.datamodel.document import (
     DoclingDocument,
     InputDocument,
 )
-from docling.document_converter import DocumentConverter
+from docling.document_converter import DocumentConverter, MarkdownFormatOption
 from tests.verify_utils import CONFID_PREC, COORD_PREC
 
 from .test_data_gen_flag import GEN_TEST_DATA
@@ -209,6 +209,37 @@ def test_convert_embedded_base64_image_enforces_size_limit():
     ]
     assert len(pictures) == 1
     assert pictures[0].image is None
+
+
+@pytest.mark.parametrize("as_path", [False, True], ids=["str", "Path"])
+def test_local_relative_image_resolves_from_document_dir(tmp_path: Path, as_path: bool):
+    """A local Markdown source resolves relative images from its own directory."""
+    image_path = tmp_path / "figure.png"
+    Image.new("RGB", (7, 5), color=(0, 255, 0)).save(image_path)
+    md_path = tmp_path / "doc.md"
+    md_path.write_text("# Title\n\n![alt](figure.png)\n", encoding="utf-8")
+
+    converter = DocumentConverter(
+        allowed_formats=[InputFormat.MD],
+        format_options={
+            InputFormat.MD: MarkdownFormatOption(
+                backend_options=MarkdownBackendOptions(
+                    fetch_images=True, enable_local_fetch=True
+                )
+            )
+        },
+    )
+
+    doc = converter.convert(md_path if as_path else str(md_path)).document
+
+    pictures = [
+        item for item, _ in doc.iterate_items() if isinstance(item, PictureItem)
+    ]
+    assert len(pictures) == 1
+    image = pictures[0].get_image(doc)
+    assert image is not None
+    assert image.size == (7, 5)
+    assert image.getpixel((0, 0)) == (0, 255, 0)
 
 
 def test_code_block_language_detection():
@@ -1177,6 +1208,34 @@ def test_rich_table_cell_autolinks():
     # Plain cell — no RichTableCell (row 4, col 1 → cells[9])
     plain_cell = cells[9]
     assert not isinstance(plain_cell, RichTableCell)
+
+
+def test_autolinks_outside_table_cells():
+    """Autolinks in paragraphs, list items and headings keep their hyperlink.
+
+    ``marko.inline.AutoLink`` (``<https://url>``, and the GFM bare URL
+    ``gfm_el.Url``, a subclass of ``AutoLink``) is not a subclass of
+    ``marko.inline.Link``, so it needs its own check, as in table cells.
+    """
+    markdown = (
+        "# Heading <https://example.com/h>\n\n"
+        "See <https://example.com/ab> and https://example.com/gfm.\n\n"
+        "- item <https://example.com/li>\n"
+    )
+    conv_result = get_converter().convert_string(markdown, format=InputFormat.MD)
+    assert conv_result.status == ConversionStatus.SUCCESS
+
+    hyperlinks = {
+        item.text: str(item.hyperlink)
+        for item, _ in conv_result.document.iterate_items()
+        if getattr(item, "hyperlink", None)
+    }
+    assert hyperlinks == {
+        "https://example.com/h": "https://example.com/h",
+        "https://example.com/ab": "https://example.com/ab",
+        "https://example.com/gfm": "https://example.com/gfm",
+        "https://example.com/li": "https://example.com/li",
+    }
 
 
 def test_rich_table_cell_no_stray_body_items():

@@ -192,6 +192,11 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
         caption_data: list[str] = []
         last_list_item: ListItem | None = None
         list_continuation = False
+        # The marker kind of the list group at each level ("." for ordered,
+        # "*" or "-" for bullets), for the list being parsed. Reset when a new
+        # list starts, so a level that holds a section header is never mistaken
+        # for a list.
+        list_kinds: dict[int, str] = {}
 
         parents: dict[int, Union[GroupItem, None]] = {}
         indents: dict[int, Union[GroupItem, None]] = {}
@@ -298,12 +303,17 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                         parent=parents[level], name="list", label=GroupLabel.LIST
                     )
                     indents[level + 1] = item["indent"]
+                    list_kinds = {level + 1: self._list_kind(item)}
 
                 elif in_list and item["indent"] > indents[level]:
+                    # A nested list belongs to the item above it. As a sibling
+                    # of the items, it is counted as an item of the outer list,
+                    # and the next ordered item is numbered one too high.
                     parents[level + 1] = doc.add_group(
-                        parent=parents[level], name="list", label=GroupLabel.LIST
+                        parent=last_list_item, name="list", label=GroupLabel.LIST
                     )
                     indents[level + 1] = item["indent"]
+                    list_kinds[level + 1] = self._list_kind(item)
 
                 elif in_list and item["indent"] < indents[level]:
                     while level > 0 and item["indent"] < indents[level]:
@@ -314,6 +324,15 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                         parents[level] = None
                         indents[level] = None
                         level -= 1
+
+                self._match_list_kind(
+                    doc=doc,
+                    item=item,
+                    parents=parents,
+                    indents=indents,
+                    list_kinds=list_kinds,
+                    last_list_item=last_list_item,
+                )
 
                 last_list_item = doc.add_list_item(
                     item["text"],
@@ -490,8 +509,7 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                 continue
 
             if stripped in cls._CONTENT_BLOCK_DELIMITERS:
-                has_closer = cls._has_matching_closer(lines, i, stripped)
-                if has_closer:
+                if cls._has_matching_closer(lines, i, stripped):
                     # Consume both delimiters; yield inner lines and a trailing
                     # blank so the following text starts a fresh paragraph.
                     i += 1
@@ -500,8 +518,10 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                         i += 1
                     i += 1
                     yield ""
-                elif stripped == "--":
-                    # Stray "--" (no closer): break the paragraph, do not render as text.
+                else:
+                    # Stray delimiter (no closer): break the paragraph, do not
+                    # render as text. The line must be consumed either way;
+                    # leaving `i` on it loops over the same line forever.
                     yield ""
                     i += 1
                 continue
@@ -621,9 +641,57 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
         ):
             return in_list, last_list_item, list_continuation
 
+        # Close every level of the list, not only the innermost one. Otherwise
+        # the text after a nested list is added to the outer list group.
         level = cls._get_current_level(parents)
-        parents[level] = None
+        while (
+            isinstance(group := parents[level], GroupItem)
+            and group.label == GroupLabel.LIST
+        ):
+            parents[level] = None
+            level -= 1
         return False, None, False
+
+    @classmethod
+    def _match_list_kind(
+        cls,
+        *,
+        doc: DoclingDocument,
+        item: dict,
+        parents: dict[int, GroupItem | None],
+        indents: dict[int, GroupItem | None],
+        list_kinds: dict[int, str],
+        last_list_item: ListItem | None,
+    ) -> None:
+        """Keep items with different list markers out of the same list group.
+
+        AsciiDoc nests lists by marker, not by indentation. The item returns to
+        the closest enclosing list with its marker at the same indent, or else
+        opens a nested list under the item above it.
+        """
+        level = cls._get_current_level(parents)
+        kind = cls._list_kind(item)
+        if list_kinds.get(level) == kind:
+            return
+        outer = level - 1
+        while outer in list_kinds and indents[outer] == item["indent"]:
+            if list_kinds[outer] == kind:
+                for closed in range(outer + 1, level + 1):
+                    parents[closed] = None
+                    indents[closed] = None
+                return
+            outer -= 1
+        parents[level + 1] = doc.add_group(
+            parent=last_list_item, name="list", label=GroupLabel.LIST
+        )
+        indents[level + 1] = item["indent"]
+        list_kinds[level + 1] = kind
+
+    @staticmethod
+    def _list_kind(item: dict) -> str:
+        # All ordered markers ("." and "1.") count as one kind; a bullet's kind
+        # is its marker character, so "*" and "-" lists nest like Asciidoctor.
+        return "." if item["numbered"] else item["marker"][0]
 
     @staticmethod
     def _flush_text_data(

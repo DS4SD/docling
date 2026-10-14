@@ -268,13 +268,15 @@ def test_guess_format_upper_case_extension_path(tmp_path, suffix, content, expec
         ("DOC", InputFormat.DOC),
         ("ppt", InputFormat.PPT),
         ("xls", InputFormat.XLS),
+        ("msg", InputFormat.EMAIL),
+        ("MSG", InputFormat.EMAIL),
     ],
 )
 def test_guess_format_ole2_with_fat_first_sector(tmp_path, suffix, expected):
     # An OLE2 container whose first sector after the header is a FAT sector
     # (FD FF FF FF) is reported as Excel by filetype whatever it really holds,
-    # e.g. a Word 6.0 .doc. The extension must then decide between the OLE2
-    # based formats.
+    # e.g. a Word 6.0 .doc or an Outlook .msg (#704 in docling-serve). The
+    # extension must then decide between the OLE2 based formats.
     content = bytearray(1024)
     content[:8] = bytes.fromhex("D0CF11E0A1B11AE1")
     content[512:516] = bytes.fromhex("FDFFFFFF")

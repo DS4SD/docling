@@ -209,6 +209,40 @@ uv run docling convert --from pdf --to dclx \
 ```
 
 
+### Control PDF parser threads
+
+The PDF parser and the model pipeline use separate thread settings.
+`PdfPipelineOptions.accelerator_options.num_threads` controls CPU threads for
+model inference, while `ThreadedDoclingParseBackendOptions.parser_threads`
+controls the docling-parse backend.
+
+For the standard PDF pipeline, configure parser threads on `PdfFormatOption`:
+
+```python
+from docling.datamodel.backend_options import ThreadedDoclingParseBackendOptions
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
+
+pipeline_options = PdfPipelineOptions()
+
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(
+            pipeline_options=pipeline_options,
+            backend_options=ThreadedDoclingParseBackendOptions(parser_threads=8),
+        )
+    }
+)
+```
+
+The equivalent CLI option is independent of `--num-threads`:
+
+```sh
+docling --pipeline native --from pdf --parser-threads 8 FILE
+```
+
+
 ### Extract the native content of a PDF
 
 `NativePdfPipeline` uses docling-parse alone: one text item per native text cell
@@ -436,7 +470,7 @@ converter = DocumentConverter(
         )
     }
 )
-doc = converter.convert("saved_document.json").document
+doc = converter.convert("saved_document.json")
 ```
 
 Relative image paths are resolved against the current working directory. The
@@ -626,3 +660,25 @@ Things to know:
 ## Limit resource usage
 
 You can limit the CPU threads used by Docling by setting the environment variable `OMP_NUM_THREADS` accordingly. The default setting is using 4 CPU threads.
+
+Peak memory on large or image-heavy PDFs is driven by how many decoded pages are held at once.
+`queue_max_size` bounds the pages buffered between pipeline stages, and `max_concurrent_results`
+bounds the pages the threaded docling-parse backend decodes ahead of the pipeline:
+
+```python
+from docling.datamodel.backend_options import ThreadedDoclingParseBackendOptions
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
+
+pipeline_options = PdfPipelineOptions(queue_max_size=1)
+
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(
+            pipeline_options=pipeline_options,
+            backend_options=ThreadedDoclingParseBackendOptions(max_concurrent_results=1),
+        )
+    }
+)
+```
