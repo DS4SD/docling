@@ -533,6 +533,18 @@ WHISPER_DISTIL_LARGE_V3_5_NATIVE = InlineAsrNativeWhisperOptions(
     max_time_chunk=30.0,
 )
 
+_DISTIL_WHISPER_OPENAI_CHECKPOINTS: dict[str, tuple[str, str]] = {
+    "distil-small.en": ("distil-whisper/distil-small.en", "original-model.bin"),
+    "distil-medium.en": ("distil-whisper/distil-medium.en", "original-model.bin"),
+    "distil-large-v3": ("distil-whisper/distil-large-v3-openai", "model.bin"),
+    "distil-large-v3.5": ("distil-whisper/distil-large-v3.5-openai", "model.bin"),
+}
+
+
+def _distil_whisper_prefetch_name(model_name: str) -> str:
+    return "whisper_" + model_name.replace("-", "_").replace(".", "_")
+
+
 # =============================================================================
 # WhisperS2T Models (CTranslate2 backend - fastest option for CPU/CUDA)
 # =============================================================================

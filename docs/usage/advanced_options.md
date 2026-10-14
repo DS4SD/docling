@@ -36,8 +36,18 @@ docling-tools models download whisper_tiny --output-dir /models
 docling --asr-model whisper_tiny_native --artifacts-path /models audio.wav
 ```
 
+The native Distil-Whisper presets work the same way. Their OpenAI-format
+checkpoints come from Hugging Face and are stored in the output directory in the
+Hugging Face cache layout:
+
+```sh
+docling-tools models download whisper_distil_small_en --output-dir /models
+docling --asr-model whisper_distil_small_en_native --artifacts-path /models audio.wav
+```
+
 `docling-tools models download --all` does not include ASR models. Add `--asr`
-to prefetch all native Whisper model sizes and English-only variants:
+to prefetch all native Whisper model sizes, English-only variants, and
+Distil-Whisper presets:
 
 ```sh
 docling-tools models download --all --asr --output-dir /models

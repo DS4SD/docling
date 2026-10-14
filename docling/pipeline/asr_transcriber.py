@@ -23,6 +23,10 @@ from docling.backend.noop_backend import NoOpBackend
 from docling.datamodel.accelerator_options import (
     AcceleratorOptions,
 )
+from docling.datamodel.asr_model_specs import (
+    _DISTIL_WHISPER_OPENAI_CHECKPOINTS,
+    _distil_whisper_prefetch_name,
+)
 from docling.datamodel.base_models import (
     ConversionStatus,
     DoclingComponentType,
@@ -180,17 +184,6 @@ class _ConversationItem(BaseModel):
         return result
 
 
-# Distil-Whisper models are not part of openai-whisper's model registry, but
-# their Hugging Face repos publish the checkpoint in the original OpenAI
-# format, which whisper.load_model() accepts as a local file path.
-_DISTIL_WHISPER_OPENAI_CHECKPOINTS: dict[str, tuple[str, str]] = {
-    "distil-small.en": ("distil-whisper/distil-small.en", "original-model.bin"),
-    "distil-medium.en": ("distil-whisper/distil-medium.en", "original-model.bin"),
-    "distil-large-v3": ("distil-whisper/distil-large-v3-openai", "model.bin"),
-    "distil-large-v3.5": ("distil-whisper/distil-large-v3.5-openai", "model.bin"),
-}
-
-
 class _NativeWhisperModel:
     def __init__(
         self,
@@ -256,8 +249,9 @@ class _NativeWhisperModel:
                             f"artifacts_path ({artifacts_path}) does not contain "
                             f"the checkpoint {repo_id}/{filename} required by ASR "
                             f"model '{self.model_name}'. Prefetch it with: "
-                            f"hf download {repo_id} {filename} "
-                            f'--cache-dir "{artifacts_path}"'
+                            f"docling-tools models download "
+                            f"{_distil_whisper_prefetch_name(self.model_name)} "
+                            f'--output-dir "{artifacts_path}"'
                         ) from err
                 else:
                     checkpoint_path = hf_hub_download(

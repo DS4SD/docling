@@ -10,6 +10,7 @@ from typing import Optional
 import requests
 from tqdm import tqdm
 
+from docling.datamodel.asr_model_specs import _DISTIL_WHISPER_OPENAI_CHECKPOINTS
 from docling.datamodel.pipeline_options import (
     LayoutObjectDetectionOptions,
     granite_picture_description,
@@ -121,6 +122,29 @@ def _sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _download_distil_whisper_models(
+    model_names: list[str], output_dir: Path, *, force: bool, progress: bool
+) -> None:
+    from huggingface_hub import hf_hub_download
+    from huggingface_hub.utils import disable_progress_bars
+
+    unknown = set(model_names) - _DISTIL_WHISPER_OPENAI_CHECKPOINTS.keys()
+    if unknown:
+        raise ValueError(f"Unknown Distil-Whisper models: {sorted(unknown)}")
+    if not progress:
+        disable_progress_bars()
+
+    for model_name in model_names:
+        repo_id, filename = _DISTIL_WHISPER_OPENAI_CHECKPOINTS[model_name]
+        _log.info("Downloading Distil-Whisper model %s...", model_name)
+        hf_hub_download(
+            repo_id=repo_id,
+            filename=filename,
+            cache_dir=output_dir,
+            force_download=force,
+        )
+
+
 def download_models(
     output_dir: Optional[Path] = None,
     *,
@@ -148,6 +172,7 @@ def download_models(
     easyocr_languages: Optional[list[str]] = None,  # BCP-47 tags
     with_nemotron_ocr: bool = False,
     whisper_models: Optional[list[str]] = None,
+    whisper_distil_models: Optional[list[str]] = None,
 ):
     if easyocr_languages is not None and not with_easyocr:
         raise ValueError("easyocr_languages requires with_easyocr=True")
@@ -169,6 +194,11 @@ def download_models(
     if whisper_models:
         _download_whisper_models(
             whisper_models, output_dir, force=force, progress=progress
+        )
+
+    if whisper_distil_models:
+        _download_distil_whisper_models(
+            whisper_distil_models, output_dir, force=force, progress=progress
         )
 
     if with_layout:
