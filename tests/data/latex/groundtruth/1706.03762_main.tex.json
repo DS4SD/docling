@@ -346,37 +346,34 @@
         "$ref": "#/texts/112"
       },
       {
-        "$ref": "#/texts/113"
-      },
-      {
         "$ref": "#/groups/3"
       },
       {
-        "$ref": "#/texts/155"
+        "$ref": "#/texts/153"
       },
       {
         "$ref": "#/groups/4"
       },
       {
-        "$ref": "#/texts/156"
+        "$ref": "#/texts/154"
       },
       {
         "$ref": "#/groups/5"
       },
       {
-        "$ref": "#/texts/158"
+        "$ref": "#/texts/156"
       },
       {
-        "$ref": "#/texts/159"
+        "$ref": "#/texts/157"
       },
       {
         "$ref": "#/groups/6"
       },
       {
-        "$ref": "#/texts/161"
+        "$ref": "#/texts/159"
       },
       {
-        "$ref": "#/texts/162"
+        "$ref": "#/texts/160"
       }
     ],
     "content_layer": "body",
@@ -459,6 +456,9 @@
         "$ref": "#/body"
       },
       "children": [
+        {
+          "$ref": "#/texts/113"
+        },
         {
           "$ref": "#/texts/114"
         },
@@ -575,12 +575,6 @@
         },
         {
           "$ref": "#/texts/152"
-        },
-        {
-          "$ref": "#/texts/153"
-        },
-        {
-          "$ref": "#/texts/154"
         }
       ],
       "content_layer": "body",
@@ -597,7 +591,7 @@
           "$ref": "#/pictures/3"
         },
         {
-          "$ref": "#/texts/157"
+          "$ref": "#/texts/155"
         }
       ],
       "content_layer": "body",
@@ -617,7 +611,7 @@
           "$ref": "#/pictures/5"
         },
         {
-          "$ref": "#/texts/160"
+          "$ref": "#/texts/158"
         }
       ],
       "content_layer": "body",
@@ -637,7 +631,7 @@
           "$ref": "#/pictures/7"
         },
         {
-          "$ref": "#/texts/163"
+          "$ref": "#/texts/161"
         }
       ],
       "content_layer": "body",
@@ -2026,23 +2020,25 @@
       },
       "children": [],
       "content_layer": "body",
-      "label": "text",
-      "prov": [],
-      "orig": "plain",
-      "text": "plain"
-    },
-    {
-      "self_ref": "#/texts/113",
-      "parent": {
-        "$ref": "#/body"
-      },
-      "children": [],
-      "content_layer": "body",
       "label": "section_header",
       "prov": [],
       "orig": "References",
       "text": "References",
       "level": 1
+    },
+    {
+      "self_ref": "#/texts/113",
+      "parent": {
+        "$ref": "#/groups/3"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [],
+      "orig": "[layernorm2016] JimmyLei Ba, JamieRyan Kiros, and GeoffreyE Hinton.\nLayer normalization.\narXiv preprint arXiv:1607.06450, 2016.",
+      "text": "[layernorm2016] JimmyLei Ba, JamieRyan Kiros, and GeoffreyE Hinton.\nLayer normalization.\narXiv preprint arXiv:1607.06450, 2016.",
+      "enumerated": false,
+      "marker": ""
     },
     {
       "self_ref": "#/texts/114",
@@ -2053,8 +2049,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "10",
-      "text": "10",
+      "orig": "[bahdanau2014neural] Dzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio.\nNeural machine translation by jointly learning to align and\n translate.\nCoRR, abs/1409.0473, 2014.",
+      "text": "[bahdanau2014neural] Dzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio.\nNeural machine translation by jointly learning to align and\n translate.\nCoRR, abs/1409.0473, 2014.",
       "enumerated": false,
       "marker": ""
     },
@@ -2067,8 +2063,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "layernorm2016\nJimmyLei Ba, JamieRyan Kiros, and GeoffreyE Hinton.\nLayer normalization.\narXiv preprint arXiv:1607.06450, 2016.",
-      "text": "layernorm2016\nJimmyLei Ba, JamieRyan Kiros, and GeoffreyE Hinton.\nLayer normalization.\narXiv preprint arXiv:1607.06450, 2016.",
+      "orig": "[DBLP:journals/corr/BritzGLL17] Denny Britz, Anna Goldie, Minh-Thang Luong, and QuocV. Le.\nMassive exploration of neural machine translation architectures.\nCoRR, abs/1703.03906, 2017.",
+      "text": "[DBLP:journals/corr/BritzGLL17] Denny Britz, Anna Goldie, Minh-Thang Luong, and QuocV. Le.\nMassive exploration of neural machine translation architectures.\nCoRR, abs/1703.03906, 2017.",
       "enumerated": false,
       "marker": ""
     },
@@ -2081,8 +2077,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "bahdanau2014neural\nDzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio.\nNeural machine translation by jointly learning to align and\n  translate.\nCoRR, abs/1409.0473, 2014.",
-      "text": "bahdanau2014neural\nDzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio.\nNeural machine translation by jointly learning to align and\n  translate.\nCoRR, abs/1409.0473, 2014.",
+      "orig": "[cheng2016long] Jianpeng Cheng, LiDong, and Mirella Lapata.\nLong short-term memory-networks for machine reading.\narXiv preprint arXiv:1601.06733, 2016.",
+      "text": "[cheng2016long] Jianpeng Cheng, LiDong, and Mirella Lapata.\nLong short-term memory-networks for machine reading.\narXiv preprint arXiv:1601.06733, 2016.",
       "enumerated": false,
       "marker": ""
     },
@@ -2095,8 +2091,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "DBLP:journals/corr/BritzGLL17\nDenny Britz, Anna Goldie, Minh-Thang Luong, and QuocV. Le.\nMassive exploration of neural machine translation architectures.\nCoRR, abs/1703.03906, 2017.",
-      "text": "DBLP:journals/corr/BritzGLL17\nDenny Britz, Anna Goldie, Minh-Thang Luong, and QuocV. Le.\nMassive exploration of neural machine translation architectures.\nCoRR, abs/1703.03906, 2017.",
+      "orig": "[cho2014learning] Kyunghyun Cho, Bart van Merrienboer, Caglar Gulcehre, Fethi Bougares, Holger\n Schwenk, and Yoshua Bengio.\nLearning phrase representations using rnn encoder-decoder for\n statistical machine translation.\nCoRR, abs/1406.1078, 2014.",
+      "text": "[cho2014learning] Kyunghyun Cho, Bart van Merrienboer, Caglar Gulcehre, Fethi Bougares, Holger\n Schwenk, and Yoshua Bengio.\nLearning phrase representations using rnn encoder-decoder for\n statistical machine translation.\nCoRR, abs/1406.1078, 2014.",
       "enumerated": false,
       "marker": ""
     },
@@ -2109,8 +2105,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "cheng2016long\nJianpeng Cheng, LiDong, and Mirella Lapata.\nLong short-term memory-networks for machine reading.\narXiv preprint arXiv:1601.06733, 2016.",
-      "text": "cheng2016long\nJianpeng Cheng, LiDong, and Mirella Lapata.\nLong short-term memory-networks for machine reading.\narXiv preprint arXiv:1601.06733, 2016.",
+      "orig": "[xception2016] Francois Chollet.\nXception: Deep learning with depthwise separable convolutions.\narXiv preprint arXiv:1610.02357, 2016.",
+      "text": "[xception2016] Francois Chollet.\nXception: Deep learning with depthwise separable convolutions.\narXiv preprint arXiv:1610.02357, 2016.",
       "enumerated": false,
       "marker": ""
     },
@@ -2123,8 +2119,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "cho2014learning\nKyunghyun Cho, Bart van Merrienboer, Caglar Gulcehre, Fethi Bougares, Holger\n  Schwenk, and Yoshua Bengio.\nLearning phrase representations using rnn encoder-decoder for\n  statistical machine translation.\nCoRR, abs/1406.1078, 2014.",
-      "text": "cho2014learning\nKyunghyun Cho, Bart van Merrienboer, Caglar Gulcehre, Fethi Bougares, Holger\n  Schwenk, and Yoshua Bengio.\nLearning phrase representations using rnn encoder-decoder for\n  statistical machine translation.\nCoRR, abs/1406.1078, 2014.",
+      "orig": "[gruEval14] Junyoung Chung, Caglar Gulcehre, Kyunghyun Cho, and Yoshua\n Bengio.\nEmpirical evaluation of gated recurrent neural networks on sequence\n modeling.\nCoRR, abs/1412.3555, 2014.",
+      "text": "[gruEval14] Junyoung Chung, Caglar Gulcehre, Kyunghyun Cho, and Yoshua\n Bengio.\nEmpirical evaluation of gated recurrent neural networks on sequence\n modeling.\nCoRR, abs/1412.3555, 2014.",
       "enumerated": false,
       "marker": ""
     },
@@ -2137,8 +2133,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "xception2016\nFrancois Chollet.\nXception: Deep learning with depthwise separable convolutions.\narXiv preprint arXiv:1610.02357, 2016.",
-      "text": "xception2016\nFrancois Chollet.\nXception: Deep learning with depthwise separable convolutions.\narXiv preprint arXiv:1610.02357, 2016.",
+      "orig": "[dyer-rnng:16] Chris Dyer, Adhiguna Kuncoro, Miguel Ballesteros, and NoahA. Smith.\nRecurrent neural network grammars.\nIn Proc. of NAACL, 2016.",
+      "text": "[dyer-rnng:16] Chris Dyer, Adhiguna Kuncoro, Miguel Ballesteros, and NoahA. Smith.\nRecurrent neural network grammars.\nIn Proc. of NAACL, 2016.",
       "enumerated": false,
       "marker": ""
     },
@@ -2151,8 +2147,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "gruEval14\nJunyoung Chung, Caglar Gulcehre, Kyunghyun Cho, and Yoshua\n  Bengio.\nEmpirical evaluation of gated recurrent neural networks on sequence\n  modeling.\nCoRR, abs/1412.3555, 2014.",
-      "text": "gruEval14\nJunyoung Chung, Caglar Gulcehre, Kyunghyun Cho, and Yoshua\n  Bengio.\nEmpirical evaluation of gated recurrent neural networks on sequence\n  modeling.\nCoRR, abs/1412.3555, 2014.",
+      "orig": "[JonasFaceNet2017] Jonas Gehring, Michael Auli, David Grangier, Denis Yarats, and YannN. Dauphin.\nConvolutional sequence to sequence learning.\narXiv preprint arXiv:1705.03122v2, 2017.",
+      "text": "[JonasFaceNet2017] Jonas Gehring, Michael Auli, David Grangier, Denis Yarats, and YannN. Dauphin.\nConvolutional sequence to sequence learning.\narXiv preprint arXiv:1705.03122v2, 2017.",
       "enumerated": false,
       "marker": ""
     },
@@ -2165,8 +2161,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "dyer-rnng:16\nChris Dyer, Adhiguna Kuncoro, Miguel Ballesteros, and NoahA. Smith.\nRecurrent neural network grammars.\nIn Proc. of NAACL, 2016.",
-      "text": "dyer-rnng:16\nChris Dyer, Adhiguna Kuncoro, Miguel Ballesteros, and NoahA. Smith.\nRecurrent neural network grammars.\nIn Proc. of NAACL, 2016.",
+      "orig": "[graves2013generating] Alex Graves.\nGenerating sequences with recurrent neural networks.\narXiv preprint arXiv:1308.0850, 2013.",
+      "text": "[graves2013generating] Alex Graves.\nGenerating sequences with recurrent neural networks.\narXiv preprint arXiv:1308.0850, 2013.",
       "enumerated": false,
       "marker": ""
     },
@@ -2179,8 +2175,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "JonasFaceNet2017\nJonas Gehring, Michael Auli, David Grangier, Denis Yarats, and YannN. Dauphin.\nConvolutional sequence to sequence learning.\narXiv preprint arXiv:1705.03122v2, 2017.",
-      "text": "JonasFaceNet2017\nJonas Gehring, Michael Auli, David Grangier, Denis Yarats, and YannN. Dauphin.\nConvolutional sequence to sequence learning.\narXiv preprint arXiv:1705.03122v2, 2017.",
+      "orig": "[he2016deep] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.\nDeep residual learning for image recognition.\nIn Proceedings of the IEEE Conference on Computer Vision and\n Pattern Recognition, pages 770778, 2016.",
+      "text": "[he2016deep] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.\nDeep residual learning for image recognition.\nIn Proceedings of the IEEE Conference on Computer Vision and\n Pattern Recognition, pages 770778, 2016.",
       "enumerated": false,
       "marker": ""
     },
@@ -2193,8 +2189,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "graves2013generating\nAlex Graves.\nGenerating sequences with recurrent neural networks.\narXiv preprint arXiv:1308.0850, 2013.",
-      "text": "graves2013generating\nAlex Graves.\nGenerating sequences with recurrent neural networks.\narXiv preprint arXiv:1308.0850, 2013.",
+      "orig": "[hochreiter2001gradient] Sepp Hochreiter, Yoshua Bengio, Paolo Frasconi, and Jurgen Schmidhuber.\nGradient flow in recurrent nets: the difficulty of learning long-term\n dependencies, 2001.",
+      "text": "[hochreiter2001gradient] Sepp Hochreiter, Yoshua Bengio, Paolo Frasconi, and Jurgen Schmidhuber.\nGradient flow in recurrent nets: the difficulty of learning long-term\n dependencies, 2001.",
       "enumerated": false,
       "marker": ""
     },
@@ -2207,8 +2203,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "he2016deep\nKaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.\nDeep residual learning for image recognition.\nIn Proceedings of the IEEE Conference on Computer Vision and\n Pattern Recognition, pages 770778, 2016.",
-      "text": "he2016deep\nKaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.\nDeep residual learning for image recognition.\nIn Proceedings of the IEEE Conference on Computer Vision and\n Pattern Recognition, pages 770778, 2016.",
+      "orig": "[hochreiter1997] Sepp Hochreiter and Jurgen Schmidhuber.\nLong short-term memory.\nNeural computation, 9(8):17351780, 1997.",
+      "text": "[hochreiter1997] Sepp Hochreiter and Jurgen Schmidhuber.\nLong short-term memory.\nNeural computation, 9(8):17351780, 1997.",
       "enumerated": false,
       "marker": ""
     },
@@ -2221,8 +2217,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "hochreiter2001gradient\nSepp Hochreiter, Yoshua Bengio, Paolo Frasconi, and Jurgen Schmidhuber.\nGradient flow in recurrent nets: the difficulty of learning long-term\n  dependencies, 2001.",
-      "text": "hochreiter2001gradient\nSepp Hochreiter, Yoshua Bengio, Paolo Frasconi, and Jurgen Schmidhuber.\nGradient flow in recurrent nets: the difficulty of learning long-term\n  dependencies, 2001.",
+      "orig": "[huang-harper:2009:EMNLP] Zhongqiang Huang and Mary Harper.\nSelf-training PCFG grammars with latent annotations across\n languages.\nIn Proceedings of the 2009 Conference on Empirical Methods in\n Natural Language Processing, pages 832841. ACL, August 2009.",
+      "text": "[huang-harper:2009:EMNLP] Zhongqiang Huang and Mary Harper.\nSelf-training PCFG grammars with latent annotations across\n languages.\nIn Proceedings of the 2009 Conference on Empirical Methods in\n Natural Language Processing, pages 832841. ACL, August 2009.",
       "enumerated": false,
       "marker": ""
     },
@@ -2235,8 +2231,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "hochreiter1997\nSepp Hochreiter and Jurgen Schmidhuber.\nLong short-term memory.\nNeural computation, 9(8):17351780, 1997.",
-      "text": "hochreiter1997\nSepp Hochreiter and Jurgen Schmidhuber.\nLong short-term memory.\nNeural computation, 9(8):17351780, 1997.",
+      "orig": "[jozefowicz2016exploring] Rafal Jozefowicz, Oriol Vinyals, Mike Schuster, Noam Shazeer, and Yonghui Wu.\nExploring the limits of language modeling.\narXiv preprint arXiv:1602.02410, 2016.",
+      "text": "[jozefowicz2016exploring] Rafal Jozefowicz, Oriol Vinyals, Mike Schuster, Noam Shazeer, and Yonghui Wu.\nExploring the limits of language modeling.\narXiv preprint arXiv:1602.02410, 2016.",
       "enumerated": false,
       "marker": ""
     },
@@ -2249,8 +2245,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "huang-harper:2009:EMNLP\nZhongqiang Huang and Mary Harper.\nSelf-training PCFG grammars with latent annotations across\n  languages.\nIn Proceedings of the 2009 Conference on Empirical Methods in\n Natural Language Processing, pages 832841. ACL, August 2009.",
-      "text": "huang-harper:2009:EMNLP\nZhongqiang Huang and Mary Harper.\nSelf-training PCFG grammars with latent annotations across\n  languages.\nIn Proceedings of the 2009 Conference on Empirical Methods in\n Natural Language Processing, pages 832841. ACL, August 2009.",
+      "orig": "[extendedngpu] ukasz Kaiser and Samy Bengio.\nCan active memory replace attention?\nIn Advances in Neural Information Processing Systems, (NIPS),\n 2016.",
+      "text": "[extendedngpu] ukasz Kaiser and Samy Bengio.\nCan active memory replace attention?\nIn Advances in Neural Information Processing Systems, (NIPS),\n 2016.",
       "enumerated": false,
       "marker": ""
     },
@@ -2263,8 +2259,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "jozefowicz2016exploring\nRafal Jozefowicz, Oriol Vinyals, Mike Schuster, Noam Shazeer, and Yonghui Wu.\nExploring the limits of language modeling.\narXiv preprint arXiv:1602.02410, 2016.",
-      "text": "jozefowicz2016exploring\nRafal Jozefowicz, Oriol Vinyals, Mike Schuster, Noam Shazeer, and Yonghui Wu.\nExploring the limits of language modeling.\narXiv preprint arXiv:1602.02410, 2016.",
+      "orig": "[neural_gpu] ukasz Kaiser and Ilya Sutskever.\nNeural GPUs learn algorithms.\nIn International Conference on Learning Representations\n (ICLR), 2016.",
+      "text": "[neural_gpu] ukasz Kaiser and Ilya Sutskever.\nNeural GPUs learn algorithms.\nIn International Conference on Learning Representations\n (ICLR), 2016.",
       "enumerated": false,
       "marker": ""
     },
@@ -2277,8 +2273,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "extendedngpu\nukasz Kaiser and Samy Bengio.\nCan active memory replace attention?\nIn Advances in Neural Information Processing Systems, (NIPS),\n  2016.",
-      "text": "extendedngpu\nukasz Kaiser and Samy Bengio.\nCan active memory replace attention?\nIn Advances in Neural Information Processing Systems, (NIPS),\n  2016.",
+      "orig": "[NalBytenet2017] Nal Kalchbrenner, Lasse Espeholt, Karen Simonyan, Aaron vanden Oord, Alex\n Graves, and Koray Kavukcuoglu.\nNeural machine translation in linear time.\narXiv preprint arXiv:1610.10099v2, 2017.",
+      "text": "[NalBytenet2017] Nal Kalchbrenner, Lasse Espeholt, Karen Simonyan, Aaron vanden Oord, Alex\n Graves, and Koray Kavukcuoglu.\nNeural machine translation in linear time.\narXiv preprint arXiv:1610.10099v2, 2017.",
       "enumerated": false,
       "marker": ""
     },
@@ -2291,8 +2287,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "neural_gpu\nukasz Kaiser and Ilya Sutskever.\nNeural GPUs learn algorithms.\nIn International Conference on Learning Representations\n (ICLR), 2016.",
-      "text": "neural_gpu\nukasz Kaiser and Ilya Sutskever.\nNeural GPUs learn algorithms.\nIn International Conference on Learning Representations\n (ICLR), 2016.",
+      "orig": "[structuredAttentionNetworks] Yoon Kim, Carl Denton, Luong Hoang, and AlexanderM. Rush.\nStructured attention networks.\nIn International Conference on Learning Representations, 2017.",
+      "text": "[structuredAttentionNetworks] Yoon Kim, Carl Denton, Luong Hoang, and AlexanderM. Rush.\nStructured attention networks.\nIn International Conference on Learning Representations, 2017.",
       "enumerated": false,
       "marker": ""
     },
@@ -2305,8 +2301,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "NalBytenet2017\nNal Kalchbrenner, Lasse Espeholt, Karen Simonyan, Aaron vanden Oord, Alex\n  Graves, and Koray Kavukcuoglu.\nNeural machine translation in linear time.\narXiv preprint arXiv:1610.10099v2, 2017.",
-      "text": "NalBytenet2017\nNal Kalchbrenner, Lasse Espeholt, Karen Simonyan, Aaron vanden Oord, Alex\n  Graves, and Koray Kavukcuoglu.\nNeural machine translation in linear time.\narXiv preprint arXiv:1610.10099v2, 2017.",
+      "orig": "[kingma2014adam] Diederik Kingma and Jimmy Ba.\nAdam: A method for stochastic optimization.\nIn ICLR, 2015.",
+      "text": "[kingma2014adam] Diederik Kingma and Jimmy Ba.\nAdam: A method for stochastic optimization.\nIn ICLR, 2015.",
       "enumerated": false,
       "marker": ""
     },
@@ -2319,8 +2315,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "structuredAttentionNetworks\nYoon Kim, Carl Denton, Luong Hoang, and AlexanderM. Rush.\nStructured attention networks.\nIn International Conference on Learning Representations, 2017.",
-      "text": "structuredAttentionNetworks\nYoon Kim, Carl Denton, Luong Hoang, and AlexanderM. Rush.\nStructured attention networks.\nIn International Conference on Learning Representations, 2017.",
+      "orig": "[Kuchaiev2017Factorization] Oleksii Kuchaiev and Boris Ginsburg.\nFactorization tricks for LSTM networks.\narXiv preprint arXiv:1703.10722, 2017.",
+      "text": "[Kuchaiev2017Factorization] Oleksii Kuchaiev and Boris Ginsburg.\nFactorization tricks for LSTM networks.\narXiv preprint arXiv:1703.10722, 2017.",
       "enumerated": false,
       "marker": ""
     },
@@ -2333,8 +2329,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "kingma2014adam\nDiederik Kingma and Jimmy Ba.\nAdam: A method for stochastic optimization.\nIn ICLR, 2015.",
-      "text": "kingma2014adam\nDiederik Kingma and Jimmy Ba.\nAdam: A method for stochastic optimization.\nIn ICLR, 2015.",
+      "orig": "[lin2017structured] Zhouhan Lin, Minwei Feng, Cicero Nogueirados Santos, MoYu, Bing Xiang, Bowen\n Zhou, and Yoshua Bengio.\nA structured self-attentive sentence embedding.\narXiv preprint arXiv:1703.03130, 2017.",
+      "text": "[lin2017structured] Zhouhan Lin, Minwei Feng, Cicero Nogueirados Santos, MoYu, Bing Xiang, Bowen\n Zhou, and Yoshua Bengio.\nA structured self-attentive sentence embedding.\narXiv preprint arXiv:1703.03130, 2017.",
       "enumerated": false,
       "marker": ""
     },
@@ -2347,8 +2343,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "Kuchaiev2017Factorization\nOleksii Kuchaiev and Boris Ginsburg.\nFactorization tricks for LSTM networks.\narXiv preprint arXiv:1703.10722, 2017.",
-      "text": "Kuchaiev2017Factorization\nOleksii Kuchaiev and Boris Ginsburg.\nFactorization tricks for LSTM networks.\narXiv preprint arXiv:1703.10722, 2017.",
+      "orig": "[multiseq2seq] Minh-Thang Luong, QuocV. Le, Ilya Sutskever, Oriol Vinyals, and Lukasz Kaiser.\nMulti-task sequence to sequence learning.\narXiv preprint arXiv:1511.06114, 2015.",
+      "text": "[multiseq2seq] Minh-Thang Luong, QuocV. Le, Ilya Sutskever, Oriol Vinyals, and Lukasz Kaiser.\nMulti-task sequence to sequence learning.\narXiv preprint arXiv:1511.06114, 2015.",
       "enumerated": false,
       "marker": ""
     },
@@ -2361,8 +2357,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "lin2017structured\nZhouhan Lin, Minwei Feng, Cicero Nogueirados Santos, MoYu, Bing Xiang, Bowen\n  Zhou, and Yoshua Bengio.\nA structured self-attentive sentence embedding.\narXiv preprint arXiv:1703.03130, 2017.",
-      "text": "lin2017structured\nZhouhan Lin, Minwei Feng, Cicero Nogueirados Santos, MoYu, Bing Xiang, Bowen\n  Zhou, and Yoshua Bengio.\nA structured self-attentive sentence embedding.\narXiv preprint arXiv:1703.03130, 2017.",
+      "orig": "[luong2015effective] Minh-Thang Luong, Hieu Pham, and ChristopherD Manning.\nEffective approaches to attention-based neural machine translation.\narXiv preprint arXiv:1508.04025, 2015.",
+      "text": "[luong2015effective] Minh-Thang Luong, Hieu Pham, and ChristopherD Manning.\nEffective approaches to attention-based neural machine translation.\narXiv preprint arXiv:1508.04025, 2015.",
       "enumerated": false,
       "marker": ""
     },
@@ -2375,8 +2371,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "multiseq2seq\nMinh-Thang Luong, QuocV. Le, Ilya Sutskever, Oriol Vinyals, and Lukasz Kaiser.\nMulti-task sequence to sequence learning.\narXiv preprint arXiv:1511.06114, 2015.",
-      "text": "multiseq2seq\nMinh-Thang Luong, QuocV. Le, Ilya Sutskever, Oriol Vinyals, and Lukasz Kaiser.\nMulti-task sequence to sequence learning.\narXiv preprint arXiv:1511.06114, 2015.",
+      "orig": "[marcus1993building] MitchellP Marcus, MaryAnn Marcinkiewicz, and Beatrice Santorini.\nBuilding a large annotated corpus of english: The penn treebank.\nComputational linguistics, 19(2):313330, 1993.",
+      "text": "[marcus1993building] MitchellP Marcus, MaryAnn Marcinkiewicz, and Beatrice Santorini.\nBuilding a large annotated corpus of english: The penn treebank.\nComputational linguistics, 19(2):313330, 1993.",
       "enumerated": false,
       "marker": ""
     },
@@ -2389,8 +2385,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "luong2015effective\nMinh-Thang Luong, Hieu Pham, and ChristopherD Manning.\nEffective approaches to attention-based neural machine translation.\narXiv preprint arXiv:1508.04025, 2015.",
-      "text": "luong2015effective\nMinh-Thang Luong, Hieu Pham, and ChristopherD Manning.\nEffective approaches to attention-based neural machine translation.\narXiv preprint arXiv:1508.04025, 2015.",
+      "orig": "[mcclosky-etAl:2006:NAACL] David McClosky, Eugene Charniak, and Mark Johnson.\nEffective self-training for parsing.\nIn Proceedings of the Human Language Technology Conference of\n the NAACL, Main Conference, pages 152159. ACL, June 2006.",
+      "text": "[mcclosky-etAl:2006:NAACL] David McClosky, Eugene Charniak, and Mark Johnson.\nEffective self-training for parsing.\nIn Proceedings of the Human Language Technology Conference of\n the NAACL, Main Conference, pages 152159. ACL, June 2006.",
       "enumerated": false,
       "marker": ""
     },
@@ -2403,8 +2399,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "marcus1993building\nMitchellP Marcus, MaryAnn Marcinkiewicz, and Beatrice Santorini.\nBuilding a large annotated corpus of english: The penn treebank.\nComputational linguistics, 19(2):313330, 1993.",
-      "text": "marcus1993building\nMitchellP Marcus, MaryAnn Marcinkiewicz, and Beatrice Santorini.\nBuilding a large annotated corpus of english: The penn treebank.\nComputational linguistics, 19(2):313330, 1993.",
+      "orig": "[decomposableAttnModel] Ankur Parikh, Oscar Täckström, Dipanjan Das, and Jakob Uszkoreit.\nA decomposable attention model.\nIn Empirical Methods in Natural Language Processing, 2016.",
+      "text": "[decomposableAttnModel] Ankur Parikh, Oscar Täckström, Dipanjan Das, and Jakob Uszkoreit.\nA decomposable attention model.\nIn Empirical Methods in Natural Language Processing, 2016.",
       "enumerated": false,
       "marker": ""
     },
@@ -2417,8 +2413,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "mcclosky-etAl:2006:NAACL\nDavid McClosky, Eugene Charniak, and Mark Johnson.\nEffective self-training for parsing.\nIn Proceedings of the Human Language Technology Conference of\n the NAACL, Main Conference, pages 152159. ACL, June 2006.",
-      "text": "mcclosky-etAl:2006:NAACL\nDavid McClosky, Eugene Charniak, and Mark Johnson.\nEffective self-training for parsing.\nIn Proceedings of the Human Language Technology Conference of\n the NAACL, Main Conference, pages 152159. ACL, June 2006.",
+      "orig": "[paulus2017deep] Romain Paulus, Caiming Xiong, and Richard Socher.\nA deep reinforced model for abstractive summarization.\narXiv preprint arXiv:1705.04304, 2017.",
+      "text": "[paulus2017deep] Romain Paulus, Caiming Xiong, and Richard Socher.\nA deep reinforced model for abstractive summarization.\narXiv preprint arXiv:1705.04304, 2017.",
       "enumerated": false,
       "marker": ""
     },
@@ -2431,8 +2427,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "decomposableAttnModel\nAnkur Parikh, Oscar Täckström, Dipanjan Das, and Jakob Uszkoreit.\nA decomposable attention model.\nIn Empirical Methods in Natural Language Processing, 2016.",
-      "text": "decomposableAttnModel\nAnkur Parikh, Oscar Täckström, Dipanjan Das, and Jakob Uszkoreit.\nA decomposable attention model.\nIn Empirical Methods in Natural Language Processing, 2016.",
+      "orig": "[petrov-EtAl:2006:ACL] Slav Petrov, Leon Barrett, Romain Thibaux, and Dan Klein.\nLearning accurate, compact, and interpretable tree annotation.\nIn Proceedings of the 21st International Conference on\n Computational Linguistics and 44th Annual Meeting of the ACL, pages\n 433440. ACL, July 2006.",
+      "text": "[petrov-EtAl:2006:ACL] Slav Petrov, Leon Barrett, Romain Thibaux, and Dan Klein.\nLearning accurate, compact, and interpretable tree annotation.\nIn Proceedings of the 21st International Conference on\n Computational Linguistics and 44th Annual Meeting of the ACL, pages\n 433440. ACL, July 2006.",
       "enumerated": false,
       "marker": ""
     },
@@ -2445,8 +2441,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "paulus2017deep\nRomain Paulus, Caiming Xiong, and Richard Socher.\nA deep reinforced model for abstractive summarization.\narXiv preprint arXiv:1705.04304, 2017.",
-      "text": "paulus2017deep\nRomain Paulus, Caiming Xiong, and Richard Socher.\nA deep reinforced model for abstractive summarization.\narXiv preprint arXiv:1705.04304, 2017.",
+      "orig": "[press2016using] Ofir Press and Lior Wolf.\nUsing the output embedding to improve language models.\narXiv preprint arXiv:1608.05859, 2016.",
+      "text": "[press2016using] Ofir Press and Lior Wolf.\nUsing the output embedding to improve language models.\narXiv preprint arXiv:1608.05859, 2016.",
       "enumerated": false,
       "marker": ""
     },
@@ -2459,8 +2455,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "petrov-EtAl:2006:ACL\nSlav Petrov, Leon Barrett, Romain Thibaux, and Dan Klein.\nLearning accurate, compact, and interpretable tree annotation.\nIn Proceedings of the 21st International Conference on\n Computational Linguistics and 44th Annual Meeting of the ACL, pages\n  433440. ACL, July 2006.",
-      "text": "petrov-EtAl:2006:ACL\nSlav Petrov, Leon Barrett, Romain Thibaux, and Dan Klein.\nLearning accurate, compact, and interpretable tree annotation.\nIn Proceedings of the 21st International Conference on\n Computational Linguistics and 44th Annual Meeting of the ACL, pages\n  433440. ACL, July 2006.",
+      "orig": "[sennrich2015neural] Rico Sennrich, Barry Haddow, and Alexandra Birch.\nNeural machine translation of rare words with subword units.\narXiv preprint arXiv:1508.07909, 2015.",
+      "text": "[sennrich2015neural] Rico Sennrich, Barry Haddow, and Alexandra Birch.\nNeural machine translation of rare words with subword units.\narXiv preprint arXiv:1508.07909, 2015.",
       "enumerated": false,
       "marker": ""
     },
@@ -2473,8 +2469,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "press2016using\nOfir Press and Lior Wolf.\nUsing the output embedding to improve language models.\narXiv preprint arXiv:1608.05859, 2016.",
-      "text": "press2016using\nOfir Press and Lior Wolf.\nUsing the output embedding to improve language models.\narXiv preprint arXiv:1608.05859, 2016.",
+      "orig": "[shazeer2017outrageously] Noam Shazeer, Azalia Mirhoseini, Krzysztof Maziarz, Andy Davis, Quoc Le,\n Geoffrey Hinton, and Jeff Dean.\nOutrageously large neural networks: The sparsely-gated\n mixture-of-experts layer.\narXiv preprint arXiv:1701.06538, 2017.",
+      "text": "[shazeer2017outrageously] Noam Shazeer, Azalia Mirhoseini, Krzysztof Maziarz, Andy Davis, Quoc Le,\n Geoffrey Hinton, and Jeff Dean.\nOutrageously large neural networks: The sparsely-gated\n mixture-of-experts layer.\narXiv preprint arXiv:1701.06538, 2017.",
       "enumerated": false,
       "marker": ""
     },
@@ -2487,8 +2483,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "sennrich2015neural\nRico Sennrich, Barry Haddow, and Alexandra Birch.\nNeural machine translation of rare words with subword units.\narXiv preprint arXiv:1508.07909, 2015.",
-      "text": "sennrich2015neural\nRico Sennrich, Barry Haddow, and Alexandra Birch.\nNeural machine translation of rare words with subword units.\narXiv preprint arXiv:1508.07909, 2015.",
+      "orig": "[srivastava2014dropout] Nitish Srivastava, GeoffreyE Hinton, Alex Krizhevsky, Ilya Sutskever, and\n Ruslan Salakhutdinov.\nDropout: a simple way to prevent neural networks from overfitting.\nJournal of Machine Learning Research, 15(1):19291958, 2014.",
+      "text": "[srivastava2014dropout] Nitish Srivastava, GeoffreyE Hinton, Alex Krizhevsky, Ilya Sutskever, and\n Ruslan Salakhutdinov.\nDropout: a simple way to prevent neural networks from overfitting.\nJournal of Machine Learning Research, 15(1):19291958, 2014.",
       "enumerated": false,
       "marker": ""
     },
@@ -2501,8 +2497,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "shazeer2017outrageously\nNoam Shazeer, Azalia Mirhoseini, Krzysztof Maziarz, Andy Davis, Quoc Le,\n  Geoffrey Hinton, and Jeff Dean.\nOutrageously large neural networks: The sparsely-gated\n  mixture-of-experts layer.\narXiv preprint arXiv:1701.06538, 2017.",
-      "text": "shazeer2017outrageously\nNoam Shazeer, Azalia Mirhoseini, Krzysztof Maziarz, Andy Davis, Quoc Le,\n  Geoffrey Hinton, and Jeff Dean.\nOutrageously large neural networks: The sparsely-gated\n  mixture-of-experts layer.\narXiv preprint arXiv:1701.06538, 2017.",
+      "orig": "[sukhbaatar2015] Sainbayar Sukhbaatar, Arthur Szlam, Jason Weston, and Rob Fergus.\nEnd-to-end memory networks.\nIn C.Cortes, N.D. Lawrence, D.D. Lee, M.Sugiyama, and R.Garnett,\n editors, Advances in Neural Information Processing Systems 28, pages\n 24402448. Curran Associates, Inc., 2015.",
+      "text": "[sukhbaatar2015] Sainbayar Sukhbaatar, Arthur Szlam, Jason Weston, and Rob Fergus.\nEnd-to-end memory networks.\nIn C.Cortes, N.D. Lawrence, D.D. Lee, M.Sugiyama, and R.Garnett,\n editors, Advances in Neural Information Processing Systems 28, pages\n 24402448. Curran Associates, Inc., 2015.",
       "enumerated": false,
       "marker": ""
     },
@@ -2515,8 +2511,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "srivastava2014dropout\nNitish Srivastava, GeoffreyE Hinton, Alex Krizhevsky, Ilya Sutskever, and\n  Ruslan Salakhutdinov.\nDropout: a simple way to prevent neural networks from overfitting.\nJournal of Machine Learning Research, 15(1):19291958, 2014.",
-      "text": "srivastava2014dropout\nNitish Srivastava, GeoffreyE Hinton, Alex Krizhevsky, Ilya Sutskever, and\n  Ruslan Salakhutdinov.\nDropout: a simple way to prevent neural networks from overfitting.\nJournal of Machine Learning Research, 15(1):19291958, 2014.",
+      "orig": "[sutskever14] Ilya Sutskever, Oriol Vinyals, and QuocVV Le.\nSequence to sequence learning with neural networks.\nIn Advances in Neural Information Processing Systems, pages\n 31043112, 2014.",
+      "text": "[sutskever14] Ilya Sutskever, Oriol Vinyals, and QuocVV Le.\nSequence to sequence learning with neural networks.\nIn Advances in Neural Information Processing Systems, pages\n 31043112, 2014.",
       "enumerated": false,
       "marker": ""
     },
@@ -2529,8 +2525,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "sukhbaatar2015\nSainbayar Sukhbaatar, Arthur Szlam, Jason Weston, and Rob Fergus.\nEnd-to-end memory networks.\nIn C.Cortes, N.D. Lawrence, D.D. Lee, M.Sugiyama, and R.Garnett,\n  editors, Advances in Neural Information Processing Systems 28, pages\n  24402448. Curran Associates, Inc., 2015.",
-      "text": "sukhbaatar2015\nSainbayar Sukhbaatar, Arthur Szlam, Jason Weston, and Rob Fergus.\nEnd-to-end memory networks.\nIn C.Cortes, N.D. Lawrence, D.D. Lee, M.Sugiyama, and R.Garnett,\n  editors, Advances in Neural Information Processing Systems 28, pages\n  24402448. Curran Associates, Inc., 2015.",
+      "orig": "[DBLP:journals/corr/SzegedyVISW15] Christian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jonathon Shlens, and\n Zbigniew Wojna.\nRethinking the inception architecture for computer vision.\nCoRR, abs/1512.00567, 2015.",
+      "text": "[DBLP:journals/corr/SzegedyVISW15] Christian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jonathon Shlens, and\n Zbigniew Wojna.\nRethinking the inception architecture for computer vision.\nCoRR, abs/1512.00567, 2015.",
       "enumerated": false,
       "marker": ""
     },
@@ -2543,8 +2539,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "sutskever14\nIlya Sutskever, Oriol Vinyals, and QuocVV Le.\nSequence to sequence learning with neural networks.\nIn Advances in Neural Information Processing Systems, pages\n  31043112, 2014.",
-      "text": "sutskever14\nIlya Sutskever, Oriol Vinyals, and QuocVV Le.\nSequence to sequence learning with neural networks.\nIn Advances in Neural Information Processing Systems, pages\n  31043112, 2014.",
+      "orig": "[KVparse15] Vinyals & Kaiser, Koo, Petrov, Sutskever, and Hinton.\nGrammar as a foreign language.\nIn Advances in Neural Information Processing Systems, 2015.",
+      "text": "[KVparse15] Vinyals & Kaiser, Koo, Petrov, Sutskever, and Hinton.\nGrammar as a foreign language.\nIn Advances in Neural Information Processing Systems, 2015.",
       "enumerated": false,
       "marker": ""
     },
@@ -2557,8 +2553,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "DBLP:journals/corr/SzegedyVISW15\nChristian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jonathon Shlens, and\n  Zbigniew Wojna.\nRethinking the inception architecture for computer vision.\nCoRR, abs/1512.00567, 2015.",
-      "text": "DBLP:journals/corr/SzegedyVISW15\nChristian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jonathon Shlens, and\n  Zbigniew Wojna.\nRethinking the inception architecture for computer vision.\nCoRR, abs/1512.00567, 2015.",
+      "orig": "[wu2016google] Yonghui Wu, Mike Schuster, Zhifeng Chen, QuocV Le, Mohammad Norouzi, Wolfgang\n Macherey, Maxim Krikun, Yuan Cao, Qin Gao, Klaus Macherey, etal.\nGoogle's neural machine translation system: Bridging the gap between\n human and machine translation.\narXiv preprint arXiv:1609.08144, 2016.",
+      "text": "[wu2016google] Yonghui Wu, Mike Schuster, Zhifeng Chen, QuocV Le, Mohammad Norouzi, Wolfgang\n Macherey, Maxim Krikun, Yuan Cao, Qin Gao, Klaus Macherey, etal.\nGoogle's neural machine translation system: Bridging the gap between\n human and machine translation.\narXiv preprint arXiv:1609.08144, 2016.",
       "enumerated": false,
       "marker": ""
     },
@@ -2571,8 +2567,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "KVparse15\nVinyals & Kaiser, Koo, Petrov, Sutskever, and Hinton.\nGrammar as a foreign language.\nIn Advances in Neural Information Processing Systems, 2015.",
-      "text": "KVparse15\nVinyals & Kaiser, Koo, Petrov, Sutskever, and Hinton.\nGrammar as a foreign language.\nIn Advances in Neural Information Processing Systems, 2015.",
+      "orig": "[DBLP:journals/corr/ZhouCWLX16] Jie Zhou, Ying Cao, Xuguang Wang, Peng Li, and Wei Xu.\nDeep recurrent models with fast-forward connections for neural\n machine translation.\nCoRR, abs/1606.04199, 2016.",
+      "text": "[DBLP:journals/corr/ZhouCWLX16] Jie Zhou, Ying Cao, Xuguang Wang, Peng Li, and Wei Xu.\nDeep recurrent models with fast-forward connections for neural\n machine translation.\nCoRR, abs/1606.04199, 2016.",
       "enumerated": false,
       "marker": ""
     },
@@ -2585,41 +2581,13 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "wu2016google\nYonghui Wu, Mike Schuster, Zhifeng Chen, QuocV Le, Mohammad Norouzi, Wolfgang\n  Macherey, Maxim Krikun, Yuan Cao, Qin Gao, Klaus Macherey, etal.\nGoogle's neural machine translation system: Bridging the gap between\n  human and machine translation.\narXiv preprint arXiv:1609.08144, 2016.",
-      "text": "wu2016google\nYonghui Wu, Mike Schuster, Zhifeng Chen, QuocV Le, Mohammad Norouzi, Wolfgang\n  Macherey, Maxim Krikun, Yuan Cao, Qin Gao, Klaus Macherey, etal.\nGoogle's neural machine translation system: Bridging the gap between\n  human and machine translation.\narXiv preprint arXiv:1609.08144, 2016.",
+      "orig": "[zhu-EtAl:2013:ACL] Muhua Zhu, Yue Zhang, Wenliang Chen, Min Zhang, and Jingbo Zhu.\nFast and accurate shift-reduce constituent parsing.\nIn Proceedings of the 51st Annual Meeting of the ACL (Volume 1:\n Long Papers), pages 434443. ACL, August 2013.",
+      "text": "[zhu-EtAl:2013:ACL] Muhua Zhu, Yue Zhang, Wenliang Chen, Min Zhang, and Jingbo Zhu.\nFast and accurate shift-reduce constituent parsing.\nIn Proceedings of the 51st Annual Meeting of the ACL (Volume 1:\n Long Papers), pages 434443. ACL, August 2013.",
       "enumerated": false,
       "marker": ""
     },
     {
       "self_ref": "#/texts/153",
-      "parent": {
-        "$ref": "#/groups/3"
-      },
-      "children": [],
-      "content_layer": "body",
-      "label": "list_item",
-      "prov": [],
-      "orig": "DBLP:journals/corr/ZhouCWLX16\nJie Zhou, Ying Cao, Xuguang Wang, Peng Li, and Wei Xu.\nDeep recurrent models with fast-forward connections for neural\n  machine translation.\nCoRR, abs/1606.04199, 2016.",
-      "text": "DBLP:journals/corr/ZhouCWLX16\nJie Zhou, Ying Cao, Xuguang Wang, Peng Li, and Wei Xu.\nDeep recurrent models with fast-forward connections for neural\n  machine translation.\nCoRR, abs/1606.04199, 2016.",
-      "enumerated": false,
-      "marker": ""
-    },
-    {
-      "self_ref": "#/texts/154",
-      "parent": {
-        "$ref": "#/groups/3"
-      },
-      "children": [],
-      "content_layer": "body",
-      "label": "list_item",
-      "prov": [],
-      "orig": "zhu-EtAl:2013:ACL\nMuhua Zhu, Yue Zhang, Wenliang Chen, Min Zhang, and Jingbo Zhu.\nFast and accurate shift-reduce constituent parsing.\nIn Proceedings of the 51st Annual Meeting of the ACL (Volume 1:\n Long Papers), pages 434443. ACL, August 2013.",
-      "text": "zhu-EtAl:2013:ACL\nMuhua Zhu, Yue Zhang, Wenliang Chen, Min Zhang, and Jingbo Zhu.\nFast and accurate shift-reduce constituent parsing.\nIn Proceedings of the 51st Annual Meeting of the ACL (Volume 1:\n Long Papers), pages 434443. ACL, August 2013.",
-      "enumerated": false,
-      "marker": ""
-    },
-    {
-      "self_ref": "#/texts/155",
       "parent": {
         "$ref": "#/body"
       },
@@ -2632,7 +2600,7 @@
       "level": 1
     },
     {
-      "self_ref": "#/texts/156",
+      "self_ref": "#/texts/154",
       "parent": {
         "$ref": "#/body"
       },
@@ -2644,7 +2612,7 @@
       "text": "Image: ./vis/making_more_difficult5_new.pdf"
     },
     {
-      "self_ref": "#/texts/157",
+      "self_ref": "#/texts/155",
       "parent": {
         "$ref": "#/groups/4"
       },
@@ -2656,7 +2624,7 @@
       "text": "An example of the attention mechanism following long-distance dependencies in the encoder self-attention in layer 5 of 6. Many of the attention heads attend to a distant dependency of the verb `making', completing the phrase `making...more difficult'. Attentions here shown only for the word `making'. Different colors represent different heads. Best viewed in color."
     },
     {
-      "self_ref": "#/texts/158",
+      "self_ref": "#/texts/156",
       "parent": {
         "$ref": "#/body"
       },
@@ -2668,7 +2636,7 @@
       "text": "Image: ./vis/anaphora_resolution_new.pdf"
     },
     {
-      "self_ref": "#/texts/159",
+      "self_ref": "#/texts/157",
       "parent": {
         "$ref": "#/body"
       },
@@ -2680,7 +2648,7 @@
       "text": "Image: ./vis/anaphora_resolution2_new.pdf"
     },
     {
-      "self_ref": "#/texts/160",
+      "self_ref": "#/texts/158",
       "parent": {
         "$ref": "#/groups/5"
       },
@@ -2692,7 +2660,7 @@
       "text": "Two attention heads, also in layer 5 of 6, apparently involved in anaphora resolution. Top: Full attentions for head 5. Bottom: Isolated attentions from just the word `its' for attention heads 5 and 6. Note that the attentions are very sharp for this word."
     },
     {
-      "self_ref": "#/texts/161",
+      "self_ref": "#/texts/159",
       "parent": {
         "$ref": "#/body"
       },
@@ -2704,7 +2672,7 @@
       "text": "Image: ./vis/attending_to_head_new.pdf"
     },
     {
-      "self_ref": "#/texts/162",
+      "self_ref": "#/texts/160",
       "parent": {
         "$ref": "#/body"
       },
@@ -2716,7 +2684,7 @@
       "text": "Image: ./vis/attending_to_head2_new.pdf"
     },
     {
-      "self_ref": "#/texts/163",
+      "self_ref": "#/texts/161",
       "parent": {
         "$ref": "#/groups/6"
       },
@@ -2794,7 +2762,7 @@
       "prov": [],
       "captions": [
         {
-          "$ref": "#/texts/156"
+          "$ref": "#/texts/154"
         }
       ],
       "references": [],
@@ -2821,7 +2789,7 @@
       "prov": [],
       "captions": [
         {
-          "$ref": "#/texts/158"
+          "$ref": "#/texts/156"
         }
       ],
       "references": [],
@@ -2848,7 +2816,7 @@
       "prov": [],
       "captions": [
         {
-          "$ref": "#/texts/159"
+          "$ref": "#/texts/157"
         }
       ],
       "references": [],
@@ -2875,7 +2843,7 @@
       "prov": [],
       "captions": [
         {
-          "$ref": "#/texts/161"
+          "$ref": "#/texts/159"
         }
       ],
       "references": [],
@@ -2902,7 +2870,7 @@
       "prov": [],
       "captions": [
         {
-          "$ref": "#/texts/162"
+          "$ref": "#/texts/160"
         }
       ],
       "references": [],

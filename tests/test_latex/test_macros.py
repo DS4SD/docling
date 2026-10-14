@@ -87,6 +87,25 @@ def test_latex_title_macro():
     assert len(title_items) >= 1
 
 
+def test_latex_title_with_optional_short_title():
+    latex_content = (
+        rb"\documentclass{article}\begin{document}"
+        rb"\title[Short $x$]{Long $y$}\maketitle"
+        rb"\end{document}"
+    )
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(latex_content),
+        format=InputFormat.LATEX,
+        backend=LatexDocumentBackend,
+        filename="test.tex",
+    )
+    backend = LatexDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(latex_content))
+    doc = backend.convert()
+    titles = [item.text for item in doc.texts if item.label == DocItemLabel.TITLE]
+    assert titles == ["Long $y$"]
+    assert "Short" not in doc.export_to_markdown()
+
+
 def test_latex_heading_levels():
     """Test different heading levels"""
     latex_content = b"""
@@ -655,6 +674,39 @@ def test_latex_bibliography():
 
     md = doc.export_to_markdown()
     assert "References" in md
+    items = [item.text for item in doc.texts if item.label == DocItemLabel.LIST_ITEM]
+    assert len(items) == 2
+    assert items[0].startswith("[ref1] Author One")
+    assert items[1].startswith("[ref2] Author Two")
+    assert not any(item == "9" for item in items)
+
+
+def test_latex_layout_assignments_and_bibliography_style_are_not_body_text():
+    latex_content = b"""\\documentclass{article}
+\\begin{document}
+Visible text. \\vfuzz=2pt
+\\hfuzz = 1.5pt
+\\bibliographystyle{amsplain}
+\\begin{thebibliography}{10}
+\\bibitem{ref} Author, Title.
+\\end{thebibliography}
+\\end{document}
+"""
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(latex_content),
+        format=InputFormat.LATEX,
+        backend=LatexDocumentBackend,
+        filename="test.tex",
+    )
+    backend = LatexDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(latex_content))
+    doc = backend.convert()
+
+    texts = [item.text for item in doc.texts]
+    assert any("Visible text." in text for text in texts)
+    assert any("[ref] Author, Title." in text for text in texts)
+    assert not any(
+        "=2pt" in text or "1.5pt" in text or "amsplain" in text for text in texts
+    )
 
 
 def test_latex_footnote():

@@ -215,9 +215,6 @@
       },
       {
         "$ref": "#/texts/75"
-      },
-      {
-        "$ref": "#/texts/76"
       }
     ],
     "content_layer": "body",
@@ -1326,18 +1323,6 @@
     },
     {
       "self_ref": "#/texts/75",
-      "parent": {
-        "$ref": "#/body"
-      },
-      "children": [],
-      "content_layer": "body",
-      "label": "text",
-      "prov": [],
-      "orig": "splncs04",
-      "text": "splncs04"
-    },
-    {
-      "self_ref": "#/texts/76",
       "parent": {
         "$ref": "#/body"
       },

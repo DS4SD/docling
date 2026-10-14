@@ -287,9 +287,6 @@
       },
       {
         "$ref": "#/texts/92"
-      },
-      {
-        "$ref": "#/texts/93"
       }
     ],
     "content_layer": "body",
@@ -1529,18 +1526,6 @@
       "prov": [],
       "orig": "main",
       "text": "main"
-    },
-    {
-      "self_ref": "#/texts/93",
-      "parent": {
-        "$ref": "#/body"
-      },
-      "children": [],
-      "content_layer": "body",
-      "label": "text",
-      "prov": [],
-      "orig": "aasjournal",
-      "text": "aasjournal"
     }
   ],
   "pictures": [

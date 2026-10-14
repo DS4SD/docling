@@ -105,9 +105,14 @@ class MacroHandlerMixin:
             "eeq": r"\end{equation}",
         }
         pattern = re.compile(r"\\(?:bea|eea|beq|eeq|be|ee)\b")
+        fuzz_assignment = re.compile(
+            r"\\[vh]fuzz\s*=\s*[+-]?(?:\d+(?:\.\d*)?|\.\d+)\s*"
+            r"(?:pt|pc|in|bp|cm|mm|dd|cc|sp|em|ex)\b"
+        )
 
         def replace(segment: str) -> str:
-            return pattern.sub(lambda match: shortcuts[match.group()[1:]], segment)
+            segment = pattern.sub(lambda match: shortcuts[match.group()[1:]], segment)
+            return fuzz_assignment.sub("", segment)
 
         pieces: list[str] = []
         cursor = 0

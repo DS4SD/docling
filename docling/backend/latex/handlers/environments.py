@@ -62,6 +62,7 @@ class EnvironmentHandlerMixin:
         def _parse_table(self, node: Any) -> Any: ...
         def _extract_verbatim_content(self, latex_str: str, env_name: str) -> str: ...
         def _extract_macro_arg(self, node: Any) -> str: ...
+        def _nodes_to_text(self, nodes: Any) -> str: ...
 
     def _find_document_env(self, nodes, depth: int = 0):
         if nodes is None or depth > 10:
@@ -345,18 +346,10 @@ class EnvironmentHandlerMixin:
             items.append((current_key, current_item))
 
         for key, item_nodes in items:
-            if key:
-                doc.add_text(
+            body = self._nodes_to_text(item_nodes).strip()
+            if body:
+                doc.add_list_item(
                     parent=bib_group,
-                    label=DocItemLabel.LIST_ITEM,
-                    text=f"[{key}] ",
+                    text=f"[{key}] {body}" if key else body,
                     formatting=formatting,
                 )
-
-            self._process_nodes(
-                item_nodes,
-                doc,
-                bib_group,
-                formatting,
-                text_label=DocItemLabel.LIST_ITEM,
-            )

@@ -230,9 +230,6 @@
       },
       {
         "$ref": "#/texts/72"
-      },
-      {
-        "$ref": "#/texts/73"
       }
     ],
     "content_layer": "body",
@@ -1273,18 +1270,6 @@
       "prov": [],
       "orig": "ref",
       "text": "ref"
-    },
-    {
-      "self_ref": "#/texts/73",
-      "parent": {
-        "$ref": "#/body"
-      },
-      "children": [],
-      "content_layer": "body",
-      "label": "text",
-      "prov": [],
-      "orig": "plain",
-      "text": "plain"
     }
   ],
   "pictures": [
