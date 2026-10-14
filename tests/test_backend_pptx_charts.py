@@ -4,8 +4,9 @@
 """Tests for PowerPoint chart plots: every plot type and combination charts."""
 
 import datetime
+import logging
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 import pytest
 from docling_core.types.doc import PictureClassificationLabel, PictureItem
@@ -124,6 +125,41 @@ def _save_combo_chart_deck(
     prs.save(path)
 
 
+def _single_plot_deck(plot: str) -> tuple[Any, Any]:
+    """Return a deck whose chart has one ``c:<plot>`` plot, and that plot element.
+
+    The plot has one series "2026" with 10, 20 and 30 over Q1 to Q3. python-pptx
+    writes only the plot types that it has a class for, so the series and axis
+    ids of a clustered column chart move into a new ``c:<plot>`` element.
+    """
+    from lxml import etree
+    from pptx import Presentation
+    from pptx.chart.data import CategoryChartData
+    from pptx.enum.chart import XL_CHART_TYPE
+    from pptx.oxml.ns import qn
+    from pptx.util import Inches
+
+    chart_data = CategoryChartData()
+    chart_data.categories = ["Q1", "Q2", "Q3"]
+    chart_data.add_series("2026", (10, 20, 30))
+    prs = Presentation()
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    chart = slide.shapes.add_chart(
+        XL_CHART_TYPE.COLUMN_CLUSTERED,
+        Inches(1),
+        Inches(1),
+        Inches(6),
+        Inches(4),
+        chart_data,
+    ).chart
+    bar_chart = chart.element.chart.plotArea.find(qn("c:barChart"))
+    other_plot = etree.Element(qn(f"c:{plot}"))
+    other_plot.extend(bar_chart.findall(qn("c:ser")) + bar_chart.findall(qn("c:axId")))
+    bar_chart.addnext(other_plot)
+    bar_chart.getparent().remove(bar_chart)
+    return prs, other_plot
+
+
 def _only_chart(path: Path) -> PictureItem:
     doc = get_converter().convert(path).document
     pictures = list(doc.pictures)
@@ -211,31 +247,7 @@ def test_plot_without_a_python_pptx_class_keeps_its_data(
     has a plot class but no series class for it. Now the chart keeps its type
     and its data.
     """
-    from lxml import etree
-    from pptx import Presentation
-    from pptx.chart.data import CategoryChartData
-    from pptx.enum.chart import XL_CHART_TYPE
-    from pptx.oxml.ns import qn
-    from pptx.util import Inches
-
-    chart_data = CategoryChartData()
-    chart_data.categories = ["Q1", "Q2", "Q3"]
-    chart_data.add_series("2026", (10, 20, 30))
-    prs = Presentation()
-    slide = prs.slides.add_slide(prs.slide_layouts[6])
-    chart = slide.shapes.add_chart(
-        XL_CHART_TYPE.COLUMN_CLUSTERED,
-        Inches(1),
-        Inches(1),
-        Inches(6),
-        Inches(4),
-        chart_data,
-    ).chart
-    bar_chart = chart.element.chart.plotArea.find(qn("c:barChart"))
-    other_plot = etree.Element(qn(f"c:{plot}"))
-    other_plot.extend(bar_chart.findall(qn("c:ser")) + bar_chart.findall(qn("c:axId")))
-    bar_chart.addnext(other_plot)
-    bar_chart.getparent().remove(bar_chart)
+    prs, _ = _single_plot_deck(plot)
     path = tmp_path / f"{plot}.pptx"
     prs.save(path)
 
@@ -243,6 +255,32 @@ def test_plot_without_a_python_pptx_class_keeps_its_data(
 
     assert _labels(picture) == [label.value]
     assert _grid(picture) == [["", "2026"], ["Q1", "10"], ["Q2", "20"], ["Q3", "30"]]
+
+
+def test_malformed_series_drops_only_the_chart_data(tmp_path: Path, caplog):
+    """A series without ``c:order`` loses the chart's data, not the presentation.
+
+    python-pptx raises ``InvalidXmlError`` when a required element is missing.
+    That error must not stop the conversion of the whole presentation. The
+    chart keeps its type without a data table, and a warning names the missing
+    element.
+    """
+    from pptx.oxml.ns import qn
+
+    prs, stock_plot = _single_plot_deck("stockChart")
+    series = stock_plot.find(qn("c:ser"))
+    series.remove(series.find(qn("c:order")))
+    path = tmp_path / "stock_chart_without_order.pptx"
+    prs.save(path)
+
+    with caplog.at_level(
+        logging.WARNING, logger="docling.backend.mspowerpoint_backend"
+    ):
+        picture = _only_chart(path)
+
+    assert _labels(picture) == [PictureClassificationLabel.OTHER_CHART.value]
+    assert picture.meta is not None and picture.meta.tabular_chart is None
+    assert "c:order" in caplog.text
 
 
 def test_date_axis_categories_are_iso_dates(tmp_path: Path):

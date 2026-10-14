@@ -1592,7 +1592,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         caption_text = self._chart_title_text(chart)
         try:
             table_data = self._chart_to_table_data(chart, plots)
-        except (AttributeError, ValueError, KeyError) as exc:
+        except (AttributeError, ValueError, KeyError, InvalidXmlError) as exc:
             _log.warning("Could not extract chart data: %s", exc)
             table_data = None
 
