@@ -1631,7 +1631,9 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         A title is stored as DrawingML rich text: a Title object whose
         ``.tx.rich.p`` is a list of paragraphs, each with a list of runs
         ``.r``, each run carrying its text in ``.t``.  We flatten all runs into
-        a single string.
+        a single string.  A title linked to a cell keeps its text in the cell
+        cache ``.tx.strRef.strCache`` instead, and openpyxl then gives it an
+        empty ``.tx.rich``.
 
         Args:
             title: The ``title`` of an openpyxl chart or axis.
@@ -1645,14 +1647,17 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         if isinstance(title, str):
             return title or None
         tx = title.tx
-        if tx is None or tx.rich is None:
+        if tx is None:
             return None
 
         runs: list[str] = []
-        for paragraph in tx.rich.p:
-            for run in paragraph.r or []:
-                if run.t:
-                    runs.append(run.t)
+        if tx.strRef is not None and tx.strRef.strCache is not None:
+            runs = [point.v for point in tx.strRef.strCache.pt if point.v]
+        elif tx.rich is not None:
+            for paragraph in tx.rich.p:
+                for run in paragraph.r or []:
+                    if run.t:
+                        runs.append(run.t)
         text = "".join(runs).strip()
         return text or None
 

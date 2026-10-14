@@ -12,6 +12,9 @@ import pytest
 from docling_core.types.doc import PictureClassificationLabel, PictureItem
 from openpyxl import Workbook, load_workbook
 from openpyxl.chart import BarChart, LineChart, Reference
+from openpyxl.chart.data_source import StrData, StrRef, StrVal
+from openpyxl.chart.text import Text
+from openpyxl.chart.title import Title
 
 from docling.backend import msexcel_backend
 from docling.datamodel.backend_options import MsExcelBackendOptions
@@ -40,6 +43,7 @@ _LINES = {
 def _save_combo_chart_workbook(
     path: Path,
     time_of_day: datetime.time = datetime.time(0),
+    linked_axis_title: bool = False,
     range_end_row: Optional[int] = None,
 ) -> None:
     """Save a workbook whose chart draws columns and lines on a second axis.
@@ -49,8 +53,9 @@ def _save_combo_chart_workbook(
     ``c:lineChart`` with the two ratio series on a secondary value axis. Both
     plots share the date categories in column A, which have ``time_of_day``.
     The category axis is titled "Region Position" and the primary value axis
-    "Bar Sales". The ranges of the chart end at ``range_end_row``, or at the
-    last data row.
+    "Bar Sales". With ``linked_axis_title`` the category axis title is linked
+    to cell A1, so its text is in a cell cache instead of in rich text. The
+    ranges of the chart end at ``range_end_row``, or at the last data row.
     """
     workbook = Workbook()
     sheet = workbook.worksheets[0]
@@ -71,7 +76,13 @@ def _save_combo_chart_workbook(
         titles_from_data=True,
     )
     bars.set_categories(categories)
-    bars.x_axis.title = "Region Position"
+    if linked_axis_title:
+        cache = StrData(ptCount=1, pt=[StrVal(idx=0, v="Region Position")])
+        bars.x_axis.title = Title(
+            tx=Text(strRef=StrRef(f="'Sheet'!$A$1", strCache=cache))
+        )
+    else:
+        bars.x_axis.title = "Region Position"
     bars.y_axis.title = "Bar Sales"
 
     lines = LineChart()
@@ -154,14 +165,15 @@ def test_date_categories_are_iso_dates(
     ]
 
 
-def test_category_axis_title_heads_the_category_column(tmp_path: Path):
+@pytest.mark.parametrize("linked", [False, True], ids=["rich-text", "cell-linked"])
+def test_category_axis_title_heads_the_category_column(tmp_path: Path, linked: bool):
     """The category axis title fills the top-left cell of the data table.
 
-    That cell was always empty. The value axis title has no column to head,
-    so it stays out.
+    That cell was always empty. A title linked to a cell is read from the cell
+    cache. The value axis title has no column to head, so it stays out.
     """
     path = tmp_path / "combo_chart.xlsx"
-    _save_combo_chart_workbook(path)
+    _save_combo_chart_workbook(path, linked_axis_title=linked)
 
     grid = _grid(_only_chart(path))
 
