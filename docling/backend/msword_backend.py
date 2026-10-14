@@ -1137,10 +1137,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # text-box detection below: those run over descendants, so on this element they would
             # read both branches, and again on the chosen branch's own children.
             if tag_name == "AlternateContent":
-                branch = self._select_alternate_content_branch(element)
-                if branch is not None:
-                    _, te = self._walk_linear(branch, doc)
-                    added_elements.extend(te)
+                added_elements.extend(
+                    self._walk_optional_container(
+                        self._select_alternate_content_branch(element), doc
+                    )
+                )
                 continue
             # Check for Inline Images (blip elements)
             _raw_drawing_blip = self.blip_xpath_expr(element)
@@ -1259,10 +1260,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 sdt_content = element.find(
                     "./w:sdtContent", namespaces=_OOXML_NAMESPACES
                 )
-                if sdt_content is not None:
-                    # Recursively walk the SDT content to catch textboxes, tables, and nested structures
-                    _, te = self._walk_linear(sdt_content, doc)
-                    added_elements.extend(te)
+                # Recursively walk the SDT content to catch textboxes, tables, and nested structures
+                added_elements.extend(self._walk_optional_container(sdt_content, doc))
             # Check for Image
             elif drawing_blip:
                 pics = self._handle_pictures(drawing_blip, doc)
@@ -1336,6 +1335,18 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 _log.debug(f"Ignoring element in DOCX with tag: {tag_name}")
 
         return doc, added_elements
+
+    def _walk_optional_container(
+        self, container: BaseOxmlElement | None, doc: DoclingDocument
+    ) -> list[RefItem]:
+        """Walk the children of ``container`` and return the added refs.
+
+        A missing container (``None``) adds nothing.
+        """
+        if container is None:
+            return []
+        _, refs = self._walk_linear(container, doc)
+        return refs
 
     @staticmethod
     def _select_alternate_content_branch(
