@@ -68,7 +68,7 @@ def test_marks_superscript_and_subscript_runs():
         ("rd", Script.SUPER),
         ("[12]", Script.SUPER),
     ]
-    # The space the text-line builder puts before a script ("mc 2") is gone.
+    # As in the Word backend, a run has no whitespace at its edges.
     assert runs[0][:2] == [
         ("Einstein wrote E = mc", Script.BASELINE),
         ("2", Script.SUPER),
