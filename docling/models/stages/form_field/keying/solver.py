@@ -19,7 +19,11 @@ from docling.models.stages.form_field.keying.candidates import (
     candidates_for,
     siblings,
 )
-from docling.models.stages.form_field.keying.geometry import anchors, contains
+from docling.models.stages.form_field.keying.geometry import (
+    anchors,
+    lettered,
+    side_of,
+)
 from docling.models.stages.form_field.keying.inputs import (
     MAX_KEY_TEXTS,
     inputs,
@@ -33,6 +37,7 @@ from docling.models.stages.form_field.keying.symmetry import (
 )
 from docling.models.stages.form_field.keying.tables import add_hints, table_fields
 from docling.models.stages.form_field.keying.types import (
+    WIDGET_COVERAGE,
     Assignment,
     Candidate,
     KeyText,
@@ -52,6 +57,10 @@ MAX_ACTIVE_CANDIDATES = 1000
 NULL_COST = 3.0
 # Seconds the MILP solver may spend on one page.
 TIME_LIMIT = 10.0
+# Cost of keying a checkbox by the text of its checkbox block. Every geometric
+# candidate costs at least 0, so the block's text wins unless sharing rules or
+# penalties elsewhere on the page weigh more against it.
+BLOCK_PRIOR = -1.0
 
 
 def crossing(
@@ -308,9 +317,12 @@ def in_checkbox_blocks(
     """Checkboxes keyed by the text of the checkbox block drawn around them.
 
     The layout boxes a checkbox together with its label; a block holding
-    exactly one value, a checkbox outside detected tables, is keyed by all of
-    its text, before and outside the search. A block with several values, or
-    text the layout also put in another block, is left to the search.
+    exactly one value, a checkbox outside detected tables, offers all of its
+    text as that checkbox's key at BLOCK_PRIOR. The search still chooses, so
+    the text can also key a field of the same row and the checkbox keeps the
+    prompt of its group. A block with several values, text the layout also
+    put in another block, or text without letters is left to the geometric
+    candidates.
     """
     keyed = []
     for region in found:
@@ -319,7 +331,12 @@ def in_checkbox_blocks(
             DocItemLabel.CHECKBOX_UNSELECTED,
         }:
             continue
-        inside = [i for i, v in enumerate(values) if contains(region.bbox, v.bbox)]
+        # Held as a host paragraph holds its widgets: most of the value inside.
+        inside = [
+            i
+            for i, v in enumerate(values)
+            if v.bbox.intersection_over_self(region.bbox) >= WIDGET_COVERAGE
+        ]
         if len(inside) != 1:
             continue
         (i,) = inside
@@ -332,13 +349,25 @@ def in_checkbox_blocks(
         }
         if not atoms or any(len(sources[atom]) > 1 for atom in atoms):
             continue
-        keyed += [
-            Candidate((i,), k, "field_key", {})
-            for k, key_text in enumerate(key_texts)
-            if key_text.atoms == atoms
-            and not key_text.stack
-            and key_text.scope == values[i].scope
-        ]
+        for k, key_text in enumerate(key_texts):
+            if (
+                key_text.atoms != atoms
+                or key_text.stack
+                or key_text.scope != values[i].scope
+                or not lettered(key_text.text)
+            ):
+                continue
+            # The side lets the sharing rules apply, as to any single key.
+            facing = side_of(key_text.bbox, values[i].bbox)
+            keyed.append(
+                Candidate(
+                    (i,),
+                    k,
+                    "field_key",
+                    {"block": BLOCK_PRIOR},
+                    None if facing is None else facing[0],
+                )
+            )
     once = Counter(c.members[0] for c in keyed)
     return [c for c in keyed if once[c.members[0]] == 1]
 
@@ -362,21 +391,15 @@ def _solve(
             f"skipped: {len(values)} values x {len(key_texts)} key texts exceed the page limit",
             slots,
         )
-    # A checkbox keyed by its block, and that key's text, take part in no
-    # other association.
-    taken = {c.members[0] for c in in_blocks}
-    used = {atom for c in in_blocks for atom in key_texts[c.key].atoms}
-    proposed = [
-        c
-        for c in candidates_for(values, key_texts, h)
-        if taken.isdisjoint(c.members) and used.isdisjoint(key_texts[c.key].atoms)
-    ]
+    proposed = candidates_for(values, key_texts, h)
     # A decided alternating run fixes which key each of its values reads.
     mark_sequences(proposed, sequences(values, key_texts, proposed, NULL_COST, h))
+    # A checkbox block's own text joins the search after the runs are decided:
+    # the layout's block outweighs the side a run reads its keys from.
+    proposed += in_blocks
     # Values in detected tables are keyed from their own cells, outside the
     # free-form search: table text never competes with free-form keys.
     tables, slots = keyed_in_tables()
-    tables = in_blocks + tables
     fixed = list(range(len(proposed), len(proposed) + len(tables)))
     # A candidate worse than leaving all its members blank cannot help: all
     # remaining interactions are penalties. Keep the full list for diagnostics.
@@ -412,7 +435,7 @@ def _solve(
         for atom in key_texts[candidate.key].atoms:
             spans[atom][column] = 1.0
     for i, value in enumerate(values):
-        if not value.scope.eligible or i in taken:
+        if not value.scope.eligible:
             continue
         owners[i][len(costs)] = 1.0
         costs.append(NULL_COST)

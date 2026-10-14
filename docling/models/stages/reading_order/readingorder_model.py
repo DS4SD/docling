@@ -962,9 +962,22 @@ class ReadingOrderModel:
                 current_list = None
                 item_parent = parent
             field_item = out_doc.add_field_item(parent=item_parent)
+            # A checkbox block also boxes the drawn checkbox, which is where the
+            # value is: its key is located by its text alone.
+            key_bbox = element.cluster.bbox
+            if (
+                label
+                in {DocItemLabel.CHECKBOX_SELECTED, DocItemLabel.CHECKBOX_UNSELECTED}
+                and element.field_item.key_bbox is not None
+            ):
+                key_bbox = element.field_item.key_bbox
             out_doc.add_field_key(
                 text=cap_text,
-                prov=prov,
+                prov=ProvenanceItem(
+                    page_no=element.page_no,
+                    charspan=(0, len(cap_text)),
+                    bbox=key_bbox.to_bottom_left_origin(page_height),
+                ),
                 parent=field_item,
                 hyperlink=element.hyperlink,
             )

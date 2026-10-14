@@ -5,6 +5,7 @@
 
 from unittest.mock import MagicMock
 
+import pytest
 from docling_core.types.doc import BoundingBox, DocItemLabel, Size
 from docling_core.types.doc.items.form import FieldItem
 from docling_core.types.doc.page import BoundingRectangle, PdfWidget, TextCell
@@ -143,3 +144,158 @@ def test_two_checkboxes_in_one_block_are_left_to_the_search() -> None:
         for region in page.predictions.field_regions
         for item in region.items
     ] == ["Sim", "Não"]
+
+
+def _text_field(index: int, bbox: BoundingBox) -> PdfWidget:
+    return PdfWidget(
+        index=index,
+        rect=BoundingRectangle.from_bounding_box(
+            bbox.to_bottom_left_origin(page_height=PAGE_HEIGHT)
+        ),
+        widget_text="",
+        widget_field_type="/Tx",
+    )
+
+
+def _keys(page: Page) -> list[str]:
+    return [
+        item.key_text
+        for region in page.predictions.field_regions
+        for item in region.items
+    ]
+
+
+def test_hosted_checkbox_key_is_located_by_its_text() -> None:
+    # The block boxes the drawn square with its label, but the square is the
+    # value's place: the key's location covers the label's text only.
+    text_bbox = BoundingBox(l=73.7, t=37.9, r=300.0, b=44.8)
+    block = _block(
+        1,
+        DocItemLabel.CHECKBOX_UNSELECTED,
+        BoundingBox(l=55.5, t=32.4, r=300.0, b=46.0),
+        (0, "Recibos de vencimento.", text_bbox),
+    )
+    page = _page([block], [_checkbox(0, BoundingBox(l=58.8, t=34.8, r=66.8, b=42.8))])
+
+    doc = _materialize(page)
+
+    (item,) = doc.field_items
+    key = item.children[0].resolve(doc)
+    assert key.text == "Recibos de vencimento."
+    box = key.prov[0].bbox.to_top_left_origin(PAGE_HEIGHT)
+    assert (box.l, box.t, box.r, box.b) == pytest.approx(
+        (text_bbox.l, text_bbox.t, text_bbox.r, text_bbox.b)
+    )
+
+
+def test_block_with_no_letters_is_left_to_the_search() -> None:
+    # A column of answer boxes printed after leader dots, which the layout
+    # boxes as a checkbox block: the dots are no key, the column header is.
+    header = "Grado igual o superior al 65%"
+    header_bbox = BoundingBox(l=60, t=10, r=150, b=18)
+    dots_bbox = BoundingBox(l=60, t=26, r=135, b=34)
+    page = _page(
+        [
+            _block(1, DocItemLabel.TEXT, header_bbox, (0, header, header_bbox)),
+            _block(
+                2,
+                DocItemLabel.CHECKBOX_UNSELECTED,
+                BoundingBox(l=60, t=25, r=150, b=35),
+                (1, "........................", dots_bbox),
+            ),
+        ],
+        [_checkbox(0, BoundingBox(l=139, t=26, r=148, b=34))],
+    )
+
+    _materialize(page)
+
+    assert _keys(page) == [header]
+
+
+def test_block_label_also_keys_a_field_of_its_row() -> None:
+    # "VISA Office" labels the checkbox in its block and the box on the same
+    # row: the block's text keys the checkbox without taking the label from
+    # the row's other field.
+    label_bbox = BoundingBox(l=24, t=21, r=68, b=29)
+    page = _page(
+        [
+            _block(
+                1,
+                DocItemLabel.CHECKBOX_UNSELECTED,
+                BoundingBox(l=10, t=20, r=70, b=30),
+                (0, "VISA Office", label_bbox),
+            )
+        ],
+        [
+            _checkbox(0, BoundingBox(l=12, t=21, r=20, b=29)),
+            _text_field(1, BoundingBox(l=80, t=20, r=200, b=30)),
+        ],
+    )
+
+    doc = _materialize(page)
+
+    assert _keys(page) == ["VISA Office", "VISA Office"]
+    assert all(item.label == DocItemLabel.FIELD_KEY for item in doc.texts if item.text)
+
+
+def test_group_prompt_stays_when_one_option_is_keyed_by_its_block() -> None:
+    # "3. SEX" asks a question answered by two checkboxes. MALE is boxed as a
+    # checkbox block, FEMALE is plain text further right than an adjacent
+    # option key. The question stays the group's prompt, so it does not key
+    # FEMALE although it sits closer.
+    prompt_bbox = BoundingBox(l=30, t=10, r=60, b=18)
+    female_bbox = BoundingBox(l=55, t=28, r=85, b=36)
+    male_bbox = BoundingBox(l=55, t=41, r=75, b=49)
+    page = _page(
+        [
+            _block(1, DocItemLabel.TEXT, prompt_bbox, (0, "3. SEX", prompt_bbox)),
+            _block(2, DocItemLabel.TEXT, female_bbox, (1, "FEMALE", female_bbox)),
+            _block(
+                3,
+                DocItemLabel.CHECKBOX_UNSELECTED,
+                BoundingBox(l=31, t=39, r=80, b=50),
+                (2, "MALE", male_bbox),
+            ),
+        ],
+        [
+            _checkbox(0, BoundingBox(l=32, t=27, r=41, b=36)),
+            _checkbox(1, BoundingBox(l=32, t=40, r=41, b=49)),
+        ],
+    )
+
+    _materialize(page)
+
+    keyed = {
+        item.values[0].bbox.t: item.key_text
+        for region in page.predictions.field_regions
+        for item in region.items
+    }
+    assert keyed == {27: "FEMALE", 40: "MALE"}
+
+
+def test_block_a_little_short_of_its_checkbox_still_keys_it() -> None:
+    # The layout's block ends 0.1 pt above the drawn square's bottom; the
+    # square is still the block's checkbox, not left to the caption above.
+    caption_bbox = BoundingBox(l=56.7, t=19.5, r=115.5, b=26.3)
+    text_bbox = BoundingBox(l=76.0, t=36.0, r=300.0, b=42.9)
+    page = _page(
+        [
+            _block(
+                1,
+                DocItemLabel.SECTION_HEADER,
+                caption_bbox,
+                (0, "Fotocópias de:", caption_bbox),
+            ),
+            _block(
+                2,
+                DocItemLabel.CHECKBOX_UNSELECTED,
+                BoundingBox(l=55.5, t=33.0, r=300.0, b=42.7),
+                (1, "Recibos de vencimento.", text_bbox),
+            ),
+        ],
+        [_checkbox(0, BoundingBox(l=58.8, t=34.8, r=66.8, b=42.8))],
+    )
+
+    _materialize(page)
+
+    assert _keys(page) == ["Recibos de vencimento."]
