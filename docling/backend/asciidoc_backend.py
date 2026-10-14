@@ -48,6 +48,26 @@ _COMMENT_BLOCK_DELIMITER = "////"
 _CELL_SPEC: Final = r"(?:(?:\d+(?:\.\d+)?|\.\d+)[*+])*[<^>]?(?:\.[<^>])?[adehlms]?"
 _LIST_ITEM_PATTERN: Final = r"^(\s*)(\*+|-|\.+|\d+\.|\w+\.)\s+(.*)"
 
+# Inline formatting marks, unconstrained (doubled, valid anywhere) before
+# constrained (single, valid only at word boundaries, so "snake_case" and
+# "2*3*4" stay plain text), as in Asciidoctor.
+_INLINE_FORMAT_RE: Final = re.compile(
+    r"``(?P<umono>.+?)``"
+    r"|\*\*(?P<ubold>.+?)\*\*"
+    r"|__(?P<uitalic>.+?)__"
+    r"|(?<!\w)`(?P<mono>\S(?:.*?\S)?)`(?!\w)"
+    r"|(?<!\w)\*(?P<bold>\S(?:.*?\S)?)\*(?!\w)"
+    r"|(?<!\w)_(?P<italic>\S(?:.*?\S)?)_(?!\w)"
+)
+
+
+@dataclass(frozen=True)
+class _InlineRun:
+    text: str
+    bold: bool = False
+    italic: bool = False
+    code: bool = False
+
 
 @dataclass(frozen=True)
 class _LiteralBlock:
@@ -133,13 +153,7 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
         preserve reading order, then any pending caption is emitted as a
         bold paragraph.
         """
-        if text_data:
-            doc.add_text(
-                text=" ".join(text_data),
-                label=DocItemLabel.PARAGRAPH,
-                parent=parent,
-            )
-            text_data = []
+        text_data = self._flush_text_data(doc=doc, text_data=text_data, parent=parent)
         if caption_data:
             caption_data = self._flush_caption_as_paragraph(doc, caption_data, parent)
         return caption_data, text_data
@@ -407,13 +421,9 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                 item = self._parse_text(line)
                 text_data.append(item["text"])
 
-        if len(text_data) > 0:
-            doc.add_text(
-                text=" ".join(text_data),
-                label=DocItemLabel.PARAGRAPH,
-                parent=self._get_current_parent(parents),
-            )
-            text_data = []
+        text_data = self._flush_text_data(
+            doc=doc, text_data=text_data, parent=self._get_current_parent(parents)
+        )
 
         if in_table:
             # An unclosed table still consumes its pending caption below.
@@ -700,13 +710,58 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
         text_data: list[str],
         parent: GroupItem | None,
     ) -> list[str]:
-        if len(text_data) > 0:
-            doc.add_text(
-                text=" ".join(text_data),
-                label=DocItemLabel.PARAGRAPH,
-                parent=parent,
-            )
+        if len(text_data) == 0:
+            return []
+        text = " ".join(text_data)
+        runs = AsciiDocBackend._parse_inline(text)
+        if not any(run.bold or run.italic or run.code for run in runs):
+            doc.add_text(text=text, label=DocItemLabel.PARAGRAPH, parent=parent)
+            return []
+        # Mixed formatting needs one item per run, kept together in an inline
+        # group like the Markdown backend does.
+        group = doc.add_inline_group(parent=parent)
+        for run in runs:
+            run_text = run.text.strip()
+            if not run_text:
+                continue
+            if run.code:
+                doc.add_code(text=run_text, parent=group)
+            else:
+                doc.add_text(
+                    text=run_text,
+                    label=DocItemLabel.TEXT,
+                    parent=group,
+                    formatting=(
+                        Formatting(bold=run.bold, italic=run.italic)
+                        if run.bold or run.italic
+                        else None
+                    ),
+                )
         return []
+
+    @staticmethod
+    def _parse_inline(
+        text: str, bold: bool = False, italic: bool = False
+    ) -> list[_InlineRun]:
+        """Split text into runs of plain, bold, italic and monospace text."""
+        runs: list[_InlineRun] = []
+        position = 0
+        for match in _INLINE_FORMAT_RE.finditer(text):
+            if match.start() > position:
+                runs.append(
+                    _InlineRun(text[position : match.start()], bold=bold, italic=italic)
+                )
+            if (code := match.group("umono") or match.group("mono")) is not None:
+                runs.append(_InlineRun(code, code=True))
+            elif (inner := match.group("ubold") or match.group("bold")) is not None:
+                runs.extend(AsciiDocBackend._parse_inline(inner, True, italic))
+            else:
+                inner = match.group("uitalic") or match.group("italic")
+                runs.extend(AsciiDocBackend._parse_inline(inner, bold, True))
+            position = match.end()
+        if position < len(text):
+            runs.append(_InlineRun(text[position:], bold=bold, italic=italic))
+        return runs
 
     #   =========   Title
     @staticmethod
