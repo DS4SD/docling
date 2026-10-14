@@ -67,6 +67,7 @@ try:  # pragma: no cover - import-time guard
     from docx.document import Document as DocxDocument
     from docx.enum.style import WD_STYLE_TYPE
     from docx.opc.constants import RELATIONSHIP_TYPE as DOCX_RT
+    from docx.opc.part import XmlPart
     from docx.oxml import parse_xml as docx_parse_xml
     from docx.oxml.simpletypes import ST_Merge
     from docx.oxml.table import CT_Tc
@@ -586,10 +587,9 @@ def _remove_xml_comment_nodes(docx_obj: DocxDocument) -> list[str]:
     """
     texts: list[str] = []
     for part in docx_obj.part.package.iter_parts():
-        element = getattr(part, "_element", None)
-        if element is None:
+        if not isinstance(part, XmlPart):
             continue
-        for node in list(element.iter(etree.Comment, etree.ProcessingInstruction)):
+        for node in list(part.element.iter(etree.Comment, etree.ProcessingInstruction)):
             parent = node.getparent()
             if parent is None:
                 continue
