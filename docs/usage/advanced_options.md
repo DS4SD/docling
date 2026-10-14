@@ -660,3 +660,25 @@ Things to know:
 ## Limit resource usage
 
 You can limit the CPU threads used by Docling by setting the environment variable `OMP_NUM_THREADS` accordingly. The default setting is using 4 CPU threads.
+
+Peak memory on large or image-heavy PDFs is driven by how many decoded pages are held at once.
+`queue_max_size` bounds the pages buffered between pipeline stages, and `max_concurrent_results`
+bounds the pages the threaded docling-parse backend decodes ahead of the pipeline:
+
+```python
+from docling.datamodel.backend_options import ThreadedDoclingParseBackendOptions
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
+
+pipeline_options = PdfPipelineOptions(queue_max_size=1)
+
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(
+            pipeline_options=pipeline_options,
+            backend_options=ThreadedDoclingParseBackendOptions(max_concurrent_results=1),
+        )
+    }
+)
+```
