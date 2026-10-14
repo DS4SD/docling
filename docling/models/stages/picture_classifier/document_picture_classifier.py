@@ -23,6 +23,7 @@ from docling.datamodel.base_models import ItemAndImageEnrichmentElement
 from docling.datamodel.picture_classification_options import (
     DocumentPictureClassifierOptions,
 )
+from docling.datamodel.progress import EnrichmentStep
 from docling.models.base_model import BaseItemAndImageEnrichmentModel
 from docling.models.inference_engines.image_classification import (
     BaseImageClassificationEngine,
@@ -65,6 +66,7 @@ class DocumentPictureClassifier(
         Processes a batch of elements and adds classification annotations.
     """
 
+    progress_step = EnrichmentStep.PICTURE_CLASSIFICATION
     images_scale = 2
 
     def __init__(
@@ -121,7 +123,11 @@ class DocumentPictureClassifier(
         bool
             True if the element is a PictureItem and processing is enabled; False otherwise.
         """
-        return self.enabled and isinstance(element, PictureItem)
+        return (
+            self.enabled
+            and isinstance(element, PictureItem)
+            and (element.meta is None or element.meta.classification is None)
+        )
 
     def __call__(
         self,

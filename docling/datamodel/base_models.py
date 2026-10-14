@@ -425,6 +425,8 @@ class ApiImageStreamingRequestResult:
     num_tokens: int | None
     usage: Any | None = None
     logprobs: Any | None = None
+    error: str | None = None  # set when the request failed and produced no output
+    stop_reason: VlmStopReason = VlmStopReason.UNSPECIFIED
 
 
 class ContainerElement(

@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import logging
 import re
-from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING, Callable
 
@@ -38,6 +37,7 @@ from docling.backend.latex.constants import (
 from docling.backend.latex.utils.encoding import decode_latex_content
 from docling.backend.latex.utils.latex_context import LATEX_CONTEXT_DB
 from docling.backend.latex.utils.text import iter_child_nodelists
+from docling.backend.utils.image import normalize_image_for_png
 
 if TYPE_CHECKING:
     from typing import Any
@@ -77,7 +77,7 @@ _PYPDFIUM2_INSTALL_HINT = (
 
 class MacroHandlerMixin:
     if TYPE_CHECKING:
-        path_or_stream: BytesIO | Path
+        _source_dir: Path | None
         _input_stack: set[str]
         _custom_macros: dict[str, str]
         _custom_macro_num_args: dict[str, int]
@@ -336,9 +336,9 @@ class MacroHandlerMixin:
             if img_path:
                 image = None
                 try:
-                    if isinstance(self.path_or_stream, Path):
-                        base_dir = self.path_or_stream.parent.resolve()
-                        img_full_path = self.path_or_stream.parent / img_path
+                    if self._source_dir is not None:
+                        base_dir = self._source_dir.resolve()
+                        img_full_path = self._source_dir / img_path
                         try:
                             if not img_full_path.resolve().is_relative_to(base_dir):
                                 _log.warning(
@@ -374,7 +374,9 @@ class MacroHandlerMixin:
                                 _log.debug(
                                     f"Loaded image {img_path}: {pil_image.size}, DPI={dpi}"
                                 )
-                            image = ImageRef.from_pil(image=pil_image, dpi=int(dpi))
+                            image = ImageRef.from_pil(
+                                image=normalize_image_for_png(pil_image), dpi=int(dpi)
+                            )
                 except Exception as e:
                     _log.debug(f"Could not load image {img_path}: {e}")
 
@@ -398,9 +400,9 @@ class MacroHandlerMixin:
             from pylatexenc.latexwalker import LatexWalker
 
             filepath = self._extract_macro_arg(node)
-            if filepath and isinstance(self.path_or_stream, Path):
-                base_dir = self.path_or_stream.parent.resolve()
-                input_path = self.path_or_stream.parent / filepath
+            if filepath and self._source_dir is not None:
+                base_dir = self._source_dir.resolve()
+                input_path = self._source_dir / filepath
                 if not input_path.suffix:
                     input_path = input_path.with_suffix(".tex")
 

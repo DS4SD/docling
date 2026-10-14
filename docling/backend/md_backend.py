@@ -37,8 +37,11 @@ from typing_extensions import Annotated, override
 from docling.backend.abstract_backend import (
     DeclarativeDocumentBackend,
 )
-from docling.backend.html_backend import HTMLDocumentBackend
 from docling.backend.utils.image_resource_loader import ImageResourceLoader
+from docling.backend.utils.markdown_html import (
+    MarkdownHTMLDocumentBackend,
+    serialize_markdown_for_html,
+)
 from docling.datamodel.backend_options import (
     HTMLBackendOptions,
     MarkdownBackendOptions,
@@ -847,7 +850,9 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 formatting, strikethrough=True
             )
 
-        elif isinstance(element, marko.inline.Link):
+        elif isinstance(element, marko.inline.Link | marko.inline.AutoLink):
+            # AutoLink covers <https://url> and the GFM bare-URL form (gfm_el.Url
+            # subclasses AutoLink).
             _log.debug(" - Link: %s", element.children)
             hyperlink = MarkdownDocumentBackend._resolve_link_dest(element.dest)
 
@@ -1126,8 +1131,11 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
             )
 
             if self._html_blocks > 0:
-                html_backend_cls = HTMLDocumentBackend
-                html_str = doc.export_to_html()
+                html_backend_cls = MarkdownHTMLDocumentBackend
+                html_payload = serialize_markdown_for_html(
+                    doc, source_hash=self.document_hash
+                )
+                html_str = html_payload.text
 
                 def _restore_original_html(txt, regex):
                     _txt, count = re.subn(regex, "", txt)
@@ -1166,6 +1174,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                     in_doc=in_doc,
                     path_or_stream=stream,
                     options=html_options,
+                    picture_refs=html_payload.picture_refs,
                 )
                 doc = html_backend_obj.convert()
         else:
