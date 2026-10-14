@@ -5,17 +5,17 @@
 
 import datetime
 from pathlib import Path
-from typing import Any
+from typing import Optional
 
 import pytest
 from docling_core.types.doc import PictureClassificationLabel, PictureItem
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from openpyxl.chart import BarChart, LineChart, Reference
 
-from docling.backend.msexcel_backend import MsExcelDocumentBackend
+from docling.backend import msexcel_backend
 from docling.datamodel.backend_options import MsExcelBackendOptions
 from docling.datamodel.base_models import InputFormat
-from docling.datamodel.document import InputDocument
+from docling.document_converter import DocumentConverter, ExcelFormatOption
 
 from .test_backend_msexcel import get_converter
 
@@ -36,21 +36,26 @@ _LINES = {
 }
 
 
-def _save_combo_chart_workbook(path: Path) -> None:
+def _save_combo_chart_workbook(
+    path: Path,
+    time_of_day: datetime.time = datetime.time(0),
+) -> None:
     """Save a workbook whose chart draws columns and lines on a second axis.
 
     This is how Excel stores a "Clustered Column - Line on Secondary Axis"
     chart: a ``c:barChart`` with the four region series, then a
     ``c:lineChart`` with the two ratio series on a secondary value axis. Both
-    plots share the date categories in column A. The category axis is titled
-    "Region Position" and the primary value axis "Bar Sales".
+    plots share the date categories in column A, which have ``time_of_day``.
+    The category axis is titled "Region Position" and the primary value axis
+    "Bar Sales".
     """
     workbook = Workbook()
     sheet = workbook.worksheets[0]
     sheet.append(["Month", *_BARS, *_LINES])
     for row, month in enumerate(_MONTHS):
         sheet.append(
-            [month, *(v[row] for v in _BARS.values())]
+            [datetime.datetime.combine(month, time_of_day)]
+            + [v[row] for v in _BARS.values()]
             + [v[row] for v in _LINES.values()]
         )
     last_row = 1 + len(_MONTHS)
@@ -80,8 +85,8 @@ def _save_combo_chart_workbook(path: Path) -> None:
     workbook.save(path)
 
 
-def _only_chart(path: Path) -> PictureItem:
-    doc = get_converter().convert(path).document
+def _only_chart(path: Path, converter: Optional[DocumentConverter] = None):
+    doc = (converter or get_converter()).convert(path).document
     pictures = list(doc.pictures)
     assert len(pictures) == 1
     return pictures[0]
@@ -123,19 +128,26 @@ def test_combo_chart_lists_each_plot_type_and_keeps_all_series(tmp_path: Path):
     assert len(grid) == 1 + len(_MONTHS)
 
 
-def test_date_categories_are_iso_dates(tmp_path: Path):
-    """Date categories read as ISO 8601 dates, without a midnight time.
+@pytest.mark.parametrize(
+    ("time_of_day", "suffix"),
+    [(datetime.time(0), ""), (datetime.time(12, 30), "T12:30:00")],
+    ids=["date", "date-and-time"],
+)
+def test_date_categories_are_iso_dates(
+    tmp_path: Path, time_of_day: datetime.time, suffix: str
+):
+    """Date categories read as ISO 8601, with a time of day only when they have one.
 
     openpyxl reads a date cell as a ``datetime``, which was written as
     ``2012-01-01 00:00:00``.
     """
     path = tmp_path / "combo_chart.xlsx"
-    _save_combo_chart_workbook(path)
+    _save_combo_chart_workbook(path, time_of_day=time_of_day)
 
     grid = _grid(_only_chart(path))
 
     assert [row[0] for row in grid[1:]] == [
-        month.date().isoformat() for month in _MONTHS
+        month.date().isoformat() + suffix for month in _MONTHS
     ]
 
 
@@ -153,45 +165,33 @@ def test_category_axis_title_heads_the_category_column(tmp_path: Path):
     assert grid[0] == ["Region Position", *_BARS, *_LINES]
 
 
-def test_render_workbook_holds_the_data_of_every_plot(tmp_path: Path):
-    """The workbook that LibreOffice renders holds the line series data too.
+def test_render_workbook_holds_the_data_of_every_plot(tmp_path: Path, monkeypatch):
+    """The workbook that LibreOffice draws holds the line series data too.
 
-    The render workbook keeps every plot of the chart, but before only the
-    data of the first plot was copied into it, so the line plot had no data.
-    Only the workbook assembly is exercised, so this runs without LibreOffice.
+    That workbook keeps every plot of the chart, but before only the data of
+    the first plot was copied into it, so the line plot was drawn without data.
+    A stand-in for LibreOffice keeps the workbook it gets, so this runs without
+    LibreOffice.
     """
     path = tmp_path / "combo_chart.xlsx"
     _save_combo_chart_workbook(path)
-    in_doc = InputDocument(
-        path_or_stream=path,
-        format=InputFormat.XLSX,
-        filename=path.stem,
-        backend=MsExcelDocumentBackend,
-    )
-    backend = MsExcelDocumentBackend(
-        in_doc=in_doc,
-        path_or_stream=path,
-        options=MsExcelBackendOptions(render_chart_images=True),
-    )
-    source_sheet = backend.workbook.worksheets[0]
-    chart = source_sheet._charts[0]
+    rendered: list[Workbook] = []
 
-    standalone = backend._build_standalone_chart_workbook(chart)
+    def libreoffice(input_path: Path, output_path: Path) -> None:
+        rendered.append(load_workbook(input_path))
 
-    assert standalone is not None
-    data_sheet = standalone[source_sheet.title]
+    monkeypatch.setattr(
+        msexcel_backend, "get_docx_to_pdf_converter", lambda: libreoffice
+    )
+    options = MsExcelBackendOptions(render_chart_images=True)
+    converter = DocumentConverter(
+        allowed_formats=[InputFormat.XLSX],
+        format_options={InputFormat.XLSX: ExcelFormatOption(backend_options=options)},
+    )
+
+    _only_chart(path, converter)
+
+    assert len(rendered) == 1
+    data_sheet = rendered[0]["Sheet"]
     assert [data_sheet.cell(row=1, column=col).value for col in (6, 7)] == list(_LINES)
     assert data_sheet.cell(row=2, column=6).value == _LINES["Margin"][0]
-
-
-@pytest.mark.parametrize(
-    ("value", "expected"),
-    [
-        (datetime.datetime(2012, 1, 1), "2012-01-01"),
-        (datetime.datetime(2012, 1, 1, 12, 30), "2012-01-01T12:30:00"),
-        (0.126, "0.126"),
-    ],
-)
-def test_chart_cell_text(value: Any, expected: str):
-    """A date keeps its time of day only when it has one; numbers stay as they are."""
-    assert MsExcelDocumentBackend._chart_cell_text(value) == expected
