@@ -88,7 +88,6 @@ try:  # pragma: no cover - import-time guard
     from openpyxl.styles import PatternFill
     from openpyxl.styles.numbers import is_date_format
     from openpyxl.utils.cell import range_boundaries
-    from openpyxl.utils.datetime import from_excel
     from openpyxl.worksheet.worksheet import Worksheet
     from openpyxl.xml.constants import IMAGE_NS
 
@@ -117,12 +116,9 @@ _CHART_RENDER_HINT = (
     "data without it."
 )
 
-# Maps an openpyxl chart object's ``tagname`` (the DrawingML element name, e.g.
-# "barChart") to the docling picture-classification label we tag the emitted
-# PictureItem with. Chart types not listed fall back to OTHER_CHART.
 _GENERAL_NUMBER_FORMATS: Final[frozenset[str]] = frozenset({"general", "@", ""})
 _EXCEL_DATE_TOKEN_RE: Final[re.Pattern[str]] = re.compile(
-    r'"[^"]*"|\\.|am/pm|yyyy|yy|mmmm|mmm|mm|m|dddd|ddd|dd|d|hh|h|ss|s|[ :/.,-]',
+    r'"[^"]*"|\\.|am/pm|yyyy|yy|mmmmm|mmmm|mmm|mm|m|dddd|ddd|dd|d|hh|h|ss|s|[ :/.,-]',
     re.IGNORECASE,
 )
 
@@ -277,7 +273,11 @@ def _format_excel_date(value: Any, fmt: str) -> str:
             elif token == "am/pm":
                 if not isinstance(dt, datetime):
                     return str(value)
-                rendered.append("AM" if dt.hour < 12 else "PM")
+                rendered.append(part[:2] if dt.hour < 12 else part[3:])
+            elif token == "mmmmm":
+                if isinstance(value, time):
+                    return str(value)
+                rendered.append(dt.strftime("%B")[:1])
             else:
                 directive = {
                     "yyyy": "%Y",
@@ -291,6 +291,9 @@ def _format_excel_date(value: Any, fmt: str) -> str:
     return "".join(rendered)
 
 
+# Maps an openpyxl chart object's ``tagname`` (the DrawingML element name, e.g.
+# "barChart") to the docling picture-classification label we tag the emitted
+# PictureItem with. Chart types not listed fall back to OTHER_CHART.
 _CHART_TAGNAME_TO_CLASSIFICATION: Final[dict[str, PictureClassificationLabel]] = {
     "barChart": PictureClassificationLabel.BAR_CHART,
     "bar3DChart": PictureClassificationLabel.BAR_CHART,
@@ -2053,7 +2056,8 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         sheet name, convert the range to bounds with openpyxl's
         ``range_boundaries``, and read the *cached* values from the workbook
         (the backend loads with ``data_only=True``, so we get computed numbers,
-        not formulas).  Values are returned in row-major order.
+        not formulas). Values are returned in row-major order without display
+        formatting, so chart data keeps the precision of the cached values.
 
         Args:
             ref: A range reference string, optionally sheet-qualified.
@@ -2089,9 +2093,8 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         values: list[str] = []
         for row in range(min_row, max_row + 1):
             for col in range(min_col, max_col + 1):
-                values.append(
-                    _displayed_cell_text(target_sheet.cell(row=row, column=col))
-                )
+                value = target_sheet.cell(row=row, column=col).value
+                values.append("" if value is None else str(value))
 
         return values
 

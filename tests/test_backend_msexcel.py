@@ -22,6 +22,7 @@ from docling_core.types.doc import (
 )
 from docling_core.types.doc.document import DEFAULT_CONTENT_LAYERS
 from openpyxl import Workbook, load_workbook
+from openpyxl.chart import BarChart, Reference
 from openpyxl.comments import Comment
 from openpyxl.worksheet.merge import MergedCellRange
 
@@ -449,6 +450,48 @@ def test_chartsheet_data_values(documents) -> None:
             break
 
     assert found_310, "Should find the value 310 (total ducks for 2024) in the document"
+
+
+def test_chart_data_keeps_raw_values_in_formatted_cells(tmp_path: Path) -> None:
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.title = "Sales"
+    sheet.append(["Month", "Revenue"])
+    sheet.append([datetime(2025, 2, 1), 1234.5])
+    sheet.append([datetime(2025, 3, 1), 99.125])
+    for row in (2, 3):
+        sheet.cell(row, 1).number_format = "mmm-yy"
+        sheet.cell(row, 2).number_format = '"$"#,##0.00'
+    chart = BarChart()
+    chart.add_data(
+        Reference(sheet, min_col=2, min_row=1, max_row=3), titles_from_data=True
+    )
+    chart.set_categories(Reference(sheet, min_col=1, min_row=2, max_row=3))
+    sheet.add_chart(chart, "D1")
+    path = tmp_path / "formatted_chart_data.xlsx"
+    workbook.save(path)
+
+    document = get_converter().convert(path).document
+    assert len(document.tables) == 1
+    worksheet_grid = {
+        (cell.start_row_offset_idx, cell.start_col_offset_idx): cell.text
+        for cell in document.tables[0].data.table_cells
+    }
+    assert worksheet_grid[(1, 0)] == "Feb-25"
+    assert worksheet_grid[(1, 1)] == "$1,234.50"
+    assert worksheet_grid[(2, 1)] == "$99.13"
+    assert len(document.pictures) == 1
+    chart_data = document.pictures[0].meta.tabular_chart.chart_data
+    assert (chart_data.num_rows, chart_data.num_cols) == (3, 2)
+    chart_grid = {
+        (cell.start_row_offset_idx, cell.start_col_offset_idx): cell.text
+        for cell in chart_data.table_cells
+    }
+    assert chart_grid[(0, 1)] == "Revenue"
+    assert chart_grid[(1, 0)] == "2025-02-01 00:00:00"
+    assert chart_grid[(2, 0)] == "2025-03-01 00:00:00"
+    assert chart_grid[(1, 1)] == "1234.5"
+    assert chart_grid[(2, 1)] == "99.125"
 
 
 def test_chart_parsing_disabled() -> None:
@@ -1054,9 +1097,15 @@ def test_format_excel_value_matches_excel_display() -> None:
         (datetime(2025, 2, 1, 13, 30), "m/d/yy h:mm", "2025-02-01 13:30:00"),
         (time(0, 7, 45), "mm:ss", "07:45"),
         (time(13, 30), "h:mm AM/PM", "1:30 PM"),
+        (time(13, 30), "h:mm am/pm", "1:30 pm"),
+        (time(0, 7), "hh:mm am/pm", "12:07 am"),
         (time(0, 7), "hh:mm AM/PM", "12:07 AM"),
         (time(13, 30), "h:mm", "13:30"),
         (datetime(2025, 2, 1), "d-mmm-yy", "1-Feb-25"),
+        (datetime(2025, 2, 1), "mmmmm", "F"),
+        (datetime(2025, 3, 1), "mmmmm d", "M 1"),
+        (datetime(2025, 2, 1), '"mmmmm "mmmmm', "mmmmm F"),
+        (time(13, 30), "mmmmm", "13:30:00"),
         (datetime(2025, 2, 1), '"Due "mmm d', "Due Feb 1"),
         (datetime(2025, 2, 1), '"Due; "mmm d', "Due; Feb 1"),
         (datetime(2025, 2, 1), "yyyy-mm-dd", "2025-02-01"),
@@ -1081,17 +1130,21 @@ def test_format_excel_value_matches_excel_display() -> None:
         (12.5, '"$0"0.00', "12.5"),
     ],
 )
-def test_excel_review_number_format_regressions(value, number_format, expected) -> None:
+def test_excel_number_format_tokens_and_sections(
+    value, number_format, expected
+) -> None:
     assert _format_excel_value(value, number_format) == expected
 
 
-def test_xlsx_review_formats_survive_document_conversion(tmp_path: Path) -> None:
+def test_xlsx_number_formats_survive_document_conversion(tmp_path: Path) -> None:
     workbook = Workbook()
     sheet = workbook.active
     rows = [
         ("Date", datetime(2025, 2, 1), "mm-dd-yy", "2025-02-01"),
         ("Minutes", time(0, 7, 45), "mm:ss", "07:45"),
         ("Afternoon", time(13, 30), "h:mm AM/PM", "1:30 PM"),
+        ("Lowercase afternoon", time(13, 30), "h:mm am/pm", "1:30 pm"),
+        ("Month initial", datetime(2025, 2, 1), "mmmmm", "F"),
         ("Due", datetime(2025, 2, 1), '"Due "mmm d', "Due Feb 1"),
         ("Negative", -5, '"$"#,##0.00_);\\("$"#,##0.00\\)', "($5.00)"),
         ("Percent", 0.125, "0%", "13%"),
@@ -1102,7 +1155,7 @@ def test_xlsx_review_formats_survive_document_conversion(tmp_path: Path) -> None
     for row_index, (label, value, number_format, _) in enumerate(rows, start=2):
         sheet.cell(row_index, 1, label)
         sheet.cell(row_index, 2, value).number_format = number_format
-    path = tmp_path / "review_number_formats.xlsx"
+    path = tmp_path / "number_format_tokens.xlsx"
     workbook.save(path)
 
     document = get_converter().convert(path).document
@@ -1138,7 +1191,7 @@ def test_xlsx_keeps_excel_number_formats(tmp_path: Path) -> None:
     sheet["C5"] = "Order month"
     sheet["D5"] = datetime(2025, 2, 1)
     sheet["D5"].number_format = "mmm-yy"
-    file_path = tmp_path / "formulas_and_number_formats.xlsx"
+    file_path = tmp_path / "number_formats.xlsx"
     workbook.save(file_path)
 
     converter = get_converter()
