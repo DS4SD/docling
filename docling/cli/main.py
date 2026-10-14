@@ -50,6 +50,7 @@ from pydantic import SecretStr, TypeAdapter, ValidationError
 from rich.console import Console
 from tqdm.contrib.logging import logging_redirect_tqdm
 
+from docling.cli.entrypoint import print_version
 from docling.cli.export_utils import (
     _export_flags_from_formats,
     _is_empty_output,
@@ -117,7 +118,7 @@ from docling.datamodel.base_models import (
     OutputFormat,
 )
 from docling.datamodel.chart_extraction_options import ChartExtractionVlmEngineOptions
-from docling.datamodel.document import ConversionResult, DoclingVersion
+from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import (
     AsrPipelineOptions,
     BaseLayoutOptions,
@@ -461,18 +462,7 @@ def logo_callback(value: bool):
 
 def version_callback(value: bool):
     if value:
-        v = DoclingVersion()
-        docling_version = (
-            v.docling_version
-            if v.docling_version != "unknown"
-            else v.docling_slim_version
-        )
-        print(f"Docling version: {docling_version}")
-        print(f"Docling Core version: {v.docling_core_version}")
-        print(f"Docling IBM Models version: {v.docling_ibm_models_version}")
-        print(f"Docling Parse version: {v.docling_parse_version}")
-        print(f"Python: {v.py_impl_version} ({v.py_lang_version})")
-        print(f"Platform: {v.platform_str}")
+        print_version()
         raise typer.Exit()
 
 
