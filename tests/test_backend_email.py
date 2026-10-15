@@ -7,6 +7,7 @@ from email.utils import getaddresses
 from io import BytesIO
 from pathlib import Path
 
+import pytest
 from docling_core.types.doc import DocItemLabel, TextItem
 
 from docling.backend.email_backend import EmailDocumentBackend
@@ -441,6 +442,42 @@ Content-Type: text/html; charset="utf-8"
     assert "Hello **Bob** ," in markdown
     assert "This is HTML." in markdown
     assert "<strong>" not in markdown
+
+
+@pytest.mark.parametrize(
+    ("mime_charset", "meta", "text"),
+    [
+        (
+            "iso-8859-1",
+            '<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">',
+            "Café crème",
+        ),
+        ("utf-8", '<meta charset="iso-8859-1">', "日本語 café"),
+    ],
+    ids=["latin1", "utf8-with-latin1-meta"],
+)
+def test_email_backend_decodes_html_body_with_meta_charset_once(
+    mime_charset: str, meta: str, text: str
+):
+    # Mail clients keep the <meta> charset of the original HTML in the part
+    html = f"<html><head>{meta}</head><body><p>{text}</p></body></html>"
+    raw_email = (
+        b"From: Alice Example <alice@example.com>\r\n"
+        b"Subject: Menu\r\n"
+        b"MIME-Version: 1.0\r\n"
+        + f'Content-Type: text/html; charset="{mime_charset}"\r\n'.encode()
+        + b"Content-Transfer-Encoding: 8bit\r\n\r\n"
+        + html.encode(mime_charset)
+    )
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(raw_email),
+        format=InputFormat.EMAIL,
+        filename="html.eml",
+        backend=EmailDocumentBackend,
+    )
+    backend = EmailDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(raw_email))
+
+    assert text in backend.convert().export_to_markdown()
 
 
 def test_email_backend_normalises_body_line_endings():

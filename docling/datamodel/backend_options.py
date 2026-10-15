@@ -311,6 +311,15 @@ class ThreadedDoclingParseBackendOptions(PdfBackendOptions):
             "If unset, the backend falls back to global accelerator thread settings."
         ),
     )
+    max_concurrent_results: Optional[PositiveInt] = Field(
+        None,
+        description=(
+            "Maximum number of decoded pages the threaded docling-parse backend buffers "
+            "ahead of the pipeline before its workers pause. Each buffered page holds its "
+            "decoded content and rendered image in memory, so lowering this bounds peak "
+            "memory on large or image-heavy PDFs. If unset, the docling-parse default is used."
+        ),
+    )
     render_pages: bool = Field(
         True,
         description=(
@@ -377,15 +386,27 @@ class IWorkBackendOptions(BaseBackendOptions):
     max_member_count: Annotated[
         PositiveInt, Field(description="Maximum number of archive members to inspect")
     ] = 5000
+    sheet_names: Annotated[
+        Optional[list[str]],
+        Field(
+            description=(
+                "An optional list of sheet names to include when converting a "
+                "Numbers spreadsheet. When set, only sheets whose names appear "
+                "in this list will be processed. Sheet names are matched "
+                "case-sensitively. Set to None (default) to include all sheets. "
+                "Ignored by the Pages backend, which has no sheets."
+            )
+        ),
+    ] = None
     render_chart_images: Annotated[
         bool,
         Field(
             description=(
                 "Whether to render an image for each chart in a Keynote "
-                "presentation and attach it to the chart PictureItem. Keynote "
-                "stores no picture of a chart and LibreOffice cannot read one "
-                "out of a .key, so the chart is rebuilt from the data read out "
-                "of the presentation as a single-chart Office document and "
+                "presentation or a Numbers spreadsheet and attach it to the "
+                "chart PictureItem. Neither app stores a picture of a chart, so "
+                "the chart is rebuilt from the data read out of the document as "
+                "a single-chart Office document and "
                 "rasterized with LibreOffice, the route the Office backends "
                 "render their charts by. The image has the chart's kind, data "
                 "and title but not its colours or fonts, and a chart with no "
@@ -487,6 +508,20 @@ class MsWordBackendOptions(BaseBackendOptions):
         ),
     )
 
+    use_outline_level_for_headings: Annotated[
+        bool,
+        Field(
+            description=(
+                "Use `w:outlineLvl` as a heading signal when no name-based signal "
+                "exists (e.g. localized styles such as `Nadpis1`). Known limitation: "
+                "styles that carry an outline level only for TOC participation are "
+                "also promoted to headings. Set to `False` to disable. Note: for "
+                "styles already identified as headings by name, the level is still "
+                "read from `w:outlineLvl` regardless of this option."
+            )
+        ),
+    ] = True
+
 
 class OdsBackendOptions(BaseBackendOptions):
     """Options specific to the ODS (OpenDocument Spreadsheet) backend."""
@@ -527,6 +562,14 @@ class LatexBackendOptions(BaseBackendOptions):
     """Options specific to the LaTeX backend."""
 
     kind: Literal["latex"] = Field("latex", exclude=True, repr=False)
+    source_uri: Optional[PurePath] = Field(
+        None,
+        description=(
+            "The local path of the LaTeX document. If provided and the document "
+            "is read from a stream, the backend resolves relative \\input, "
+            "\\include and \\includegraphics paths against its directory."
+        ),
+    )
     parse_timeout: Optional[float] = Field(
         30.0,
         description=(
