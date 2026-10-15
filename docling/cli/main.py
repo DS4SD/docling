@@ -877,7 +877,7 @@ def convert(  # noqa: C901
         ImageRefMode,
         typer.Option(
             ...,
-            help="Image export mode for image-capable document outputs (JSON, YAML, HTML, HTML split-page, and Markdown). Text, DocTags, and WebVTT outputs do not export images. With `placeholder`, only the position of the image is marked in the output. In `embedded` mode, the image is embedded as base64 encoded string. In `referenced` mode, the image is exported in PNG format and referenced from the main exported document.",
+            help="Image export mode for image-capable document outputs (JSON, YAML, HTML, HTML split-page, and Markdown). Text, DocTags, and WebVTT outputs do not export images. With `placeholder`, only the position of the image is marked in the output. In `embedded` mode, the image is embedded as base64 encoded string. In `referenced` mode, the image is exported in PNG format to a `<name>_artifacts` folder next to the output file, and the output references it with a relative path.",
         ),
     ] = ImageRefMode.EMBEDDED,
     html_image_fetch: Annotated[
