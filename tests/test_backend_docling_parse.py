@@ -9,7 +9,7 @@ from typing import Any
 import pytest
 from docling_core.types.doc import CoordOrigin
 from docling_core.types.doc.page import PdfCellRenderingMode
-from docling_parse.pdf_parser import ContentLevel
+from docling_parse.pdf_parser import ContentLevel, ThreadedPdfParserConfig
 from PIL import Image, ImageDraw, ImageStat
 
 import docling.backend.docling_parse_backend as docling_parse_backend_module
@@ -537,6 +537,60 @@ def test_threaded_backend_allows_disabling_native_memory_release(
     assert parser.decode_config.release_native_memory_every_n_pages == 0
 
     in_doc._backend.unload()
+
+
+def test_threaded_backend_keeps_parser_default_read_ahead_when_unset(
+    test_doc_path, monkeypatch: pytest.MonkeyPatch
+):
+    monkeypatch.setattr(
+        "docling.backend.docling_parse_backend.DoclingThreadedPdfParser",
+        _FakeThreadedParser,
+    )
+
+    in_doc = InputDocument(
+        path_or_stream=test_doc_path,
+        format=InputFormat.PDF,
+        backend=ThreadedDoclingParseDocumentBackend,
+        backend_options=ThreadedDoclingParseBackendOptions(),
+    )
+
+    parser = _FakeThreadedParser.created
+    assert parser is not None
+    assert parser.parser_config is not None
+    assert (
+        parser.parser_config.max_concurrent_results
+        == ThreadedPdfParserConfig().max_concurrent_results
+    )
+
+    in_doc._backend.unload()
+
+
+def test_threaded_backend_uses_backend_option_max_concurrent_results(
+    test_doc_path, monkeypatch: pytest.MonkeyPatch
+):
+    monkeypatch.setattr(
+        "docling.backend.docling_parse_backend.DoclingThreadedPdfParser",
+        _FakeThreadedParser,
+    )
+
+    in_doc = InputDocument(
+        path_or_stream=test_doc_path,
+        format=InputFormat.PDF,
+        backend=ThreadedDoclingParseDocumentBackend,
+        backend_options=ThreadedDoclingParseBackendOptions(max_concurrent_results=1),
+    )
+
+    parser = _FakeThreadedParser.created
+    assert parser is not None
+    assert parser.parser_config is not None
+    assert parser.parser_config.max_concurrent_results == 1
+
+    in_doc._backend.unload()
+
+
+def test_threaded_backend_rejects_non_positive_max_concurrent_results():
+    with pytest.raises(ValueError):
+        ThreadedDoclingParseBackendOptions(max_concurrent_results=0)
 
 
 def test_threaded_backend_uses_accelerator_thread_count_when_unset(

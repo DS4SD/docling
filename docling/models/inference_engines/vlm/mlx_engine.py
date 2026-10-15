@@ -271,7 +271,7 @@ class MlxVlmEngine(BaseVlmEngine, HuggingFaceModelDownloadMixin):
                 generation_kwargs: dict[str, Any] = {
                     "max_tokens": input_data.max_new_tokens,
                     "verbose": False,
-                    "temp": input_data.temperature,
+                    "temperature": input_data.temperature,
                 }
                 if self.options.repetition_penalty is not None:
                     generation_kwargs["repetition_penalty"] = (
