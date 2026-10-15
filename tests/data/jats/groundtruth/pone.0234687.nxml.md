@@ -114,7 +114,11 @@ Table 3 GHG emission factors for Off- and On-farm feed production.
 | Pearl milletd | 11,000 | 0.195 | kg CO2e (kg DM)-1 | [32,35] |
 | Kikuyu grasse | 9,500 | 0.226 | kg CO2e (kg DM)-1 | [32,36] |
 
-a CO 2 e, carbon dioxide equivalent. b Emission factor estimated as [kg CO 2 e ha -1 : kg DM ha -1 ]. c,d,e Emission factors estimated as [kg CO 2 e ha -1 : kg DM ha -1 × 0.7], assuming that animals are able to consume 70% of pasture during grazing.
+a CO 2 e, carbon dioxide equivalent.
+
+b Emission factor estimated as [kg CO 2 e ha -1 : kg DM ha -1 ].
+
+c,d,e Emission factors estimated as [kg CO 2 e ha -1 : kg DM ha -1 × 0.7], assuming that animals are able to consume 70% of pasture during grazing.
 
 Emissions from on-farm feed production (corn silage and pasture) were estimated using primary and secondary sources based on the actual amount of each input (Table 4). Primary sources were direct and indirect N 2 O-N emissions from organic and synthetic fertilizers and crop/pasture residues, CO 2 -C emissions from lime and urea applications, as well as fuel combustion. The direct N 2 O-N emission factor (kg (kg N input) -1 ) is based on a local study performed previously [37]. For indirect N 2 O-N emissions (kg N 2 O-N (kg NH 3 -N + NO x ) -1 ), as well as CO 2 -C emissions from lime + urea, default values proposed by IPCC [38] were used. For perennial pastures, a C sequestration of 0.57 t ha -1 was used based on a 9-year study conducted in southern Brazil [39]. Due to the use of conventional tillage, no C sequestration was considered for annual pastures. The amount of fuel required was 8.9 (no-tillage) and 14.3 L ha -1 (disking) for annual tropical and temperate pastures, respectively [40]. The CO 2 from fuel combustion was 2.7 kg CO 2 L -1 [41]. Secondary sources of emissions during the production of fuel, machinery, fertilizer, pesticides, seeds and plastic for ensilage were estimated using emission factors described by Rotz et al. [42].
 
@@ -150,7 +154,23 @@ Table 4 GHG emissions from On-farm feed production.
 | kg CO2e ha-1 (emitted—sequestered) | 1833 | 964 | 1130 | -245 |
 | Emission factor, kg CO2e (kg DM)-1i | 0.115 | 0.145 | 0.147 | -0.037 |
 
-a 100% of N requirements for corn silage and 90% for pastures was supplied by stocked manure. b From IPCC [38]. c From a local study [37]. d From Assessment report 5 (AR5; [27]). e From [40,41] f Emissions during the production of fuel, machinery, fertilizer, pesticides, seeds and plastic for ensilage. Estimated as described by Rotz et al. [42]. g Without accounting sequestered CO 2 -C due to no-tillage for perennial pasture. h From [39]. i Accounting sequestered CO 2 -C due to no-tillage for perennial pasture.
+a 100% of N requirements for corn silage and 90% for pastures was supplied by stocked manure.
+
+b From IPCC [38].
+
+c From a local study [37].
+
+d From Assessment report 5 (AR5; [27]).
+
+e From [40,41]
+
+f Emissions during the production of fuel, machinery, fertilizer, pesticides, seeds and plastic for ensilage. Estimated as described by Rotz et al. [42].
+
+g Without accounting sequestered CO 2 -C due to no-tillage for perennial pasture.
+
+h From [39].
+
+i Accounting sequestered CO 2 -C due to no-tillage for perennial pasture.
 
 ### Animal husbandry
 
@@ -184,7 +204,13 @@ Table 5 Factors for major resource inputs in farm management.
 | Electricity for milking | 0.06 | kWh (kg milk)-1 | [47] |
 | Electricity for lightingd | 75 | kWh cow-1 | [47] |
 
-a mm, machinery mass b Based on United States data. c Based on the Brazilian electricity matrix. d Naturally ventilated barns.
+a mm, machinery mass
+
+b Based on United States data.
+
+c Based on the Brazilian electricity matrix.
+
+d Naturally ventilated barns.
 
 The amount of fuel use for manure handling were estimated taking into consideration the amount of manure produced per cow and the amounts of fuel required for manure handling (L diesel t -1 ) [42]. The amount of manure was estimated from OM excretions (kg cow -1 ), assuming that the manure has 8% ash on DM basis and 60% DM content. The OM excretions were calculated by NDOMI × days in confinement × proportion of daily time that animals stayed on confinement.
 

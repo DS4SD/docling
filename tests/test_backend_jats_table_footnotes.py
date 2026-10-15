@@ -8,10 +8,10 @@ Contract:
 * Each nonempty fn directly under table-wrap/table-wrap-foot becomes exactly
   one FOOTNOTE TextItem whose parent is the table, and the table references it
   from TableItem.footnotes in source order.
-* A note made of a single non-formula run keeps text, formatting, and hyperlink
-  on the wrapper itself.
-* A note with several runs or an inline formula uses an empty wrapper whose
-  children are the inline TEXT/FORMULA runs.
+* Each note uses an empty wrapper whose children are inline FOOTNOTE/FORMULA
+  runs, including single plain, styled, or linked runs. This keeps note content
+  visible with the released docling-core table serializers while retaining its
+  semantic label.
 * A bare p under table-wrap-foot and existing fn-group handling stay unchanged.
 
 All XML below is original synthetic content.
@@ -19,6 +19,8 @@ All XML below is original synthetic content.
 
 from io import BytesIO
 
+import pytest
+from docling_core.transforms.chunker import HierarchicalChunker
 from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
@@ -90,14 +92,13 @@ def _runs(doc: DoclingDocument, item: NodeItem) -> list[TextItem]:
 
 
 def _note_text(doc: DoclingDocument, item: TextItem) -> str:
-    """Plain text of a wrapper: its own text, or its inline runs joined."""
-    if item.text:
-        return item.text
+    """Plain text of a note's inline runs joined."""
     return " ".join(r.text for r in _runs(doc, item))
 
 
 def _assert_wrapper(table: TableItem, item: TextItem) -> None:
     assert item.label == DocItemLabel.FOOTNOTE
+    assert item.text == ""
     assert item.parent is not None
     assert item.parent.cref == table.self_ref
 
@@ -131,12 +132,14 @@ def test_simple_table_footnote_is_one_wrapper_owned_by_table():
     notes = _footnotes(doc, table)
     assert len(notes) == 1
     _assert_wrapper(table, notes[0])
-    assert notes[0].text == "Values are means of three runs."
-    assert notes[0].children == []
-    assert notes[0].formatting is None
-    assert notes[0].hyperlink is None
-    # The note is not duplicated elsewhere as another FOOTNOTE text.
-    assert [t.self_ref for t in _all_footnote_texts(doc)] == [notes[0].self_ref]
+    runs = _runs(doc, notes[0])
+    assert [r.text for r in runs] == ["Values are means of three runs."]
+    assert runs[0].formatting is None
+    assert runs[0].hyperlink is None
+    # The note has one content-bearing FOOTNOTE item beneath its empty wrapper.
+    assert [t.text for t in _all_footnote_texts(doc) if t.text] == [
+        "Values are means of three runs."
+    ]
 
 
 def test_literal_xref_note_stays_one_plain_wrapper():
@@ -149,12 +152,16 @@ def test_literal_xref_note_stays_one_plain_wrapper():
 
     table = doc.tables[0]
     notes = _footnotes(doc, table)
-    assert [n.text for n in notes] == ["From sample [8], measured.", "See 1 now."]
+    assert [_note_text(doc, n) for n in notes] == [
+        "From sample [8], measured.",
+        "See 1 now.",
+    ]
     for note in notes:
         _assert_wrapper(table, note)
-        assert note.children == []
-        assert note.formatting is None
-        assert note.hyperlink is None
+        runs = _runs(doc, note)
+        assert len(runs) == 1
+        assert runs[0].formatting is None
+        assert runs[0].hyperlink is None
 
     for out in (doc.export_to_markdown(), doc.export_to_html()):
         assert "From sample [8], measured." in out
@@ -191,11 +198,11 @@ def test_multiple_notes_and_tables_keep_source_order():
         _assert_wrapper(first, note)
     for note in second_notes:
         _assert_wrapper(second, note)
-    assert [n.text for n in first_notes] == [
+    assert [_note_text(doc, n) for n in first_notes] == [
         "First table note one.",
         "First table note two.",
     ]
-    assert [n.text for n in second_notes] == ["Second table note."]
+    assert [_note_text(doc, n) for n in second_notes] == ["Second table note."]
 
     md = doc.export_to_markdown()
     _assert_ordered(
@@ -246,7 +253,7 @@ def test_styled_linked_and_superscript_runs_are_preserved():
     _assert_wrapper(table, wrapper)
     assert wrapper.text == ""
     runs = _runs(doc, wrapper)
-    assert all(r.label == DocItemLabel.TEXT for r in runs)
+    assert all(r.label == DocItemLabel.FOOTNOTE for r in runs)
     texts = [r.text for r in runs]
     by_text = {r.text: r for r in runs}
 
@@ -275,13 +282,104 @@ def test_inline_formula_is_a_formula_run_inside_the_wrapper():
     _assert_wrapper(table, wrapper)
     assert wrapper.text == ""
     assert [(r.label, r.text) for r in _runs(doc, wrapper)] == [
-        (DocItemLabel.TEXT, "Error bound is"),
+        (DocItemLabel.FOOTNOTE, "Error bound is"),
         (DocItemLabel.FORMULA, "\\epsilon < 0.5"),
-        (DocItemLabel.TEXT, "for all rows."),
+        (DocItemLabel.FOOTNOTE, "for all rows."),
     ]
 
     md = doc.export_to_markdown()
     _assert_ordered(md, "Alpha", "Error bound is", "$\\epsilon < 0.5$", "for all rows.")
+
+
+def test_export_label_filter_omits_table_note_text():
+    note_text = "Filtered table note."
+    doc = _convert(
+        _table_wrap(
+            "t1",
+            "Table 1",
+            "Filtering.",
+            "Alpha",
+            f"<fn><p>{note_text}</p></fn>",
+        )
+        + "<p>Paragraph after table.</p>"
+    )
+    labels = set(DocItemLabel) - {DocItemLabel.FOOTNOTE}
+
+    assert note_text in doc.export_to_markdown()
+    assert note_text in doc.export_to_html()
+    for output in (
+        doc.export_to_markdown(labels=labels),
+        doc.export_to_html(labels=labels),
+    ):
+        assert note_text not in output
+        assert "Alpha" in output
+        assert "Paragraph after table." in output
+
+
+def test_hierarchical_chunk_metadata_classifies_note_text_and_formula():
+    note_text = "Chunked table note"
+    foot = (
+        f"<fn><p>{note_text} with <italic>emphasis</italic> and "
+        "<inline-formula><tex-math>a^2</tex-math></inline-formula>.</p></fn>"
+    )
+    doc = _convert(
+        _table_wrap("t1", "Table 1", "Chunking.", "Alpha", foot)
+        + "<p>Paragraph after table.</p>"
+    )
+
+    note_chunks = [
+        chunk for chunk in HierarchicalChunker().chunk(doc) if note_text in chunk.text
+    ]
+    assert len(note_chunks) == 1
+    assert [item.label for item in note_chunks[0].meta.doc_items] == [
+        DocItemLabel.FOOTNOTE,
+        DocItemLabel.FOOTNOTE,
+        DocItemLabel.FOOTNOTE,
+        DocItemLabel.FORMULA,
+        DocItemLabel.FOOTNOTE,
+    ]
+
+
+@pytest.mark.parametrize(
+    ("content", "markdown", "html"),
+    [
+        (
+            "<bold>Styled note.</bold>",
+            "**Styled note.**",
+            "<strong>Styled note.</strong>",
+        ),
+        (
+            '<ext-link xlink:href="https://example.org/note">Linked note.</ext-link>',
+            "[Linked note.](https://example.org/note)",
+            '<a href="https://example.org/note">Linked note.</a>',
+        ),
+        (
+            "<inline-formula><tex-math>a^2</tex-math></inline-formula>",
+            "$a^2$",
+            "<msup><mi>a</mi><mn>2</mn></msup>",
+        ),
+    ],
+    ids=["styled", "linked", "formula"],
+)
+def test_single_run_note_exports_once_with_inline_formatting(content, markdown, html):
+    doc = _convert(
+        _table_wrap(
+            "t1", "Table 1", "Single run.", "Alpha", f"<fn><p>{content}</p></fn>"
+        )
+        + "<p>After table.</p>"
+    )
+    restored = DoclingDocument.model_validate_json(doc.model_dump_json())
+    for converted in (doc, restored):
+        note = _footnotes(converted, converted.tables[0])[0]
+        _assert_wrapper(converted.tables[0], note)
+        assert len(_runs(converted, note)) == 1
+        md = converted.export_to_markdown()
+        _assert_ordered(md, "Alpha", markdown, "After table.")
+        assert md.count(markdown) == 1
+        assert "$$" not in md
+        output = converted.export_to_html()
+        _assert_ordered(output, "</table>", html, "After table.")
+        assert output.count(html) == 1
 
 
 def test_tables_without_notes_or_with_empty_notes_have_no_footnotes():
@@ -346,7 +444,7 @@ def test_existing_fn_group_output_is_unchanged():
     assert "Values are means of three runs." not in joined
 
     table = doc.tables[0]
-    assert [n.text for n in _footnotes(doc, table)] == [
+    assert [_note_text(doc, n) for n in _footnotes(doc, table)] == [
         "Values are means of three runs."
     ]
 
@@ -375,7 +473,7 @@ def test_json_roundtrip_preserves_footnote_refs_and_runs():
     assert len(notes) == 2
     for note in notes:
         _assert_wrapper(table, note)
-    assert notes[0].text == "Plain roundtrip note."
+    assert _note_text(restored, notes[0]) == "Plain roundtrip note."
     rich_runs = _runs(restored, notes[1])
     assert [r.text for r in rich_runs] == ["Rich", "roundtrip", "note."]
     bold = rich_runs[1].formatting
@@ -441,34 +539,35 @@ def _single_note(foot: str) -> tuple[DoclingDocument, TableItem, TextItem]:
 
 def test_paragraphs_in_one_note_keep_a_word_boundary():
     doc, _, note = _single_note('<fn id="p1"><p>alpha</p><p>beta</p></fn>')
-    assert note.text == "alpha beta"
-    assert note.children == []
+    assert [r.text for r in _runs(doc, note)] == ["alpha beta"]
     assert "alpha beta" in doc.export_to_markdown()
 
     # Source line breaks between paragraphs give the same single space.
-    _, _, note = _single_note('<fn id="p2"><p>alpha</p>\n  <p>beta</p></fn>')
-    assert note.text == "alpha beta"
+    doc, _, note = _single_note('<fn id="p2"><p>alpha</p>\n  <p>beta</p></fn>')
+    assert [r.text for r in _runs(doc, note)] == ["alpha beta"]
 
     # Leading whitespace in the next paragraph is the boundary; add no extra space.
-    _, _, note = _single_note('<fn id="p3"><p>alpha</p><p> beta</p></fn>')
-    assert note.text == "alpha beta"
-    _, _, note = _single_note('<fn id="p4"><p>alpha</p><p>\nbeta</p></fn>')
-    assert note.text == "alpha beta"
+    doc, _, note = _single_note('<fn id="p3"><p>alpha</p><p> beta</p></fn>')
+    assert [r.text for r in _runs(doc, note)] == ["alpha beta"]
+    doc, _, note = _single_note('<fn id="p4"><p>alpha</p><p>\nbeta</p></fn>')
+    assert [r.text for r in _runs(doc, note)] == ["alpha beta"]
 
 
 def test_paragraph_boundary_skips_comments_and_keeps_label_and_tails():
-    _, _, note = _single_note(
+    doc, _, note = _single_note(
         '<fn id="c1"><p>Before</p><!-- hidden --><?probe data?><p>after</p></fn>'
     )
-    assert note.text == "Before after"
+    assert [r.text for r in _runs(doc, note)] == ["Before after"]
 
     # The label join is marker behavior and is not changed here.
-    _, _, note = _single_note('<fn id="l1"><label>a</label><p>One.</p><p>Two.</p></fn>')
-    assert "One. Two." in note.text
+    doc, _, note = _single_note(
+        '<fn id="l1"><label>a</label><p>One.</p><p>Two.</p></fn>'
+    )
+    assert [r.text for r in _runs(doc, note)] == ["aOne. Two."]
 
     # Text around paragraphs keeps its source order and its existing join.
-    _, _, note = _single_note('<fn id="t1">lead <p>alpha</p>mid<p>beta</p> end</fn>')
-    assert note.text == "lead alphamid beta end"
+    doc, _, note = _single_note('<fn id="t1">lead <p>alpha</p>mid<p>beta</p> end</fn>')
+    assert [r.text for r in _runs(doc, note)] == ["lead alphamid beta end"]
 
 
 def test_paragraph_boundary_keeps_styled_and_formula_runs():
@@ -484,10 +583,10 @@ def test_paragraph_boundary_keeps_styled_and_formula_runs():
         "<tex-math>b^2</tex-math><p>y</p></fn>"
     )
     assert [(r.label, r.text) for r in _runs(doc, note)] == [
-        (DocItemLabel.TEXT, "x"),
+        (DocItemLabel.FOOTNOTE, "x"),
         (DocItemLabel.FORMULA, "a^2"),
         (DocItemLabel.FORMULA, "b^2"),
-        (DocItemLabel.TEXT, "y"),
+        (DocItemLabel.FOOTNOTE, "y"),
     ]
 
 

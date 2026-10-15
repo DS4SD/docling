@@ -113,12 +113,12 @@ item-0 at level 0: unspecified: group _root_
             item-110 at level 6: text: ). The nutrient intake was calcu ...  collected throughout the experiments.
           item-111 at level 5: table with [21x11]
             item-111 at level 6: caption: Table 2 Dairy cows’ diets in different scenariosa.
-            item-112 at level 6: footnote: 
+            item-112 at level 6: footnote:
               item-113 at level 7: inline: group group
-                item-114 at level 8: text: a
-                item-115 at level 8: text: AI, artificial insemination; TMR ... of total mixed ration with pasture; NE
-                item-116 at level 8: text: L
-                item-117 at level 8: text: , net energy for lactation; MP, metabolizable protein.
+                item-114 at level 8: footnote: a
+                item-115 at level 8: footnote: AI, artificial insemination; TMR ... of total mixed ration with pasture; NE
+                item-116 at level 8: footnote: L
+                item-117 at level 8: footnote: , net energy for lactation; MP, metabolizable protein.
         item-118 at level 4: section_header: GHG emissions from crop and pasture production
           item-119 at level 5: inline: group group
             item-120 at level 6: text: GHG emission factors used for of ... s productions were 3300 and 1500 kg CO
@@ -130,32 +130,32 @@ item-0 at level 0: unspecified: group _root_
             item-126 at level 6: text: ) of corn silage and pastures we ... onsume 70% of pastures during grazing.
           item-127 at level 5: table with [9x5]
             item-127 at level 6: caption: Table 3 GHG emission factors for Off- and On-farm feed production.
-            item-128 at level 6: footnote: 
+            item-128 at level 6: footnote:
               item-129 at level 7: inline: group group
-                item-130 at level 8: text: a
-                item-131 at level 8: text: CO
-                item-132 at level 8: text: 2
-                item-133 at level 8: text: e, carbon dioxide equivalent.
-            item-134 at level 6: footnote: 
+                item-130 at level 8: footnote: a
+                item-131 at level 8: footnote: CO
+                item-132 at level 8: footnote: 2
+                item-133 at level 8: footnote: e, carbon dioxide equivalent.
+            item-134 at level 6: footnote:
               item-135 at level 7: inline: group group
-                item-136 at level 8: text: b
-                item-137 at level 8: text: Emission factor estimated as [kg CO
-                item-138 at level 8: text: 2
-                item-139 at level 8: text: e ha
-                item-140 at level 8: text: -1
-                item-141 at level 8: text: : kg DM ha
-                item-142 at level 8: text: -1
-                item-143 at level 8: text: ].
-            item-144 at level 6: footnote: 
+                item-136 at level 8: footnote: b
+                item-137 at level 8: footnote: Emission factor estimated as [kg CO
+                item-138 at level 8: footnote: 2
+                item-139 at level 8: footnote: e ha
+                item-140 at level 8: footnote: -1
+                item-141 at level 8: footnote: : kg DM ha
+                item-142 at level 8: footnote: -1
+                item-143 at level 8: footnote: ].
+            item-144 at level 6: footnote:
               item-145 at level 7: inline: group group
-                item-146 at level 8: text: c,d,e
-                item-147 at level 8: text: Emission factors estimated as [kg CO
-                item-148 at level 8: text: 2
-                item-149 at level 8: text: e ha
-                item-150 at level 8: text: -1
-                item-151 at level 8: text: : kg DM ha
-                item-152 at level 8: text: -1
-                item-153 at level 8: text: × 0.7], assuming that animals ar ... consume 70% of pasture during grazing.
+                item-146 at level 8: footnote: c,d,e
+                item-147 at level 8: footnote: Emission factors estimated as [kg CO
+                item-148 at level 8: footnote: 2
+                item-149 at level 8: footnote: e ha
+                item-150 at level 8: footnote: -1
+                item-151 at level 8: footnote: : kg DM ha
+                item-152 at level 8: footnote: -1
+                item-153 at level 8: footnote: × 0.7], assuming that animals ar ... consume 70% of pasture during grazing.
           item-154 at level 5: inline: group group
             item-155 at level 6: text: Emissions from on-farm feed prod ... ary sources were direct and indirect N
             item-156 at level 6: text: 2
@@ -190,46 +190,46 @@ item-0 at level 0: unspecified: group _root_
             item-185 at level 6: text: [41]. Secondary sources of emiss ... factors described by Rotz et al. [42].
           item-186 at level 5: table with [28x5]
             item-186 at level 6: caption: Table 4 GHG emissions from On-farm feed production.
-            item-187 at level 6: footnote: 
+            item-187 at level 6: footnote:
               item-188 at level 7: inline: group group
-                item-189 at level 8: text: a
-                item-190 at level 8: text: 100% of N requirements for corn  ... stures was supplied by stocked manure.
-            item-191 at level 6: footnote: 
+                item-189 at level 8: footnote: a
+                item-190 at level 8: footnote: 100% of N requirements for corn  ... stures was supplied by stocked manure.
+            item-191 at level 6: footnote:
               item-192 at level 7: inline: group group
-                item-193 at level 8: text: b
-                item-194 at level 8: text: From IPCC [38].
-            item-195 at level 6: footnote: 
+                item-193 at level 8: footnote: b
+                item-194 at level 8: footnote: From IPCC [38].
+            item-195 at level 6: footnote:
               item-196 at level 7: inline: group group
-                item-197 at level 8: text: c
-                item-198 at level 8: text: From a local study [37].
-            item-199 at level 6: footnote: 
+                item-197 at level 8: footnote: c
+                item-198 at level 8: footnote: From a local study [37].
+            item-199 at level 6: footnote:
               item-200 at level 7: inline: group group
-                item-201 at level 8: text: d
-                item-202 at level 8: text: From Assessment report 5 (AR5; [27]).
-            item-203 at level 6: footnote: 
+                item-201 at level 8: footnote: d
+                item-202 at level 8: footnote: From Assessment report 5 (AR5; [27]).
+            item-203 at level 6: footnote:
               item-204 at level 7: inline: group group
-                item-205 at level 8: text: e
-                item-206 at level 8: text: From [40,41]
-            item-207 at level 6: footnote: 
+                item-205 at level 8: footnote: e
+                item-206 at level 8: footnote: From [40,41]
+            item-207 at level 6: footnote:
               item-208 at level 7: inline: group group
-                item-209 at level 8: text: f
-                item-210 at level 8: text: Emissions during the production  ... ated as described by Rotz et al. [42].
-            item-211 at level 6: footnote: 
+                item-209 at level 8: footnote: f
+                item-210 at level 8: footnote: Emissions during the production  ... ated as described by Rotz et al. [42].
+            item-211 at level 6: footnote:
               item-212 at level 7: inline: group group
-                item-213 at level 8: text: g
-                item-214 at level 8: text: Without accounting sequestered CO
-                item-215 at level 8: text: 2
-                item-216 at level 8: text: -C due to no-tillage for perennial pasture.
-            item-217 at level 6: footnote: 
+                item-213 at level 8: footnote: g
+                item-214 at level 8: footnote: Without accounting sequestered CO
+                item-215 at level 8: footnote: 2
+                item-216 at level 8: footnote: -C due to no-tillage for perennial pasture.
+            item-217 at level 6: footnote:
               item-218 at level 7: inline: group group
-                item-219 at level 8: text: h
-                item-220 at level 8: text: From [39].
-            item-221 at level 6: footnote: 
+                item-219 at level 8: footnote: h
+                item-220 at level 8: footnote: From [39].
+            item-221 at level 6: footnote:
               item-222 at level 7: inline: group group
-                item-223 at level 8: text: i
-                item-224 at level 8: text: Accounting sequestered CO
-                item-225 at level 8: text: 2
-                item-226 at level 8: text: -C due to no-tillage for perennial pasture.
+                item-223 at level 8: footnote: i
+                item-224 at level 8: footnote: Accounting sequestered CO
+                item-225 at level 8: footnote: 2
+                item-226 at level 8: footnote: -C due to no-tillage for perennial pasture.
       item-227 at level 3: section_header: Animal husbandry
         item-228 at level 4: inline: group group
           item-229 at level 5: text: The CH
@@ -301,22 +301,22 @@ item-0 at level 0: unspecified: group _root_
         item-295 at level 4: text: Emissions due to farm management ...  crop and pasture production’ section.
         item-296 at level 4: table with [12x4]
           item-296 at level 5: caption: Table 5 Factors for major resource inputs in farm management.
-          item-297 at level 5: footnote: 
+          item-297 at level 5: footnote:
             item-298 at level 6: inline: group group
-              item-299 at level 7: text: a
-              item-300 at level 7: text: mm, machinery mass
-          item-301 at level 5: footnote: 
+              item-299 at level 7: footnote: a
+              item-300 at level 7: footnote: mm, machinery mass
+          item-301 at level 5: footnote:
             item-302 at level 6: inline: group group
-              item-303 at level 7: text: b
-              item-304 at level 7: text: Based on United States data.
-          item-305 at level 5: footnote: 
+              item-303 at level 7: footnote: b
+              item-304 at level 7: footnote: Based on United States data.
+          item-305 at level 5: footnote:
             item-306 at level 6: inline: group group
-              item-307 at level 7: text: c
-              item-308 at level 7: text: Based on the Brazilian electricity matrix.
-          item-309 at level 5: footnote: 
+              item-307 at level 7: footnote: c
+              item-308 at level 7: footnote: Based on the Brazilian electricity matrix.
+          item-309 at level 5: footnote:
             item-310 at level 6: inline: group group
-              item-311 at level 7: text: d
-              item-312 at level 7: text: Naturally ventilated barns.
+              item-311 at level 7: footnote: d
+              item-312 at level 7: footnote: Naturally ventilated barns.
         item-313 at level 4: inline: group group
           item-314 at level 5: text: The amount of fuel use for manur ... quired for manure handling (L diesel t
           item-315 at level 5: text: -1

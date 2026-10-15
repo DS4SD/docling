@@ -142,7 +142,9 @@ Table 2 Adjusted risk ratios for pre-TAS failure from log-binomial model sensiti
 | +Baseline prevalence > = 10% | 2.52 (1.37–4.64) | 2.42 (1.31–4.47) | 2.03 (1.06–3.90) | 2.30 (1.21–4.36) | 2.01 (1.07–3.77) |
 | Elevation < 350m | 3.07 (1.95–4.83) | 2.21 (1.42–3.43) | 4.68 (2.22–9.87) | 3.04 (1.93–4.79) | 3.76 (1.92–7.37) |
 
-NOTE: Table shows adjusted Risk Ratio (RR) of failing pre-TAS. Gray shading &amp; + denote interaction terms, Bold text denotes statistically significant results with p-values ≤0.05
+NOTE: Table shows adjusted Risk Ratio (RR) of failing pre-TAS.
+
+Gray shading &amp; + denote interaction terms, Bold text denotes statistically significant results with p-values ≤0.05
 
 Overall 74 districts in the dataset failed pre-TAS. Fig 5 summarizes the likelihood of failure by variable combinations identified in the log-binomial model. For those districts with a baseline prevalence ≥10% that used a FTS diagnostic test and have an average elevation below 350 meters (Combination C01), 87% of the 23 districts failed. Of districts with high baseline that used an ICT diagnostic test and have a low average elevation (C02) 45% failed. Overall, combinations with high baseline and low elevation C01, C02, and C04 accounted for 51% of all the failures (38 of 74).
 

@@ -1226,21 +1226,29 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
             segments = JatsDocumentBackend._strip_segments(merged)
             if not segments:
                 continue
-            if len(segments) == 1 and segments[0].label == DocItemLabel.TEXT:
-                # A single plain run stays on the wrapper itself.
-                footnote = doc.add_text(
-                    label=DocItemLabel.FOOTNOTE,
-                    text=segments[0].text,
-                    formatting=segments[0].formatting,
-                    hyperlink=segments[0].hyperlink,
-                    parent=table_item,
+            # Keep table-note text distinguishable from body text for export
+            # filtering and chunk metadata; formulas retain their own label.
+            segments = [
+                (
+                    replace(segment, label=DocItemLabel.FOOTNOTE)
+                    if segment.label == DocItemLabel.TEXT
+                    else segment
                 )
-            else:
-                # Mixed styling or formulas: an empty wrapper owns the runs.
-                footnote = doc.add_text(
-                    label=DocItemLabel.FOOTNOTE, text="", parent=table_item
-                )
-                JatsDocumentBackend._emit_inline(doc, footnote, segments)
+                for segment in segments
+            ]
+            # Released core table serializers skip referenced footnote wrappers.
+            # Keep all content in child runs so it is also exported by traversal.
+            footnote = doc.add_text(
+                label=DocItemLabel.FOOTNOTE, text="", parent=table_item
+            )
+            # _emit_inline groups multiple runs; a single run needs the same
+            # inline scope, especially when it is a formula.
+            container = (
+                doc.add_inline_group(parent=footnote)
+                if len(segments) == 1
+                else footnote
+            )
+            JatsDocumentBackend._emit_inline(doc, container, segments)
             table_item.footnotes.append(footnote.get_ref())
 
     def _add_tables(
