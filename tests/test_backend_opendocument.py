@@ -259,6 +259,48 @@ def test_odt_section_preserves_split_list_continuation(tmp_path: Path):
     assert nested_group.parent == list_items[0].get_ref()
 
 
+def test_odt_hidden_section_goes_to_invisible_layer(tmp_path: Path):
+    """A hidden section (``text:display="none"``) is left out of the export.
+
+    Its content, nested sections included, stays available in
+    ``ContentLayer.INVISIBLE``, the same as a hidden ODS sheet or ODP slide.
+    """
+    path = tmp_path / "hidden_section.odt"
+    source = OdfDocument("text")
+    body = source.body
+    body.clear()
+    body.append(Paragraph("Question"))
+    hidden = Section(name="Answers")
+    hidden.set_attribute("text:display", "none")
+    hidden.append(Header(1, "Answer key"))
+    table = Table("Answers", width=1, height=1)
+    table.set_value("A1", "42")
+    hidden.append(table)
+    nested = Section(name="Notes")
+    nested.append(Paragraph("Nested note"))
+    hidden.append(nested)
+    body.append(hidden)
+    shown = Section(name="Shown")
+    shown.append(Paragraph("Shown section"))
+    body.append(shown)
+    source.save(str(path))
+
+    document = (
+        DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path).document
+    )
+
+    hidden_texts = [
+        item.text
+        for item, _ in document.iterate_items(
+            included_content_layers={ContentLayer.INVISIBLE}
+        )
+        if isinstance(item, TextItem)
+    ]
+    assert document.export_to_markdown() == "Question\n\nShown section"
+    assert hidden_texts == ["Answer key", "Nested note"]
+    assert document.tables[0].content_layer == ContentLayer.INVISIBLE
+
+
 def test_ods_conversion(ods_path: Path):
     res = DocumentConverter(allowed_formats=[InputFormat.ODS]).convert(ods_path)
     doc = res.document
