@@ -583,15 +583,6 @@ class _WhisperS2TModel:
                 "asr_options": asr_opts,
             }
 
-            # large-v3, distil-large-v3, distil-large-v3.5, and large-v3-turbo models require n_mels=128
-            if self.model_identifier in [
-                "large-v3",
-                "distil-large-v3",
-                "distil-large-v3.5",
-                "large-v3-turbo",
-            ]:
-                model_kwargs["n_mels"] = 128
-
             self.model = whisper_s2t.load_model(
                 model_identifier=self.model_identifier,
                 **model_kwargs,

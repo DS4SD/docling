@@ -311,6 +311,15 @@ class ThreadedDoclingParseBackendOptions(PdfBackendOptions):
             "If unset, the backend falls back to global accelerator thread settings."
         ),
     )
+    max_concurrent_results: Optional[PositiveInt] = Field(
+        None,
+        description=(
+            "Maximum number of decoded pages the threaded docling-parse backend buffers "
+            "ahead of the pipeline before its workers pause. Each buffered page holds its "
+            "decoded content and rendered image in memory, so lowering this bounds peak "
+            "memory on large or image-heavy PDFs. If unset, the docling-parse default is used."
+        ),
+    )
     render_pages: bool = Field(
         True,
         description=(
