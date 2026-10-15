@@ -841,7 +841,7 @@ def test_export_documents_marks_empty_markdown_as_failure(tmp_path):
     conv_res.status = ConversionStatus.SUCCESS
 
     class DummyDocument:
-        def save_as_markdown(self, *, filename, image_mode):
+        def save_as_markdown(self, *, filename, artifacts_dir, image_mode):
             Path(filename).write_text("")
 
     conv_res.document = DummyDocument()
@@ -893,7 +893,7 @@ def test_export_documents_marks_stat_errors_as_failure(tmp_path, monkeypatch):
     conv_res.status = ConversionStatus.SUCCESS
 
     class DummyDocument:
-        def save_as_markdown(self, *, filename, image_mode):
+        def save_as_markdown(self, *, filename, artifacts_dir, image_mode):
             Path(filename).write_text("ok")
 
     conv_res.document = DummyDocument()
