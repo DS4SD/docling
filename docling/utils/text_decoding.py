@@ -93,6 +93,13 @@ def _utf8_high_byte_coverage(raw: bytes) -> float:
 
 def _decode_bytes(raw: bytes, encoding: Optional[str] = None) -> str:
     if encoding is not None:
+        # An explicit ``utf-8`` request must still drop a leading byte-order
+        # mark, matching the auto-detect path; otherwise the BOM leaks into the
+        # decoded text (see issue #4846). ``utf-8-sig`` is identical to
+        # ``utf-8`` when no BOM is present, so this only changes behaviour for
+        # UTF-8 content that actually starts with a BOM.
+        if encoding.lower() in ("utf-8", "utf8") and raw.startswith(codecs.BOM_UTF8):
+            encoding = "utf-8-sig"
         try:
             return raw.decode(encoding)
         except (UnicodeDecodeError, LookupError) as error:
