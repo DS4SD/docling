@@ -2504,7 +2504,7 @@ requires-dist = [
     { name = "typer", marker = "extra == 'cli'", specifier = ">=0.19.0,<0.27.0" },
     { name = "typer", marker = "extra == 'service-client'", specifier = ">=0.19.0,<0.27.0" },
     { name = "websockets", marker = "extra == 'service-client'", specifier = ">=14.0,<17.0" },
-    { name = "whisper-s2t-reborn", marker = "(platform_machine != 'arm64' and extra == 'format-audio') or (sys_platform != 'darwin' and extra == 'format-audio')", specifier = ">=1.7.1,<2.0.0" },
+    { name = "whisper-s2t-reborn", marker = "(platform_machine != 'arm64' and extra == 'format-audio') or (sys_platform != 'darwin' and extra == 'format-audio')", specifier = ">=1.8.0,<2.0.0" },
 ]
 provides-extras = ["convert-core", "extract-core", "format-pdf-pypdfium2", "format-pdf-docling", "format-pdf", "format-docx", "format-pptx", "format-xlsx", "format-office", "format-opendocument", "format-html", "format-markdown", "format-web", "format-latex", "format-email", "format-iwork", "format-xml-jats", "format-xml-uspto", "format-xml-xbrl", "format-html-render", "format-audio", "format-video", "feat-ocr-rapidocr", "feat-ocr-rapidocr-onnx", "feat-ocr-easyocr", "feat-ocr-tesserocr", "feat-ocr-mac", "feat-ocr-nemotron", "models-local", "models-remote", "models-onnxruntime", "models-vlm-inline", "feat-chunking", "service-client", "cli", "standard", "all"]
 
@@ -11263,7 +11263,7 @@ wheels = [
 
 [[package]]
 name = "whisper-s2t-reborn"
-version = "1.7.2"
+version = "1.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "av", version = "17.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
@@ -11281,9 +11281,9 @@ dependencies = [
     { name = "torch", version = "2.14.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version != '3.12.*' or platform_machine != 'x86_64' or sys_platform != 'linux'" },
     { name = "tqdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1e/25/7db88510a5466f374f756dbe7f29d02457a37c2b149bdbfa0e00bfe51ccf/whisper_s2t_reborn-1.7.2.tar.gz", hash = "sha256:073d745bb1b66ed8aa0298e098e9f83a09029ce77f449fc9f71406223b9678b2", size = 1436967, upload-time = "2026-09-30T04:14:05.083Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/5d/83/b15a9858e4564d9c1f5e38bd212b9e8d737fc42f1dd982d5de11e856ed33/whisper_s2t_reborn-1.8.0.tar.gz", hash = "sha256:342c7dd291aa667230a6a509ebfb1a0d8960641ac1fb78424a1a5de14631caf1", size = 1438953, upload-time = "2026-10-15T20:39:26.977Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bd/01/8b60d53999c9cde096f65b05346f68d2f16d7e6e52243edc18290579f322/whisper_s2t_reborn-1.7.2-py3-none-any.whl", hash = "sha256:cda496600236f532e0f2298c463c731f943efbed6a5bdf6def2d56ac9c6b3082", size = 1438008, upload-time = "2026-09-30T04:14:03.301Z" },
+    { url = "https://files.pythonhosted.org/packages/95/90/f8fda7e037b69794343c14e947e0a911e250389283a00ee12a7eb4c10564/whisper_s2t_reborn-1.8.0-py3-none-any.whl", hash = "sha256:5ee923e6b7580534f1229d223d48d8b2c9508dbfb173bbff140b656cc1a56818", size = 1439500, upload-time = "2026-10-15T20:39:25.26Z" },
 ]
 
 [[package]]
