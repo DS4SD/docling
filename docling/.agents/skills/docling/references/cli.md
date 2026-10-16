@@ -7,7 +7,8 @@ file the agent cannot open directly — PDFs above all, but also DOCX, PPTX, XLS
 HTML, Markdown, AsciiDoc, CSV, images, audio, and XML.
 
 Authoritative flag list: <https://docling-project.github.io/docling/reference/cli/>
-(or `docling --help`). This file is a task-oriented summary.
+(or `docling --help`). Both `docling` and `docling-tools` accept `-h` as a short
+help flag, including on subcommands. This file is a task-oriented summary.
 
 ## Basics
 
@@ -124,6 +125,7 @@ docling report.pdf --enrich-picture-description --output /tmp/
 | Password-protected PDF | `--pdf-password PASSWORD` (raises `ConversionError` if wrong) |
 | Very large document (500+ pages) | Standard, add `--no-tables` for speed; set `--device` / `--num-threads` |
 | Only part of a document is needed | `--page-range 1-4` (or a single page, `--page-range 4`); page numbers start at 1 |
+| Long run, want to see progress | Progress bars on stderr by default in a terminal (document position, pages, enrichment items); `--progress` forces it for pipes, `--no-progress` / `-q` hides it |
 | Complex / multi-column layout | `--pipeline vlm` (standard may misorder reading flow) |
 | Handwriting or formulas | `--pipeline vlm` only |
 | Output near-empty | Enable OCR, or switch to `--pipeline vlm` |
@@ -151,6 +153,14 @@ Pre-download models and point the CLI at them for air-gapped runs:
 ```bash
 docling-tools models download --output-dir /models   # fetch model artifacts
 docling report.pdf --artifacts-path /models --output /tmp/
+```
+
+For native Whisper ASR, prefetch a selected OpenAI-format checkpoint. Plain
+`--all` excludes ASR models; `--all --asr` includes all native Whisper sizes.
+
+```bash
+docling-tools models download whisper_tiny --output-dir /models
+docling --asr-model whisper_tiny_native --artifacts-path /models audio.wav
 ```
 
 `--artifacts-path` overrides the default Hugging Face cache; you can also set

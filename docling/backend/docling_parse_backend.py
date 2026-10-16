@@ -312,13 +312,18 @@ class ThreadedDoclingParseDocumentBackend(PdfDocumentBackend):
             include_bitmap_bytes=self.options.include_bitmap_images,
         )
 
+        parser_config = ThreadedPdfParserConfig(
+            loglevel="fatal",
+            threads=parser_threads,
+            render_config=render_config,
+            page_content_config=content_config,
+        )
+        if threaded_options.max_concurrent_results is not None:
+            parser_config.max_concurrent_results = (
+                threaded_options.max_concurrent_results
+            )
         self.parser = DoclingThreadedPdfParser(
-            parser_config=ThreadedPdfParserConfig(
-                loglevel="fatal",
-                threads=parser_threads,
-                render_config=render_config,
-                page_content_config=content_config,
-            ),
+            parser_config=parser_config,
             decode_config=decode_config,
         )
         try:

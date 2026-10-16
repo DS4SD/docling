@@ -5,6 +5,8 @@ import base64
 import json
 import re
 import shutil
+import subprocess
+import sys
 import zipfile
 from io import BytesIO
 from pathlib import Path
@@ -95,6 +97,14 @@ def test_cli_help():
     assert result.exit_code == 0
     assert "convert-remote" in result.output
     assert "DOCLING_SERVICE_URL" in result.output
+
+
+@pytest.mark.parametrize("args", [["-h"], ["convert", "-h"], ["convert-remote", "-h"]])
+def test_cli_short_help(args: list[str]) -> None:
+    result = runner.invoke(app, args)
+
+    assert result.exit_code == 0
+    assert "Usage" in result.output
 
 
 def test_cli_convert_help():
@@ -1648,32 +1658,58 @@ def test_cli_invalid_table_structure_engine_is_rejected(tmp_path):
     assert result.exit_code != 0
 
 
-def test_cli_main_importable_without_local_model_stack(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    """Importing docling.cli.main must not require pypdfium2 or scipy.
+_SLIM_CLI_SCRIPT = """
+import sys
 
-    Ensure that CLI does not crash in `docling convert-remote`
-    on lightweight `docling-client` / `docling-slim[service-client]` installs.
+# Simulate a docling-client / docling-slim[service-client] install.
+for blocked in ("pypdfium2", "scipy", "scipy.ndimage", "torch", "packaging"):
+    sys.modules[blocked] = None
+
+from typer.testing import CliRunner
+
+from docling.cli.main import app
+
+result = CliRunner().invoke(app, sys.argv[1:])
+sys.stdout.write(result.output)
+# A traceback (any exception other than a clean exit) maps to exit code 99.
+crashed = result.exception is not None and not isinstance(result.exception, SystemExit)
+sys.exit(99 if crashed else result.exit_code)
+"""
+
+
+def _run_slim_cli(*args: str) -> subprocess.CompletedProcess[str]:
+    # A subprocess keeps the blocked modules and the re-imported CLI out of
+    # the other tests in this session.
+    return subprocess.run(
+        [sys.executable, "-c", _SLIM_CLI_SCRIPT, *args],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+
+def test_cli_convert_remote_works_without_local_model_stack() -> None:
+    """`docling convert-remote` must work on `docling-client` installs.
+
+    `docling-client` / `docling-slim[service-client]` has no local model stack
+    (pypdfium2, scipy, torch, packaging, ...). Building the engine factories
+    loads the built-in plugins, which import the engine modules, so the CLI
+    must guard that step too and not only the factory import.
     """
-    import importlib
-    import sys
+    result = _run_slim_cli("convert-remote", "--help")
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "docling-serve" in strip_ansi(result.stdout)
 
-    monkeypatch.setitem(sys.modules, "pypdfium2", None)  # type: ignore[arg-type]
-    monkeypatch.setitem(sys.modules, "scipy", None)  # type: ignore[arg-type]
-    monkeypatch.setitem(sys.modules, "scipy.ndimage", None)  # type: ignore[arg-type]
 
-    for mod in list(sys.modules):
-        if mod.startswith(
-            (
-                "docling.cli.main",
-                "docling.document_converter",
-                "docling.models.factories",
-            )
-        ):
-            monkeypatch.delitem(sys.modules, mod)
-
-    importlib.import_module("docling.cli.main")
+def test_cli_convert_without_local_model_stack_shows_install_hint(
+    tmp_path: Path,
+) -> None:
+    """Local `docling convert` must exit with an install hint, not a traceback."""
+    source = tmp_path / "doc.pdf"
+    source.write_bytes(b"%PDF-1.4")
+    result = _run_slim_cli("convert", str(source))
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert "pip install docling" in strip_ansi(result.stdout)
 
 
 def test_cli_invalid_ocr_engine_is_rejected(tmp_path):

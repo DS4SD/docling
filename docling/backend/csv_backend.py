@@ -105,6 +105,8 @@ class CsvDocumentBackend(DeclarativeDocumentBackend):
         usually the header line, which rarely contains one. RFC 4180 and
         `csv.excel` both use doubling, so it is the correct default.
         """
+        # Rewind before sniffing so repeated conversions use the same dialect.
+        self.content.seek(0)
         # Dialect detection: the larger sample is only read on fallback.
         head = self.content.readline()
         while head in ("\n", "\r\n", "\r"):
