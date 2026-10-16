@@ -2640,3 +2640,20 @@ def test_body_level_alternate_content_with_no_usable_branch_adds_nothing(tmp_pat
         "Paragraph before AlternateContent",
         "Paragraph after AlternateContent",
     ]
+
+
+def test_docx_styles_xml_with_type_list_converts(tmp_path):
+    """A style with w:type='list' does not crash default style lookup or conversion."""
+    document = Document()
+    document.add_heading("Quarterly results", level=1)
+    document.add_paragraph("Revenue grew 3%.")  # paragraph without w:pStyle
+
+    style = OxmlElement("w:style")
+    style.set(qn("w:type"), "list")
+    style.set(qn("w:styleId"), "OutlineList")
+    document.styles.element.append(style)
+
+    doc = _convert_built(document, tmp_path)
+
+    texts = [item.text for item in doc.texts]
+    assert texts == ["Quarterly results", "Revenue grew 3%."]

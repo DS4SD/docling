@@ -879,9 +879,13 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         if self.docx_obj:
             self.valid = True
             self.current_part = self.docx_obj.part
-            self._default_paragraph_style = self.docx_obj.styles.default(
-                WD_STYLE_TYPE.PARAGRAPH
-            )
+            self._normalize_style_types()
+            try:
+                self._default_paragraph_style = self.docx_obj.styles.default(
+                    WD_STYLE_TYPE.PARAGRAPH
+                )
+            except Exception:
+                self._default_paragraph_style = None
             # Build comment mappings after loading document
             self._extract_comment_ranges()
 
@@ -4834,3 +4838,27 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 comment_ids.add(comment_id)
 
         return comment_ids
+
+    def _normalize_style_types(self) -> None:
+        """Normalize non-standard style types in styles.xml.
+
+        Some third-party DOCX generators write ``w:type="list"`` instead of
+        ``w:type="numbering"``. In python-docx, ``WD_STYLE_TYPE.LIST`` maps to
+        the XML attribute value ``"numbering"``. An unmapped XML value causes
+        ``WD_STYLE_TYPE.from_xml`` to raise a ``ValueError`` when resolving
+        default styles or accessing unstyled paragraphs.
+        """
+        if not self.docx_obj or not hasattr(self.docx_obj, "styles"):
+            return
+        styles_element = getattr(self.docx_obj.styles, "element", None)
+        if styles_element is None:
+            return
+        type_key = f"{_W_NS_CLARK}type"
+        for style_el in styles_element:
+            if style_el.tag == f"{_W_NS_CLARK}style" or style_el.tag.endswith("style"):
+                val = style_el.get(type_key)
+                if val == "list":
+                    style_el.set(type_key, "numbering")
+                elif val is None and "type" in style_el.attrib:
+                    if style_el.attrib["type"] == "list":
+                        style_el.attrib["type"] = "numbering"
