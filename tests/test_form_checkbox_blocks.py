@@ -238,11 +238,10 @@ def test_block_label_also_keys_a_field_of_its_row() -> None:
     assert all(item.label == DocItemLabel.FIELD_KEY for item in doc.texts if item.text)
 
 
-def test_group_prompt_stays_when_one_option_is_keyed_by_its_block() -> None:
-    # "3. SEX" asks a question answered by two checkboxes. MALE is boxed as a
-    # checkbox block, FEMALE is plain text further right than an adjacent
-    # option key. The question stays the group's prompt, so it does not key
-    # FEMALE although it sits closer.
+def test_plain_option_beside_a_checkbox_block_takes_the_question() -> None:
+    # Known limit: "3. SEX" asks a question answered by two checkboxes. MALE
+    # is boxed as a checkbox block and so joins no group; without a group the
+    # question is no prompt and keys FEMALE, the text closest to it.
     prompt_bbox = BoundingBox(l=30, t=10, r=60, b=18)
     female_bbox = BoundingBox(l=55, t=28, r=85, b=36)
     male_bbox = BoundingBox(l=55, t=41, r=75, b=49)
@@ -270,7 +269,7 @@ def test_group_prompt_stays_when_one_option_is_keyed_by_its_block() -> None:
         for region in page.predictions.field_regions
         for item in region.items
     }
-    assert keyed == {27: "FEMALE", 40: "MALE"}
+    assert keyed == {27: "3. SEX", 40: "MALE"}
 
 
 def test_block_a_little_short_of_its_checkbox_still_keys_it() -> None:
@@ -299,3 +298,124 @@ def test_block_a_little_short_of_its_checkbox_still_keys_it() -> None:
     _materialize(page)
 
     assert _keys(page) == ["Recibos de vencimento."]
+
+
+def _keyed_at(page: Page) -> dict[tuple[int, int], str]:
+    return {
+        (round(item.values[0].bbox.l), round(item.values[0].bbox.t)): item.key_text
+        for region in page.predictions.field_regions
+        for item in region.items
+    }
+
+
+def _option(
+    cluster_id: int, index: int, left: float, top: float, label: str, right: float
+) -> tuple[Cluster, PdfWidget]:
+    # A checkbox block, 8 pt tall, with the drawn square at its left.
+    box = BoundingBox(l=left - 2, t=top - 1, r=right, b=top + 9)
+    text_box = BoundingBox(l=left + 12, t=top, r=right - 4, b=top + 8)
+    return (
+        _block(
+            cluster_id, DocItemLabel.CHECKBOX_UNSELECTED, box, (index, label, text_box)
+        ),
+        _checkbox(index, BoundingBox(l=left, t=top, r=left + 8, b=top + 8)),
+    )
+
+
+def test_checkbox_blocks_below_a_field_leave_its_label_to_the_field() -> None:
+    # "Contact name:" labels the field to its right. Two checkbox blocks sit
+    # 6 pt below. A checkbox keyed by its block is not also a member of a
+    # choice group, so the label cannot become that group's prompt and
+    # leave the field unkeyed.
+    label_bbox = BoundingBox(l=10, t=10, r=60, b=18)
+    first, first_box = _option(2, 1, 10, 24, "Send by email", 80)
+    second, second_box = _option(3, 2, 10, 36, "Send by post", 80)
+    page = _page(
+        [
+            _block(1, DocItemLabel.TEXT, label_bbox, (0, "Contact name:", label_bbox)),
+            first,
+            second,
+        ],
+        [_text_field(0, BoundingBox(l=64, t=10, r=140, b=18)), first_box, second_box],
+    )
+
+    _materialize(page)
+
+    assert _keyed_at(page) == {
+        (64, 10): "Contact name:",
+        (10, 24): "Send by email",
+        (10, 36): "Send by post",
+    }
+
+
+def test_checkbox_keyed_by_its_block_is_not_printed_a_second_time() -> None:
+    # A heading, then three options. The first option's row also holds a
+    # labelled field; the options are indented by different amounts. The
+    # first option is keyed by its own block, not by the heading, so its
+    # paragraph is hosted by the field and not left in the body as a second
+    # checkbox.
+    heading_bbox = BoundingBox(l=10, t=10, r=70, b=18)
+    note_bbox = BoundingBox(l=72, t=20, r=98, b=28)
+    note2_bbox = BoundingBox(l=72, t=44, r=98, b=52)
+    zero, zero_box = _option(2, 1, 10, 20, "Choice 0 text", 68)
+    one, one_box = _option(4, 3, 14, 32, "Choice 1 text", 102)
+    two, two_box = _option(5, 4, 10, 44, "Choice 2 text", 68)
+    page = _page(
+        [
+            _block(1, DocItemLabel.TEXT, heading_bbox, (0, "Documents", heading_bbox)),
+            zero,
+            _block(3, DocItemLabel.TEXT, note_bbox, (2, "Note 0:", note_bbox)),
+            one,
+            two,
+            _block(6, DocItemLabel.TEXT, note2_bbox, (5, "Note 2:", note2_bbox)),
+        ],
+        [
+            zero_box,
+            _text_field(5, BoundingBox(l=102, t=20, r=158, b=28)),
+            one_box,
+            two_box,
+            _text_field(6, BoundingBox(l=102, t=44, r=158, b=52)),
+        ],
+    )
+
+    doc = _materialize(page)
+
+    keyed = _keyed_at(page)
+    assert keyed[(10, 20)] == "Choice 0 text"
+    assert keyed[(14, 32)] == "Choice 1 text"
+    assert keyed[(10, 44)] == "Choice 2 text"
+    assert not [
+        item
+        for item in doc.texts
+        if item.label
+        in {DocItemLabel.CHECKBOX_SELECTED, DocItemLabel.CHECKBOX_UNSELECTED}
+        and item.text
+    ]
+
+
+def test_label_of_a_field_is_not_the_prompt_of_a_block_and_a_plain_option() -> None:
+    # As above, but the second option is plain text, not a block. A group of
+    # the two would still take "Contact name:" as its prompt.
+    label_bbox = BoundingBox(l=10, t=10, r=60, b=18)
+    plain_bbox = BoundingBox(l=24, t=36, r=76, b=44)
+    first, first_box = _option(2, 1, 10, 24, "Send by email", 80)
+    page = _page(
+        [
+            _block(1, DocItemLabel.TEXT, label_bbox, (0, "Contact name:", label_bbox)),
+            first,
+            _block(3, DocItemLabel.TEXT, plain_bbox, (2, "Send by post", plain_bbox)),
+        ],
+        [
+            _text_field(0, BoundingBox(l=64, t=10, r=140, b=18)),
+            first_box,
+            _checkbox(2, BoundingBox(l=10, t=36, r=18, b=44)),
+        ],
+    )
+
+    _materialize(page)
+
+    assert _keyed_at(page) == {
+        (64, 10): "Contact name:",
+        (10, 24): "Send by email",
+        (10, 36): "Send by post",
+    }

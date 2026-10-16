@@ -57,10 +57,6 @@ MAX_ACTIVE_CANDIDATES = 1000
 NULL_COST = 3.0
 # Seconds the MILP solver may spend on one page.
 TIME_LIMIT = 10.0
-# Cost of keying a checkbox by the text of its checkbox block. Every geometric
-# candidate costs at least 0, so the block's text wins unless sharing rules or
-# penalties elsewhere on the page weigh more against it.
-BLOCK_PRIOR = -1.0
 
 
 def crossing(
@@ -317,12 +313,12 @@ def in_checkbox_blocks(
     """Checkboxes keyed by the text of the checkbox block drawn around them.
 
     The layout boxes a checkbox together with its label; a block holding
-    exactly one value, a checkbox outside detected tables, offers all of its
-    text as that checkbox's key at BLOCK_PRIOR. The search still chooses, so
-    the text can also key a field of the same row and the checkbox keeps the
-    prompt of its group. A block with several values, text the layout also
-    put in another block, or text without letters is left to the geometric
-    candidates.
+    exactly one value, a checkbox outside detected tables, is keyed by all of
+    its text. The checkbox takes part in no other association, but the text
+    stays in the search, under the sharing rules of any key, so it can also
+    key a field of the same row. A block with several values, text the layout
+    also put in another block, or text without letters is left to the
+    geometric candidates.
     """
     keyed = []
     for region in found:
@@ -361,11 +357,7 @@ def in_checkbox_blocks(
             facing = side_of(key_text.bbox, values[i].bbox)
             keyed.append(
                 Candidate(
-                    (i,),
-                    k,
-                    "field_key",
-                    {"block": BLOCK_PRIOR},
-                    None if facing is None else facing[0],
+                    (i,), k, "field_key", {}, None if facing is None else facing[0]
                 )
             )
     once = Counter(c.members[0] for c in keyed)
@@ -391,11 +383,14 @@ def _solve(
             f"skipped: {len(values)} values x {len(key_texts)} key texts exceed the page limit",
             slots,
         )
-    proposed = candidates_for(values, key_texts, h)
+    # A checkbox keyed by its block takes part in no other association.
+    taken = {c.members[0] for c in in_blocks}
+    proposed = [
+        c for c in candidates_for(values, key_texts, h) if taken.isdisjoint(c.members)
+    ]
     # A decided alternating run fixes which key each of its values reads.
     mark_sequences(proposed, sequences(values, key_texts, proposed, NULL_COST, h))
-    # A checkbox block's own text joins the search after the runs are decided:
-    # the layout's block outweighs the side a run reads its keys from.
+    # Added once the runs are decided: a run's side does not apply to a block.
     proposed += in_blocks
     # Values in detected tables are keyed from their own cells, outside the
     # free-form search: table text never competes with free-form keys.
@@ -437,8 +432,11 @@ def _solve(
     for i, value in enumerate(values):
         if not value.scope.eligible:
             continue
-        owners[i][len(costs)] = 1.0
-        costs.append(NULL_COST)
+        # A checkbox keyed by its block has no blank option: its block's text
+        # is its only key.
+        if i not in taken:
+            owners[i][len(costs)] = 1.0
+            costs.append(NULL_COST)
         constraint(owners[i], 1, 1)
     for coefficients in prompts.values():
         constraint(coefficients, 0, 1)
