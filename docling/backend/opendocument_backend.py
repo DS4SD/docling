@@ -1114,6 +1114,10 @@ def _add_odf_child(
             comments=comments,
         )
     elif isinstance(element, Section):
+        # Writer saves a section hidden with Format > Sections > Hide as
+        # text:display="none", so its content is not shown or printed.
+        if element.get_attribute("text:display") == "none":
+            content_layer = ContentLayer.INVISIBLE
         _add_odf_children(
             doc,
             element.children,
