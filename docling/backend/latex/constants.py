@@ -25,6 +25,7 @@ MACROS_STRUCTURAL = frozenset(
         "paragraph",
         "subparagraph",
         "caption",
+        "captionof",
         "label",
         "includegraphics",
         "bibliography",

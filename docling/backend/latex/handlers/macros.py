@@ -34,6 +34,7 @@ from docling.backend.latex.constants import (
     MACROS_TEXT_FORMATTING,
     MACROS_TEXT_STYLE,
 )
+from docling.backend.latex.handlers.math import InlineFormula
 from docling.backend.latex.utils.encoding import decode_latex_content
 from docling.backend.latex.utils.latex_context import LATEX_CONTEXT_DB
 from docling.backend.latex.utils.text import iter_child_nodelists
@@ -81,6 +82,8 @@ class MacroHandlerMixin:
         _input_stack: set[str]
         _custom_macros: dict[str, str]
         _custom_macro_num_args: dict[str, int]
+        _masked_macro_spans: list[tuple[int, int]]
+        _suppress_image_path_caption: bool
         labels: dict[str, bool]
 
         def _process_nodes(
@@ -96,6 +99,7 @@ class MacroHandlerMixin:
 
     def _preprocess_custom_macros(self, latex_text: str) -> str:
         """Expand legacy shortcuts without changing macro definitions."""
+        self._masked_macro_spans = self._macro_definition_spans(latex_text)
         shortcuts = {
             "be": r"\begin{equation}",
             "ee": r"\end{equation}",
@@ -116,7 +120,7 @@ class MacroHandlerMixin:
 
         pieces: list[str] = []
         cursor = 0
-        for start, end in self._macro_definition_spans(latex_text):
+        for start, end in self._masked_macro_spans:
             pieces.append(replace(latex_text[cursor:start]))
             definition = latex_text[start:end]
             if definition.startswith(
@@ -260,7 +264,7 @@ class MacroHandlerMixin:
     def _process_item_macro_inline(
         self,
         node: LatexMacroNode,
-        text_buffer: list[str],
+        text_buffer: list[str | InlineFormula],
         following_nodes=None,
     ) -> None:
         term = self._item_term(node)
@@ -269,6 +273,44 @@ class MacroHandlerMixin:
             if following_nodes and isinstance(following_nodes[0], LatexCharsNode):
                 following_nodes[0].chars = following_nodes[0].chars.lstrip()
 
+    def _append_custom_math_expansion(
+        self,
+        expansion: str,
+        doc: DoclingDocument,
+        parent: NodeItem | None,
+        formatting: Formatting | None,
+        text_label: DocItemLabel | None,
+        text_buffer: list[str | InlineFormula],
+        flush_fn: Callable[[], None],
+    ) -> bool:
+        if r"\ensuremath" not in expansion and "$" not in expansion:
+            return False
+        try:
+            parsed_nodes, _, _ = LatexWalker(
+                expansion,
+                tolerant_parsing=True,
+                latex_context=LATEX_CONTEXT_DB,
+            ).get_latex_nodes()
+        except LatexWalkerParseError:
+            return False
+        if not self._contains_math(parsed_nodes):
+            return False
+        self._append_inline_nodes(
+            parsed_nodes, doc, parent, formatting, text_label, text_buffer, flush_fn
+        )
+        return True
+
+    def _append_ensuremath(
+        self, node: LatexMacroNode, text_buffer: list[str | InlineFormula]
+    ) -> None:
+        if not node.nodeargd or not node.nodeargd.argnlist:
+            return
+        argument = node.nodeargd.argnlist[-1]
+        if isinstance(argument, LatexGroupNode):
+            math_text = argument.latex_verbatim()[1:-1].strip()
+            if math_text:
+                text_buffer.append(InlineFormula(self._expand_macros(math_text)))
+
     def _process_macro_node_inline(
         self,
         node: LatexMacroNode,
@@ -276,7 +318,7 @@ class MacroHandlerMixin:
         parent: NodeItem | None,
         formatting: Formatting | None,
         text_label: DocItemLabel | None,
-        text_buffer: list[str],
+        text_buffer: list[str | InlineFormula],
         flush_fn: Callable[[], None],
         following_nodes=None,
     ) -> int:
@@ -291,6 +333,8 @@ class MacroHandlerMixin:
             formatted_text = self._extract_macro_arg(node)
             if formatted_text:
                 text_buffer.append(formatted_text)
+        elif node.macroname == "ensuremath":
+            self._append_ensuremath(node, text_buffer)
         elif node.macroname in self._custom_macros:
             expansion, consumed = self._expand_custom_macro_invocation(
                 node, following_nodes or []
@@ -299,6 +343,18 @@ class MacroHandlerMixin:
                 _log.debug(
                     f"Expanding custom macro \\{node.macroname} -> '{expansion}'"
                 )
+                if self._append_custom_math_expansion(
+                    expansion,
+                    doc,
+                    parent,
+                    formatting,
+                    text_label,
+                    text_buffer,
+                    flush_fn,
+                ):
+                    if node.latex_verbatim()[-1].isspace():
+                        text_buffer.append(" ")
+                    return consumed
                 if self._custom_macro_num_args.get(node.macroname, 0) > 0:
                     text_buffer.append(self._parse_latex_fragment_to_text(expansion))
                 else:
@@ -329,6 +385,8 @@ class MacroHandlerMixin:
         elif node.macroname == "item":
             flush_fn()
             self._process_item_macro_inline(node, text_buffer, following_nodes)
+        elif node.macroname == "label":
+            self._process_macro(node, doc, parent, formatting, text_label)
         else:
             if node.macroname in MACROS_STRUCTURAL:
                 flush_fn()
@@ -404,12 +462,8 @@ class MacroHandlerMixin:
             if label_text:
                 self.labels[label_text] = True
 
-        elif node.macroname == "caption":
-            caption_text = self._extract_macro_arg(node)
-            if caption_text:
-                doc.add_text(
-                    parent=parent, label=DocItemLabel.CAPTION, text=caption_text
-                )
+        elif node.macroname in {"caption", "captionof"}:
+            self._add_caption(node, doc, parent, formatting)
 
         elif node.macroname in ["footnote", "marginpar"]:
             footnote_text = self._extract_macro_arg(node)
@@ -467,9 +521,11 @@ class MacroHandlerMixin:
                 except Exception as e:
                     _log.debug(f"Could not load image {img_path}: {e}")
 
-                caption = doc.add_text(
-                    label=DocItemLabel.CAPTION, text=f"Image: {img_path}"
-                )
+                caption = None
+                if not self._suppress_image_path_caption:
+                    caption = doc.add_text(
+                        label=DocItemLabel.CAPTION, text=f"Image: {img_path}"
+                    )
 
                 doc.add_picture(
                     parent=parent,
@@ -629,6 +685,26 @@ class MacroHandlerMixin:
                     _log.debug(f"Skipping unknown macro: {node.macroname}")
             else:
                 _log.debug(f"Skipping unknown macro: {node.macroname}")
+
+    def _add_caption(
+        self,
+        node: LatexMacroNode,
+        doc: DoclingDocument,
+        parent: NodeItem | None,
+        formatting: Formatting | None = None,
+    ) -> None:
+        if node.nodeargd is None or not node.nodeargd.argnlist:
+            return
+        argument = node.nodeargd.argnlist[-1]
+        if not isinstance(argument, LatexGroupNode):
+            return
+        self._process_nodes(
+            argument.nodelist,
+            doc,
+            parent,
+            formatting,
+            DocItemLabel.CAPTION,
+        )
 
     def _extract_macro_arg(self, node: LatexMacroNode) -> str:
         if node.nodeargd and node.nodeargd.argnlist:

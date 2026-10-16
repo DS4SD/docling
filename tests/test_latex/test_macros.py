@@ -6,7 +6,7 @@ from io import BytesIO
 from pathlib import Path
 
 import pytest
-from docling_core.types.doc import DocItemLabel, GroupLabel
+from docling_core.types.doc import ContentLayer, DocItemLabel, GroupLabel
 
 from docling.backend.latex_backend import LatexDocumentBackend
 from docling.datamodel.backend_options import LatexBackendOptions
@@ -39,6 +39,50 @@ def test_latex_unknown_macro_fallback():
 
     md = doc.export_to_markdown()
     assert "Known Content" in md
+
+
+def test_latex_preserves_invisible_source_commands():
+    latex_content = rb"""\documentclass{article}
+\usepackage[utf8]{inputenc}
+\newenvironment{custom}[1]{\textbf{#1}}{\par}
+\newcommand{\myterm}[1]{first #1
+	second}
+\def\legacy{old}
+\begin{document}
+Body text.
+\end{document}
+"""
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(latex_content),
+        format=InputFormat.LATEX,
+        backend=LatexDocumentBackend,
+        filename="test.tex",
+    )
+    backend = LatexDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(latex_content))
+    doc = backend.convert()
+
+    expected = [
+        r"\documentclass{article}",
+        r"\usepackage[utf8]{inputenc}",
+        r"\newenvironment{custom}[1]{\textbf{#1}}{\par}",
+        "\\newcommand{\\myterm}[1]{first #1\n\tsecond}",
+        r"\def\legacy{old}",
+    ]
+    invisible = [
+        item for item in doc.texts if item.content_layer == ContentLayer.INVISIBLE
+    ]
+    assert [item.label for item in invisible] == [DocItemLabel.TEXT] * len(expected)
+    assert [item.text for item in invisible] == expected
+    assert [item.orig for item in invisible] == expected
+    assert all(command in doc.export_to_doclang() for command in expected)
+    restored = DoclingDocument.model_validate_json(doc.model_dump_json())
+    assert [
+        item.text
+        for item in restored.texts
+        if item.content_layer == ContentLayer.INVISIBLE
+    ] == expected
+    assert "Body text." in doc.export_to_markdown()
+    assert all(command not in doc.export_to_markdown() for command in expected)
 
 
 def test_latex_label():
@@ -173,7 +217,7 @@ C \\emph{em}x and \\textit{it}.
     backend = LatexDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(latex_content))
     doc = backend.convert()
 
-    assert [t.text for t in doc.texts] == [
+    assert [t.text for t in doc.texts if t.content_layer == ContentLayer.BODY] == [
         "A it text. B bf more.",
         "C emx and it.",
     ]
@@ -847,7 +891,9 @@ def test_latex_nested_formatting_macros():
         )
         doc = backend.convert()
 
-        all_text = " ".join(t.text for t in doc.texts)
+        all_text = " ".join(
+            t.text for t in doc.texts if t.content_layer == ContentLayer.BODY
+        )
         assert expected in all_text, (
             f"[{description}] expected {expected!r} in output, got: {all_text!r}"
         )

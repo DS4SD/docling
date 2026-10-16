@@ -32,6 +32,8 @@ def _build_context_db() -> Any:
         "docling-metadata-and-bibliography",
         macros=[
             MacroSpec("title", "[{"),
+            MacroSpec("caption", "*[{"),
+            MacroSpec("captionof", "{{"),
             MacroSpec("bibitem", "[{"),
             MacroSpec("bibliographystyle", "{"),
         ],
