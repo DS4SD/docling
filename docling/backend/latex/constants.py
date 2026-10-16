@@ -3,7 +3,22 @@
 
 MACROS_NEWCOMMAND = frozenset(["newcommand", "renewcommand", "providecommand"])
 
-MACROS_PREAMBLE_METADATA = frozenset(["title", "author", "date"])
+MACROS_METADATA = frozenset(
+    [
+        "title",
+        "author",
+        "date",
+        "affiliation",
+        "affil",
+        "address",
+        "institute",
+        "email",
+        "altaffiliation",
+        "thanks",
+        "footnote",
+        "preprint",
+    ]
+)
 
 MACROS_INLINE_VERBATIM = frozenset(["%", "$", "&", "#", "_", "{", "}", "~"])
 
@@ -31,6 +46,15 @@ MACROS_STRUCTURAL = frozenset(
         "bibliography",
         "title",
         "author",
+        "date",
+        "affiliation",
+        "affil",
+        "address",
+        "institute",
+        "email",
+        "altaffiliation",
+        "thanks",
+        "preprint",
         "maketitle",
         "footnote",
         "marginpar",

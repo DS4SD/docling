@@ -213,8 +213,11 @@ def test_arxiv_latex_corpus(
             if write_success and not row_failed:
                 try:
                     params = LaTeXParams(
+                        layers={ContentLayer.BODY, ContentLayer.INVISIBLE},
                         include_annotations=False,
                         enable_chart_tables=False,
+                        document_class="",
+                        packages=[],
                     )
                     serializer = SourceLaTeXDocSerializer(
                         doc=document,

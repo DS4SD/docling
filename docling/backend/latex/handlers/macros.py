@@ -27,8 +27,8 @@ from docling.backend.latex.constants import (
     MACROS_IGNORED,
     MACROS_INLINE_VERBATIM,
     MACROS_LEGACY_FORMATTING,
+    MACROS_METADATA,
     MACROS_NEWCOMMAND,
-    MACROS_PREAMBLE_METADATA,
     MACROS_SPACING,
     MACROS_STRUCTURAL,
     MACROS_TEXT_FORMATTING,
@@ -93,6 +93,7 @@ class MacroHandlerMixin:
             parent: Any = ...,
             formatting: Any = ...,
             text_label: Any = ...,
+            heading_level: int | None = ...,
         ) -> None: ...
         def _nodes_to_text(self, nodes: Any) -> str: ...
         def _item_term(self, node: Any) -> str: ...
@@ -130,6 +131,16 @@ class MacroHandlerMixin:
                     definition, tolerant_parsing=True, latex_context=LATEX_CONTEXT_DB
                 ).get_latex_nodes()
                 self._extract_custom_macros(definition_nodes)
+            elif match := re.fullmatch(
+                r"\\(?:def|edef|gdef|xdef)\s*\\([A-Za-z@]+)\s*\{(.*)\}",
+                definition,
+                re.DOTALL,
+            ):
+                # A source definition can replace a built-in accent macro.
+                # Register zero-argument definitions before the main parse so
+                # the parser does not consume a following math delimiter.
+                self._custom_macros[match.group(1)] = match.group(2)
+                self._custom_macro_num_args[match.group(1)] = 0
             pieces.append(re.sub(r"[^\n]", " ", definition))
             cursor = end
         pieces.append(replace(latex_text[cursor:]))
@@ -238,28 +249,6 @@ class MacroHandlerMixin:
 
             for child_nodes in iter_child_nodelists(node):
                 self._extract_custom_macros(child_nodes, depth + 1)
-
-    def _extract_preamble_metadata(self, nodes, doc: DoclingDocument, depth: int = 0):
-        if nodes is None or depth > 10:
-            return
-
-        for node in nodes:
-            if isinstance(node, LatexEnvironmentNode) and node.envname == "document":
-                return
-
-            if (
-                isinstance(node, LatexMacroNode)
-                and node.macroname in MACROS_PREAMBLE_METADATA
-            ):
-                text = self._extract_macro_arg(node)
-                if text:
-                    if node.macroname == "title":
-                        doc.add_text(label=DocItemLabel.TITLE, text=text)
-                    else:
-                        doc.add_text(label=DocItemLabel.TEXT, text=text)
-
-            for child_nodes in iter_child_nodelists(node):
-                self._extract_preamble_metadata(child_nodes, doc, depth + 1)
 
     def _process_item_macro_inline(
         self,
@@ -420,22 +409,21 @@ class MacroHandlerMixin:
         text_label: DocItemLabel | None = None,
     ):
         if node.macroname in MACROS_HEADING:
-            title = self._extract_macro_arg(node)
-            if title:
-                level = self._get_heading_level(node.macroname)
-                doc.add_heading(parent=parent, text=title, level=level)
+            if node.nodeargd is not None and node.nodeargd.argnlist:
+                argument = node.nodeargd.argnlist[-1]
+                if isinstance(argument, LatexGroupNode):
+                    self._process_nodes(
+                        argument.nodelist,
+                        doc,
+                        parent,
+                        formatting,
+                        heading_level=self._get_heading_level(node.macroname),
+                    )
 
-        elif node.macroname == "title":
-            title = self._extract_macro_arg(node)
-            if title:
-                doc.add_text(parent=parent, label=DocItemLabel.TITLE, text=title)
+        elif node.macroname in MACROS_METADATA:
+            self._metadata_handler.process_macro(node, doc, parent, formatting)
 
-        elif node.macroname in ["author", "date"]:
-            meta_text = self._extract_macro_arg(node)
-            if meta_text:
-                doc.add_text(parent=parent, label=DocItemLabel.TEXT, text=meta_text)
-
-        elif node.macroname in ["thanks", "maketitle"]:
+        elif node.macroname == "maketitle":
             pass
 
         elif node.macroname in MACROS_TEXT_STYLE:
@@ -465,7 +453,7 @@ class MacroHandlerMixin:
         elif node.macroname in {"caption", "captionof"}:
             self._add_caption(node, doc, parent, formatting)
 
-        elif node.macroname in ["footnote", "marginpar"]:
+        elif node.macroname == "marginpar":
             footnote_text = self._extract_macro_arg(node)
             if footnote_text:
                 doc.add_text(

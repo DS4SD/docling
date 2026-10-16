@@ -7,6 +7,7 @@ from typing import Any
 
 from docling_core.transforms.serializer.base import (
     BaseDocSerializer,
+    BaseTextSerializer,
     SerializationResult,
 )
 from docling_core.transforms.serializer.common import create_ser_result
@@ -14,6 +15,7 @@ from docling_core.transforms.serializer.doclang import DocLangDocSerializer
 from docling_core.transforms.serializer.latex import (
     LaTeXDocSerializer,
     LaTeXInlineSerializer,
+    LaTeXTextSerializer,
 )
 from docling_core.types.doc import (
     ContentLayer,
@@ -75,10 +77,54 @@ class SourceLaTeXInlineSerializer(LaTeXInlineSerializer):
         )
 
 
+class SourceLaTeXTextSerializer(LaTeXTextSerializer):
+    """Keep invisible source commands as LaTeX rather than escaped text."""
+
+    def serialize(
+        self,
+        *,
+        item: TextItem,
+        doc_serializer: BaseDocSerializer,
+        doc: DoclingDocument,
+        **kwargs: Any,
+    ) -> SerializationResult:
+        if item.content_layer == ContentLayer.INVISIBLE:
+            return create_ser_result(text=item.text, span_source=item)
+        return super().serialize(
+            item=item, doc_serializer=doc_serializer, doc=doc, **kwargs
+        )
+
+
 class SourceLaTeXDocSerializer(LaTeXDocSerializer):
     """Serialize rich captions from the LaTeX backend for source comparison."""
 
+    text_serializer: BaseTextSerializer = SourceLaTeXTextSerializer()
     _nested_caption_refs_cache: set[str] | None = PrivateAttr(default=None)
+
+    def serialize_doc(
+        self, *, parts: list[SerializationResult], **kwargs: Any
+    ) -> SerializationResult:
+        preamble_parts: list[SerializationResult] = []
+        body_parts: list[SerializationResult] = []
+        for part in parts:
+            items = part.get_unique_doc_items()
+            if items and all(
+                item.content_layer == ContentLayer.INVISIBLE for item in items
+            ):
+                preamble_parts.append(part)
+            else:
+                body_parts.append(part)
+
+        result = super().serialize_doc(parts=body_parts, **kwargs)
+        if not preamble_parts:
+            return result
+
+        header, separator, body = result.text.partition(r"\begin{document}")
+        source_preamble = "\n".join(part.text for part in preamble_parts)
+        return create_ser_result(
+            text=f"{header}{source_preamble}\n\n{separator}{body}",
+            span_source=parts,
+        )
 
     def _skip_in_walk(self, *, node: NodeItem, root: NodeItem | None) -> bool:
         if self._nested_caption_refs_cache is None:

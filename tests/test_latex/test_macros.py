@@ -6,6 +6,7 @@ from io import BytesIO
 from pathlib import Path
 
 import pytest
+from docling_core.transforms.serializer.latex import LaTeXParams
 from docling_core.types.doc import ContentLayer, DocItemLabel, GroupLabel
 
 from docling.backend.latex_backend import LatexDocumentBackend
@@ -16,6 +17,7 @@ from docling.document_converter import DocumentConverter
 
 from ..test_data_gen_flag import GEN_TEST_DATA
 from ..verify_utils import verify_document, verify_export
+from .latex_serializer import SourceLaTeXDocSerializer, SourceLaTeXInlineSerializer
 
 GENERATE = GEN_TEST_DATA
 LATEX_DATA_DIR = Path("./tests/data/latex/sources/")
@@ -84,6 +86,77 @@ Body text.
     assert "Body text." in doc.export_to_markdown()
     assert all(command not in doc.export_to_markdown() for command in expected)
 
+    parsed_latex = (
+        SourceLaTeXDocSerializer(
+            doc=doc,
+            params=LaTeXParams(
+                layers={ContentLayer.BODY, ContentLayer.INVISIBLE},
+                document_class="",
+                packages=[],
+                include_annotations=False,
+                enable_chart_tables=False,
+            ),
+            inline_serializer=SourceLaTeXInlineSerializer(),
+        )
+        .serialize()
+        .text
+    )
+    preamble, body = parsed_latex.split(r"\begin{document}", maxsplit=1)
+    assert [preamble.index(command) for command in expected] == sorted(
+        preamble.index(command) for command in expected
+    )
+    assert all(command not in body for command in expected)
+    assert r"\textbackslash{}newcommand" not in parsed_latex
+    assert "Body text." in body
+
+
+def test_latex_preserves_complete_newtheorem_declarations():
+    declarations = [
+        r"\newtheorem{theorem}{Theorem}",
+        r"\newtheorem{corollary}[theorem]{Corollary}",
+        r"\newtheorem{lemma}{Lemma}[section]",
+        r"\newtheorem*{remark}{Remark}",
+    ]
+    source = (
+        "\\documentclass{article}\n"
+        + "\n".join(declarations)
+        + "\n\\begin{document}\nBody text.\n\\end{document}"
+    ).encode("utf-8")
+    stream = BytesIO(source)
+    in_doc = InputDocument(
+        path_or_stream=stream,
+        format=InputFormat.LATEX,
+        backend=LatexDocumentBackend,
+        filename="test.tex",
+    )
+    doc = LatexDocumentBackend(in_doc=in_doc, path_or_stream=stream).convert()
+
+    invisible = [
+        item.text for item in doc.texts if item.content_layer == ContentLayer.INVISIBLE
+    ]
+    assert invisible[1:] == declarations
+    assert all(command in doc.export_to_doclang() for command in declarations)
+
+    parsed = (
+        SourceLaTeXDocSerializer(
+            doc=doc,
+            params=LaTeXParams(
+                layers={ContentLayer.BODY, ContentLayer.INVISIBLE},
+                document_class="",
+                packages=[],
+                include_annotations=False,
+                enable_chart_tables=False,
+            ),
+            inline_serializer=SourceLaTeXInlineSerializer(),
+        )
+        .serialize()
+        .text
+    )
+    preamble, body = parsed.split(r"\begin{document}", maxsplit=1)
+    assert all(command in preamble for command in declarations)
+    assert all(command not in body for command in declarations)
+    assert "Body text." in body
+
 
 def test_latex_label():
     """Test label macro parsing"""
@@ -145,8 +218,10 @@ def test_latex_title_with_optional_short_title():
     )
     backend = LatexDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(latex_content))
     doc = backend.convert()
-    titles = [item.text for item in doc.texts if item.label == DocItemLabel.TITLE]
-    assert titles == ["Long $y$"]
+    titles = [item for item in doc.texts if item.label == DocItemLabel.TITLE]
+    assert len(titles) == 1
+    assert titles[0].children
+    assert "<formula>y</formula>" in doc.export_to_doclang()
     assert "Short" not in doc.export_to_markdown()
 
 
@@ -173,6 +248,60 @@ def test_latex_heading_levels():
 
     headers = [t for t in doc.texts if t.label == DocItemLabel.SECTION_HEADER]
     assert len(headers) >= 3
+
+
+def test_latex_section_heading_and_title_keep_inline_formulas():
+    source = rb"""\documentclass{article}
+\title[Short $x$]{From $A_1$ to the $B^2$ case}
+\begin{document}
+\maketitle
+\section[Short $k$]{Dimension $2$ and rank $r$}
+\subsection{The $q$ case}
+\end{document}"""
+    stream = BytesIO(source)
+    in_doc = InputDocument(
+        path_or_stream=stream,
+        format=InputFormat.LATEX,
+        backend=LatexDocumentBackend,
+        filename="test.tex",
+    )
+    doc = LatexDocumentBackend(in_doc=in_doc, path_or_stream=stream).convert()
+
+    titles = [item for item in doc.texts if item.label == DocItemLabel.TITLE]
+    headings = [item for item in doc.texts if item.label == DocItemLabel.SECTION_HEADER]
+    assert len(titles) == 1
+    assert len(headings) == 2
+    assert titles[0].children
+    assert all(item.children for item in headings)
+    assert [item.level for item in headings] == [1, 2]
+
+    dclg = doc.export_to_doclang()
+    assert "<formula>A_1</formula>" in dclg
+    assert "<formula>B^2</formula>" in dclg
+    assert "<formula>2</formula>" in dclg
+    assert "<formula>r</formula>" in dclg
+    assert "<formula>q</formula>" in dclg
+    assert "Short" not in dclg
+
+    parsed = (
+        SourceLaTeXDocSerializer(
+            doc=doc,
+            params=LaTeXParams(
+                layers={ContentLayer.BODY, ContentLayer.INVISIBLE},
+                document_class="",
+                packages=[],
+                include_annotations=False,
+                enable_chart_tables=False,
+            ),
+            inline_serializer=SourceLaTeXInlineSerializer(),
+        )
+        .serialize()
+        .text
+    )
+    assert r"From $A_1$ to the $B^2$ case" in parsed
+    assert r"\section{Dimension $2$ and rank $r$}" in parsed
+    assert r"\subsection{The $q$ case}" in parsed
+    assert r"\$" not in parsed
 
 
 def test_latex_text_formatting():

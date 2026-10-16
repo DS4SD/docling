@@ -74,4 +74,7 @@ class MathHandlerMixin:
         latex_str = re.sub(r"\\label\{.*?\}", "", latex_str)
         latex_str = self._expand_macros(latex_str)
 
-        return latex_str.strip()
+        latex_str = latex_str.strip()
+        if env_name == "inline":
+            latex_str = re.sub(r"[ \t\r\n]*[\t\r\n][ \t\r\n]*", " ", latex_str)
+        return latex_str

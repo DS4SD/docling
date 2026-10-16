@@ -137,6 +137,46 @@ def test_source_linebreaks_are_spaces_in_document_text():
             assert "\t" not in item.orig
 
 
+def test_inline_math_source_linebreak_does_not_wrap_formula_content():
+    latex_content = rb"""\documentclass{article}
+\begin{document}
+The interval is $70 < Q <
+115$ GeV.
+\end{document}"""
+    stream = BytesIO(latex_content)
+    in_doc = InputDocument(
+        path_or_stream=stream,
+        format=InputFormat.LATEX,
+        backend=LatexDocumentBackend,
+        filename="inline-linebreak.tex",
+    )
+    doc = LatexDocumentBackend(in_doc=in_doc, path_or_stream=stream).convert()
+
+    formulas = [item for item in doc.texts if item.label == DocItemLabel.FORMULA]
+    assert [formula.text for formula in formulas] == ["70 < Q < 115"]
+    assert "<formula><![CDATA[70 < Q < 115]]></formula>" in doc.export_to_doclang()
+
+
+def test_def_redefined_accent_does_not_consume_math_delimiter():
+    latex_content = rb"""\documentclass{article}
+\def\v{\vert}
+\begin{document}
+Let $x=\v$ and $y$ follow.
+\end{document}"""
+    stream = BytesIO(latex_content)
+    in_doc = InputDocument(
+        path_or_stream=stream,
+        format=InputFormat.LATEX,
+        backend=LatexDocumentBackend,
+        filename="redefined-accent.tex",
+    )
+    doc = LatexDocumentBackend(in_doc=in_doc, path_or_stream=stream).convert()
+
+    formulas = [item for item in doc.texts if item.label == DocItemLabel.FORMULA]
+    assert [formula.text for formula in formulas] == [r"x=\vert", "y"]
+    assert "and" in doc.export_to_doclang()
+
+
 def test_latex_various_math_environments():
     """Test various math environments"""
     latex_content = rb"""

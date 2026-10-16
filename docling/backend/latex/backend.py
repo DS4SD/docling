@@ -17,6 +17,7 @@ from docling.backend.latex.constants import MACROS_IGNORED
 from docling.backend.latex.handlers.environments import EnvironmentHandlerMixin
 from docling.backend.latex.handlers.macros import MacroHandlerMixin
 from docling.backend.latex.handlers.math import InlineFormula, MathHandlerMixin
+from docling.backend.latex.handlers.metadata import LatexMetadataHandler
 from docling.backend.latex.utils.encoding import decode_latex_content
 from docling.backend.latex.utils.latex_context import LATEX_CONTEXT_DB
 from docling.backend.latex.utils.table import TableHelperMixin
@@ -39,6 +40,7 @@ try:  # pragma: no cover - import-time guard
         LatexMathNode,
         LatexWalker,
     )
+    from pylatexenc.macrospec import MacroSpec
 
     _PYLATEXENC_AVAILABLE = True
 except ImportError as e:  # pragma: no cover - import-time guard
@@ -85,6 +87,7 @@ class LatexDocumentBackend(
         self.labels: dict[str, bool] = {}
         self._custom_macros: dict[str, str] = {}
         self._custom_macro_num_args: dict[str, int] = {}
+        self._metadata_handler = LatexMetadataHandler(self)
         self._masked_macro_spans: list[tuple[int, int]] = []
         self._suppress_image_path_caption = False
         self._input_stack: set[str] = set()
@@ -125,8 +128,18 @@ class LatexDocumentBackend(
         else:
             self.latex_preamble = ""
 
+        parser_context = LATEX_CONTEXT_DB.filter_context()
+        zero_arg_macros = [
+            MacroSpec(name, "")
+            for name, count in self._custom_macro_num_args.items()
+            if count == 0
+        ]
+        if zero_arg_macros:
+            parser_context.add_context_category(
+                "docling-source-macros", macros=zero_arg_macros, prepend=True
+            )
         walker = LatexWalker(
-            preprocessed_text, tolerant_parsing=True, latex_context=LATEX_CONTEXT_DB
+            preprocessed_text, tolerant_parsing=True, latex_context=parser_context
         )
 
         try:
@@ -144,7 +157,7 @@ class LatexDocumentBackend(
 
         try:
             self._extract_custom_macros(nodes)
-            self._extract_preamble_metadata(nodes, doc)
+            self._metadata_handler.process_preamble(nodes, doc)
 
             doc_node = self._find_document_env(nodes)
 
@@ -244,6 +257,7 @@ class LatexDocumentBackend(
         parent: NodeItem | None = None,
         formatting: Formatting | None = None,
         text_label: DocItemLabel | None = None,
+        heading_level: int | None = None,
     ):
         if nodes is None:
             return
@@ -253,12 +267,20 @@ class LatexDocumentBackend(
         def flush_text_buffer():
             if text_buffer:
                 if any(isinstance(part, InlineFormula) for part in text_buffer):
-                    paragraph = doc.add_text(
-                        parent=parent,
-                        label=text_label or DocItemLabel.TEXT,
-                        text="",
-                        formatting=formatting,
-                    )
+                    if heading_level is not None:
+                        paragraph = doc.add_heading(
+                            parent=parent,
+                            text="",
+                            level=heading_level,
+                            formatting=formatting,
+                        )
+                    else:
+                        paragraph = doc.add_text(
+                            parent=parent,
+                            label=text_label or DocItemLabel.TEXT,
+                            text="",
+                            formatting=formatting,
+                        )
                     inline_group = doc.add_inline_group(parent=paragraph)
                     parts: list[str | InlineFormula] = []
                     for part in text_buffer:
@@ -296,12 +318,20 @@ class LatexDocumentBackend(
                 else:
                     combined_text = "".join(text_buffer).strip()
                     if combined_text:
-                        doc.add_text(
-                            parent=parent,
-                            label=text_label or DocItemLabel.TEXT,
-                            text=combined_text,
-                            formatting=formatting,
-                        )
+                        if heading_level is not None:
+                            doc.add_heading(
+                                parent=parent,
+                                text=combined_text,
+                                level=heading_level,
+                                formatting=formatting,
+                            )
+                        else:
+                            doc.add_text(
+                                parent=parent,
+                                label=text_label or DocItemLabel.TEXT,
+                                text=combined_text,
+                                formatting=formatting,
+                            )
                 text_buffer.clear()
 
         idx = 0
@@ -319,6 +349,9 @@ class LatexDocumentBackend(
                         text_buffer,
                         flush_text_buffer,
                     )
+
+                elif isinstance(node, InlineFormula):
+                    text_buffer.append(node)
 
                 elif isinstance(node, LatexMacroNode):
                     inline_args = self._inline_math_argument_nodes(node)
