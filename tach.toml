@@ -186,6 +186,7 @@ path = "docling.utils"
 layer = "core"
 depends_on = [
   "docling.datamodel",
+  "docling.datamodel.asr_model_specs",
   "docling.datamodel.vlm_model_specs",
   "docling.models.stages.chart_extraction",
   "docling.models.stages.code_formula",
@@ -463,6 +464,7 @@ layer = "pipeline"
 depends_on = [
   "docling.backend",
   "docling.datamodel",
+  "docling.datamodel.asr_model_specs",
   "docling.datamodel.pipeline_options_asr_model",
   "docling.pipeline.base_pipeline",
   "docling.utils",

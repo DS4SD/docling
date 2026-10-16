@@ -23,11 +23,17 @@ from PIL import Image
 from pydantic import AnyUrl
 
 from docling.datamodel.base_models import VlmStopReason
+from docling.datamodel.pipeline_options_vlm_model import ApiVlmOptions, ResponseFormat
 from docling.datamodel.vlm_engine_options import ApiVlmEngineOptions, VlmEngineType
 from docling.models.inference_engines.vlm.api_openai_compatible_engine import (
     ApiVlmEngine,
 )
 from docling.models.inference_engines.vlm.base import VlmEngineInput
+from docling.models.stages.vlm_convert.vlm_convert_model import (
+    _prediction_from_engine_output,
+)
+from docling.models.utils.generation_utils import GenerationStopper
+from docling.models.vlm_pipeline_models.api_vlm_model import ApiVlmModel
 from docling.utils.api_image_request import (
     api_image_request,
     api_image_request_streaming,
@@ -207,6 +213,85 @@ def test_malformed_json_chunks_are_skipped(api, endpoint, image):
     assert result.text == "good"
 
 
+def test_streamed_logprobs_are_collected_in_order(api, endpoint, image):
+    api.stream_chunks = ["Hel", "lo"]
+    api.stream_logprobs = [-0.25, -1.5]
+
+    result = api_image_request_streaming(
+        image, "describe", endpoint, model="m", logprobs=True
+    )
+
+    assert result.logprobs is not None
+    assert [(t.token, t.logprob) for t in result.logprobs.content] == [
+        ("Hel", -0.25),
+        ("lo", -1.5),
+    ]
+
+
+@pytest.mark.parametrize(
+    ("finish_reason", "expected"),
+    [
+        ("stop", VlmStopReason.END_OF_SEQUENCE),
+        ("length", VlmStopReason.LENGTH),
+        ("content_filter", VlmStopReason.CONTENT_FILTERED),
+    ],
+)
+def test_streaming_reports_the_stop_reason_from_the_final_chunk(
+    api, endpoint, image, finish_reason, expected
+):
+    """A stream cut at the token limit must be told apart from a finished one,
+    as a non-streamed call does."""
+    api.stream_chunks = ["a", "b"]
+    api.finish_reason = finish_reason
+
+    result = api_image_request_streaming(image, "describe", endpoint, model="m")
+
+    assert result.text == "ab"
+    assert result.stop_reason == expected
+
+
+@pytest.mark.parametrize("status", [400, 500])
+def test_streaming_api_errors_do_not_raise_but_are_reported(
+    api, endpoint, image, status
+):
+    """Like the non-streaming call, a rejected streaming call must not raise:
+    one failing page would otherwise abort the whole document."""
+    api.fail_status = status
+
+    result = api_image_request_streaming(image, "describe", endpoint, model="m")
+
+    assert result.text == ""
+    assert result.error is not None and result.error.startswith(f"HTTP {status}")
+
+
+def test_streaming_timeout_is_reported_as_an_error(api, endpoint, image):
+    api.delay_seconds = 1.0
+
+    result = api_image_request_streaming(
+        image, "describe", endpoint, timeout=0.15, model="m"
+    )
+
+    assert result.text == ""
+    assert result.error is not None and "timed out" in result.error
+
+
+def test_a_stream_that_stalls_midway_is_reported_and_its_partial_text_dropped(
+    api, endpoint, image
+):
+    """Text received before the stream stalled is incomplete, so it is not
+    returned as if it were the page's output."""
+    api.stream_chunks = ["first ", "second ", "third"]
+    api.stream_stall_after = 2
+    api.delay_seconds = 1.0
+
+    result = api_image_request_streaming(
+        image, "describe", endpoint, timeout=0.15, model="m"
+    )
+
+    assert result.text == ""
+    assert result.error is not None
+
+
 # -- the engine layer ----------------------------------------------------
 
 
@@ -235,6 +320,97 @@ def test_engine_options_drive_the_outgoing_request(api, image):
     assert body["temperature"] == 0.25
     sent = api.service.requests_for("POST", r"/v1/chat/completions")[-1].headers
     assert sent["x-tenant"] == "acme"
+
+
+def test_engine_keeps_logprobs_when_a_stopper_aborts_the_stream(api, image):
+    """A custom stopper switches the engine to streaming; generated tokens
+    must still reach the prediction, up to the point where it stopped."""
+
+    class _StopOnLoop(GenerationStopper):
+        def should_stop(self, s: str) -> bool:
+            return "loop" in s
+
+    api.stream_chunks = ["ok ", "loop", " not read"]
+    api.stream_logprobs = [-0.1, -0.2, -0.3]
+    engine = _engine(api, params={"model": "m", "logprobs": True})
+
+    outputs = engine.predict_batch(
+        [
+            VlmEngineInput(
+                image=image,
+                prompt="describe",
+                extra_generation_config={"custom_stopping_criteria": [_StopOnLoop]},
+            )
+        ]
+    )
+
+    assert _sent_body(api)["stream"] is True
+    prediction = _prediction_from_engine_output(outputs[0])
+    assert prediction.text == "ok loop"
+    assert prediction.stop_reason == VlmStopReason.STOP_SEQUENCE
+    assert [(t.text, t.logprob) for t in prediction.generated_tokens] == [
+        ("ok ", -0.1),
+        ("loop", -0.2),
+    ]
+
+
+def test_engine_reports_a_failed_stream_as_an_inference_error(api, image):
+    """With a stopper the engine streams; a failed stream must reach the
+    prediction as INFERENCE_ERROR with its reason, as a failed non-streamed
+    call does, so the pipeline marks only that page as failed."""
+
+    class _NeverStop(GenerationStopper):
+        def should_stop(self, s: str) -> bool:
+            return False
+
+    api.fail_status = 400
+    engine = _engine(api, params={"model": "m"})
+
+    outputs = engine.predict_batch(
+        [
+            VlmEngineInput(
+                image=image,
+                prompt="describe",
+                extra_generation_config={"custom_stopping_criteria": [_NeverStop]},
+            )
+        ]
+    )
+
+    assert _sent_body(api)["stream"] is True
+    prediction = _prediction_from_engine_output(outputs[0])
+    assert prediction.text == ""
+    assert prediction.stop_reason == VlmStopReason.INFERENCE_ERROR
+    assert prediction.error_message is not None
+    assert prediction.error_message.startswith("HTTP 400")
+
+
+def test_api_vlm_model_reports_a_failed_stream_as_an_inference_error(
+    api, endpoint, image
+):
+    """The VlmPipeline's ApiVlmModel also streams when given a stopper; a failed
+    stream must reach its prediction as INFERENCE_ERROR with the reason."""
+
+    class _NeverStop(GenerationStopper):
+        def should_stop(self, s: str) -> bool:
+            return False
+
+    api.fail_status = 400
+    options = ApiVlmOptions(
+        url=endpoint,
+        prompt="describe",
+        response_format=ResponseFormat.PLAINTEXT,
+        params={"model": "m"},
+        custom_stopping_criteria=[_NeverStop()],
+    )
+    model = ApiVlmModel(enabled=True, enable_remote_services=True, vlm_options=options)
+
+    (prediction,) = model.process_images([image], "describe")
+
+    assert _sent_body(api)["stream"] is True
+    assert prediction.text == ""
+    assert prediction.stop_reason == VlmStopReason.INFERENCE_ERROR
+    assert prediction.error_message is not None
+    assert prediction.error_message.startswith("HTTP 400")
 
 
 def test_engine_requires_remote_services_to_be_enabled(api):

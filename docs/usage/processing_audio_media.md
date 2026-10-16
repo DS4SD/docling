@@ -353,6 +353,56 @@ pipeline_options.asr_options = InlineAsrWhisperS2TOptions(
 !!! note "WhisperS2T is not available on Apple Silicon"
     The `whisper-s2t-reborn` dependency installs only on non-Apple-Silicon platforms, so `_S2T` presets can't be used on M-series Macs — use the native or MLX backends there. On Linux with CUDA, see the [cuBLAS note](#installation) above if model loading fails.
 
+### Transcribing with a remote Whisper server
+
+Instead of loading a model in the Docling process, the ASR pipeline can send the audio to an OpenAI-compatible
+`/v1/audio/transcriptions` endpoint — a Whisper server that is deployed on its own (for example faster-whisper-server,
+whisper.cpp's server or vLLM) or a hosted service. This keeps the model, and its GPU, out of the process that converts
+documents, and lets several services share one transcription server.
+
+```python
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import AsrPipelineOptions
+from docling.datamodel.pipeline_options_asr_model import ApiAsrOptions
+from docling.document_converter import AudioFormatOption, DocumentConverter
+from docling.pipeline.asr_pipeline import AsrPipeline
+
+pipeline_options = AsrPipelineOptions(
+    asr_options=ApiAsrOptions(
+        url="http://whisper:8000/v1/audio/transcriptions",
+        model="Systran/faster-whisper-small",
+        language="en",
+        initial_prompt="Columbus flight control loop: COL FLIGHT, COL SYSTEMS",
+        headers={"Authorization": "Bearer TOKEN"},
+    ),
+    enable_remote_services=True,  # required: the audio leaves this process
+)
+
+converter = DocumentConverter(
+    format_options={
+        InputFormat.AUDIO: AudioFormatOption(
+            pipeline_cls=AsrPipeline, pipeline_options=pipeline_options
+        )
+    }
+)
+result = converter.convert("recording.mp3")
+```
+
+The file is posted as `multipart/form-data` with `response_format=verbose_json`, and every timed segment of the answer
+becomes a text item with a `TrackSource` (start and end time), like with the local backends. Words are added to each
+segment when `word_timestamps=True` and the server supports `timestamp_granularities[]=word`. Settings that are specific to a
+server go in `params`, which are sent as additional form fields.
+
+Notes:
+
+- `enable_remote_services=True` is required, as for remote picture description: without it the pipeline raises
+  `OperationNotAllowed` and nothing is sent.
+- FFmpeg is not needed for audio files, the server decodes them. (The video pipeline still uses it to extract the
+  audio track.)
+- The server must return timed segments (`verbose_json`). An answer without them fails the conversion with a message
+  saying so. Speaker labels are not part of the OpenAI transcription API, so the items have no speaker.
+- The request waits up to `timeout` seconds (600 by default), which long recordings may need to exceed.
+
 ### From the command line
 
 The `docling` CLI selects any preset with `--asr-model` (values are the lower-case preset names). Audio inputs route to the ASR pipeline and video inputs to the video pipeline automatically based on file extension, so no extra flag is required to pick a pipeline — `--asr-model` controls the transcription backend for both:

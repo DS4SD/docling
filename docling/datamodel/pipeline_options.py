@@ -53,7 +53,10 @@ from docling.datamodel.object_detection_engine_options import (
 from docling.datamodel.picture_classification_options import (
     DocumentPictureClassifierOptions,
 )
-from docling.datamodel.pipeline_options_asr_model import InlineAsrOptions
+from docling.datamodel.pipeline_options_asr_model import (
+    ApiAsrOptions,
+    InlineAsrOptions,
+)
 from docling.datamodel.pipeline_options_vlm_model import (
     ApiVlmOptions,
     InferenceFramework,
@@ -1184,6 +1187,28 @@ class CodeFormulaVlmOptions(StagePresetMixin, VlmEngineOptionsMixin, BaseModel):
         default=True, description="Extract mathematical formulas"
     )
 
+    expansion_factor: float = Field(
+        default=0.18,
+        ge=0.0,
+        description=(
+            "Margin added around each code or formula element when it is cropped "
+            "from the page, as a fraction of the element's width (left and right) "
+            "and height (top and bottom). A wide margin can take in an equation "
+            "number or a neighbouring line, which can make the model loop."
+        ),
+    )
+
+    stop_on_repetition: bool = Field(
+        default=True,
+        description=(
+            "Stop a generation that keeps repeating the same short unit (for "
+            "example `\\quad \\quad ...`) instead of running to max_new_tokens, and "
+            "remove the repeated tail from the output. Inline engines stop the "
+            "looping element early; for API and vLLM engines only the output is "
+            "cleaned up."
+        ),
+    )
+
 
 # =============================================================================
 # PRESET REGISTRATION
@@ -1257,7 +1282,7 @@ _default_code_formula_options = CodeFormulaVlmOptions.from_preset("codeformulav2
 _default_chart_extraction_options = ChartExtractionVlmEngineOptions.from_preset(
     "granite_vision_v4"
 )
-"""Default chart extraction options using granite_vision_v4 preset with Transformers runtime."""
+"""Default chart extraction options using granite_vision_v4 with automatic runtime selection."""
 
 
 # Define an enum for the backend options
@@ -1486,7 +1511,7 @@ class ConvertPipelineOptions(PipelineOptions):
             description=(
                 "Configuration for the chart extraction stage. "
                 "Use ChartExtractionVlmEngineOptions.from_preset('granite_vision_v4') "
-                "(default) or from_preset('granite_vision') for the V1 model. "
+                "(default) or from_preset('granite_vision_v3_3') for the CSV-only model. "
                 "Controls which output formats are generated (chart2csv, chart2summary, chart2code)."
             )
         ),
@@ -1781,11 +1806,13 @@ class AsrPipelineOptions(PipelineOptions):
     """
 
     asr_options: Annotated[
-        InlineAsrOptions,
+        InlineAsrOptions | ApiAsrOptions,
         Field(
             description=(
                 "Automatic Speech Recognition (ASR) model configuration for audio transcription. Specifies which "
-                "ASR model to use (e.g., Whisper variants) and model-specific parameters for speech-to-text conversion."
+                "ASR model to use (e.g., Whisper variants) and model-specific parameters for speech-to-text conversion. "
+                "Use `ApiAsrOptions` (with `enable_remote_services=True`) to transcribe with an OpenAI-compatible "
+                "server instead of a model loaded in this process."
             )
         ),
     ] = asr_model_specs.WHISPER_TINY
@@ -1807,7 +1834,7 @@ class VideoPipelineOptions(PipelineOptions):
     """
 
     asr_options: Annotated[
-        InlineAsrOptions,
+        InlineAsrOptions | ApiAsrOptions,
         Field(description="ASR model configuration for the video audio track."),
     ] = asr_model_specs.WHISPER_TINY
 
@@ -2027,9 +2054,9 @@ class HeadingHierarchyOptions(BaseModel):
         Field(
             description=(
                 "Optional override of the numbering-scheme precedence (highest level first). "
-                "Known schemes: 'part', 'chapter', 'article', 'roman_u', 'arabic', "
-                "'alpha_u', 'alpha_l', 'roman_l'. When None, a default legal/regulatory "
-                "ordering is used."
+                "Known schemes: 'part', 'chapter', 'division', 'subdivision', 'article', "
+                "'roman_u', 'arabic', 'alpha_u', 'alpha_l', 'roman_l'. When None, a default "
+                "legal/regulatory ordering is used."
             )
         ),
     ] = None

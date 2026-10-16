@@ -5,6 +5,8 @@ import base64
 import json
 import re
 import shutil
+import subprocess
+import sys
 import zipfile
 from io import BytesIO
 from pathlib import Path
@@ -97,6 +99,14 @@ def test_cli_help():
     assert "DOCLING_SERVICE_URL" in result.output
 
 
+@pytest.mark.parametrize("args", [["-h"], ["convert", "-h"], ["convert-remote", "-h"]])
+def test_cli_short_help(args: list[str]) -> None:
+    result = runner.invoke(app, args)
+
+    assert result.exit_code == 0
+    assert "Usage" in result.output
+
+
 def test_cli_convert_help():
     result = runner.invoke(app, ["convert", "--help"], terminal_width=200)
     assert result.exit_code == 0
@@ -165,6 +175,27 @@ def test_cli_exports_doclang(tmp_path):
     content = converted.read_text(encoding="utf-8")
     assert re.search(r'<doclang version="\d+\.\d+">', content) is not None
     assert "DocLang CLI" in content
+
+
+def test_cli_exports_plain_text_without_markdown_markers(tmp_path):
+    source = tmp_path / "input.md"
+    source.write_text(
+        "# Title\n\nSome **bold** text and a [link](https://example.com).\n",
+        encoding="utf-8",
+    )
+    output = tmp_path / "out"
+
+    result = runner.invoke(
+        app,
+        [str(source), "--from", "md", "--to", "text", "--output", str(output)],
+    )
+
+    assert result.exit_code == 0
+    content = (output / "input.txt").read_text(encoding="utf-8")
+    assert content.startswith("Title")
+    assert "Some bold text and a link" in content
+    for marker in ("#", "**", "](", "https://example.com"):
+        assert marker not in content
 
 
 def test_cli_exports_dclx(tmp_path):
@@ -486,6 +517,59 @@ def test_cli_html_fetches_local_images_per_input(tmp_path):
     assert result.exit_code == 0
     _assert_markdown_embeds_png(output / "first.md", first_png)
     _assert_markdown_embeds_png(output / "second.md", second_png)
+
+
+def test_cli_latex_reads_included_files_next_to_the_source(tmp_path):
+    """Files pulled in with \\input are read from the source's own directory."""
+    source = tmp_path / "paper"
+    source.mkdir()
+    (source / "main.tex").write_text(
+        "\\documentclass{article}\n\\begin{document}\n\\input{body}\n\\end{document}\n"
+    )
+    (source / "body.tex").write_text("Text from the included file.\n")
+    output = tmp_path / "out"
+
+    result = runner.invoke(
+        app, [str(source / "main.tex"), "--to", "md", "--output", str(output)]
+    )
+
+    assert result.exit_code == 0
+    assert "Text from the included file." in (output / "main.md").read_text()
+
+
+def test_cli_from_latex_keeps_any_source_in_place(tmp_path, monkeypatch):
+    """With --from latex alone, a file is handed over in place whatever its name."""
+    captured: dict[str, list[Path]] = {}
+
+    class _FakeDocumentConverter:
+        def __init__(self, *, allowed_formats, format_options):
+            pass
+
+        def convert_all(
+            self,
+            input_doc_paths,
+            headers=None,
+            raises_on_error=False,
+            page_range=DEFAULT_PAGE_RANGE,
+        ):
+            captured["paths"] = [Path(path) for path in input_doc_paths]
+            return []
+
+    monkeypatch.setattr(
+        "docling.document_converter.DocumentConverter", _FakeDocumentConverter
+    )
+
+    source = tmp_path / "paper" / "paper.ltx"
+    source.parent.mkdir()
+    source.write_text("\\documentclass{article}\n")
+
+    result = runner.invoke(
+        app,
+        [str(source), "--from", "latex", "--output", str(tmp_path / "out")],
+    )
+
+    assert result.exit_code == 0
+    assert captured["paths"] == [source]
 
 
 def test_cli_directory_skips_office_lock_files(tmp_path):
@@ -963,6 +1047,47 @@ def test_cli_directory_includes_gif_images(tmp_path, monkeypatch):
     assert sorted(path.name for path in captured["paths"]) == ["photo.gif", "photo.png"]
 
 
+def test_cli_applies_video_options_to_videos_in_a_directory(tmp_path, monkeypatch):
+    """Video options apply when the video is found by expanding a directory."""
+    captured: dict[InputFormat, Any] = {}
+
+    class _FakeDocumentConverter:
+        def __init__(self, *, allowed_formats, format_options):
+            captured.update(format_options)
+
+        def convert_all(
+            self,
+            input_doc_paths,
+            headers=None,
+            raises_on_error=False,
+            page_range=DEFAULT_PAGE_RANGE,
+        ):
+            return []
+
+    monkeypatch.setattr(
+        "docling.document_converter.DocumentConverter", _FakeDocumentConverter
+    )
+
+    source = tmp_path / "videos"
+    source.mkdir()
+    (source / "talk.mp4").write_bytes(b"not a real video")
+
+    result = runner.invoke(
+        app,
+        [
+            str(source),
+            "--video-frame-interval",
+            "2",
+            "--output",
+            str(tmp_path / "out"),
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert InputFormat.VIDEO in captured
+    assert captured[InputFormat.VIDEO].pipeline_options.frame_interval_seconds == 2.0
+
+
 def test_cli_audio_extensions_coverage():
     """Test that audio/video extensions are correctly split across InputFormat."""
     from docling.datamodel.base_models import FormatToExtensions, InputFormat
@@ -1305,8 +1430,36 @@ def test_parse_page_range_is_shared_with_convert_remote():
         _parse_page_range("4-2")
 
 
+@pytest.mark.parametrize(
+    ("preset_id", "device", "repo_id", "engine_type"),
+    [
+        (
+            "granite_vision_v3_3",
+            "cpu",
+            "ibm-granite/granite-vision-3.3-2b-chart2csv-preview",
+            "transformers",
+        ),
+        (
+            "granite_vision_v4_mlx",
+            "mps",
+            "ibm-granite/granite-vision-4.1-4b",
+            "mlx",
+        ),
+        (
+            "granite_vision_v4",
+            "mps",
+            "ibm-granite/granite-vision-4.1-4b",
+            "auto_inline",
+        ),
+    ],
+)
 def test_cli_passes_accelerator_options_to_vlm_pipeline(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    preset_id: str,
+    device: str,
+    repo_id: str,
+    engine_type: str,
 ) -> None:
     captured_pipeline_options: VlmPipelineOptions | None = None
 
@@ -1351,18 +1504,42 @@ def test_cli_passes_accelerator_options_to_vlm_pipeline(
             "--pipeline",
             "vlm",
             "--device",
-            "cpu",
+            device,
             "--num-threads",
             "7",
+            "--enrich-chart-extraction",
+            "--chart-extraction-preset",
+            preset_id,
+            "--enrich-picture-description",
+            "--picture-description-max-new-tokens",
+            "128",
         ],
     )
 
     assert result.exit_code == 0
     assert captured_pipeline_options is not None
-    assert captured_pipeline_options.accelerator_options.device == AcceleratorDevice.CPU
+    assert captured_pipeline_options.accelerator_options.device == AcceleratorDevice(
+        device
+    )
     assert captured_pipeline_options.accelerator_options.num_threads == 7
     assert captured_pipeline_options.generate_page_images is True
     assert captured_pipeline_options.generate_picture_images is True
+    assert captured_pipeline_options.do_chart_extraction is True
+    assert (
+        captured_pipeline_options.chart_extraction_options.model_spec.default_repo_id
+        == repo_id
+    )
+    assert (
+        captured_pipeline_options.chart_extraction_options.engine_options.engine_type.value
+        == engine_type
+    )
+    assert captured_pipeline_options.do_picture_description is True
+    assert (
+        captured_pipeline_options.picture_description_options.generation_config[
+            "max_new_tokens"
+        ]
+        == 128
+    )
 
 
 def _capture_cli_engine_options(monkeypatch, extra_args, tmp_path, option_name):
@@ -1481,32 +1658,58 @@ def test_cli_invalid_table_structure_engine_is_rejected(tmp_path):
     assert result.exit_code != 0
 
 
-def test_cli_main_importable_without_local_model_stack(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    """Importing docling.cli.main must not require pypdfium2 or scipy.
+_SLIM_CLI_SCRIPT = """
+import sys
 
-    Ensure that CLI does not crash in `docling convert-remote`
-    on lightweight `docling-client` / `docling-slim[service-client]` installs.
+# Simulate a docling-client / docling-slim[service-client] install.
+for blocked in ("pypdfium2", "scipy", "scipy.ndimage", "torch", "packaging"):
+    sys.modules[blocked] = None
+
+from typer.testing import CliRunner
+
+from docling.cli.main import app
+
+result = CliRunner().invoke(app, sys.argv[1:])
+sys.stdout.write(result.output)
+# A traceback (any exception other than a clean exit) maps to exit code 99.
+crashed = result.exception is not None and not isinstance(result.exception, SystemExit)
+sys.exit(99 if crashed else result.exit_code)
+"""
+
+
+def _run_slim_cli(*args: str) -> subprocess.CompletedProcess[str]:
+    # A subprocess keeps the blocked modules and the re-imported CLI out of
+    # the other tests in this session.
+    return subprocess.run(
+        [sys.executable, "-c", _SLIM_CLI_SCRIPT, *args],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+
+def test_cli_convert_remote_works_without_local_model_stack() -> None:
+    """`docling convert-remote` must work on `docling-client` installs.
+
+    `docling-client` / `docling-slim[service-client]` has no local model stack
+    (pypdfium2, scipy, torch, packaging, ...). Building the engine factories
+    loads the built-in plugins, which import the engine modules, so the CLI
+    must guard that step too and not only the factory import.
     """
-    import importlib
-    import sys
+    result = _run_slim_cli("convert-remote", "--help")
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "docling-serve" in strip_ansi(result.stdout)
 
-    monkeypatch.setitem(sys.modules, "pypdfium2", None)  # type: ignore[arg-type]
-    monkeypatch.setitem(sys.modules, "scipy", None)  # type: ignore[arg-type]
-    monkeypatch.setitem(sys.modules, "scipy.ndimage", None)  # type: ignore[arg-type]
 
-    for mod in list(sys.modules):
-        if mod.startswith(
-            (
-                "docling.cli.main",
-                "docling.document_converter",
-                "docling.models.factories",
-            )
-        ):
-            monkeypatch.delitem(sys.modules, mod)
-
-    importlib.import_module("docling.cli.main")
+def test_cli_convert_without_local_model_stack_shows_install_hint(
+    tmp_path: Path,
+) -> None:
+    """Local `docling convert` must exit with an install hint, not a traceback."""
+    source = tmp_path / "doc.pdf"
+    source.write_bytes(b"%PDF-1.4")
+    result = _run_slim_cli("convert", str(source))
+    assert result.returncode == 1, result.stdout + result.stderr
+    assert "pip install docling" in strip_ansi(result.stdout)
 
 
 def test_cli_invalid_ocr_engine_is_rejected(tmp_path):
