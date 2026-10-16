@@ -817,6 +817,41 @@ def test_utf8_bom_does_not_hide_the_document_title(tmp_path: Path) -> None:
         assert doc.texts[0].text == "Document Title"
 
 
+def test_inline_formatting_in_paragraphs() -> None:
+    # Bold, italic and monospace marks used to stay in the text as literal
+    # "*", "_" and "`". Single marks only count at word boundaries, so
+    # "snake_case" and "2*3*4" stay plain, as in Asciidoctor.
+    source = b"""Some *bold*, _italic_ and `mono` text, with **st**rong.
+
+*_both_* and snake_case_name and 2*3*4.
+
+No marks here.
+"""
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(source),
+        format=InputFormat.ASCIIDOC,
+        backend=AsciiDocBackend,
+        filename="inline-formatting.adoc",
+    )
+    doc = in_doc._backend.convert()
+
+    styled = {
+        item.text: (item.formatting.bold, item.formatting.italic)
+        for item in doc.texts
+        if item.formatting is not None
+    }
+    assert styled == {
+        "bold": (True, False),
+        "italic": (False, True),
+        "st": (True, False),
+        "both": (True, True),
+    }
+    assert [item.text for item in doc.texts if isinstance(item, CodeItem)] == ["mono"]
+    plain = [item.text for item in doc.texts if item.formatting is None]
+    assert "and snake_case_name and 2*3*4." in plain
+    assert "No marks here." in plain
+
+
 def test_heading_flushes_pending_paragraph() -> None:
     # text accumulated before a section header used to be appended to the
     # text after the header and attributed to the wrong section
