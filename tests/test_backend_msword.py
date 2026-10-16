@@ -2540,6 +2540,8 @@ def test_get_paragraph_position_falls_through_a_value_with_no_number():
     resort of this method. A single parsed element is on line 1.
     """
     assert _position_of("auto") == 1
+
+
 @pytest.mark.parametrize(
     ("note_body", "expected"),
     [
