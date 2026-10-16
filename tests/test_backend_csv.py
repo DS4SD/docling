@@ -7,8 +7,9 @@ from pathlib import Path
 
 import pytest
 
+from docling.backend.csv_backend import CsvDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
-from docling.datamodel.document import ConversionResult, DoclingDocument
+from docling.datamodel.document import ConversionResult, DoclingDocument, InputDocument
 from docling.document_converter import DocumentConverter
 
 from .test_data_gen_flag import GEN_TEST_DATA
@@ -328,7 +329,11 @@ def test_leading_blank_lines_preserve_nonuniform_dialect(
     ]
 
 
-@pytest.mark.parametrize("prefix", ["\n", "\n" * 4096])
+@pytest.mark.parametrize(
+    "prefix",
+    ["\n", "\n" * 4096],
+    ids=["single_blank_line", "many_blank_lines"],
+)
 def test_leading_blank_lines_before_quoted_multiline_header(prefix):
     payload = (prefix + '"Title: details\ncontinued";value\n1;2\n').encode()
     doc = (
@@ -381,3 +386,29 @@ def test_file_of_only_blank_lines_is_empty():
     )
 
     assert len(doc.tables) == 0
+
+
+@pytest.mark.parametrize("delimiter", [",", ";", "\t", "|"])
+def test_repeated_backend_conversion_preserves_dialect(delimiter: str):
+    payload = f"name{delimiter}value\nAlice{delimiter}1\n".encode()
+    stream = BytesIO(payload)
+    in_doc = InputDocument(
+        path_or_stream=stream,
+        filename="repeat.csv",
+        format=InputFormat.CSV,
+        backend=CsvDocumentBackend,
+    )
+    backend = CsvDocumentBackend(in_doc=in_doc, path_or_stream=stream)
+    first = backend.convert()
+    second = backend.convert()
+
+    for doc in (first, second):
+        table = doc.tables[0].data
+        assert (table.num_rows, table.num_cols) == (2, 2)
+        assert [cell.text for cell in table.table_cells] == [
+            "name",
+            "value",
+            "Alice",
+            "1",
+        ]
+    assert first.export_to_dict() == second.export_to_dict()

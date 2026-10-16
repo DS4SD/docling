@@ -35,13 +35,40 @@ from docling.utils.text_decoding import decode_text
 
 _log = logging.getLogger(__name__)
 
+# A line starting with // is a comment and never body content. //// opens a
+# delimited comment block: every line up to the matching //// is hidden.
+_LINE_COMMENT_RE = re.compile(r"^//")
+_COMMENT_BLOCK_DELIMITER = "////"
+
 # Cell format specifier that may precede a "|" delimiter, e.g. "^.^h" in
 # "^.^h|Header": span (3*, 2+, .2+, 2.3+), alignment (<, ^, >, .^), style
 # (a/d/e/h/l/m/s). AsciiDoc writes the span as [colspan][.rowspan] followed by
 # "+" or "*", and either number may be omitted, so ".2+" is a rowspan on its
 # own. Requiring at least one of the two keeps a bare "+" from matching.
 _CELL_SPEC: Final = r"(?:(?:\d+(?:\.\d+)?|\.\d+)[*+])*[<^>]?(?:\.[<^>])?[adehlms]?"
-_LIST_ITEM_PATTERN: Final = r"^(\s*)(\*+|-|\.+|\d+\.|\w+\.)\s+(.*)"
+# An ordered marker with a letter has one letter only ("a.", "B."), so a line
+# that starts with an abbreviation such as "Dr." or "Fig." stays text.
+_LIST_ITEM_PATTERN: Final = r"^(\s*)(\*+|-|\.+|\d+\.|[a-zA-Z]\.)\s+(.*)"
+
+# Inline formatting marks, unconstrained (doubled, valid anywhere) before
+# constrained (single, valid only at word boundaries, so "snake_case" and
+# "2*3*4" stay plain text), as in Asciidoctor.
+_INLINE_FORMAT_RE: Final = re.compile(
+    r"``(?P<umono>.+?)``"
+    r"|\*\*(?P<ubold>.+?)\*\*"
+    r"|__(?P<uitalic>.+?)__"
+    r"|(?<!\w)`(?P<mono>\S(?:.*?\S)?)`(?!\w)"
+    r"|(?<!\w)\*(?P<bold>\S(?:.*?\S)?)\*(?!\w)"
+    r"|(?<!\w)_(?P<italic>\S(?:.*?\S)?)_(?!\w)"
+)
+
+
+@dataclass(frozen=True)
+class _InlineRun:
+    text: str
+    bold: bool = False
+    italic: bool = False
+    code: bool = False
 
 
 @dataclass(frozen=True)
@@ -115,6 +142,43 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
 
         return doc
 
+    def _flush_blank_line(
+        self,
+        doc: DoclingDocument,
+        caption_data: list[str],
+        text_data: list[str],
+        parent: Union[GroupItem, None],
+    ) -> tuple[list[str], list[str]]:
+        """Flush both accumulators on a blank line.
+
+        Plain text accumulated before a block title is emitted first to
+        preserve reading order, then any pending caption is emitted as a
+        bold paragraph.
+        """
+        text_data = self._flush_text_data(doc=doc, text_data=text_data, parent=parent)
+        if caption_data:
+            caption_data = self._flush_caption_as_paragraph(doc, caption_data, parent)
+        return caption_data, text_data
+
+    def _flush_caption_as_paragraph(
+        self,
+        doc: DoclingDocument,
+        caption_data: list[str],
+        parent: Union[GroupItem, None],
+    ) -> list[str]:
+        """Emit a pending block title as a bold paragraph.
+
+        Used for block titles whose target is not a floating item (picture,
+        table, or code block), which have no caption slot.
+        """
+        doc.add_text(
+            text=" ".join(caption_data),
+            label=DocItemLabel.PARAGRAPH,
+            parent=parent,
+            formatting=Formatting(bold=True),
+        )
+        return []
+
     def _parse(self, doc: DoclingDocument):
         """Orchestrate parsing and populate `doc` from the source lines.
 
@@ -137,16 +201,20 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
 
         in_list = False
         in_table = False
+        in_delimited_table = False
 
         text_data: list[str] = []
         table_data: list[list[str]] = []
         caption_data: list[str] = []
         last_list_item: ListItem | None = None
         list_continuation = False
+        # The marker kind of the list group at each level ("." for ordered,
+        # "*" or "-" for bullets), for the list being parsed. Reset when a new
+        # list starts, so a level that holds a section header is never mistaken
+        # for a list.
+        list_kinds: dict[int, str] = {}
 
-        # parents: dict[int, Union[DocItem, GroupItem, None]] = {}
         parents: dict[int, Union[GroupItem, None]] = {}
-        # indents: dict[int, Union[DocItem, GroupItem, None]] = {}
         indents: dict[int, Union[GroupItem, None]] = {}
 
         for i in range(10):
@@ -154,46 +222,26 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
             indents[i] = None
 
         for block in self._iter_blocks(self.lines):
-            # line = line.strip()
             if isinstance(block, _LiteralBlock):
-                in_list, last_list_item, list_continuation = self._close_list_if_needed(
-                    line="<literal-block>",
-                    in_list=in_list,
-                    parents=parents,
-                    last_list_item=last_list_item,
-                    list_continuation=list_continuation,
-                    is_continuation_block=True,
-                )
-                text_data = self._flush_text_data(
-                    doc=doc,
-                    text_data=text_data,
-                    parent=self._get_current_parent(parents),
-                )
-                caption: Optional[TextItem] = None
-                if caption_data:
-                    caption = doc.add_text(
-                        text=" ".join(caption_data),
-                        label=DocItemLabel.CAPTION,
+                text_data, caption_data, in_list, last_list_item, list_continuation = (
+                    self._add_literal_block(
+                        doc=doc,
+                        block=block,
+                        text_data=text_data,
+                        caption_data=caption_data,
+                        in_list=in_list,
+                        last_list_item=last_list_item,
+                        list_continuation=list_continuation,
+                        parents=parents,
                     )
-                    caption_data = []
-                code_language = (
-                    detect_code_language(block.text, hint=block.language)
-                    if block.language is not None
-                    else None
                 )
-                doc.add_code(
-                    text=block.text,
-                    code_language=code_language,
-                    caption=caption,
-                    parent=(
-                        last_list_item if in_list else self._get_current_parent(parents)
-                    ),
-                )
-                list_continuation = False
                 continue
 
             line = block
             stripped_line = line.strip()
+            if in_delimited_table and self._continue_table(table_data, line):
+                continue
+
             in_list, last_list_item, list_continuation = self._close_list_if_needed(
                 line=line,
                 in_list=in_list,
@@ -202,6 +250,16 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                 list_continuation=list_continuation,
                 is_continuation_block=False,
             )
+
+            # Block attributes and anchors (e.g. "[cols=\"2,1\"]", "[NOTE]",
+            # "[[some-id]]") are metadata that applies to the block that
+            # follows; they are never body content, so skip them.
+            if (
+                re.match(r"^\[\[.+\]\]$", stripped_line)
+                or re.match(r"^\[[^\[\]]+\]$", stripped_line)
+                or re.match(r"^:[\w.-]+:(\s.*)?$", stripped_line)
+            ):
+                continue
 
             # Title
             if self._is_title(line):
@@ -261,12 +319,17 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                         parent=parents[level], name="list", label=GroupLabel.LIST
                     )
                     indents[level + 1] = item["indent"]
+                    list_kinds = {level + 1: self._list_kind(item)}
 
                 elif in_list and item["indent"] > indents[level]:
+                    # A nested list belongs to the item above it. As a sibling
+                    # of the items, it is counted as an item of the outer list,
+                    # and the next ordered item is numbered one too high.
                     parents[level + 1] = doc.add_group(
-                        parent=parents[level], name="list", label=GroupLabel.LIST
+                        parent=last_list_item, name="list", label=GroupLabel.LIST
                     )
                     indents[level + 1] = item["indent"]
+                    list_kinds[level + 1] = self._list_kind(item)
 
                 elif in_list and item["indent"] < indents[level]:
                     while level > 0 and item["indent"] < indents[level]:
@@ -277,6 +340,15 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                         parents[level] = None
                         indents[level] = None
                         level -= 1
+
+                self._match_list_kind(
+                    doc=doc,
+                    item=item,
+                    parents=parents,
+                    indents=indents,
+                    list_kinds=list_kinds,
+                    last_list_item=last_list_item,
+                )
 
                 last_list_item = doc.add_list_item(
                     item["text"],
@@ -291,16 +363,24 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                 continue
 
             # Tables
-            elif line.strip() == "|===" and not in_table:  # start of table
-                in_table = True
+            elif line.strip() == "|===":  # start or end of table
+                if in_table:
+                    self._add_table_if_nonempty(
+                        doc, table_data, caption_data, self._get_current_parent(parents)
+                    )
+                    caption_data = []
+                    in_table = False
+                    in_delimited_table = False
+                    table_data = []
+                else:
+                    in_table = True
+                    in_delimited_table = True
 
             elif self._is_table_line(line):  # within a table
                 in_table = True
                 table_data.append(self._parse_table_line(line))
 
-            elif in_table and (
-                (not self._is_table_line(line)) or line.strip() == "|==="
-            ):  # end of table
+            elif in_table and not self._is_table_line(line):  # end of table
                 self._add_table_if_nonempty(
                     doc, table_data, caption_data, self._get_current_parent(parents)
                 )
@@ -310,30 +390,13 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
 
             # Picture
             elif self._is_picture(line):
-                caption = None
-                if len(caption_data) > 0:
-                    caption = doc.add_text(
-                        text=" ".join(caption_data), label=DocItemLabel.CAPTION
-                    )
-
-                caption_data = []
-
-                item = self._parse_picture(line)
-
-                image: Optional[ImageRef] = None
-                if "uri" in item and self.options.fetch_images:
-                    base_path = (
-                        str(self.options.source_uri)
-                        if self.options.source_uri is not None
-                        else None
-                    )
-                    image = self._image_loader.load_image_ref(item["uri"], base_path)
-                doc.add_picture(
-                    image=image,
-                    caption=caption,
-                    parent=last_list_item
-                    if in_list
-                    else self._get_current_parent(parents),
+                caption_data, in_list, last_list_item = self._add_picture_item(
+                    doc=doc,
+                    line=line,
+                    caption_data=caption_data,
+                    in_list=in_list,
+                    last_list_item=last_list_item,
+                    parents=parents,
                 )
                 list_continuation = False
 
@@ -348,30 +411,32 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                 item = self._parse_text(line)
                 caption_data.append(item["text"])
 
-            # Plain text
-            elif len(line.strip()) == 0 and len(text_data) > 0:
-                doc.add_text(
-                    text=" ".join(text_data),
-                    label=DocItemLabel.PARAGRAPH,
-                    parent=self._get_current_parent(parents),
+            elif len(line.strip()) == 0:
+                caption_data, text_data = self._flush_blank_line(
+                    doc,
+                    caption_data,
+                    text_data,
+                    self._get_current_parent(parents),
                 )
-                text_data = []
 
             elif len(line.strip()) > 0:  # allow multiline texts
                 item = self._parse_text(line)
                 text_data.append(item["text"])
 
-        if len(text_data) > 0:
-            doc.add_text(
-                text=" ".join(text_data),
-                label=DocItemLabel.PARAGRAPH,
-                parent=self._get_current_parent(parents),
-            )
-            text_data = []
+        text_data = self._flush_text_data(
+            doc=doc, text_data=text_data, parent=self._get_current_parent(parents)
+        )
 
         if in_table:
+            # An unclosed table still consumes its pending caption below.
             self._add_table_if_nonempty(
                 doc, table_data, caption_data, self._get_current_parent(parents)
+            )
+        elif caption_data:
+            # A block title never followed by a floating element must still
+            # reach the document.
+            self._flush_caption_as_paragraph(
+                doc, caption_data, self._get_current_parent(parents)
             )
 
         return doc
@@ -393,10 +458,11 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
         return None
 
     _SOURCE_ATTR_RE = re.compile(r"^\[source(?:,\s*([\w+#.-]+))?[^\]]*\]$")
-    _CONTENT_BLOCK_DELIMITERS = ("====", "****", "____", "--", "+++")
+    _CONTENT_BLOCK_DELIMITERS = ("====", "****", "____", "--", "++++")
 
     @staticmethod
     def _has_matching_closer(lines: list[str], open_idx: int, delimiter: str) -> bool:
+        """Return True if `delimiter` appears on a line of its own after `open_idx`."""
         for j in range(open_idx + 1, len(lines)):
             if lines[j].strip() == delimiter:
                 return True
@@ -407,6 +473,7 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
         block_data: list[str] | None = None
         block_delimiter: str | None = None
         block_language: str | None = None
+        in_comment_block = False
 
         i = 0
         n = len(lines)
@@ -438,20 +505,37 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                 i += 1
                 continue
 
-            if stripped in cls._CONTENT_BLOCK_DELIMITERS and cls._has_matching_closer(
-                lines, i, stripped
-            ):
-                # Example (====), sidebar (****), quote (____), open (--) and
-                # passthrough (+++) blocks carry regular content: consume the
-                # delimiter lines themselves so they do not leak into the
-                # text, and re-emit the inner lines unchanged. The closer look-
-                # ahead keeps stray separator lines (e.g. "--" in a changelog)
-                # from swallowing the rest of the document.
+            if in_comment_block:
+                if stripped == _COMMENT_BLOCK_DELIMITER:
+                    in_comment_block = False
                 i += 1
-                while i < n and lines[i].strip() != stripped:
-                    yield lines[i]
+                continue
+
+            if stripped == _COMMENT_BLOCK_DELIMITER:
+                in_comment_block = True
+                i += 1
+                continue
+
+            if _LINE_COMMENT_RE.match(line):
+                i += 1
+                continue
+
+            if stripped in cls._CONTENT_BLOCK_DELIMITERS:
+                if cls._has_matching_closer(lines, i, stripped):
+                    # Consume both delimiters; yield inner lines and a trailing
+                    # blank so the following text starts a fresh paragraph.
                     i += 1
-                i += 1
+                    while i < n and lines[i].strip() != stripped:
+                        yield lines[i]
+                        i += 1
+                    i += 1
+                    yield ""
+                else:
+                    # Stray delimiter (no closer): break the paragraph, do not
+                    # render as text. The line must be consumed either way;
+                    # leaving `i` on it loops over the same line forever.
+                    yield ""
+                    i += 1
                 continue
 
             source_attr = cls._SOURCE_ATTR_RE.match(stripped)
@@ -467,6 +551,88 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
 
         if block_data is not None:
             yield _LiteralBlock(text="\n".join(block_data), language=block_language)
+
+    def _add_picture_item(
+        self,
+        *,
+        doc: DoclingDocument,
+        line: str,
+        caption_data: list[str],
+        in_list: bool,
+        last_list_item: ListItem | None,
+        parents: dict[int, GroupItem | None],
+    ) -> tuple[list[str], bool, ListItem | None]:
+        """Add a picture with its pending caption, if any."""
+        caption: Optional[TextItem] = None
+        if len(caption_data) > 0:
+            caption = doc.add_text(
+                text=" ".join(caption_data), label=DocItemLabel.CAPTION
+            )
+
+        caption_data = []
+
+        item = self._parse_picture(line)
+
+        image: Optional[ImageRef] = None
+        if "uri" in item and self.options.fetch_images:
+            base_path = (
+                str(self.options.source_uri)
+                if self.options.source_uri is not None
+                else None
+            )
+            image = self._image_loader.load_image_ref(item["uri"], base_path)
+        doc.add_picture(
+            image=image,
+            caption=caption,
+            parent=last_list_item if in_list else self._get_current_parent(parents),
+        )
+        return caption_data, in_list, last_list_item
+
+    def _add_literal_block(
+        self,
+        *,
+        doc: DoclingDocument,
+        block: _LiteralBlock,
+        text_data: list[str],
+        caption_data: list[str],
+        in_list: bool,
+        last_list_item: ListItem | None,
+        list_continuation: bool,
+        parents: dict[int, GroupItem | None],
+    ) -> tuple[list[str], list[str], bool, ListItem | None, bool]:
+        """Add a literal/listing block, flushing pending text and captions."""
+        in_list, last_list_item, list_continuation = self._close_list_if_needed(
+            line="<literal-block>",
+            in_list=in_list,
+            parents=parents,
+            last_list_item=last_list_item,
+            list_continuation=list_continuation,
+            is_continuation_block=True,
+        )
+        text_data = self._flush_text_data(
+            doc=doc,
+            text_data=text_data,
+            parent=self._get_current_parent(parents),
+        )
+        caption: Optional[TextItem] = None
+        if caption_data:
+            caption = doc.add_text(
+                text=" ".join(caption_data),
+                label=DocItemLabel.CAPTION,
+            )
+            caption_data = []
+        code_language = (
+            detect_code_language(block.text, hint=block.language)
+            if block.language is not None
+            else None
+        )
+        doc.add_code(
+            text=block.text,
+            code_language=code_language,
+            caption=caption,
+            parent=(last_list_item if in_list else self._get_current_parent(parents)),
+        )
+        return text_data, caption_data, in_list, last_list_item, False
 
     @classmethod
     def _close_list_if_needed(
@@ -487,9 +653,57 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
         ):
             return in_list, last_list_item, list_continuation
 
+        # Close every level of the list, not only the innermost one. Otherwise
+        # the text after a nested list is added to the outer list group.
         level = cls._get_current_level(parents)
-        parents[level] = None
+        while (
+            isinstance(group := parents[level], GroupItem)
+            and group.label == GroupLabel.LIST
+        ):
+            parents[level] = None
+            level -= 1
         return False, None, False
+
+    @classmethod
+    def _match_list_kind(
+        cls,
+        *,
+        doc: DoclingDocument,
+        item: dict,
+        parents: dict[int, GroupItem | None],
+        indents: dict[int, GroupItem | None],
+        list_kinds: dict[int, str],
+        last_list_item: ListItem | None,
+    ) -> None:
+        """Keep items with different list markers out of the same list group.
+
+        AsciiDoc nests lists by marker, not by indentation. The item returns to
+        the closest enclosing list with its marker at the same indent, or else
+        opens a nested list under the item above it.
+        """
+        level = cls._get_current_level(parents)
+        kind = cls._list_kind(item)
+        if list_kinds.get(level) == kind:
+            return
+        outer = level - 1
+        while outer in list_kinds and indents[outer] == item["indent"]:
+            if list_kinds[outer] == kind:
+                for closed in range(outer + 1, level + 1):
+                    parents[closed] = None
+                    indents[closed] = None
+                return
+            outer -= 1
+        parents[level + 1] = doc.add_group(
+            parent=last_list_item, name="list", label=GroupLabel.LIST
+        )
+        indents[level + 1] = item["indent"]
+        list_kinds[level + 1] = kind
+
+    @staticmethod
+    def _list_kind(item: dict) -> str:
+        # All ordered markers ("." and "1.") count as one kind; a bullet's kind
+        # is its marker character, so "*" and "-" lists nest like Asciidoctor.
+        return "." if item["numbered"] else item["marker"][0]
 
     @staticmethod
     def _flush_text_data(
@@ -498,13 +712,58 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
         text_data: list[str],
         parent: GroupItem | None,
     ) -> list[str]:
-        if len(text_data) > 0:
-            doc.add_text(
-                text=" ".join(text_data),
-                label=DocItemLabel.PARAGRAPH,
-                parent=parent,
-            )
+        if len(text_data) == 0:
+            return []
+        text = " ".join(text_data)
+        runs = AsciiDocBackend._parse_inline(text)
+        if not any(run.bold or run.italic or run.code for run in runs):
+            doc.add_text(text=text, label=DocItemLabel.PARAGRAPH, parent=parent)
+            return []
+        # Mixed formatting needs one item per run, kept together in an inline
+        # group like the Markdown backend does.
+        group = doc.add_inline_group(parent=parent)
+        for run in runs:
+            run_text = run.text.strip()
+            if not run_text:
+                continue
+            if run.code:
+                doc.add_code(text=run_text, parent=group)
+            else:
+                doc.add_text(
+                    text=run_text,
+                    label=DocItemLabel.TEXT,
+                    parent=group,
+                    formatting=(
+                        Formatting(bold=run.bold, italic=run.italic)
+                        if run.bold or run.italic
+                        else None
+                    ),
+                )
         return []
+
+    @staticmethod
+    def _parse_inline(
+        text: str, bold: bool = False, italic: bool = False
+    ) -> list[_InlineRun]:
+        """Split text into runs of plain, bold, italic and monospace text."""
+        runs: list[_InlineRun] = []
+        position = 0
+        for match in _INLINE_FORMAT_RE.finditer(text):
+            if match.start() > position:
+                runs.append(
+                    _InlineRun(text[position : match.start()], bold=bold, italic=italic)
+                )
+            if (code := match.group("umono") or match.group("mono")) is not None:
+                runs.append(_InlineRun(code, code=True))
+            elif (inner := match.group("ubold") or match.group("bold")) is not None:
+                runs.extend(AsciiDocBackend._parse_inline(inner, True, italic))
+            else:
+                inner = match.group("uitalic") or match.group("italic")
+                runs.extend(AsciiDocBackend._parse_inline(inner, bold, True))
+            position = match.end()
+        if position < len(text):
+            runs.append(_InlineRun(text[position:], bold=bold, italic=italic))
+        return runs
 
     #   =========   Title
     @staticmethod
@@ -581,17 +840,36 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
     #   =========   Tables
     @staticmethod
     def _is_table_line(line):
-        return re.match(rf"^{_CELL_SPEC}\|.*\|", line)
+        # A cell may be the only one on its line: vertical AsciiDoc tables
+        # commonly write one cell per line, so a second "|" is not required.
+        return re.match(rf"^{_CELL_SPEC}\|", line) is not None
+
+    @classmethod
+    def _continue_table(cls, table_data: list[list[str]], line: str) -> bool:
+        """Consume a line between |=== delimiters that is not a row.
+
+        A blank line only separates rows, and a line without a leading "|"
+        continues the cell above it. Returns False for any other line.
+        """
+        stripped = line.strip()
+        if stripped == "|===" or cls._is_table_line(line):
+            return False
+        if stripped and not table_data:
+            return False
+        if stripped:
+            table_data[-1][-1] = f"{table_data[-1][-1]} {stripped}".lstrip()
+        return True
 
     @staticmethod
     def _parse_table_line(line):
         # Drop cell specifiers glued to a "|" (e.g. "^.^h"); anchored to
         # whitespace so content ending in a style letter (e.g. "Eth") survives.
         line = re.sub(rf"(^|\s){_CELL_SPEC}(?=\|)", r"\1", line)
-        # Split by "|" and remove the leading empty string from the first "|"
-        cells = line.split("|")[1:]
+        # Split on unescaped "|" and remove the leading empty string from the
+        # first "|"; a "\|" is a pipe in the cell text and loses its backslash.
+        cells = re.split(r"(?<!\\)\|", line)[1:]
         # Strip whitespace from each cell (empty cells become empty strings)
-        return [cell.strip() for cell in cells]
+        return [cell.replace("\\|", "|").strip() for cell in cells]
 
     @staticmethod
     def _add_table_if_nonempty(

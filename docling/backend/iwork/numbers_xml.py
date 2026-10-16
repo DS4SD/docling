@@ -19,6 +19,7 @@ import plistlib
 import zipfile
 from xml.etree.ElementTree import Element
 
+from docling.backend.iwork.charts import LEGACY_CHART_TYPES, ChartType
 from docling.backend.iwork.content import Chart, ChartKind, ChartSeries
 from docling.backend.iwork.legacy import (
     SF_ATTR_HEADER_ROWS,
@@ -28,6 +29,7 @@ from docling.backend.iwork.legacy import (
     SF_CELL_TEXT,
     SF_DATASOURCE,
     SF_GRID,
+    SF_MEDIA_ELEMENTS,
     SF_NAMESPACE,
     SF_PARAGRAPH,
     SF_TABULAR_MODEL,
@@ -38,6 +40,7 @@ from docling.backend.iwork.legacy import (
     float_attr,
     int_attr,
     legacy_geometry,
+    legacy_picture,
     parse_index,
 )
 from docling.backend.iwork.numbers_content import (
@@ -45,6 +48,7 @@ from docling.backend.iwork.numbers_content import (
     Cell,
     Comment,
     PlacedChart,
+    PlacedPicture,
     Sheet,
     Table,
     format_bool,
@@ -62,6 +66,7 @@ LS_NAMESPACE = "http://developer.apple.com/namespaces/ls"
 
 LS_WORKSPACE = f"{{{LS_NAMESPACE}}}workspace"
 LS_ATTR_WORKSPACE_NAME = f"{{{LS_NAMESPACE}}}workspace-name"
+LS_PAGE_INFO = f"{{{LS_NAMESPACE}}}page-info"
 
 SF_TABULAR_INFO = f"{{{SF_NAMESPACE}}}tabular-info"
 SF_ROWS = f"{{{SF_NAMESPACE}}}rows"
@@ -71,17 +76,39 @@ SF_GRID_COLUMN = f"{{{SF_NAMESPACE}}}grid-column"
 SF_RESULT = f"{{{SF_NAMESPACE}}}r"
 SF_PROXIED_CELL = f"{{{SF_NAMESPACE}}}proxied-cell-ref"
 SF_CHART_INFO = f"{{{SF_NAMESPACE}}}chart-info"
+SF_CHART_MODEL = f"{{{SF_NAMESPACE}}}formula-chart-model"
 SF_CHART_NAME = f"{{{SF_NAMESPACE}}}chart-name"
 SF_CHART_COLUMN_NAMES = f"{{{SF_NAMESPACE}}}chart-column_names"
 SF_CHART_ROW_NAMES = f"{{{SF_NAMESPACE}}}chart-row_names"
 SF_ENTITY_ID = f"{{{SF_NAMESPACE}}}entity-id"
 SF_STICKY_NOTE = f"{{{SF_NAMESPACE}}}sticky-note"
+SF_LAYERS = f"{{{SF_NAMESPACE}}}layers"
+SF_LAYER = f"{{{SF_NAMESPACE}}}layer"
+SF_DRAWABLES = f"{{{SF_NAMESPACE}}}drawables"
+
+SHEET_DRAWABLES = f"{LS_PAGE_INFO}/{SF_LAYERS}/{SF_LAYER}/{SF_DRAWABLES}"
+"""Path from a workspace to the lists of what its sheet draws.
+
+A picture is read only from these lists, as on a Keynote '09 slide.
+Renditions that an image keeps below it are not read as pictures of their own.
+"""
 
 SF_ATTR_HEADER_COLS = f"{{{SF_NAMESPACE}}}num-header-columns"
 SF_ATTR_CELL_COUNT = f"{{{SF_NAMESPACE}}}nc"
 SF_ATTR_VALUE = f"{{{SF_NAMESPACE}}}v"
 SF_ATTR_CELL_DATE = f"{{{SF_NAMESPACE}}}cell-date"
 SF_ATTR_COL_SPAN = f"{{{SF_NAMESPACE}}}col-span"
+SF_ATTR_CHART_TYPE = f"{{{SF_NAMESPACE}}}chart-type"
+SF_ATTR_CHART_DIRECTION = f"{{{SF_NAMESPACE}}}chart-direction"
+
+SERIES_BY_ROW = 0
+"""``sf:chart-direction`` of a chart plotting each of its rows as a series.
+
+1 plots each column instead, which is also how a chart that does not say is
+read. A pie draws a wedge per series, and the one in the Tika fixtures says 0
+and is drawn with a wedge per row in the thumbnail Numbers saved beside it; the
+3D area chart beside it says 1 and draws a legend entry per column.
+"""
 
 SFA_ATTR_TEXT = f"{{{SFA_NAMESPACE}}}string"
 
@@ -131,7 +158,8 @@ def read_content(
     """Read the sheets of an iWork '09 document out of its ``index.xml``.
 
     Args:
-        archive: The open ``.numbers`` container, which also holds the chart data.
+        archive: The open ``.numbers`` container, which also holds the chart data
+            and the image data.
         member: The name of its index member.
         max_total_bytes: The largest index this is willing to decompress to.
         max_file_bytes: The largest chart share this is willing to read.
@@ -158,6 +186,12 @@ def read_content(
             for info in workspace.iter(SF_CHART_INFO)
             if (chart := read_chart(info, shares)) is not None
         ]
+        pictures = [
+            picture
+            for drawables in workspace.iterfind(SHEET_DRAWABLES)
+            for drawable in drawables
+            if (picture := read_picture(drawable, archive)) is not None
+        ]
         comments = [
             comment
             for note in workspace.iter(SF_STICKY_NOTE)
@@ -165,12 +199,14 @@ def read_content(
         ]
         tables.sort(key=sheet_order)
         charts.sort(key=sheet_order)
+        pictures.sort(key=sheet_order)
         comments.sort(key=sheet_order)
         sheets.append(
             Sheet(
                 name=workspace.get(LS_ATTR_WORKSPACE_NAME) or "",
                 tables=tables,
                 charts=charts,
+                pictures=pictures,
                 comments=comments,
             )
         )
@@ -433,22 +469,21 @@ def read_chart(info: Element, shares: dict[str, dict]) -> PlacedChart | None:
     it last plotted in a share of its own, so the names come from the chart and
     the numbers from the share.
 
-    The share stores a row per category, each holding that category's value in
-    every series, which is the transpose of what a
-    :class:`~docling.backend.iwork.content.Chart` holds — so the values are
-    turned on their side here.
+    The share is laid out the way the chart's data is, a row per row name with
+    a value in every column, and ``sf:chart-direction`` says whether the rows or
+    the columns are the series; the others are the categories.
 
     Args:
         info: The chart element.
         shares: The cached chart data, keyed by chart entity id.
 
     Returns:
-        The chart and its frame, or None when it names neither a category nor a
-        series.
+        The chart and its frame, or None when it names neither a row nor a
+        column.
     """
-    categories = strings(info.find(f".//{SF_CHART_ROW_NAMES}"))
-    names = strings(info.find(f".//{SF_CHART_COLUMN_NAMES}"))
-    by_category: list[list[float | None]] = []
+    row_names = strings(info.find(f".//{SF_CHART_ROW_NAMES}"))
+    column_names = strings(info.find(f".//{SF_CHART_COLUMN_NAMES}"))
+    rows: list[list[float | None]] = []
 
     entity = info.find(f".//{SF_ENTITY_ID}")
     key = entity.get(SFA_ATTR_TEXT) if entity is not None else None
@@ -458,33 +493,47 @@ def read_chart(info: Element, shares: dict[str, dict]) -> PlacedChart | None:
         # stale name left behind in the element, say — the share wins.
         shared_names = [str(name) for name in share.get(SHARE_COLUMNS_KEY, [])]
         if shared_names:
-            names = shared_names
-        rows = share.get(SHARE_ROWS_KEY) or []
-        if rows:
-            categories = [str(row.get(SHARE_ROW_NAME_KEY, "")) for row in rows]
-            by_category = [points(row) for row in rows]
+            column_names = shared_names
+        shared_rows = share.get(SHARE_ROWS_KEY) or []
+        if shared_rows:
+            row_names = [str(row.get(SHARE_ROW_NAME_KEY, "")) for row in shared_rows]
+            rows = [points(row) for row in shared_rows]
 
-    if not categories and not names:
+    if not row_names and not column_names:
         return None
 
+    model = info.find(f".//{SF_CHART_MODEL}")
+    if model is not None and int_attr(model, SF_ATTR_CHART_DIRECTION) == SERIES_BY_ROW:
+        categories = column_names
+        series = tuple(
+            ChartSeries(
+                name,
+                tuple(
+                    _point_of(rows, row, column) for column in range(len(categories))
+                ),
+            )
+            for row, name in enumerate(row_names)
+        )
+    else:
+        categories = row_names
+        series = tuple(
+            ChartSeries(
+                name,
+                tuple(_point_of(rows, row, column) for row in range(len(categories))),
+            )
+            for column, name in enumerate(column_names)
+        )
+
+    chart_type = LEGACY_CHART_TYPES.get(
+        int_attr(info, SF_ATTR_CHART_TYPE) or 0, ChartType(ChartKind.OTHER)
+    )
     return PlacedChart(
         chart=Chart(
-            # iWork '09 numbers the kinds of chart differently from the modern
-            # container, and that numbering has not been established against
-            # real documents, so the kind is left unsaid rather than guessed.
-            kind=ChartKind.OTHER,
+            kind=chart_type.kind,
             title=legacy_chart_title(info),
             categories=tuple(categories),
-            series=tuple(
-                ChartSeries(
-                    name=name,
-                    values=tuple(
-                        _point_of(by_category, category, series)
-                        for category in range(len(categories))
-                    ),
-                )
-                for series, name in enumerate(names)
-            ),
+            series=series,
+            stacked=chart_type.stacked,
         ),
         geometry=legacy_geometry(info),
     )
@@ -498,18 +547,16 @@ def legacy_chart_title(info: Element) -> str | None:
     return (name.get(SFA_ATTR_TEXT) or "").strip() or None
 
 
-def _point_of(
-    by_category: list[list[float | None]], category: int, series: int
-) -> float | None:
-    """Read one plotted value out of the share's category-major rows."""
-    if category >= len(by_category):
+def _point_of(rows: list[list[float | None]], row: int, column: int) -> float | None:
+    """Read one plotted value out of the share's rows."""
+    if row >= len(rows):
         return None
-    row = by_category[category]
-    return row[series] if series < len(row) else None
+    values = rows[row]
+    return values[column] if column < len(values) else None
 
 
 def points(row: dict) -> list[float | None]:
-    """Read one category's plotted values, leaving the gaps empty."""
+    """Read one row's plotted values, leaving the gaps empty."""
     return [
         float(value)
         if isinstance(value, (int, float)) and not isinstance(value, bool)
@@ -523,6 +570,25 @@ def strings(container: Element | None) -> list[str]:
     if container is None:
         return []
     return [child.get(SFA_ATTR_TEXT) or "" for child in container]
+
+
+def read_picture(drawable: Element, archive: zipfile.ZipFile) -> PlacedPicture | None:
+    """Build one picture from a drawable of a sheet, and say where it sits.
+
+    Args:
+        drawable: One element of the drawables of the sheet.
+        archive: The open ``.numbers`` container, which holds the image data.
+
+    Returns:
+        The picture and its frame, or None when the drawable is not an
+        ``sf:media`` or ``sf:image`` or names no data.
+    """
+    if drawable.tag not in SF_MEDIA_ELEMENTS:
+        return None
+    picture = legacy_picture(drawable, archive)
+    if picture is None:
+        return None
+    return PlacedPicture(picture=picture, geometry=legacy_geometry(drawable))
 
 
 def read_comment(note: Element) -> Comment | None:

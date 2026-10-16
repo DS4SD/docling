@@ -90,7 +90,9 @@ class _FieldDecoder:
                 f"from {data.hex()!r}."
             ) from exc
         if isinstance(value, int) and field.scale:
-            return Decimal(value).scaleb(-field.scale)
+            # Scaling decodes an implied decimal point, not an arithmetic result.
+            # Decimal.scaleb() would round to the caller's context precision.
+            return Decimal(f"{value}e-{field.scale}")
         return value
 
     def _string(self, data: bytes) -> str:
