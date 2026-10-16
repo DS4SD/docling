@@ -740,6 +740,8 @@ class ConfidenceReport(PageConfidenceScores):
             value.pop("low_score", None)
             value.pop("mean_grade", None)
             value.pop("low_grade", None)
+            if value.get("pages") is None:
+                value.pop("pages", None)
 
         model = handler(value)
         if not model.pages:
