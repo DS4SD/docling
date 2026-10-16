@@ -370,6 +370,35 @@ If the installer fails, check the log file.
     assert "If the installer fails, check the log file." in doc.export_to_markdown()
 
 
+def test_line_starting_with_an_abbreviation_is_not_a_list_item() -> None:
+    source = b"""= Review
+
+The report was reviewed.
+Dr. Smith approved it on Monday.
+
+Fig. 2 shows the architecture.
+
+a. First option
+b. Second option
+"""
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(source),
+        format=InputFormat.ASCIIDOC,
+        backend=AsciiDocBackend,
+        filename="abbreviation.adoc",
+    )
+    doc = in_doc._backend.convert()
+
+    paragraphs = [item.text for item in doc.texts if item.label == "paragraph"]
+    assert paragraphs == [
+        "The report was reviewed. Dr. Smith approved it on Monday.",
+        "Fig. 2 shows the architecture.",
+    ]
+    list_items = [item for item in doc.texts if isinstance(item, ListItem)]
+    assert [item.text for item in list_items] == ["First option", "Second option"]
+    assert all(item.enumerated for item in list_items)
+
+
 def test_nested_list_belongs_to_the_item_above_it() -> None:
     # A nested list used to be added next to the items of the outer list
     # instead of under the item above it. The outer list then counted it as an
