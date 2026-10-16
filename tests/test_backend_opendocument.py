@@ -40,7 +40,7 @@ from docling.backend.opendocument_backend import (
     OdsDocumentBackend,
     OdtDocumentBackend,
 )
-from docling.datamodel.base_models import DocumentStream, InputFormat
+from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
 from docling.datamodel.document import ConversionResult, DoclingDocument, InputDocument
 from docling.document_converter import DocumentConverter
 
@@ -257,6 +257,48 @@ def test_odt_section_preserves_split_list_continuation(tmp_path: Path):
     assert [item.text for item in list_items] == ["Outer", "Nested"]
     nested_group = list_items[1].parent.resolve(result.document)
     assert nested_group.parent == list_items[0].get_ref()
+
+
+def test_odt_hidden_section_goes_to_invisible_layer(tmp_path: Path):
+    """A hidden section (``text:display="none"``) is left out of the export.
+
+    Its content, nested sections included, stays available in
+    ``ContentLayer.INVISIBLE``, the same as a hidden ODS sheet or ODP slide.
+    """
+    path = tmp_path / "hidden_section.odt"
+    source = OdfDocument("text")
+    body = source.body
+    body.clear()
+    body.append(Paragraph("Question"))
+    hidden = Section(name="Answers")
+    hidden.set_attribute("text:display", "none")
+    hidden.append(Header(1, "Answer key"))
+    table = Table("Answers", width=1, height=1)
+    table.set_value("A1", "42")
+    hidden.append(table)
+    nested = Section(name="Notes")
+    nested.append(Paragraph("Nested note"))
+    hidden.append(nested)
+    body.append(hidden)
+    shown = Section(name="Shown")
+    shown.append(Paragraph("Shown section"))
+    body.append(shown)
+    source.save(str(path))
+
+    document = (
+        DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path).document
+    )
+
+    hidden_texts = [
+        item.text
+        for item, _ in document.iterate_items(
+            included_content_layers={ContentLayer.INVISIBLE}
+        )
+        if isinstance(item, TextItem)
+    ]
+    assert document.export_to_markdown() == "Question\n\nShown section"
+    assert hidden_texts == ["Answer key", "Nested note"]
+    assert document.tables[0].content_layer == ContentLayer.INVISIBLE
 
 
 def test_ods_conversion(ods_path: Path):
@@ -490,6 +532,65 @@ def test_ods_rich_table_cell_defines_data_bounds(tmp_path: Path):
     assert cell_texts[(0, 1)] == "plain"
 
 
+def test_ods_sheet_anchored_picture_is_kept(tmp_path: Path):
+    # A picture anchored to the sheet is stored in <table:shapes>, not in a cell
+    image_path = tmp_path / "sheet_image.png"
+    Image.new("RGB", (2, 2), "red").save(image_path)
+
+    path = tmp_path / "sheet_image.ods"
+    doc = OdfDocument("spreadsheet")
+    body = doc.body
+    body.clear()
+
+    table = Table("Sheet1", width=2, height=2)
+    body.append(table)
+    cell = table.get_cell("B2")
+    cell.append(Frame.image_frame(doc.add_file(str(image_path)), size=("1cm", "1cm")))
+    table.set_cell("B2", cell)
+    shapes = Element.from_tag("table:shapes")
+    shapes.append(
+        Frame.image_frame(
+            doc.add_file(str(image_path)), size=("1cm", "1cm"), position=("1cm", "1cm")
+        )
+    )
+    table.insert(shapes, position=0)
+    doc.save(str(path))
+
+    pictures = DocumentConverter().convert(path).document.pictures
+    # One picture from the cell and one from the sheet, neither of them twice
+    assert len(pictures) == 2
+    assert all(p.image is not None for p in pictures)
+
+
+def test_ods_sheet_anchored_vector_picture_is_skipped(tmp_path: Path):
+    # A vector picture cannot become a bitmap, so it is skipped like a cell picture
+    image_path = tmp_path / "sheet_image.svg"
+    image_path.write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="2" height="2">'
+        '<rect width="2" height="2" fill="red"/></svg>'
+    )
+
+    path = tmp_path / "sheet_image_vector.ods"
+    doc = OdfDocument("spreadsheet")
+    body = doc.body
+    body.clear()
+
+    table = Table("Sheet1", width=1, height=1)
+    body.append(table)
+    shapes = Element.from_tag("table:shapes")
+    shapes.append(
+        Frame.image_frame(
+            doc.add_file(str(image_path)), size=("1cm", "1cm"), position=("1cm", "1cm")
+        )
+    )
+    table.insert(shapes, position=0)
+    doc.save(str(path))
+
+    result = DocumentConverter().convert(path)
+    assert result.status == ConversionStatus.SUCCESS
+    assert result.document.pictures == []
+
+
 def test_ods_table_cell_image_creates_rich_cell_picture(tmp_path: Path):
     image_path = tmp_path / "cell_image.png"
     Image.new("RGB", (2, 2), "red").save(image_path)
@@ -624,6 +725,67 @@ def test_odt_text_document_nested_lists():
     assert parent_group_2_1.parent == item_by_text["numbered list 2"].get_ref()
     assert parent_group_2_2_1.parent == item_by_text["bullet list 2.2"].get_ref()
     assert parent_group_3_0_1.parent == item_by_text["numbered list 3"].get_ref()
+
+
+def test_odt_list_item_with_only_an_image_has_no_text(tmp_path: Path):
+    """A list item takes its text from the text runs, as a paragraph does. So an
+    item with only a footnote, or only an image or a chart with no alt text, gets
+    no text. The item keeps its number and its nested list. The footnote body is
+    a footnote item. The image and the chart are the ones of text_document_02.odt."""
+    source = OdfDocument("tests/data/odf/sources/text_document_02.odt")
+    style = Style("list", name="Numbered")
+    style.set_level_style(1, num_format="1", suffix=".")
+    style.set_level_style(2, num_format="1", suffix=")")
+    source.insert_style(style)
+    body = source.body
+    frames = {frame.name: frame.clone for frame in body.get_frames()}
+    body.clear()
+    image, chart, footnote = Paragraph(), Paragraph(), Paragraph()
+    image.append(frames["Image1"])
+    chart.append(frames["Object1"])
+    footnote.append(Note(citation="1", body="Note body."))
+    nested = OdfList(style="Numbered")
+    nested.append(ListItem("Nested one"))
+    odf_list = OdfList(style="Numbered")
+    for children in [
+        [Paragraph("First")],
+        [image],
+        [chart],
+        [footnote],
+        [image.clone, nested],
+        [Paragraph("Last")],
+    ]:
+        item = ListItem()
+        for child in children:
+            item.append(child)
+        odf_list.append(item)
+    body.append(odf_list)
+    path = tmp_path / "list_item_with_only_an_image.odt"
+    source.save(str(path))
+
+    document = (
+        DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path).document
+    )
+    list_items = [
+        item
+        for item, _level in document.iterate_items()
+        if isinstance(item, TextItem) and item.label == "list_item"
+    ]
+
+    assert [(item.text, item.enumerated, item.marker) for item in list_items] == [
+        ("First", True, "1."),
+        ("", True, "2."),
+        ("", True, "3."),
+        ("", True, "4."),
+        ("", True, "5."),
+        ("Nested one", True, "1)"),
+        ("Last", True, "6."),
+    ]
+    nested_group = list_items[5].parent.resolve(document)
+    assert nested_group.parent == list_items[4].get_ref()
+    assert [
+        item.text for item in document.texts if item.label == DocItemLabel.FOOTNOTE
+    ] == ["Note body."]
 
 
 def test_odt_text_document_title_and_subtitle():

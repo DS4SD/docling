@@ -4,6 +4,7 @@
 import logging
 import os
 import re
+import threading
 from contextlib import nullcontext
 from pathlib import Path
 from types import SimpleNamespace
@@ -1691,6 +1692,35 @@ def test_trailing_whitespace_run_keeps_paragraph_formatting(tmp_path):
     assert formatting["Plain text"].bold is False
 
 
+def test_cyclic_based_on_chain_does_not_hang(tmp_path):
+    """A ``basedOn`` cycle between paragraph styles must not stall the conversion.
+
+    Regression test: the bold lookup in ``_get_format_from_run`` followed
+    ``base_style`` links without a depth cap, so a malformed styles.xml in
+    which style A is based on B and B on A looped forever.
+    """
+    doc = Document()
+    style_a = doc.styles.add_style("Cycle A", WD_STYLE_TYPE.PARAGRAPH)
+    style_b = doc.styles.add_style("Cycle B", WD_STYLE_TYPE.PARAGRAPH)
+    style_a.base_style = style_b
+    style_b.base_style = style_a
+    doc.add_paragraph("Text in a cyclic style", style=style_a)
+    docx_path = tmp_path / "cyclic_styles.docx"
+    doc.save(docx_path)
+
+    # A bounded join turns a hang into a failure instead of a stuck test run.
+    results: list[DoclingDocument] = []
+    worker = threading.Thread(
+        target=lambda: results.append(_convert(docx_path)), daemon=True
+    )
+    worker.start()
+    worker.join(timeout=30)
+
+    assert not worker.is_alive(), "conversion did not finish: style chain loops"
+    assert results, "conversion raised; see the captured thread exception"
+    assert [item.text for item in results[0].texts] == ["Text in a cyclic style"]
+
+
 # ------ Code-block detection tests ------
 
 _CODE_BLOCKS_FIXTURE = Path("./tests/data/docx/sources/docx_code_blocks.docx")
@@ -2490,3 +2520,123 @@ def test_footnote_body_text_is_not_dropped_outside_plain_paragraphs(
         if item.label == DocItemLabel.FOOTNOTE
     ]
     assert expected in footnote_items
+
+
+_MC_BODY_BLOCK = """
+<mc:AlternateContent
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
+    xmlns:w16se="http://schemas.microsoft.com/office/word/2015/wordml/symex">
+  <mc:Choice Requires="{requires}">
+    <w:p><w:r><w:t>CHOICE_BRANCH_ACTIVE</w:t></w:r></w:p>
+    <w:p><w:r><w:t>LEGITIMATE_DUPLICATE_PARAGRAPH</w:t></w:r></w:p>
+    <w:p><w:r><w:t>LEGITIMATE_DUPLICATE_PARAGRAPH</w:t></w:r></w:p>
+  </mc:Choice>
+  <mc:Fallback>
+    <w:p><w:r><w:t>FALLBACK_LEGACY_BRANCH</w:t></w:r></w:p>
+  </mc:Fallback>
+</mc:AlternateContent>
+"""
+
+
+def _body_texts_around_alternate_content(tmp_path, requires: str) -> list[str]:
+    document = Document()
+    document.add_paragraph("Paragraph before AlternateContent")
+    block = etree.fromstring(_MC_BODY_BLOCK.format(requires=requires))
+    document.element.body.sectPr.addprevious(block)
+    document.add_paragraph("Paragraph after AlternateContent")
+    doc = _convert_built(document, tmp_path)
+    return [item.text for item in doc.texts]
+
+
+def test_body_level_alternate_content_reads_the_supported_choice(tmp_path):
+    """A body-level ``mc:AlternateContent`` must not drop its paragraphs.
+
+    Only the supported ``mc:Choice`` is read, so the legacy ``mc:Fallback``
+    text does not appear and identical paragraphs in the Choice both stay.
+    """
+    texts = _body_texts_around_alternate_content(tmp_path, requires="wps")
+
+    assert texts == [
+        "Paragraph before AlternateContent",
+        "CHOICE_BRANCH_ACTIVE",
+        "LEGITIMATE_DUPLICATE_PARAGRAPH",
+        "LEGITIMATE_DUPLICATE_PARAGRAPH",
+        "Paragraph after AlternateContent",
+    ]
+
+
+def test_body_level_alternate_content_falls_back_when_choice_is_unsupported(
+    tmp_path,
+):
+    """A Choice that requires an unknown namespace yields to ``mc:Fallback``."""
+    texts = _body_texts_around_alternate_content(tmp_path, requires="w16se")
+
+    assert texts == [
+        "Paragraph before AlternateContent",
+        "FALLBACK_LEGACY_BRANCH",
+        "Paragraph after AlternateContent",
+    ]
+
+
+_MC_BODY_TEXTBOX_BLOCK = """
+<mc:AlternateContent
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
+    xmlns:v="urn:schemas-microsoft-com:vml">
+  <mc:Choice Requires="wps">
+    <w:p><w:r><wps:wsp><wps:txbx><w:txbxContent>
+      <w:p><w:r><w:t>TEXTBOX_TEXT</w:t></w:r></w:p>
+    </w:txbxContent></wps:txbx></wps:wsp></w:r></w:p>
+  </mc:Choice>
+  <mc:Fallback>
+    <w:p><w:r><w:pict><v:shape><v:textbox><w:txbxContent>
+      <w:p><w:r><w:t>TEXTBOX_TEXT</w:t></w:r></w:p>
+    </w:txbxContent></v:textbox></v:shape></w:pict></w:r></w:p>
+  </mc:Fallback>
+</mc:AlternateContent>
+"""
+
+
+def test_body_level_alternate_content_reads_a_text_box_once(tmp_path):
+    """A text box inside the chosen branch is read once, not once per detection pass.
+
+    The text-box detection runs over a body child with descendant paths. If it runs on the
+    ``mc:AlternateContent`` element and again on the Choice's own paragraph, the same text box is
+    emitted twice.
+    """
+    document = Document()
+    document.add_paragraph("before")
+    block = etree.fromstring(_MC_BODY_TEXTBOX_BLOCK)
+    document.element.body.sectPr.addprevious(block)
+    document.add_paragraph("after")
+
+    doc = _convert_built(document, tmp_path)
+
+    texts = [item.text for item in doc.texts]
+    # The paragraph that anchors a text box also gives an empty item, as it does outside
+    # ``mc:AlternateContent``, so the check is that the text box itself is read once.
+    assert texts.count("TEXTBOX_TEXT") == 1, texts
+    assert texts[0] == "before"
+    assert texts[-1] == "after"
+
+
+def test_body_level_alternate_content_with_no_usable_branch_adds_nothing(tmp_path):
+    """No supported Choice and no Fallback leaves the block out, rather than failing."""
+    document = Document()
+    document.add_paragraph("Paragraph before AlternateContent")
+    block = etree.fromstring(_MC_BODY_BLOCK.format(requires="w16se"))
+    mc_ns = "http://schemas.openxmlformats.org/markup-compatibility/2006"
+    for fallback in block.findall(f"{{{mc_ns}}}Fallback"):
+        block.remove(fallback)
+    document.element.body.sectPr.addprevious(block)
+    document.add_paragraph("Paragraph after AlternateContent")
+
+    doc = _convert_built(document, tmp_path)
+
+    assert [item.text for item in doc.texts] == [
+        "Paragraph before AlternateContent",
+        "Paragraph after AlternateContent",
+    ]

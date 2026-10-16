@@ -604,6 +604,11 @@ class ConversionResult(ConversionAssets):
     # conversion result (not on the pipeline) because one pipeline instance is shared
     # by every conversion made through the same DocumentConverter.
     _page_sizes_by_no: dict[int, Size] = PrivateAttr(default_factory=dict)
+    # Absolute (monotonic-clock) deadline for the whole conversion, derived from
+    # `document_timeout` when set. Private transient plumbing, same rationale as
+    # above: the assembly stage reads it to bound work that runs after the page
+    # stages (e.g. reading-order separator extraction).
+    _conversion_deadline: Optional[float] = PrivateAttr(default=None)
 
 
 class _DummyBackend(AbstractDocumentBackend):
@@ -890,11 +895,12 @@ class _DocumentConversionInput(BaseModel):
 
     @staticmethod
     def _resolve_ole2_mime(mime: Optional[str], ext: Optional[str]) -> Optional[str]:
-        """Let the extension choose between the OLE2 based legacy Office formats.
+        """Let the extension choose between the OLE2 based formats.
 
         ``filetype`` tells .doc, .ppt and .xls apart from a few bytes after the
         OLE2 header, which is not conclusive: a file whose first sector is a FAT
         sector is reported as Excel (or PowerPoint) whatever it really holds.
+        That includes an Outlook .msg, which is an OLE2 container as well.
         """
         if mime is None or ext is None:
             return mime
@@ -905,6 +911,8 @@ class _DocumentConversionInput(BaseModel):
         for fmt in ole2_formats:
             if ext.lower() in FormatToExtensions[fmt]:
                 return FormatToMimeType[fmt][0]
+        if ext.lower() == "msg":
+            return _DocumentConversionInput._mime_from_extension("msg")
         return mime
 
     @staticmethod

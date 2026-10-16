@@ -243,9 +243,9 @@ class TransformersObjectDetectionEngine(HfObjectDetectionEngineBase):
             batch_outputs.append(
                 self._build_output(
                     input_item=input_item,
-                    labels=result["labels"],
-                    scores=result["scores"],
-                    boxes=result["boxes"],
+                    labels=result["labels"].tolist(),
+                    scores=result["scores"].tolist(),
+                    boxes=result["boxes"].tolist(),
                 )
             )
 

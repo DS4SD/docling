@@ -13,7 +13,18 @@ from datetime import datetime, time, timedelta
 from io import BytesIO
 from pathlib import Path
 from tempfile import mkdtemp
-from typing import Any, Callable, Final, Iterable, Iterator, Literal, Optional, Union
+from typing import (
+    Any,
+    Callable,
+    Final,
+    Iterable,
+    Iterator,
+    Literal,
+    Optional,
+    Sequence,
+    Union,
+)
+from urllib.parse import urlparse
 
 from docling_core.types.doc import (
     BoundingBox,
@@ -35,10 +46,12 @@ from docling_core.types.doc import (
     TableCell,
     TableData,
     TabularChartMetaField,
+    TextItem,
 )
 from docling_core.types.doc.document import ContentLayer
 from lxml import etree
 from PIL import Image, UnidentifiedImageError
+from pydantic import AnyUrl, ValidationError
 from typing_extensions import override
 
 from docling.backend.abstract_backend import (
@@ -64,6 +77,7 @@ _PPTX_IMPORT_ERROR: ImportError | None = None
 try:  # pragma: no cover - import-time guard
     from pptx import Presentation, presentation
     from pptx.chart.plot import PlotFactory, PlotTypeInspector
+    from pptx.enum.action import PP_ACTION
     from pptx.enum.shapes import MSO_SHAPE_TYPE, PP_PLACEHOLDER
     from pptx.exc import InvalidXmlError
     from pptx.oxml.ns import qn
@@ -558,6 +572,8 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             width = slide_size.width
             height = slide_size.height
         shape_bbox = [left, top, left + width, top + height]
+        if None not in (shape.left, shape.top, shape.width, shape.height):
+            shape_bbox = self._to_slide_coordinates(shape, shape_bbox)
         # python-pptx reports left and top as EMU from the slide's top-left, with
         # y growing downward, so the tuple above is in TOPLEFT order. Tagging it
         # BOTTOMLEFT does not convert it: BoundingBox.from_tuple unpacks
@@ -571,6 +587,67 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         )
 
         return prov
+
+    @staticmethod
+    def _to_slide_coordinates(shape, bbox: list) -> list:
+        """Map a box in a grouped shape's coordinates to slide coordinates.
+
+        python-pptx reports the position of a shape inside a group in the
+        group's child coordinate space (``a:chOff``/``a:chExt``), which only
+        matches the slide while the group has not been moved, resized or
+        flipped since its shapes were grouped. Each enclosing group maps that
+        space onto its own box (``a:off``/``a:ext``), so the transforms are
+        applied from the innermost group outwards. Group rotation is not
+        applied.
+
+        Args:
+            shape: The shape the box belongs to.
+            bbox: The box as ``[left, top, right, bottom]`` in the shape's own
+                coordinate space.
+
+        Returns:
+            The box as ``[left, top, right, bottom]`` in slide coordinates.
+        """
+        left, top, right, bottom = bbox
+        parent = shape._element.getparent()
+        while parent is not None and parent.tag == qn("p:grpSp"):
+            xfrm = parent.find(f"{qn('p:grpSpPr')}/{qn('a:xfrm')}")
+            parts = (
+                None
+                if xfrm is None
+                else [
+                    xfrm.find(qn(f"a:{name}"))
+                    for name in ("off", "ext", "chOff", "chExt")
+                ]
+            )
+            if parts is not None and None not in parts:
+                off, ext, ch_off, ch_ext = parts
+                try:
+                    off_x, off_y = int(off.get("x")), int(off.get("y"))
+                    ext_x, ext_y = int(ext.get("cx")), int(ext.get("cy"))
+                    ch_x, ch_y = int(ch_off.get("x")), int(ch_off.get("y"))
+                    ch_cx, ch_cy = int(ch_ext.get("cx")), int(ch_ext.get("cy"))
+                except (TypeError, ValueError):
+                    pass
+                else:
+                    scale_x = ext_x / ch_cx if ch_cx else 1.0
+                    scale_y = ext_y / ch_cy if ch_cy else 1.0
+                    left = off_x + (left - ch_x) * scale_x
+                    right = off_x + (right - ch_x) * scale_x
+                    top = off_y + (top - ch_y) * scale_y
+                    bottom = off_y + (bottom - ch_y) * scale_y
+                    if xfrm.get("flipH") in ("1", "true"):
+                        left, right = (
+                            2 * off_x + ext_x - right,
+                            2 * off_x + ext_x - left,
+                        )
+                    if xfrm.get("flipV") in ("1", "true"):
+                        top, bottom = (
+                            2 * off_y + ext_y - bottom,
+                            2 * off_y + ext_y - top,
+                        )
+            parent = parent.getparent()
+        return [left, top, right, bottom]
 
     def _get_paragraph_level(self, paragraph) -> int:
         """Return the indentation level of a paragraph XML element.
@@ -1042,6 +1119,16 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         open_lists: list[_OpenList] = []
         doc_label = DocItemLabel.LIST_ITEM
 
+        # Footer, date and slide-number placeholders are slide chrome, like page
+        # headers and footers in a PDF.
+        content_layer = None
+        if shape.is_placeholder and shape.placeholder_format.type in (
+            PP_PLACEHOLDER.FOOTER,
+            PP_PLACEHOLDER.DATE,
+            PP_PLACEHOLDER.SLIDE_NUMBER,
+        ):
+            content_layer = ContentLayer.FURNITURE
+
         # Iterate through paragraphs to build up text
         for paragraph in shape.text_frame.paragraphs:
             is_a_list, bullet_type = self._is_list_item(paragraph)
@@ -1063,7 +1150,11 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                 if not open_lists:
                     open_lists.append(
                         _OpenList(
-                            group=doc.add_list_group(name="list", parent=parent_slide),
+                            group=doc.add_list_group(
+                                name="list",
+                                parent=parent_slide,
+                                content_layer=content_layer,
+                            ),
                             level=level,
                         )
                     )
@@ -1071,7 +1162,9 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                     open_lists.append(
                         _OpenList(
                             group=doc.add_list_group(
-                                name="list", parent=open_lists[-1].last_item
+                                name="list",
+                                parent=open_lists[-1].last_item,
+                                content_layer=content_layer,
                             ),
                             level=level,
                         )
@@ -1090,9 +1183,12 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                     parent=current.group,
                     text="" if has_equations else p_text,
                     prov=prov,
+                    content_layer=content_layer,
                 )
                 if has_equations:
-                    inline_group = doc.add_inline_group(parent=current.last_item)
+                    inline_group = doc.add_inline_group(
+                        parent=current.last_item, content_layer=content_layer
+                    )
                     for label, text in fragments:
                         doc.add_text(
                             label=label,
@@ -1101,6 +1197,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                             prov=self._generate_prov(
                                 shape, slide_ind, text, slide_size
                             ),
+                            content_layer=content_layer,
                         )
             else:  # is paragraph not a list item
                 open_lists.clear()
@@ -1127,7 +1224,9 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                             label=doc_label, parent=parent_slide, text="", prov=prov
                         )
                     parent = (
-                        doc.add_inline_group(parent=fragment_parent)
+                        doc.add_inline_group(
+                            parent=fragment_parent, content_layer=content_layer
+                        )
                         if has_text
                         else fragment_parent
                     )
@@ -1140,6 +1239,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                                 prov=self._generate_prov(
                                     shape, slide_ind, text, slide_size
                                 ),
+                                content_layer=content_layer,
                             )
                 else:
                     doc.add_text(
@@ -1147,6 +1247,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                         parent=parent_slide,
                         text=p_text,
                         prov=prov,
+                        content_layer=content_layer,
                     )
         return
 
@@ -1939,9 +2040,11 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
                     return
                 # Handle other text elements, including lists (bullet lists, numbered
                 # lists)
+                first_new_text = len(doc.texts)
                 self._handle_text_elements(
                     shape, parent_slide, slide_ind, doc, slide_size
                 )
+                self._apply_shape_hyperlink(shape, doc.texts[first_new_text:])
                 return
 
             def handle_groups(shape, parent_slide, slide_ind, doc, slide_size):
@@ -1997,6 +2100,45 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         return bool(hidden) and hidden[0] in ("1", "true")
 
     @staticmethod
+    def _shape_hyperlink(shape) -> Optional[Union[AnyUrl, Path]]:
+        """Return the link attached to the whole shape, if it has one.
+
+        PowerPoint stores such a link as ``a:hlinkClick`` under the shape's
+        ``p:cNvPr``. Only a link to a URL or a file is returned: other click
+        actions, such as a jump to another slide, also carry a relationship
+        target (``slide2.xml``), but it is not something a reader can follow.
+        """
+        try:
+            click_action = shape.click_action
+            if click_action.action not in (PP_ACTION.HYPERLINK, PP_ACTION.OPEN_FILE):
+                return None
+            address = click_action.hyperlink.address
+        except (AttributeError, KeyError):
+            # No click action on this shape kind, or its relationship is gone.
+            return None
+        if not address:
+            return None
+        if not urlparse(address).scheme:
+            return Path(address)
+        try:
+            return AnyUrl(address)
+        except ValidationError:
+            _log.warning("Skipping malformed hyperlink address: %r", address)
+            return None
+
+    @classmethod
+    def _apply_shape_hyperlink(cls, shape, items: Sequence[TextItem]) -> None:
+        """Give the shape's link to its text items that have no link of their own."""
+        if not items:
+            return
+        hyperlink = cls._shape_hyperlink(shape)
+        if hyperlink is None:
+            return
+        for item in items:
+            if item.hyperlink is None:
+                item.hyperlink = hyperlink
+
+    @staticmethod
     def _body_item_refs(doc: DoclingDocument, parent_slide: GroupItem) -> set[str]:
         return {
             item.self_ref
@@ -2044,7 +2186,7 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             for item, _ in doc.iterate_items(
                 root=parent_slide,
                 with_groups=True,
-                included_content_layers={ContentLayer.BODY},
+                included_content_layers={ContentLayer.BODY, ContentLayer.FURNITURE},
             )
         ]
         for item in items:
