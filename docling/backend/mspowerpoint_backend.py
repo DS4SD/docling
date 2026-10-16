@@ -572,6 +572,8 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
             width = slide_size.width
             height = slide_size.height
         shape_bbox = [left, top, left + width, top + height]
+        if None not in (shape.left, shape.top, shape.width, shape.height):
+            shape_bbox = self._to_slide_coordinates(shape, shape_bbox)
         # python-pptx reports left and top as EMU from the slide's top-left, with
         # y growing downward, so the tuple above is in TOPLEFT order. Tagging it
         # BOTTOMLEFT does not convert it: BoundingBox.from_tuple unpacks
@@ -585,6 +587,67 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         )
 
         return prov
+
+    @staticmethod
+    def _to_slide_coordinates(shape, bbox: list) -> list:
+        """Map a box in a grouped shape's coordinates to slide coordinates.
+
+        python-pptx reports the position of a shape inside a group in the
+        group's child coordinate space (``a:chOff``/``a:chExt``), which only
+        matches the slide while the group has not been moved, resized or
+        flipped since its shapes were grouped. Each enclosing group maps that
+        space onto its own box (``a:off``/``a:ext``), so the transforms are
+        applied from the innermost group outwards. Group rotation is not
+        applied.
+
+        Args:
+            shape: The shape the box belongs to.
+            bbox: The box as ``[left, top, right, bottom]`` in the shape's own
+                coordinate space.
+
+        Returns:
+            The box as ``[left, top, right, bottom]`` in slide coordinates.
+        """
+        left, top, right, bottom = bbox
+        parent = shape._element.getparent()
+        while parent is not None and parent.tag == qn("p:grpSp"):
+            xfrm = parent.find(f"{qn('p:grpSpPr')}/{qn('a:xfrm')}")
+            parts = (
+                None
+                if xfrm is None
+                else [
+                    xfrm.find(qn(f"a:{name}"))
+                    for name in ("off", "ext", "chOff", "chExt")
+                ]
+            )
+            if parts is not None and None not in parts:
+                off, ext, ch_off, ch_ext = parts
+                try:
+                    off_x, off_y = int(off.get("x")), int(off.get("y"))
+                    ext_x, ext_y = int(ext.get("cx")), int(ext.get("cy"))
+                    ch_x, ch_y = int(ch_off.get("x")), int(ch_off.get("y"))
+                    ch_cx, ch_cy = int(ch_ext.get("cx")), int(ch_ext.get("cy"))
+                except (TypeError, ValueError):
+                    pass
+                else:
+                    scale_x = ext_x / ch_cx if ch_cx else 1.0
+                    scale_y = ext_y / ch_cy if ch_cy else 1.0
+                    left = off_x + (left - ch_x) * scale_x
+                    right = off_x + (right - ch_x) * scale_x
+                    top = off_y + (top - ch_y) * scale_y
+                    bottom = off_y + (bottom - ch_y) * scale_y
+                    if xfrm.get("flipH") in ("1", "true"):
+                        left, right = (
+                            2 * off_x + ext_x - right,
+                            2 * off_x + ext_x - left,
+                        )
+                    if xfrm.get("flipV") in ("1", "true"):
+                        top, bottom = (
+                            2 * off_y + ext_y - bottom,
+                            2 * off_y + ext_y - top,
+                        )
+            parent = parent.getparent()
+        return [left, top, right, bottom]
 
     def _get_paragraph_level(self, paragraph) -> int:
         """Return the indentation level of a paragraph XML element.
