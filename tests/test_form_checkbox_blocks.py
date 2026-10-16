@@ -419,3 +419,52 @@ def test_label_of_a_field_is_not_the_prompt_of_a_block_and_a_plain_option() -> N
         (10, 24): "Send by email",
         (10, 36): "Send by post",
     }
+
+
+def test_boxed_checkboxes_in_a_grid_keep_their_column_header_as_hint() -> None:
+    # Two columns of boxed checkboxes under "Applicant" and "Spouse": each is
+    # keyed by its block, and its column header is still kept as a hint.
+    clusters, widgets = [], []
+    for column, (header, x) in enumerate([("Applicant", 30), ("Spouse", 130)]):
+        header_bbox = BoundingBox(l=x, t=10, r=x + 45, b=18)
+        clusters.append(
+            _block(
+                100 + column,
+                DocItemLabel.TEXT,
+                header_bbox,
+                (len(clusters), header, header_bbox),
+            )
+        )
+        for row, (label, y) in enumerate([("Employed", 30), ("Retired", 45)]):
+            clusters.append(
+                _block(
+                    10 * column + row,
+                    DocItemLabel.CHECKBOX_UNSELECTED,
+                    BoundingBox(l=x, t=y, r=x + 52, b=y + 11),
+                    (
+                        len(clusters),
+                        label,
+                        BoundingBox(l=x + 13, t=y + 1, r=x + 50, b=y + 9),
+                    ),
+                )
+            )
+            widgets.append(
+                _checkbox(
+                    len(widgets), BoundingBox(l=x + 2, t=y + 1, r=x + 11, b=y + 10)
+                )
+            )
+    page = _page(clusters, widgets)
+
+    _materialize(page)
+
+    keyed = {
+        (item.values[0].bbox.l, item.values[0].bbox.t): (item.key_text, item.hint_text)
+        for region in page.predictions.field_regions
+        for item in region.items
+    }
+    assert keyed == {
+        (32, 31): ("Employed", "Applicant"),
+        (32, 46): ("Retired", "Applicant"),
+        (132, 31): ("Employed", "Spouse"),
+        (132, 46): ("Retired", "Spouse"),
+    }

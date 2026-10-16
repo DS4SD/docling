@@ -385,9 +385,8 @@ def _solve(
         )
     # A checkbox keyed by its block takes part in no other association.
     taken = {c.members[0] for c in in_blocks}
-    proposed = [
-        c for c in candidates_for(values, key_texts, h) if taken.isdisjoint(c.members)
-    ]
+    found = candidates_for(values, key_texts, h)
+    proposed = [c for c in found if taken.isdisjoint(c.members)]
     # A decided alternating run fixes which key each of its values reads.
     mark_sequences(proposed, sequences(values, key_texts, proposed, NULL_COST, h))
     # Added once the runs are decided: a run's side does not apply to a block.
@@ -508,7 +507,9 @@ def _solve(
             values, key_texts, proposed + tables, str(result.message), slots
         )
     selected = [index for column, index in enumerate(active) if result.x[column] > 0.5]
-    add_hints([proposed[i] for i in selected], proposed, values, NULL_COST)
+    # A hint never moves a key: a boxed checkbox's header comes from its
+    # geometric candidates, even though they took no part in the search.
+    add_hints([proposed[i] for i in selected], found + in_blocks, values, NULL_COST)
     return Assignment(
         values,
         key_texts,
