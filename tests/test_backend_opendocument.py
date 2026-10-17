@@ -301,6 +301,153 @@ def test_odt_hidden_section_goes_to_invisible_layer(tmp_path: Path):
     assert document.tables[0].content_layer == ContentLayer.INVISIBLE
 
 
+def test_odt_table_of_contents_content_is_extracted(tmp_path: Path):
+    """A generated table of contents (``text:table-of-content``) is kept.
+
+    The index title and entry paragraphs inside ``text:index-body`` are
+    extracted into the body layer in document reading order.
+    """
+    path = tmp_path / "table_of_contents.odt"
+    source = OdfDocument("text")
+    body = source.body
+    body.clear()
+    body.append(Paragraph("Intro paragraph."))
+
+    index = Element.from_tag("text:table-of-content")
+    index_source = Element.from_tag("text:table-of-content-source")
+    index_source.set_attribute("text:outline-level", 10)
+    index_source.append(Element.from_tag("text:index-title-template"))
+    index.append(index_source)
+
+    index_body = Element.from_tag("text:index-body")
+    index_title = Element.from_tag("text:index-title")
+    index_title.append(Paragraph("Table of Contents"))
+    index_body.append(index_title)
+
+    ch1 = Paragraph("Chapter One")
+    ch1.append(Element.from_tag("text:tab"))
+    ch1.append("1")
+    index_body.append(ch1)
+
+    sec1 = Paragraph("Section One")
+    sec1.append(Element.from_tag("text:tab"))
+    sec1.append("2")
+    index_body.append(sec1)
+
+    index.append(index_body)
+    body.append(index)
+    body.append(Paragraph("Outro paragraph."))
+    source.save(str(path))
+
+    document = (
+        DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path).document
+    )
+
+    body_texts = [
+        item.text
+        for item, _ in document.iterate_items(
+            included_content_layers={ContentLayer.BODY}
+        )
+        if isinstance(item, TextItem)
+    ]
+    assert body_texts == [
+        "Intro paragraph.",
+        "Table of Contents",
+        "Chapter One\t1",
+        "Section One\t2",
+        "Outro paragraph.",
+    ]
+    assert document.export_to_markdown() == (
+        "Intro paragraph.\n\n"
+        "Table of Contents\n\n"
+        "Chapter One\t1\n\n"
+        "Section One\t2\n\n"
+        "Outro paragraph."
+    )
+
+
+def test_odt_hidden_table_of_contents_goes_to_invisible_layer(tmp_path: Path):
+    """A hidden table of contents (``text:display="none"``) goes to the invisible layer."""
+    path = tmp_path / "hidden_toc.odt"
+    source = OdfDocument("text")
+    body = source.body
+    body.clear()
+    body.append(Paragraph("Question"))
+
+    index = Element.from_tag("text:table-of-content")
+    index.set_attribute("text:display", "none")
+    index_body = Element.from_tag("text:index-body")
+    index_title = Element.from_tag("text:index-title")
+    index_title.append(Paragraph("Hidden TOC"))
+    index_body.append(index_title)
+    index_body.append(Paragraph("Hidden Entry\t1"))
+    index.append(index_body)
+    body.append(index)
+
+    body.append(Paragraph("Conclusion"))
+    source.save(str(path))
+
+    document = (
+        DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path).document
+    )
+
+    hidden_texts = [
+        item.text
+        for item, _ in document.iterate_items(
+            included_content_layers={ContentLayer.INVISIBLE}
+        )
+        if isinstance(item, TextItem)
+    ]
+    assert document.export_to_markdown() == "Question\n\nConclusion"
+    assert hidden_texts == ["Hidden TOC", "Hidden Entry\t1"]
+
+
+def test_odt_illustration_and_table_indexes_extracted(tmp_path: Path):
+    """Other index types (illustrations, tables) inside ``text:index-body`` are kept."""
+    path = tmp_path / "other_indexes.odt"
+    source = OdfDocument("text")
+    body = source.body
+    body.clear()
+
+    fig_index = Element.from_tag("text:illustration-index")
+    fig_body = Element.from_tag("text:index-body")
+    fig_title = Element.from_tag("text:index-title")
+    fig_title.append(Paragraph("List of Figures"))
+    fig_body.append(fig_title)
+    fig_body.append(Paragraph("Figure 1: Architecture\t5"))
+    fig_index.append(fig_body)
+    body.append(fig_index)
+
+    tbl_index = Element.from_tag("text:table-index")
+    tbl_body = Element.from_tag("text:index-body")
+    tbl_title = Element.from_tag("text:index-title")
+    tbl_title.append(Paragraph("List of Tables"))
+    tbl_body.append(tbl_title)
+    tbl_body.append(Paragraph("Table 1: Benchmark\t12"))
+    tbl_index.append(tbl_body)
+    body.append(tbl_index)
+
+    source.save(str(path))
+
+    document = (
+        DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path).document
+    )
+
+    texts = [
+        item.text
+        for item, _ in document.iterate_items(
+            included_content_layers={ContentLayer.BODY}
+        )
+        if isinstance(item, TextItem)
+    ]
+    assert texts == [
+        "List of Figures",
+        "Figure 1: Architecture\t5",
+        "List of Tables",
+        "Table 1: Benchmark\t12",
+    ]
+
+
 def test_ods_conversion(ods_path: Path):
     res = DocumentConverter(allowed_formats=[InputFormat.ODS]).convert(ods_path)
     doc = res.document

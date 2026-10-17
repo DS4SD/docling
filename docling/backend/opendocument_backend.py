@@ -72,11 +72,14 @@ _ODFDO_AVAILABLE: bool = False
 _ODFDO_IMPORT_ERROR: ImportError | None = None
 try:  # pragma: no cover - import-time guard
     from odfdo import (
+        TOC,
         Document as OdfDocument,
         DrawPage,
         Element,
         Frame,
         Header,
+        IndexBody,
+        IndexTitle,
         List as OdfList,
         ListItem,
         Paragraph,
@@ -101,6 +104,18 @@ _ODF_CHART_CLASS_TO_PICTURE_CLASSIFICATION = {
     "chart:circle": PictureClassificationLabel.PIE_CHART,
     "chart:pie": PictureClassificationLabel.PIE_CHART,
     "chart:scatter": PictureClassificationLabel.SCATTER_PLOT,
+}
+
+_ODF_INDEX_CONTAINER_TAGS = {
+    "text:table-of-content",
+    "text:illustration-index",
+    "text:table-index",
+    "text:object-index",
+    "text:user-index",
+    "text:alphabetical-index",
+    "text:bibliography",
+    "text:index-body",
+    "text:index-title",
 }
 
 
@@ -1127,6 +1142,40 @@ def _add_odf_child(
             image_loader=image_loader,
             comments=comments,
         )
+    elif (
+        isinstance(element, (TOC, IndexBody, IndexTitle))
+        or getattr(element, "tag", None) in _ODF_INDEX_CONTAINER_TAGS
+    ):
+        if (
+            getattr(element, "get_attribute", None)
+            and element.get_attribute("text:display") == "none"
+        ):
+            content_layer = ContentLayer.INVISIBLE
+        index_body = (
+            element.get_element("text:index-body")
+            if hasattr(element, "get_element")
+            else None
+        )
+        children = index_body.children if index_body is not None else element.children
+        if not children and getattr(element, "text", None):
+            text = element.text.strip()
+            if text:
+                doc.add_text(
+                    label=DocItemLabel.TEXT,
+                    parent=parent,
+                    text=text,
+                    content_layer=content_layer,
+                )
+        else:
+            _add_odf_children(
+                doc,
+                children,
+                parent=parent,
+                content_layer=content_layer,
+                odf_obj=odf_obj,
+                image_loader=image_loader,
+                comments=comments,
+            )
     elif isinstance(element, Frame):
         chart_count = _add_odf_charts(doc, element, parent, content_layer, odf_obj)
         _add_odf_images(
