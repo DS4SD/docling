@@ -6,6 +6,9 @@ from pathlib import Path
 
 import pytest
 from docling_core.types.doc import DocItemLabel, GroupLabel
+from marko.block import FencedCode, List as MdList
+from marko.ext.gfm import gfm
+from marko.ext.gfm.elements import Paragraph, Table
 
 from docling.backend.latex_backend import LatexDocumentBackend
 from docling.datamodel.backend_options import LatexBackendOptions
@@ -383,6 +386,59 @@ def test_latex_enumerate_line_of_item_starting_with_formula(
     first = doc.groups[0].children[0].resolve(doc)
     assert [child.resolve(doc).label for child in first.children] == children
     assert doc.export_to_markdown() == expected_md
+
+
+@pytest.mark.xfail(
+    reason="docling-core#888: Markdown export does not indent the block "
+    "children of a list item; remove when docling-core is bumped",
+    strict=True,
+)
+@pytest.mark.parametrize(
+    ("item", "first_blocks", "first_text"),
+    [
+        (rb"\item \begin{theorem}First\end{theorem}", [Paragraph], "First"),
+        (rb"\item \begin{verbatim}code\end{verbatim}", [FencedCode], "code"),
+        (rb"\item \begin{lstlisting}code\end{lstlisting}", [FencedCode], "code"),
+        (rb"\item \begin{tabular}{c}a\\b\end{tabular}", [Table], "a"),
+        (
+            rb"\item First \begin{verbatim}code\end{verbatim}",
+            [Paragraph, FencedCode],
+            "code",
+        ),
+    ],
+    ids=["theorem", "verbatim", "lstlisting", "tabular", "text_then_verbatim"],
+)
+def test_latex_enumerate_markdown_of_item_with_block(
+    item: bytes, first_blocks: list[type], first_text: str
+):
+    """A block in an item stays in that item when the Markdown is parsed.
+
+    A block at the start of an item was exported as ``1. `` followed by the block
+    at column 0, which a CommonMark parser reads as an empty item followed by the
+    block outside the list; ``2. Second`` then loses its numbering.
+    """
+    latex_content = (
+        b"\\documentclass{article}\n\\begin{document}\n\\begin{enumerate}\n"
+        + item
+        + b"\n\\item Second\n\\end{enumerate}\n\\end{document}\n"
+    )
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(latex_content),
+        format=InputFormat.LATEX,
+        backend=LatexDocumentBackend,
+        filename="test.tex",
+    )
+    backend = LatexDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(latex_content))
+    doc = backend.convert()
+
+    parsed = gfm.parse(doc.export_to_markdown())
+    (md_list,) = parsed.children
+    assert isinstance(md_list, MdList)
+    assert (md_list.ordered, md_list.start) == (True, 1)
+    first, second = md_list.children
+    assert [type(child) for child in first.children] == first_blocks
+    assert first_text in gfm.render(first)
+    assert gfm.render(second) == "<li>Second</li>\n"
 
 
 def test_latex_enumerate_empty_item_keeps_numbering():
