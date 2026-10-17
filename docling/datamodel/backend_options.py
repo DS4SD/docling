@@ -58,6 +58,12 @@ class CsvBackendOptions(TextBackendOptions):
     kind: Literal["csv"] = Field("csv", exclude=True, repr=False)
 
 
+class CalendarBackendOptions(TextBackendOptions):
+    """Options specific to the iCalendar backend."""
+
+    kind: Literal["calendar"] = Field("calendar", exclude=True, repr=False)
+
+
 class AsciiDocBackendOptions(TextBackendOptions):
     """Options specific to the AsciiDoc backend."""
 
@@ -827,6 +833,7 @@ BackendOptions = Annotated[
     Union[
         DeclarativeBackendOptions,
         AsciiDocBackendOptions,
+        CalendarBackendOptions,
         CsvBackendOptions,
         EbcdicBackendOptions,
         EpubBackendOptions,
