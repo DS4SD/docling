@@ -25,6 +25,7 @@ from docling_core.types.doc import (
     GroupLabel,
     ImageRef,
     ListGroup,
+    ListItem,
     NodeItem,
     PictureClassificationLabel,
     PictureClassificationMetaField,
@@ -2440,6 +2441,35 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         grouped = [self._group_paragraph_content(segment) for segment in segments]
         return [elements for elements in grouped if elements]
 
+    def _split_off_break_tail(
+        self,
+        paragraph: Paragraph,
+        text: str,
+        elements: list[tuple[str, Formatting | None, AnyUrl | Path | None]],
+        equations: list[str],
+    ) -> tuple[
+        str,
+        list[tuple[str, Formatting | None, AnyUrl | Path | None]],
+        list[list[tuple[str, Formatting | None, AnyUrl | Path | None]]],
+    ]:
+        """Split a title, heading or list item at its first page or column break.
+
+        Returns the text and elements before the break, and the segments after
+        it. A paragraph without such a break, or with equations, is returned
+        unchanged with no segments after it.
+        """
+        segments = self._get_paragraph_segments(paragraph)
+        if equations or len(segments) < 2:
+            return text, elements, []
+        marked_text = "".join(
+            part
+            for part, _, _ in self._iter_paragraph_content(paragraph, mark_breaks=True)
+        )
+        head = next(
+            part.strip() for part in marked_text.split(_BREAK_MARK) if part.strip()
+        )
+        return head, segments[0], segments[1:]
+
     def _has_checkbox(self, element: BaseOxmlElement) -> bool:
         """Check if a paragraph element contains a checkbox.
 
@@ -2874,26 +2904,28 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             else prev_parent
         )
 
-    def _add_paragraph_text_items(
+    def _add_segment_text_items(
         self,
         doc: DoclingDocument,
-        paragraph: Paragraph,
-        checkbox_label: DocItemLabel | None,
-        skip_empty_text: bool,
+        segments: list[list[tuple[str, Formatting | None, AnyUrl | Path | None]]],
+        checkbox_label: DocItemLabel | None = None,
+        skip_empty_text: bool = False,
+        parent: NodeItem | None = None,
     ) -> list[RefItem]:
-        """Add the text items of a regular paragraph, one segment at a time.
+        """Add the text items of paragraph segments, one segment at a time.
 
         A page or column break starts a new segment, so its text becomes
         separate items under the same parent.
         """
         refs: list[RefItem] = []
-        for segment in self._get_paragraph_segments(paragraph):
+        for segment in segments:
             refs.extend(
                 self._add_body_text_items(
                     doc=doc,
                     paragraph_elements=segment,
                     checkbox_label=checkbox_label,
                     skip_empty_text=skip_empty_text,
+                    parent=parent,
                 )
             )
         return refs
@@ -2945,6 +2977,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # Check if this is actually a numbered list by examining the numFmt
             is_numbered = self._has_visible_numbering_format(numid, ilevel)
             left_indent = self._get_list_left_indent(paragraph, numid, ilevel)
+            _, item_elements, tail = self._split_off_break_tail(
+                paragraph, text, paragraph_elements, equations
+            )
 
             # If there are equations in the list item, handle them specially
             if len(equations) > 0:
@@ -2963,8 +2998,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     numid=numid,
                     ilevel=ilevel,
                     left_indent=left_indent,
-                    elements=paragraph_elements,
+                    elements=item_elements,
                     is_numbered=is_numbered,
+                    tail=tail,
                 )
             elem_ref.extend(li)  # MUST BE REF!!!
             self._update_history(p_style_id, p_level, numid, ilevel)
@@ -3014,21 +3050,31 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 self.parents[key] = None
             # Same reason as for headings below: the parents stack is cleared here.
             self.level_at_new_list = None
+            title_text, _, tail = self._split_off_break_tail(
+                paragraph, text, paragraph_elements, equations
+            )
             te = doc.add_text(
                 parent=None,
                 label=DocItemLabel.TITLE,
-                text=text,
+                text=title_text,
                 content_layer=self.content_layer,
             )
             self.parents[0] = te
             elem_ref.append(te.get_ref())
+            elem_ref.extend(self._add_segment_text_items(doc, tail))
         elif "Heading" in p_style_id:
             # _add_heading clears the parents tail; reset list context so the
             # next list item opens fresh under this heading.
             self.level_at_new_list = None
             is_numbered_style = self._is_numbered_heading(paragraph)
-            h1 = self._add_heading(doc, p_level, text, is_numbered_style, numid, ilevel)
+            heading_text, _, tail = self._split_off_break_tail(
+                paragraph, text, paragraph_elements, equations
+            )
+            h1 = self._add_heading(
+                doc, p_level, heading_text, is_numbered_style, numid, ilevel
+            )
             elem_ref.extend(h1)
+            elem_ref.extend(self._add_segment_text_items(doc, tail))
 
         elif len(equations) > 0:
             if (paragraph.text is None or len(paragraph.text.strip()) == 0) and len(
@@ -3125,8 +3171,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         else:
             self._end_list_on_body_text(text)
             elem_ref.extend(
-                self._add_paragraph_text_items(
-                    doc, paragraph, checkbox_label, skip_empty_text
+                self._add_segment_text_items(
+                    doc,
+                    self._get_paragraph_segments(paragraph),
+                    checkbox_label,
+                    skip_empty_text,
                 )
             )
 
@@ -3146,12 +3195,17 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         paragraph_elements: list,
         checkbox_label,
         skip_empty_text: bool,
+        parent: NodeItem | None = None,
     ) -> list[RefItem]:
-        """Add ordinary paragraph text items under the current parent."""
-        level = self._get_level()
+        """Add ordinary paragraph text items under ``parent``.
+
+        Without ``parent``, they go under the current parent.
+        """
+        if parent is None:
+            parent = self.parents.get(self._get_level() - 1)
         parent = self._create_or_reuse_parent(
             doc=doc,
-            prev_parent=self.parents.get(level - 1),
+            prev_parent=parent,
             paragraph_elements=paragraph_elements,
         )
         elem_ref: list[RefItem] = []
@@ -3290,7 +3344,10 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         marker: str,
         enumerated: bool,
         level: int,
+        tail: list[list[tuple[str, Formatting | None, AnyUrl | Path | None]]]
+        | None = None,
     ) -> list[RefItem]:
+        """Add a list item, with ``tail`` as text that continues inside it."""
         elem_ref: list[RefItem] = []
         # This should not happen by construction
         if not isinstance(self.parents[level], ListGroup):
@@ -3301,10 +3358,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         if not elements:
             return elem_ref
 
+        item: ListItem | None = None
         if len(elements) == 1:
             text, format, hyperlink = elements[0]
             if text:
-                doc.add_list_item(
+                item = doc.add_list_item(
                     marker=marker,
                     enumerated=enumerated,
                     parent=self.parents[level],
@@ -3313,13 +3371,13 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     hyperlink=hyperlink,
                 )
         else:
-            new_item = doc.add_list_item(
+            item = doc.add_list_item(
                 marker=marker,
                 enumerated=enumerated,
                 parent=self.parents[level],
                 text="",
             )
-            new_parent = doc.add_inline_group(parent=new_item)
+            new_parent = doc.add_inline_group(parent=item)
             for text, format, hyperlink in elements:
                 if text:
                     doc.add_text(
@@ -3330,6 +3388,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                         hyperlink=hyperlink,
                         content_layer=self.content_layer,
                     )
+        if item is not None and tail:
+            self._add_segment_text_items(doc, tail, skip_empty_text=True, parent=item)
         return elem_ref
 
     def _add_list_item_with_marker(
@@ -3614,6 +3674,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         left_indent: int,
         elements: list,
         is_numbered: bool = False,
+        tail: list[list[tuple[str, Formatting | None, AnyUrl | Path | None]]]
+        | None = None,
     ) -> list[RefItem]:
         """Add a regular list item without inline equations.
 
@@ -3624,6 +3686,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             left_indent: The paragraph's effective left indentation in twips.
             elements: List of (text, formatting, hyperlink) tuples representing the paragraph content.
             is_numbered: Whether this is a numbered list (True) or bulleted list (False).
+            tail: Segments after a page or column break, which continue inside the item.
 
         Returns:
             List of references to created document elements.
@@ -3642,7 +3705,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             enum_marker = ""
 
         self._add_formatted_list_item(
-            doc, elements, enum_marker, is_numbered, use_level
+            doc, elements, enum_marker, is_numbered, use_level, tail
         )
         return elem_ref
 

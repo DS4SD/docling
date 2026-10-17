@@ -2531,6 +2531,37 @@ def test_page_and_column_breaks_split_a_paragraph(tmp_path, break_type, expected
     assert len(document.body.children) == len(expected)
 
 
+def test_page_break_in_a_title_heading_or_list_item(tmp_path):
+    """A page break ends a title or heading, and the text after it becomes a
+    paragraph under it. In a list item, that text continues inside the item,
+    so it does not become a new list item."""
+    doc = Document()
+    for paragraph, before, after in [
+        (doc.add_paragraph(style="Title"), "Report", "Draft"),
+        (doc.add_heading(level=1), "Chapter one", "Overview"),
+        (doc.add_paragraph(style="List Number"), "Step one", "Step one, continued"),
+    ]:
+        paragraph.add_run(before).add_break(WD_BREAK.PAGE)
+        paragraph.add_run(after)
+    doc.add_paragraph("Step two", style="List Number")
+
+    document = _convert_built(doc, tmp_path)
+
+    items = {item.text: item for item in document.texts}
+    assert items["Report"].label == DocItemLabel.TITLE
+    assert items["Chapter one"].label == DocItemLabel.SECTION_HEADER
+    assert [
+        item.text for item in document.texts if item.label == DocItemLabel.LIST_ITEM
+    ] == ["Step one", "Step two"]
+    for parent, child in [
+        ("Report", "Draft"),
+        ("Chapter one", "Overview"),
+        ("Step one", "Step one, continued"),
+    ]:
+        assert items[child].label == DocItemLabel.TEXT
+        assert items[child].parent == items[parent].get_ref()
+
+
 @pytest.mark.parametrize(
     ("note_body", "expected"),
     [
