@@ -9,6 +9,7 @@ import tempfile
 import time
 import warnings
 from collections.abc import Iterable
+from contextlib import nullcontext
 from enum import Enum
 from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Any, Literal, cast
@@ -47,6 +48,7 @@ from docling_core.types.doc import ImageRefMode
 from docling_core.utils.file import resolve_source_to_path
 from pydantic import SecretStr, TypeAdapter, ValidationError
 from rich.console import Console
+from tqdm.contrib.logging import logging_redirect_tqdm
 
 from docling.cli.export_utils import (
     _export_flags_from_formats,
@@ -114,6 +116,7 @@ from docling.datamodel.base_models import (
     InputFormat,
     OutputFormat,
 )
+from docling.datamodel.chart_extraction_options import ChartExtractionVlmEngineOptions
 from docling.datamodel.document import ConversionResult, DoclingVersion
 from docling.datamodel.pipeline_options import (
     AsrPipelineOptions,
@@ -141,11 +144,14 @@ from docling.datamodel.pipeline_options import (
 from docling.datamodel.pipeline_options_asr_model import InlineAsrOptions
 from docling.datamodel.settings import DEFAULT_PAGE_RANGE, settings
 from docling.utils.profiling import ProfilingItem
+from docling.utils.progress import ProgressPrinter
 
-# The local model stack (scipy, torch, …) is absent on lightweight installs
-# (docling-slim[service-client] / docling-client).  Guard these imports so the
-# CLI module — and `convert-remote` — remain importable without them.
-_local_model_stack_available: bool
+# The local model stack (scipy, torch, packaging, …) is absent on lightweight
+# installs (docling-slim[service-client] / docling-client). Importing the
+# factories is not enough to detect this: building them loads the built-in
+# plugins, which import the engine modules. Guard both steps so the CLI module
+# — and `convert-remote` — remain importable without the local model stack.
+_local_model_stack_error: ImportError | None = None
 try:
     from docling.models.factories import (
         get_layout_factory,
@@ -153,9 +159,20 @@ try:
         get_table_structure_factory,
     )
 
-    _local_model_stack_available = True
-except ImportError:
-    _local_model_stack_available = False
+    ocr_engines_enum_internal = list(
+        get_ocr_factory(allow_external_plugins=False).get_enum()
+    )
+    layout_engines_enum_internal = list(
+        get_layout_factory(allow_external_plugins=False).get_enum()
+    )
+    table_structure_engines_enum_internal = list(
+        get_table_structure_factory(allow_external_plugins=False).get_enum()
+    )
+except ImportError as exc:
+    _local_model_stack_error = exc
+    ocr_engines_enum_internal = []
+    layout_engines_enum_internal = []
+    table_structure_engines_enum_internal = []
 
 if TYPE_CHECKING:
     from docling.models.factories.base_factory import BaseFactory
@@ -215,8 +232,34 @@ def _is_html_source(source: str, from_formats: list[InputFormat]) -> bool:
     return _name_matches_format(source_name, InputFormat.HTML)
 
 
-def _is_temporary_word_file(path: Path) -> bool:
-    return path.name.startswith("~$") and path.suffix.lower() == ".docx"
+def _is_latex_source(path: Path, from_formats: list[InputFormat]) -> bool:
+    if InputFormat.LATEX not in from_formats:
+        return False
+    if len(from_formats) == 1:
+        return True
+
+    return _name_matches_format(path.name, InputFormat.LATEX)
+
+
+# Office writes a ~$ lock file next to an open document. Word, Excel, and
+# PowerPoint all use the same prefix; the suffixes are those of the Office
+# formats, taken from FormatToExtensions so a new extension there is covered.
+_OFFICE_LOCK_FORMATS = {
+    InputFormat.DOC,
+    InputFormat.DOCX,
+    InputFormat.XLS,
+    InputFormat.XLSX,
+    InputFormat.PPT,
+    InputFormat.PPTX,
+}
+
+_OFFICE_LOCK_SUFFIXES: frozenset[str] = frozenset(
+    f".{ext}" for fmt in _OFFICE_LOCK_FORMATS for ext in FormatToExtensions[fmt]
+)
+
+
+def _is_office_lock_file(path: Path) -> bool:
+    return path.name.startswith("~$") and path.suffix.lower() in _OFFICE_LOCK_SUFFIXES
 
 
 def _iter_input_paths_from_directory(
@@ -228,8 +271,8 @@ def _iter_input_paths_from_directory(
             _name_matches_format(path.name, fmt) for fmt in from_formats
         ):
             continue
-        if _is_temporary_word_file(path):
-            _log.info(f"Ignoring temporary Word file: {path}")
+        if _is_office_lock_file(path):
+            _log.info(f"Ignoring temporary Office file: {path}")
             continue
         if path not in seen_paths:
             seen_paths.add(path)
@@ -257,24 +300,9 @@ def _expand_from_formats(from_formats: list[str] | None) -> list[InputFormat]:
     return list(dict.fromkeys(expanded_formats))
 
 
-if _local_model_stack_available:
-    ocr_factory_internal = get_ocr_factory(allow_external_plugins=False)
-    ocr_engines_enum_internal = ocr_factory_internal.get_enum()
-
-    layout_factory_internal = get_layout_factory(allow_external_plugins=False)
-    layout_engines_enum_internal = layout_factory_internal.get_enum()
-
-    table_structure_factory_internal = get_table_structure_factory(
-        allow_external_plugins=False
-    )
-    table_structure_engines_enum_internal = table_structure_factory_internal.get_enum()
-else:
-    ocr_engines_enum_internal = []
-    layout_engines_enum_internal = []
-    table_structure_engines_enum_internal = []
-
 # Get available VLM presets from the registry
 vlm_preset_ids = VlmConvertOptions.list_preset_ids()
+chart_extraction_preset_ids = ChartExtractionVlmEngineOptions.list_preset_ids()
 
 DOCLING_ASCII_ART = r"""
                              ████ ██████
@@ -391,6 +419,7 @@ def _resolve_asr_options(asr_model: AsrModelType) -> InlineAsrOptions:
 app = typer.Typer(
     name="Docling",
     cls=_DefaultCommandGroup,
+    context_settings={"help_option_names": ["-h", "--help"]},
     help=(
         "Convert documents with Docling. At default verbosity a per-file "
         "progress line is logged; pass -q/--quiet for fully silent output "
@@ -406,6 +435,22 @@ app = typer.Typer(
         "supported options, and exit codes before invoking it."
     ),
 )
+
+
+def _require_local_model_stack(command: str) -> None:
+    """Exit with an install hint when the local model stack is missing."""
+    if _local_model_stack_error is None:
+        return
+    err_console.print(
+        f"[red]Error: `{command}` needs the local conversion stack, "
+        f"which is not installed ({_local_model_stack_error}).[/red]\n\n"
+        "Install the full docling package for local conversion:\n"
+        "    pip install docling\n\n"
+        "To convert with a Docling Serve endpoint instead, use:\n"
+        "    docling convert-remote --help",
+        highlight=False,
+    )
+    raise typer.Exit(1)
 
 
 def logo_callback(value: bool):
@@ -433,6 +478,7 @@ def version_callback(value: bool):
 
 def show_external_plugins_callback(value: bool):
     if value:
+        _require_local_model_stack("--show-external-plugins")
         ocr_factory_all = get_ocr_factory(allow_external_plugins=True)
         layout_factory_all = get_layout_factory(allow_external_plugins=True)
         table_factory_all = get_table_structure_factory(allow_external_plugins=True)
@@ -500,6 +546,7 @@ def export_documents(
     chunk_max_tokens: int | None = None,
     chunk_tokenizer: str = "sentence-transformers/all-MiniLM-L6-v2",
     debug_vlm_native_output: bool = False,
+    output_file: Path | None = None,
 ):
     success_count = 0
     failure_count = 0
@@ -539,7 +586,7 @@ def export_documents(
 
             # Export JSON format:
             if export_json:
-                fname = output_dir / f"{doc_filename}.json"
+                fname = output_file or output_dir / f"{doc_filename}.json"
                 _log.info(f"writing JSON output to {fname}")
                 conv_res.document.save_as_json(
                     filename=fname, image_mode=image_export_mode
@@ -547,7 +594,7 @@ def export_documents(
 
             # Export YAML format:
             if export_yaml:
-                fname = output_dir / f"{doc_filename}.yaml"
+                fname = output_file or output_dir / f"{doc_filename}.yaml"
                 _log.info(f"writing YAML output to {fname}")
                 conv_res.document.save_as_yaml(
                     filename=fname, image_mode=image_export_mode
@@ -555,7 +602,7 @@ def export_documents(
 
             # Export HTML format:
             if export_html:
-                fname = output_dir / f"{doc_filename}.html"
+                fname = output_file or output_dir / f"{doc_filename}.html"
                 _log.info(f"writing HTML output to {fname}")
                 conv_res.document.save_as_html(
                     filename=fname,
@@ -565,7 +612,7 @@ def export_documents(
 
             # Export HTML format:
             if export_html_split_page:
-                fname = output_dir / f"{doc_filename}.html"
+                fname = output_file or output_dir / f"{doc_filename}.html"
                 _log.info(f"writing HTML output to {fname}")
                 if show_layout:
                     ser = HTMLDocSerializer(
@@ -591,17 +638,14 @@ def export_documents(
 
             # Export Text format:
             if export_txt:
-                fname = output_dir / f"{doc_filename}.txt"
+                fname = output_file or output_dir / f"{doc_filename}.txt"
                 _log.info(f"writing TXT output to {fname}")
-                conv_res.document.save_as_markdown(
-                    filename=fname,
-                    strict_text=True,
-                    image_mode=ImageRefMode.PLACEHOLDER,
-                )
+                with fname.open("w", encoding="utf-8") as fp:
+                    fp.write(conv_res.document.export_to_text())
 
             # Export Markdown format:
             if export_md:
-                fname = output_dir / f"{doc_filename}.md"
+                fname = output_file or output_dir / f"{doc_filename}.md"
                 _log.info(f"writing Markdown output to {fname}")
                 conv_res.document.save_as_markdown(
                     filename=fname, image_mode=image_export_mode
@@ -624,32 +668,32 @@ def export_documents(
 
             # Export Document Tags format:
             if export_doctags:
-                fname = output_dir / f"{doc_filename}.doctags"
+                fname = output_file or output_dir / f"{doc_filename}.doctags"
                 _log.info(f"writing Doc Tags output to {fname}")
                 conv_res.document.save_as_doctags(filename=fname)
 
             # Export WebVTT format:
             if export_vtt:
-                fname = output_dir / f"{doc_filename}.vtt"
+                fname = output_file or output_dir / f"{doc_filename}.vtt"
                 _log.info(f"writing WebVTT output to {fname}")
                 conv_res.document.save_as_vtt(filename=fname)
 
             # Export DocLang format:
             if export_doclang:
-                fname = output_dir / f"{doc_filename}.dclg.xml"
+                fname = output_file or output_dir / f"{doc_filename}.dclg.xml"
                 _log.info(f"writing DocLang output to {fname}")
                 with fname.open("w", encoding="utf-8") as fp:
                     fp.write(conv_res.document.export_to_doclang())
 
             # Export DCLX format:
             if export_dclx:
-                fname = output_dir / f"{doc_filename}.dclx"
+                fname = output_file or output_dir / f"{doc_filename}.dclx"
                 _log.info(f"writing DCLX output to {fname}")
                 conv_res.document.save_as_doclang_archive(filename=fname)
 
             # Export LaTeX format:
             if export_latex:
-                fname = output_dir / f"{doc_filename}.tex"
+                fname = output_file or output_dir / f"{doc_filename}.tex"
                 _log.info(f"writing LaTeX output to {fname}")
                 ser_res = LaTeXDocSerializer(doc=conv_res.document).serialize()
                 with fname.open("w", encoding="utf-8") as fp:
@@ -657,7 +701,7 @@ def export_documents(
 
             # Export Chunks format:
             if export_chunks and chunker_obj is not None:
-                fname = output_dir / f"{doc_filename}.chunks.jsonl"
+                fname = output_file or output_dir / f"{doc_filename}.chunks.jsonl"
                 _log.info(f"writing Chunks output to {fname}")
                 with fname.open("w", encoding="utf-8") as fp:
                     for i, chunk in enumerate(
@@ -778,7 +822,7 @@ def convert(  # noqa: C901
     from_formats: list[str] = typer.Option(
         None,
         "--from",
-        help="Input formats to accept. Use 'odf' for odt, ods, and odp. Defaults to all supported formats.",
+        help="Input formats to accept. Use 'odf' for odt, ods, and odp. Defaults to all.",
     ),
     to_formats: list[OutputFormat] = typer.Option(
         None, "--to", help="Specify output formats. Defaults to Markdown."
@@ -813,7 +857,12 @@ def convert(  # noqa: C901
     html_image_headers: str = typer.Option(
         None,
         "--html-image-headers",
-        help="Specify http request headers used when fetching HTML and EPUB image resources in the form of a JSON string",
+        help="Specify http request headers used when fetching HTML and EPUB image resources in the form of a JSON string. They are only sent to the source document's origin, or to the origins given with --html-image-headers-origin.",
+    ),
+    html_image_headers_origins: list[str] = typer.Option(
+        None,
+        "--html-image-headers-origin",
+        help="Origin (e.g. https://cdn.example.com) allowed to receive --html-image-headers. Can be repeated. Replaces the default, which is the source document's origin.",
     ),
     image_export_mode: Annotated[
         ImageRefMode,
@@ -918,6 +967,16 @@ def convert(  # noqa: C901
         typer.Option(
             ...,
             help="If enabled, the table structure model will be used to extract table information.",
+        ),
+    ] = True,
+    reading_order_separators: Annotated[
+        bool,
+        typer.Option(
+            "--reading-order-separators/--no-reading-order-separators",
+            help=(
+                "Use visible horizontal and vertical PDF rules as structural "
+                "signals for reading order."
+            ),
         ),
     ] = True,
     layout_engine: Annotated[
@@ -1037,6 +1096,16 @@ def convert(  # noqa: C901
             ..., help="Enable chart data extraction from bar, pie, and line charts."
         ),
     ] = False,
+    chart_extraction_preset: Annotated[
+        str,
+        typer.Option(
+            "--chart-extraction-preset",
+            help=(
+                "Choose the chart extraction preset. Available presets: "
+                f"{', '.join(chart_extraction_preset_ids)}"
+            ),
+        ),
+    ] = "granite_vision_v4",
     artifacts_path: Annotated[
         Path | None,
         typer.Option(..., help="If provided, the location of the model artifacts."),
@@ -1073,6 +1142,16 @@ def convert(  # noqa: C901
     output: Annotated[
         Path, typer.Option(..., help="Output directory where results are saved.")
     ] = Path("."),
+    output_file: Annotated[
+        Path | None,
+        typer.Option(
+            "--output-file",
+            help=(
+                "Write the primary result to this exact path. Requires one input "
+                "document and one output format."
+            ),
+        ),
+    ] = None,
     verbose: Annotated[
         int,
         typer.Option(
@@ -1179,7 +1258,17 @@ def convert(  # noqa: C901
             help="If enabled, it saves the profiling summaries to json.",
         ),
     ] = False,
+    progress: Annotated[
+        bool | None,
+        typer.Option(
+            "--progress/--no-progress",
+            help="Show progress bars for pages and enrichment on stderr. On by "
+            "default when stderr is a terminal and --quiet is not given.",
+        ),
+    ] = None,
 ):
+    _require_local_model_stack("docling convert")
+
     # Heavy backend/converter/pipeline imports are deferred to here so the CLI
     # (and `convert-remote`) stay importable without the local PDF stack
     # (pypdfium2 / docling_parse). Only local `convert` needs them.
@@ -1198,6 +1287,7 @@ def convert(  # noqa: C901
         FormatOption,
         HTMLFormatOption,
         IWorkKeynoteFormatOption,
+        IWorkNumbersFormatOption,
         IWorkPagesFormatOption,
         LatexFormatOption,
         MarkdownFormatOption,
@@ -1234,6 +1324,9 @@ def convert(  # noqa: C901
 
     log_format = "%(asctime)s\t%(levelname)s\t%(name)s: %(message)s"
 
+    if progress is None:
+        progress = not quiet and ProgressPrinter.is_terminal(sys.stderr)
+
     if verbose == 0:
         logging.basicConfig(level=logging.WARNING, format=log_format)
         if not quiet:
@@ -1241,8 +1334,12 @@ def convert(  # noqa: C901
             # long-running conversions (e.g. directories of audio files) can see
             # which input is currently in flight. --quiet opts back out for callers
             # (e.g. AI agents) that need fully silent output.
-            logging.getLogger("docling.pipeline.base_pipeline").setLevel(logging.INFO)
-            logging.getLogger("docling.document_converter").setLevel(logging.INFO)
+            # The progress printer shows the same per-file lines, and more.
+            if not progress:
+                logging.getLogger("docling.pipeline.base_pipeline").setLevel(
+                    logging.INFO
+                )
+                logging.getLogger("docling.document_converter").setLevel(logging.INFO)
             # Model download, load and inference are the other long-running steps
             # with no output of their own: without these a multi-gigabyte fetch or
             # a slow first inference looks like the CLI has hung.
@@ -1306,6 +1403,11 @@ def convert(  # noqa: C901
             "[red]Error: --html-image-headers requires --html-image-fetch remote or all.[/red]"
         )
         raise typer.Abort()
+    if html_image_headers_origins and parsed_html_image_headers is None:
+        err_console.print(
+            "[red]Error: --html-image-headers-origin requires --html-image-headers.[/red]"
+        )
+        raise typer.Abort()
 
     if profiling or save_profiling:
         settings.debug.profile_pipeline_timings = True
@@ -1324,9 +1426,13 @@ def convert(  # noqa: C901
                         input_doc_paths.extend(
                             _iter_input_paths_from_directory(local_path, from_formats)
                         )
-                    elif _is_temporary_word_file(local_path):
-                        _log.info(f"Ignoring temporary Word file: {local_path}")
-                    elif _is_html_source(src, from_formats):
+                    elif _is_office_lock_file(local_path):
+                        _log.info(f"Ignoring temporary Office file: {local_path}")
+                    elif _is_html_source(src, from_formats) or _is_latex_source(
+                        local_path, from_formats
+                    ):
+                        # Keep the file in place: these backends resolve images
+                        # and included files relative to the document.
                         input_doc_paths.append(local_path)
                     else:
                         resolved_source = resolve_source_to_path(
@@ -1354,8 +1460,8 @@ def convert(  # noqa: C901
                             _iter_input_paths_from_directory(local_path, from_formats)
                         )
                     elif local_path.exists():
-                        if _is_temporary_word_file(local_path):
-                            _log.info(f"Ignoring temporary Word file: {local_path}")
+                        if _is_office_lock_file(local_path):
+                            _log.info(f"Ignoring temporary Office file: {local_path}")
                         else:
                             input_doc_paths.append(local_path)
                     else:
@@ -1370,6 +1476,18 @@ def convert(  # noqa: C901
 
         if to_formats is None:
             to_formats = [OutputFormat.MARKDOWN]
+
+        if output_file is not None:
+            if len(input_doc_paths) != 1:
+                err_console.print(
+                    "[red]Error: --output-file requires exactly one input document.[/red]"
+                )
+                raise typer.Abort()
+            if len(to_formats) != 1:
+                err_console.print(
+                    "[red]Error: --output-file requires exactly one output format.[/red]"
+                )
+                raise typer.Abort()
 
         export_flags = _export_flags_from_formats(to_formats)
 
@@ -1423,6 +1541,17 @@ def convert(  # noqa: C901
             table_structure_factory.create_options(kind=table_structure_engine)
         )
 
+        try:
+            chart_extraction_options = ChartExtractionVlmEngineOptions.from_preset(
+                chart_extraction_preset
+            )
+        except KeyError as exc:
+            raise typer.BadParameter(
+                f"Unknown chart extraction preset {chart_extraction_preset!r}. "
+                f"Available presets: {', '.join(chart_extraction_preset_ids)}",
+                param_hint="--chart-extraction-preset",
+            ) from exc
+
         if pipeline in {ProcessingPipeline.STANDARD, ProcessingPipeline.LEGACY}:
             pipeline_cls = (
                 LegacyStandardPdfPipeline
@@ -1436,6 +1565,7 @@ def convert(  # noqa: C901
                 do_ocr=ocr,
                 ocr_options=ocr_options,
                 do_table_structure=tables,
+                use_reading_order_separators=reading_order_separators,
                 layout_options=layout_options,
                 table_structure_options=table_structure_options,
                 do_code_enrichment=enrich_code,
@@ -1443,6 +1573,7 @@ def convert(  # noqa: C901
                 do_picture_description=enrich_picture_description,
                 do_picture_classification=enrich_picture_classes,
                 do_chart_extraction=enrich_chart_extraction,
+                chart_extraction_options=chart_extraction_options,
                 document_timeout=document_timeout,
             )
             if isinstance(
@@ -1480,6 +1611,7 @@ def convert(  # noqa: C901
                 do_picture_description=enrich_picture_description,
                 do_picture_classification=enrich_picture_classes,
                 do_chart_extraction=enrich_chart_extraction,
+                chart_extraction_options=chart_extraction_options,
             )
             if artifacts_path is not None:
                 simple_format_option.artifacts_path = artifacts_path
@@ -1500,6 +1632,7 @@ def convert(  # noqa: C901
                     enable_local_fetch=html_enable_local_fetch,
                     enable_remote_fetch=html_enable_remote_fetch,
                     headers=parsed_html_image_headers,
+                    headers_allowed_origins=html_image_headers_origins or None,
                 )
 
             # Use image-native backend for IMAGE to avoid pypdfium2 locking
@@ -1518,6 +1651,9 @@ def convert(  # noqa: C901
                     pipeline_options=simple_format_option
                 ),
                 InputFormat.IWORK_KEYNOTE: IWorkKeynoteFormatOption(
+                    pipeline_options=simple_format_option
+                ),
+                InputFormat.IWORK_NUMBERS: IWorkNumbersFormatOption(
                     pipeline_options=simple_format_option
                 ),
                 InputFormat.DOCX: WordFormatOption(
@@ -1575,6 +1711,7 @@ def convert(  # noqa: C901
                 do_picture_description=enrich_picture_description,
                 do_picture_classification=enrich_picture_classes,
                 do_chart_extraction=enrich_chart_extraction,
+                chart_extraction_options=chart_extraction_options,
                 document_timeout=document_timeout,
             )
             if parser_threads is not None:
@@ -1609,7 +1746,15 @@ def convert(  # noqa: C901
             pipeline_options = VlmPipelineOptions(
                 accelerator_options=accelerator_options,
                 enable_remote_services=enable_remote_services,
+                do_picture_classification=enrich_picture_classes,
+                do_picture_description=enrich_picture_description,
+                do_chart_extraction=enrich_chart_extraction,
+                chart_extraction_options=chart_extraction_options,
             )
+            if picture_description_max_new_tokens is not None:
+                pipeline_options.picture_description_options.generation_config[
+                    "max_new_tokens"
+                ] = picture_description_max_new_tokens
             if _should_generate_export_images(image_export_mode, to_formats):
                 pipeline_options.generate_page_images = True
                 pipeline_options.generate_picture_images = True
@@ -1676,8 +1821,11 @@ def convert(  # noqa: C901
         # imports above: docling.pipeline.video_pipeline transitively pulls
         # in the ASR/diarization ML stack and video_frame_sampling pulls in
         # scipy, so we avoid paying that cost unless video input is used.
+        # Check the expanded inputs, not the raw sources, so that videos found
+        # in a directory or downloaded from a URL get these options too.
         has_video_source = InputFormat.VIDEO in from_formats and any(
-            _name_matches_format(src, InputFormat.VIDEO) for src in source
+            _name_matches_format(str(path), InputFormat.VIDEO)
+            for path in input_doc_paths
         )
         if has_video_source:
             from docling.datamodel.pipeline_options import VideoPipelineOptions
@@ -1691,6 +1839,7 @@ def convert(  # noqa: C901
             # --video-cuts-per-minute is given (see _auto_prominence).
             video_pipeline_options = VideoPipelineOptions()
             video_pipeline_options.enable_diarization = video_diarization
+            video_pipeline_options.document_timeout = document_timeout
             video_pipeline_options.asr_options = _resolve_asr_options(asr_model)
             if video_sampling_mode == "scene":
                 video_pipeline_options.frame_sampling_mode = (
@@ -1722,31 +1871,40 @@ def convert(  # noqa: C901
             allowed_formats=from_formats,
             format_options=format_options,
         )
+        if progress:
+            doc_converter.progress_printer = ProgressPrinter(len(input_doc_paths))
 
         start_time = time.time()
 
         _log.info(f"paths: {input_doc_paths}")
-        conv_results = doc_converter.convert_all(
-            input_doc_paths,
-            headers=parsed_headers,
-            raises_on_error=abort_on_error,
-            page_range=parsed_page_range,
-        )
+        # Log records go through tqdm while the bars are shown, so they print
+        # above the bars instead of tearing them.
+        with logging_redirect_tqdm() if progress else nullcontext():
+            conv_results = doc_converter.convert_all(
+                input_doc_paths,
+                headers=parsed_headers,
+                raises_on_error=abort_on_error,
+                page_range=parsed_page_range,
+            )
 
-        output.mkdir(parents=True, exist_ok=True)
-        export_documents(
-            conv_results,
-            output_dir=output,
-            **export_flags,
-            show_layout=show_layout,
-            print_timings=profiling,
-            export_timings=save_profiling,
-            image_export_mode=image_export_mode,
-            chunker_type=chunker_type,
-            chunk_max_tokens=chunk_max_tokens,
-            chunk_tokenizer=chunk_tokenizer,
-            debug_vlm_native_output=debug_vlm_native_output,
-        )
+            export_output_dir = (
+                output_file.parent if output_file is not None else output
+            )
+            export_output_dir.mkdir(parents=True, exist_ok=True)
+            export_documents(
+                conv_results,
+                output_dir=export_output_dir,
+                **export_flags,
+                show_layout=show_layout,
+                print_timings=profiling,
+                export_timings=save_profiling,
+                image_export_mode=image_export_mode,
+                chunker_type=chunker_type,
+                chunk_max_tokens=chunk_max_tokens,
+                chunk_tokenizer=chunk_tokenizer,
+                debug_vlm_native_output=debug_vlm_native_output,
+                output_file=output_file,
+            )
 
         end_time = time.time() - start_time
 

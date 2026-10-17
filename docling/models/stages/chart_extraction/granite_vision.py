@@ -5,6 +5,7 @@ import logging
 import re
 from collections.abc import Iterable
 from io import StringIO
+from itertools import pairwise
 from pathlib import Path
 from typing import Callable, Dict, List, Optional
 
@@ -29,6 +30,7 @@ from docling.datamodel.chart_extraction_options import (
     ChartExtractionOutputFormat,
     ChartExtractionVlmEngineOptions,
 )
+from docling.datamodel.progress import EnrichmentStep
 from docling.models.base_model import BaseItemAndImageEnrichmentModel
 from docling.models.inference_engines.vlm import (
     BaseVlmEngine,
@@ -81,6 +83,8 @@ class ChartExtractionVlmEngineModel(BaseItemAndImageEnrichmentModel):
         )
     """
 
+    progress_step = EnrichmentStep.CHART_EXTRACTION
+
     images_scale: float = 2.0
 
     def __init__(
@@ -121,7 +125,23 @@ class ChartExtractionVlmEngineModel(BaseItemAndImageEnrichmentModel):
         ):
             return False
         main_pred = element.meta.classification.get_main_prediction()
-        return main_pred.class_name in SUPPORTED_CHART_TYPES
+        return main_pred.class_name in SUPPORTED_CHART_TYPES and any(
+            self._needs_prompt(element, prompt)
+            for prompt in self.options.active_prompts()
+        )
+
+    @staticmethod
+    def _needs_prompt(item: PictureItem, prompt: str) -> bool:
+        meta = item.meta
+        if meta is None:
+            return True
+        if prompt == "<chart2csv>":
+            return meta.tabular_chart is None
+        if prompt == "<chart2summary>":
+            return meta.description is None
+        if prompt == "<chart2code>":
+            return meta.code is None
+        return True
 
     def _resolve_runtime_engine_type(self) -> VlmEngineType:
         selected_engine_type = getattr(self.engine, "selected_engine_type", None)
@@ -165,11 +185,22 @@ class ChartExtractionVlmEngineModel(BaseItemAndImageEnrichmentModel):
         stop_strings = list(model_spec.stop_strings)
         extra_generation_config = model_spec.get_runtime_input_extra_config(engine_type)
 
-        # Build a flat batch: image x prompt, keeping them in sync
+        # Request only chart fields that the VLM did not already provide.
         batch_inputs: list[VlmEngineInput] = []
-        for image in images:
+        requests: list[tuple[int, str]] = []
+        for img_idx, (item, image) in enumerate(zip(elements, images)):
             for prompt in active_prompts:
-                wire_prompt = _NL_PROMPT_MAP.get(prompt, prompt) if use_nl else prompt
+                if not self._needs_prompt(item, prompt):
+                    continue
+                if (
+                    self.options.output_format
+                    == ChartExtractionOutputFormat.GRANITE_VISION_CHART2CSV
+                ):
+                    wire_prompt = model_spec.prompt
+                else:
+                    wire_prompt = (
+                        _NL_PROMPT_MAP.get(prompt, prompt) if use_nl else prompt
+                    )
                 batch_inputs.append(
                     VlmEngineInput(
                         image=image,
@@ -180,43 +211,39 @@ class ChartExtractionVlmEngineModel(BaseItemAndImageEnrichmentModel):
                         extra_generation_config=extra_generation_config,
                     )
                 )
+                requests.append((img_idx, prompt))
+
+        if not batch_inputs:
+            yield from elements
+            return
 
         if self.engine is None:
             raise RuntimeError("Engine not initialized")
 
         outputs = list(self.engine.predict_batch(batch_inputs))
 
-        n_prompts = len(active_prompts)
-        for img_idx, item in enumerate(elements):
-            if not isinstance(item, PictureItem):
-                yield item
-                continue
+        handler = _OUTPUT_FORMAT_HANDLERS.get(self.options.output_format)
+        if handler is None:
+            _log.error(
+                f"No handler registered for output_format "
+                f"{self.options.output_format!r}; skipping chart extraction."
+            )
+            yield from elements
+            return
 
+        for (img_idx, prompt), output in zip(requests, outputs):
+            item = elements[img_idx]
             if item.meta is None or not isinstance(item.meta, PictureMeta):
                 item.meta = PictureMeta()
+            _log.debug(
+                f"chart extraction [{prompt}] image {img_idx}: {output.text[:120]}"
+            )
+            try:
+                handler(prompt, output.text, item)
+            except Exception as exc:
+                _log.error(f"Failed to process [{prompt}] for image {img_idx}: {exc}")
 
-            handler = _OUTPUT_FORMAT_HANDLERS.get(self.options.output_format)
-            if handler is None:
-                _log.error(
-                    f"No handler registered for output_format "
-                    f"{self.options.output_format!r}; skipping image {img_idx}."
-                )
-                yield item
-                continue
-
-            for prompt_idx, prompt in enumerate(active_prompts):
-                result = outputs[img_idx * n_prompts + prompt_idx].text
-                _log.debug(
-                    f"chart extraction [{prompt}] image {img_idx}: {result[:120]}"
-                )
-                try:
-                    handler(prompt, result, item)
-                except Exception as exc:
-                    _log.error(
-                        f"Failed to process [{prompt}] for image {img_idx}: {exc}"
-                    )
-
-            yield item
+        yield from elements
 
     def __del__(self) -> None:
         if self.engine is not None:
@@ -268,6 +295,7 @@ def _handle_granite_vision_charts(prompt: str, result: str, item: PictureItem) -
 
 _OUTPUT_FORMAT_HANDLERS: Dict[ChartExtractionOutputFormat, _ChartOutputHandler] = {
     ChartExtractionOutputFormat.GRANITE_VISION_CHARTS: _handle_granite_vision_charts,
+    ChartExtractionOutputFormat.GRANITE_VISION_CHART2CSV: _handle_granite_vision_charts,
 }
 
 
@@ -286,19 +314,48 @@ def _is_numeric(value: object) -> bool:
         return False
 
 
+def _is_blank(value: object) -> bool:
+    return pd.isna(value) or not str(value).strip()  # type: ignore[arg-type]
+
+
+def _is_monotone_integer_row(row: pd.Series) -> bool:
+    """Whether a row contains strictly increasing integer labels."""
+    values: list[float] = []
+    cells = list(row)
+    if cells and _is_blank(cells[0]):
+        cells = cells[1:]
+    for value in cells:
+        if not _is_numeric(value):
+            return False
+        number = float(value)
+        if not number.is_integer():
+            return False
+        values.append(number)
+    return len(values) > 1 and all(a < b for a, b in pairwise(values))
+
+
 def _dataframe_to_tabledata(df: pd.DataFrame) -> TableData:
     """Convert a pandas DataFrame into a ``TableData`` object."""
     table_cells: list[TableCell] = []
 
-    first_row_is_header = len(df) > 0 and all(
-        not _is_numeric(val) for val in df.iloc[0]
+    # The chart model is prompted to emit CSV with headers. Mixed headers
+    # (e.g. Category,2020,2021) must not be mistaken for body rows. For
+    # numeric-only headers, require increasing integer labels and a body row
+    # without that pattern to avoid guessing on ordinary numeric grids.
+    first_row_is_header = len(df) > 0 and (
+        any(not _is_blank(value) and not _is_numeric(value) for value in df.iloc[0])
+        or (
+            len(df) > 1
+            and _is_monotone_integer_row(df.iloc[0])
+            and not _is_monotone_integer_row(df.iloc[1])
+        )
     )
 
     if first_row_is_header:
         for col_idx, value in enumerate(df.iloc[0]):
             table_cells.append(
                 TableCell(
-                    text=str(value),
+                    text="" if pd.isna(value) else str(value),
                     start_row_offset_idx=0,
                     end_row_offset_idx=1,
                     start_col_offset_idx=col_idx,
@@ -327,7 +384,9 @@ def _dataframe_to_tabledata(df: pd.DataFrame) -> TableData:
                     row_span=1,
                     col_span=1,
                     column_header=False,
-                    row_header=not _is_numeric(value),
+                    row_header=(
+                        col_idx == 0 and bool(text.strip()) and not _is_numeric(value)
+                    ),
                     row_section=False,
                     fillable=False,
                 )

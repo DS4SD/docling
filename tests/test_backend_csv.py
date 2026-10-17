@@ -7,8 +7,9 @@ from pathlib import Path
 
 import pytest
 
+from docling.backend.csv_backend import CsvDocumentBackend
 from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
-from docling.datamodel.document import ConversionResult, DoclingDocument
+from docling.datamodel.document import ConversionResult, DoclingDocument, InputDocument
 from docling.document_converter import DocumentConverter
 
 from .test_data_gen_flag import GEN_TEST_DATA
@@ -107,6 +108,75 @@ def test_quoted_newline_in_first_field():
     table = conv_result.document.tables[0]
     assert table.data.num_cols == 3
     assert table.data.table_cells[0].text == "line one\nstill line one"
+
+
+def test_doubled_quotes_are_unescaped():
+    """A doubled quote inside a quoted field is an escaped quote (RFC 4180).
+
+    The dialect is sniffed from the header line, which almost never contains a
+    doubled quote, so `csv.Sniffer` reported `doublequote=False` and the reader
+    kept the doubling, so the value came back with its quotes still doubled.
+    """
+    csv_bytes = b'a,b\n"he said ""hi""",2\n'
+    conv_result = get_converter().convert(
+        DocumentStream(name="quotes.csv", stream=BytesIO(csv_bytes)),
+        raises_on_error=True,
+    )
+    cells = conv_result.document.tables[0].data.table_cells
+    assert [cell.text for cell in cells] == ["a", "b", 'he said "hi"', "2"]
+
+
+def test_doubled_quotes_with_non_comma_delimiter():
+    """The same holds once the sniffer has picked a different delimiter."""
+    csv_bytes = b'a;b\n"say ""x""";2\n'
+    conv_result = get_converter().convert(
+        DocumentStream(name="quotes-semicolon.csv", stream=BytesIO(csv_bytes)),
+        raises_on_error=True,
+    )
+    cells = conv_result.document.tables[0].data.table_cells
+    assert [cell.text for cell in cells] == ["a", "b", 'say "x"', "2"]
+
+
+def test_backslash_escaped_quotes_are_a_load_error():
+    """A file using backslash-escaped quotes (e.g. MySQL SELECT … INTO OUTFILE) fails to load.
+
+    Such files contain bare `"` characters that are not doubled, which is
+    malformed under RFC 4180. The strict parse rejects them as a load error.
+    """
+    conv_result = get_converter().convert(
+        DocumentStream(
+            name="backslash.csv",
+            stream=BytesIO(b'id,text\n1,"say \\"hi\\" now"\n2,plain\n'),
+        ),
+        raises_on_error=False,
+    )
+    assert conv_result.status == ConversionStatus.FAILURE
+
+
+@pytest.mark.parametrize("delimiter", [",", ";", "\t", "|"])
+def test_quoted_newline_with_delimiter_in_first_physical_line(delimiter):
+    """A delimiter inside an unfinished quoted field must not win sniffing."""
+    csv_bytes = (
+        f'"Title: details\ncontinued"{delimiter}value\n1{delimiter}2\n'
+    ).encode()
+    doc = (
+        get_converter()
+        .convert(
+            DocumentStream(name="multiline.csv", stream=BytesIO(csv_bytes)),
+            raises_on_error=True,
+        )
+        .document
+    )
+
+    table_data = doc.tables[0].data
+    assert table_data.num_rows == 2
+    assert table_data.num_cols == 2
+    assert [cell.text for cell in table_data.table_cells] == [
+        "Title: details\ncontinued",
+        "value",
+        "1",
+        "2",
+    ]
 
 
 def test_empty_csv():
@@ -229,6 +299,81 @@ def test_row_of_empty_fields_is_kept():
     assert [cell.text for cell in table_data.table_cells] == ["a", "b", "", ""]
 
 
+@pytest.mark.parametrize("delimiter", [",", ";", "\t", "|", ":"])
+@pytest.mark.parametrize("prefix", ["\n", "\n\n", "\r\n\r\n"])
+@pytest.mark.parametrize("source_kind", ["path", "stream"])
+def test_leading_blank_lines_preserve_nonuniform_dialect(
+    delimiter, prefix, source_kind, tmp_path
+):
+    payload = (
+        prefix + f"name{delimiter}value\na{delimiter}1{delimiter}extra\nb{delimiter}2\n"
+    ).encode()
+    if source_kind == "path":
+        source = tmp_path / "leading.csv"
+        source.write_bytes(payload)
+    else:
+        source = DocumentStream(name="leading.csv", stream=BytesIO(payload))
+
+    with pytest.warns(UserWarning, match="Inconsistent column lengths"):
+        doc = get_converter().convert(source, raises_on_error=True).document
+    data = doc.tables[0].data
+    assert (data.num_rows, data.num_cols) == (3, 3)
+    assert [cell.text for cell in data.table_cells] == [
+        "name",
+        "value",
+        "a",
+        "1",
+        "extra",
+        "b",
+        "2",
+    ]
+
+
+@pytest.mark.parametrize(
+    "prefix",
+    ["\n", "\n" * 4096],
+    ids=["single_blank_line", "many_blank_lines"],
+)
+def test_leading_blank_lines_before_quoted_multiline_header(prefix):
+    payload = (prefix + '"Title: details\ncontinued";value\n1;2\n').encode()
+    doc = (
+        get_converter()
+        .convert(
+            DocumentStream(name="multiline.csv", stream=BytesIO(payload)),
+            raises_on_error=True,
+        )
+        .document
+    )
+    data = doc.tables[0].data
+    assert (data.num_rows, data.num_cols) == (2, 2)
+    assert [cell.text for cell in data.table_cells] == [
+        "Title: details\ncontinued",
+        "value",
+        "1",
+        "2",
+    ]
+
+
+@pytest.mark.parametrize(
+    "payload, expected",
+    [
+        (b"\n;;\na;b;c\n", ["", "", "", "a", "b", "c"]),
+        (b'\n"";b\na;c\n', ["", "b", "a", "c"]),
+        (b"\n ;b\na;c\n", [" ", "b", "a", "c"]),
+    ],
+)
+def test_leading_blank_lines_keep_nonblank_first_record(payload, expected):
+    doc = (
+        get_converter()
+        .convert(
+            DocumentStream(name="nonblank.csv", stream=BytesIO(payload)),
+            raises_on_error=True,
+        )
+        .document
+    )
+    assert [cell.text for cell in doc.tables[0].data.table_cells] == expected
+
+
 def test_file_of_only_blank_lines_is_empty():
     """Dropping every row must leave an empty document, not an empty table."""
     doc = (
@@ -241,3 +386,29 @@ def test_file_of_only_blank_lines_is_empty():
     )
 
     assert len(doc.tables) == 0
+
+
+@pytest.mark.parametrize("delimiter", [",", ";", "\t", "|"])
+def test_repeated_backend_conversion_preserves_dialect(delimiter: str):
+    payload = f"name{delimiter}value\nAlice{delimiter}1\n".encode()
+    stream = BytesIO(payload)
+    in_doc = InputDocument(
+        path_or_stream=stream,
+        filename="repeat.csv",
+        format=InputFormat.CSV,
+        backend=CsvDocumentBackend,
+    )
+    backend = CsvDocumentBackend(in_doc=in_doc, path_or_stream=stream)
+    first = backend.convert()
+    second = backend.convert()
+
+    for doc in (first, second):
+        table = doc.tables[0].data
+        assert (table.num_rows, table.num_cols) == (2, 2)
+        assert [cell.text for cell in table.table_cells] == [
+            "name",
+            "value",
+            "Alice",
+            "1",
+        ]
+    assert first.export_to_dict() == second.export_to_dict()

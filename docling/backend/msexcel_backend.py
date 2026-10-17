@@ -9,7 +9,7 @@ import posixpath
 import shutil
 import warnings
 from copy import deepcopy
-from datetime import datetime
+from datetime import datetime, timezone
 from io import BytesIO
 from pathlib import Path
 from tempfile import mkdtemp
@@ -32,6 +32,7 @@ from docling_core.types.doc import (
     PictureClassificationPrediction,
     PictureMeta,
     ProvenanceItem,
+    RefItem,
     Size,
     TableCell,
     TableData,
@@ -52,6 +53,7 @@ from docling.backend.docx.drawingml.utils import (
     crop_whitespace,
     get_docx_to_pdf_converter,
 )
+from docling.backend.utils.image import normalize_image_for_png
 from docling.datamodel.backend_options import MsExcelBackendOptions
 from docling.datamodel.base_models import FormatToMimeType, InputFormat
 from docling.datamodel.document import InputDocument
@@ -74,6 +76,8 @@ _OPENPYXL_IMPORT_ERROR: ImportError | None = None
 try:  # pragma: no cover - import-time guard
     from openpyxl import Workbook, load_workbook
     from openpyxl.cell.cell import Cell, MergedCell
+    from openpyxl.chart.data_source import AxDataSource, NumDataSource
+    from openpyxl.chart.series import SeriesLabel
     from openpyxl.chartsheet.chartsheet import Chartsheet
     from openpyxl.drawing.image import Image
     from openpyxl.drawing.spreadsheet_drawing import (
@@ -132,6 +136,50 @@ _CHART_TAGNAME_TO_CLASSIFICATION: Final[dict[str, PictureClassificationLabel]] =
 def _has_unsafe_zip_paths(namelist: list[str]) -> bool:
     """Return True if any ZIP member name is absolute or contains a path traversal."""
     return any(m.startswith("/") or ".." in m for m in namelist)
+
+
+def _order_comment_thread(
+    entries: list[tuple[str | None, str | None, tuple[str, str, datetime | None]]],
+) -> list[tuple[str, str, datetime | None]]:
+    """Order the (id, parentId, comment) entries of one cell as a thread.
+
+    OOXML does not fix the element order of threaded comments, so the thread
+    follows the id/parentId links: each comment comes before its replies, and
+    replies to the same comment are sorted by timestamp, then document order.
+    A comment whose parent is missing is a root. Comments that no root reaches
+    (a parentId cycle) are kept at the end, in document order.
+    """
+
+    def sort_key(index: int) -> tuple[bool, datetime, int]:
+        timestamp = entries[index][2][2]
+        if timestamp is None:
+            return (True, datetime.min, index)
+        if timestamp.tzinfo is not None:
+            timestamp = timestamp.astimezone(timezone.utc).replace(tzinfo=None)
+        return (False, timestamp, index)
+
+    ids = {comment_id for comment_id, _, _ in entries if comment_id}
+    roots: list[int] = []
+    children: dict[str, list[int]] = {}
+    for index, (_, parent_id, _) in enumerate(entries):
+        if parent_id in ids:
+            children.setdefault(parent_id, []).append(index)
+        else:
+            roots.append(index)
+
+    ordered: list[int] = []
+    visited: set[int] = set()
+    stack = sorted(roots, key=sort_key, reverse=True)
+    while stack:
+        index = stack.pop()
+        if index in visited:
+            continue
+        visited.add(index)
+        ordered.append(index)
+        replies = children.get(entries[index][0] or "", [])
+        stack.extend(sorted(replies, key=sort_key, reverse=True))
+    ordered.extend(i for i in range(len(entries)) if i not in visited)
+    return [entries[i][2] for i in ordered]
 
 
 @dataclass
@@ -358,21 +406,25 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
 
     def _parse_threaded_comments(
         self, sheet_name: str
-    ) -> dict[str, tuple[str, str, datetime | None]]:
+    ) -> dict[str, list[tuple[str, str, datetime | None]]]:
         """Parse threaded comments from Excel XML for a specific sheet.
 
-        Returns a dict mapping cell coordinates to (author, text, timestamp) tuples.
+        Returns a dict mapping cell coordinates to a list of (author, text, timestamp)
+        tuples for the thread, in parent-before-child order (roots first, then replies
+        ordered by timestamp).
         Only works when path_or_stream is a Path (not BytesIO).
 
         Security Note:
             Uses secure XML parser configuration to prevent XXE attacks and validates
             ZIP file paths to prevent zip-slip attacks.
         """
-        threaded_comments: dict[str, tuple[str, str, datetime | None]] = {}
+        threaded_comments: dict[
+            str, list[tuple[str | None, str | None, tuple[str, str, datetime | None]]]
+        ] = {}
 
         # Only extract from Path objects (BytesIO is consumed by load_workbook)
         if not isinstance(self.path_or_stream, Path):
-            return threaded_comments
+            return {}
 
         # Namespace for threaded comments XML
         ns = {
@@ -386,7 +438,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
             with ZipFile(self.path_or_stream, "r") as zip_file:
                 if _has_unsafe_zip_paths(zip_file.namelist()):
                     _log.warning("Skipping file with unsafe ZIP paths")
-                    return threaded_comments
+                    return {}
 
                 person_map: dict[str, str] = {}
                 try:
@@ -409,7 +461,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
                     None,
                 )
                 if sheet_num is None:
-                    return threaded_comments
+                    return {}
 
                 threaded_file = f"xl/threadedComments/threadedComment{sheet_num}.xml"
                 try:
@@ -451,7 +503,13 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
                                         f"Could not parse timestamp '{timestamp_str}': {e}"
                                     )
 
-                            threaded_comments[cell_ref] = (author, text, timestamp)
+                            threaded_comments.setdefault(cell_ref, []).append(
+                                (
+                                    comment.get("id"),
+                                    comment.get("parentId"),
+                                    (author, text, timestamp),
+                                )
+                            )
 
                 except Exception as e:
                     _log.debug(f"Could not parse {threaded_file}: {e}")
@@ -459,7 +517,10 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         except Exception as e:
             _log.debug(f"Could not parse threaded comments: {e}")
 
-        return threaded_comments
+        return {
+            cell_ref: _order_comment_thread(entries)
+            for cell_ref, entries in threaded_comments.items()
+        }
 
     @override
     def is_valid(self) -> bool:
@@ -628,11 +689,11 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         if sheet_group is None:
             return
 
-        def _top_row(ref: Any) -> float:
+        def _top_row(ref: RefItem) -> float:
             item = ref.resolve(doc)
-            if item is None:
+            if not isinstance(item, DocItem):
                 return float("inf")
-            for prov in getattr(item, "prov", []):
+            for prov in item.prov:
                 if prov.page_no == page_no:
                     return prov.bbox.t
             return float("inf")
@@ -752,21 +813,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
                     )
 
             # Extract comments and link them to cells
-            for (row, col), (author, raw_text, timestamp) in comment_map.items():
-                metadata_parts = []
-                if author:
-                    metadata_parts.append(f"author: {author}")
-                if timestamp:
-                    timestamp_str = timestamp.isoformat(timespec="milliseconds")
-                    metadata_parts.append(f"time: {timestamp_str}")
-
-                if metadata_parts and raw_text:
-                    full_text = f"[{', '.join(metadata_parts)}]: {raw_text}"
-                elif metadata_parts:
-                    full_text = f"[{', '.join(metadata_parts)}]"
-                else:
-                    full_text = raw_text
-
+            for (row, col), thread in comment_map.items():
                 cell_item = self._find_cell_item(doc, page_no, row, col)
                 targets = [cell_item] if cell_item else None
 
@@ -775,11 +822,26 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
                     name=f"comment-{sheet.title}-{sheet.cell(row=row + 1, column=col + 1).coordinate}",
                     content_layer=ContentLayer.NOTES,
                 )
-                doc.add_comment(
-                    text=full_text,
-                    targets=targets,
-                    parent=comment_group,
-                )
+                for author, raw_text, timestamp in thread:
+                    metadata_parts = []
+                    if author:
+                        metadata_parts.append(f"author: {author}")
+                    if timestamp:
+                        timestamp_str = timestamp.isoformat(timespec="milliseconds")
+                        metadata_parts.append(f"time: {timestamp_str}")
+
+                    if metadata_parts and raw_text:
+                        full_text = f"[{', '.join(metadata_parts)}]: {raw_text}"
+                    elif metadata_parts:
+                        full_text = f"[{', '.join(metadata_parts)}]"
+                    else:
+                        full_text = raw_text
+
+                    doc.add_comment(
+                        text=full_text,
+                        targets=targets,
+                        parent=comment_group,
+                    )
 
                 if not targets:
                     _log.debug(
@@ -893,7 +955,8 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
     def _find_data_tables(
         self, sheet: Worksheet
     ) -> tuple[
-        list[ExcelTable], dict[tuple[int, int], tuple[str, str, datetime | None]]
+        list[ExcelTable],
+        dict[tuple[int, int], list[tuple[str, str, datetime | None]]],
     ]:
         """Find all compact rectangular data tables in an Excel worksheet.
 
@@ -905,14 +968,15 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         Returns:
             A tuple containing:
                 - A list of ExcelTable objects representing the data tables
-                - A dict mapping (row, col) to (author, comment_text, timestamp) for cells with comments
+                - A dict mapping (row, col) to the (author, comment_text, timestamp)
+                  tuples of the comment thread on that cell
         """
         merged_cell_index = _MergedCellIndex(sheet)
         bounds = self._find_true_data_bounds(sheet, merged_cell_index)
         tables: list[ExcelTable] = []  # List to store found tables
         visited: set[tuple[int, int]] = set()  # Track already visited cells
         comment_map: dict[
-            tuple[int, int], tuple[str, str, datetime | None]
+            tuple[int, int], list[tuple[str, str, datetime | None]]
         ] = {}  # Collect comments
 
         # Parse threaded comments from XML (Excel 365+ format with proper author names and timestamps)
@@ -939,17 +1003,21 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
                     timestamp = None
 
                     # Check if this is a threaded comment with better data in XML
-                    cell_coord = cell.coordinate
-                    if cell_coord in threaded_comments:
-                        author, raw_text, timestamp = threaded_comments[cell_coord]
-                    elif author.startswith("tc={") and "[Threaded comment]" in raw_text:
-                        # Fallback: extract from openpyxl's text if XML parsing failed
-                        if "Comment:\n" in raw_text:
-                            raw_text = raw_text.split("Comment:\n", 1)[1].strip()
-                        author = "Threaded comment"
+                    thread = threaded_comments.get(cell.coordinate)
+                    if thread is None:
+                        if (
+                            author.startswith("tc={")
+                            and "[Threaded comment]" in raw_text
+                        ):
+                            # Fallback: extract from openpyxl's text if XML parsing failed
+                            if "Comment:\n" in raw_text:
+                                raw_text = raw_text.split("Comment:\n", 1)[1].strip()
+                            author = "Threaded comment"
+                        thread = [(author, raw_text, timestamp)]
 
-                    if raw_text:
-                        comment_map[(ri, rj)] = (author, raw_text, timestamp)
+                    thread = [entry for entry in thread if entry[1]]
+                    if thread:
+                        comment_map[(ri, rj)] = thread
 
                 if cell.value is None or (ri, rj) in visited:
                     continue
@@ -1298,11 +1366,11 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
 
             # Skip images PIL can already handle — openpyxl already added those.
             try:
-                pil_probe = PILImage.open(BytesIO(image_bytes))
+                pil_probe = normalize_image_for_png(PILImage.open(BytesIO(image_bytes)))
                 probe_buf = BytesIO()
                 pil_probe.save(probe_buf, format="PNG")
                 continue  # PIL succeeded; openpyxl took care of this one
-            except (UnidentifiedImageError, OSError):
+            except (UnidentifiedImageError, OSError, ValueError):
                 pass
 
             pil_image = self._convert_emf_to_pil(image_bytes)
@@ -1351,7 +1419,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
                 try:
                     image: Image = cast(Image, item)
                     ref = image.ref
-                    pil_image = (
+                    pil_image = normalize_image_for_png(
                         ref if isinstance(ref, PILImage.Image) else PILImage.open(ref)
                     )
                     doc.add_picture(
@@ -1779,15 +1847,17 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         return True
 
     @staticmethod
-    def _ref_formula(data_source: Any) -> str | None:
+    def _ref_formula(
+        data_source: AxDataSource | NumDataSource | SeriesLabel | None,
+    ) -> str | None:
         """Return the cell-range formula string from a chart data source.
 
         A chart's series title/categories/values are each a small openpyxl
-        object (SeriesLabel, AxDataSource, NumDataSource) that may hold either a
-        numeric reference (``.numRef``) or a string reference (``.strRef``); both
-        expose the range formula on ``.f`` (e.g. "'Sheet1'!$B$2:$B$7").  These
-        objects don't share a common base exposing both attributes, so we probe
-        each — a narrowly-scoped getattr against a third-party API.
+        object that holds a numeric reference (``.numRef``), a string
+        reference (``.strRef``) or both: ``AxDataSource`` has both,
+        ``NumDataSource`` only ``.numRef`` and ``SeriesLabel`` only
+        ``.strRef``.  Each reference exposes the range formula on ``.f``
+        (e.g. "'Sheet1'!$B$2:$B$7").
 
         Args:
             data_source: A chart data-source object, or None.
@@ -1795,14 +1865,14 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         Returns:
             The range-formula string, or None if absent.
         """
-        if data_source is None:
-            return None
-        num_ref = getattr(data_source, "numRef", None)
-        if num_ref is not None and num_ref.f:
-            return num_ref.f
-        str_ref = getattr(data_source, "strRef", None)
-        if str_ref is not None and str_ref.f:
-            return str_ref.f
+        if isinstance(data_source, (AxDataSource, NumDataSource)):
+            num_ref = data_source.numRef
+            if num_ref is not None and num_ref.f:
+                return num_ref.f
+        if isinstance(data_source, (AxDataSource, SeriesLabel)):
+            str_ref = data_source.strRef
+            if str_ref is not None and str_ref.f:
+                return str_ref.f
         return None
 
     def _resolve_reference(self, ref: str) -> list[str]:
