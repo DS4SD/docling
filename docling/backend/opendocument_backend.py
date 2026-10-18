@@ -72,6 +72,7 @@ _ODFDO_AVAILABLE: bool = False
 _ODFDO_IMPORT_ERROR: ImportError | None = None
 try:  # pragma: no cover - import-time guard
     from odfdo import (
+        TOC,
         Document as OdfDocument,
         DrawPage,
         Element,
@@ -87,6 +88,16 @@ try:  # pragma: no cover - import-time guard
     _ODFDO_AVAILABLE = True
 except ImportError as e:  # pragma: no cover - import-time guard
     _ODFDO_IMPORT_ERROR = e
+
+_ODF_INDEX_TAGS = {
+    "text:table-of-content",
+    "text:illustration-index",
+    "text:table-index",
+    "text:object-index",
+    "text:user-index",
+    "text:alphabetical-index",
+    "text:bibliography",
+}
 
 _log = logging.getLogger(__name__)
 
@@ -1121,6 +1132,41 @@ def _add_odf_child(
         _add_odf_children(
             doc,
             element.children,
+            parent=parent,
+            content_layer=content_layer,
+            odf_obj=odf_obj,
+            image_loader=image_loader,
+            comments=comments,
+        )
+    elif (_ODFDO_AVAILABLE and isinstance(element, TOC)) or getattr(
+        element, "tag", None
+    ) in _ODF_INDEX_TAGS:
+        if element.get_attribute("text:display") == "none":
+            content_layer = ContentLayer.INVISIBLE
+        # The visible text of an index lives in its text:index-body child.
+        index_body = None
+        for child in getattr(element, "children", []):
+            if getattr(child, "tag", None) == "text:index-body":
+                index_body = child
+                break
+        children_to_add = (
+            index_body.children
+            if index_body is not None
+            else getattr(element, "children", [])
+        )
+        _add_odf_children(
+            doc,
+            children_to_add,
+            parent=parent,
+            content_layer=content_layer,
+            odf_obj=odf_obj,
+            image_loader=image_loader,
+            comments=comments,
+        )
+    elif getattr(element, "tag", None) in ("text:index-title", "text:index-body"):
+        _add_odf_children(
+            doc,
+            getattr(element, "children", []),
             parent=parent,
             content_layer=content_layer,
             odf_obj=odf_obj,

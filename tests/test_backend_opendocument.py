@@ -2105,3 +2105,115 @@ def test_odp_hidden_slide_goes_to_invisible_layer(tmp_path: Path):
     ]
     assert document.export_to_markdown() == "# Visible slide\n\nPresented text"
     assert hidden_texts == ["Hidden slide", "Backup text"]
+
+
+def test_odt_table_of_contents_extracted(tmp_path: Path):
+    """An ODT generated table of contents is extracted into the document tree.
+
+    The title and entries from the index-body child are extracted in source
+    order into ContentLayer.BODY.
+    """
+    path = tmp_path / "table_of_contents.odt"
+    doc = OdfDocument("text")
+    body = doc.body
+    body.clear()
+    body.append(Paragraph("Intro paragraph."))
+
+    toc = Element.from_tag("text:table-of-content")
+    toc_source = Element.from_tag("text:table-of-content-source")
+    toc_source.set_attribute("text:outline-level", 10)
+    toc_source.append(Element.from_tag("text:index-title-template"))
+    toc.append(toc_source)
+
+    index_body = Element.from_tag("text:index-body")
+    index_title = Element.from_tag("text:index-title")
+    index_title.append(Paragraph("Table of Contents"))
+    index_body.append(index_title)
+    index_body.append(Paragraph("Chapter One"))
+    index_body.append(Paragraph("Section One"))
+    toc.append(index_body)
+    body.append(toc)
+    body.append(Paragraph("Outro paragraph."))
+    doc.save(str(path))
+
+    result = DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path)
+    document = result.document
+
+    items = [
+        item.text for item, _ in document.iterate_items() if isinstance(item, TextItem)
+    ]
+    assert items == [
+        "Intro paragraph.",
+        "Table of Contents",
+        "Chapter One",
+        "Section One",
+        "Outro paragraph.",
+    ]
+    markdown = document.export_to_markdown()
+    assert "Table of Contents" in markdown
+    assert "Chapter One" in markdown
+    assert "Section One" in markdown
+
+
+def test_odt_hidden_table_of_contents_goes_to_invisible_layer(tmp_path: Path):
+    """A hidden table of contents (text:display="none") goes to ContentLayer.INVISIBLE."""
+    path = tmp_path / "hidden_toc.odt"
+    doc = OdfDocument("text")
+    body = doc.body
+    body.clear()
+    body.append(Paragraph("Visible intro."))
+
+    toc = Element.from_tag("text:table-of-content")
+    toc.set_attribute("text:display", "none")
+    index_body = Element.from_tag("text:index-body")
+    index_title = Element.from_tag("text:index-title")
+    index_title.append(Paragraph("Hidden Contents"))
+    index_body.append(index_title)
+    index_body.append(Paragraph("Hidden Chapter"))
+    toc.append(index_body)
+    body.append(toc)
+    body.append(Paragraph("Visible outro."))
+    doc.save(str(path))
+
+    result = DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path)
+    document = result.document
+
+    visible_items = [
+        item.text for item, _ in document.iterate_items() if isinstance(item, TextItem)
+    ]
+    assert visible_items == ["Visible intro.", "Visible outro."]
+
+    hidden_items = [
+        item.text
+        for item, _ in document.iterate_items(
+            included_content_layers={ContentLayer.INVISIBLE}
+        )
+        if isinstance(item, TextItem)
+    ]
+    assert hidden_items == ["Hidden Contents", "Hidden Chapter"]
+
+
+def test_odt_illustration_and_table_indexes(tmp_path: Path):
+    """Other ODF index containers like illustration-index and table-index are extracted."""
+    path = tmp_path / "illustration_index.odt"
+    doc = OdfDocument("text")
+    body = doc.body
+    body.clear()
+
+    idx = Element.from_tag("text:illustration-index")
+    index_body = Element.from_tag("text:index-body")
+    index_title = Element.from_tag("text:index-title")
+    index_title.append(Paragraph("List of Figures"))
+    index_body.append(index_title)
+    index_body.append(Paragraph("Figure 1: Diagram"))
+    idx.append(index_body)
+    body.append(idx)
+    doc.save(str(path))
+
+    result = DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path)
+    document = result.document
+
+    items = [
+        item.text for item, _ in document.iterate_items() if isinstance(item, TextItem)
+    ]
+    assert items == ["List of Figures", "Figure 1: Diagram"]
