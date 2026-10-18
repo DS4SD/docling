@@ -8,6 +8,8 @@ Install ``datasets`` and ``doclang`` first. Use ``--max-items N`` for a short ru
 Pass ``--write-success`` to save valid output, original source bytes, and
 LaTeX and JSON serialized from the resulting DoclingDocument.
 The full stream contains millions of source files and can take a long time.
+Completed files are appended to ``latex-manifest.jsonl``. Run the same command
+again after an interruption to continue with the next unprocessed source file.
 """
 
 import hashlib
@@ -22,6 +24,7 @@ import pytest
 from docling_core.transforms.serializer.doclang import DocLangParams
 from docling_core.transforms.serializer.latex import LaTeXParams
 from docling_core.types.doc import ContentLayer, DocItemLabel
+from pydantic import BaseModel, ValidationError as PydanticValidationError
 
 from docling.backend.latex_backend import LatexDocumentBackend
 from docling.datamodel.base_models import InputFormat
@@ -35,6 +38,49 @@ from .latex_serializer import (
 
 _DATASET = "secemp9/arxiv-complete"
 _SOURCE_EXTENSIONS = {"tex", "ltx"}
+
+
+class _ManifestEntry(BaseModel):
+    paper_id: str
+    path: str
+    stages: list[str]
+
+
+def _read_manifest(path: Path) -> dict[tuple[str, str], _ManifestEntry]:
+    """Load completed files and discard a line interrupted during a write."""
+    if not path.exists():
+        return {}
+
+    entries: dict[tuple[str, str], _ManifestEntry] = {}
+    with path.open("r+b") as stream:
+        line_number = 0
+        while True:
+            offset = stream.tell()
+            line = stream.readline()
+            if not line:
+                break
+            line_number += 1
+            if not line.endswith(b"\n"):
+                stream.truncate(offset)
+                break
+            try:
+                entry = _ManifestEntry.model_validate_json(line)
+            except PydanticValidationError as exc:
+                raise ValueError(
+                    f"Invalid manifest line {line_number}: {path}"
+                ) from exc
+            entries[(entry.paper_id, entry.path)] = entry
+    return entries
+
+
+def test_manifest_recovers_interrupted_write(tmp_path: Path) -> None:
+    manifest_path = tmp_path / "latex-manifest.jsonl"
+    entry = _ManifestEntry(paper_id="1234.5678", path="main.tex", stages=[])
+    complete_line = (entry.model_dump_json() + "\n").encode()
+    manifest_path.write_bytes(complete_line + b'{"paper_id":"unfinished"')
+
+    assert _read_manifest(manifest_path) == {("1234.5678", "main.tex"): entry}
+    assert manifest_path.read_bytes() == complete_line
 
 
 def _local_name(tag: str) -> str:
@@ -79,8 +125,13 @@ def test_arxiv_latex_corpus(
     from doclang import ValidationError, validate
 
     repo_root = Path(__file__).resolve().parents[2]
+    manifest_path = repo_root / "latex-manifest.jsonl"
+    completed = _read_manifest(manifest_path)
     report_path = repo_root / "latex-failures.jsonl"
-    report_path.write_text("", encoding="utf-8")
+    if completed:
+        report_path.touch(exist_ok=True)
+    else:
+        report_path.write_text("", encoding="utf-8")
     dclg_path = tmp_path / "current.dclg"
     artifacts_dir = repo_root / "latex-failures"
     source_dir = artifacts_dir / "sources"
@@ -88,8 +139,19 @@ def test_arxiv_latex_corpus(
     success_dir = repo_root / "latex-success"
     if write_success:
         success_dir.mkdir(exist_ok=True)
-    failures: Counter[str] = Counter()
+    failures: Counter[str] = Counter(
+        stage for entry in completed.values() for stage in entry.stages
+    )
     checked = 0
+    row_stages: list[str] = []
+
+    def finish_row(row: dict) -> None:
+        entry = _ManifestEntry(
+            paper_id=row["paper_id"], path=row["path"], stages=row_stages.copy()
+        )
+        with manifest_path.open("a", encoding="utf-8") as output:
+            output.write(entry.model_dump_json() + "\n")
+        completed[(entry.paper_id, entry.path)] = entry
 
     def report(row: dict, stage: str, error: str, dclg: str | None = None) -> None:
         entry = {
@@ -111,6 +173,7 @@ def test_arxiv_latex_corpus(
         with report_path.open("a", encoding="utf-8") as output:
             output.write(json.dumps(entry, ensure_ascii=False) + "\n")
         failures[stage] += 1
+        row_stages.append(stage)
 
     corpus = load_dataset(_DATASET, "latex", split="train", streaming=True)
     with caplog.at_level(logging.WARNING, logger="docling.backend.latex"):
@@ -119,7 +182,10 @@ def test_arxiv_latex_corpus(
                 break
             if row["ext"] not in _SOURCE_EXTENSIONS:
                 continue
+            if (row["paper_id"], row["path"]) in completed:
+                continue
             checked += 1
+            row_stages = []
             caplog.clear()
 
             source = BytesIO(row["content"])
@@ -136,6 +202,7 @@ def test_arxiv_latex_corpus(
                 document = backend.convert()
             except Exception as exc:
                 report(row, "parse", repr(exc))
+                finish_row(row)
                 continue
 
             backend_errors = [
@@ -192,12 +259,14 @@ def test_arxiv_latex_corpus(
                 dclg_path.write_text(dclg, encoding="utf-8")
             except Exception as exc:
                 report(row, "serialize", repr(exc))
+                finish_row(row)
                 continue
 
             try:
                 root = ET.fromstring(dclg)
             except ET.ParseError as exc:
                 report(row, "xsd", str(exc), dclg)
+                finish_row(row)
                 continue
 
             if _has_inline_formula_content(root):
@@ -227,24 +296,30 @@ def test_arxiv_latex_corpus(
                     parsed_latex = serializer.serialize().text
                 except Exception as exc:
                     report(row, "serialize_latex", repr(exc))
+                    finish_row(row)
                     continue
                 latex_id = _latex_id(row)
                 try:
                     document.save_as_json(success_dir / f"{latex_id}.json")
                 except Exception as exc:
                     report(row, "serialize_json", repr(exc))
+                    finish_row(row)
                     continue
                 (success_dir / f"{latex_id}.tex").write_bytes(row["content"])
                 (success_dir / f"{latex_id}.dclg").write_text(dclg, encoding="utf-8")
                 (success_dir / f"{latex_id}.parsed.tex").write_text(
                     parsed_latex, encoding="utf-8"
                 )
+            finish_row(row)
 
-    summary = f"Checked {checked} source files; report: {report_path}"
+    summary = (
+        f"Checked {checked} new source files ({len(completed)} total); "
+        f"manifest: {manifest_path}; report: {report_path}"
+    )
     terminal_reporter = pytestconfig.pluginmanager.get_plugin("terminalreporter")
     if terminal_reporter is None:
         print(summary)
     else:
         terminal_reporter.write_line(summary)
-    assert checked > 0, "The LaTeX stream contained no .tex or .ltx files"
+    assert completed, "The LaTeX stream contained no .tex or .ltx files"
     assert not failures, f"Corpus failures: {dict(failures)}; report: {report_path}"

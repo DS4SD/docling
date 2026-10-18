@@ -2,6 +2,7 @@ model_artifacts/
 scratch/
 ds_convert_models/
 /latex-failures.jsonl
+/latex-manifest.jsonl
 /latex-failures/
 /latex-success/
 
