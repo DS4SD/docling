@@ -18,11 +18,6 @@ from .verify_utils import check_conversion_result_v2
 GENERATE_V2 = GEN_TEST_DATA
 pytestmark = pytest.mark.ml_pdf_model
 
-SKIP_DOCTAGS_COMPARISON = [
-    "2203.01017v2.pdf",
-    "table_mislabeled_as_picture.pdf",
-]
-
 # PDFs that are tested separately in test_failed_pages.py (intentionally failing pages)
 SKIP_E2E_TEST = ["skipped_1page.pdf", "skipped_2pages.pdf"]
 
@@ -109,7 +104,6 @@ def test_e2e_pdfs_conversions():
                 gt=get_regular_groundtruth_paths(pdf_path),
                 doc_result=doc_result,
                 generate=GENERATE_V2,
-                verify_doctags=pdf_path.name not in SKIP_DOCTAGS_COMPARISON,
             )
         except Exception as exc:
             results.append(
