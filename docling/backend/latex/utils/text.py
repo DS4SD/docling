@@ -167,13 +167,20 @@ class TextHelperMixin:
         text_buffer: list[str | InlineFormula],
         flush_fn: Callable[[], None],
     ) -> None:
-        for node in nodes:
+        index = 0
+        while index < len(nodes):
+            node = nodes[index]
+            consumed = 0
             if isinstance(node, LatexCharsNode):
                 self._process_chars_node(
                     node, doc, parent, formatting, text_label, text_buffer, flush_fn
                 )
             elif isinstance(node, LatexMathNode):
                 self._process_math_node(node, doc, parent, text_buffer, flush_fn)
+            elif isinstance(node, LatexEnvironmentNode) and node.envname == "math":
+                math_text = self._clean_math(node.latex_verbatim(), node.envname)
+                if math_text:
+                    text_buffer.append(InlineFormula(math_text))
             elif isinstance(node, LatexGroupNode):
                 self._append_inline_nodes(
                     node.nodelist or [],
@@ -197,9 +204,17 @@ class TextHelperMixin:
                         flush_fn,
                     )
                 else:
-                    self._process_macro_node_inline(
-                        node, doc, parent, formatting, text_label, text_buffer, flush_fn
+                    consumed = self._process_macro_node_inline(
+                        node,
+                        doc,
+                        parent,
+                        formatting,
+                        text_label,
+                        text_buffer,
+                        flush_fn,
+                        nodes[index + 1 :],
                     )
+            index += 1 + consumed
 
     def _inline_math_argument_nodes(self, node: LatexMacroNode) -> list | None:
         if node.macroname not in (

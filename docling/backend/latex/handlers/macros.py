@@ -76,6 +76,52 @@ _PYPDFIUM2_INSTALL_HINT = (
 )
 
 
+def _skip_latex_space(text: str, cursor: int) -> int:
+    while cursor < len(text) and text[cursor].isspace():
+        cursor += 1
+    return cursor
+
+
+def _latex_group_end(text: str, start: int, opening: str, closing: str) -> int:
+    depth = 0
+    index = start
+    while index < len(text):
+        if text[index] == "\\" and index + 1 < len(text) and text[index + 1] in "{}[]":
+            index += 2
+            continue
+        if text[index] == opening:
+            depth += 1
+        elif text[index] == closing:
+            depth -= 1
+            if depth == 0:
+                return index + 1
+        index += 1
+    return len(text)
+
+
+def _simple_declaration_end(text: str, command: str, cursor: int) -> int | None:
+    cursor = _skip_latex_space(text, cursor)
+    if command == "newif":
+        if cursor >= len(text) or text[cursor] != "\\":
+            return None
+        cursor += 1
+        while cursor < len(text) and text[cursor].isalpha():
+            cursor += 1
+        return cursor
+
+    group_count = 9 if command == "newtheoremstyle" else 1
+    for _ in range(group_count):
+        cursor = _skip_latex_space(text, cursor)
+        if cursor >= len(text) or text[cursor] != "{":
+            return None
+        cursor = _latex_group_end(text, cursor, "{", "}")
+    if command == "newcounter":
+        optional = _skip_latex_space(text, cursor)
+        if optional < len(text) and text[optional] == "[":
+            cursor = _latex_group_end(text, optional, "[", "]")
+    return cursor
+
+
 class MacroHandlerMixin:
     if TYPE_CHECKING:
         _source_dir: Path | None
@@ -150,60 +196,75 @@ class MacroHandlerMixin:
     def _macro_definition_spans(text: str) -> list[tuple[int, int]]:
         """Find balanced definitions that may contain legacy shortcut names."""
         pattern = re.compile(
-            r"\\(?P<command>newcommand|renewcommand|providecommand|def|edef|gdef|xdef)\b"
+            r"\\(?P<command>newcommand|renewcommand|providecommand|"
+            r"newenvironment|newtheoremstyle|newtheorem|newlength|newcounter|"
+            r"newif|def|edef|gdef|xdef)\b"
         )
 
-        def skip_space(cursor: int) -> int:
-            while cursor < len(text) and text[cursor].isspace():
-                cursor += 1
-            return cursor
-
-        def group_end(start: int, opening: str, closing: str) -> int:
-            depth = 0
-            index = start
-            while index < len(text):
-                if (
-                    text[index] == "\\"
-                    and index + 1 < len(text)
-                    and text[index + 1] in "{}[]"
-                ):
-                    index += 2
-                    continue
-                if text[index] == opening:
-                    depth += 1
-                elif text[index] == closing:
-                    depth -= 1
-                    if depth == 0:
-                        return index + 1
-                index += 1
-            return len(text)
-
+        verbatim_start = re.compile(r"\\begin\{(verbatim\*?|lstlisting|minted)\}")
         spans: list[tuple[int, int]] = []
-        for match in pattern.finditer(text):
-            if spans and match.start() < spans[-1][1]:
+        index = 0
+        while index < len(text):
+            if text[index] == "%":
+                newline = text.find("\n", index)
+                index = len(text) if newline < 0 else newline + 1
+                continue
+            if text[index] != "\\":
+                index += 1
+                continue
+            if index + 1 < len(text) and text[index + 1] in "\\%":
+                index += 2
+                continue
+            if match := verbatim_start.match(text, index):
+                end = text.find(r"\end{" + match.group(1) + "}", match.end())
+                index = len(text) if end < 0 else end + len(match.group(0))
+                continue
+            match = pattern.match(text, index)
+            if match is None:
+                index += 1
                 continue
             cursor = match.end()
-            if match.group("command") in MACROS_NEWCOMMAND:
-                cursor = skip_space(cursor)
+            command = match.group("command")
+            if command in {"newif", "newlength", "newcounter", "newtheoremstyle"}:
+                end = _simple_declaration_end(text, command, cursor)
+                if end is not None:
+                    spans.append((match.start(), end))
+                index = end if end is not None else match.end()
+                continue
+            if command in MACROS_NEWCOMMAND | {"newenvironment", "newtheorem"}:
+                cursor = _skip_latex_space(text, cursor)
                 if cursor < len(text) and text[cursor] == "*":
                     cursor += 1
-                cursor = skip_space(cursor)
+                cursor = _skip_latex_space(text, cursor)
                 if cursor < len(text) and text[cursor] == "{":
-                    cursor = group_end(cursor, "{", "}")
+                    cursor = _latex_group_end(text, cursor, "{", "}")
                 elif cursor < len(text) and text[cursor] == "\\":
                     cursor += 1
                     while cursor < len(text) and text[cursor].isalpha():
                         cursor += 1
-                for _ in range(2):
-                    cursor = skip_space(cursor)
+                option_count = 2 if command != "newtheorem" else 1
+                for _ in range(option_count):
+                    cursor = _skip_latex_space(text, cursor)
                     if cursor < len(text) and text[cursor] == "[":
-                        cursor = group_end(cursor, "[", "]")
+                        cursor = _latex_group_end(text, cursor, "[", "]")
             else:
                 while cursor < len(text) and text[cursor] != "{":
                     cursor += 1
-            cursor = skip_space(cursor)
+            cursor = _skip_latex_space(text, cursor)
             if cursor < len(text) and text[cursor] == "{":
-                spans.append((match.start(), group_end(cursor, "{", "}")))
+                end = _latex_group_end(text, cursor, "{", "}")
+                if command == "newenvironment":
+                    second = _skip_latex_space(text, end)
+                    if second < len(text) and text[second] == "{":
+                        end = _latex_group_end(text, second, "{", "}")
+                elif command == "newtheorem":
+                    second = _skip_latex_space(text, end)
+                    if second < len(text) and text[second] == "[":
+                        end = _latex_group_end(text, second, "[", "]")
+                spans.append((match.start(), end))
+                index = end
+            else:
+                index = match.end()
         return spans
 
     def _extract_custom_macros(self, nodes, depth: int = 0):

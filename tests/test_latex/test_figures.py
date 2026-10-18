@@ -6,7 +6,10 @@ from pathlib import Path
 
 import pytest
 from doclang import validate
-from docling_core.transforms.serializer.doclang import DocLangParams
+from docling_core.transforms.serializer.doclang import (
+    DocLangDocSerializer,
+    DocLangParams,
+)
 from docling_core.transforms.serializer.latex import LaTeXParams
 from docling_core.types.doc import ContentLayer, DocItemLabel, GroupLabel
 from docling_core.types.doc.document import PictureMeta
@@ -278,6 +281,36 @@ def test_latex_figure_caption_keeps_inline_formula(
         for item, _ in doc.iterate_items(root=caption)
         if item.label == DocItemLabel.FORMULA
     ] == ["x"]
+
+    public_dclg = doc.export_to_doclang()
+    assert "<caption>" in public_dclg
+    assert (
+        "<formula>x</formula>"
+        in public_dclg.split("<caption>", 1)[1].split("</caption>", 1)[0]
+    )
+    valid_dclg = (
+        DocLangDocSerializer(
+            doc=doc,
+            params=DocLangParams(
+                layers={
+                    ContentLayer.BODY,
+                    ContentLayer.FURNITURE,
+                    ContentLayer.BACKGROUND,
+                }
+            ),
+        )
+        .serialize()
+        .text
+    )
+    public_path = tmp_path / "public-caption.dclg"
+    public_path.write_text(valid_dclg, encoding="utf-8")
+    validate(public_path, allow_empty_namespace=True, xsd_only=True)
+
+    figcaption = (
+        doc.export_to_html().split("<figcaption>", 1)[1].split("</figcaption>", 1)[0]
+    )
+    assert "A" in figcaption
+    assert '<annotation encoding="TeX">x</annotation>' in figcaption
 
     dclg = (
         SourceDocLangSerializer(

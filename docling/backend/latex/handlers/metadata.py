@@ -7,8 +7,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from docling_core.types.doc import DocItemLabel, DoclingDocument, NodeItem
-from docling_core.types.doc.common.meta import BaseMeta
+from docling_core.types.doc import (
+    DocItemLabel,
+    DoclingDocument,
+    GroupItem,
+    GroupLabel,
+    NodeItem,
+)
 from docling_core.types.doc.document import Formatting
 
 from docling.backend.latex.constants import MACROS_METADATA
@@ -35,6 +40,7 @@ except ImportError:
 _ROLE_ALIASES = {"affil": "affiliation"}
 _FOOTNOTE_ROLES = {"thanks", "footnote", "altaffiliation"}
 _SPLIT_ROLES = {"author", "affiliation", "institute", "address"}
+_AFFILIATION_ROLES = {"affiliation", "altaffiliation", "institute", "address"}
 
 
 class LatexMetadataHandler:
@@ -42,10 +48,41 @@ class LatexMetadataHandler:
 
     def __init__(self, backend: LatexDocumentBackend) -> None:
         self._backend = backend
+        self._metadata_groups: dict[str, GroupItem] = {}
+        self._role_groups: dict[tuple[str, str], GroupItem] = {}
 
     def process_preamble(self, nodes: list, doc: DoclingDocument) -> None:
         """Read metadata before the document environment."""
+        self._metadata_groups.clear()
+        self._role_groups.clear()
         self._process_preamble_nodes(nodes, doc, depth=0)
+
+    def _parent_for_role(
+        self, doc: DoclingDocument, parent: NodeItem | None, role: str
+    ) -> GroupItem:
+        parent_ref = parent.self_ref if parent is not None else doc.body.self_ref
+        if parent_ref not in self._metadata_groups:
+            self._metadata_groups[parent_ref] = doc.add_group(
+                parent=parent, label=GroupLabel.UNSPECIFIED, name="metadata"
+            )
+        metadata_group = self._metadata_groups[parent_ref]
+        group_name = (
+            "authors"
+            if role == "author"
+            else "affiliations"
+            if role in _AFFILIATION_ROLES
+            else None
+        )
+        if group_name is None:
+            return metadata_group
+        key = (parent_ref, group_name)
+        if key not in self._role_groups:
+            self._role_groups[key] = doc.add_group(
+                parent=metadata_group,
+                label=GroupLabel.UNSPECIFIED,
+                name=group_name,
+            )
+        return self._role_groups[key]
 
     def _process_preamble_nodes(
         self, nodes: list, doc: DoclingDocument, depth: int
@@ -89,24 +126,15 @@ class LatexMetadataHandler:
             if isinstance(optional, LatexGroupNode) and optional.nodelist:
                 nodes = [*optional.nodelist, LatexCharsNode(chars=" "), *nodes]
         segments = self._split_on_and(nodes) if role in _SPLIT_ROLES else [nodes]
-        parent_ref = parent.self_ref if parent is not None else doc.body.self_ref
-
+        role_parent = self._parent_for_role(doc, parent, role)
         for segment in segments:
-            before = len(doc.texts)
             self._backend._process_nodes(
-                self._replace_inst_markers(segment), doc, parent, formatting, label
+                self._replace_inst_markers(segment),
+                doc,
+                role_parent,
+                formatting,
+                label,
             )
-            for item in doc.texts[before:]:
-                if item.label != label or item.parent.cref != parent_ref:
-                    continue
-                if (
-                    item.meta is not None
-                    and "latex__classification" in item.meta.get_custom_part()
-                ):
-                    continue
-                meta = item.meta or BaseMeta()
-                meta.set_custom_field("latex", "classification", role)
-                item.meta = meta
 
     def _replace_inst_markers(self, nodes: list) -> list:
         """Represent affiliation markers as inline superscript formulas."""

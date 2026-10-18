@@ -21,7 +21,7 @@ from docling.backend.latex.handlers.metadata import LatexMetadataHandler
 from docling.backend.latex.utils.encoding import decode_latex_content
 from docling.backend.latex.utils.latex_context import LATEX_CONTEXT_DB
 from docling.backend.latex.utils.table import TableHelperMixin
-from docling.backend.latex.utils.text import TextHelperMixin
+from docling.backend.latex.utils.text import TextHelperMixin, iter_child_nodelists
 from docling.datamodel.backend_options import LatexBackendOptions
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
@@ -177,18 +177,38 @@ class LatexDocumentBackend(
         return doc
 
     def _preserve_invisible_commands(self, nodes, doc: DoclingDocument) -> None:
-        """Keep masked definitions and ignored preamble commands in source order."""
-        spans = list(self._masked_macro_spans)
-        for node in nodes:
-            if isinstance(node, LatexEnvironmentNode) and node.envname == "document":
-                break
-            if isinstance(node, LatexMacroNode) and node.macroname in MACROS_IGNORED:
-                spans.append((node.pos, node.pos + node.len))
+        """Keep definitions and ignored preamble commands in the invisible layer."""
+        commands = [
+            (start, self.latex_text[start:end])
+            for start, end in self._masked_macro_spans
+        ]
 
-        for start, end in sorted(spans):
+        def visit(items, in_preamble: bool) -> None:
+            for node in items:
+                if (
+                    isinstance(node, LatexMacroNode)
+                    and node.macroname in MACROS_IGNORED
+                ):
+                    if in_preamble or node.macroname.startswith("new"):
+                        commands.append((node.pos, node.latex_verbatim()))
+                if (
+                    isinstance(node, LatexEnvironmentNode)
+                    and node.envname == "document"
+                ):
+                    visit(node.nodelist or [], False)
+                    in_preamble = False
+                elif not (
+                    isinstance(node, LatexEnvironmentNode)
+                    and node.envname in {"verbatim", "lstlisting", "minted"}
+                ):
+                    for children in iter_child_nodelists(node):
+                        visit(children, in_preamble)
+
+        visit(nodes, True)
+        for _, command in sorted(commands):
             doc.add_text(
                 label=DocItemLabel.TEXT,
-                text=self.latex_text[start:end],
+                text=command,
                 content_layer=ContentLayer.INVISIBLE,
             )
 

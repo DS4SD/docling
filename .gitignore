@@ -13,6 +13,7 @@ ds_convert_models/
 *~
 *.dclx
 *.dclg
+!tests/data/latex/groundtruth/*.dclg
 *.xml
 *.zip
 \#*\#

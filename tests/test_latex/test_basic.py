@@ -5,6 +5,7 @@ from io import BytesIO
 from pathlib import Path
 
 import pytest
+from docling_core.transforms.serializer.latex import LaTeXParams
 from docling_core.types.doc import ContentLayer, DocItemLabel, GroupLabel
 
 from docling.backend.latex_backend import LatexDocumentBackend
@@ -15,6 +16,7 @@ from docling.document_converter import DocumentConverter, LatexFormatOption
 
 from ..test_data_gen_flag import GEN_TEST_DATA
 from ..verify_utils import verify_document, verify_export
+from .latex_serializer import SourceLaTeXDocSerializer, SourceLaTeXInlineSerializer
 
 GENERATE = GEN_TEST_DATA
 LATEX_DATA_DIR = Path("./tests/data/latex/sources/")
@@ -227,6 +229,30 @@ def test_e2e_latex_conversions(latex_paths):
         )
         assert verify_export(pred_itxt, str(gt_path) + ".itxt", generate=GENERATE), (
             f"Indented text export mismatch for {latex_path}"
+        )
+
+        pred_dclg = doc.export_to_doclang()
+        assert verify_export(pred_dclg, str(gt_path) + ".dclg", generate=GENERATE), (
+            f"DocLang export mismatch for {latex_path}"
+        )
+
+        pred_latex = (
+            SourceLaTeXDocSerializer(
+                doc=doc,
+                params=LaTeXParams(
+                    layers={ContentLayer.BODY, ContentLayer.INVISIBLE},
+                    document_class="",
+                    packages=[],
+                    include_annotations=False,
+                    enable_chart_tables=False,
+                ),
+                inline_serializer=SourceLaTeXInlineSerializer(),
+            )
+            .serialize()
+            .text
+        )
+        assert verify_export(pred_latex, str(gt_path) + ".latex", generate=GENERATE), (
+            f"LaTeX export mismatch for {latex_path}"
         )
 
         assert verify_document(doc, str(gt_path) + ".json", GENERATE), (

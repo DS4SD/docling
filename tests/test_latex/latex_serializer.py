@@ -23,6 +23,7 @@ from docling_core.types.doc import (
     FloatingItem,
     InlineGroup,
     NodeItem,
+    SectionHeaderItem,
     TextItem,
 )
 from pydantic import PrivateAttr
@@ -90,6 +91,23 @@ class SourceLaTeXTextSerializer(LaTeXTextSerializer):
     ) -> SerializationResult:
         if item.content_layer == ContentLayer.INVISIBLE:
             return create_ser_result(text=item.text, span_source=item)
+        if isinstance(item, SectionHeaderItem) and item.level in (4, 5):
+            if item.text == "" and len(item.children) == 1:
+                child = item.children[0].resolve(doc)
+                if isinstance(child, InlineGroup):
+                    text = doc_serializer.serialize(
+                        item=child, is_inline_scope=True, **kwargs
+                    ).text
+                else:
+                    text = doc_serializer.post_process(text=item.text)
+            else:
+                text = doc_serializer.post_process(
+                    text=item.text,
+                    formatting=item.formatting,
+                    hyperlink=item.hyperlink,
+                )
+            command = "paragraph" if item.level == 4 else "subparagraph"
+            return create_ser_result(text=f"\\{command}{{{text}}}", span_source=item)
         return super().serialize(
             item=item, doc_serializer=doc_serializer, doc=doc, **kwargs
         )
