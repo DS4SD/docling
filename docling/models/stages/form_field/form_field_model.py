@@ -5,14 +5,14 @@
 
 The stage runs after table structure. For every page with widgets it passes
 the widgets, layout clusters and detected table cells to ``keying.assign``,
-which chooses the key of each value, and turns the result into
-``FieldRegionPrediction``s: one item per key-value association.
+which chooses the key of each value, and turns the result into a
+``FormFieldPrediction``: one item per key-value association.
 Outside detected tables, a value in a grid of like values also keeps the
 aligned header along its other axis as a field hint. Items are placed as the
 original stage placed its values: a paragraph that inlines all of an item's widgets
 hosts the item in place, otherwise the enclosing FORM region does, otherwise a
 page-wide region. A value in a cell of a detected table goes into that cell
-instead (``page.predictions.table_fields``), keyed only by text printed in the
+instead (``Table.field_cells``), keyed only by text printed in the
 same cell and without hints: the table's headers already carry the
 association. Text used as a field key leaves the body, also when it shares a
 text block with text that did not, and text blocks that merely re-render a filled value are
@@ -30,8 +30,8 @@ from docling_core.types.doc.page import PdfWidget
 from docling.datamodel.base_models import (
     Cluster,
     FieldItemPrediction,
-    FieldRegionPrediction,
     FieldValuePrediction,
+    FormFieldPrediction,
     Page,
     TableFieldPrediction,
 )
@@ -80,12 +80,13 @@ class _Unit:
 class _Plan:
     """Everything the stage writes to a page, computed before any edit."""
 
-    regions: list[FieldRegionPrediction]
+    regions: FormFieldPrediction
     dropped: set[int]  # clusters whose text all became keys
     trimmed: dict[int, set[int]]  # cluster id -> its cells used as keys or values
     hosts: set[int]  # paragraphs that carry an item in place; never dropped
     values: list[FieldValuePrediction]
-    table_fields: list[TableFieldPrediction] = field(default_factory=list)
+    # table cluster id -> its cells with items, in order
+    table_fields: dict[int, list[TableFieldPrediction]] = field(default_factory=dict)
 
 
 def _walk(clusters: list[Cluster]) -> dict[int, Cluster]:
@@ -185,13 +186,13 @@ def _build_units(
 
 def _cell_units(
     units: list[_Unit], assignment: Assignment
-) -> tuple[list[TableFieldPrediction], list[_Unit]]:
+) -> tuple[dict[int, list[TableFieldPrediction]], list[_Unit]]:
     """Units whose values all sit in one table cell, grouped into that cell.
 
     The table's own row and column headers carry the association there, and
     keying.tables keys such a value only by text of its own cell, so the item
-    keeps its key and drops any hint. Returns the cells, then the units
-    placed as before.
+    keeps its key and drops any hint. Returns the cells by table id, then the
+    units placed as before.
     """
     cells: dict[tuple[int, tuple[int, int], tuple[int, int]], list[_Unit]] = (
         defaultdict(list)
@@ -206,17 +207,17 @@ def _cell_units(
         assert slot is not None
         unit.item = unit.item.model_copy(update={"hint_text": ""})
         cells[slot.table, slot.rows, slot.columns].append(unit)
-    placed = [
-        TableFieldPrediction(
-            table_id=table,
-            start_row_offset_idx=rows[0],
-            end_row_offset_idx=rows[1],
-            start_col_offset_idx=columns[0],
-            end_col_offset_idx=columns[1],
-            items=[unit.item for unit in members],
+    placed: dict[int, list[TableFieldPrediction]] = defaultdict(list)
+    for (table, rows, columns), members in cells.items():
+        placed[table].append(
+            TableFieldPrediction(
+                start_row_offset_idx=rows[0],
+                end_row_offset_idx=rows[1],
+                start_col_offset_idx=columns[0],
+                end_col_offset_idx=columns[1],
+                items=[unit.item for unit in members],
+            )
         )
-        for (table, rows, columns), members in cells.items()
-    ]
     return placed, rest
 
 
@@ -269,26 +270,24 @@ def _place(
     hosts: dict[int, Cluster],
     assignment: Assignment,
     page: Page,
-) -> list[FieldRegionPrediction]:
+) -> FormFieldPrediction:
     """The three placement routes: inline paragraph, FORM region, page-wide."""
-    regions: list[FieldRegionPrediction] = []
+    inline_items: dict[int, FieldItemPrediction] = {}
     rest: list[tuple[BoundingBox, FieldItemPrediction]] = []
     for k, unit in enumerate(units):
         host = hosts.get(k)
         if host is not None:
-            regions.append(
-                FieldRegionPrediction(
-                    source_container_id=host.id, bbox=host.bbox, items=[unit.item]
-                )
-            )
+            inline_items[host.id] = unit.item
             continue
         rest.append((assignment.values[min(unit.positions)].bbox, unit.item))
-    return regions + _form_regions(rest, page)
+    fields = _form_regions(rest, page)
+    fields.inline_items = inline_items
+    return fields
 
 
 def _form_regions(
     items: list[tuple[BoundingBox, FieldItemPrediction]], page: Page
-) -> list[FieldRegionPrediction]:
+) -> FormFieldPrediction:
     """Items grouped by the FORM region holding their box; the rest page-wide."""
     assert page.predictions.layout is not None
     forms = [
@@ -299,23 +298,7 @@ def _form_regions(
     for bbox, item in items:
         form = PdfFormFieldModel._match_form(bbox, forms)
         (loose if form is None else by_form[form.id]).append(item)
-    boxes = {form.id: form.bbox for form in forms}
-    regions = [
-        FieldRegionPrediction(
-            source_container_id=form_id, bbox=boxes[form_id], items=items
-        )
-        for form_id, items in by_form.items()
-    ]
-    if loose:
-        regions.append(
-            FieldRegionPrediction(
-                bbox=BoundingBox.enclosing_bbox(
-                    [value.bbox for item in loose for value in item.values]
-                ),
-                items=loose,
-            )
-        )
-    return regions
+    return FormFieldPrediction(form_items=dict(by_form), loose_items=loose)
 
 
 def _table_children(page: Page) -> set[int]:
@@ -405,7 +388,9 @@ class PdfFormFieldModel(BasePageModel):
                 text="",
                 orig=source_value,
                 bbox=bbox,
-                checkbox="unselected" if off else "selected",
+                checkbox=DocItemLabel.CHECKBOX_UNSELECTED
+                if off
+                else DocItemLabel.CHECKBOX_SELECTED,
             )
 
         return FieldValuePrediction(text=source_value, orig=source_value, bbox=bbox)
@@ -475,7 +460,7 @@ class PdfFormFieldModel(BasePageModel):
         self._commit(page, plan)
 
     def _plan_page(self, page: Page) -> _Plan:
-        """Compute the page's field regions and edits without touching the page."""
+        """Compute the page's field items and edits without touching the page."""
         assert page.size is not None and page.parsed_page is not None
         assert page.predictions.layout is not None
         assignment = _assign(page)
@@ -519,9 +504,20 @@ class PdfFormFieldModel(BasePageModel):
             for cluster_id, cluster in _walk(clusters).items()
             if cluster_id in plan.trimmed
         ]
+        # table_fields keys come from table_map (see _assign), so it is set.
+        structure = page.predictions.tablestructure
+        tables = (
+            []
+            if structure is None
+            else [
+                (structure.table_map[table_id], cells)
+                for table_id, cells in plan.table_fields.items()
+            ]
+        )
         try:
-            page.predictions.field_regions = plan.regions
-            page.predictions.table_fields = plan.table_fields
+            page.predictions.form_fields = plan.regions
+            for table, cells in tables:
+                table.field_cells = cells
             self._drop_clusters(page, plan.dropped)
             self._trim_clusters(page, plan.trimmed)
             self._suppress_duplicate_text(page, plan.values, keep=frozenset(plan.hosts))
@@ -531,8 +527,9 @@ class PdfFormFieldModel(BasePageModel):
                 page.page_no,
                 exc_info=True,
             )
-            page.predictions.field_regions = []
-            page.predictions.table_fields = []
+            page.predictions.form_fields = None
+            for table, _ in tables:
+                table.field_cells = []
             for cluster in clusters:
                 cluster.children = children[cluster.id]
             for cluster, cells, bbox in trimmed:

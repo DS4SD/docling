@@ -12,7 +12,7 @@ from docling_core.types.doc.page import BoundingRectangle, PdfWidget, TextCell
 
 from docling.datamodel.base_models import Cluster, LayoutPrediction, Page
 
-from .test_form_extraction import _materialize
+from .test_form_extraction import _materialize, _regions
 
 # Tall enough for a note, a caption and three rows of PJ-1 page 4.
 PAGE_HEIGHT = 120
@@ -109,8 +109,7 @@ def test_checkbox_in_its_label_block_is_keyed_by_the_whole_block() -> None:
     doc = _materialize(page)
 
     assert [
-        (region.source_container_id, [item.key_text for item in region.items])
-        for region in page.predictions.field_regions
+        (source, [item.key_text for item in items]) for source, items in _regions(page)
     ] == [(row.id, [text]) for row, text in zip(rows, paragraphs)]
     order = []
     for item, _ in doc.iterate_items(with_groups=False):
@@ -139,11 +138,10 @@ def test_two_checkboxes_in_one_block_are_left_to_the_search() -> None:
 
     _materialize(page)
 
-    assert [
-        item.key_text
-        for region in page.predictions.field_regions
-        for item in region.items
-    ] == ["Sim", "Não"]
+    assert [item.key_text for _, items in _regions(page) for item in items] == [
+        "Sim",
+        "Não",
+    ]
 
 
 def _text_field(index: int, bbox: BoundingBox) -> PdfWidget:
@@ -158,11 +156,7 @@ def _text_field(index: int, bbox: BoundingBox) -> PdfWidget:
 
 
 def _keys(page: Page) -> list[str]:
-    return [
-        item.key_text
-        for region in page.predictions.field_regions
-        for item in region.items
-    ]
+    return [item.key_text for _, items in _regions(page) for item in items]
 
 
 def test_hosted_checkbox_key_is_located_by_its_text() -> None:
@@ -266,8 +260,8 @@ def test_plain_option_beside_a_checkbox_block_takes_the_question() -> None:
 
     keyed = {
         item.values[0].bbox.t: item.key_text
-        for region in page.predictions.field_regions
-        for item in region.items
+        for _, items in _regions(page)
+        for item in items
     }
     assert keyed == {27: "3. SEX", 40: "MALE"}
 
@@ -303,8 +297,8 @@ def test_block_a_little_short_of_its_checkbox_still_keys_it() -> None:
 def _keyed_at(page: Page) -> dict[tuple[int, int], str]:
     return {
         (round(item.values[0].bbox.l), round(item.values[0].bbox.t)): item.key_text
-        for region in page.predictions.field_regions
-        for item in region.items
+        for _, items in _regions(page)
+        for item in items
     }
 
 
@@ -459,8 +453,8 @@ def test_boxed_checkboxes_in_a_grid_keep_their_column_header_as_hint() -> None:
 
     keyed = {
         (item.values[0].bbox.l, item.values[0].bbox.t): (item.key_text, item.hint_text)
-        for region in page.predictions.field_regions
-        for item in region.items
+        for _, items in _regions(page)
+        for item in items
     }
     assert keyed == {
         (32, 31): ("Employed", "Applicant"),

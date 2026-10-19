@@ -17,6 +17,7 @@ from docling.datamodel.base_models import (
     ContainerElement,
     FieldRegionElement,
     FigureElement,
+    FormFieldPrediction,
     Page,
     PageElement,
     Table,
@@ -195,11 +196,7 @@ class PageAssembleModel(BasePageModel):
                     elements: List[PageElement] = []
                     headers: List[PageElement] = []
                     body: List[PageElement] = []
-                    field_regions_by_source = {
-                        region.source_container_id: region
-                        for region in page.predictions.field_regions
-                        if region.source_container_id is not None
-                    }
+                    form_fields = page.predictions.form_fields or FormFieldPrediction()
 
                     for cluster in page.predictions.layout.clusters:
                         # _log.info("Cluster label seen:", cluster.label)
@@ -215,10 +212,7 @@ class PageAssembleModel(BasePageModel):
                             # single keyed field item; attach it so it materializes
                             # as a field_item in place (see TextElement.field_item)
                             # instead of being pulled into a separate field_region.
-                            inline_region = field_regions_by_source.get(cluster.id)
-                            field_item = None
-                            if inline_region is not None and inline_region.items:
-                                field_item = inline_region.items[0]
+                            field_item = form_fields.inline_items.get(cluster.id)
                             text_el = TextElement(
                                 label=cluster.label,
                                 id=cluster.id,
@@ -250,20 +244,6 @@ class PageAssembleModel(BasePageModel):
                                     cluster=cluster,
                                     page_no=page.page_no,
                                 )
-                            # AcroForm values that sit in this table's cells
-                            # materialize inside those cells (see
-                            # TableFieldPrediction). A copy: the table
-                            # structure prediction stays as TableFormer left it.
-                            field_cells = [
-                                cell
-                                for cell in page.predictions.table_fields
-                                if cell.table_id == cluster.id
-                            ]
-                            if field_cells:
-                                tbl = tbl.model_copy(
-                                    update={"field_cells": field_cells}
-                                )
-
                             elements.append(tbl)
                             body.append(tbl)
                         elif cluster.label == FIGURE_LABEL:
@@ -284,8 +264,8 @@ class PageAssembleModel(BasePageModel):
                             elements.append(fig)
                             body.append(fig)
                         elif cluster.label in CONTAINER_LABELS:
-                            field_region = field_regions_by_source.get(cluster.id)
-                            if field_region is None:
+                            field_items = form_fields.form_items.get(cluster.id)
+                            if field_items is None:
                                 container_el = ContainerElement(
                                     label=cluster.label,
                                     id=cluster.id,
@@ -297,10 +277,8 @@ class PageAssembleModel(BasePageModel):
                                     label=DocItemLabel.FIELD_REGION,
                                     id=cluster.id,
                                     page_no=page.page_no,
-                                    cluster=cluster.model_copy(
-                                        update={"bbox": field_region.bbox}
-                                    ),
-                                    items=field_region.items,
+                                    cluster=cluster,
+                                    items=field_items,
                                 )
                             elements.append(container_el)
                             body.append(container_el)

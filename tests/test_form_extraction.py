@@ -35,6 +35,7 @@ from docling.backend.docling_parse_backend import (
 from docling.datamodel.base_models import (
     AssembledUnit,
     Cluster,
+    FieldItemPrediction,
     FieldRegionElement,
     InputFormat,
     LayoutPrediction,
@@ -78,6 +79,18 @@ def _convert(*, extract_form_fields: bool) -> ConversionResult:
             InputFormat.PDF: PdfFormatOption(pipeline_options=options),
         }
     ).convert(FORM_PDF)
+
+
+def _regions(page: Page) -> list[tuple[int | None, list[FieldItemPrediction]]]:
+    """The page's field items by route: host paragraph or FORM id, then page-wide."""
+    fields = page.predictions.form_fields
+    if fields is None:
+        return []
+    return [
+        *((host_id, [item]) for host_id, item in fields.inline_items.items()),
+        *fields.form_items.items(),
+        *([(None, fields.loose_items)] if fields.loose_items else []),
+    ]
 
 
 def _conversion_result(page: Page) -> ConversionResult:
@@ -187,15 +200,22 @@ def test_field_mapping_assembly_and_materialization_preserve_regions_and_order()
             field_flags=PUSHBUTTON_FLAG,
         ),
     ]
+    # A FORM keeps its child blocks, as layout postprocessing leaves them.
+    visible_child = Cluster(
+        id=4,
+        label=DocItemLabel.TEXT,
+        bbox=BoundingBox(l=5, t=5, r=35, b=9),
+    )
+    form_1.children = [visible_child]
     page = Page(page_no=1, size=Size(width=100, height=100))
     page.parsed_page = MagicMock(widgets=widgets)
-    page.predictions.layout = LayoutPrediction(clusters=[form_1, form_2, form_3])
+    page.predictions.layout = LayoutPrediction(
+        clusters=[form_1, form_2, form_3, visible_child]
+    )
     conv_res = _conversion_result(page)
 
     assert list(PdfFormFieldModel(enabled=True)(conv_res, [page])) == [page]
-    assert [
-        region.source_container_id for region in page.predictions.field_regions
-    ] == [
+    assert [source for source, _ in _regions(page)] == [
         1,
         2,
         3,
@@ -203,49 +223,32 @@ def test_field_mapping_assembly_and_materialization_preserve_regions_and_order()
     ]
 
     # Keyless items: one value each, one item per widget -- flat shape preserved.
-    def _region_values(region):
-        return [value for item in region.items for value in item.values]
+    def _region_values(items):
+        return [value for item in items for value in item.values]
 
+    regions = _regions(page)
     assert [
-        [value.text for value in _region_values(region)]
-        for region in page.predictions.field_regions
+        [value.text for value in _region_values(items)] for _, items in regions
     ] == [["first", "third", "tie"], ["second"], [""], [""]]
     assert [
-        [value.checkbox for value in _region_values(region)]
-        for region in page.predictions.field_regions
-    ] == [[None, None, None], [None], ["selected"], ["unselected"]]
-    assert all(
-        item.key_text == ""
-        for region in page.predictions.field_regions
-        for item in region.items
-    )
-    assert page.predictions.field_regions[2].items[0].values[0].orig == "/On"
-    assert page.predictions.field_regions[3].items[0].values[0].orig == "/Off"
+        [value.checkbox for value in _region_values(items)] for _, items in regions
+    ] == [
+        [None, None, None],
+        [None],
+        [DocItemLabel.CHECKBOX_SELECTED],
+        [DocItemLabel.CHECKBOX_UNSELECTED],
+    ]
+    assert all(item.key_text == "" for _, items in regions for item in items)
+    assert regions[2][1][0].values[0].orig == "/On"
+    assert regions[3][1][0].values[0].orig == "/Off"
     # The zero-size and push-button widgets are dropped: no extra region and
     # neither their text nor orig reaches any value.
     assert not any(
         value.orig in {"ghost", "Submit"}
-        for region in page.predictions.field_regions
-        for value in _region_values(region)
+        for _, items in regions
+        for value in _region_values(items)
     )
 
-    visible_child = Cluster(
-        id=4,
-        label=DocItemLabel.TEXT,
-        bbox=BoundingBox(l=5, t=5, r=35, b=9),
-    )
-    retained_form_1 = form_1.model_copy(
-        update={
-            "bbox": BoundingBox(l=5, t=5, r=35, b=45),
-            "children": [visible_child],
-        }
-    )
-    retained_form_2 = form_2.model_copy(
-        update={"bbox": BoundingBox(l=60, t=5, r=95, b=45)}
-    )
-    page.predictions.layout = LayoutPrediction(
-        clusters=[retained_form_1, retained_form_2, visible_child]
-    )
     layout_before_assembly = page.predictions.layout.model_copy(deep=True)
     page._backend = MagicMock()
     page._backend.is_valid.return_value = True
@@ -258,11 +261,9 @@ def test_field_mapping_assembly_and_materialization_preserve_regions_and_order()
         for element in page.assembled.elements
         if isinstance(element, FieldRegionElement)
     ]
-    # Only the two FORM blocks left in the layout become region elements;
-    # the other two regions' fields are placed by the reading order.
-    assert len(region_elements) == 2
-    assert region_elements[0].id == form_1.id
-    assert region_elements[0].cluster.bbox == form_1.bbox
+    # Each FORM block with fields becomes a region element; the page-wide
+    # field is placed by the reading order.
+    assert [element.id for element in region_elements] == [1, 2, 3]
     assert region_elements[0].cluster.children == [visible_child]
     assert len({element.id for element in page.assembled.elements}) == len(
         page.assembled.elements
@@ -274,10 +275,9 @@ def test_field_mapping_assembly_and_materialization_preserve_regions_and_order()
         headers=page.assembled.headers,
     )
     doc = ReadingOrderModel(ReadingOrderOptions())(conv_res)
-    # The two fields left outside the layout's FORM regions (the third form is
-    # gone from the layout) are page-wide: placed between the page's blocks by
-    # geometry, one field region per run. Here both sit between the two forms.
-    assert len(doc.field_regions) == 3
+    # One field region per FORM, plus one for the page-wide field, which the
+    # reading order places between the blocks by geometry.
+    assert len(doc.field_regions) == 4
     assert len(doc.field_items) == 6
     assert not any(item.label == DocItemLabel.FIELD_KEY for item in doc.texts)
 
@@ -306,8 +306,9 @@ def test_field_mapping_assembly_and_materialization_preserve_regions_and_order()
             [_value_repr(field.children[0].resolve(doc)) for field in field_items]
         )
     assert values_by_region == [
+        [DocItemLabel.CHECKBOX_SELECTED.value],
         ["first", "third", "tie"],
-        [DocItemLabel.CHECKBOX_SELECTED.value, DocItemLabel.CHECKBOX_UNSELECTED.value],
+        [DocItemLabel.CHECKBOX_UNSELECTED.value],
         ["second"],
     ]
     doc.validate_document()
@@ -349,7 +350,7 @@ def test_suppresses_rendered_duplicate_of_filled_widget() -> None:
     assert outside in remaining  # coincidental match kept
     assert form.children == []  # child ref pruned so assembly stays consistent
     # A printed number is never a key: the value stays keyless.
-    assert page.predictions.field_regions[0].items[0].key_text == ""
+    assert _regions(page)[0][1][0].key_text == ""
 
 
 def _checkbox_cluster(cluster_id: int, bbox: BoundingBox) -> Cluster:
@@ -374,13 +375,14 @@ def test_checkbox_widget_keys_its_option_key_and_lets_as_override_classifier() -
 
     list(PdfFormFieldModel(enabled=True)(conv_res, [page]))
 
-    (region,) = page.predictions.field_regions
-    (item,) = region.items
+    ((_, (item,)),) = _regions(page)
     (value,) = item.values
     assert item.key_text == "Married filing jointly"
     assert item.key_bbox == key_bbox
     assert value.text == ""
-    assert value.checkbox == "unselected"  # from /AS, overriding the classifier
+    assert (
+        value.checkbox == DocItemLabel.CHECKBOX_UNSELECTED
+    )  # from /AS, overriding the classifier
     assert value.bbox == widget_bbox
     assert key not in page.predictions.layout.clusters  # promoted to a key
     assert glyph in page.predictions.layout.clusters  # the mark is no key
@@ -397,10 +399,7 @@ def test_pipeline_materializes_format_neutral_fields() -> None:
     # binds its detached "Full name:" key. All four land in the page-wide
     # region; the keys leave the merged paragraph, and its last line, which
     # keys nothing, stays in the body.
-    assert [
-        region.source_container_id
-        for region in result.pages[0].predictions.field_regions
-    ] == [None]
+    assert [source for source, _ in _regions(result.pages[0])] == [None]
     assert len(result.document.field_regions) == 1
     items = result.document.field_items
     keys = [
@@ -462,7 +461,7 @@ def test_pipeline_materializes_format_neutral_fields() -> None:
     assert "widget_appearance_state" not in serialized
 
     disabled = _convert(extract_form_fields=False)
-    assert disabled.pages[0].predictions.field_regions == []
+    assert _regions(disabled.pages[0]) == []
     assert disabled.document.field_regions == []
     assert disabled.document.field_items == []
     # The hosting paragraph is not dropped -- it is reinterpreted as a field_item
@@ -512,18 +511,18 @@ def test_widgets_inlined_in_paragraph_group_into_one_keyed_item() -> None:
     list(PdfFormFieldModel(enabled=True)(conv_res, [page]))
 
     keyed = [
-        (region, item)
-        for region in page.predictions.field_regions
-        for item in region.items
+        (source, item)
+        for source, items in _regions(page)
+        for item in items
         if item.key_text
     ]
     assert len(keyed) == 1
-    region, item = keyed[0]
-    assert region.source_container_id == paragraph.id
+    source, item = keyed[0]
+    assert source == paragraph.id
     assert item.key_text == "check here and enter amount repaid and interest:"
     assert item.key_bbox == paragraph.bbox
     assert [(v.text, v.checkbox) for v in item.values] == [
-        ("", "unselected"),
+        ("", DocItemLabel.CHECKBOX_UNSELECTED),
         ("1221.00", None),
         ("12.50", None),
     ]
@@ -664,9 +663,9 @@ def test_widget_in_table_goes_into_its_cell_with_value_only(caplog) -> None:
         doc = _materialize(page)
     assert "Form field" not in caplog.text  # the keying ran, not the fallback
 
-    assert page.predictions.field_regions == []
-    (cell_fields,) = page.predictions.table_fields
-    assert cell_fields.table_id == table.id
+    assert _regions(page) == []
+    assert page.predictions.tablestructure is not None
+    (cell_fields,) = page.predictions.tablestructure.table_map[table.id].field_cells
     assert [(i.key_text, i.hint_text) for i in cell_fields.items] == [("", "")]
     # The table keeps its cells: nothing is promoted out of the layout.
     assert [cluster.id for cluster in page.predictions.layout.clusters] == [1]
@@ -758,9 +757,9 @@ def test_widget_between_columns_of_an_incomplete_grid_stays_out_of_the_table() -
 
     list(PdfFormFieldModel(enabled=True)(_conversion_result(page), [page]))
 
-    assert page.predictions.table_fields == []
-    (region,) = page.predictions.field_regions
-    (item,) = region.items
+    assert page.predictions.tablestructure is not None
+    assert page.predictions.tablestructure.table_map[table.id].field_cells == []
+    ((_, (item,)),) = _regions(page)
     assert item.key_text == ""
     assert [value.text for value in item.values] == ["1,000"]
 
@@ -772,8 +771,7 @@ def test_widget_in_table_without_structure_stays_keyless() -> None:
 
     list(PdfFormFieldModel(enabled=True)(_conversion_result(page), [page]))
 
-    (region,) = page.predictions.field_regions
-    (item,) = region.items
+    ((_, (item,)),) = _regions(page)
     assert item.key_text == ""
     assert item.hint_text == ""
     assert [value.text for value in item.values] == ["1,000"]
@@ -802,9 +800,9 @@ def test_keying_failure_keeps_values_without_keys(caplog, monkeypatch) -> None:
         list(PdfFormFieldModel(enabled=True)(_conversion_result(page), [page]))
 
     assert "Form field keying failed on page 1" in caplog.text
-    (region,) = page.predictions.field_regions
-    assert region.source_container_id == form.id
-    assert [(item.key_text, item.values[0].text) for item in region.items] == [
+    ((source, items),) = _regions(page)
+    assert source == form.id
+    assert [(item.key_text, item.values[0].text) for item in items] == [
         ("", "Ada"),
         ("", "Lovelace"),
     ]
@@ -868,11 +866,11 @@ def test_option_keys_leave_a_partly_used_paragraph() -> None:
 
     list(PdfFormFieldModel(enabled=True)(_conversion_result(page), [page]))
 
-    assert [
-        item.key_text
-        for region in page.predictions.field_regions
-        for item in region.items
-    ] == ["I agree to the terms", "Subscribe to newsletter", "Monthly mail digest"]
+    assert [item.key_text for _, items in _regions(page) for item in items] == [
+        "I agree to the terms",
+        "Subscribe to newsletter",
+        "Monthly mail digest",
+    ]
     assert page.predictions.layout.clusters == [paragraph]
     assert [cell.text for cell in paragraph.cells] == ["See example.org for details"]
     assert paragraph.bbox == BoundingBox(l=18, t=55, r=54.5, b=57.75)
@@ -915,8 +913,8 @@ def test_filled_values_do_not_remain_as_a_paragraph_after_their_keys() -> None:
 
     assert [
         (item.key_text, [value.text for value in item.values])
-        for region in page.predictions.field_regions
-        for item in region.items
+        for _, items in _regions(page)
+        for item in items
     ] == [("Full name:", ["John Smith"]), ("City:", ["Paris"])]
     assert page.predictions.layout.clusters == []
 
@@ -935,7 +933,7 @@ def test_failed_commit_restores_a_trimmed_paragraph(caplog, monkeypatch) -> None
         list(PdfFormFieldModel(enabled=True)(_conversion_result(page), [page]))
 
     assert "Form field extraction failed on page 1" in caplog.text
-    assert page.predictions.field_regions == []
+    assert page.predictions.form_fields is None
     assert page.predictions.layout.clusters == [paragraph]
     assert paragraph.cells == cells
     assert paragraph.bbox == bbox
@@ -953,9 +951,9 @@ def test_inline_host_is_not_dropped_as_rendered_duplicate() -> None:
 
     list(PdfFormFieldModel(enabled=True)(_conversion_result(page), [page]))
 
-    (region,) = page.predictions.field_regions
-    assert region.source_container_id == host.id
-    assert [value.text for value in region.items[0].values] == ["Amount 12"]
+    ((source, items),) = _regions(page)
+    assert source == host.id
+    assert [value.text for value in items[0].values] == ["Amount 12"]
     assert host in page.predictions.layout.clusters
 
 
@@ -1050,21 +1048,50 @@ def _host_between_paragraphs(
 
 
 @pytest.mark.parametrize("host_is_source", [True, False])
-def test_reading_order_never_merges_an_inline_host(
-    host_is_source: bool, monkeypatch
-) -> None:
-    # predict_merges joins a paragraph to its continuation, and the merged
-    # paragraph is not emitted on its own. A host becomes a field item and takes
-    # no merged text: merged from, its continuation would vanish; merged into,
-    # its widgets would.
-    page, previous, host, following = _host_between_paragraphs()
-    source, target = (host, following) if host_is_source else (previous, host)
-
-    def predict_merges(self, sorted_elements):
-        cids = {element.ref.cref: element.cid for element in sorted_elements}
-        return {cids[f"#/1/{source.id}"]: [cids[f"#/1/{target.id}"]]}
-
-    monkeypatch.setattr(ReadingOrderPredictor, "predict_merges", predict_merges)
+def test_reading_order_never_merges_an_inline_host(host_is_source: bool) -> None:
+    # predict_merges joins a paragraph to its continuation at the top of the
+    # next column, and the merged paragraph is not emitted on its own. A host
+    # becomes a field item and takes no merged text: merged from, its
+    # continuation would vanish; merged into, its widgets would.
+    left, right = (10, 90), (110, 190)
+    host_column, host_top = (left, 30) if host_is_source else (right, 10)
+    host_bbox = BoundingBox(
+        l=host_column[0], t=host_top, r=host_column[1], b=host_top + 10
+    )
+    previous = _text_cluster(
+        1,
+        BoundingBox(
+            l=10, t=10 if host_is_source else 30, r=90, b=20 if host_is_source else 40
+        ),
+        "Applicants who live in",
+    )
+    host = _text_cluster(2, host_bbox, "check here if you rent")
+    following = _text_cluster(
+        3,
+        BoundingBox(
+            l=110, t=10 if host_is_source else 30, r=190, b=20 if host_is_source else 40
+        ),
+        "and attach the lease",
+    )
+    page = Page(page_no=1, size=Size(width=200, height=100))
+    page.parsed_page = MagicMock(
+        widgets=[
+            _widget(
+                0,
+                BoundingBox(
+                    l=host_bbox.r - 10,
+                    t=host_top + 2,
+                    r=host_bbox.r - 4,
+                    b=host_top + 8,
+                ),
+                "",
+                field_type="/Btn",
+                appearance_state="/Off",
+            )
+        ],
+        hyperlinks=[],
+    )
+    page.predictions.layout = LayoutPrediction(clusters=[previous, host, following])
 
     doc = _materialize(page)
 
@@ -1222,8 +1249,8 @@ def test_painted_cells_survive_candidate_filters_and_abstention(
     assert (key in page.predictions.layout.clusters) is abstain
     assert [
         (item.key_text, [value.text for value in item.values])
-        for region in page.predictions.field_regions
-        for item in region.items
+        for _, items in _regions(page)
+        for item in items
     ] == [("" if abstain else "Full name:", ["John Smith"]), ("", ["Paris"])]
 
 

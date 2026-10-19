@@ -20,6 +20,7 @@ from docling.models.stages.form_field.keying import (
     scope_of,
     solver,
 )
+from docling.models.stages.form_field.keying.inputs import inputs
 
 
 @dataclass
@@ -630,30 +631,10 @@ def test_key_touching_both_boxes_does_not_decide_a_run():
     assert ("field_key", [1], "Last Name") in fields
 
 
-def test_penalized_pairs_match_scoring_every_pair(monkeypatch):
+def test_penalized_pairs_match_scoring_every_pair():
     # penalized_pairs only scores candidates whose boxes meet or whose values
     # follow each other; it must find what scoring every pair finds.
-    fast = solver.penalized_pairs
     compared = 0
-
-    def checked(active, proposed, values, key_texts, h):
-        nonlocal compared
-        every = []
-        for a, b in combinations(range(len(active)), 2):
-            first, second = proposed[active[a]], proposed[active[b]]
-            if key_texts[first.key].scope != key_texts[second.key].scope:
-                continue
-            penalty = 3.0 * solver.crossing(first, second, values, key_texts) + (
-                solver.transition_penalty(first, second, values, key_texts, h)
-            )
-            if penalty:
-                every.append((a, b, penalty))
-        found = fast(active, proposed, values, key_texts, h)
-        assert found == every
-        compared += len(every)
-        return found
-
-    monkeypatch.setattr(solver, "penalized_pairs", checked)
     rng = random.Random(4496)
     for _ in range(60):
         columns = rng.randint(1, 4)
@@ -678,5 +659,21 @@ def test_penalized_pairs_match_scoring_every_pair(monkeypatch):
         if rng.random() < 0.5:  # native order unlike the printed order
             rng.shuffle(widgets)
             widgets = [w.model_copy(update={"index": i}) for i, w in enumerate(widgets)]
-        keyed(snapshot(widgets, texts))
+        page = snapshot(widgets, texts)
+        result = keyed(page)
+        h = inputs(widgets, regions(texts), {}, page.height).h
+        proposed, values, key_texts = result.candidates, result.values, result.key_texts
+        active = list(range(len(proposed)))
+        every = []
+        for a, b in combinations(active, 2):
+            first, second = proposed[a], proposed[b]
+            if key_texts[first.key].scope != key_texts[second.key].scope:
+                continue
+            penalty = 3.0 * solver.crossing(first, second, values, key_texts) + (
+                solver.transition_penalty(first, second, values, key_texts, h)
+            )
+            if penalty:
+                every.append((a, b, penalty))
+        assert solver.penalized_pairs(active, proposed, values, key_texts, h) == every
+        compared += len(every)
     assert compared > 100

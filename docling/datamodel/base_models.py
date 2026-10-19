@@ -436,7 +436,9 @@ class FieldValuePrediction(BaseModel):
     # Selection state for a checkbox/radio widget; None for text-like fields.
     # When set, the value is materialized as an empty field value that nests a
     # CHECKBOX_SELECTED/UNSELECTED child (state lives on the child, not the text).
-    checkbox: Literal["selected", "unselected"] | None = None
+    checkbox: (
+        Literal[DocItemLabel.CHECKBOX_SELECTED, DocItemLabel.CHECKBOX_UNSELECTED] | None
+    ) = None
 
 
 class FieldItemPrediction(BaseModel):
@@ -452,17 +454,18 @@ class FieldItemPrediction(BaseModel):
     hint_text: str = ""
 
 
-class FieldRegionPrediction(BaseModel):
-    source_container_id: int | None = None
-    bbox: BoundingBox
-    items: list[FieldItemPrediction] = []
+class FormFieldPrediction(BaseModel):
+    # One entry per placement route of the form field stage. Items in table
+    # cells are on Table.field_cells instead.
+    inline_items: dict[int, FieldItemPrediction] = {}  # host paragraph id
+    form_items: dict[int, list[FieldItemPrediction]] = {}  # FORM cluster id
+    loose_items: list[FieldItemPrediction] = []  # placed by geometry
 
 
 class TableFieldPrediction(BaseModel):
     # Field items that live inside one cell of a structured table. The table's
     # own row and column headers carry the association, so the items only hold
     # a key printed in that same cell. Offsets follow TableCell's convention.
-    table_id: int  # layout cluster id of the table
     start_row_offset_idx: int
     end_row_offset_idx: int
     start_col_offset_idx: int
@@ -487,7 +490,7 @@ class Table(BasePageElement):
     orientation: Orientation = Orientation.ROT_0
     table_cells: list[TableCell]
     # AcroForm field items placed in this table's cells (see TableFieldPrediction);
-    # attached at page assembly, empty unless form fields are extracted.
+    # written by the form field stage, empty unless form fields are extracted.
     field_cells: list[TableFieldPrediction] = []
 
 
@@ -535,8 +538,7 @@ class EquationPrediction(BaseModel):
 
 class PagePredictions(BaseModel):
     layout: LayoutPrediction | None = None
-    field_regions: list[FieldRegionPrediction] = []
-    table_fields: list[TableFieldPrediction] = []
+    form_fields: FormFieldPrediction | None = None
     tablestructure: TableStructurePrediction | None = None
     figures_classification: FigureClassificationPrediction | None = None
     equations_prediction: EquationPrediction | None = None

@@ -678,15 +678,25 @@ class ReadingOrderModel:
         # placed between the blocks by geometry.
         loose: dict[int, list[FieldItemPrediction]] = defaultdict(list)
         for page in conv_res.pages:
-            for region in page.predictions.field_regions:
-                source = id_to_elem.get(
-                    f"#/{page.page_no}/{region.source_container_id}"
-                )
+            form_fields = page.predictions.form_fields
+            if form_fields is None:
+                continue
+            placed = [
+                *((cid, [item]) for cid, item in form_fields.inline_items.items()),
+                *form_fields.form_items.items(),
+            ]
+            for cluster_id, items in placed:
+                source = id_to_elem.get(f"#/{page.page_no}/{cluster_id}")
                 if not (
                     isinstance(source, FieldRegionElement)
-                    or getattr(source, "field_item", None) is not None
+                    or (
+                        isinstance(source, TextElement)
+                        and source.field_item is not None
+                    )
                 ):
-                    loose[page.page_no].extend(region.items)
+                    loose[page.page_no].extend(items)
+            if form_fields.loose_items:
+                loose[page.page_no].extend(form_fields.loose_items)
 
         def add_fields(
             page_no: int, items: list[FieldItemPrediction], parent: NodeItem | None
@@ -922,15 +932,7 @@ class ReadingOrderModel:
             # the token inlines into <value>. No prov on the child: it shares the
             # value's rect, and the serializer flattens child locations into
             # <value>, so a duplicate prov would emit the same location twice.
-            out_doc.add_text(
-                label=(
-                    DocItemLabel.CHECKBOX_SELECTED
-                    if value.checkbox == "selected"
-                    else DocItemLabel.CHECKBOX_UNSELECTED
-                ),
-                text="",
-                parent=field_value,
-            )
+            out_doc.add_text(label=value.checkbox, text="", parent=field_value)
         return field_value
 
     def _handle_text_element(
