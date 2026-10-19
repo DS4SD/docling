@@ -83,7 +83,9 @@ def create_markdown_parser(*, inline_only: bool = False) -> marko.Markdown:
     return marko.Markdown(
         parser=InlineParser if inline_only else marko.Parser,
         extensions=[
-            "gfm",
+            # GFM adds block elements after InlineParser filters them, and its
+            # strikethrough and autolinks change literal native block content.
+            *([] if inline_only else ["gfm"]),
             MarkoExtension(
                 elements=[
                     Math,
