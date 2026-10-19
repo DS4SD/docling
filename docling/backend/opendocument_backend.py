@@ -78,6 +78,7 @@ try:  # pragma: no cover - import-time guard
         Frame,
         Header,
         List as OdfList,
+        ListHeader,
         ListItem,
         Paragraph,
         Section,
@@ -715,11 +716,11 @@ def _odf_element_text_lines(element: Any) -> list[str]:
     if isinstance(element, OdfList):
         lines: list[str] = []
         for child in element.children:
-            if isinstance(child, ListItem):
+            if isinstance(child, ListHeader | ListItem):
                 lines.extend(_odf_element_text_lines(child))
         return lines
 
-    if isinstance(element, ListItem):
+    if isinstance(element, ListHeader | ListItem):
         lines: list[str] = []
         for child in element.children:
             lines.extend(_odf_element_text_lines(child))
@@ -1314,6 +1315,42 @@ def _add_odf_charts(
     return chart_count
 
 
+def _add_odf_list_header(
+    doc: DoclingDocument,
+    header: ListHeader,
+    parent: NodeItem,
+    content_layer: ContentLayer | None,
+    odf_obj: OdfDocument | None,
+    comments: _OdfComments | None = None,
+) -> None:
+    """Add the paragraphs of a list header as text before its list.
+
+    A list header (``text:list-header``) is the first entry of a list, which
+    is never numbered and has no bullet (ODF 1.3 Part 3, 5.3.3). So it is not
+    a list item.
+    """
+    for child in header.children:
+        if isinstance(child, Header):
+            _add_odf_heading(
+                doc,
+                child,
+                parent=parent,
+                content_layer=content_layer,
+                odf_obj=odf_obj,
+                comments=comments,
+            )
+        elif isinstance(child, Paragraph):
+            item = _add_odf_text_runs(
+                doc,
+                _odf_text_runs(child, odf_obj),
+                label=DocItemLabel.TEXT,
+                parent=parent,
+                content_layer=content_layer,
+            )
+            if comments is not None:
+                comments.attach(doc, item, [child])
+
+
 def _add_odf_list(
     doc: DoclingDocument,
     odf_list: OdfList,
@@ -1326,6 +1363,17 @@ def _add_odf_list(
     flatten_nested_text: bool = True,
     comments: _OdfComments | None = None,
 ) -> _OdfListState | None:
+    for header in odf_list.children:
+        if isinstance(header, ListHeader):
+            _add_odf_list_header(
+                doc,
+                header,
+                parent=parent,
+                content_layer=content_layer,
+                odf_obj=odf_obj,
+                comments=comments,
+            )
+
     if not _odf_list_has_renderable_content(
         odf_list, flatten_nested_text=flatten_nested_text
     ):

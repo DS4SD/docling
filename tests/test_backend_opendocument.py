@@ -788,6 +788,56 @@ def test_odt_list_item_with_only_an_image_has_no_text(tmp_path: Path):
     ] == ["Note body."]
 
 
+def test_odt_list_header_is_kept_before_its_list(tmp_path: Path):
+    """A list header (``text:list-header``) is the unnumbered first entry of a
+    list. Its paragraphs are kept as text before the list, also when the list
+    has no item and when the list is in a table cell."""
+    header_list = (
+        "<text:list><text:list-header><text:p>{}</text:p></text:list-header>{}"
+        "</text:list>"
+    )
+    items = (
+        "<text:list-item><text:p>Flour</text:p></text:list-item>"
+        "<text:list-item><text:p>Water</text:p></text:list-item>"
+    )
+    source = OdfDocument("text")
+    body = source.body
+    body.clear()
+    body.append(Element.from_tag(header_list.format("Ingredients you need:", items)))
+    body.append(Element.from_tag(header_list.format("Only a header", "")))
+    body.append(
+        Element.from_tag(
+            "<table:table><table:table-column/><table:table-row><table:table-cell>"
+            + header_list.format(
+                "Header in a cell",
+                "<text:list-item><text:p>Cell item</text:p></text:list-item>",
+            )
+            + "</table:table-cell></table:table-row></table:table>"
+        )
+    )
+    path = tmp_path / "list_header.odt"
+    source.save(str(path))
+
+    document = (
+        DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path).document
+    )
+
+    body_items = [
+        (item.label, item.text)
+        for item, _level in document.iterate_items()
+        if isinstance(item, TextItem)
+    ]
+    assert body_items == [
+        (DocItemLabel.TEXT, "Ingredients you need:"),
+        (DocItemLabel.LIST_ITEM, "Flour"),
+        (DocItemLabel.LIST_ITEM, "Water"),
+        (DocItemLabel.TEXT, "Only a header"),
+        (DocItemLabel.TEXT, "Header in a cell"),
+        (DocItemLabel.LIST_ITEM, "Cell item"),
+    ]
+    assert document.tables[0].data.table_cells[0].text.startswith("Header in a cell")
+
+
 def test_odt_text_document_title_and_subtitle():
     path = Path("tests/data/odf/sources/text_document_01.odt")
 
