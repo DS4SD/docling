@@ -1,8 +1,9 @@
 # SPDX-FileCopyrightText: The Docling Contributors
 # SPDX-License-Identifier: MIT
 
+import re
 from io import BytesIO
-from time import perf_counter
+from unittest.mock import patch
 from xml.etree import ElementTree as ET
 
 import pytest
@@ -154,10 +155,9 @@ def test_many_unused_macros_do_not_slow_formula_expansion():
     backend._preprocess_custom_macros(backend.latex_text)
     assert len(backend._custom_macros) == 701
 
-    start = perf_counter()
-    for _ in range(10_000):
+    with patch.object(re, "sub", wraps=re.sub) as substitute:
         assert backend._expand_macros(r"x+\used") == "x+1"
-    assert perf_counter() - start < 3
+    assert substitute.call_count < 10
 
 
 def test_verbatim_definition_is_preserved():
