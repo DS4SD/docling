@@ -34,6 +34,7 @@ from docling.datamodel.accelerator_options import AcceleratorDevice, Accelerator
 from docling.datamodel.chart_extraction_options import (
     ChartExtractionModelKind,
     ChartExtractionModelOptions,
+    ChartExtractionVlmEngineOptions,
 )
 from docling.datamodel.extraction_options import ExtractionPromptStyle
 from docling.datamodel.kserve_v2_options import KserveV2OptionsMixin
@@ -52,7 +53,10 @@ from docling.datamodel.object_detection_engine_options import (
 from docling.datamodel.picture_classification_options import (
     DocumentPictureClassifierOptions,
 )
-from docling.datamodel.pipeline_options_asr_model import InlineAsrOptions
+from docling.datamodel.pipeline_options_asr_model import (
+    ApiAsrOptions,
+    InlineAsrOptions,
+)
 from docling.datamodel.pipeline_options_vlm_model import (
     ApiVlmOptions,
     InferenceFramework,
@@ -385,6 +389,18 @@ class RapidOcrOptions(OcrOptions):
             )
         ),
     ] = "onnxruntime"
+    model_size: Annotated[
+        Literal["tiny", "small", "medium"],
+        Field(
+            description=(
+                "Detection/recognition model size for the PP-OCRv6 backbone. Only affects "
+                "languages that resolve to PP-OCRv6 (see `lang`); it has no effect on languages "
+                "served by PP-OCRv5/PP-OCRv4, and never affects the classification model. "
+                "An unsupported combination (e.g. `tiny` with Japanese) raises "
+                "`RapidOcrModelSizeNotSupportedError` rather than falling back silently."
+            )
+        ),
+    ] = "small"
     text_score: Annotated[
         float,
         Field(
@@ -1171,6 +1187,28 @@ class CodeFormulaVlmOptions(StagePresetMixin, VlmEngineOptionsMixin, BaseModel):
         default=True, description="Extract mathematical formulas"
     )
 
+    expansion_factor: float = Field(
+        default=0.18,
+        ge=0.0,
+        description=(
+            "Margin added around each code or formula element when it is cropped "
+            "from the page, as a fraction of the element's width (left and right) "
+            "and height (top and bottom). A wide margin can take in an equation "
+            "number or a neighbouring line, which can make the model loop."
+        ),
+    )
+
+    stop_on_repetition: bool = Field(
+        default=True,
+        description=(
+            "Stop a generation that keeps repeating the same short unit (for "
+            "example `\\quad \\quad ...`) instead of running to max_new_tokens, and "
+            "remove the repeated tail from the output. Inline engines stop the "
+            "looping element early; for API and vLLM engines only the output is "
+            "cleaned up."
+        ),
+    )
+
 
 # =============================================================================
 # PRESET REGISTRATION
@@ -1187,6 +1225,7 @@ VlmConvertOptions.register_preset(stage_model_specs.VLM_CONVERT_PHI4)
 VlmConvertOptions.register_preset(stage_model_specs.VLM_CONVERT_QWEN)
 VlmConvertOptions.register_preset(stage_model_specs.VLM_CONVERT_NANONETS_OCR2)
 VlmConvertOptions.register_preset(stage_model_specs.VLM_CONVERT_NEMOTRON_PARSE_V2)
+VlmConvertOptions.register_preset(stage_model_specs.VLM_CONVERT_MINERU2_PRO)
 VlmConvertOptions.register_preset(stage_model_specs.VLM_CONVERT_GEMMA_12B)
 VlmConvertOptions.register_preset(stage_model_specs.VLM_CONVERT_GEMMA_27B)
 VlmConvertOptions.register_preset(stage_model_specs.VLM_CONVERT_DOLPHIN)
@@ -1214,7 +1253,6 @@ PictureDescriptionVlmEngineOptions.register_preset(stage_model_specs.PICTURE_DES
 CodeFormulaVlmOptions.register_preset(stage_model_specs.CODE_FORMULA_CODEFORMULAV2)
 CodeFormulaVlmOptions.register_preset(stage_model_specs.CODE_FORMULA_GRANITE_DOCLING)
 
-
 # =============================================================================
 # MODULE-LEVEL DEFAULTS FOR NEW PRESET SYSTEM
 # =============================================================================
@@ -1239,6 +1277,12 @@ _default_picture_classification_options = DocumentPictureClassifierOptions.from_
 # Default CodeFormulaVlmOptions using codeformulav2 preset
 _default_code_formula_options = CodeFormulaVlmOptions.from_preset("codeformulav2")
 """Default code/formula options using codeformulav2 preset with AUTO_INLINE runtime."""
+
+# Default ChartExtractionVlmEngineOptions using granite_vision_v4 preset
+_default_chart_extraction_options = ChartExtractionVlmEngineOptions.from_preset(
+    "granite_vision_v4"
+)
+"""Default chart extraction options using granite_vision_v4 with automatic runtime selection."""
 
 
 # Define an enum for the backend options
@@ -1446,7 +1490,7 @@ class ConvertPipelineOptions(PipelineOptions):
             description=(
                 "Configuration for picture description model. Uses new preset system (recommended). "
                 "Default: 'smolvlm' preset. Only applicable when `do_picture_description=True`. "
-                "Example: PictureDescriptionVlmOptions.from_preset('granite_vision')"
+                "Example: PictureDescriptionVlmEngineOptions.from_preset('granite_vision')"
             ),
         ),
     ] = _default_picture_description_options
@@ -1462,14 +1506,16 @@ class ConvertPipelineOptions(PipelineOptions):
         ),
     ] = False
     chart_extraction_options: Annotated[
-        ChartExtractionModelOptions,
+        ChartExtractionVlmEngineOptions,
         Field(
             description=(
-                "Configuration for the chart extraction model, including which model variant to use "
-                "and which output formats to generate (CSV, code, summary)."
+                "Configuration for the chart extraction stage. "
+                "Use ChartExtractionVlmEngineOptions.from_preset('granite_vision_v4') "
+                "(default) or from_preset('granite_vision_v3_3') for the CSV-only model. "
+                "Controls which output formats are generated (chart2csv, chart2summary, chart2code)."
             )
         ),
-    ] = ChartExtractionModelOptions()
+    ] = _default_chart_extraction_options
 
 
 class PaginatedPipelineOptions(ConvertPipelineOptions):
@@ -1760,11 +1806,13 @@ class AsrPipelineOptions(PipelineOptions):
     """
 
     asr_options: Annotated[
-        InlineAsrOptions,
+        InlineAsrOptions | ApiAsrOptions,
         Field(
             description=(
                 "Automatic Speech Recognition (ASR) model configuration for audio transcription. Specifies which "
-                "ASR model to use (e.g., Whisper variants) and model-specific parameters for speech-to-text conversion."
+                "ASR model to use (e.g., Whisper variants) and model-specific parameters for speech-to-text conversion. "
+                "Use `ApiAsrOptions` (with `enable_remote_services=True`) to transcribe with an OpenAI-compatible "
+                "server instead of a model loaded in this process."
             )
         ),
     ] = asr_model_specs.WHISPER_TINY
@@ -1786,7 +1834,7 @@ class VideoPipelineOptions(PipelineOptions):
     """
 
     asr_options: Annotated[
-        InlineAsrOptions,
+        InlineAsrOptions | ApiAsrOptions,
         Field(description="ASR model configuration for the video audio track."),
     ] = asr_model_specs.WHISPER_TINY
 
@@ -1821,8 +1869,17 @@ class VideoPipelineOptions(PipelineOptions):
 
     max_sampled_frames: Annotated[
         int | None,
-        Field(default=None, gt=0, description="Optional cap on sampled frames."),
-    ] = None
+        Field(
+            default=200,
+            gt=0,
+            description=(
+                "Maximum number of frames sampled per video; sampling stops once it "
+                "is reached. The default of 200 bounds memory and output size "
+                "(about 33 minutes at the default 10 s interval). Set to None for "
+                "no limit."
+            ),
+        ),
+    ] = 200
 
     scene_change_smooth_window: Annotated[
         int,
@@ -1997,9 +2054,9 @@ class HeadingHierarchyOptions(BaseModel):
         Field(
             description=(
                 "Optional override of the numbering-scheme precedence (highest level first). "
-                "Known schemes: 'part', 'chapter', 'article', 'roman_u', 'arabic', "
-                "'alpha_u', 'alpha_l', 'roman_l'. When None, a default legal/regulatory "
-                "ordering is used."
+                "Known schemes: 'part', 'chapter', 'division', 'subdivision', 'article', "
+                "'roman_u', 'arabic', 'alpha_u', 'alpha_l', 'roman_l'. When None, a default "
+                "legal/regulatory ordering is used."
             )
         ),
     ] = None
@@ -2051,6 +2108,21 @@ class PdfPipelineOptions(PaginatedPipelineOptions):
             )
         ),
     ] = True
+    extract_form_fields: Annotated[
+        bool,
+        Field(
+            description=(
+                "Extract native interactive PDF widgets (AcroForm) as format-neutral fillable field values, "
+                "each with a field key from printed text associated by page geometry: text in or beside "
+                "its cell, or a whole paragraph that inlines the widget. A widget in a detected table goes "
+                "into its table cell, keyed only by text printed in that same cell; row and column "
+                "headers are not used as keys or hints. Requires the docling-parse backend, which supplies "
+                "page widgets; table cells need table structure. Raw widget metadata remains available only "
+                "on retained parsed pages. Scanned or flattened forms and backends without page widgets are "
+                "unaffected."
+            )
+        ),
+    ] = False
     do_ocr: Annotated[
         bool,
         Field(
@@ -2174,6 +2246,16 @@ class PdfPipelineOptions(PaginatedPipelineOptions):
             )
         ),
     ] = False
+    use_reading_order_separators: Annotated[
+        bool,
+        Field(
+            description=(
+                "Use visible horizontal and vertical PDF rules as structural signals "
+                "for rule-based reading order. This only affects PDF backends that "
+                "expose visible shape geometry."
+            )
+        ),
+    ] = True
     heading_hierarchy_options: Annotated[
         HeadingHierarchyOptions,
         Field(

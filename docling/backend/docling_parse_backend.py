@@ -1,27 +1,20 @@
 # SPDX-FileCopyrightText: The Docling Contributors
 # SPDX-License-Identifier: MIT
 
+from __future__ import annotations
+
 import warnings
 from collections.abc import Iterable, Iterator
 from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional, Union
 
-from docling_core.types.doc import BoundingBox, Size
+from docling_core.types.doc import BoundingBox, CoordOrigin, Size
 from docling_core.types.doc.page import (
     PdfCellRenderingMode,
     PdfTextCell,
     SegmentedPdfPage,
     TextCell,
-)
-from docling_parse.pdf_parser import (
-    ContentConfig,
-    ContentLevel,
-    DecodeConfig,
-    DoclingThreadedPdfParser,
-    PageParseResult,
-    RenderConfig,
-    ThreadedPdfParserConfig,
 )
 from PIL import Image
 
@@ -35,6 +28,34 @@ from docling.exceptions import DocumentLoadError
 from docling.utils.pdf_outline import (
     _PdfOutlineItem,
     extract_outline_from_docling_parse,
+)
+
+# docling-parse is installed by the `format-pdf-docling` extra, but
+# DocumentConverter imports every backend eagerly, so a module-level import here
+# breaks `import docling` on installs that omit the extra - the slim packages in
+# particular. Guard it like the email, opendocument, and xbrl backends do, and
+# surface the failure only when this backend is actually used.
+# See https://github.com/docling-project/docling/issues/3613.
+_DOCLING_PARSE_AVAILABLE: bool = False
+_DOCLING_PARSE_IMPORT_ERROR: ImportError | None = None
+try:  # pragma: no cover - import-time guard
+    from docling_parse.pdf_parser import (
+        ContentConfig,
+        ContentLevel,
+        DecodeConfig,
+        DoclingThreadedPdfParser,
+        PageParseResult,
+        RenderConfig,
+        ThreadedPdfParserConfig,
+    )
+
+    _DOCLING_PARSE_AVAILABLE = True
+except ImportError as e:  # pragma: no cover - import-time guard
+    _DOCLING_PARSE_IMPORT_ERROR = e
+
+_INSTALL_HINT = (
+    "The 'docling-parse' package is required to parse PDF files with this "
+    "backend. Install it with `pip install 'docling-slim[format-pdf-docling]'`."
 )
 
 if TYPE_CHECKING:
@@ -222,6 +243,31 @@ class ThreadedDoclingParsePageBackend(PdfPageBackend):
             )
         ]
 
+    def get_thin_shape_boxes(
+        self, *, max_thickness: float
+    ) -> Optional[list[BoundingBox]]:
+        if not self.is_valid():
+            return []
+
+        page_height = self.get_size().height
+        boxes = []
+        # docling-parse exposes the individual painted paths only through its
+        # page decoder; get_connected_shape_bounding_boxes merges them first.
+        for shape in self._result._require_page_decoder().get_page_shapes():
+            xs, ys = list(shape.get_x()), list(shape.get_y())
+            if not xs or not ys:
+                continue
+            box = BoundingBox(
+                l=min(xs),
+                b=min(ys),
+                r=max(xs),
+                t=max(ys),
+                coord_origin=CoordOrigin.BOTTOMLEFT,
+            )
+            if min(box.width, box.height) <= max_thickness:
+                boxes.append(box.to_top_left_origin(page_height))
+        return boxes
+
     def get_page_image(
         self, scale: float = 1, cropbox: Optional[BoundingBox] = None
     ) -> Image.Image:
@@ -244,10 +290,13 @@ class ThreadedDoclingParseDocumentBackend(PdfDocumentBackend):
 
     def __init__(
         self,
-        in_doc: "InputDocument",
+        in_doc: InputDocument,
         path_or_stream: Union[BytesIO, Path],
         options: Optional[PdfBackendOptions] = None,
     ):
+        if not _DOCLING_PARSE_AVAILABLE:
+            raise ImportError(_INSTALL_HINT) from _DOCLING_PARSE_IMPORT_ERROR
+
         if options is None:
             options = PdfBackendOptions()
         super().__init__(in_doc, path_or_stream, options)
@@ -288,13 +337,18 @@ class ThreadedDoclingParseDocumentBackend(PdfDocumentBackend):
             include_bitmap_bytes=self.options.include_bitmap_images,
         )
 
+        parser_config = ThreadedPdfParserConfig(
+            loglevel="fatal",
+            threads=parser_threads,
+            render_config=render_config,
+            page_content_config=content_config,
+        )
+        if threaded_options.max_concurrent_results is not None:
+            parser_config.max_concurrent_results = (
+                threaded_options.max_concurrent_results
+            )
         self.parser = DoclingThreadedPdfParser(
-            parser_config=ThreadedPdfParserConfig(
-                loglevel="fatal",
-                threads=parser_threads,
-                render_config=render_config,
-                page_content_config=content_config,
-            ),
+            parser_config=parser_config,
             decode_config=decode_config,
         )
         try:
@@ -361,7 +415,7 @@ class DoclingParseDocumentBackend(ThreadedDoclingParseDocumentBackend):
 
     def __init__(
         self,
-        in_doc: "InputDocument",
+        in_doc: InputDocument,
         path_or_stream: Union[BytesIO, Path],
         options: Optional[PdfBackendOptions] = None,
     ):

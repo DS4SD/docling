@@ -52,6 +52,8 @@ from docling.utils.pdf_outline import _PdfOutlineItem
 _DEFAULT_FAMILY_ORDER = [
     "part",  # PART I / TITLE I / BOOK I
     "chapter",  # CHAPTER 1
+    "division",  # DIVISION I / Division 1 / Division A
+    "subdivision",  # SUBDIVISION A / Subdivision a
     "article",  # ARTICLE 1 / SECTION 1 / Clause / § 1
     "roman_u",  # I. II. III.
     "arabic",  # 1. 2. 3.  (and dotted 1.1, 1.1.1 by depth)
@@ -70,19 +72,29 @@ _ROMAN_RE = re.compile(
 )
 
 _KW_PART = re.compile(r"^(part|title|book)\b", re.IGNORECASE)
-_KW_CHAPTER = re.compile(r"^(chapter)\b", re.IGNORECASE)
+# Skip statute citations like "Chapter A-15" (letter-dash-digit); real chapters still match.
+_KW_CHAPTER = re.compile(r"^(chapter)\b(?!\s+[a-z]-\d)", re.IGNORECASE)
 _KW_ARTICLE = re.compile(
     r"^(article|section|clause|schedule|annex|appendix|rule)\b", re.IGNORECASE
 )
+# "Division"/"Subdivision" are ordinary words too ("Division of Powers"), so -- unlike
+# part/chapter/article -- they only count as numbering when an explicit enumerator (an
+# Arabic index, a Roman numeral, or a single letter) follows. The enumerator must be
+# terminated by whitespace, end-of-string, or separator punctuation, so a French elision
+# such as "Division d'appel" (a letter followed by an apostrophe) is not read as a marker.
+_KW_ENUM = r"\s+(\d+|[a-z]|[ivxlcdm]+)(?=\s|$|[.,:;)\]\u2013\u2014-])"
+_KW_DIVISION = re.compile(r"^division" + _KW_ENUM, re.IGNORECASE)
+_KW_SUBDIVISION = re.compile(r"^subdivision" + _KW_ENUM, re.IGNORECASE)
 _SECTION_SYMBOL = re.compile(r"^§+\s*\d")  # § 1 / §§ 1.2
-# Dotted decimal outline (1.1, 1.1.1, ...), terminated by space/end/punctuation.
-_DOTTED = re.compile(r"^(\d+(?:\.\d+)+)(?:[.)\]\s]|$)")
-# Single Arabic index (1. / 2)).
-_ARABIC = re.compile(r"^(\d+)[.)]")
+_SEP = r"(?:[)\]]|[:\-\u2013\u2014](?=\s|$))"
+# Dotted decimal outline (1.1, 1.1.1, ...), terminated by punctuation/space/end.
+_DOTTED = re.compile(r"^\(?\s*(\d+(?:\.\d+)+)(?:[.)\]\s]|[:\-\u2013\u2014](?=\s|$)|$)")
+# Single Arabic index (1. / 1) / (1) / 1: / 1 -).
+_ARABIC = re.compile(r"^\(?\s*(\d+)\s*(?:\.(?!\d)|" + _SEP + r")")
 # A bare index is only accepted with document-wide sequence evidence.
 _BARE_ARABIC = re.compile(r"^(\d+)\s+\S")
-# Single/multi letter marker, optionally parenthesized: (a) / A. / (iv) / IV.
-_LETTER = re.compile(r"^\(?\s*([A-Za-z]+)\s*[).]")
+# Single/multi letter marker, optionally parenthesized: (a) / A. / (iv) / IV. / A: / A -
+_LETTER = re.compile(r"^\(?\s*([A-Za-z]+)\s*(?:\.|" + _SEP + r")")
 
 
 @dataclass
@@ -116,6 +128,18 @@ def _classify_letter(token: str) -> _Marker | None:
     return None
 
 
+def _keyword_enumerator(m: re.Match[str] | None) -> bool:
+    """True when a keyword match carries a real enumerator (digit, letter, or Roman).
+
+    Multi-letter tokens are only accepted when they are valid Roman numerals, so
+    "Division Civil Remedies" (all Roman-numeral letters) is not mistaken for a marker.
+    """
+    if m is None:
+        return False
+    tok = m.group(1)
+    return tok.isdigit() or len(tok) == 1 or _is_roman(tok)
+
+
 def _parse_marker(text: str) -> _Marker | None:
     """Extract the leading numbering marker from a heading, or None if unnumbered."""
     s = (text or "").strip()
@@ -124,6 +148,10 @@ def _parse_marker(text: str) -> _Marker | None:
 
     if _KW_PART.match(s):
         return _Marker(family="part")
+    if _keyword_enumerator(_KW_DIVISION.match(s)):
+        return _Marker(family="division")
+    if _keyword_enumerator(_KW_SUBDIVISION.match(s)):
+        return _Marker(family="subdivision")
     if _KW_CHAPTER.match(s):
         return _Marker(family="chapter")
     if _KW_ARTICLE.match(s) or _SECTION_SYMBOL.match(s):
@@ -379,12 +407,12 @@ def _infer_from_style(
 # matches an on-page heading "1.1 Definitions" (and vice-versa).
 _LEADING_MARKER = re.compile(
     r"^\s*(?:"
-    r"(?:part|title|book|chapter|article|section|clause|schedule|annex|appendix|rule)"
+    r"(?:part|title|book|division|subdivision|chapter|article|section|clause|schedule|annex|appendix|rule)"
     r"\b[\s.:]*[0-9ivxlcdm]*"
     r"|§+\s*[0-9.]+"
-    r"|\(?[0-9]+(?:\.[0-9]+)*[).]?"
-    r"|\(?[A-Za-z]{1,2}[).]"
-    r")[\s.:)\-]*",
+    r"|\(?[0-9]+(?:\.[0-9]+)*[.)\]]?"
+    r"|\(?[A-Za-z]{1,2}(?:[.)\]]|(?=\s*[:\-\u2013\u2014]))"
+    r")[\s.:)\-\u2013\u2014]*",
     re.IGNORECASE,
 )
 

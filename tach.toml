@@ -186,6 +186,7 @@ path = "docling.utils"
 layer = "core"
 depends_on = [
   "docling.datamodel",
+  "docling.datamodel.asr_model_specs",
   "docling.datamodel.vlm_model_specs",
   "docling.models.stages.chart_extraction",
   "docling.models.stages.code_formula",
@@ -278,6 +279,7 @@ layer = "core"
 depends_on = [
   "docling.datamodel",
   "docling.models",
+  "docling.models.inference_engines.vlm",
   "docling.models.utils",
   "docling.utils",
 ]
@@ -317,6 +319,11 @@ depends_on = [
   "docling.utils",
   "docling.utils.ocr_language",
 ]
+
+[[modules]]
+path = "docling.models.stages.form_field"
+layer = "models"
+depends_on = ["docling.datamodel", "docling.models", "docling.utils"]
 
 [[modules]]
 path = "docling.models.stages.page_assemble"
@@ -462,6 +469,7 @@ layer = "pipeline"
 depends_on = [
   "docling.backend",
   "docling.datamodel",
+  "docling.datamodel.asr_model_specs",
   "docling.datamodel.pipeline_options_asr_model",
   "docling.pipeline.base_pipeline",
   "docling.utils",
@@ -523,6 +531,7 @@ depends_on = [
   "docling.datamodel",
   "docling.models.factories",
   "docling.models.stages.code_formula",
+  "docling.models.stages.form_field",
   "docling.models.stages.heading_hierarchy",
   "docling.models.stages.page_assemble",
   "docling.models.stages.page_preprocessing",

@@ -27,6 +27,7 @@ from docling.models.stages.heading_hierarchy.heading_hierarchy_model import (
     HeadingHierarchyModel,
     _infer_from_numbering,
     _parse_marker,
+    _strip_marker,
 )
 
 
@@ -170,16 +171,119 @@ def test_keyword_part_and_article():
     assert _parse_marker("§ 1.2 Liability").family == "article"
 
 
+def test_keyword_division_and_subdivision():
+    assert _parse_marker("DIVISION I").family == "division"
+    assert _parse_marker("DIVISION A").family == "division"
+    assert _parse_marker("Division 1").family == "division"
+    assert _parse_marker("Division 1 Offences and Penalties").family == "division"
+    assert _parse_marker("SUBDIVISION A").family == "subdivision"
+    assert _parse_marker("Subdivision a").family == "subdivision"
+    # Enumerators may be terminated by separator punctuation, not only whitespace.
+    assert _parse_marker("Division I, General").family == "division"
+    assert _parse_marker("Division A; Scope").family == "division"
+
+    # Division/subdivision outrank article subsections in the default order.
+    levels = _levels(["Division 1 General", "Article 3 Powers"])
+    assert levels == {0: 1, 1: 2}
+
+    # Stripping the leading marker stays in sync for bookmark matching.
+    assert _strip_marker("Division I Powers").strip() == "Powers"
+
+
+def test_chapter_outranks_division_in_default_order():
+    # In codes that use both (e.g. Australian Commonwealth acts), a Chapter contains
+    # Divisions, so chapter must rank above division/subdivision in the default order.
+    levels = _levels(["Chapter 1 A", "Division 1 B", "Subdivision A C"])
+    assert levels == {0: 1, 1: 2, 2: 3}
+
+
+def test_statute_citation_is_not_a_chapter():
+    # Statute citations are not chapters; numbered, Roman and lettered chapters still match.
+    assert _parse_marker("Chapter A-15") is None
+    assert _parse_marker("Chapter B-9") is None
+    assert _parse_marker("Chapter P-6.5") is None
+    assert _parse_marker("Chapter 1").family == "chapter"
+    assert _parse_marker("Chapter 2D").family == "chapter"
+    assert _parse_marker("Chapter I").family == "chapter"
+    assert _parse_marker("Chapter A").family == "chapter"
+    assert _parse_marker("Chapter 1-A").family == "chapter"
+
+    # A citation alone adds no level: Divisions stay directly under the Part.
+    levels = _levels(["Part 1 X", "Chapter A-15", "Division 1 Y"])
+    assert levels == {0: 1, 2: 2}
+
+
 def test_non_marker_text_is_ignored():
     assert _parse_marker("Summary") is None
     assert _parse_marker("Introduction to the topic") is None
     assert _parse_marker("ABSTRACT") is None
+    assert _parse_marker("Division of Property") is None
+    assert _parse_marker("Division of weeks of benefits") is None
+    assert _parse_marker("Division du cong\u00e9") is None
+    assert _parse_marker("Subdivision of land") is None
+    assert _parse_marker("Division Civil Remedies") is None
+    assert _parse_marker("Division d'appel") is None
+    assert _parse_marker("Division l'emploi") is None
+    assert _parse_marker("Division s'applique") is None
+    assert _parse_marker("Division d\u2019appel") is None
+    assert _parse_marker("2024 Annual Financial Report") is None
+    assert _parse_marker("2024-2025 Budget") is None
+    assert _parse_marker("2024\u201325 Outlook") is None
+    assert _parse_marker("10-K Filing") is None
+    assert _parse_marker("3-D Printing") is None
+    assert _parse_marker("1-Year Results") is None
+    assert _parse_marker("3:00 PM Session") is None
+    assert _parse_marker("2:1 Aspect Ratio") is None
+    assert _parse_marker("K-means Clustering") is None
+    assert _parse_marker("T-cell Biology") is None
+    assert _parse_marker("E-commerce") is None
+    assert _parse_marker("Y-axis") is None
+    assert _parse_marker("X-ray Imaging") is None
+    assert _parse_marker("1.5-fold increase") is None
+
+
+def test_numbering_delimiter_variants():
+    # Supports colon, dash, brackets, and parenthesized Arabic numerals.
+    assert _parse_marker("1 - Scope").family == "arabic"
+    assert _parse_marker("1: Scope").family == "arabic"
+    assert _parse_marker("1] Scope").family == "arabic"
+    assert _parse_marker("(1) Scope").family == "arabic"
+    assert _parse_marker("1.1: Details").family == "dotted"
+    assert _parse_marker("1.1: Details").depth == 2
+    assert _parse_marker("1.1 - Details").family == "dotted"
+    assert _parse_marker("(1.1) Details").family == "dotted"
+    assert _parse_marker("A - Appendix").family == "alpha_u"
+    assert _parse_marker("A: Appendix").family == "alpha_u"
+    assert _parse_marker("A.1 Proofs").family == "alpha_u"
+    assert _parse_marker("I.1 Scope").family == "roman_u"
+
+    # Preserves correct hierarchical depth when dotted headings use colons
+    levels = _levels(["1. Introduction", "1.1: Background", "1.1.1: Details"])
+    assert levels == {0: 1, 1: 2, 2: 3}
+
+    # Stripping leading markers stays in sync for brackets, colons, and dashes
+    assert _strip_marker("1] Scope").strip() == "Scope"
+    assert _strip_marker("(1) Scope").strip() == "Scope"
+    assert _strip_marker("1 - Scope").strip() == "Scope"
+    assert _strip_marker("1: Scope").strip() == "Scope"
+    assert _strip_marker("1.1: Details").strip() == "Details"
+    assert _strip_marker("A - Appendix").strip() == "Appendix"
 
 
 def test_custom_numbering_scheme_order():
     # Override so Arabic outranks Roman.
     levels = _levels(
         ["I. A", "1. B"],
+        numbering_schemes=["arabic", "roman_u"],
+    )
+    assert levels == {0: 2, 1: 1}
+
+
+def test_omitted_scheme_family_ranks_lowest():
+    # A custom order that omits "division": the heading still parses (family "division")
+    # but, absent from the order, it ranks below any listed family instead of above it.
+    levels = _levels(
+        ["Division 1 Offences", "1. Scope"],
         numbering_schemes=["arabic", "roman_u"],
     )
     assert levels == {0: 2, 1: 1}

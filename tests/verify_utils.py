@@ -494,7 +494,11 @@ def check_conversion_result_v2(
     doc_pred_md = _normalize_newlines(
         doc_result.document.export_to_markdown(compact_tables=True)
     )
-    doc_pred_dt = _normalize_newlines(doc_result.document.export_to_doctags())
+    doc_pred_dt = (
+        _normalize_newlines(doc_result.document.export_to_doctags())
+        if verify_doctags
+        else ""
+    )
 
     pages_path = gt.pages_meta
     json_path = gt.doc_json
@@ -628,7 +632,10 @@ def verify_export(
         return True
 
     with file.open(encoding="utf-8", newline="") as fr:
-        true_text = fr.read()
+        # The ground-truth file may carry CRLF line endings on Windows
+        # checkouts for extensions not covered by an `eol=lf` gitattribute;
+        # normalize it just like the prediction so the comparison is LF-only.
+        true_text = _normalize_newlines(fr.read())
 
     pred_text = _strip_embedded_image_data(pred_text)
     true_text = _strip_embedded_image_data(true_text)

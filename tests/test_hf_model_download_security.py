@@ -142,9 +142,57 @@ class TestShippedSpecsArePinned:
                 assert is_pinned_revision(spec.revision), name
 
     def test_distil_whisper_checkpoints(self):
-        from docling.pipeline.asr_transcriber import (
+        from docling.datamodel.asr_model_specs import (
             _DISTIL_WHISPER_OPENAI_CHECKPOINTS,
         )
 
         for name, (_, _, revision) in _DISTIL_WHISPER_OPENAI_CHECKPOINTS.items():
             assert is_pinned_revision(revision), name
+
+
+@pytest.mark.parametrize(
+    "model_name",
+    ["distil-small.en", "distil-medium.en", "distil-large-v3", "distil-large-v3.5"],
+)
+@pytest.mark.parametrize("offline", [False, True])
+def test_distil_whisper_prefetch_matches_runtime_revision(
+    tmp_path, model_name, offline
+):
+    from unittest.mock import Mock, patch
+
+    from docling.datamodel.accelerator_options import AcceleratorOptions
+    from docling.datamodel.asr_model_specs import _DISTIL_WHISPER_OPENAI_CHECKPOINTS
+    from docling.datamodel.pipeline_options_asr_model import (
+        InlineAsrNativeWhisperOptions,
+    )
+    from docling.pipeline.asr_transcriber import _NativeWhisperModel
+    from docling.utils.model_downloader import _download_distil_whisper_models
+
+    repo_id, filename, revision = _DISTIL_WHISPER_OPENAI_CHECKPOINTS[model_name]
+    checkpoint = str(tmp_path / filename)
+    with (
+        patch("huggingface_hub.hf_hub_download", return_value=checkpoint) as download,
+        patch.dict("sys.modules", {"whisper": Mock()}),
+    ):
+        _download_distil_whisper_models(
+            [model_name], tmp_path, force=False, progress=False
+        )
+        download.assert_called_once_with(
+            repo_id=repo_id,
+            filename=filename,
+            revision=revision,
+            cache_dir=tmp_path,
+            force_download=False,
+        )
+        download.reset_mock()
+
+        _NativeWhisperModel(
+            enabled=True,
+            artifacts_path=tmp_path if offline else None,
+            accelerator_options=AcceleratorOptions(device="cpu"),
+            asr_options=InlineAsrNativeWhisperOptions(repo_id=model_name),
+        )
+        expected = dict(repo_id=repo_id, filename=filename, revision=revision)
+        if offline:
+            expected.update(cache_dir=str(tmp_path), local_files_only=True)
+        download.assert_called_once_with(**expected)

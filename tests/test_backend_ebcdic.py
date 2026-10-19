@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 import json
+from decimal import localcontext
 from io import BytesIO
 from pathlib import Path
 
@@ -155,6 +156,40 @@ def test_single_schema_decodes_cobol_field_types(employee_layout):
     assert [cell.text for cell in rows[0]] == ["name", "wages", "balance", "id"]
     assert [cell.text for cell in rows[1]] == ["Ada", "1234.56", "-987.65", "7"]
     assert [cell.text for cell in rows[2]] == ["Grace", "9000.00", "123.45", "-2"]
+
+
+@pytest.mark.parametrize(
+    ("field_type", "encode"),
+    [
+        (EbcdicFieldType.PACKED_DECIMAL, _packed),
+        (EbcdicFieldType.ZONED_DECIMAL, _zoned),
+        (
+            EbcdicFieldType.INTEGER,
+            lambda value, size: value.to_bytes(size, "big", signed=True),
+        ),
+    ],
+    ids=lambda value: getattr(value, "value", ""),
+)
+def test_scaled_numbers_keep_fixed_point_notation(field_type, encode):
+    """Values below 1e-6 must not switch to scientific notation (0E-7, 1E-7)."""
+    layout = EbcdicLayout(
+        records=[
+            EbcdicRecordLayout(
+                fields=[EbcdicField(name="rate", size=8, type=field_type, scale=7)]
+            )
+        ]
+    )
+    data = b"".join(encode(value, 8) for value in (0, 1, -3, 12345678))
+
+    result = _convert(data, EbcdicBackendOptions(layout=layout))
+
+    rows = result.document.tables[0].data.grid
+    assert [row[0].text for row in rows[1:]] == [
+        "0.0000000",
+        "0.0000001",
+        "-0.0000003",
+        "1.2345678",
+    ]
 
 
 def test_max_records_stops_early(employee_layout):
@@ -312,3 +347,51 @@ def test_layout_sources_are_mutually_exclusive(employee_layout, tmp_path: Path):
         EbcdicBackendOptions(
             layout=employee_layout, layout_file=tmp_path / "orders.json"
         )
+
+
+@pytest.mark.parametrize(
+    ("field_type", "size", "encode"),
+    [
+        (EbcdicFieldType.PACKED_DECIMAL, 16, _packed),
+        (EbcdicFieldType.ZONED_DECIMAL, 31, _zoned),
+        (
+            EbcdicFieldType.INTEGER,
+            16,
+            lambda value, size: value.to_bytes(size, "big", signed=True),
+        ),
+        (
+            EbcdicFieldType.UNSIGNED_INTEGER,
+            16,
+            lambda value, size: value.to_bytes(size, "big", signed=False),
+        ),
+    ],
+)
+@pytest.mark.parametrize("precision", [6, 28])
+def test_scaled_numbers_are_independent_of_decimal_precision(
+    field_type, size, encode, precision
+):
+    """Copybook scaling must preserve every digit, even above Decimal's precision."""
+    layout = EbcdicLayout(
+        records=[
+            EbcdicRecordLayout(
+                fields=[EbcdicField(name="amount", size=size, type=field_type, scale=2)]
+            )
+        ]
+    )
+    value = 1234567890123456789012345678901
+    values = [0, value]
+    if field_type != EbcdicFieldType.UNSIGNED_INTEGER:
+        values.append(-value)
+    data = b"".join(encode(number, size) for number in values)
+
+    with localcontext() as context:
+        context.prec = precision
+        result = _convert(data, EbcdicBackendOptions(layout=layout))
+
+    cells = result.document.tables[0].data.grid
+    expected = ["0.00", "12345678901234567890123456789.01"]
+    if field_type != EbcdicFieldType.UNSIGNED_INTEGER:
+        expected.append("-12345678901234567890123456789.01")
+    assert [row[0].text for row in cells[1:]] == expected
+    markdown = result.document.export_to_markdown(compact_tables=True)
+    assert all(amount in markdown for amount in expected)

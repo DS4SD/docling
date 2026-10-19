@@ -16,6 +16,7 @@ from docling.backend.latex.handlers.environments import EnvironmentHandlerMixin
 from docling.backend.latex.handlers.macros import MacroHandlerMixin
 from docling.backend.latex.handlers.math import MathHandlerMixin
 from docling.backend.latex.utils.encoding import decode_latex_content
+from docling.backend.latex.utils.latex_context import LATEX_CONTEXT_DB
 from docling.backend.latex.utils.table import TableHelperMixin
 from docling.backend.latex.utils.text import TextHelperMixin
 from docling.datamodel.backend_options import LatexBackendOptions
@@ -71,6 +72,13 @@ class LatexDocumentBackend(
             options = LatexBackendOptions()
         super().__init__(in_doc, path_or_stream, options)
         self.options = LatexBackendOptions.model_validate(self.options)
+        # Directory that relative \input, \include and \includegraphics paths
+        # resolve against. A stream has none unless source_uri gives it.
+        self._source_dir: Path | None = None
+        if isinstance(self.path_or_stream, Path):
+            self._source_dir = self.path_or_stream.parent
+        elif self.options.source_uri is not None:
+            self._source_dir = Path(self.options.source_uri).parent
         self.labels: dict[str, bool] = {}
         self._custom_macros: dict[str, str] = {}
         self._custom_macro_num_args: dict[str, int] = {}
@@ -113,7 +121,9 @@ class LatexDocumentBackend(
         else:
             self.latex_preamble = ""
 
-        walker = LatexWalker(preprocessed_text, tolerant_parsing=True)
+        walker = LatexWalker(
+            preprocessed_text, tolerant_parsing=True, latex_context=LATEX_CONTEXT_DB
+        )
 
         try:
             nodes, _pos, _len = walker.get_latex_nodes()
