@@ -30,8 +30,8 @@ from docling.models.inference_engines.image_classification import (
     ImageClassificationEngineInput,
     create_image_classification_engine,
 )
-from docling.models.utils import _to_rgb
 from docling.models.utils.hf_model_download import HuggingFaceModelDownloadMixin
+from docling.utils.image_utils import to_rgb
 
 __all__ = [
     "DocumentPictureClassifier",
@@ -167,9 +167,9 @@ class DocumentPictureClassifier(
 
             raw_image = el.image
             if isinstance(raw_image, Image.Image):
-                raw_image = _to_rgb(raw_image)
+                raw_image = to_rgb(raw_image)
             elif isinstance(raw_image, np.ndarray):
-                raw_image = _to_rgb(Image.fromarray(raw_image))
+                raw_image = to_rgb(Image.fromarray(raw_image))
             else:
                 raise TypeError(
                     "Supported input formats are PIL.Image.Image or numpy.ndarray."

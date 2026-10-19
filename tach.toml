@@ -38,6 +38,11 @@ layer = "foundation"
 depends_on = []
 
 [[modules]]
+path = "docling.utils.image_utils"
+layer = "foundation"
+depends_on = []
+
+[[modules]]
 path = "docling.backend"
 layer = "core"
 depends_on = [
@@ -47,6 +52,7 @@ depends_on = [
   "docling.datamodel.backend_options",
   "docling.exceptions",
   "docling.utils",
+  "docling.utils.image_utils",
 ]
 
 [[modules]]
@@ -203,7 +209,7 @@ depends_on = [
   "docling.datamodel",
   "docling.datamodel.pipeline_options_vlm_model",
   "docling.exceptions",
-  "docling.models.utils",
+  "docling.utils.image_utils",
   "docling.utils.ocr_language",
 ]
 
@@ -267,6 +273,7 @@ depends_on = [
   "docling.exceptions",
   "docling.models.utils",
   "docling.utils",
+  "docling.utils.image_utils",
 ]
 
 [[modules]]
@@ -348,6 +355,7 @@ depends_on = [
   "docling.models",
   "docling.models.inference_engines.image_classification",
   "docling.models.utils",
+  "docling.utils.image_utils",
 ]
 
 [[modules]]
