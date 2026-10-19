@@ -9,7 +9,6 @@ import zipfile
 import zlib
 from collections.abc import Iterable
 from pathlib import Path
-from types import SimpleNamespace
 
 import pytest
 from docling_core.types.doc import (
@@ -25,6 +24,7 @@ from docling.backend.docx.drawingml.utils import get_libreoffice_cmd
 from docling.backend.mspowerpoint_backend import (
     _MAX_CHART_TABLE_CELLS,
     MsPowerpointDocumentBackend,
+    _build_chart_table,
     _is_metafile,
     _last_populated_row,
 )
@@ -457,17 +457,6 @@ def _build_inflated_ptcount_pptx(path: Path, declared: int) -> None:
     tmp.unlink()
 
 
-def _backend_under_test() -> MsPowerpointDocumentBackend:
-    """Return a backend instance for direct ``_chart_to_table_data`` calls."""
-    in_doc = InputDocument(
-        path_or_stream=CHART_PPTX,
-        format=InputFormat.PPTX,
-        backend=MsPowerpointDocumentBackend,
-    )
-    assert in_doc.valid
-    return in_doc._backend
-
-
 def test_chart_with_inflated_category_range_trims_trailing_empty_rows(tmp_path):
     """A chart whose declared range exceeds its data is trimmed to populated rows.
 
@@ -515,32 +504,23 @@ def test_last_populated_row_trims_only_trailing_empty_rows():
 
 def test_chart_with_no_populated_data_returns_no_table():
     """A chart whose declared range holds no data at all yields no table."""
-    chart = SimpleNamespace(
-        series=[SimpleNamespace(name="s1", values=[])],
-        plots=[SimpleNamespace(categories=["", "", ""])],
-    )
-    assert _backend_under_test()._chart_to_table_data(chart) is None
+    assert _build_chart_table(["", "", ""], [("s1", [])]) is None
 
 
 def test_chart_data_table_capped_at_max_cells(caplog):
     """Genuinely huge charts are truncated at the cell cap with a warning.
 
-    A stub chart with 60k populated points in 2 series would emit 180k cells;
-    the table is cut to ``_MAX_CHART_TABLE_CELLS`` cells instead of ballooning.
+    60k populated points in 2 series would emit 180k cells; the table is cut to
+    ``_MAX_CHART_TABLE_CELLS`` cells instead of ballooning.
     """
     n_points = 60_000
-    chart = SimpleNamespace(
-        series=[
-            SimpleNamespace(name="s1", values=[float(i) for i in range(n_points)]),
-            SimpleNamespace(name="s2", values=[float(i) for i in range(n_points)]),
-        ],
-        plots=[SimpleNamespace(categories=[f"c{i}" for i in range(n_points)])],
-    )
+    values = [str(i) for i in range(n_points)]
+    categories = [f"c{i}" for i in range(n_points)]
 
     with caplog.at_level(
         logging.WARNING, logger="docling.backend.mspowerpoint_backend"
     ):
-        table_data = _backend_under_test()._chart_to_table_data(chart)
+        table_data = _build_chart_table(categories, [("s1", values), ("s2", values)])
 
     assert table_data is not None
     assert table_data.num_cols == 3
@@ -1301,3 +1281,152 @@ def test_pptx_picture_in_placeholder(tmp_path: Path):
     assert picture.image.mimetype == "image/png"
     assert picture.image.size.width == 200.0
     assert picture.image.size.height == 100.0
+
+
+def test_pptx_hidden_slide_goes_to_invisible_layer(tmp_path: Path):
+    """A slide hidden in PowerPoint (``show="0"``) is left out of the default export.
+
+    Its content stays available in ``ContentLayer.INVISIBLE``, like a hidden
+    Excel sheet, and speaker notes keep the notes layer.
+    """
+    from pptx import Presentation
+    from pptx.util import Inches
+
+    prs = Presentation()
+    for title, body, hidden in [
+        ("Visible slide", "Presented text", False),
+        ("Hidden slide", "Backup text", True),
+    ]:
+        slide = prs.slides.add_slide(prs.slide_layouts[5])
+        slide.shapes.title.text = title
+        box = slide.shapes.add_textbox(Inches(1), Inches(2), Inches(4), Inches(1))
+        box.text_frame.text = body
+        if hidden:
+            slide._element.set("show", "0")
+        slide.notes_slide.notes_text_frame.text = f"Notes for {title}"
+
+    pptx_path = tmp_path / "hidden.pptx"
+    prs.save(pptx_path)
+
+    doc = get_converter().convert(pptx_path).document
+
+    def texts(layer: ContentLayer) -> list[str]:
+        return [
+            item.text
+            for item, _ in doc.iterate_items(included_content_layers={layer})
+            if isinstance(item, TextItem)
+        ]
+
+    assert doc.export_to_markdown() == "# Visible slide\n\nPresented text"
+    assert texts(ContentLayer.INVISIBLE) == ["Hidden slide", "Backup text"]
+    assert texts(ContentLayer.NOTES) == [
+        "Notes for Visible slide",
+        "Notes for Hidden slide",
+    ]
+
+
+def test_pptx_footer_placeholders_go_to_furniture_layer(tmp_path: Path):
+    """Footer, date and slide-number placeholders are slide chrome, not body text."""
+    from lxml import etree
+    from pptx import Presentation
+    from pptx.util import Inches
+
+    ns = (
+        'xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" '
+        'xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"'
+    )
+
+    prs = Presentation()
+    for body, hidden in [("Presented text", False), ("Backup text", True)]:
+        slide = prs.slides.add_slide(prs.slide_layouts[6])
+        box = slide.shapes.add_textbox(Inches(1), Inches(1), Inches(4), Inches(1))
+        box.text_frame.text = body
+        for idx, (ph_type, text) in enumerate(
+            [("dt", "10 October 2026"), ("ftr", "Confidential"), ("sldNum", "1")],
+            start=10,
+        ):
+            slide.shapes._spTree.append(
+                etree.fromstring(
+                    f'<p:sp {ns}><p:nvSpPr><p:cNvPr id="{idx}" name="{ph_type}"/>'
+                    "<p:cNvSpPr/><p:nvPr>"
+                    f'<p:ph type="{ph_type}" idx="{idx}"/></p:nvPr></p:nvSpPr>'
+                    f"<p:spPr/><p:txBody><a:bodyPr/><a:p><a:r><a:t>{text}</a:t>"
+                    "</a:r></a:p></p:txBody></p:sp>"
+                )
+            )
+        if hidden:
+            slide._element.set("show", "0")
+
+    pptx_path = tmp_path / "footer.pptx"
+    prs.save(pptx_path)
+
+    doc = get_converter().convert(pptx_path).document
+
+    def texts(layer: ContentLayer) -> list[str]:
+        return [
+            item.text
+            for item, _ in doc.iterate_items(included_content_layers={layer})
+            if isinstance(item, TextItem)
+        ]
+
+    assert doc.export_to_markdown() == "Presented text"
+    assert texts(ContentLayer.FURNITURE) == ["10 October 2026", "Confidential", "1"]
+    assert texts(ContentLayer.INVISIBLE) == [
+        "Backup text",
+        "10 October 2026",
+        "Confidential",
+        "1",
+    ]
+
+
+@pytest.mark.parametrize(
+    ("layout_marker", "override_layer", "expected"),
+    [
+        ("buNone", None, "Item one\n\nItem two"),
+        ("buAutoNum", None, "1. Item one\n2. Item two"),
+        (None, None, "- Item one\n- Item two"),
+        ("buNone", "shape", "- Item one\n- Item two"),
+        ("buNone", "paragraph", "- Item one\n- Item two"),
+    ],
+)
+def test_pptx_layout_list_marker_precedence(
+    tmp_path: Path,
+    layout_marker: str | None,
+    override_layer: str | None,
+    expected: str,
+) -> None:
+    from pptx import Presentation
+    from pptx.oxml.ns import qn
+
+    presentation = Presentation()
+    layout = presentation.slide_layouts[1]
+    layout_body = layout.placeholders[1]
+    layout_style = layout_body._element.find(".//" + qn("a:lstStyle"))
+    assert layout_style is not None
+    if layout_marker is not None:
+        level = layout_style.makeelement(qn("a:lvl1pPr"))
+        attrs = {"type": "arabicPeriod"} if layout_marker == "buAutoNum" else {}
+        level.append(level.makeelement(qn("a:" + layout_marker), attrs))
+        layout_style.append(level)
+
+    slide = presentation.slides.add_slide(layout)
+    slide.shapes.title.text = "Agenda"
+    body = slide.placeholders[1]
+    body.text_frame.text = "Item one"
+    body.text_frame.add_paragraph().text = "Item two"
+    if override_layer == "shape":
+        style = body._element.find(".//" + qn("a:lstStyle"))
+        assert style is not None
+        level = style.makeelement(qn("a:lvl1pPr"))
+        level.append(level.makeelement(qn("a:buChar"), {"char": "•"}))
+        style.append(level)
+    elif override_layer == "paragraph":
+        for paragraph in body.text_frame.paragraphs:
+            properties = paragraph._p.get_or_add_pPr()
+            properties.append(properties.makeelement(qn("a:buChar"), {"char": "•"}))
+
+    path = tmp_path / "layout_bullets.pptx"
+    presentation.save(path)
+    document = get_converter().convert(path).document
+
+    assert document.export_to_markdown() == "# Agenda\n\n" + expected

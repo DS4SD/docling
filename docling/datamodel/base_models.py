@@ -425,6 +425,8 @@ class ApiImageStreamingRequestResult:
     num_tokens: int | None
     usage: Any | None = None
     logprobs: Any | None = None
+    error: str | None = None  # set when the request failed and produced no output
+    stop_reason: VlmStopReason = VlmStopReason.UNSPECIFIED
 
 
 class FieldValuePrediction(BaseModel):
@@ -796,6 +798,8 @@ class ConfidenceReport(PageConfidenceScores):
             value.pop("low_score", None)
             value.pop("mean_grade", None)
             value.pop("low_grade", None)
+            if value.get("pages") is None:
+                value.pop("pages", None)
 
         model = handler(value)
         if not model.pages:

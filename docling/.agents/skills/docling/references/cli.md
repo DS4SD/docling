@@ -7,7 +7,8 @@ file the agent cannot open directly — PDFs above all, but also DOCX, PPTX, XLS
 HTML, Markdown, AsciiDoc, CSV, images, audio, and XML.
 
 Authoritative flag list: <https://docling-project.github.io/docling/reference/cli/>
-(or `docling --help`). This file is a task-oriented summary.
+(or `docling --help`). Both `docling` and `docling-tools` accept `-h` as a short
+help flag, including on subcommands. This file is a task-oriented summary.
 
 ## Basics
 
@@ -50,8 +51,18 @@ docling report.pdf --pipeline vlm --output /tmp/
 docling report.pdf --pipeline vlm --vlm-model granite_docling --output /tmp/
 docling report.pdf --pipeline vlm --vlm-model smoldocling --output /tmp/
 docling report.pdf --pipeline vlm --vlm-model nemotron_parse_v2 --output /tmp/
+docling chart.png --from image --to dclx --pipeline vlm --enrich-chart-extraction
 docling report.pdf --pipeline native --from pdf --output /tmp/
 ```
+
+VLM picture enrichment runs after conversion. `--enrich-chart-extraction`
+classifies pictures first and adds chart data only where the VLM has not
+already provided it.
+Use `--chart-extraction-preset granite_vision_v3_3` for the older CSV-only
+`ibm-granite/granite-vision-3.3-2b-chart2csv-preview` checkpoint. The default
+`granite_vision_v4` preset uses Granite Vision 4.1 4B, selecting MLX on
+compatible Apple Silicon systems and Transformers elsewhere. To require MLX,
+use `--chart-extraction-preset granite_vision_v4_mlx` with the same repository.
 
 For PDFs, visible horizontal and vertical rules are used as reading-order
 signals by default. Disable this to compare against rule-free ordering:
@@ -115,6 +126,7 @@ docling report.pdf --enrich-picture-description --output /tmp/
 | Password-protected PDF | `--pdf-password PASSWORD` (raises `ConversionError` if wrong) |
 | Very large document (500+ pages) | Standard, add `--no-tables` for speed; set `--device` / `--num-threads` |
 | Only part of a document is needed | `--page-range 1-4` (or a single page, `--page-range 4`); page numbers start at 1 |
+| Long run, want to see progress | Progress bars on stderr by default in a terminal (document position, pages, enrichment items); `--progress` forces it for pipes, `--no-progress` / `-q` hides it |
 | Complex / multi-column layout | `--pipeline vlm` (standard may misorder reading flow) |
 | Handwriting or formulas | `--pipeline vlm` only |
 | Output near-empty | Enable OCR, or switch to `--pipeline vlm` |
@@ -142,6 +154,17 @@ Pre-download models and point the CLI at them for air-gapped runs:
 ```bash
 docling-tools models download --output-dir /models   # fetch model artifacts
 docling report.pdf --artifacts-path /models --output /tmp/
+```
+
+For native Whisper ASR, prefetch a selected OpenAI-format checkpoint. Plain
+`--all` excludes ASR models; `--all --asr` includes all native Whisper sizes and
+the Distil-Whisper presets.
+
+```bash
+docling-tools models download whisper_tiny --output-dir /models
+docling --asr-model whisper_tiny_native --artifacts-path /models audio.wav
+docling-tools models download whisper_distil_small_en --output-dir /models
+docling --asr-model whisper_distil_small_en_native --artifacts-path /models audio.wav
 ```
 
 `--artifacts-path` overrides the default Hugging Face cache; you can also set
