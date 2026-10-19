@@ -120,30 +120,6 @@ def test_checkbox_in_its_label_block_is_keyed_by_the_whole_block() -> None:
     assert [text for text in order if text] == [note, "Fotocópias de:", *paragraphs]
 
 
-def test_two_checkboxes_in_one_block_are_left_to_the_search() -> None:
-    # A Yes/No pair the layout boxed as one checkbox block: the block's text
-    # keys neither box as a whole; each box reads its own option key.
-    block = _block(
-        1,
-        DocItemLabel.CHECKBOX_UNSELECTED,
-        BoundingBox(l=10, t=10, r=90, b=30),
-        (0, "Sim", BoundingBox(l=24, t=11, r=40, b=19)),
-        (1, "Não", BoundingBox(l=24, t=21, r=40, b=29)),
-    )
-    widgets = [
-        _checkbox(0, BoundingBox(l=12, t=11, r=20, b=19)),
-        _checkbox(1, BoundingBox(l=12, t=21, r=20, b=29)),
-    ]
-    page = _page([block], widgets)
-
-    _materialize(page)
-
-    assert [item.key_text for _, items in _regions(page) for item in items] == [
-        "Sim",
-        "Não",
-    ]
-
-
 def _text_field(index: int, bbox: BoundingBox) -> PdfWidget:
     return PdfWidget(
         index=index,
@@ -182,30 +158,6 @@ def test_hosted_checkbox_key_is_located_by_its_text() -> None:
     )
 
 
-def test_block_with_no_letters_is_left_to_the_search() -> None:
-    # A column of answer boxes printed after leader dots, which the layout
-    # boxes as a checkbox block: the dots are no key, the column header is.
-    header = "Grado igual o superior al 65%"
-    header_bbox = BoundingBox(l=60, t=10, r=150, b=18)
-    dots_bbox = BoundingBox(l=60, t=26, r=135, b=34)
-    page = _page(
-        [
-            _block(1, DocItemLabel.TEXT, header_bbox, (0, header, header_bbox)),
-            _block(
-                2,
-                DocItemLabel.CHECKBOX_UNSELECTED,
-                BoundingBox(l=60, t=25, r=150, b=35),
-                (1, "........................", dots_bbox),
-            ),
-        ],
-        [_checkbox(0, BoundingBox(l=139, t=26, r=148, b=34))],
-    )
-
-    _materialize(page)
-
-    assert _keys(page) == [header]
-
-
 def test_block_label_also_keys_a_field_of_its_row() -> None:
     # "VISA Office" labels the checkbox in its block and the box on the same
     # row: the block's text keys the checkbox without taking the label from
@@ -232,68 +184,6 @@ def test_block_label_also_keys_a_field_of_its_row() -> None:
     assert all(item.label == DocItemLabel.FIELD_KEY for item in doc.texts if item.text)
 
 
-def test_plain_option_beside_a_checkbox_block_takes_the_question() -> None:
-    # Known limit: "3. SEX" asks a question answered by two checkboxes. MALE
-    # is boxed as a checkbox block and so joins no group; without a group the
-    # question is no prompt and keys FEMALE, the text closest to it.
-    prompt_bbox = BoundingBox(l=30, t=10, r=60, b=18)
-    female_bbox = BoundingBox(l=55, t=28, r=85, b=36)
-    male_bbox = BoundingBox(l=55, t=41, r=75, b=49)
-    page = _page(
-        [
-            _block(1, DocItemLabel.TEXT, prompt_bbox, (0, "3. SEX", prompt_bbox)),
-            _block(2, DocItemLabel.TEXT, female_bbox, (1, "FEMALE", female_bbox)),
-            _block(
-                3,
-                DocItemLabel.CHECKBOX_UNSELECTED,
-                BoundingBox(l=31, t=39, r=80, b=50),
-                (2, "MALE", male_bbox),
-            ),
-        ],
-        [
-            _checkbox(0, BoundingBox(l=32, t=27, r=41, b=36)),
-            _checkbox(1, BoundingBox(l=32, t=40, r=41, b=49)),
-        ],
-    )
-
-    _materialize(page)
-
-    keyed = {
-        item.values[0].bbox.t: item.key_text
-        for _, items in _regions(page)
-        for item in items
-    }
-    assert keyed == {27: "3. SEX", 40: "MALE"}
-
-
-def test_block_a_little_short_of_its_checkbox_still_keys_it() -> None:
-    # The layout's block ends 0.1 pt above the drawn square's bottom; the
-    # square is still the block's checkbox, not left to the caption above.
-    caption_bbox = BoundingBox(l=56.7, t=19.5, r=115.5, b=26.3)
-    text_bbox = BoundingBox(l=76.0, t=36.0, r=300.0, b=42.9)
-    page = _page(
-        [
-            _block(
-                1,
-                DocItemLabel.SECTION_HEADER,
-                caption_bbox,
-                (0, "Fotocópias de:", caption_bbox),
-            ),
-            _block(
-                2,
-                DocItemLabel.CHECKBOX_UNSELECTED,
-                BoundingBox(l=55.5, t=33.0, r=300.0, b=42.7),
-                (1, "Recibos de vencimento.", text_bbox),
-            ),
-        ],
-        [_checkbox(0, BoundingBox(l=58.8, t=34.8, r=66.8, b=42.8))],
-    )
-
-    _materialize(page)
-
-    assert _keys(page) == ["Recibos de vencimento."]
-
-
 def _keyed_at(page: Page) -> dict[tuple[int, int], str]:
     return {
         (round(item.values[0].bbox.l), round(item.values[0].bbox.t)): item.key_text
@@ -314,32 +204,6 @@ def _option(
         ),
         _checkbox(index, BoundingBox(l=left, t=top, r=left + 8, b=top + 8)),
     )
-
-
-def test_checkbox_blocks_below_a_field_leave_its_label_to_the_field() -> None:
-    # "Contact name:" labels the field to its right. Two checkbox blocks sit
-    # 6 pt below. A checkbox keyed by its block is not also a member of a
-    # choice group, so the label cannot become that group's prompt and
-    # leave the field unkeyed.
-    label_bbox = BoundingBox(l=10, t=10, r=60, b=18)
-    first, first_box = _option(2, 1, 10, 24, "Send by email", 80)
-    second, second_box = _option(3, 2, 10, 36, "Send by post", 80)
-    page = _page(
-        [
-            _block(1, DocItemLabel.TEXT, label_bbox, (0, "Contact name:", label_bbox)),
-            first,
-            second,
-        ],
-        [_text_field(0, BoundingBox(l=64, t=10, r=140, b=18)), first_box, second_box],
-    )
-
-    _materialize(page)
-
-    assert _keyed_at(page) == {
-        (64, 10): "Contact name:",
-        (10, 24): "Send by email",
-        (10, 36): "Send by post",
-    }
 
 
 def test_checkbox_keyed_by_its_block_is_not_printed_a_second_time() -> None:
@@ -385,80 +249,3 @@ def test_checkbox_keyed_by_its_block_is_not_printed_a_second_time() -> None:
         in {DocItemLabel.CHECKBOX_SELECTED, DocItemLabel.CHECKBOX_UNSELECTED}
         and item.text
     ]
-
-
-def test_label_of_a_field_is_not_the_prompt_of_a_block_and_a_plain_option() -> None:
-    # As above, but the second option is plain text, not a block. A group of
-    # the two would still take "Contact name:" as its prompt.
-    label_bbox = BoundingBox(l=10, t=10, r=60, b=18)
-    plain_bbox = BoundingBox(l=24, t=36, r=76, b=44)
-    first, first_box = _option(2, 1, 10, 24, "Send by email", 80)
-    page = _page(
-        [
-            _block(1, DocItemLabel.TEXT, label_bbox, (0, "Contact name:", label_bbox)),
-            first,
-            _block(3, DocItemLabel.TEXT, plain_bbox, (2, "Send by post", plain_bbox)),
-        ],
-        [
-            _text_field(0, BoundingBox(l=64, t=10, r=140, b=18)),
-            first_box,
-            _checkbox(2, BoundingBox(l=10, t=36, r=18, b=44)),
-        ],
-    )
-
-    _materialize(page)
-
-    assert _keyed_at(page) == {
-        (64, 10): "Contact name:",
-        (10, 24): "Send by email",
-        (10, 36): "Send by post",
-    }
-
-
-def test_boxed_checkboxes_in_a_grid_keep_their_column_header_as_hint() -> None:
-    # Two columns of boxed checkboxes under "Applicant" and "Spouse": each is
-    # keyed by its block, and its column header is still kept as a hint.
-    clusters, widgets = [], []
-    for column, (header, x) in enumerate([("Applicant", 30), ("Spouse", 130)]):
-        header_bbox = BoundingBox(l=x, t=10, r=x + 45, b=18)
-        clusters.append(
-            _block(
-                100 + column,
-                DocItemLabel.TEXT,
-                header_bbox,
-                (len(clusters), header, header_bbox),
-            )
-        )
-        for row, (label, y) in enumerate([("Employed", 30), ("Retired", 45)]):
-            clusters.append(
-                _block(
-                    10 * column + row,
-                    DocItemLabel.CHECKBOX_UNSELECTED,
-                    BoundingBox(l=x, t=y, r=x + 52, b=y + 11),
-                    (
-                        len(clusters),
-                        label,
-                        BoundingBox(l=x + 13, t=y + 1, r=x + 50, b=y + 9),
-                    ),
-                )
-            )
-            widgets.append(
-                _checkbox(
-                    len(widgets), BoundingBox(l=x + 2, t=y + 1, r=x + 11, b=y + 10)
-                )
-            )
-    page = _page(clusters, widgets)
-
-    _materialize(page)
-
-    keyed = {
-        (item.values[0].bbox.l, item.values[0].bbox.t): (item.key_text, item.hint_text)
-        for _, items in _regions(page)
-        for item in items
-    }
-    assert keyed == {
-        (32, 31): ("Employed", "Applicant"),
-        (32, 46): ("Retired", "Applicant"),
-        (132, 31): ("Employed", "Spouse"),
-        (132, 46): ("Retired", "Spouse"),
-    }

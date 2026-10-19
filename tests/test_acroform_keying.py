@@ -484,28 +484,6 @@ def test_line_split_into_pieces_is_joined_but_neighbouring_cells_are_not():
     assert ("field_key", [2], "MESE") in fields
 
 
-def test_close_call_follows_the_side_of_aligned_sibling_options():
-    # The first option has a slightly closer key on its left, but its
-    # sibling options below all read their keys on the right.
-    page = snapshot(
-        [
-            widget(0, box(100, 50, 108, 58), checkbox=True),
-            widget(1, box(100, 70, 108, 78), checkbox=True),
-            widget(2, box(100, 90, 108, 98), checkbox=True),
-        ],
-        [
-            key_text(1, "Applicant", box(50, 50, 98, 58)),
-            key_text(2, "Type 1A", box(114, 50, 150, 58)),
-            key_text(3, "Type 1B", box(114, 70, 150, 78)),
-            key_text(4, "Type 2", box(114, 90, 150, 98)),
-        ],
-    )
-    _, fields = chosen(page)
-    assert ("option_key", [0], "Type 1A") in fields
-    assert ("option_key", [1], "Type 1B") in fields
-    assert ("option_key", [2], "Type 2") in fields
-
-
 def test_layout_child_repeated_at_top_level_is_not_consumed_twice():
     key = key_text(1, "Name", box(10, 60, 45, 70))
     container = Cluster(
@@ -591,10 +569,18 @@ def test_stacked_boxes_read_the_key_above_when_the_next_one_touches_below():
     assert ("field_key", [1], "Address") in fields
 
 
-def test_repeated_options_read_their_keys_from_one_side():
-    # The first option has the list's shared prompt right above it, in its own
-    # cell; the identical options below all read their keys on the
-    # right. The structure reads one side: the first option follows the rest.
+@pytest.mark.parametrize(
+    "other",
+    [
+        # A slightly closer key on the first option's left.
+        key_text(1, "Applicant", box(50, 50, 98, 58)),
+        # The list's shared prompt right above the first option, in its own cell.
+        key_text(1, "Types:", box(100, 40, 140, 48)),
+    ],
+)
+def test_aligned_options_read_their_keys_from_one_side(other: Cluster) -> None:
+    # The options below the first all read their keys on the right; the
+    # structure reads one side, so the first option follows the rest.
     page = snapshot(
         [
             widget(0, box(100, 50, 108, 58), checkbox=True),
@@ -602,7 +588,7 @@ def test_repeated_options_read_their_keys_from_one_side():
             widget(2, box(100, 90, 108, 98), checkbox=True),
         ],
         [
-            key_text(1, "Types:", box(100, 40, 140, 48)),
+            other,
             key_text(2, "Type 1A", box(114, 50, 150, 58)),
             key_text(3, "Type 1B", box(114, 70, 150, 78)),
             key_text(4, "Type 2", box(114, 90, 150, 98)),
@@ -629,6 +615,173 @@ def test_key_touching_both_boxes_does_not_decide_a_run():
     _, fields = chosen(page)
     assert ("field_key", [0], "UFID") in fields
     assert ("field_key", [1], "Last Name") in fields
+
+
+def block(
+    cluster_id: int,
+    bbox: BoundingBox,
+    *lines: tuple[int, str, BoundingBox],
+    label: DocItemLabel = DocItemLabel.CHECKBOX_UNSELECTED,
+) -> Cluster:
+    """A layout block, by default a checkbox block that boxes a square and its label."""
+    cells = [
+        TextCell(
+            index=index,
+            text=text,
+            orig=text,
+            from_ocr=False,
+            rect=BoundingRectangle.from_bounding_box(bbox),
+        )
+        for index, text, bbox in lines
+    ]
+    return Cluster(id=cluster_id, label=label, bbox=bbox, cells=cells)
+
+
+def block_keys(page: KeyingPage) -> dict[int, str]:
+    """Widget index -> its key, for every keyed value."""
+    _, fields = chosen(page)
+    return {
+        index: text
+        for kind, indices, text in fields
+        if kind != "choice_group"
+        for index in indices
+    }
+
+
+def test_two_checkboxes_in_one_block_are_left_to_the_search() -> None:
+    # A Yes/No pair the layout boxed as one checkbox block: the block's text
+    # keys neither box as a whole; each box reads its own option key.
+    page = snapshot(
+        [
+            widget(0, box(12, 11, 20, 19), checkbox=True),
+            widget(1, box(12, 21, 20, 29), checkbox=True),
+        ],
+        [
+            block(
+                1,
+                box(10, 10, 90, 30),
+                (0, "Sim", box(24, 11, 40, 19)),
+                (1, "Não", box(24, 21, 40, 29)),
+            )
+        ],
+    )
+    assert block_keys(page) == {0: "Sim", 1: "Não"}
+
+
+def test_block_with_no_letters_is_left_to_the_search() -> None:
+    # A column of answer boxes printed after leader dots, which the layout
+    # boxes as a checkbox block: the dots are no key, the column header is.
+    header = "Grado igual o superior al 65%"
+    page = snapshot(
+        [widget(0, box(139, 26, 148, 34), checkbox=True)],
+        [
+            key_text(1, header, box(60, 10, 150, 18)),
+            block(
+                2,
+                box(60, 25, 150, 35),
+                (2, "........................", box(60, 26, 135, 34)),
+            ),
+        ],
+    )
+    assert block_keys(page) == {0: header}
+
+
+def test_block_a_little_short_of_its_checkbox_still_keys_it() -> None:
+    # The layout's block ends 0.1 pt above the drawn square's bottom; the
+    # square is still the block's checkbox, not left to the caption above.
+    caption_bbox = box(56.7, 19.5, 115.5, 26.3)
+    page = snapshot(
+        [widget(0, box(58.8, 34.8, 66.8, 42.8), checkbox=True)],
+        [
+            block(
+                1,
+                caption_bbox,
+                (0, "Fotocópias de:", caption_bbox),
+                label=DocItemLabel.SECTION_HEADER,
+            ),
+            block(
+                2,
+                box(55.5, 33.0, 300.0, 42.7),
+                (1, "Recibos de vencimento.", box(76.0, 36.0, 300.0, 42.9)),
+            ),
+        ],
+    )
+    assert block_keys(page) == {0: "Recibos de vencimento."}
+
+
+@pytest.mark.parametrize("second_is_block", [True, False])
+def test_checkbox_blocks_below_a_field_leave_its_label_to_the_field(
+    second_is_block: bool,
+) -> None:
+    # "Contact name:" labels the field to its right. Two options sit 6 pt
+    # below; the first is a checkbox block, the second a block or plain text.
+    # A checkbox keyed by its block is not also a member of a choice group,
+    # so the label cannot become that group's prompt and leave the field
+    # unkeyed.
+    second = (
+        block(3, box(8, 35, 80, 45), (2, "Send by post", box(22, 36, 76, 44)))
+        if second_is_block
+        else key_text(3, "Send by post", box(24, 36, 76, 44))
+    )
+    page = snapshot(
+        [
+            widget(0, box(64, 10, 140, 18)),
+            widget(1, box(10, 24, 18, 32), checkbox=True),
+            widget(2, box(10, 36, 18, 44), checkbox=True),
+        ],
+        [
+            key_text(1, "Contact name:", box(10, 10, 60, 18)),
+            block(2, box(8, 23, 80, 33), (1, "Send by email", box(22, 24, 76, 32))),
+            second,
+        ],
+    )
+    assert block_keys(page) == {
+        0: "Contact name:",
+        1: "Send by email",
+        2: "Send by post",
+    }
+
+
+def test_boxed_checkboxes_in_a_grid_keep_their_column_header_as_hint() -> None:
+    # Two columns of boxed checkboxes under "Applicant" and "Spouse": each is
+    # keyed by its block, and its column header is still kept as a hint.
+    clusters, widgets = [], []
+    for column, (header, x) in enumerate([("Applicant", 30), ("Spouse", 130)]):
+        clusters.append(
+            block(
+                100 + column,
+                box(x, 10, x + 45, 18),
+                (len(clusters), header, box(x, 10, x + 45, 18)),
+                label=DocItemLabel.TEXT,
+            )
+        )
+        for row, (label, y) in enumerate([("Employed", 30), ("Retired", 45)]):
+            clusters.append(
+                block(
+                    10 * column + row,
+                    box(x, y, x + 52, y + 11),
+                    (len(clusters), label, box(x + 13, y + 1, x + 50, y + 9)),
+                )
+            )
+            widgets.append(
+                widget(len(widgets), box(x + 2, y + 1, x + 11, y + 10), checkbox=True)
+            )
+    result = keyed(snapshot(widgets, clusters))
+    keyed_values = {
+        result.values[member].native.index: (
+            result.key_texts[candidate.key].text,
+            "" if candidate.hint is None else result.key_texts[candidate.hint].text,
+        )
+        for candidate in (result.candidates[i] for i in result.selected)
+        if candidate.kind != "choice_group"
+        for member in candidate.members
+    }
+    assert keyed_values == {
+        0: ("Employed", "Applicant"),
+        1: ("Retired", "Applicant"),
+        2: ("Employed", "Spouse"),
+        3: ("Retired", "Spouse"),
+    }
 
 
 def test_penalized_pairs_match_scoring_every_pair():

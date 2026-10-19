@@ -965,3 +965,34 @@ def test_widgets_move_with_the_text_when_the_crop_box_is_offset(
     expected = _widget_offsets_from_text(backend_cls, source)
     assert len(expected) == 4
     assert _widget_offsets_from_text(backend_cls, shifted) == expected
+
+
+def test_docling_parse_exposes_complete_widget_contract_in_native_order() -> None:
+    input_doc = InputDocument(
+        path_or_stream=Path("tests/data/pdf/sources/acroform_sample.pdf"),
+        format=InputFormat.PDF,
+        backend=ThreadedDoclingParseDocumentBackend,
+    )
+    backend = input_doc._backend
+    page = next(backend.iter_pages())
+    try:
+        segmented_page = page.get_segmented_page()
+        assert segmented_page is not None
+        assert [widget.widget_field_name for widget in segmented_page.widgets] == [
+            "applicant_name",
+            "agree_terms",
+            "newsletter",
+            "mail_optin",
+        ]
+        assert [widget.index for widget in segmented_page.widgets] == [0, 1, 2, 3]
+        assert segmented_page.widgets[0].widget_text == "Ada Lovelace"
+        assert segmented_page.widgets[0].widget_description == "Full legal name"
+        assert segmented_page.widgets[0].widget_field_type == "/Tx"
+        assert segmented_page.widgets[0].widget_field_flags == 2
+        assert segmented_page.widgets[1].widget_appearance_state == "/Yes"
+        assert segmented_page.widgets[2].widget_appearance_state == "/Off"
+        assert segmented_page.widgets[3].widget_text in {None, ""}
+        assert segmented_page.widgets[3].widget_appearance_state == "/On"
+    finally:
+        page.unload()
+        backend.unload()

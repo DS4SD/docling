@@ -29,9 +29,6 @@ from docling_core.types.doc.page import (
     TextCell,
 )
 
-from docling.backend.docling_parse_backend import (
-    ThreadedDoclingParseDocumentBackend,
-)
 from docling.datamodel.base_models import (
     AssembledUnit,
     Cluster,
@@ -122,34 +119,6 @@ def _widget(
         widget_appearance_state=appearance_state,
         widget_field_flags=field_flags,
     )
-
-
-def test_docling_parse_exposes_complete_widget_contract_in_native_order() -> None:
-    input_doc = InputDocument(
-        path_or_stream=FORM_PDF,
-        format=InputFormat.PDF,
-        backend=ThreadedDoclingParseDocumentBackend,
-    )
-    backend = input_doc._backend
-    page = next(backend.iter_pages())
-    try:
-        segmented_page = page.get_segmented_page()
-        assert segmented_page is not None
-        assert [widget.widget_field_name for widget in segmented_page.widgets] == (
-            EXPECTED_NAMES
-        )
-        assert [widget.index for widget in segmented_page.widgets] == [0, 1, 2, 3]
-        assert segmented_page.widgets[0].widget_text == "Ada Lovelace"
-        assert segmented_page.widgets[0].widget_description == "Full legal name"
-        assert segmented_page.widgets[0].widget_field_type == "/Tx"
-        assert segmented_page.widgets[0].widget_field_flags == 2
-        assert segmented_page.widgets[1].widget_appearance_state == "/Yes"
-        assert segmented_page.widgets[2].widget_appearance_state == "/Off"
-        assert segmented_page.widgets[3].widget_text in {None, ""}
-        assert segmented_page.widgets[3].widget_appearance_state == "/On"
-    finally:
-        page.unload()
-        backend.unload()
 
 
 def test_field_mapping_assembly_and_materialization_preserve_regions_and_order() -> (
@@ -1252,34 +1221,3 @@ def test_painted_cells_survive_candidate_filters_and_abstention(
         for _, items in _regions(page)
         for item in items
     ] == [("" if abstain else "Full name:", ["John Smith"]), ("", ["Paris"])]
-
-
-def test_painted_values_in_a_paragraph_without_keys_stay_in_the_body() -> None:
-    # Step A preserves the current cleanup scope: only key-supplying clusters
-    # lose individual painted cells. The value-only paragraph still keeps them.
-    key = _text_cluster(1, BoundingBox(l=10, t=10, r=28, b=14), "Full name:")
-    painted = _text_cluster(2, BoundingBox(l=31, t=10, r=50, b=14), "John Smith")
-    note = _text_cluster(
-        3, BoundingBox(l=31, t=70, r=90, b=74), "See example.org for details"
-    )
-    note.cells[0].index = 3
-    painted.cells += note.cells
-    painted.bbox = BoundingBox.enclosing_bbox([painted.bbox, note.bbox])
-    page = Page(page_no=1, size=Size(width=100, height=100))
-    page.parsed_page = MagicMock(
-        widgets=[_widget(0, BoundingBox(l=30, t=9.5, r=70, b=14.5), "John Smith")]
-    )
-    page.predictions.layout = LayoutPrediction(clusters=[key, painted])
-    original_cells, original_box = list(painted.cells), painted.bbox
-
-    doc = _materialize(page)
-
-    assert page.predictions.layout.clusters == [painted]
-    assert painted.cells == original_cells
-    assert painted.bbox == original_box
-    assert [
-        item.text for item in doc.texts if item.label == DocItemLabel.FIELD_KEY
-    ] == ["Full name:"]
-    assert "John Smith See example.org for details" in [item.text for item in doc.texts]
-    assert doc.export_to_markdown().count("John Smith") == 2
-    doc.validate_document()
