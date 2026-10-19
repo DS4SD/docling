@@ -1462,8 +1462,8 @@
       "content_layer": "body",
       "label": "text",
       "prov": [],
-      "orig": "1]organization=Physik Department, Technische Universitat Munchen, addressline=James-Franck-Strae 1, city=Garchingb.Munchen, postcode=D-85748, country=Germany",
-      "text": "1]organization=Physik Department, Technische Universitat Munchen, addressline=James-Franck-Strae 1, city=Garchingb.Munchen, postcode=D-85748, country=Germany"
+      "orig": "1]organization=Physik Department, Technische Universität München, addressline=James-Franck-Straße 1, city=Garchingb.München, postcode=D-85748, country=Germany",
+      "text": "1]organization=Physik Department, Technische Universität München, addressline=James-Franck-Straße 1, city=Garchingb.München, postcode=D-85748, country=Germany"
     },
     {
       "self_ref": "#/texts/9",
@@ -1486,8 +1486,8 @@
       "content_layer": "body",
       "label": "text",
       "prov": [],
-      "orig": "2]organization=Fakultat fur Physik, Universitat Bielefeld, addressline=Universitätsstraße 25, city=Bielefeld, postcode=D-33615, country=Germany",
-      "text": "2]organization=Fakultat fur Physik, Universitat Bielefeld, addressline=Universitätsstraße 25, city=Bielefeld, postcode=D-33615, country=Germany"
+      "orig": "2]organization=Fakultät für Physik, Universität Bielefeld, addressline=Universitätsstraße 25, city=Bielefeld, postcode=D-33615, country=Germany",
+      "text": "2]organization=Fakultät für Physik, Universität Bielefeld, addressline=Universitätsstraße 25, city=Bielefeld, postcode=D-33615, country=Germany"
     },
     {
       "self_ref": "#/texts/11",

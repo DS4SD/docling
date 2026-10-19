@@ -561,7 +561,7 @@ lrate = d_{\tex ... {warmup\_steps}^{-1.5})
     item-544 at level 2: list_item: [cheng2016long] Jianpeng Cheng,  ... arXiv preprint arXiv:1601.06733, 2016.
     item-545 at level 2: list_item: [cho2014learning] Kyunghyun Cho, ... ranslation. CoRR, abs/1406.1078, 2014.
     item-546 at level 2: list_item: [xception2016] Francois Chollet. ... arXiv preprint arXiv:1610.02357, 2016.
-    item-547 at level 2: list_item: [gruEval14] Junyoung Chung, Cagl ... e modeling. CoRR, abs/1412.3555, 2014.
+    item-547 at level 2: list_item: [gruEval14] Junyoung Chung, Çagl ... e modeling. CoRR, abs/1412.3555, 2014.
     item-548 at level 2: list_item: [dyer-rnng:16] Chris Dyer, Adhig ... ork grammars. In Proc. of NAACL, 2016.
     item-549 at level 2: list_item: [JonasFaceNet2017] Jonas Gehring ... Xiv preprint arXiv:1705.03122v2, 2017.
     item-550 at level 2: list_item: [graves2013generating] Alex Grav ...  arXiv preprint arXiv:1308.0850, 2013.
@@ -570,8 +570,8 @@ lrate = d_{\tex ... {warmup\_steps}^{-1.5})
     item-553 at level 2: list_item: [hochreiter1997] Sepp Hochreiter ... ural computation, 9(8):17351780, 1997.
     item-554 at level 2: list_item: [huang-harper:2009:EMNLP] Zhongq ... ssing, pages 832841. ACL, August 2009.
     item-555 at level 2: list_item: [jozefowicz2016exploring] Rafal  ... arXiv preprint arXiv:1602.02410, 2016.
-    item-556 at level 2: list_item: [extendedngpu] ukasz Kaiser and  ... tion Processing Systems, (NIPS), 2016.
-    item-557 at level 2: list_item: [neural_gpu] ukasz Kaiser and Il ... Learning Representations (ICLR), 2016.
+    item-556 at level 2: list_item: [extendedngpu] Łukasz Kaiser and ... tion Processing Systems, (NIPS), 2016.
+    item-557 at level 2: list_item: [neural_gpu] Łukasz Kaiser and I ... Learning Representations (ICLR), 2016.
     item-558 at level 2: list_item: [NalBytenet2017] Nal Kalchbrenne ... Xiv preprint arXiv:1610.10099v2, 2017.
     item-559 at level 2: list_item: [structuredAttentionNetworks] Yo ... nce on Learning Representations, 2017.
     item-560 at level 2: list_item: [kingma2014adam] Diederik Kingma ... tochastic optimization. In ICLR, 2015.

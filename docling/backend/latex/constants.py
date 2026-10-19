@@ -159,6 +159,11 @@ MACROS_ACCENTS = frozenset(
     ["'", '"', "^", "`", "~", "=", ".", "c", "d", "b", "H", "k", "r", "t", "u", "v"]
 )
 
+# Text-mode letters typed as macros without an argument, e.g. \o (ø), \ss (ß).
+MACROS_LETTERS = frozenset(
+    ["o", "O", "l", "L", "i", "j", "ss", "aa", "AA", "ae", "AE", "oe", "OE"]
+)
+
 MACROS_SPACING = frozenset(
     [
         "newline",

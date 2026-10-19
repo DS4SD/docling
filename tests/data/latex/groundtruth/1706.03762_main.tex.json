@@ -3316,8 +3316,8 @@
       "content_layer": "body",
       "label": "text",
       "prov": [],
-      "orig": "University of Toronto aidan@cs.toronto.edu ukasz Kaiser[1] Google Brain lukaszkaiser@google.com Illia Polosukhin[1]",
-      "text": "University of Toronto aidan@cs.toronto.edu ukasz Kaiser[1] Google Brain lukaszkaiser@google.com Illia Polosukhin[1]"
+      "orig": "University of Toronto aidan@cs.toronto.edu Łukasz Kaiser[1] Google Brain lukaszkaiser@google.com Illia Polosukhin[1]",
+      "text": "University of Toronto aidan@cs.toronto.edu Łukasz Kaiser[1] Google Brain lukaszkaiser@google.com Illia Polosukhin[1]"
     },
     {
       "self_ref": "#/texts/41",
@@ -8726,8 +8726,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "[gruEval14] Junyoung Chung, Caglar Gulcehre, Kyunghyun Cho, and Yoshua Bengio. Empirical evaluation of gated recurrent neural networks on sequence modeling. CoRR, abs/1412.3555, 2014.",
-      "text": "[gruEval14] Junyoung Chung, Caglar Gulcehre, Kyunghyun Cho, and Yoshua Bengio. Empirical evaluation of gated recurrent neural networks on sequence modeling. CoRR, abs/1412.3555, 2014.",
+      "orig": "[gruEval14] Junyoung Chung, Çaglar Gülçehre, Kyunghyun Cho, and Yoshua Bengio. Empirical evaluation of gated recurrent neural networks on sequence modeling. CoRR, abs/1412.3555, 2014.",
+      "text": "[gruEval14] Junyoung Chung, Çaglar Gülçehre, Kyunghyun Cho, and Yoshua Bengio. Empirical evaluation of gated recurrent neural networks on sequence modeling. CoRR, abs/1412.3555, 2014.",
       "enumerated": false,
       "marker": ""
     },
@@ -8796,8 +8796,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "[hochreiter2001gradient] Sepp Hochreiter, Yoshua Bengio, Paolo Frasconi, and Jurgen Schmidhuber. Gradient flow in recurrent nets: the difficulty of learning long-term dependencies, 2001.",
-      "text": "[hochreiter2001gradient] Sepp Hochreiter, Yoshua Bengio, Paolo Frasconi, and Jurgen Schmidhuber. Gradient flow in recurrent nets: the difficulty of learning long-term dependencies, 2001.",
+      "orig": "[hochreiter2001gradient] Sepp Hochreiter, Yoshua Bengio, Paolo Frasconi, and Jürgen Schmidhuber. Gradient flow in recurrent nets: the difficulty of learning long-term dependencies, 2001.",
+      "text": "[hochreiter2001gradient] Sepp Hochreiter, Yoshua Bengio, Paolo Frasconi, and Jürgen Schmidhuber. Gradient flow in recurrent nets: the difficulty of learning long-term dependencies, 2001.",
       "enumerated": false,
       "marker": ""
     },
@@ -8810,8 +8810,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "[hochreiter1997] Sepp Hochreiter and Jurgen Schmidhuber. Long short-term memory. Neural computation, 9(8):17351780, 1997.",
-      "text": "[hochreiter1997] Sepp Hochreiter and Jurgen Schmidhuber. Long short-term memory. Neural computation, 9(8):17351780, 1997.",
+      "orig": "[hochreiter1997] Sepp Hochreiter and Jürgen Schmidhuber. Long short-term memory. Neural computation, 9(8):17351780, 1997.",
+      "text": "[hochreiter1997] Sepp Hochreiter and Jürgen Schmidhuber. Long short-term memory. Neural computation, 9(8):17351780, 1997.",
       "enumerated": false,
       "marker": ""
     },
@@ -8852,8 +8852,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "[extendedngpu] ukasz Kaiser and Samy Bengio. Can active memory replace attention? In Advances in Neural Information Processing Systems, (NIPS), 2016.",
-      "text": "[extendedngpu] ukasz Kaiser and Samy Bengio. Can active memory replace attention? In Advances in Neural Information Processing Systems, (NIPS), 2016.",
+      "orig": "[extendedngpu] Łukasz Kaiser and Samy Bengio. Can active memory replace attention? In Advances in Neural Information Processing Systems, (NIPS), 2016.",
+      "text": "[extendedngpu] Łukasz Kaiser and Samy Bengio. Can active memory replace attention? In Advances in Neural Information Processing Systems, (NIPS), 2016.",
       "enumerated": false,
       "marker": ""
     },
@@ -8866,8 +8866,8 @@
       "content_layer": "body",
       "label": "list_item",
       "prov": [],
-      "orig": "[neural_gpu] ukasz Kaiser and Ilya Sutskever. Neural GPUs learn algorithms. In International Conference on Learning Representations (ICLR), 2016.",
-      "text": "[neural_gpu] ukasz Kaiser and Ilya Sutskever. Neural GPUs learn algorithms. In International Conference on Learning Representations (ICLR), 2016.",
+      "orig": "[neural_gpu] Łukasz Kaiser and Ilya Sutskever. Neural GPUs learn algorithms. In International Conference on Learning Representations (ICLR), 2016.",
+      "text": "[neural_gpu] Łukasz Kaiser and Ilya Sutskever. Neural GPUs learn algorithms. In International Conference on Learning Representations (ICLR), 2016.",
       "enumerated": false,
       "marker": ""
     },

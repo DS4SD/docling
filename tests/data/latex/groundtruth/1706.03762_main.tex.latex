@@ -50,7 +50,7 @@ Work performed while at Google Research.
 
 Google Brain avaswani@google.com Noam Shazeer[1] Google Brain noam@google.com Niki Parmar[1] Google Research nikip@google.com Jakob Uszkoreit[1] Google Research usz@google.com Llion Jones[1] Google Research llion@google.com Aidan N. Gomez[1]
 
-University of Toronto aidan@cs.toronto.edu ukasz Kaiser[1] Google Brain lukaszkaiser@google.com Illia Polosukhin[1]
+University of Toronto aidan@cs.toronto.edu Łukasz Kaiser[1] Google Brain lukaszkaiser@google.com Illia Polosukhin[1]
 
 illia.polosukhin@gmail.com
 
@@ -379,17 +379,17 @@ Acknowledgements We are grateful to Nal Kalchbrenner and Stephan Gouws for their
 \item [cheng2016long] Jianpeng Cheng, LiDong, and Mirella Lapata. Long short-term memory-networks for machine reading. arXiv preprint arXiv:1601.06733, 2016.
 \item [cho2014learning] Kyunghyun Cho, Bart van Merrienboer, Caglar Gulcehre, Fethi Bougares, Holger Schwenk, and Yoshua Bengio. Learning phrase representations using rnn encoder-decoder for statistical machine translation. CoRR, abs/1406.1078, 2014.
 \item [xception2016] Francois Chollet. Xception: Deep learning with depthwise separable convolutions. arXiv preprint arXiv:1610.02357, 2016.
-\item [gruEval14] Junyoung Chung, Caglar Gulcehre, Kyunghyun Cho, and Yoshua Bengio. Empirical evaluation of gated recurrent neural networks on sequence modeling. CoRR, abs/1412.3555, 2014.
+\item [gruEval14] Junyoung Chung, Çaglar Gülçehre, Kyunghyun Cho, and Yoshua Bengio. Empirical evaluation of gated recurrent neural networks on sequence modeling. CoRR, abs/1412.3555, 2014.
 \item [dyer-rnng:16] Chris Dyer, Adhiguna Kuncoro, Miguel Ballesteros, and NoahA. Smith. Recurrent neural network grammars. In Proc. of NAACL, 2016.
 \item [JonasFaceNet2017] Jonas Gehring, Michael Auli, David Grangier, Denis Yarats, and YannN. Dauphin. Convolutional sequence to sequence learning. arXiv preprint arXiv:1705.03122v2, 2017.
 \item [graves2013generating] Alex Graves. Generating sequences with recurrent neural networks. arXiv preprint arXiv:1308.0850, 2013.
 \item [he2016deep] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770778, 2016.
-\item [hochreiter2001gradient] Sepp Hochreiter, Yoshua Bengio, Paolo Frasconi, and Jurgen Schmidhuber. Gradient flow in recurrent nets: the difficulty of learning long-term dependencies, 2001.
-\item [hochreiter1997] Sepp Hochreiter and Jurgen Schmidhuber. Long short-term memory. Neural computation, 9(8):17351780, 1997.
+\item [hochreiter2001gradient] Sepp Hochreiter, Yoshua Bengio, Paolo Frasconi, and Jürgen Schmidhuber. Gradient flow in recurrent nets: the difficulty of learning long-term dependencies, 2001.
+\item [hochreiter1997] Sepp Hochreiter and Jürgen Schmidhuber. Long short-term memory. Neural computation, 9(8):17351780, 1997.
 \item [huang-harper:2009:EMNLP] Zhongqiang Huang and Mary Harper. Self-training PCFG grammars with latent annotations across languages. In Proceedings of the 2009 Conference on Empirical Methods in Natural Language Processing, pages 832841. ACL, August 2009.
 \item [jozefowicz2016exploring] Rafal Jozefowicz, Oriol Vinyals, Mike Schuster, Noam Shazeer, and Yonghui Wu. Exploring the limits of language modeling. arXiv preprint arXiv:1602.02410, 2016.
-\item [extendedngpu] ukasz Kaiser and Samy Bengio. Can active memory replace attention? In Advances in Neural Information Processing Systems, (NIPS), 2016.
-\item [neural\_gpu] ukasz Kaiser and Ilya Sutskever. Neural GPUs learn algorithms. In International Conference on Learning Representations (ICLR), 2016.
+\item [extendedngpu] Łukasz Kaiser and Samy Bengio. Can active memory replace attention? In Advances in Neural Information Processing Systems, (NIPS), 2016.
+\item [neural\_gpu] Łukasz Kaiser and Ilya Sutskever. Neural GPUs learn algorithms. In International Conference on Learning Representations (ICLR), 2016.
 \item [NalBytenet2017] Nal Kalchbrenner, Lasse Espeholt, Karen Simonyan, Aaron vanden Oord, Alex Graves, and Koray Kavukcuoglu. Neural machine translation in linear time. arXiv preprint arXiv:1610.10099v2, 2017.
 \item [structuredAttentionNetworks] Yoon Kim, Carl Denton, Luong Hoang, and AlexanderM. Rush. Structured attention networks. In International Conference on Learning Representations, 2017.
 \item [kingma2014adam] Diederik Kingma and Jimmy Ba. Adam: A method for stochastic optimization. In ICLR, 2015.

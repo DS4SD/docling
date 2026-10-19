@@ -145,7 +145,7 @@
   <footnote>Work performed while at Google Brain.</footnote>
   <footnote>Work performed while at Google Research.</footnote>
   <text>Google Brain avaswani@google.com Noam Shazeer[1] Google Brain noam@google.com Niki Parmar[1] Google Research nikip@google.com Jakob Uszkoreit[1] Google Research usz@google.com Llion Jones[1] Google Research llion@google.com Aidan N. Gomez[1]</text>
-  <text>University of Toronto aidan@cs.toronto.edu ukasz Kaiser[1] Google Brain lukaszkaiser@google.com Illia Polosukhin[1]</text>
+  <text>University of Toronto aidan@cs.toronto.edu Łukasz Kaiser[1] Google Brain lukaszkaiser@google.com Illia Polosukhin[1]</text>
   <text>illia.polosukhin@gmail.com</text>
   <text>Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works.</text>
   <heading level="2">Abstract</heading>
@@ -1884,7 +1884,7 @@ lrate = d_{\text{model}}^{-0.5} \cdot
     <ldiv/>
     [xception2016] Francois Chollet. Xception: Deep learning with depthwise separable convolutions. arXiv preprint arXiv:1610.02357, 2016.
     <ldiv/>
-    [gruEval14] Junyoung Chung, Caglar Gulcehre, Kyunghyun Cho, and Yoshua Bengio. Empirical evaluation of gated recurrent neural networks on sequence modeling. CoRR, abs/1412.3555, 2014.
+    [gruEval14] Junyoung Chung, Çaglar Gülçehre, Kyunghyun Cho, and Yoshua Bengio. Empirical evaluation of gated recurrent neural networks on sequence modeling. CoRR, abs/1412.3555, 2014.
     <ldiv/>
     [dyer-rnng:16] Chris Dyer, Adhiguna Kuncoro, Miguel Ballesteros, and NoahA. Smith. Recurrent neural network grammars. In Proc. of NAACL, 2016.
     <ldiv/>
@@ -1894,17 +1894,17 @@ lrate = d_{\text{model}}^{-0.5} \cdot
     <ldiv/>
     [he2016deep] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770778, 2016.
     <ldiv/>
-    [hochreiter2001gradient] Sepp Hochreiter, Yoshua Bengio, Paolo Frasconi, and Jurgen Schmidhuber. Gradient flow in recurrent nets: the difficulty of learning long-term dependencies, 2001.
+    [hochreiter2001gradient] Sepp Hochreiter, Yoshua Bengio, Paolo Frasconi, and Jürgen Schmidhuber. Gradient flow in recurrent nets: the difficulty of learning long-term dependencies, 2001.
     <ldiv/>
-    [hochreiter1997] Sepp Hochreiter and Jurgen Schmidhuber. Long short-term memory. Neural computation, 9(8):17351780, 1997.
+    [hochreiter1997] Sepp Hochreiter and Jürgen Schmidhuber. Long short-term memory. Neural computation, 9(8):17351780, 1997.
     <ldiv/>
     [huang-harper:2009:EMNLP] Zhongqiang Huang and Mary Harper. Self-training PCFG grammars with latent annotations across languages. In Proceedings of the 2009 Conference on Empirical Methods in Natural Language Processing, pages 832841. ACL, August 2009.
     <ldiv/>
     [jozefowicz2016exploring] Rafal Jozefowicz, Oriol Vinyals, Mike Schuster, Noam Shazeer, and Yonghui Wu. Exploring the limits of language modeling. arXiv preprint arXiv:1602.02410, 2016.
     <ldiv/>
-    [extendedngpu] ukasz Kaiser and Samy Bengio. Can active memory replace attention? In Advances in Neural Information Processing Systems, (NIPS), 2016.
+    [extendedngpu] Łukasz Kaiser and Samy Bengio. Can active memory replace attention? In Advances in Neural Information Processing Systems, (NIPS), 2016.
     <ldiv/>
-    [neural_gpu] ukasz Kaiser and Ilya Sutskever. Neural GPUs learn algorithms. In International Conference on Learning Representations (ICLR), 2016.
+    [neural_gpu] Łukasz Kaiser and Ilya Sutskever. Neural GPUs learn algorithms. In International Conference on Learning Representations (ICLR), 2016.
     <ldiv/>
     [NalBytenet2017] Nal Kalchbrenner, Lasse Espeholt, Karen Simonyan, Aaron vanden Oord, Alex Graves, and Koray Kavukcuoglu. Neural machine translation in linear time. arXiv preprint arXiv:1610.10099v2, 2017.
     <ldiv/>

@@ -98,7 +98,7 @@ def test_latex_front_matter_keeps_roles_and_inline_math():
         .serialize()
         .text
     )
-    assert r"C. Balazs$^{1}$" in parsed
+    assert r"C. Balázs$^{1}$" in parsed
     assert r"E. L. Berger$^{2}$" in parsed
     assert r"Third Author $^3$" in parsed
     assert r"\$" not in parsed
