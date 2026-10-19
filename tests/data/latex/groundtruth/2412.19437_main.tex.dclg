@@ -272,10 +272,6 @@
     \newpage
   </text>
   <heading>DeepSeek-V3 Technical Report</heading>
-  <footnote>https://aider.chat</footnote>
-  <footnote>https://codeforces.com</footnote>
-  <footnote>https://www.cms.org.cn/Home/comp/comp/cid/12.html</footnote>
-  <footnote>https://github.com/openai/simple-evals</footnote>
   <text>UTF8gbsn</text>
   <picture>
     <caption>Benchmark performance of DeepSeek-V3 and its counterparts.</caption>
@@ -2075,11 +2071,15 @@
   <heading level="3">Evaluations</heading>
   <heading level="4">Evaluation Settings</heading>
   <text>Evaluation Benchmarks. Apart from the benchmark we used for base model testing, we further evaluate instructed models on IFEval[IFeval], FRAMES[frames], LongBench v2[bai2024longbench2], GPQA[gpqa], SimpleQA[simpleqa], C-SimpleQA[csimpleqa], SWE-Bench Verified[swe_verified], Aider</text>
+  <footnote>https://aider.chat</footnote>
   <text>, LiveCodeBench[livecodebench] (questions from August 2024 to November 2024), Codeforces</text>
+  <footnote>https://codeforces.com</footnote>
   <text>, Chinese National High School Mathematics Olympiad (CNMO 2024)</text>
+  <footnote>https://www.cms.org.cn/Home/comp/comp/cid/12.html</footnote>
   <text>, and American Invitational Mathematics Examination 2024 (AIME 2024)[AIME2024].</text>
   <text>Compared Baselines. We conduct comprehensive evaluations of our chat model against several strong baselines, including DeepSeek-V2-0506, DeepSeek-V2.5-0905, Qwen2.5 72B Instruct, LLaMA-3.1 405B Instruct, Claude-Sonnet-3.5-1022, and GPT-4o-0513. For the DeepSeek-V2 model series, we select the most representative variants for comparison. For closed-source models, evaluations are performed through their respective APIs.</text>
   <text>Detailed Evaluation Configurations. For standard benchmarks including MMLU, DROP, GPQA, and SimpleQA, we adopt the evaluation prompts from the simple-evals framework</text>
+  <footnote>https://github.com/openai/simple-evals</footnote>
   <text>. We utilize the Zero-Eval prompt format[Lin_ZeroEval_A_Unified_2024] for MMLU-Redux in a zero-shot setting. For other datasets, we follow their original evaluation protocols with default prompts as provided by the dataset creators. For code and math benchmarks, the HumanEval-Mul dataset includes 8 mainstream programming languages (Python, Java, Cpp, C#, JavaScript, TypeScript, PHP, and Bash) in total. We use CoT and non-CoT methods to evaluate model performance on LiveCodeBench, where the data are collected from August 2024 to November 2024. The Codeforces dataset is measured using the percentage of competitors. SWE-Bench verified is evaluated using the agentless framework[agentless]. We use the diff format to evaluate the Aider-related benchmarks. For mathematical assessments, AIME and CNMO 2024 are evaluated with a temperature of 0.7, and the results are averaged over 16 runs, while MATH-500 employs greedy decoding. We allow all models to output a maximum of 8192 tokens for each benchmark.</text>
   <table>
     <caption>Comparison between DeepSeek-V3 and other representative chat models. All models are evaluated in a configuration that limits the output length to 8K. Benchmarks containing fewer than 1000 samples are tested multiple times using varying temperature settings to derive robust final results. DeepSeek-V3 stands as the best-performing open-source model, and also exhibits competitive performance against frontier closed-source models.</caption>

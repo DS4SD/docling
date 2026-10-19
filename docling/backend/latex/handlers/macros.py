@@ -86,8 +86,16 @@ def _latex_group_end(text: str, start: int, opening: str, closing: str) -> int:
     depth = 0
     index = start
     while index < len(text):
-        if text[index] == "\\" and index + 1 < len(text) and text[index + 1] in "{}[]":
+        if (
+            text[index] == "\\"
+            and index + 1 < len(text)
+            and text[index + 1] in "\\{}[]%"
+        ):
             index += 2
+            continue
+        if text[index] == "%":
+            newline = text.find("\n", index)
+            index = len(text) if newline < 0 else newline + 1
             continue
         if text[index] == opening:
             depth += 1
@@ -97,6 +105,23 @@ def _latex_group_end(text: str, start: int, opening: str, closing: str) -> int:
                 return index + 1
         index += 1
     return len(text)
+
+
+def _strip_latex_comments(text: str) -> str:
+    parts: list[str] = []
+    index = 0
+    while index < len(text):
+        if text[index] == "\\" and index + 1 < len(text) and text[index + 1] in "\\%":
+            parts.append(text[index : index + 2])
+            index += 2
+            continue
+        if text[index] == "%":
+            newline = text.find("\n", index)
+            index = len(text) if newline < 0 else newline + 1
+            continue
+        parts.append(text[index])
+        index += 1
+    return "".join(parts)
 
 
 def _simple_declaration_end(text: str, command: str, cursor: int) -> int | None:
@@ -185,7 +210,9 @@ class MacroHandlerMixin:
                 # A source definition can replace a built-in accent macro.
                 # Register zero-argument definitions before the main parse so
                 # the parser does not consume a following math delimiter.
-                self._custom_macros[match.group(1)] = match.group(2)
+                self._custom_macros[match.group(1)] = _strip_latex_comments(
+                    match.group(2)
+                )
                 self._custom_macro_num_args[match.group(1)] = 0
             pieces.append(re.sub(r"[^\n]", " ", definition))
             cursor = end
@@ -300,7 +327,9 @@ class MacroHandlerMixin:
                             macro_def = def_arg.latex_verbatim().strip("{} ")
 
                         if macro_name:
-                            self._custom_macros[macro_name] = macro_def
+                            self._custom_macros[macro_name] = _strip_latex_comments(
+                                macro_def
+                            )
                             self._custom_macro_num_args[macro_name] = (
                                 self._parse_custom_macro_num_args(num_args_arg)
                             )

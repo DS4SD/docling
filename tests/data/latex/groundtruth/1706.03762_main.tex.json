@@ -205,6 +205,9 @@
         "$ref": "#/texts/119"
       },
       {
+        "$ref": "#/texts/127"
+      },
+      {
         "$ref": "#/texts/143"
       },
       {
@@ -367,6 +370,9 @@
         "$ref": "#/texts/398"
       },
       {
+        "$ref": "#/texts/399"
+      },
+      {
         "$ref": "#/texts/400"
       },
       {
@@ -464,12 +470,6 @@
         },
         {
           "$ref": "#/groups/1"
-        },
-        {
-          "$ref": "#/texts/127"
-        },
-        {
-          "$ref": "#/texts/399"
         }
       ],
       "content_layer": "body",
@@ -4393,7 +4393,7 @@
     {
       "self_ref": "#/texts/127",
       "parent": {
-        "$ref": "#/groups/0"
+        "$ref": "#/body"
       },
       "children": [
         {
@@ -7864,7 +7864,7 @@
     {
       "self_ref": "#/texts/399",
       "parent": {
-        "$ref": "#/groups/0"
+        "$ref": "#/body"
       },
       "children": [],
       "content_layer": "body",

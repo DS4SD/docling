@@ -44,14 +44,6 @@
 
 Albert Q. Jiang, Alexandre Sablayrolles, Arthur Mensch, Chris Bamford, Devendra Singh Chaplot, Diego de las Casas, Florian Bressand, Gianna Lengyel, Guillaume Lample, Lucile Saulnier, Lélio Renard Lavaud, Marie-Anne Lachaux, Pierre Stock, Teven Le Scao, Thibaut Lavril, Thomas Wang, Timothée Lacroix, William El Sayed
 
-https://github.com/mistralai/mistral-src
-
-https://github.com/skypilot-org/skypilot
-
-https://huggingface.co/mistralai
-
-Since Llama\textbackslash{}xspace2 34B was not open-sourced, we report results for Llama\textbackslash{}xspace1 34B.
-
 \begin{figure}[h]
 % image
 \caption{Image: images/header.jpeg}
@@ -69,9 +61,15 @@ Mistral\textasciitilde{}7B\textbackslash{}xspaceleverages grouped-query attentio
 
 Mistral\textasciitilde{}7B\textbackslash{}xspaceis released under the Apache 2.0 license. This release is accompanied by a reference implementation
 
+https://github.com/mistralai/mistral-src
+
 facilitating easy deployment either locally or on cloud platforms such as AWS, GCP, or Azure using the vLLM[kwon2023efficient] inference server and SkyPilot
 
+https://github.com/skypilot-org/skypilot
+
 . Integration with Hugging Face
+
+https://huggingface.co/mistralai
 
 is also streamlined for easier integration. Moreover, Mistral\textasciitilde{}7B\textbackslash{}xspaceis crafted for ease of fine-tuning across a myriad of tasks. As a demonstration of its adaptability and superior performance, we present a chat model fine-tuned from Mistral\textasciitilde{}7B\textbackslash{}xspacethat significantly outperforms the Llama\textbackslash{}xspace2 13B  Chat model.
 
@@ -139,6 +137,8 @@ We compare Mistral\textasciitilde{}7B\textbackslash{}xspaceto Llama\textbackslas
 \end{itemize}
 
 Detailed results for Mistral\textasciitilde{}7B\textbackslash{}xspace, Llama\textbackslash{}xspace2 7B/13B, and Code-Llama\textbackslash{}xspace7B are reported in Table[tab:results]. Figure[fig:bars] compares the performance of Mistral\textasciitilde{}7B\textbackslash{}xspacewith Llama\textbackslash{}xspace2 7B/13B, and Llama\textbackslash{}xspace1 34B
+
+Since Llama\textbackslash{}xspace2 34B was not open-sourced, we report results for Llama\textbackslash{}xspace1 34B.
 
 in different categories. Mistral\textasciitilde{}7B\textbackslash{}xspacesurpasses Llama\textbackslash{}xspace2 13B across all metrics, and outperforms Llama\textbackslash{}xspace134B on most benchmarks. In particular, Mistral\textasciitilde{}7B\textbackslash{}xspacedisplays a superior performance in code, mathematics, and reasoning benchmarks.
 

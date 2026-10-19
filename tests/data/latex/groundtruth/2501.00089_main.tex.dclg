@@ -32,18 +32,6 @@
   <text><![CDATA[Department of Physics & Astronomy, Johns Hopkins University, 3400 N Charles St, Baltimore, MD 21218]]></text>
   <text>Department of Computer Science, Johns Hopkins University, 3400 N Charles St, Baltimore, MD 21218</text>
   <text>jowu@stsci.edu</text>
-  <footnote>If we use all non-zero SFNet features, then the best-fit linear SVM validates at 0.83 accuracy and 0.70 F1 score, i.e., it performs worse. This suggests that restricting to the four most frequent feature activations reduces noiseanother benefit of sparsity.</footnote>
-  <footnote>
-    <content>We use the same training/validation split and re-initialize the model each time for each value of </content>
-    <formula>k</formula>
-. Because we repeat the training process from scratch, the RMSE values presented in this section slightly differ from the ones reported in Section [sec:results].
-  </footnote>
-  <footnote>
-    <content>The non-monotonic decrease in RMSE with increasing </content>
-    <formula>k</formula>
-    <content> suggests that PCAwhile able to reduce dimensionalitydoes not optimally distill morphological features into the ones most relevant for predicting galaxy properties.</content>
-  </footnote>
-  <footnote>While there is promise in improving the semantic content of some classification labels [2022arXiv221014760B], categorization is often an oversimplification of richer (astro)physics.</footnote>
   <text>0000-0002-5077-881X]John F. Wu</text>
   <heading level="2">Abstract</heading>
   <text><![CDATA[Galaxy appearances reveal the physics of how they formed and evolved. Machine learning models can now exploit galaxies' information-rich morphologies to predict physical properties directly from image cutouts. Learning the relationship between pixel-level features and galaxy properties is essential for building a physical understanding of galaxy evolution, but we are still unable to explicate the details of how deep neural networks represent image features. To address this lack of interpretability, we present a novel neural network architecture called a Sparse Feature Network (SFNet). SFNets produce interpretable features that can be linearly combined in order to estimate galaxy properties like optical emission line ratios or gas-phase metallicity. We find that SFNets do not sacrifice accuracy in order to gain interpretability, and that they perform comparably well to cutting-edge models on astronomical machine learning tasks. Our novel approach is valuable for finding physical patterns in large datasets and helping astronomers interpret machine learning results.]]></text>
@@ -208,6 +196,7 @@ dex error. This level of performance suggests that our SFNet is extremely accura
   <text><![CDATA[The model is only able to learn physical laws by leveraging galaxy morphology present within the optical image cutouts. However, galaxy evolution is governed by the complex interplay between multiple physical processes [2015ARAA..53...51S,2017MNRAS.471.2687B], which are not always imprinted in galaxy morphology, or perhaps not at the scales or wavelengths probed by our imaging surveys. Nonetheless, CNNs are surprisingly powerful at predicting the spectroscopic tracers of galaxy evolution. [2019AA...624A.102D] and [2019MNRAS.484.4683W] showed that galaxies' stellar masses can be estimated directly from image cutouts, and [2021MNRAS.501.4359Z] suggest that CNNs are sensitive to small-scale morphological perturbations due to dust in galaxies. Even information outside of the image cutout can be indirectly probed; [2020ApJ...900..142W] measure impact of galaxy environment on CNN-predicted gas properties, suggesting that the well-known density-morphology relation [1980ApJ...236..351D] can be implicitly learned via ML models. In summary, SFNets can learn a limited (but still powerful) set of physical relationships that govern galaxy evolution.]]></text>
   <heading level="3">Performance versus interpretability</heading>
   <text>Previous works have found that a CNN trained on optical image cutouts can successfully classify AGN from star-forming galaxies with an accuracy [2021ApJ...914..142H,2022arXiv221207881G,Doorenbos+2024]. We test how well the interpretable SFNet from Section[ssec:ionization] can also identify AGN. By optimizing a linear support vector machine (SVM) classifier on SL17, SL138, SL157, and SL322 from the training dataset, we can classify AGN with a validation accuracy of 0.85 and F1 score of 0.72.</text>
+  <footnote>If we use all non-zero SFNet features, then the best-fit linear SVM validates at 0.83 accuracy and 0.70 F1 score, i.e., it performs worse. This suggests that restricting to the four most frequent feature activations reduces noiseanother benefit of sparsity.</footnote>
   <text>In comparison, the highly tuned CNN from [2022arXiv221207881G] achieves an accuracy of 0.89 and F1 score of 0.75, and the conditional diffusion model by  [Doorenbos+2024] results in an accuracy of 0.82 and F1 score of 0.73 (although we note that they use a slightly different AGN classification scheme). Our experiments demonstrate that a linear combination of our interpretable features can distinguish AGN from star-forming galaxies at a level comparable to state-of-the-art ML algorithms.</text>
   <text>
     <content>In Section[ssec:metallicity], we estimate gas metallicity to within 0.087dex using a linear combination of two features (and 0.086dex using four features). For comparison, a typical CNN only achieves </content>
@@ -236,6 +225,11 @@ dex. Again, this suggests that SFNets do not sacrifice performance in order to g
     <formula>k \in \{2, 3, 4, 6, 8\}</formula>
 . We independently re-train the SFNet three times in order to estimate the mean and standard error on the prediction RMSE.
   </text>
+  <footnote>
+    <content>We use the same training/validation split and re-initialize the model each time for each value of </content>
+    <formula>k</formula>
+. Because we repeat the training process from scratch, the RMSE values presented in this section slightly differ from the ones reported in Section [sec:results].
+  </footnote>
   <text>The results are shown in Figure[fig:pca-comparison], and specific RMSE values are given in Table[tab:dimred].</text>
   <text>l cc cc[t!] 5</text>
   <text>Comparison of performance using a SFNet and a CNN with PCA-based dimensionality reduction.</text>
@@ -275,6 +269,11 @@ dex. Again, this suggests that SFNets do not sacrifice performance in order to g
     <formula>k=2</formula>
     <content> explainable features, reinforcing our results found in Section[ssec:metallicity]. We interpret this as evidence that the metallicity cannot be linearly combined using a small number of principal components of features extracted via a typical CNN.</content>
   </text>
+  <footnote>
+    <content>The non-monotonic decrease in RMSE with increasing </content>
+    <formula>k</formula>
+    <content> suggests that PCAwhile able to reduce dimensionalitydoes not optimally distill morphological features into the ones most relevant for predicting galaxy properties.</content>
+  </footnote>
   <text>
     <content>We turn our attention to spectral line fluxes (right panel of Figure[fig:pca-comparison]), and find that performance is poor for small values of </content>
     <formula>k</formula>
@@ -322,6 +321,7 @@ dex (comparable to the SFNet performance).
   </text>
   <heading level="3">Limitations of previous interpretability methods</heading>
   <text>The ML discipline generally focuses on classification problems, which has led to rapid development of classification-based interpretability algorithms [erhan2009_visualizing,zeiler2013visualizingunderstandingconvolutionalnetworks,simonyan2014deepinsideconvolutionalnetworks,8099837]. For example, Gradient-weighted Class Activation Mapping (GradCAM; gradcam) enables researchers to interrogate the model to reveal the pixels that are most important for each class prediction. However, GradCAM and its variations are reliant on classification labels. For example, galaxy morphologies and other properties exist along a continuum rather than in distinct categories. Even identifying AGN via the BPT diagram, which we explore in Section[ssec:ionization], is more accurately posed as a regression problem than a classification problem.</text>
+  <footnote>While there is promise in improving the semantic content of some classification labels [2022arXiv221014760B], categorization is often an oversimplification of richer (astro)physics.</footnote>
   <text>Moreover, interpretation for classification tasks (with fully separable classes) serves a different purpose than interpretation for regression tasks. Specifically, astronomers might ask questions like, which morphological features in this galaxy scale with its gas-phase metallicity? Astronomers are generally less interested in asking questions like, which morphological features in this image scale with the probability that it is a galaxy rather than a star? Regression tasks can be interpreted by understanding how output quantities scale with input features (see, e.g., our equations in Figure[fig:equations]), but classification problemswherein predictions are selected via the softmax operationonly require the dominant class to be marginally higher than every other class. Therefore, interpretability for regression and classification problems is different.</text>
   <text>Other interpretability methods like saliency mapping [simonyan2014deepinsideconvolutionalnetworks] cannot learn the non-linear patterns of multiple pixels at oncewhich is exactly what makes deep learning models so powerful. Despite these limitations, saliency and GradCAM-like techniques are widely adopted in astronomy [2019ApJ...882L..12P,2020ApJ...900..142W,2021MNRAS.501.4579B,2024ApJ...967..152A]. Our results demonstrate that sparse algorithms provide a powerful alternative for interpretable ML in the physical sciences.</text>
   <heading level="2">Conclusions</heading>

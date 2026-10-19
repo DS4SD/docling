@@ -93,7 +93,7 @@ class LatexMetadataHandler:
             if isinstance(node, LatexEnvironmentNode) and node.envname == "document":
                 break
             if isinstance(node, LatexMacroNode) and node.macroname in MACROS_METADATA:
-                self.process_macro(node, doc)
+                self.process_macro(node, doc, in_preamble=True)
                 continue
             for children in iter_child_nodelists(node):
                 self._process_preamble_nodes(children, doc, depth + 1)
@@ -104,6 +104,8 @@ class LatexMetadataHandler:
         doc: DoclingDocument,
         parent: NodeItem | None = None,
         formatting: Formatting | None = None,
+        *,
+        in_preamble: bool = False,
     ) -> None:
         """Add one or more rich text items for a metadata command."""
         if node.nodeargd is None or not node.nodeargd.argnlist:
@@ -126,7 +128,11 @@ class LatexMetadataHandler:
             if isinstance(optional, LatexGroupNode) and optional.nodelist:
                 nodes = [*optional.nodelist, LatexCharsNode(chars=" "), *nodes]
         segments = self._split_on_and(nodes) if role in _SPLIT_ROLES else [nodes]
-        role_parent = self._parent_for_role(doc, parent, role)
+        role_parent = (
+            parent
+            if role == "footnote" and not in_preamble
+            else self._parent_for_role(doc, parent, role)
+        )
         for segment in segments:
             self._backend._process_nodes(
                 self._replace_inst_markers(segment),

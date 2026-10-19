@@ -147,24 +147,6 @@
   <text>Google Brain avaswani@google.com Noam Shazeer[1] Google Brain noam@google.com Niki Parmar[1] Google Research nikip@google.com Jakob Uszkoreit[1] Google Research usz@google.com Llion Jones[1] Google Research llion@google.com Aidan N. Gomez[1]</text>
   <text>University of Toronto aidan@cs.toronto.edu ukasz Kaiser[1] Google Brain lukaszkaiser@google.com Illia Polosukhin[1]</text>
   <text>illia.polosukhin@gmail.com</text>
-  <footnote>
-    <content>To illustrate why the dot products get large, assume that the components of </content>
-    <formula>q</formula>
-    <content> and </content>
-    <formula>k</formula>
-    <content> are independent random variables with mean </content>
-    <formula>0</formula>
-    <content> and variance </content>
-    <formula>1</formula>
-    <content>.  Then their dot product, </content>
-    <formula>q \cdot k = \sum_{i=1}^{d_k} q_ik_i</formula>
-    <content>, has mean </content>
-    <formula>0</formula>
-    <content> and variance </content>
-    <formula>d_k</formula>
-.
-  </footnote>
-  <footnote>We used values of 2.8, 3.7, 6.0 and 9.5 TFLOPS for K80, K40, M40 and P100, respectively.</footnote>
   <text>Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works.</text>
   <heading level="2">Abstract</heading>
   <text>The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being  more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU.  On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing  both with large and limited training data.</text>
@@ -263,6 +245,23 @@
     <formula>d_k</formula>
 , the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients
   </text>
+  <footnote>
+    <content>To illustrate why the dot products get large, assume that the components of </content>
+    <formula>q</formula>
+    <content> and </content>
+    <formula>k</formula>
+    <content> are independent random variables with mean </content>
+    <formula>0</formula>
+    <content> and variance </content>
+    <formula>1</formula>
+    <content>.  Then their dot product, </content>
+    <formula>q \cdot k = \sum_{i=1}^{d_k} q_ik_i</formula>
+    <content>, has mean </content>
+    <formula>0</formula>
+    <content> and variance </content>
+    <formula>d_k</formula>
+.
+  </footnote>
   <text>
     <content>. To counteract this effect, we scale the dot products by </content>
     <formula>\frac{1}{\sqrt{d_k}}</formula>
@@ -1250,6 +1249,7 @@ lrate = d_{\text{model}}^{-0.5} \cdot
 , but terminate early when possible [wu2016google].
   </text>
   <text>Table [tab:wmt-results] summarizes our results and compares our translation quality and training costs to other model architectures from the literature.  We estimate the number of floating point operations used to train a model by multiplying the training time, the number of GPUs used, and an estimate of the sustained single-precision floating-point capacity of each GPU</text>
+  <footnote>We used values of 2.8, 3.7, 6.0 and 9.5 TFLOPS for K80, K40, M40 and P100, respectively.</footnote>
   <text>.</text>
   <heading level="3">Model Variations</heading>
   <table>

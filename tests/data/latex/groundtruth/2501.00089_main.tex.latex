@@ -20,14 +20,6 @@ Department of Computer Science, Johns Hopkins University, 3400 N Charles St, Bal
 
 jowu@stsci.edu
 
-If we use all non-zero SFNet features, then the best-fit linear SVM validates at 0.83 accuracy and 0.70 F1 score, i.e., it performs worse. This suggests that restricting to the four most frequent feature activations reduces noiseanother benefit of sparsity.
-
-We use the same training/validation split and re-initialize the model each time for each value of $k$. Because we repeat the training process from scratch, the RMSE values presented in this section slightly differ from the ones reported in Section [sec:results].
-
-The non-monotonic decrease in RMSE with increasing $k$ suggests that PCAwhile able to reduce dimensionalitydoes not optimally distill morphological features into the ones most relevant for predicting galaxy properties.
-
-While there is promise in improving the semantic content of some classification labels [2022arXiv221014760B], categorization is often an oversimplification of richer (astro)physics.
-
 0000-0002-5077-881X]John F. Wu
 
 \section{Abstract}
@@ -123,6 +115,8 @@ The model is only able to learn physical laws by leveraging galaxy morphology pr
 
 Previous works have found that a CNN trained on optical image cutouts can successfully classify AGN from star-forming galaxies with an accuracy [2021ApJ...914..142H,2022arXiv221207881G,Doorenbos+2024]. We test how well the interpretable SFNet from Section[ssec:ionization] can also identify AGN. By optimizing a linear support vector machine (SVM) classifier on SL17, SL138, SL157, and SL322 from the training dataset, we can classify AGN with a validation accuracy of 0.85 and F1 score of 0.72.
 
+If we use all non-zero SFNet features, then the best-fit linear SVM validates at 0.83 accuracy and 0.70 F1 score, i.e., it performs worse. This suggests that restricting to the four most frequent feature activations reduces noiseanother benefit of sparsity.
+
 In comparison, the highly tuned CNN from [2022arXiv221207881G] achieves an accuracy of 0.89 and F1 score of 0.75, and the conditional diffusion model by  [Doorenbos+2024] results in an accuracy of 0.82 and F1 score of 0.73 (although we note that they use a slightly different AGN classification scheme). Our experiments demonstrate that a linear combination of our interpretable features can distinguish AGN from star-forming galaxies at a level comparable to state-of-the-art ML algorithms.
 
 In Section[ssec:metallicity], we estimate gas metallicity to within 0.087dex using a linear combination of two features (and 0.086dex using four features). For comparison, a typical CNN only achieves $0.085$dex error [2019MNRAS.484.4683W]; note that the systematic scatter is $\sim 0.03$dex. Again, this suggests that SFNets do not sacrifice performance in order to gain interpretability.
@@ -138,6 +132,8 @@ While the SFNet produces interpretable features by imposing a sparsity constrain
 
 We test whether this smaller set of principal components are as robust as the SFNet features. We train a multivariate linear regression model using the first $k$ principal components from dense CNN activations as features, again using the same training and validation split, to predict both the metallicity and spectral line strengths. For comparison, we have also re-trained the SFNet using $k \in \{2, 3, 4, 6, 8\}$. We independently re-train the SFNet three times in order to estimate the mean and standard error on the prediction RMSE.
 
+We use the same training/validation split and re-initialize the model each time for each value of $k$. Because we repeat the training process from scratch, the RMSE values presented in this section slightly differ from the ones reported in Section [sec:results].
+
 The results are shown in Figure[fig:pca-comparison], and specific RMSE values are given in Table[tab:dimred].
 
 l cc cc[t!] 5
@@ -147,6 +143,8 @@ Comparison of performance using a SFNet and a CNN with PCA-based dimensionality 
 2cRMSE: Metallicity 2cRMSE: Spectral Lines (lr)2-3(lr)4-5 $k$ SFNet PCA SFNet PCA 2  $0.0858 \pm 0.0004$  0.1753  $0.2418 \pm 0.0002$  0.2806 3  $0.0862 \pm 0.0011$  0.2032  $0.2395 \pm 0.0014$  0.2646 4  $0.0862 \pm 0.0013$  0.1034  $0.2383 \pm 0.0003$  0.2646 6  $0.0875 \pm 0.0007$  0.1020  $0.2394 \pm 0.0009$  0.2419 8  $0.0852 \pm 0.0004$  0.0921  $0.2389 \pm 0.0012$  0.2396
 
 For both metallicity and spectral line fluxes, $>95\%$ of the variance is explained using the top $k=8$ principal components. For metallicity (left panel of Figure[fig:pca-comparison]), we find that the CNN + PCA performs poorly on the validation set for all values of $k$. Meanwhile, the SFNet can reconstruct metallicity with only $k=2$ explainable features, reinforcing our results found in Section[ssec:metallicity]. We interpret this as evidence that the metallicity cannot be linearly combined using a small number of principal components of features extracted via a typical CNN.
+
+The non-monotonic decrease in RMSE with increasing $k$ suggests that PCAwhile able to reduce dimensionalitydoes not optimally distill morphological features into the ones most relevant for predicting galaxy properties.
 
 We turn our attention to spectral line fluxes (right panel of Figure[fig:pca-comparison]), and find that performance is poor for small values of $k$, but if we use 8 principal components, then the RMSE becomes comparable to that of the SFNet. The SFNet can accurately estimate spectral line fluxes using only $k=4$ features (with significantly worse performance at $k=2$).
 
@@ -169,6 +167,8 @@ Finally, we check whether the SFNet can capture information not found within the
 \subsection{Limitations of previous interpretability methods}
 
 The ML discipline generally focuses on classification problems, which has led to rapid development of classification-based interpretability algorithms [erhan2009\_visualizing,zeiler2013visualizingunderstandingconvolutionalnetworks,simonyan2014deepinsideconvolutionalnetworks,8099837]. For example, Gradient-weighted Class Activation Mapping (GradCAM; gradcam) enables researchers to interrogate the model to reveal the pixels that are most important for each class prediction. However, GradCAM and its variations are reliant on classification labels. For example, galaxy morphologies and other properties exist along a continuum rather than in distinct categories. Even identifying AGN via the BPT diagram, which we explore in Section[ssec:ionization], is more accurately posed as a regression problem than a classification problem.
+
+While there is promise in improving the semantic content of some classification labels [2022arXiv221014760B], categorization is often an oversimplification of richer (astro)physics.
 
 Moreover, interpretation for classification tasks (with fully separable classes) serves a different purpose than interpretation for regression tasks. Specifically, astronomers might ask questions like, which morphological features in this galaxy scale with its gas-phase metallicity? Astronomers are generally less interested in asking questions like, which morphological features in this image scale with the probability that it is a galaxy rather than a star? Regression tasks can be interpreted by understanding how output quantities scale with input features (see, e.g., our equations in Figure[fig:equations]), but classification problemswherein predictions are selected via the softmax operationonly require the dominant class to be marginally higher than every other class. Therefore, interpretability for regression and classification problems is different.
 

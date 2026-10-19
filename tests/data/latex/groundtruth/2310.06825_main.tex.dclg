@@ -142,10 +142,6 @@
   </text>
   <heading>Mistral~7B\xspace</heading>
   <text>Albert Q. Jiang, Alexandre Sablayrolles, Arthur Mensch, Chris Bamford, Devendra Singh Chaplot, Diego de las Casas, Florian Bressand, Gianna Lengyel, Guillaume Lample, Lucile Saulnier, Lélio Renard Lavaud, Marie-Anne Lachaux, Pierre Stock, Teven Le Scao, Thibaut Lavril, Thomas Wang, Timothée Lacroix, William El Sayed</text>
-  <footnote>https://github.com/mistralai/mistral-src</footnote>
-  <footnote>https://github.com/skypilot-org/skypilot</footnote>
-  <footnote>https://huggingface.co/mistralai</footnote>
-  <footnote>Since Llama\xspace2 34B was not open-sourced, we report results for Llama\xspace1 34B.</footnote>
   <picture>
     <caption>Image: images/header.jpeg</caption>
   </picture>
@@ -155,8 +151,11 @@
   <text>=-1 In the rapidly evolving domain of Natural Language Processing (NLP), the race towards higher model performance often necessitates an escalation in model size. However, this scaling tends to increase computational costs and inference latency, thereby raising barriers to deployment in practical, real-world scenarios. In this context, the search for balanced models delivering both high-level performance and efficiency becomes critically essential. Our model, Mistral~7B\xspace, demonstrates that a carefully designed language model can deliver high performance while maintaining an efficient inference. Mistral~7B\xspaceoutperforms the previous best 13B model (Llama 2, [touvron2023llama2]) across all tested benchmarks, and surpasses the best 34B model (LLaMa 34B,[touvron2023llama]) in mathematics and code generation. Furthermore, Mistral~7B\xspaceapproaches the coding performance of Code-Llama\xspace7B[roziere2023code], without sacrificing performance on non-code related benchmarks.</text>
   <text>Mistral~7B\xspaceleverages grouped-query attention (GQA)[ainslie2023gqa], and sliding window attention (SWA)[child2019generating,beltagy2020longformer]. GQA significantly accelerates the inference speed, and also reduces the memory requirement during decoding, allowing for higher batch sizes hence higher throughput, a crucial factor for real-time applications. In addition, SWA is designed to handle longer sequences more effectively at a reduced computational cost, thereby alleviating a common limitation in LLMs. These attention mechanisms collectively contribute to the enhanced performance and efficiency of Mistral~7B\xspace.</text>
   <text>Mistral~7B\xspaceis released under the Apache 2.0 license. This release is accompanied by a reference implementation</text>
+  <footnote>https://github.com/mistralai/mistral-src</footnote>
   <text>facilitating easy deployment either locally or on cloud platforms such as AWS, GCP, or Azure using the vLLM[kwon2023efficient] inference server and SkyPilot</text>
+  <footnote>https://github.com/skypilot-org/skypilot</footnote>
   <text>. Integration with Hugging Face</text>
+  <footnote>https://huggingface.co/mistralai</footnote>
   <text>is also streamlined for easier integration. Moreover, Mistral~7B\xspaceis crafted for ease of fine-tuning across a myriad of tasks. As a demonstration of its adaptability and superior performance, we present a chat model fine-tuned from Mistral~7B\xspacethat significantly outperforms the Llama\xspace2 13B  Chat model.</text>
   <text>=-1 Mistral~7B\xspacetakes a significant step in balancing the goals of getting high performance while keeping large language models efficient. Through our work, our aim is to help the community create more affordable, efficient, and high-performing language models that can be used in a wide range of real-world applications.</text>
   <heading level="2">Architectural details</heading>
@@ -334,6 +333,7 @@
     Popular aggregated results: MMLU[hendrycks2020measuring] (5-shot), BBH[suzgun2022challenging] (3-shot), and AGI Eval[zhong2023agieval] (3-5-shot, English multiple-choice questions only)
   </list>
   <text>Detailed results for Mistral~7B\xspace, Llama\xspace2 7B/13B, and Code-Llama\xspace7B are reported in Table[tab:results]. Figure[fig:bars] compares the performance of Mistral~7B\xspacewith Llama\xspace2 7B/13B, and Llama\xspace1 34B</text>
+  <footnote>Since Llama\xspace2 34B was not open-sourced, we report results for Llama\xspace1 34B.</footnote>
   <text>in different categories. Mistral~7B\xspacesurpasses Llama\xspace2 13B across all metrics, and outperforms Llama\xspace134B on most benchmarks. In particular, Mistral~7B\xspacedisplays a superior performance in code, mathematics, and reasoning benchmarks.</text>
   <text><![CDATA[Size and Efficiency. We computed equivalent model sizes of the Llama\xspace2 family, aiming to understand Mistral~7B\xspacemodels' efficiency in the cost-performance spectrum (see Figure[fig:size]). When evaluated on reasoning, comprehension, and STEM reasoning (specifically MMLU), Mistral~7B\xspacemirrored performance that one might expect from a Llama\xspace2 model with more than 3x its size. On the Knowledge benchmarks, Mistral~7B\xspace's performance achieves a lower compression rate of 1.9x, which is likely due to its limited parameter count that restricts the amount of knowledge it can store.]]></text>
   <text>Evaluation Differences. On some benchmarks, there are some differences between our evaluation protocol and the one reported in the Llama\xspace2 paper: 1) on MBPP, we use the hand-verified subset 2) on TriviaQA, we do not provide Wikipedia contexts.</text>

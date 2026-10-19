@@ -33,6 +33,32 @@ Important content.
     assert "Important content." in doc.export_to_markdown()
 
 
+def test_comment_inside_definition_does_not_hide_body():
+    doc = _convert(
+        r"""\documentclass{article}
+\newcommand{\term}{First% {
+Second}
+\begin{document}
+Important content. \term
+\end{document}
+"""
+    )
+    assert doc.export_to_markdown() == "Important content. FirstSecond"
+
+
+def test_body_footnotes_keep_source_order():
+    doc = _convert(
+        r"""\documentclass{article}
+\begin{document}
+First\footnote{note one} second\footnote{note two} third.
+\end{document}
+"""
+    )
+    assert doc.export_to_markdown() == (
+        "First\n\nnote one\n\nsecond\n\nnote two\n\nthird."
+    )
+
+
 def test_verbatim_definition_is_preserved():
     doc = _convert(
         r"""\documentclass{article}
