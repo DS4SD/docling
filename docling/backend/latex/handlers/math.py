@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Callable
 from docling_core.types.doc.document import DocItemLabel, DoclingDocument, NodeItem
 
 from docling.backend.latex.constants import ENV_MATH_CLEAN, ENV_MATH_DISPLAY_PREFIXES
+from docling.backend.latex.utils.whitespace import collapse_source_layout_whitespace
 
 if TYPE_CHECKING:
     from typing import Any
@@ -76,5 +77,5 @@ class MathHandlerMixin:
 
         latex_str = latex_str.strip()
         if env_name == "inline":
-            latex_str = re.sub(r"[ \t\r\n]*[\t\r\n][ \t\r\n]*", " ", latex_str)
+            latex_str = collapse_source_layout_whitespace(latex_str)
         return latex_str
