@@ -1,11 +1,14 @@
+# SPDX-FileCopyrightText: The Docling Contributors
+# SPDX-License-Identifier: MIT
+
 from io import BytesIO
 from zipfile import ZipFile
 
 import pytest
-from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
-from docling.exceptions import ConversionError
 
+from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
 from docling.document_converter import DocumentConverter
+from docling.exceptions import ConversionError
 
 
 def make_zip(*members: tuple[str, bytes]) -> DocumentStream:
@@ -79,19 +82,19 @@ def test_zip_size_limit_skips_rejected_members_without_charging_the_budget() -> 
 
 
 def test_unsupported_only_zip_returns_a_failure_result() -> None:
-    source = make_zip(("notes.txt", b"unknown format"))
+    source = make_zip(("notes.bin", b"unknown format"))
     converter = DocumentConverter(allowed_formats=[InputFormat.MD])
 
     results = list(converter.convert_all([source], raises_on_error=False))
 
     assert len(results) == 1
     assert results[0].status == ConversionStatus.FAILURE
-    assert results[0].input.file.as_posix() == "mixed.zip/notes.txt"
+    assert results[0].input.file.as_posix() == "mixed.zip/notes.bin"
 
 
 def test_convert_all_can_continue_after_an_unsupported_member() -> None:
     source = make_zip(
-        ("notes.txt", b"unknown format"),
+        ("notes.bin", b"unknown format"),
         ("good.md", b"# Good"),
     )
     converter = DocumentConverter(allowed_formats=[InputFormat.MD])
@@ -107,10 +110,10 @@ def test_convert_all_can_continue_after_an_unsupported_member() -> None:
 
 def test_convert_all_raises_on_first_failed_member_by_default() -> None:
     source = make_zip(
-        ("notes.txt", b"unknown format"),
+        ("notes.bin", b"unknown format"),
         ("good.md", b"# Good"),
     )
     converter = DocumentConverter(allowed_formats=[InputFormat.MD])
 
-    with pytest.raises(ConversionError, match=r"notes\.txt"):
+    with pytest.raises(ConversionError, match=r"notes\.bin"):
         list(converter.convert_all([source]))
