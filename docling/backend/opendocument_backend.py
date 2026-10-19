@@ -201,6 +201,68 @@ def _load_odf_document(
         ) from e
 
 
+# Style families looked up by the backends, with the tag odfdo matches for each.
+_ODF_INDEXED_STYLE_TAGS = {
+    "drawing-page": "style:style",
+    "list": "text:list-style",
+    "paragraph": "style:style",
+    "text": "style:style",
+}
+
+
+class _OdfAutomaticStyleIndex:
+    """Look up named styles of ``content.xml`` in a dict.
+
+    ``OdfDocument.get_style()`` scans every style in the container for each new
+    name, which is quadratic for documents with thousands of automatic styles
+    (common in files exported from Word). The index returns what odfdo would:
+    the first style in document order with that family and name. Anything it
+    does not hold goes to odfdo.
+    """
+
+    def __init__(self, odf_obj: OdfDocument) -> None:
+        self._odf_get_style = odf_obj.get_style
+        self._content = odf_obj.content
+        self._styles: dict[tuple[str, str], Any] | None = None
+
+    def _build(self) -> dict[tuple[str, str], Any]:
+        styles: dict[tuple[str, str], Any] = {}
+        for query in ("//office:font-face-decls", "//office:automatic-styles"):
+            container = self._content.get_element(query)
+            if container is None:
+                continue
+            for style in container.children:
+                name = style.attributes.get("style:name")
+                if not name:
+                    continue
+                if style.tag == "text:list-style":
+                    family = "list"
+                else:
+                    family = style.attributes.get("style:family", "")
+                if _ODF_INDEXED_STYLE_TAGS.get(family) == style.tag:
+                    styles.setdefault((family, name), style)
+        return styles
+
+    def get_style(
+        self,
+        family: str,
+        name_or_element: Any = None,
+        display_name: str | None = None,
+    ) -> Any:
+        if (
+            family in _ODF_INDEXED_STYLE_TAGS
+            and isinstance(name_or_element, str)
+            and name_or_element
+            and display_name is None
+        ):
+            if self._styles is None:
+                self._styles = self._build()
+            style = self._styles.get((family, name_or_element))
+            if style is not None:
+                return style
+        return self._odf_get_style(family, name_or_element, display_name)
+
+
 class _OdfBaseBackend(DeclarativeDocumentBackend):
     """Shared loading / validation logic for ODT, ODS and ODP backends."""
 
@@ -224,7 +286,13 @@ class _OdfBaseBackend(DeclarativeDocumentBackend):
         )
         # get_style() runs an XPath query over the whole document and is called for
         # every paragraph and text run; styles do not change during conversion.
-        self.odf_obj.get_style = functools.cache(self.odf_obj.get_style)  # type: ignore[method-assign]
+        self.odf_obj.get_style = functools.cache(  # type: ignore[method-assign]
+            _OdfAutomaticStyleIndex(self.odf_obj).get_style
+        )
+        # On each miss, get_style() finds the style containers again with
+        # "//office:..." queries that walk the whole part, body included.
+        for part in (self.odf_obj.content, self.odf_obj.styles):
+            part.get_element = functools.cache(part.get_element)  # type: ignore[method-assign]
         if self._odf_type and self.odf_obj.get_type() != self._odf_type:
             raise RuntimeError(
                 f"Expected an OpenDocument {self._odf_type!r} but got "
