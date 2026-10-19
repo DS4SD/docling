@@ -129,6 +129,12 @@ LightOnOCR-3 has three presets: `lightonocr3_08b`, `lightonocr3_1b`, and
 and require `transformers>=5.5.4` for local inference. The existing `lightonocr`
 preset continues to use LightOnOCR-2-1B.
 
+For `docling-slim` installations, the parser also requires the Markdown extra:
+
+```bash
+pip install 'docling-slim[format-markdown]'
+```
+
 ```bash
 docling contract.pdf --pipeline vlm --vlm-model lightonocr3_08b
 ```

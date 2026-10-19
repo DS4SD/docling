@@ -10,7 +10,6 @@ import re
 from collections.abc import Iterator
 from pathlib import Path
 
-import marko
 from docling_core.types.doc import (
     ContentLayer,
     DocItemLabel,
@@ -86,6 +85,15 @@ def parse_lightonocr_markdown(
     Continuation labels retain their base class. Separate blocks are not merged
     or associated by proximity. Plain transcription is recovered without boxes.
     """
+    # Markdown support is optional in docling-slim installations.
+    try:
+        import marko
+    except ImportError as exc:
+        raise ImportError(
+            "LightOnOCR Markdown parsing requires "
+            "`pip install 'docling-slim[format-markdown]'`."
+        ) from exc
+
     doc = DoclingDocument(
         name=Path(filename).stem,
         origin=DocumentOrigin(
