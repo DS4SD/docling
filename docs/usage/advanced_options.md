@@ -27,6 +27,35 @@ BCP-47 tags behind the `iso:` prefix:
 $ docling-tools models download easyocr --easyocr-lang iso:zh-Hans --easyocr-lang ja
 ```
 
+To prefetch an OpenAI-format Whisper checkpoint for native ASR, select its model
+name. The file is stored directly in the output directory, so the directory can
+be copied to an artifact store and used with `--artifacts-path`:
+
+```sh
+docling-tools models download whisper_tiny --output-dir /models
+docling --asr-model whisper_tiny_native --artifacts-path /models audio.wav
+```
+
+The native Distil-Whisper presets work the same way. Their OpenAI-format
+checkpoints come from Hugging Face and are stored in the output directory in the
+Hugging Face cache layout:
+
+```sh
+docling-tools models download whisper_distil_small_en --output-dir /models
+docling --asr-model whisper_distil_small_en_native --artifacts-path /models audio.wav
+```
+
+`docling-tools models download --all` does not include ASR models. Add `--asr`
+to prefetch all native Whisper model sizes, English-only variants, and
+Distil-Whisper presets:
+
+```sh
+docling-tools models download --all --asr --output-dir /models
+```
+
+This requires the `asr` extra and downloads OpenAI-format checkpoints. It does
+not prefetch Transformers-format, MLX, or WhisperS2T models.
+
 Alternatively, models can be programmatically downloaded using `docling.utils.model_downloader.download_models()`.
 
 Also, you can use `download-hf-repo` parameter to download arbitrary models from HuggingFace by specifying repo id:
@@ -190,6 +219,40 @@ uv run docling convert --from pdf --to dclx \
 ```
 
 
+### Control PDF parser threads
+
+The PDF parser and the model pipeline use separate thread settings.
+`PdfPipelineOptions.accelerator_options.num_threads` controls CPU threads for
+model inference, while `ThreadedDoclingParseBackendOptions.parser_threads`
+controls the docling-parse backend.
+
+For the standard PDF pipeline, configure parser threads on `PdfFormatOption`:
+
+```python
+from docling.datamodel.backend_options import ThreadedDoclingParseBackendOptions
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
+
+pipeline_options = PdfPipelineOptions()
+
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(
+            pipeline_options=pipeline_options,
+            backend_options=ThreadedDoclingParseBackendOptions(parser_threads=8),
+        )
+    }
+)
+```
+
+The equivalent CLI option is independent of `--num-threads`:
+
+```sh
+docling --pipeline native --from pdf --parser-threads 8 FILE
+```
+
+
 ### Extract the native content of a PDF
 
 `NativePdfPipeline` uses docling-parse alone: one text item per native text cell
@@ -246,6 +309,31 @@ doc_converter = DocumentConverter(
 ```
 
 See [PDF heading levels](./heading_levels.md) for the signals, their precedence and all options.
+
+### PowerPoint charts
+
+A chart on a PowerPoint slide becomes a picture classified by its kind, with
+the data it plots in the picture's `meta.tabular_chart` and its title as the
+caption. The first column of the data holds the categories, under the title of
+the category axis, and each series gets a column. Dates on the category axis
+are written as ISO 8601 dates, such as `2012-01-01`.
+
+A combination chart, such as columns with a line on a secondary axis, gets one
+classification prediction per chart type. The back-most plot comes first, so
+it stays the main prediction, and the series of every plot are in the data:
+
+```python
+from docling.document_converter import DocumentConverter
+
+deck = DocumentConverter().convert("deck.pptx").document
+for picture in deck.pictures:
+    if picture.meta is not None and picture.meta.classification is not None:
+        kinds = [p.class_name for p in picture.meta.classification.predictions]
+        print(kinds)  # for example ['bar_chart', 'line_chart']
+```
+
+The picture itself is empty unless you set `render_chart_images=True` in
+`MsPowerpointBackendOptions`. That draws each chart with LibreOffice.
 
 ### Apple iWork options
 
@@ -322,6 +410,11 @@ The same option draws the charts of a Numbers spreadsheet, passed through
 from Numbers documents of either generation; a chart in an iWork '09
 presentation is not read.
 
+A Numbers table cell that is filled with an image becomes a `RichTableCell`. Its
+group holds the cell's text and the picture, as for a picture in a Word table
+cell. The image of a cell is read only from documents that Numbers saved since
+2017.
+
 `sheet_names` converts only the sheets it names, and `page_range` narrows the
 selection further, since each sheet is a page:
 
@@ -387,7 +480,7 @@ converter = DocumentConverter(
         )
     }
 )
-doc = converter.convert("saved_document.json").document
+doc = converter.convert("saved_document.json")
 ```
 
 Relative image paths are resolved against the current working directory. The
@@ -469,6 +562,133 @@ converter = DocumentConverter()
 result = converter.convert(source)
 ```
 
+## Track conversion progress
+
+To see progress without writing any code, turn on the built-in printer:
+
+```python
+from docling.document_converter import DocumentConverter
+
+converter = DocumentConverter(show_progress=True)
+result = converter.convert("report.pdf")
+```
+
+It prints to stderr one line per document, a progress bar for its pages and
+one for each enrichment step (picture classification or description, chart
+extraction, code and formulas):
+
+```text
+[1] Converting report.pdf
+  pages: 100%|██████████| 9/9 [00:49<00:00,  6.23s/page]
+  DocumentPictureClassifier: 100%|██████████| 6/6 [00:00<00:00, 12.90item/s]
+Finished report.pdf: success
+```
+
+On a terminal the bars fill up in docling orange while the document converts.
+For plain bars, pass `ProgressPrinter(color=False)` as the callback or set the
+`NO_COLOR` environment variable, which also works for the CLI. In a log file
+or a pipe each bar is written once as a count, such as `pages 9/9`. For a batch,
+give the printer the number of documents to get `[3/12]` instead of `[3]`:
+
+```python
+from docling.utils.progress import ProgressPrinter
+
+printer = ProgressPrinter(total_documents=len(sources))
+for result in DocumentConverter(progress_callback=printer).convert_all(sources):
+    ...
+```
+
+With `settings.perf.doc_batch_concurrency > 1`, each document keeps its own
+bar and the labels carry the document index, for example `[2] pages 9/9`.
+
+On the command line the same output is on by default when stderr is a
+terminal. `--no-progress` or `--quiet` turns it off, and `--progress` turns it
+on for pipes and log files. While the bars are shown, the CLI prints its log
+lines above them. If your own program logs to the terminal while
+`show_progress=True` draws bars, wrap the conversion in
+`tqdm.contrib.logging.logging_redirect_tqdm()` for the same effect.
+
+### Your own progress callback
+
+Pass a `progress_callback` to drive your own progress bar or forward the
+events elsewhere. Given to `convert`, `convert_all` or `convert_string`, it
+receives the events of that call only, so one converter can serve several
+callers, such as the tasks of a service. Given to the `DocumentConverter`
+constructor, it receives the events of every call. The callback receives one
+event object at a time (see `docling.datamodel.progress`):
+
+| Event | When |
+| --- | --- |
+| `DocumentStartedProgress` | An input document is picked up, including inputs that are then skipped. |
+| `PhaseStartedProgress` | The document enters the `initialize` (pipeline set-up, slow only while the models of a new pipeline load), `build`, `assemble` or `enrich` phase. Every format reports them. |
+| `PageCompletedProgress` | A page went through all page-level models, table structure included. PDF and image pipelines only. |
+| `EnrichmentProgress` | Item counts of one enrichment step, reported per batch. `step` is a stable `EnrichmentStep` (`code_formula`, `picture_classification`, `picture_description`, `chart_extraction`, or `other` for enrichment models docling does not know); `label` is a readable name for display. |
+| `DocumentCompletedProgress` | The document finished, with its `ConversionStatus`. Always the last event of a document, also when it failed. |
+
+Every event carries `document_index`, the position of the document in the
+`convert_all` call, and `document_name`. The events are Pydantic models, so
+they are easy to forward, for example as JSON to a web client:
+
+```python
+from docling.datamodel.progress import ConversionProgressEvent
+from docling.document_converter import DocumentConverter
+
+
+def forward(event: ConversionProgressEvent) -> None:
+    print(event.model_dump_json())  # or push it to a queue or websocket
+
+
+converter = DocumentConverter()
+result = converter.convert("report.pdf", progress_callback=forward)
+```
+
+```text
+{"kind":"document_started","document_index":1,"document_name":"report.pdf"}
+{"kind":"phase_started","document_index":1,"document_name":"report.pdf","phase":"initialize"}
+...
+{"kind":"page_completed","document_index":1,"document_name":"report.pdf","page_no":2,"success":true,"completed_pages":1,"total_pages":9}
+...
+```
+
+Things to know:
+
+- Pages can finish out of order. Use `completed_pages`, not `page_no`, for
+  the progress value. `total_pages` counts the pages selected by `page_range`.
+- Enrichment runs after the last page, on the whole document, so the page bar
+  reaching 100% does not mean the document is done. Watch the
+  `EnrichmentProgress` events, or wait for `DocumentCompletedProgress`.
+- The VLM pipeline enriches the pictures of each page before it reports the
+  page, so its page count already covers that work and it sends no
+  `EnrichmentProgress`.
+- Failed pages, and pages cut by `document_timeout`, are reported with
+  `success=False`, so `completed_pages` always reaches `total_pages`.
+- Exceptions raised by the callback are logged and ignored.
+- For a single document all events come from the thread that called
+  `convert`. With `settings.perf.doc_batch_concurrency > 1` several documents
+  report at once from worker threads, so the callback must be thread-safe.
+
 ## Limit resource usage
 
 You can limit the CPU threads used by Docling by setting the environment variable `OMP_NUM_THREADS` accordingly. The default setting is using 4 CPU threads.
+
+Peak memory on large or image-heavy PDFs is driven by how many decoded pages are held at once.
+`queue_max_size` bounds the pages buffered between pipeline stages, and `max_concurrent_results`
+bounds the pages the threaded docling-parse backend decodes ahead of the pipeline:
+
+```python
+from docling.datamodel.backend_options import ThreadedDoclingParseBackendOptions
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
+
+pipeline_options = PdfPipelineOptions(queue_max_size=1)
+
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(
+            pipeline_options=pipeline_options,
+            backend_options=ThreadedDoclingParseBackendOptions(max_concurrent_results=1),
+        )
+    }
+)
+```

@@ -19,6 +19,7 @@ Known gaps to improve:
 
 from __future__ import annotations
 
+import functools
 import logging
 import re
 from collections.abc import Callable
@@ -162,6 +163,12 @@ class _OdfTextRun:
 
 _ODF_HREF_SCHEME_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9+.-]*:")
 
+# Shapes of a notes page that show the slide or a field, not the speaker notes:
+# the slide thumbnail, and the slide number, date, header and footer fields.
+_ODP_NOTES_PAGE_FIELD_CLASSES = frozenset(
+    {"page", "page-number", "date-time", "header", "footer"}
+)
+
 
 def _odf_hyperlink_from_href(href: str | None) -> AnyUrl | Path | None:
     if href is None:
@@ -215,6 +222,9 @@ class _OdfBaseBackend(DeclarativeDocumentBackend):
         self.odf_obj: OdfDocument = _load_odf_document(
             path_or_stream, self.document_hash
         )
+        # get_style() runs an XPath query over the whole document and is called for
+        # every paragraph and text run; styles do not change during conversion.
+        self.odf_obj.get_style = functools.cache(self.odf_obj.get_style)  # type: ignore[method-assign]
         if self._odf_type and self.odf_obj.get_type() != self._odf_type:
             raise RuntimeError(
                 f"Expected an OpenDocument {self._odf_type!r} but got "
@@ -1110,6 +1120,10 @@ def _add_odf_child(
             comments=comments,
         )
     elif isinstance(element, Section):
+        # Writer saves a section hidden with Format > Sections > Hide as
+        # text:display="none", so its content is not shown or printed.
+        if element.get_attribute("text:display") == "none":
+            content_layer = ContentLayer.INVISIBLE
         _add_odf_children(
             doc,
             element.children,
@@ -1409,10 +1423,11 @@ def _add_odf_list(
                 marker=marker,
                 enumerated=current_enumerated,
                 parent=list_group,
-                # Prefer the run-derived text: odfdo's own text_recursive
-                # renders hyperlinked children as "[text](href)" markdown,
-                # which would otherwise leak into the plain item text.
-                text=runs[0].text if runs else text,
+                # Use only the run-derived text: odfdo's own text_recursive
+                # renders hyperlinked children as "[text](href)" markdown, an
+                # image or a chart as "(href)" and a footnote as its citation
+                # and body, which would otherwise leak into the plain item text.
+                text=runs[0].text if runs else "",
                 content_layer=content_layer,
                 formatting=runs[0].formatting if runs else None,
                 hyperlink=runs[0].hyperlink if runs else None,
@@ -1865,14 +1880,56 @@ class OdpDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
                     text=slide_name,
                 )
             self._walk_slide(page, parent=slide_group, doc=doc)
+            if self._is_slide_hidden(page):
+                self._hide_slide(doc, slide_group)
         return doc
+
+    @staticmethod
+    def _hide_slide(doc: DoclingDocument, slide_group: NodeItem) -> None:
+        """Move the content of a hidden slide to the invisible layer.
+
+        A hidden slide is not presented, so it is kept like a hidden ODS sheet:
+        available, but out of the default exports.
+        """
+        items = [
+            item
+            for item, _ in doc.iterate_items(
+                root=slide_group,
+                with_groups=True,
+                included_content_layers={ContentLayer.BODY},
+            )
+        ]
+        for item in items:
+            item.content_layer = ContentLayer.INVISIBLE
+
+    def _is_slide_hidden(self, page: DrawPage) -> bool:
+        """Return True if the slide is hidden in the presentation.
+
+        Impress marks a hidden slide with ``presentation:visibility="hidden"`` on
+        the ``style:drawing-page-properties`` of the slide's style.
+        """
+        style_name = page.get_attribute("draw:style-name")
+        if not isinstance(style_name, str):
+            return False
+        style = self.odf_obj.get_style("drawing-page", style_name)
+        if style is None:
+            return False
+        properties = style.get_element("style:drawing-page-properties")
+        return (
+            properties is not None
+            and properties.get_attribute("presentation:visibility") == "hidden"
+        )
 
     def _walk_slide(
         self, page: DrawPage, parent: NodeItem, doc: DoclingDocument
     ) -> None:
         seen_text_content = False
         for element in page.children:
-            if getattr(element, "tag", None) in {"anim:par", "presentation:notes"}:
+            tag = getattr(element, "tag", None)
+            if tag == "presentation:notes":
+                self._walk_slide_notes(element, parent=parent, doc=doc)
+                continue
+            if tag == "anim:par":
                 continue
             has_text = bool(
                 _clean_odf_text_lines(getattr(element, "text_recursive", ""))
@@ -1893,6 +1950,34 @@ class OdpDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
                     parent=parent,
                     doc=doc,
                     is_title=is_title,
+                )
+
+    def _walk_slide_notes(
+        self, notes: Element, parent: NodeItem, doc: DoclingDocument
+    ) -> None:
+        """Add the speaker notes of a slide to the notes content layer.
+
+        As in the PowerPoint backend, the notes go under the group of their
+        slide. A notes page also shows a thumbnail of the slide and can show
+        the slide number, date, header and footer, which are not notes.
+        """
+        for element in notes.children:
+            if (
+                element.get_attribute("presentation:class")
+                in _ODP_NOTES_PAGE_FIELD_CLASSES
+            ):
+                continue
+            textboxes = (
+                element.get_elements("descendant::draw:text-box")
+                if isinstance(element, Frame)
+                else [element]
+            )
+            for textbox in textboxes:
+                self._walk_textbox_children(
+                    textbox.children,
+                    parent=parent,
+                    doc=doc,
+                    content_layer=ContentLayer.NOTES,
                 )
 
     @staticmethod
@@ -1968,6 +2053,7 @@ class OdpDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
         doc: DoclingDocument,
         *,
         is_title: bool = False,
+        content_layer: ContentLayer | None = None,
     ) -> None:
         previous_list_state: _OdfListState | None = None
         for el in elements:
@@ -1977,7 +2063,7 @@ class OdpDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
                     doc,
                     el,
                     parent=parent,
-                    content_layer=None,
+                    content_layer=content_layer,
                     odf_obj=self.odf_obj,
                 )
             elif isinstance(el, Paragraph):
@@ -1987,14 +2073,14 @@ class OdpDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
                     _odf_text_runs(el, self.odf_obj),
                     label=DocItemLabel.TITLE if is_title else DocItemLabel.TEXT,
                     parent=parent,
-                    content_layer=None,
+                    content_layer=content_layer,
                 )
             elif isinstance(el, OdfList):
                 previous_list_state = _add_odf_list(
                     doc,
                     el,
                     parent=parent,
-                    content_layer=None,
+                    content_layer=content_layer,
                     odf_obj=self.odf_obj,
                     enumerated=False,
                     continued_state=previous_list_state,
@@ -2302,26 +2388,21 @@ class OdsDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
     ) -> None:
         """Find and extract images from an ODS sheet."""
         try:
-            # Get all images in the table
-            images = table.get_images()
+            # Pictures anchored to a cell are added with that cell. The ones
+            # anchored to the sheet itself are in <table:shapes>.
+            images = table.get_elements("table:shapes//draw:image")
             for img in images:
                 try:
-                    # Get the image data
-                    image_data = img.get_data()
-                    if image_data:
-                        # Convert to PIL Image
-                        from io import BytesIO
-
-                        pil_image = PILImage.open(BytesIO(image_data))
-
-                        # Try to get position information
-                        # ODF images are typically anchored to cells
+                    image_ref = _image_ref_from_odf_image(
+                        self.odf_obj, img, image_loader=self._image_loader
+                    )
+                    if image_ref is not None:
                         # For now, use a default position
                         anchor = (0, 0, 1, 1)
 
                         doc.add_picture(
                             parent=parent,
-                            image=ImageRef.from_pil(image=pil_image, dpi=72),
+                            image=image_ref,
                             caption=None,
                             prov=ProvenanceItem(
                                 page_no=page_no,
