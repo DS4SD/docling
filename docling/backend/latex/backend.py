@@ -326,7 +326,12 @@ class LatexDocumentBackend(
                                     text=text_run,
                                 )
                                 text_run = ""
-                            doc.add_formula(parent=inline_group, text=part.text)
+                            doc.add_formula(
+                                parent=inline_group,
+                                text=_SOURCE_LAYOUT_WHITESPACE.sub(
+                                    " ", part.text
+                                ).strip(),
+                            )
                         else:
                             text_run += part
                     if text_run:

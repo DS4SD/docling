@@ -172,22 +172,22 @@ class MacroHandlerMixin:
     def _preprocess_custom_macros(self, latex_text: str) -> str:
         """Expand legacy shortcuts without changing macro definitions."""
         self._masked_macro_spans = self._macro_definition_spans(latex_text)
-        shortcuts = {
-            "be": r"\begin{equation}",
-            "ee": r"\end{equation}",
-            "bea": r"\begin{eqnarray}",
-            "eea": r"\end{eqnarray}",
-            "beq": r"\begin{equation}",
-            "eeq": r"\end{equation}",
-        }
-        pattern = re.compile(r"\\(?:bea|eea|beq|eeq|be|ee)\b")
+        shortcuts: dict[str, str] = {}
+        environment_alias = re.compile(r"\\(?:begin|end)\{[^{}]+\}|\$\$")
         fuzz_assignment = re.compile(
             r"\\[vh]fuzz\s*=\s*[+-]?(?:\d+(?:\.\d*)?|\.\d+)\s*"
             r"(?:pt|pc|in|bp|cm|mm|dd|cc|sp|em|ex)\b"
         )
 
         def replace(segment: str) -> str:
-            segment = pattern.sub(lambda match: shortcuts[match.group()[1:]], segment)
+            if shortcuts:
+                names = "|".join(
+                    re.escape(name) for name in sorted(shortcuts, key=len, reverse=True)
+                )
+                pattern = re.compile(r"\\(?:" + names + r")(?![A-Za-z@])")
+                segment = pattern.sub(
+                    lambda match: shortcuts[match.group()[1:]], segment
+                )
             return fuzz_assignment.sub("", segment)
 
         pieces: list[str] = []
@@ -214,6 +214,14 @@ class MacroHandlerMixin:
                     match.group(2)
                 )
                 self._custom_macro_num_args[match.group(1)] = 0
+            for name, expansion in self._custom_macros.items():
+                body = expansion.strip()
+                if self._custom_macro_num_args.get(
+                    name
+                ) == 0 and environment_alias.fullmatch(body):
+                    shortcuts[name] = body
+                else:
+                    shortcuts.pop(name, None)
             pieces.append(re.sub(r"[^\n]", " ", definition))
             cursor = end
         pieces.append(replace(latex_text[cursor:]))
@@ -834,6 +842,8 @@ class MacroHandlerMixin:
             previous = latex_str
             for macro_name, macro_def in self._custom_macros.items():
                 if self._custom_macro_num_args.get(macro_name, 0) > 0:
+                    continue
+                if "\\" + macro_name not in latex_str:
                     continue
                 latex_str = re.sub(
                     rf"\\{re.escape(macro_name)}(?![a-zA-Z])",

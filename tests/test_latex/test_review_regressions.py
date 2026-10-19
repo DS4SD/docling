@@ -2,8 +2,11 @@
 # SPDX-License-Identifier: MIT
 
 from io import BytesIO
+from time import perf_counter
+from xml.etree import ElementTree as ET
 
-from docling_core.types.doc import ContentLayer
+import pytest
+from docling_core.types.doc import ContentLayer, DocItemLabel
 
 from docling.backend.latex_backend import LatexDocumentBackend
 from docling.datamodel.base_models import InputFormat
@@ -57,6 +60,104 @@ First\footnote{note one} second\footnote{note two} third.
     assert doc.export_to_markdown() == (
         "First\n\nnote one\n\nsecond\n\nnote two\n\nthird."
     )
+
+
+@pytest.mark.parametrize(
+    ("math", "expected"),
+    [
+        (r"\begin{math}a+" + "\n b" + r"\end{math}", "a+ b"),
+        (r"\ensuremath{c+" + "\n d}", "c+ d"),
+    ],
+)
+def test_multiline_inline_formula_has_plain_doclang_content(math: str, expected: str):
+    doc = _convert(
+        "\\documentclass{article}\\begin{document}Before "
+        + math
+        + " after.\\end{document}"
+    )
+    root = ET.fromstring(doc.export_to_doclang())
+    formulas = [element for element in root.iter() if element.tag == "formula"]
+    assert len(formulas) == 1
+    assert formulas[0].text == expected
+    assert not list(formulas[0])
+
+
+def test_shortcut_name_defined_as_beta_keeps_math_meaning():
+    doc = _convert(
+        r"\documentclass{article}\newcommand{\be}{\beta}"
+        r"\begin{document}Before $\be+1$ after.\end{document}"
+    )
+    formulas = [item.text for item in doc.texts if item.label == DocItemLabel.FORMULA]
+    assert formulas == [r"\beta+1"]
+    assert "Before" in doc.export_to_markdown()
+    assert "after." in doc.export_to_markdown()
+
+
+@pytest.mark.parametrize(
+    ("opening", "closing_name", "closing", "expected"),
+    [
+        (
+            r"\begin{eqnarray}",
+            "eeq",
+            r"\end{eqnarray}",
+            r"\begin{eqnarray} x&=&y \end{eqnarray}",
+        ),
+        (
+            r"\begin{eqnarray}",
+            "eneq",
+            r"\end{eqnarray}",
+            r"\begin{eqnarray} x&=&y \end{eqnarray}",
+        ),
+        ("$$", "eeq", "$$", "x&=&y"),
+    ],
+)
+def test_source_defined_display_shortcuts(
+    opening: str, closing_name: str, closing: str, expected: str
+):
+    doc = _convert(
+        r"\documentclass{article}\newcommand{\beq}{"
+        + opening
+        + "}\\newcommand{\\"
+        + closing_name
+        + r"}{"
+        + closing
+        + "}\\begin{document}\\beq x&=&y \\"
+        + closing_name
+        + r"\end{document}"
+    )
+    formulas = [item.text for item in doc.texts if item.label == DocItemLabel.FORMULA]
+    assert formulas == [expected]
+
+
+def test_many_unused_macros_do_not_slow_formula_expansion():
+    names = (
+        "unused"
+        + chr(97 + index // 676)
+        + chr(97 + (index // 26) % 26)
+        + chr(97 + index % 26)
+        for index in range(700)
+    )
+    definitions = "".join("\\newcommand{\\" + name + "}{x}" for name in names)
+    source = (
+        r"\documentclass{article}\newcommand{\used}{1}"
+        + definitions
+        + r"\begin{document}$x+\used$\end{document}"
+    )
+    stream = BytesIO(source.encode())
+    in_doc = InputDocument(
+        path_or_stream=stream,
+        format=InputFormat.LATEX,
+        backend=LatexDocumentBackend,
+        filename="many-macros.tex",
+    )
+    backend = LatexDocumentBackend(in_doc=in_doc, path_or_stream=stream)
+    backend._preprocess_custom_macros(backend.latex_text)
+    assert len(backend._custom_macros) == 701
+
+    start = perf_counter()
+    for _ in range(10_000):
+        assert backend._expand_macros(r"x+\used") == "x+1"
+    assert perf_counter() - start < 3
 
 
 def test_verbatim_definition_is_preserved():
