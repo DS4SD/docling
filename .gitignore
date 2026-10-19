@@ -13,6 +13,7 @@ output/
 *.dclg
 *.xml
 *.zip
+!tests/data/**/*.zip
 \#*\#
 /.emacs.desktop
 /.emacs.desktop.lock
