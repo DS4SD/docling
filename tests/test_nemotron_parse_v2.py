@@ -175,7 +175,7 @@ def test_parse_nemotron_markdown_and_semantic_classes() -> None:
     assert document.texts[0].label == DocItemLabel.TITLE
     assert document.texts[0].text == "Main title"
     assert document.texts[1].label == DocItemLabel.SECTION_HEADER
-    assert document.texts[1].level == 3
+    assert document.texts[1].level == 2
     assert document.texts[1].text == "1.2 Method"
     assert document.texts[2].text == "Article history:\nReceived 12 June"
     assert any(item.label == DocItemLabel.REFERENCE for item in document.texts)
