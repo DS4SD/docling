@@ -1030,8 +1030,12 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 _log.debug("Some other element: %s", type(element).__name__)
 
         element_children = getattr(element, "children", [])
+        # SetextHeading is not a subclass of Heading in marko.
         if (
-            isinstance(element, marko.block.Paragraph | marko.block.Heading)
+            isinstance(
+                element,
+                marko.block.Paragraph | marko.block.Heading | marko.block.SetextHeading,
+            )
             and len(element_children) > 1
             and not _only_plain_line_breaks(element_children)
         ):

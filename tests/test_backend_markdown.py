@@ -1306,3 +1306,32 @@ def test_rich_table_cell_no_stray_body_items():
     # The only direct body child must be the table itself.
     body_crefs = {ref.cref for ref in doc.body.children}
     assert body_crefs == {"#/tables/0"}
+
+
+@pytest.mark.parametrize(
+    ("setext", "atx", "expected"),
+    [
+        ("Hello *world*\n===\n", "# Hello *world*\n", "# Hello *world*"),
+        (
+            "See [docs](https://example.org)\n---\n",
+            "## See [docs](https://example.org)\n",
+            "## See [docs](https://example.org/)",
+        ),
+        ("Use `foo` now\n---\n", "## Use `foo` now\n", "## Use `foo` now"),
+    ],
+    ids=["emphasis", "link", "code-span"],
+)
+def test_setext_heading_keeps_its_inline_content(setext: str, atx: str, expected: str):
+    """A setext heading with several inline runs is converted like the ATX one.
+
+    Its runs go in an inline group under the heading, so they are not exported
+    as an empty heading followed by one paragraph per run.
+    """
+    converter = get_converter()
+    setext_doc = converter.convert_string(setext, format=InputFormat.MD).document
+    atx_doc = converter.convert_string(atx, format=InputFormat.MD).document
+
+    assert setext_doc.export_to_markdown() == expected
+    assert [(item.label, item.text) for item in setext_doc.texts] == [
+        (item.label, item.text) for item in atx_doc.texts
+    ]
