@@ -158,23 +158,16 @@ def _collect_annotation_content(
                 break
             ii += 1
     else:
-        # Original logic for other labels
+        # Text and captions can span lines and paragraphs within one annotation.
         while i < len(lines):
-            content_line = lines[i].strip()
-            if content_line:
-                if re.match(annotation_pattern, content_line):
-                    break
-                visited_lines.add(i)
+            if re.match(annotation_pattern, lines[i].strip()):
+                break
+            if i not in visited_lines:
                 content_lines.append(lines[i].rstrip())
-                i += 1
-                if label_str not in ["figure", "image"]:
-                    break
-            else:
-                i += 1
-                if content_lines:
-                    break
+                visited_lines.add(i)
+            i += 1
 
-    return "\n".join(content_lines), i
+    return "\n".join(content_lines).strip("\n"), i
 
 
 def _process_annotation_item(
