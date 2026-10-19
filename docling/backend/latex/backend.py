@@ -22,12 +22,12 @@ from docling.backend.latex.utils.encoding import decode_latex_content
 from docling.backend.latex.utils.latex_context import LATEX_CONTEXT_DB
 from docling.backend.latex.utils.table import TableHelperMixin
 from docling.backend.latex.utils.text import TextHelperMixin, iter_child_nodelists
+from docling.backend.latex.utils.whitespace import collapse_source_layout_whitespace
 from docling.datamodel.backend_options import LatexBackendOptions
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 
 _log = logging.getLogger(__name__)
-_SOURCE_LAYOUT_WHITESPACE = re.compile(r"[ \t\r\n]*[\t\r\n][ \t\r\n]*")
 
 _PYLATEXENC_AVAILABLE: bool = False
 _PYLATEXENC_IMPORT_ERROR: ImportError | None = None
@@ -261,12 +261,12 @@ class LatexDocumentBackend(
                 DocItemLabel.CODE,
             }:
                 continue
-            item.text = _SOURCE_LAYOUT_WHITESPACE.sub(" ", item.text)
-            item.orig = _SOURCE_LAYOUT_WHITESPACE.sub(" ", item.orig)
+            item.text = collapse_source_layout_whitespace(item.text)
+            item.orig = collapse_source_layout_whitespace(item.orig)
 
         for table in doc.tables:
             for cell in table.data.table_cells:
-                cell.text = _SOURCE_LAYOUT_WHITESPACE.sub(" ", cell.text)
+                cell.text = collapse_source_layout_whitespace(cell.text)
 
         return doc
 
@@ -328,8 +328,8 @@ class LatexDocumentBackend(
                                 text_run = ""
                             doc.add_formula(
                                 parent=inline_group,
-                                text=_SOURCE_LAYOUT_WHITESPACE.sub(
-                                    " ", part.text
+                                text=collapse_source_layout_whitespace(
+                                    part.text
                                 ).strip(),
                             )
                         else:
