@@ -3377,6 +3377,47 @@ def test_artifact_route_keeps_the_hostname_behind_a_proxy(
     assert route.headers == {}
 
 
+@pytest.mark.parametrize(
+    ("url", "trusted"),
+    [
+        ("http://localhost:9000/bucket/artifact.zip", True),
+        ("http://LOCALHOST:9000/other/artifact.zip", True),
+        ("https://minio.internal/artifact.zip", True),
+        ("https://minio.internal:443/artifact.zip", True),
+        ("http://localhost:9001/artifact.zip", False),
+        ("https://localhost:9000/artifact.zip", False),
+        ("http://minio.internal/artifact.zip", False),
+        ("http://127.0.0.1:9000/artifact.zip", False),
+    ],
+)
+def test_artifact_route_trusts_only_allowlisted_origins(
+    url: str, trusted: bool
+) -> None:
+    allowlist = client_module._parse_artifact_url_allowlist(
+        ["http://localhost:9000", "https://minio.internal/"]
+    )
+
+    if trusted:
+        route = client_module._artifact_route(
+            url, check_public=True, trusted_origins=allowlist
+        )
+        assert route.urls == [url]
+        assert route.headers == {}
+    else:
+        with pytest.raises(ArtifactDownloadError, match="artifact_url_allowlist"):
+            client_module._artifact_route(
+                url, check_public=True, trusted_origins=allowlist
+            )
+
+
+@pytest.mark.parametrize(
+    "entry", ["minio.internal:9000", "ftp://minio.internal", "http://", ""]
+)
+def test_artifact_url_allowlist_rejects_non_http_origins(entry: str) -> None:
+    with pytest.raises(ValueError, match="artifact_url_allowlist"):
+        DoclingServiceClient(url=TEST_BASE_URL, artifact_url_allowlist=[entry])
+
+
 def test_convert_rejects_private_artifact_url_by_default(tmp_path: Path) -> None:
     def fake_submit(self, source, options, target, request_headers=None):
         return _status_response("task-x", "pending")

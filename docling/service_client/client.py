@@ -163,7 +163,52 @@ class _ArtifactRoute:
     extensions: dict[str, Any]
 
 
-def _artifact_route(url: str, *, check_public: bool) -> _ArtifactRoute:
+_DEFAULT_HTTP_PORTS = {"http": 80, "https": 443}
+
+
+def _artifact_origin(url: httpx.URL) -> tuple[str, str, int] | None:
+    """Return the ``(scheme, host, port)`` origin of an http(s) URL, or None.
+
+    The default port of the scheme is filled in, so ``http://h`` and
+    ``http://h:80`` have the same origin. The same parser as the request is
+    used, so the origin that is checked is the origin that is contacted.
+    """
+    scheme = url.scheme
+    host = url.raw_host.decode("ascii").lower()
+    if scheme not in _DEFAULT_HTTP_PORTS or not host:
+        return None
+    return (scheme, host, url.port or _DEFAULT_HTTP_PORTS[scheme])
+
+
+def _parse_artifact_url_allowlist(
+    origins: Iterable[str] | None,
+) -> frozenset[tuple[str, str, int]]:
+    """Parse the ``artifact_url_allowlist`` entries into origins.
+
+    Raises:
+        ValueError: If an entry is not an http(s) URL with a host.
+    """
+    parsed: set[tuple[str, str, int]] = set()
+    for value in origins or ():
+        try:
+            origin = _artifact_origin(httpx.URL(value))
+        except httpx.InvalidURL:
+            origin = None
+        if origin is None:
+            raise ValueError(
+                f"Invalid artifact_url_allowlist entry {value!r}: expected an "
+                "http(s) origin such as 'http://minio.storage.svc.cluster.local:9000'."
+            )
+        parsed.add(origin)
+    return frozenset(parsed)
+
+
+def _artifact_route(
+    url: str,
+    *,
+    check_public: bool,
+    trusted_origins: frozenset[tuple[str, str, int]] = frozenset(),
+) -> _ArtifactRoute:
     """Return how to send an artifact GET for ``url``.
 
     SSRF guard for artifact downloads: presigned URLs are followed by the client,
@@ -173,27 +218,37 @@ def _artifact_route(url: str, *, check_public: bool) -> _ArtifactRoute:
     lookup at connect time cannot select a different peer. The hostname is kept
     in the ``Host`` header and, for https, for SNI and certificate verification.
 
+    URLs whose origin is in ``trusted_origins`` skip the public-address check.
+    The caller checks each redirect hop separately, so a redirect from a
+    trusted origin to another host is checked again.
+
     The proxy comes from the environment and is the only proxy the download
     uses, because the download clients do not read the environment. When a
     proxy is used, it resolves the host, so the request keeps the hostname.
 
     Raises:
-        ArtifactDownloadError: If ``check_public`` is set and the URL is not
-            http(s) or any address of its host is not public.
+        ArtifactDownloadError: If ``check_public`` is set, the origin of the URL
+            is not in ``trusted_origins``, and the URL is not http(s) or any
+            address of its host is not public.
     """
     proxy = select_proxy(url, get_environ_proxies(url))
     if not check_public:
         return _ArtifactRoute(proxy=proxy, urls=[url], headers={}, extensions={})
     refused = ArtifactDownloadError(
-        f"Refusing to download artifact from a non-public URL: {url}."
+        f"Refusing to download artifact from a non-public URL: {url}. "
+        "To trust this storage, add its origin to the artifact_url_allowlist "
+        "of DoclingServiceClient."
     )
     try:
         parsed = httpx.URL(url)
     except httpx.InvalidURL as exc:
         raise refused from exc
-    host = parsed.raw_host.decode("ascii")
-    if parsed.scheme not in {"http", "https"} or not host:
+    origin = _artifact_origin(parsed)
+    if origin is None:
         raise refused
+    if origin in trusted_origins:
+        return _ArtifactRoute(proxy=proxy, urls=[url], headers={}, extensions={})
+    host = origin[1]
     try:
         addresses = resolve_public_addresses(host)
     except ValueError as exc:
@@ -852,7 +907,8 @@ class DoclingServiceClient(_BaseDoclingServiceClient):
         http_read_timeout: float = 60.0,
         artifact_download_timeout: float = DEFAULT_ARTIFACT_DOWNLOAD_TIMEOUT_SECONDS,
         max_artifact_download_bytes: int = DEFAULT_MAX_ARTIFACT_DOWNLOAD_BYTES,
-        # Internal: skip the artifact SSRF guard for private/loopback storage.
+        artifact_url_allowlist: Iterable[str] | None = None,
+        # Internal: skip the artifact SSRF guard for every host.
         _allow_private_artifact_urls: bool = False,
     ) -> None:
         super().__init__(
@@ -871,6 +927,10 @@ class DoclingServiceClient(_BaseDoclingServiceClient):
         )
         self._artifact_download_timeout = artifact_download_timeout
         self._max_artifact_download_bytes = max_artifact_download_bytes
+        # Origins whose artifacts may be downloaded from private addresses.
+        self._artifact_url_allowlist = _parse_artifact_url_allowlist(
+            artifact_url_allowlist
+        )
         self._allow_private_artifact_urls = _allow_private_artifact_urls
 
         timeout = httpx.Timeout(
@@ -1997,7 +2057,11 @@ class DoclingServiceClient(_BaseDoclingServiceClient):
         Each hop uses a dedicated client, so the service ``X-Api-Key`` header is
         never sent to the artifact storage, and the proxy matches the hop's URL.
         """
-        route = _artifact_route(url, check_public=not self._allow_private_artifact_urls)
+        route = _artifact_route(
+            url,
+            check_public=not self._allow_private_artifact_urls,
+            trusted_origins=self._artifact_url_allowlist,
+        )
         with httpx.Client(**self._artifact_client_options(route)) as client:
             *fallbacks, last = [
                 client.build_request(
@@ -2018,7 +2082,11 @@ class DoclingServiceClient(_BaseDoclingServiceClient):
 
     @contextlib.asynccontextmanager
     async def _open_artifact_async(self, url: str) -> AsyncIterator[httpx.Response]:
-        route = _artifact_route(url, check_public=not self._allow_private_artifact_urls)
+        route = _artifact_route(
+            url,
+            check_public=not self._allow_private_artifact_urls,
+            trusted_origins=self._artifact_url_allowlist,
+        )
         async with httpx.AsyncClient(**self._artifact_client_options(route)) as client:
             *fallbacks, last = [
                 client.build_request(

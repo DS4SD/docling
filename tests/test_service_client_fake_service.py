@@ -158,6 +158,52 @@ def test_presigned_artifact_on_a_loopback_host_is_refused(client):
     )
 
 
+def test_presigned_artifact_on_an_allowlisted_private_origin_is_downloaded(
+    service,
+):
+    with DoclingServiceClient(
+        url=service.base_url,
+        status_watcher=StatusWatcherKind.POLLING,
+        poll_server_wait=0.01,
+        poll_client_interval=0.01,
+        artifact_url_allowlist=[service.base_url],
+    ) as remote:
+        result = remote.convert(SOURCE)
+
+    assert result.status == ConversionStatus.SUCCESS
+    assert service.requests_for("GET", r"/artifacts/.*/json")
+
+
+def test_redirect_from_an_allowlisted_origin_to_a_private_host_is_refused(
+    serve, service
+):
+    """The allowlist applies to each redirect hop, not only to the first URL."""
+    port = service.base_url.rsplit(":", 1)[1]
+    service.respond_once(
+        "GET",
+        r"/artifacts/.*/json",
+        Response(
+            status=302,
+            headers={"Location": f"http://localhost:{port}/artifacts/x/json"},
+        ),
+    )
+
+    with DoclingServiceClient(
+        url=service.base_url,
+        status_watcher=StatusWatcherKind.POLLING,
+        poll_server_wait=0.01,
+        poll_client_interval=0.01,
+        artifact_url_allowlist=[service.base_url],
+    ) as remote:
+        result = remote.convert(SOURCE, raises_on_error=False)
+
+    assert result.status == ConversionStatus.FAILURE
+    assert any(
+        "non-public URL: http://localhost:" in item.error_message
+        for item in result.errors
+    ), result.errors
+
+
 @pytest.mark.parametrize("many", [False, True], ids=["convert", "convert_all"])
 def test_presigned_artifact_is_fetched_from_the_validated_address(
     client, serve, service, allow_loopback_artifacts, many
