@@ -33,8 +33,9 @@ def _sniff_dialect(head: str, read_sample: Callable[[], str]) -> type[csv.Dialec
     it rejects samples whose rows hold different numbers of delimiters. A
     successful sniff must also parse as a complete record: a line cut inside a
     quoted field can otherwise mistake its content for a delimiter. Retrying
-    with a sample that closes the quote recovers those.
-    `read_sample` is only called on that fallback path.
+    with a sample that closes the quote recovers those. A first line holding
+    several candidate delimiters is also checked against the sample.
+    `read_sample` is only called on those paths.
 
     Raises csv.Error if neither can be detected.
     """
@@ -43,9 +44,21 @@ def _sniff_dialect(head: str, read_sample: Callable[[], str]) -> type[csv.Dialec
         # Sniffer can succeed on a delimiter inside an unfinished quoted field.
         # Only trust the first-line dialect if it also parses a complete record.
         next(csv.reader([head], dialect=dialect, doublequote=True, strict=True))
-        return dialect
     except csv.Error:
         return csv.Sniffer().sniff(read_sample(), _DELIMITERS)
+
+    # A line holding more than one candidate delimiter is ambiguous on its own:
+    # the sniffer then picks the first one in its preference order, e.g. `,`
+    # for `a;b (x, y);c`. The following rows can tell them apart, so prefer a
+    # sample-based dialect when it detects another delimiter seen in the line.
+    if sum(delimiter in head for delimiter in _DELIMITERS) > 1:
+        try:
+            sample_dialect = csv.Sniffer().sniff(read_sample(), _DELIMITERS)
+        except csv.Error:
+            return dialect
+        if sample_dialect.delimiter in head:
+            return sample_dialect
+    return dialect
 
 
 class CsvDocumentBackend(DeclarativeDocumentBackend):

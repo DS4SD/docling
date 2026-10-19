@@ -137,6 +137,58 @@ def test_doubled_quotes_with_non_comma_delimiter():
     assert [cell.text for cell in cells] == ["a", "b", 'say "x"', "2"]
 
 
+@pytest.mark.parametrize(
+    "payload, expected",
+    [
+        (
+            b"Product;Weight (kg, net);Price\nApple;0,2;1,50\nPear;0,35;2\n",
+            [
+                "Product",
+                "Weight (kg, net)",
+                "Price",
+                "Apple",
+                "0,2",
+                "1,50",
+                "Pear",
+                "0,35",
+                "2",
+            ],
+        ),
+        (
+            b"Product,Weight (kg; net),Price\nApple,0.2,1.50\nPear,0.35,2\n",
+            [
+                "Product",
+                "Weight (kg; net)",
+                "Price",
+                "Apple",
+                "0.2",
+                "1.50",
+                "Pear",
+                "0.35",
+                "2",
+            ],
+        ),
+    ],
+    ids=["semicolon_with_comma_in_header", "comma_with_semicolon_in_header"],
+)
+def test_header_with_second_delimiter_uses_following_rows(payload, expected):
+    """A header holding two candidate delimiters is ambiguous on its own.
+
+    `csv.Sniffer` then picks the first one in its preference order, so a
+    semicolon file whose header contains a comma was split on commas. The
+    following rows disambiguate it (#4895).
+    """
+    doc = (
+        get_converter()
+        .convert(
+            DocumentStream(name="ambiguous.csv", stream=BytesIO(payload)),
+            raises_on_error=True,
+        )
+        .document
+    )
+    assert [cell.text for cell in doc.tables[0].data.table_cells] == expected
+
+
 def test_backslash_escaped_quotes_are_a_load_error():
     """A file using backslash-escaped quotes (e.g. MySQL SELECT … INTO OUTFILE) fails to load.
 
