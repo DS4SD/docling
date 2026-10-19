@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import json
 import logging
 import mimetypes
@@ -15,7 +16,13 @@ import tempfile
 import time
 import warnings
 import zipfile
-from collections.abc import AsyncGenerator, Iterable, Iterator, Sequence
+from collections.abc import (
+    AsyncGenerator,
+    AsyncIterator,
+    Iterable,
+    Iterator,
+    Sequence,
+)
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
@@ -147,30 +154,36 @@ def _is_storage_target(target: object) -> bool:
 
 
 @dataclass(frozen=True, slots=True)
-class _ArtifactTarget:
-    """One way to send an artifact GET: the URL to open and its extra headers."""
+class _ArtifactRoute:
+    """How to send one artifact GET: the proxy, the URLs to try, and their headers."""
 
-    url: str
+    proxy: str | None
+    urls: list[str]
     headers: dict[str, str]
     extensions: dict[str, Any]
 
 
-def _artifact_targets(url: str) -> list[_ArtifactTarget]:
-    """Return the targets for an artifact GET, in the order to try them.
+def _artifact_route(url: str, *, check_public: bool) -> _ArtifactRoute:
+    """Return how to send an artifact GET for ``url``.
 
     SSRF guard for artifact downloads: presigned URLs are followed by the client,
     so a compromised or misconfigured service could otherwise point them at the
     client's internal network. Every IPv4 and IPv6 address of the host must be
-    public, and the request goes to one of the validated addresses, so another
-    DNS lookup at connect time cannot select a different peer. The original
-    hostname is kept in the ``Host`` header and, for https, for SNI and
-    certificate verification. When a proxy is configured for the URL, the proxy
-    resolves the host, so the request keeps the hostname.
+    public, and the request goes to the validated addresses, so another DNS
+    lookup at connect time cannot select a different peer. The hostname is kept
+    in the ``Host`` header and, for https, for SNI and certificate verification.
+
+    The proxy comes from the environment and is the only proxy the download
+    uses, because the download clients do not read the environment. When a
+    proxy is used, it resolves the host, so the request keeps the hostname.
 
     Raises:
-        ArtifactDownloadError: If the URL is not http(s) or any address of its
-            host is not public.
+        ArtifactDownloadError: If ``check_public`` is set and the URL is not
+            http(s) or any address of its host is not public.
     """
+    proxy = select_proxy(url, get_environ_proxies(url))
+    if not check_public:
+        return _ArtifactRoute(proxy=proxy, urls=[url], headers={}, extensions={})
     refused = ArtifactDownloadError(
         f"Refusing to download artifact from a non-public URL: {url}."
     )
@@ -178,37 +191,20 @@ def _artifact_targets(url: str) -> list[_ArtifactTarget]:
         parsed = httpx.URL(url)
     except httpx.InvalidURL as exc:
         raise refused from exc
-    hostname = parsed.host
-    if parsed.scheme not in {"http", "https"} or not hostname:
+    host = parsed.raw_host.decode("ascii")
+    if parsed.scheme not in {"http", "https"} or not host:
         raise refused
     try:
-        addresses = resolve_public_addresses(hostname)
+        addresses = resolve_public_addresses(host)
     except ValueError as exc:
         raise refused from exc
-    if select_proxy(url, get_environ_proxies(url)):
-        return [_ArtifactTarget(url=url, headers={}, extensions={})]
-
-    host_header = f"[{hostname}]" if ":" in hostname else hostname
-    if parsed.port is not None:
-        host_header += f":{parsed.port}"
-    extensions: dict[str, Any] = (
-        {"sni_hostname": hostname} if parsed.scheme == "https" else {}
-    )
-    return [
-        _ArtifactTarget(
-            url=str(parsed.copy_with(host=str(address))),
-            headers={"Host": host_header},
-            extensions=extensions,
-        )
-        for address in addresses
-    ]
-
-
-def _build_artifact_request(
-    client: httpx.Client | httpx.AsyncClient, target: _ArtifactTarget
-) -> httpx.Request:
-    return client.build_request(
-        "GET", target.url, headers=target.headers, extensions=target.extensions
+    if proxy:
+        return _ArtifactRoute(proxy=proxy, urls=[url], headers={}, extensions={})
+    return _ArtifactRoute(
+        proxy=None,
+        urls=[str(parsed.copy_with(host=str(address))) for address in addresses],
+        headers={"Host": parsed.netloc.decode("ascii")},
+        extensions={"sni_hostname": host} if parsed.scheme == "https" else {},
     )
 
 
@@ -1931,96 +1927,115 @@ class DoclingServiceClient(_BaseDoclingServiceClient):
         the SSRF guard, and enforces a streamed size cap. Redirects are followed
         manually so each target can be re-validated.
         """
-        timeout = httpx.Timeout(self._artifact_download_timeout)
         try:
-            with httpx.Client(timeout=timeout, follow_redirects=False) as client:
-                url = uri
-                for _ in range(MAX_ARTIFACT_DOWNLOAD_REDIRECTS + 1):
-                    response = self._send_artifact_request(client, url)
-                    try:
-                        if response.is_redirect:
-                            url = self._next_redirect_url(url, response)
-                            continue
-                        if response.status_code != 200:
-                            raise ArtifactDownloadError(
-                                "Artifact download failed with HTTP "
-                                f"{response.status_code}."
-                            )
-                        chunks: list[bytes] = []
-                        total = 0
-                        for chunk in response.iter_bytes():
-                            total += len(chunk)
-                            self._check_artifact_size(total)
-                            chunks.append(chunk)
-                        return b"".join(chunks)
-                    finally:
-                        response.close()
-                raise ArtifactDownloadError(
-                    "Too many redirects while downloading artifact."
-                )
+            url = uri
+            for _ in range(MAX_ARTIFACT_DOWNLOAD_REDIRECTS + 1):
+                with self._open_artifact(url) as response:
+                    if response.is_redirect:
+                        url = self._next_redirect_url(url, response)
+                        continue
+                    if response.status_code != 200:
+                        raise ArtifactDownloadError(
+                            "Artifact download failed with HTTP "
+                            f"{response.status_code}."
+                        )
+                    chunks: list[bytes] = []
+                    total = 0
+                    for chunk in response.iter_bytes():
+                        total += len(chunk)
+                        self._check_artifact_size(total)
+                        chunks.append(chunk)
+                    return b"".join(chunks)
+            raise ArtifactDownloadError(
+                "Too many redirects while downloading artifact."
+            )
         except httpx.HTTPError as exc:
             raise ArtifactDownloadError(f"Artifact download failed: {exc}") from exc
 
     async def _download_artifact_bytes_async(self, uri: str) -> bytes:
-        timeout = httpx.Timeout(self._artifact_download_timeout)
         try:
-            async with httpx.AsyncClient(
-                timeout=timeout, follow_redirects=False
-            ) as client:
-                url = uri
-                for _ in range(MAX_ARTIFACT_DOWNLOAD_REDIRECTS + 1):
-                    response = await self._send_artifact_request_async(client, url)
-                    try:
-                        if response.is_redirect:
-                            url = self._next_redirect_url(url, response)
-                            continue
-                        if response.status_code != 200:
-                            raise ArtifactDownloadError(
-                                "Artifact download failed with HTTP "
-                                f"{response.status_code}."
-                            )
-                        chunks: list[bytes] = []
-                        total = 0
-                        async for chunk in response.aiter_bytes():
-                            total += len(chunk)
-                            self._check_artifact_size(total)
-                            chunks.append(chunk)
-                        return b"".join(chunks)
-                    finally:
-                        await response.aclose()
-                raise ArtifactDownloadError(
-                    "Too many redirects while downloading artifact."
-                )
+            url = uri
+            for _ in range(MAX_ARTIFACT_DOWNLOAD_REDIRECTS + 1):
+                async with self._open_artifact_async(url) as response:
+                    if response.is_redirect:
+                        url = self._next_redirect_url(url, response)
+                        continue
+                    if response.status_code != 200:
+                        raise ArtifactDownloadError(
+                            "Artifact download failed with HTTP "
+                            f"{response.status_code}."
+                        )
+                    chunks: list[bytes] = []
+                    total = 0
+                    async for chunk in response.aiter_bytes():
+                        total += len(chunk)
+                        self._check_artifact_size(total)
+                        chunks.append(chunk)
+                    return b"".join(chunks)
+            raise ArtifactDownloadError(
+                "Too many redirects while downloading artifact."
+            )
         except httpx.HTTPError as exc:
             raise ArtifactDownloadError(f"Artifact download failed: {exc}") from exc
 
-    def _artifact_request_targets(self, url: str) -> list[_ArtifactTarget]:
-        if self._allow_private_artifact_urls:
-            return [_ArtifactTarget(url=url, headers={}, extensions={})]
-        return _artifact_targets(url)
+    def _artifact_client_options(self, route: _ArtifactRoute) -> dict[str, Any]:
+        # ``trust_env=False`` stops httpx from choosing its own proxy, so the
+        # proxy in ``route`` is the only one used. The CA settings from the
+        # environment (``SSL_CERT_FILE``, ``SSL_CERT_DIR``) still apply.
+        return {
+            "timeout": httpx.Timeout(self._artifact_download_timeout),
+            "follow_redirects": False,
+            "trust_env": False,
+            "verify": httpx.create_ssl_context(),
+            "proxy": route.proxy,
+        }
 
-    def _send_artifact_request(self, client: httpx.Client, url: str) -> httpx.Response:
-        """Send a streamed GET for ``url``, trying each validated address in turn."""
-        *fallbacks, last = self._artifact_request_targets(url)
-        for target in fallbacks:
-            try:
-                return client.send(_build_artifact_request(client, target), stream=True)
-            except (httpx.ConnectError, httpx.ConnectTimeout):
-                continue
-        return client.send(_build_artifact_request(client, last), stream=True)
+    @contextlib.contextmanager
+    def _open_artifact(self, url: str) -> Iterator[httpx.Response]:
+        """Open a streamed GET for one hop, trying each validated address in turn.
 
-    async def _send_artifact_request_async(
-        self, client: httpx.AsyncClient, url: str
-    ) -> httpx.Response:
-        *fallbacks, last = self._artifact_request_targets(url)
-        for target in fallbacks:
-            try:
-                return await client.send(
-                    _build_artifact_request(client, target), stream=True
+        Each hop uses a dedicated client, so the service ``X-Api-Key`` header is
+        never sent to the artifact storage, and the proxy matches the hop's URL.
+        """
+        route = _artifact_route(url, check_public=not self._allow_private_artifact_urls)
+        with httpx.Client(**self._artifact_client_options(route)) as client:
+            *fallbacks, last = [
+                client.build_request(
+                    "GET", u, headers=route.headers, extensions=route.extensions
                 )
-            except (httpx.ConnectError, httpx.ConnectTimeout):
-                continue
-        return await client.send(_build_artifact_request(client, last), stream=True)
+                for u in route.urls
+            ]
+            for request in fallbacks:
+                with contextlib.suppress(httpx.ConnectError, httpx.ConnectTimeout):
+                    response = client.send(request, stream=True)
+                    break
+            else:
+                response = client.send(last, stream=True)
+            try:
+                yield response
+            finally:
+                response.close()
+
+    @contextlib.asynccontextmanager
+    async def _open_artifact_async(self, url: str) -> AsyncIterator[httpx.Response]:
+        route = _artifact_route(url, check_public=not self._allow_private_artifact_urls)
+        async with httpx.AsyncClient(**self._artifact_client_options(route)) as client:
+            *fallbacks, last = [
+                client.build_request(
+                    "GET", u, headers=route.headers, extensions=route.extensions
+                )
+                for u in route.urls
+            ]
+            for request in fallbacks:
+                with contextlib.suppress(httpx.ConnectError, httpx.ConnectTimeout):
+                    response = await client.send(request, stream=True)
+                    break
+            else:
+                response = await client.send(last, stream=True)
+            try:
+                yield response
+            finally:
+                await response.aclose()
 
     @staticmethod
     def _next_redirect_url(current_url: str, response: httpx.Response) -> str:

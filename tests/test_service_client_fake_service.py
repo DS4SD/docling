@@ -184,6 +184,24 @@ def test_presigned_artifact_is_fetched_from_the_validated_address(
     }
 
 
+def test_presigned_artifact_in_no_proxy_is_fetched_directly(
+    client, serve, service, allow_loopback_artifacts, monkeypatch
+):
+    """A host in ``NO_PROXY`` is fetched directly, also after address pinning.
+
+    ``NO_PROXY`` names the hostname, not the validated address. The download
+    must not match the address against the proxy settings again, or it is sent
+    to the proxy. The sync service client already exists, so it keeps no proxy.
+    """
+    monkeypatch.setenv("HTTP_PROXY", "http://proxy.invalid:9")
+    monkeypatch.setenv("NO_PROXY", "artifacts.invalid")
+    monkeypatch.delenv("no_proxy", raising=False)
+    port = service.base_url.rsplit(":", 1)[1]
+    serve.base_url = f"http://artifacts.invalid:{port}"
+
+    assert client.convert(SOURCE).status == ConversionStatus.SUCCESS
+
+
 def test_convert_falls_back_to_inbody_when_presigned_is_unsupported(client, service):
     """A service without artifact storage rejects presigned; the client retargets."""
     # Only the first submission is rejected, so the InBody retry succeeds.

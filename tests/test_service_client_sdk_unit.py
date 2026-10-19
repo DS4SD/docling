@@ -3315,12 +3315,14 @@ def test_convert_all_materializes_presigned_results_in_order(
         assert pictures and str(pictures[0].image.uri).startswith("data:image")
 
 
-def test_artifact_target_pins_a_public_address() -> None:
-    [target] = client_module._artifact_targets("https://8.8.8.8:8443/artifact.zip")
+def test_artifact_route_pins_a_public_address() -> None:
+    route = client_module._artifact_route(
+        "https://8.8.8.8:8443/artifact.zip", check_public=True
+    )
 
-    assert target.url == "https://8.8.8.8:8443/artifact.zip"
-    assert target.headers == {"Host": "8.8.8.8:8443"}
-    assert target.extensions == {"sni_hostname": "8.8.8.8"}
+    assert route.urls == ["https://8.8.8.8:8443/artifact.zip"]
+    assert route.headers == {"Host": "8.8.8.8:8443"}
+    assert route.extensions == {"sni_hostname": "8.8.8.8"}
 
 
 @pytest.mark.parametrize(
@@ -3335,12 +3337,12 @@ def test_artifact_target_pins_a_public_address() -> None:
         "not-a-url",
     ],
 )
-def test_artifact_target_refuses_non_public_urls(url: str) -> None:
+def test_artifact_route_refuses_non_public_urls(url: str) -> None:
     with pytest.raises(ArtifactDownloadError, match="non-public URL"):
-        client_module._artifact_targets(url)
+        client_module._artifact_route(url, check_public=True)
 
 
-def test_artifact_target_refuses_a_host_with_any_private_address(
+def test_artifact_route_refuses_a_host_with_any_private_address(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """A public A record must not hide a loopback AAAA record."""
@@ -3354,20 +3356,25 @@ def test_artifact_target_refuses_a_host_with_any_private_address(
     monkeypatch.setattr(socket, "getaddrinfo", fake_getaddrinfo)
 
     with pytest.raises(ArtifactDownloadError, match="non-public URL"):
-        client_module._artifact_targets("https://artifacts.example/artifact.zip")
+        client_module._artifact_route(
+            "https://artifacts.example/artifact.zip", check_public=True
+        )
 
 
-def test_artifact_target_keeps_the_hostname_behind_a_proxy(
+def test_artifact_route_keeps_the_hostname_behind_a_proxy(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setenv("HTTPS_PROXY", "http://proxy.invalid:3128")
     monkeypatch.delenv("NO_PROXY", raising=False)
     monkeypatch.delenv("no_proxy", raising=False)
 
-    [target] = client_module._artifact_targets("https://8.8.8.8/artifact.zip")
+    route = client_module._artifact_route(
+        "https://8.8.8.8/artifact.zip", check_public=True
+    )
 
-    assert target.url == "https://8.8.8.8/artifact.zip"
-    assert target.headers == {}
+    assert route.proxy == "http://proxy.invalid:3128"
+    assert route.urls == ["https://8.8.8.8/artifact.zip"]
+    assert route.headers == {}
 
 
 def test_convert_rejects_private_artifact_url_by_default(tmp_path: Path) -> None:
