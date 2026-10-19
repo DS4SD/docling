@@ -71,6 +71,19 @@ def parse_markdown_heading(text: str) -> tuple[str, int | None]:
     return match.group(2), len(match.group(1))
 
 
+def strip_math_delimiters(text: str) -> str:
+    """Remove one matching outer math pair without interpreting its LaTeX."""
+    text = text.strip()
+    for opening, closing in (("$$", "$$"), (r"\[", r"\]"), (r"\(", r"\)"), ("$", "$")):
+        if (
+            len(text) >= len(opening) + len(closing)
+            and text.startswith(opening)
+            and text.endswith(closing)
+        ):
+            return text[len(opening) : -len(closing)].strip()
+    return text
+
+
 def strip_stop_strings(texts: list[str], stop_strings: list[str]) -> list[str]:
     """Strip stop strings from decoded texts.
 
