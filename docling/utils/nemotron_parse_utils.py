@@ -311,7 +311,11 @@ def parse_nemotron_parse_v2(
             )
         elif region.label == "Section-header":
             heading_match = _HEADING_PATTERN.match(raw_text)
-            level = len(heading_match.group(1)) if heading_match is not None else 1
+            level = (
+                max(1, len(heading_match.group(1)) - 1)
+                if heading_match is not None
+                else 1
+            )
             document.add_heading(
                 text=_markdown_to_text(raw_text),
                 orig=raw_text,

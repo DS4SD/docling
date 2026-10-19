@@ -620,7 +620,8 @@ class _ChandraDocumentBuilder:
             if re.fullmatch(r"h[1-6]", node.tag):
                 for item in self.doc.texts[before:]:
                     if isinstance(item, SectionHeaderItem):
-                        item.level = int(node.tag[1])
+                        # Docling section level 1 exports as H2, below the title.
+                        item.level = max(1, int(node.tag[1]) - 1)
 
     def _list(self, node: _Element, parent: NodeItem | None) -> None:
         group = self.doc.add_list_group(parent=parent)
