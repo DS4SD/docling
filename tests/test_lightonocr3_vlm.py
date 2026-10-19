@@ -7,7 +7,14 @@ from pathlib import PurePath
 from types import SimpleNamespace
 
 import pytest
-from docling_core.types.doc import ContentLayer, DocItemLabel, Size
+from docling_core.types.doc import (
+    CodeItem,
+    ContentLayer,
+    DocItemLabel,
+    FormulaItem,
+    SectionHeaderItem,
+    Size,
+)
 from PIL import Image
 
 from docling.datamodel.base_models import Page, PagePredictions, VlmPrediction
@@ -214,3 +221,93 @@ def test_pipeline_dispatch_and_page_concatenation():
     bbox = document.texts[0].prov[0].bbox
     assert (bbox.l, bbox.t, bbox.r, bbox.b) == (60, 160, 540, 240)
     assert not result.errors
+
+
+@pytest.mark.parametrize(
+    "heading, level",
+    [("## 2.2 LightOnOCR-1", 2), ("### Subsection", 3), ("Section\n-------", 2)],
+)
+def test_grounded_section_heading_preserves_level(heading: str, level: int):
+    doc = parse_lightonocr_markdown(
+        f"![title](100,100,900,200) {heading}", PAGE_SIZE, page_no=3
+    )
+    item = doc.texts[0]
+    assert isinstance(item, SectionHeaderItem)
+    assert item.level == level - 1
+    assert item.prov[0].page_no == 3
+    assert item.prov[0].bbox.t == 80
+    assert doc.export_to_markdown() == f"{'#' * level} {item.text}"
+
+
+@pytest.mark.parametrize(
+    "body, latex",
+    [
+        ("$$\nx^2 + y^2 = z^2\n$$", "x^2 + y^2 = z^2"),
+        (r"\[\left\{x : x > 0\right\}\]", r"\left\{x : x > 0\right\}"),
+        (r"\(x_1 * y_2 * z_3\)", r"x_1 * y_2 * z_3"),
+        (r"$x_1$", r"x_1"),
+        (r"\frac{a}{b}", r"\frac{a}{b}"),
+        (
+            "$$\n\\begin{aligned}\na &= b \\\\\nc &= d\n\\end{aligned}\n$$",
+            "\\begin{aligned}\na &= b \\\\\nc &= d\n\\end{aligned}",
+        ),
+    ],
+)
+def test_grounded_formula_preserves_latex(body: str, latex: str):
+    doc = parse_lightonocr_markdown(
+        f"![formula](100,100,900,300)\n{body}", PAGE_SIZE, page_no=2
+    )
+    assert len(doc.texts) == 1
+    formula = doc.texts[0]
+    assert isinstance(formula, FormulaItem)
+    assert formula.text == latex
+    assert formula.prov[0].page_no == 2
+    assert formula.prov[0].bbox.l == 60
+    assert doc.export_to_markdown() == f"$${latex}$$"
+
+
+@pytest.mark.parametrize("marker", ["", "![text](100,100,900,300)\n"])
+def test_inline_math_preserves_latex_and_code(marker: str):
+    latex = r"\left\{x_1 * y_2 * z_3 < 2\right\}"
+    source = marker + f"**Value** ${latex}$ and `literal $x_1$`. Cost: \\$5."
+    doc = parse_lightonocr_markdown(source, PAGE_SIZE, page_no=1)
+    formulas = [item for item in doc.texts if isinstance(item, FormulaItem)]
+    assert [formula.text for formula in formulas] == [latex]
+    assert all(not formula.prov for formula in formulas)
+    assert [item.text for item in doc.texts if isinstance(item, CodeItem)] == [
+        "literal $x_1$"
+    ]
+    exported = doc.export_to_markdown()
+    assert f"${latex}$" in exported
+    assert "`literal $x_1$`" in exported
+    assert "**Value**" in exported
+    assert "$5" in exported
+
+
+@pytest.mark.parametrize("fence", ["```", "~~~~"])
+@pytest.mark.parametrize("code", ["print(1)", "![text](0,0,1000,1000)"])
+def test_inline_code_fence_preserves_following_block(fence: str, code: str):
+    source = (
+        f"![code](0,0,1000,500) {fence}python\n{code}\n{fence}\n"
+        "![text](0,500,1000,600) After code.\n"
+    )
+    doc = parse_lightonocr_markdown(source, PAGE_SIZE, page_no=1)
+    assert [(item.label, item.text) for item in doc.texts] == [
+        (DocItemLabel.CODE, code),
+        (DocItemLabel.TEXT, "After code."),
+    ]
+    assert not doc.pictures
+    assert doc.texts[0].prov[0].bbox.b == 400
+    assert doc.texts[1].prov[0].bbox.t == 400
+    assert doc.export_to_markdown() == f"```\n{code}\n```\n\nAfter code."
+
+
+def test_formatted_section_heading_owns_its_coordinates_once():
+    doc = parse_lightonocr_markdown(
+        "![title](100,100,900,200) ## **Rent** and terms", PAGE_SIZE, page_no=1
+    )
+    assert isinstance(doc.texts[0], SectionHeaderItem)
+    assert doc.texts[0].level == 1
+    assert doc.texts[0].prov
+    assert all(not item.prov for item in doc.texts[1:])
+    assert doc.export_to_markdown() == "## **Rent** and terms"
