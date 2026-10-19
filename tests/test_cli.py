@@ -1629,7 +1629,7 @@ def test_cli_ocr_engine_can_be_set(tmp_path, monkeypatch):
 
 def _flatten_error_box(output: str) -> str:
     """Join the lines of a rich error box into one line of text."""
-    return re.sub(r"[\s│]+", " ", output)
+    return re.sub(r"[\s│]+", " ", strip_ansi(output))
 
 
 def test_cli_ocr_option_sets_engine_fields(tmp_path, monkeypatch):
