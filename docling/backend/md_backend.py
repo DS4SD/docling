@@ -1098,6 +1098,10 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         return False
 
     @classmethod
+    def dependencies_available(cls) -> bool:
+        return _MARKO_AVAILABLE
+
+    @classmethod
     def supported_formats(cls) -> set[InputFormat]:
         return {InputFormat.MD}
 
