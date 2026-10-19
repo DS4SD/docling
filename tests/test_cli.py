@@ -1895,3 +1895,23 @@ def test_cli_native_pipeline_parser_threads(
     assert captured["pipeline_options"].parser_threads == 3
     assert captured["backend_options"].parser_threads == 3
     assert captured["pipeline_options"].accelerator_options.num_threads == 7
+
+
+def test_form_fields_with_doctags_are_rejected_before_reading_inputs(
+    tmp_path: Path,
+) -> None:
+    # DocTags has no tokens for form fields and its export raises on them. The
+    # source does not exist: the options alone are refused, nothing is read.
+    result = runner.invoke(
+        app,
+        [
+            str(tmp_path / "missing.pdf"),
+            "--extract-form-fields",
+            "--to",
+            "doctags",
+            "--output",
+            str(tmp_path),
+        ],
+    )
+    assert result.exit_code == 2  # usage error, not the missing-input abort
+    assert "--extract-form-fields cannot be combined" in strip_ansi(result.output)
