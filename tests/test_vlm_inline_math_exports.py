@@ -42,3 +42,22 @@ def test_inline_math_survives_export_without_changing_block_ownership(
     assert f"${latex}$" in exported
     assert "`literal $x_1$`" in exported
     assert "$5" in exported
+
+
+@pytest.mark.parametrize("parser", ["dots", "nemotron"])
+def test_inline_math_preserves_approximation_marks(parser: str) -> None:
+    text = "about ~5 m and ~10 m, where $x$ is the length"
+    size = Size(width=600, height=800)
+    if parser == "dots":
+        source = json.dumps(
+            [{"category": "Text", "bbox": [100, 100, 500, 200], "text": text}]
+        )
+        doc = parse_dots_json(source, size, page_no=2)
+    else:
+        source = f"<x_0.2><y_0.2>{text}<x_0.8><y_0.4><class_Text>"
+        doc = parse_nemotron_parse_v2(source, size, size, page_no=2)
+    assert "about ~5 m and ~10 m" in doc.export_to_markdown()
+    assert not any(
+        item.formatting.strikethrough for item in doc.texts if item.formatting
+    )
+    assert [item.text for item in doc.texts if isinstance(item, FormulaItem)] == ["x"]
