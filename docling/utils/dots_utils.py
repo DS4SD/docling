@@ -43,6 +43,7 @@ from PIL import Image as PILImage
 
 from docling.utils.chandra_utils import _add_html_fragment, _add_html_table
 from docling.utils.code_language import detect_code_language
+from docling.utils.markdown_math import create_markdown_parser
 from docling.utils.vlm_utils import (
     link_adjacent_captions,
     normalize_section_header_levels,
@@ -56,7 +57,7 @@ _FENCED_CODE_PATTERN = re.compile(
     re.DOTALL,
 )
 _HTML_TAG_PATTERN = re.compile(
-    r"</?(?:a|b|br|code|del|div|em|i|p|s|span|strong|sub|sup|table|tbody|td|tfoot|th|thead|tr|u)(?=[\s/>])",
+    r"</?(?:a|b|br|code|del|div|em|i|math|p|s|span|strong|sub|sup|table|tbody|td|tfoot|th|thead|tr|u)(?=[\s/>])",
     re.IGNORECASE,
 )
 _LITERAL_INLINE_PATTERN = re.compile(
@@ -85,70 +86,9 @@ def _unescape_markdown_literals(text: str) -> str:
 def _markdown_inline_html(text: str) -> str:
     """Render Markdown emphasis as inline HTML; unescape other text."""
     html_text = text
-    if "*" in text or "_" in text:
-        # Markdown is an optional format dependency, also used for DOTS emphasis.
-        try:
-            import marko
-        except ImportError as exc:
-            raise ImportError(
-                "DOTS Markdown emphasis requires "
-                "`pip install 'docling-slim[format-markdown]'`."
-            ) from exc
-        from marko.helpers import MarkoExtension
-
-        class Paragraph(marko.block.Paragraph):
-            override = True
-
-            @classmethod
-            def break_paragraph(
-                cls, source: marko.source.Source, lazy: bool = False
-            ) -> bool:
-                return False
-
-            @staticmethod
-            def is_setext_heading(line: str) -> bool:
-                # SetextHeading is not a registered block element below.
-                return False
-
-        class InlineParser(marko.Parser):
-            def __init__(self) -> None:
-                super().__init__()
-                # Native DOTS categories already define the block structure.
-                self.block_elements = {
-                    name: element
-                    for name, element in self.block_elements.items()
-                    if name in {"Document", "Paragraph", "BlankLine"}
-                }
-
-        class LiteralInline(marko.inline.InlineElement):
-            children: str
-            pattern = _LITERAL_INLINE_PATTERN
-            priority = 8
-            parse_group = 0
-
-        class CodeSpan(marko.inline.CodeSpan):
-            override = True
-            priority = 9
-
-        class LiteralRenderer:
-            def render_literal_inline(self, element: LiteralInline) -> str:
-                return (
-                    element.children
-                    if element.children.lower().startswith("<code")
-                    else marko.HTMLRenderer.escape_html(element.children)
-                )
-
-        markdown = marko.Markdown(
-            parser=InlineParser,
-            extensions=[
-                MarkoExtension(
-                    elements=[Paragraph, LiteralInline, CodeSpan],
-                    renderer_mixins=[LiteralRenderer],
-                )
-            ],
-        )
-        rendered = markdown.convert(text)
-        if "<strong>" in rendered or "<em>" in rendered:
+    if any(token in text for token in ("*", "_", "$", r"\(", r"\[", "`")):
+        rendered = create_markdown_parser(inline_only=True).convert(text)
+        if re.search(r"<(?:strong|em|math|code)\b", rendered):
             # Keep soft and hard line breaks as <br>.
             html_text = re.sub(r"(?:<br />)?\n", "<br>", rendered.strip())
         else:

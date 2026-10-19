@@ -12,6 +12,7 @@ from docling_core.types.doc import (
     CodeItem,
     DocItemLabel,
     DoclingDocument,
+    FormulaItem,
     InlineGroup,
     RichTableCell,
     Script,
@@ -117,9 +118,8 @@ def test_markdown_emphasis_preserves_math_code_and_html(page_size: Size):
     [
         ("snake_case and a_b_c", "snake_case and a_b_c"),
         (r"\*literal\*", "*literal*"),
-        (r"a\_b, $x\_1 \* y$, `c\_d` and \\*", r"a_b, $x\_1 \* y$, `c\_d` and \\*"),
+        (r"a\_b, `c\_d` and \\*", r"a_b, `c\_d` and \\*"),
         ("unmatched **bold", "unmatched **bold"),
-        ("$x_1 * y_2 * z_3$", "$x_1 * y_2 * z_3$"),
         ("______", "______"),
         ("a *\n=\nb", "a *\n=\nb"),
         (r"``a\_b` c`` and d\_e", r"``a\_b` c`` and d_e"),
@@ -400,3 +400,15 @@ class TestParseFormulaAndFootnote:
         assert len(items) == 1
         item, _ = items[0]
         assert item.label == DocItemLabel.FOOTNOTE
+
+
+def test_standalone_math_becomes_formula_without_inheriting_block_box(page_size: Size):
+    data = [
+        {"bbox": [10, 20, 300, 50], "category": "Text", "text": "$x_1 * y_2 * z_3$"}
+    ]
+    doc = parse_dots_json(json.dumps(data), page_size, page_no=1)
+    assert doc.texts[0].prov
+    assert isinstance(doc.texts[1], FormulaItem)
+    assert doc.texts[1].text == "x_1 * y_2 * z_3"
+    assert not doc.texts[1].prov
+
