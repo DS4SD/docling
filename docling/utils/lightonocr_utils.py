@@ -9,7 +9,6 @@ import html
 import re
 from collections.abc import Iterator
 from pathlib import Path
-from typing import TYPE_CHECKING
 
 from docling_core.types.doc import (
     ContentLayer,
@@ -17,23 +16,16 @@ from docling_core.types.doc import (
     DoclingDocument,
     DocumentOrigin,
     ImageRef,
-    SectionHeaderItem,
     Size,
 )
 from PIL import Image as PILImage
 
 from docling.utils.chandra_utils import _add_html_fragment
-
-if TYPE_CHECKING:
-    import marko
+from docling.utils.markdown_math import create_markdown_parser
+from docling.utils.vlm_utils import strip_math_delimiters
 
 _MARKER = re.compile(
     r"^ {0,3}!\[([a-z_]+)\+?\]\(([^)\n]*,[^)\n]*,[^)\n]*,[^)\n]*)\)[ \t]*(.*)$"
-)
-_MATH = re.compile(
-    r"(?<!\\)(?:\$\$[\s\S]*?(?<!\\)\$\$"
-    r"|(?<!\$)\$(?![\s$])[^\n$]*?(?<![\\\s])\$(?!\$)"
-    r"|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\])"
 )
 _LABELS = {
     "title": "Title",
@@ -83,57 +75,6 @@ def _blocks(content: str) -> Iterator[tuple[str, str, str]]:
         yield label, bbox, "".join(lines)
 
 
-def _math_html(text: str, *, display: bool) -> str:
-    """Keep LaTeX literal and let Docling's serializers supply its delimiters."""
-    text = text.strip()
-    for opening, closing in (("$$", "$$"), (r"\[", r"\]"), (r"\(", r"\)"), ("$", "$")):
-        if (
-            len(text) >= len(opening) + len(closing)
-            and text.startswith(opening)
-            and text.endswith(closing)
-        ):
-            text = text[len(opening) : -len(closing)].strip()
-            break
-    attrs = ' display="block"' if display else ""
-    return f"<math{attrs}>{html.escape(text)}</math>"
-
-
-def _markdown_parser() -> marko.Markdown:
-    # Markdown support is optional in docling-slim installations.
-    try:
-        import marko
-    except ImportError as exc:
-        raise ImportError(
-            "LightOnOCR Markdown parsing requires "
-            "`pip install 'docling-slim[format-markdown]'`."
-        ) from exc
-    from marko.helpers import MarkoExtension
-
-    class Math(marko.inline.InlineElement):
-        children: str
-        pattern = _MATH
-        priority = 8
-        parse_group = 0
-
-    class CodeSpan(marko.inline.CodeSpan):
-        override = True
-        priority = 9
-
-    class MathRenderer:
-        def render_math(self, element: Math) -> str:
-            return _math_html(
-                element.children,
-                display=element.children.startswith(("$$", r"\[")),
-            )
-
-    return marko.Markdown(
-        extensions=[
-            "gfm",
-            MarkoExtension(elements=[Math, CodeSpan], renderer_mixins=[MathRenderer]),
-        ]
-    )
-
-
 def parse_lightonocr_markdown(
     content: str,
     original_page_size: Size,
@@ -146,7 +87,7 @@ def parse_lightonocr_markdown(
     Continuation labels retain their base class. Separate blocks are not merged
     or associated by proximity. Plain transcription is recovered without boxes.
     """
-    markdown = _markdown_parser()
+    markdown = create_markdown_parser()
     # The parser above checks this optional dependency before its types are used.
     from marko.block import Heading, SetextHeading
 
@@ -176,7 +117,7 @@ def parse_lightonocr_markdown(
             continue
         layout_label = _LABELS.get(label, "Text")
         if label == "formula":
-            rendered = _math_html(body, display=True)
+            rendered = f'<math display="block">{html.escape(strip_math_delimiters(body))}</math>'
         elif label in {"image", "header_image", "footer_image"}:
             rendered = f'<img alt="{html.escape(body.strip(), quote=True)}">'
         else:
@@ -202,8 +143,4 @@ def parse_lightonocr_markdown(
                 picture.meta.description.created_by = "lightonocr"
             if label in {"header_image", "footer_image"}:
                 picture.content_layer = ContentLayer.FURNITURE
-    # The HTML mapper uses h1-h6 levels; Docling reserves the top level for titles.
-    for item in doc.texts:
-        if isinstance(item, SectionHeaderItem) and item.level > 1:
-            item.level -= 1
     return doc
