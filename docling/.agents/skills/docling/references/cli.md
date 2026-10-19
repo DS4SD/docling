@@ -51,9 +51,16 @@ docling report.pdf --pipeline vlm --output /tmp/
 docling report.pdf --pipeline vlm --vlm-model granite_docling --output /tmp/
 docling report.pdf --pipeline vlm --vlm-model smoldocling --output /tmp/
 docling report.pdf --pipeline vlm --vlm-model nemotron_parse_v2 --output /tmp/
+docling report.pdf --pipeline vlm --vlm-model nemotron_parse_v3_5 --trust-remote-code --output /tmp/
 docling chart.png --from image --to dclx --pipeline vlm --enrich-chart-extraction
 docling report.pdf --pipeline native --from pdf --output /tmp/
 ```
+
+`nemotron_parse_v3_5` runs code from its model repository at a pinned revision.
+Docling refuses to load it until you add `--trust-remote-code` (SDK:
+`AutoInlineVlmEngineOptions(trust_remote_code=True)`). Review the model code
+first. For vLLM, run NVIDIA's `vllm serve` server and use the API engine; the
+in-process vLLM engine is not supported for this preset.
 
 VLM picture enrichment runs after conversion. `--enrich-chart-extraction`
 classifies pictures first and adds chart data only where the VLM has not

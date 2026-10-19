@@ -574,6 +574,18 @@ class VlmPipeline(PaginatedPipeline):
             document = self._nemotron_parse_v2_page_document(
                 conv_res, page, predicted_text, page.image
             )
+        elif response_format == ResponseFormat.NEMOTRON_PARSE_V3_5:
+            from docling.utils.nemotron_parse_v3_5_utils import (
+                parse_nemotron_parse_v3_5,
+            )
+
+            document = parse_nemotron_parse_v3_5(
+                content=predicted_text,
+                original_page_size=page.size,
+                page_no=page.page_no,
+                filename=conv_res.input.file.name or "file",
+                page_image=page.image,
+            )
         elif response_format == ResponseFormat.MINERU2:
             from docling.utils.mineru_utils import parse_mineru2
 
