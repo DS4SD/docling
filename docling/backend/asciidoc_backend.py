@@ -35,10 +35,10 @@ from docling.utils.text_decoding import decode_text
 
 _log = logging.getLogger(__name__)
 
-# A line starting with // is a comment and never body content. //// opens a
-# delimited comment block: every line up to the matching //// is hidden.
-_LINE_COMMENT_RE = re.compile(r"^//")
-_COMMENT_BLOCK_DELIMITER = "////"
+# A line comment starts with exactly two slashes. Comment block delimiters
+# contain at least four slashes and must have identical opening and closing lines.
+_LINE_COMMENT_RE = re.compile(r"^//(?!/)")
+_COMMENT_BLOCK_DELIMITER_RE = re.compile(r"/{4,}")
 
 # Cell format specifier that may precede a "|" delimiter, e.g. "^.^h" in
 # "^.^h|Header": span (3*, 2+, .2+, 2.3+), alignment (<, ^, >, .^), style
@@ -468,12 +468,26 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                 return True
         return False
 
+    @staticmethod
+    def _index_comment_closers(lines: list[str], start_idx: int) -> dict[int, int]:
+        """Index the next identical comment marker in one scan."""
+        next_markers: dict[str, int] = {}
+        closers: dict[int, int] = {}
+        for j in range(len(lines) - 1, start_idx - 1, -1):
+            delimiter = lines[j].strip()
+            if _COMMENT_BLOCK_DELIMITER_RE.fullmatch(delimiter) is None:
+                continue
+            if delimiter in next_markers:
+                closers[j] = next_markers[delimiter]
+            next_markers[delimiter] = j
+        return closers
+
     @classmethod
     def _iter_blocks(cls, lines: list[str]) -> Iterator[str | _LiteralBlock]:
         block_data: list[str] | None = None
         block_delimiter: str | None = None
         block_language: str | None = None
-        in_comment_block = False
+        comment_closers: dict[int, int] | None = None
 
         i = 0
         n = len(lines)
@@ -505,14 +519,17 @@ class AsciiDocBackend(DeclarativeDocumentBackend):
                 i += 1
                 continue
 
-            if in_comment_block:
-                if stripped == _COMMENT_BLOCK_DELIMITER:
-                    in_comment_block = False
-                i += 1
-                continue
-
-            if stripped == _COMMENT_BLOCK_DELIMITER:
-                in_comment_block = True
+            if _COMMENT_BLOCK_DELIMITER_RE.fullmatch(stripped):
+                if comment_closers is None:
+                    comment_closers = cls._index_comment_closers(lines, i)
+                closer = comment_closers.get(i)
+                if closer is not None:
+                    # Comment content is opaque, including other block markers.
+                    i = closer
+                else:
+                    # Like a stray content-block delimiter, break the paragraph
+                    # without swallowing the remaining document.
+                    yield ""
                 i += 1
                 continue
 

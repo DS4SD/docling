@@ -6,6 +6,7 @@ import threading
 from io import BytesIO
 from pathlib import Path
 
+import pytest
 from docling_core.types.doc import (
     CodeItem,
     CodeLanguageLabel,
@@ -1016,6 +1017,101 @@ def test_comment_block_hides_content() -> None:
     texts = [item.text for item, _ in doc.iterate_items()]
     assert not any("hidden" in t for t in texts)
     assert "visible" in texts
+
+
+def test_three_slashes_are_body_text() -> None:
+    src = b"Before.\n\n///\n/// Keep this.\n//// Also keep this.\n\n// Hide this.\nAfter.\n"
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(src),
+        format=InputFormat.ASCIIDOC,
+        backend=AsciiDocBackend,
+        filename="slash-text.adoc",
+    )
+    doc = in_doc._backend.convert()
+
+    assert [(item.label, item.text) for item in doc.texts] == [
+        (DocItemLabel.PARAGRAPH, "Before."),
+        (DocItemLabel.PARAGRAPH, "/// /// Keep this. //// Also keep this."),
+        (DocItemLabel.PARAGRAPH, "After."),
+    ]
+    assert [ref.resolve(doc) for ref in doc.body.children] == doc.texts
+    assert doc.export_to_markdown() == (
+        "Before.\n\n/// /// Keep this. //// Also keep this.\n\nAfter."
+    )
+
+
+@pytest.mark.parametrize("delimiter", ["/////", "///////"])
+def test_long_comment_block_requires_identical_closer(delimiter: str) -> None:
+    src = (
+        f"Before.\n\n{delimiter}\nHidden one.\n////\nHidden two.\n"
+        f"//////\nHidden three.\n----\nHidden code.\n....\n{delimiter}\n\nAfter.\n"
+    ).encode()
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(src),
+        format=InputFormat.ASCIIDOC,
+        backend=AsciiDocBackend,
+        filename="long-comment-block.adoc",
+    )
+    doc = in_doc._backend.convert()
+
+    assert [(item.label, item.text) for item in doc.texts] == [
+        (DocItemLabel.PARAGRAPH, "Before."),
+        (DocItemLabel.PARAGRAPH, "After."),
+    ]
+    assert [ref.resolve(doc) for ref in doc.body.children] == doc.texts
+    assert doc.export_to_markdown() == "Before.\n\nAfter."
+
+
+@pytest.mark.parametrize("delimiter", ["////", "/////", "///////"])
+def test_unclosed_comment_delimiter_keeps_following_body(delimiter: str) -> None:
+    doc = _convert_within(f"Before.\n{delimiter}\nAfter.\n".encode())
+
+    assert [(item.label, item.text) for item in doc.texts] == [
+        (DocItemLabel.PARAGRAPH, "Before."),
+        (DocItemLabel.PARAGRAPH, "After."),
+    ]
+    assert [ref.resolve(doc) for ref in doc.body.children] == doc.texts
+    assert doc.export_to_markdown() == "Before.\n\nAfter."
+
+
+def test_many_unclosed_comment_delimiters_do_not_rescan_the_document() -> None:
+    stripped_chars = 0
+
+    class CountedLine(str):
+        def strip(self, chars: str | None = None) -> str:
+            nonlocal stripped_chars
+            stripped_chars += len(self)
+            return super().strip(chars)
+
+    count = 128
+    lines: list[str] = [
+        CountedLine(" " * 256 + "/" * length + " " * 256)
+        for length in range(5, count + 5)
+    ]
+    lines.append(CountedLine("After."))
+
+    assert list(AsciiDocBackend._iter_blocks(lines)) == [""] * count + ["After."]
+    # Each unmatched marker must retain the following body without repeatedly
+    # normalizing every remaining source line to look for an absent closer.
+    assert stripped_chars <= 3 * sum(map(len, lines))
+
+
+@pytest.mark.parametrize("delimiter", ["----", "...."])
+def test_comment_markers_inside_literal_blocks_are_code(delimiter: str) -> None:
+    code = "// Line\n/// Text\n////\n/////\n////\n/////"
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(f"{delimiter}\n{code}\n{delimiter}\n".encode()),
+        format=InputFormat.ASCIIDOC,
+        backend=AsciiDocBackend,
+        filename="slash-code.adoc",
+    )
+    doc = in_doc._backend.convert()
+
+    assert len(doc.texts) == 1
+    assert isinstance(doc.texts[0], CodeItem)
+    assert doc.texts[0].text == code
+    assert doc.body.children == [doc.texts[0].get_ref()]
+    assert doc.export_to_markdown() == f"```\n{code}\n```"
 
 
 def _convert_within(src: bytes, seconds: float = 10.0) -> DoclingDocument:
