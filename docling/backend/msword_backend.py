@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import functools
 import logging
 import re
 import warnings
@@ -897,6 +898,12 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             _normalize_list_style_types(self.docx_obj)
             self._default_paragraph_style = self.docx_obj.styles.default(
                 WD_STYLE_TYPE.PARAGRAPH
+            )
+            # paragraph.style and run.style go through get_style(), which scans
+            # the whole styles part on every call; styles do not change during
+            # conversion, so memoize it on the loaded part.
+            self.current_part.get_style = functools.cache(  # type: ignore[method-assign]
+                self.current_part.get_style
             )
             # Build comment mappings after loading document
             self._extract_comment_ranges()
