@@ -183,7 +183,7 @@ def test_parse_nemotron_markdown_and_semantic_classes() -> None:
         item.text for item in document.texts if item.label == DocItemLabel.LIST_ITEM
     ] == ["First item", "Second item"]
     assert any(
-        item.label == DocItemLabel.FORMULA and item.text == r"\(x^2\)"
+        item.label == DocItemLabel.FORMULA and item.text == r"x^2"
         for item in document.texts
     )
     assert len(document.pictures) == 2

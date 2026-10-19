@@ -31,6 +31,7 @@ from docling.backend.latex_backend import LatexDocumentBackend
 from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
+from docling.utils.vlm_utils import strip_math_delimiters
 
 _log = logging.getLogger(__name__)
 
@@ -321,7 +322,7 @@ def parse_nemotron_parse_v2(
         else:
             label = _TEXT_LABELS.get(region.label, DocItemLabel.TEXT)
             text = (
-                raw_text
+                strip_math_delimiters(raw_text)
                 if label == DocItemLabel.FORMULA
                 else _markdown_to_text(raw_text)
             )
