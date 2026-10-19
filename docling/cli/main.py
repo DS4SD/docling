@@ -1420,6 +1420,18 @@ def convert(  # noqa: C901
         )
         raise typer.Abort()
 
+    if to_formats is None:
+        to_formats = [OutputFormat.MARKDOWN]
+    if (
+        extract_form_fields
+        and pipeline in {ProcessingPipeline.STANDARD, ProcessingPipeline.LEGACY}
+        and OutputFormat.DOCTAGS in to_formats
+    ):
+        # DocTags has no tokens for form fields; the export raises on them.
+        raise typer.BadParameter(
+            "--extract-form-fields cannot be combined with `--to doctags`."
+        )
+
     if profiling or save_profiling:
         settings.debug.profile_pipeline_timings = True
 
@@ -1484,18 +1496,6 @@ def convert(  # noqa: C901
                     err_console.print(f"[red]Error: Cannot read the input {src}.[/red]")
                     _log.info(err)  # will print more details if verbose is activated
                     raise typer.Abort()
-
-        if to_formats is None:
-            to_formats = [OutputFormat.MARKDOWN]
-        if (
-            extract_form_fields
-            and pipeline in {ProcessingPipeline.STANDARD, ProcessingPipeline.LEGACY}
-            and OutputFormat.DOCTAGS in to_formats
-        ):
-            # DocTags has no tokens for form fields; the export raises on them.
-            raise typer.BadParameter(
-                "--extract-form-fields cannot be combined with `--to doctags`."
-            )
 
         if output_file is not None:
             if len(input_doc_paths) != 1:
