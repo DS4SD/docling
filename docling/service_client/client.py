@@ -6,12 +6,10 @@
 from __future__ import annotations
 
 import asyncio
-import ipaddress
 import json
 import logging
 import mimetypes
 import re
-import socket
 import sys
 import tempfile
 import time
@@ -33,8 +31,10 @@ from docling_core.types.doc.common.constants import CURRENT_VERSION
 from docling_core.types.io import DocumentStream
 from PIL import Image as PILImage
 from pydantic import AnyHttpUrl, SecretBytes, SecretStr, TypeAdapter, ValidationError
+from requests.utils import get_environ_proxies, select_proxy
 
 from docling.backend.noop_backend import NoOpBackend
+from docling.backend.utils.image_resource_loader import resolve_public_addresses
 from docling.datamodel.base_models import (
     ConfidenceReport,
     ConversionStatus,
@@ -146,38 +146,70 @@ def _is_storage_target(target: object) -> bool:
     return isinstance(target, _STORAGE_TARGET_TYPES)
 
 
-def _is_safe_artifact_url(url: str) -> bool:
-    """Return whether ``url`` resolves to a globally routable address.
+@dataclass(frozen=True, slots=True)
+class _ArtifactTarget:
+    """One way to send an artifact GET: the URL to open and its extra headers."""
+
+    url: str
+    headers: dict[str, str]
+    extensions: dict[str, Any]
+
+
+def _artifact_targets(url: str) -> list[_ArtifactTarget]:
+    """Return the targets for an artifact GET, in the order to try them.
 
     SSRF guard for artifact downloads: presigned URLs are followed by the client,
     so a compromised or misconfigured service could otherwise point them at the
-    client's internal network. Mirrors the host/IP checks docling-core applies to
-    user-supplied source URLs.
+    client's internal network. Every IPv4 and IPv6 address of the host must be
+    public, and the request goes to one of the validated addresses, so another
+    DNS lookup at connect time cannot select a different peer. The original
+    hostname is kept in the ``Host`` header and, for https, for SNI and
+    certificate verification. When a proxy is configured for the URL, the proxy
+    resolves the host, so the request keeps the hostname.
+
+    Raises:
+        ArtifactDownloadError: If the URL is not http(s) or any address of its
+            host is not public.
     """
+    refused = ArtifactDownloadError(
+        f"Refusing to download artifact from a non-public URL: {url}."
+    )
     try:
-        parsed = urlparse(url)
-        if parsed.scheme not in {"http", "https"}:
-            return False
-        hostname = parsed.hostname
-        if not hostname:
-            return False
-        try:
-            ip = ipaddress.ip_address(hostname)
-        except ValueError:
-            try:
-                ip = ipaddress.ip_address(socket.gethostbyname(hostname))
-            except (socket.gaierror, socket.herror):
-                return False
-        return ip.is_global and not (
-            ip.is_private
-            or ip.is_loopback
-            or ip.is_link_local
-            or ip.is_reserved
-            or ip.is_multicast
-            or ip.is_unspecified
+        parsed = httpx.URL(url)
+    except httpx.InvalidURL as exc:
+        raise refused from exc
+    hostname = parsed.host
+    if parsed.scheme not in {"http", "https"} or not hostname:
+        raise refused
+    try:
+        addresses = resolve_public_addresses(hostname)
+    except ValueError as exc:
+        raise refused from exc
+    if select_proxy(url, get_environ_proxies(url)):
+        return [_ArtifactTarget(url=url, headers={}, extensions={})]
+
+    host_header = f"[{hostname}]" if ":" in hostname else hostname
+    if parsed.port is not None:
+        host_header += f":{parsed.port}"
+    extensions: dict[str, Any] = (
+        {"sni_hostname": hostname} if parsed.scheme == "https" else {}
+    )
+    return [
+        _ArtifactTarget(
+            url=str(parsed.copy_with(host=str(address))),
+            headers={"Host": host_header},
+            extensions=extensions,
         )
-    except Exception:
-        return False
+        for address in addresses
+    ]
+
+
+def _build_artifact_request(
+    client: httpx.Client | httpx.AsyncClient, target: _ArtifactTarget
+) -> httpx.Request:
+    return client.build_request(
+        "GET", target.url, headers=target.headers, extensions=target.extensions
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -1904,8 +1936,8 @@ class DoclingServiceClient(_BaseDoclingServiceClient):
             with httpx.Client(timeout=timeout, follow_redirects=False) as client:
                 url = uri
                 for _ in range(MAX_ARTIFACT_DOWNLOAD_REDIRECTS + 1):
-                    self._validate_artifact_url(url)
-                    with client.stream("GET", url) as response:
+                    response = self._send_artifact_request(client, url)
+                    try:
                         if response.is_redirect:
                             url = self._next_redirect_url(url, response)
                             continue
@@ -1921,6 +1953,8 @@ class DoclingServiceClient(_BaseDoclingServiceClient):
                             self._check_artifact_size(total)
                             chunks.append(chunk)
                         return b"".join(chunks)
+                    finally:
+                        response.close()
                 raise ArtifactDownloadError(
                     "Too many redirects while downloading artifact."
                 )
@@ -1935,8 +1969,8 @@ class DoclingServiceClient(_BaseDoclingServiceClient):
             ) as client:
                 url = uri
                 for _ in range(MAX_ARTIFACT_DOWNLOAD_REDIRECTS + 1):
-                    self._validate_artifact_url(url)
-                    async with client.stream("GET", url) as response:
+                    response = await self._send_artifact_request_async(client, url)
+                    try:
                         if response.is_redirect:
                             url = self._next_redirect_url(url, response)
                             continue
@@ -1952,19 +1986,41 @@ class DoclingServiceClient(_BaseDoclingServiceClient):
                             self._check_artifact_size(total)
                             chunks.append(chunk)
                         return b"".join(chunks)
+                    finally:
+                        await response.aclose()
                 raise ArtifactDownloadError(
                     "Too many redirects while downloading artifact."
                 )
         except httpx.HTTPError as exc:
             raise ArtifactDownloadError(f"Artifact download failed: {exc}") from exc
 
-    def _validate_artifact_url(self, url: str) -> None:
+    def _artifact_request_targets(self, url: str) -> list[_ArtifactTarget]:
         if self._allow_private_artifact_urls:
-            return
-        if not _is_safe_artifact_url(url):
-            raise ArtifactDownloadError(
-                f"Refusing to download artifact from a non-public URL: {url}."
-            )
+            return [_ArtifactTarget(url=url, headers={}, extensions={})]
+        return _artifact_targets(url)
+
+    def _send_artifact_request(self, client: httpx.Client, url: str) -> httpx.Response:
+        """Send a streamed GET for ``url``, trying each validated address in turn."""
+        *fallbacks, last = self._artifact_request_targets(url)
+        for target in fallbacks:
+            try:
+                return client.send(_build_artifact_request(client, target), stream=True)
+            except (httpx.ConnectError, httpx.ConnectTimeout):
+                continue
+        return client.send(_build_artifact_request(client, last), stream=True)
+
+    async def _send_artifact_request_async(
+        self, client: httpx.AsyncClient, url: str
+    ) -> httpx.Response:
+        *fallbacks, last = self._artifact_request_targets(url)
+        for target in fallbacks:
+            try:
+                return await client.send(
+                    _build_artifact_request(client, target), stream=True
+                )
+            except (httpx.ConnectError, httpx.ConnectTimeout):
+                continue
+        return await client.send(_build_artifact_request(client, last), stream=True)
 
     @staticmethod
     def _next_redirect_url(current_url: str, response: httpx.Response) -> str:
