@@ -99,7 +99,15 @@ docling scan.pdf --force-ocr --output /tmp/              # re-OCR even extractab
 docling report.pdf --no-ocr --output /tmp/               # skip OCR (faster)
 docling scan.pdf --ocr-lang eng,deu --output /tmp/       # the engine's own codes
 docling scan.pdf --ocr-lang iso:en,iso:de --output /tmp/ # BCP-47 tags behind `iso:`
+docling scan.pdf --ocr-engine rapidocr --ocr-option model_size=tiny --output /tmp/  # engine-specific field
 ```
+
+`--ocr-option KEY=VALUE` (repeatable) sets any field of the selected OCR engine.
+VALUE is read as JSON when possible (`text_score=0.6`, `lang=["en"]`), else as a
+string. List the keys of an engine with `docling options ocr <engine>`. The
+same works for `--layout-option` / `docling options layout <engine>` and
+`--table-structure-option` / `docling options table-structure <engine>`. These
+options are for local `convert` only; `convert-remote` does not accept them.
 
 OCR engines are optional dependencies — see
 [slim-packaging.md](slim-packaging.md) for the `feat-ocr-*` extras.
@@ -111,6 +119,7 @@ docling report.pdf --no-tables --output /tmp/            # skip table structure 
 docling report.pdf --table-mode accurate --output /tmp/  # vs. fast
 docling report.pdf --layout-engine docling_layout_default --output /tmp/  # choose layout engine
 docling report.pdf --table-structure-engine docling_tableformer_v2 --output /tmp/  # choose table engine
+docling form.pdf --extract-form-fields --output /tmp/    # AcroForm widgets as fields with keys from printed text (not with --to doctags)
 docling report.pdf --enrich-code --output /tmp/          # code understanding
 docling report.pdf --enrich-formula --output /tmp/       # formula understanding
 docling report.pdf --enrich-picture-classes --output /tmp/

@@ -1,3 +1,21 @@
+## [v2.140.0](https://github.com/docling-project/docling/releases/tag/v2.140.0) - 2026-10-16
+
+### Feature
+
+* **asr:** Prefetch the native Distil-Whisper presets with docling-tools ([#4825](https://github.com/docling-project/docling/issues/4825)) ([`483cf13`](https://github.com/docling-project/docling/commit/483cf138be2fb236483adc359bd881fec74108b2))
+* **asciidoc:** Parse bold, italic and monospace in paragraphs ([#4824](https://github.com/docling-project/docling/issues/4824)) ([`fd24b9e`](https://github.com/docling-project/docling/commit/fd24b9ebc0079822f0644009a2dbeeb5906b4f3c))
+* **asr:** Transcribe with a remote OpenAI-compatible server ([#4853](https://github.com/docling-project/docling/issues/4853)) ([`b246052`](https://github.com/docling-project/docling/commit/b246052fe845e1f8a6ef68dfc088faa6da20e53b))
+
+### Fix
+
+* **odf:** Move hidden ODT sections to the invisible content layer ([#4860](https://github.com/docling-project/docling/issues/4860)) ([`f690a52`](https://github.com/docling-project/docling/commit/f690a5232c505c787a1e952216b431134b4d7c94))
+* **reading-order:** Bound page-separator candidate work and honor document_timeout ([#4633](https://github.com/docling-project/docling/issues/4633)) ([`5f45097`](https://github.com/docling-project/docling/commit/5f4509767647721a8ec011ce6a3a6a39b19bb1f0))
+* **asciidoc:** Don't take a line that starts with an abbreviation for a list item ([#4827](https://github.com/docling-project/docling/issues/4827)) ([`6275f29`](https://github.com/docling-project/docling/commit/6275f29acd00406f5faf7d41297acc875304e243))
+* **email:** Escape the text of an HTML body only once ([#4828](https://github.com/docling-project/docling/issues/4828)) ([`d0c51d0`](https://github.com/docling-project/docling/commit/d0c51d08dacf21d109d9b894859670be0b76d8b0))
+* **pptx:** Map grouped shape boxes through the group transform ([#4859](https://github.com/docling-project/docling/issues/4859)) ([`04eefdd`](https://github.com/docling-project/docling/commit/04eefdd3dfc1ff2e9bf27536abe60f9f3881b1cb))
+* **service:** Align ConfidenceScores.pages to ConfidenceReport.pages ([#4850](https://github.com/docling-project/docling/issues/4850)) ([`f6750c4`](https://github.com/docling-project/docling/commit/f6750c4061d6911cfaaa48d7cbd9aeb1509fd2fb))
+* **ocr:** Do not OCR an enclosed region twice ([#4748](https://github.com/docling-project/docling/issues/4748)) ([`6fadbae`](https://github.com/docling-project/docling/commit/6fadbae317b09c4dd4051c0f1fc1746c6baf04bc))
+
 ## [v2.139.0](https://github.com/docling-project/docling/releases/tag/v2.139.0) - 2026-10-14
 
 ### Feature
