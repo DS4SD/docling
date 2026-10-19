@@ -71,3 +71,58 @@ def test_parse_builds_document_with_heading_and_table():
 
 def test_response_format_enum_value():
     assert ResponseFormat.UNLIMITED_OCR_MARKDOWN.value == "unlimited_ocr_markdown"
+
+
+def test_continuation_lines_survive_in_a_text_block():
+    raw = (
+        "text[[100,100,900,300]]\n"
+        "First line\n"
+        "Second line\n"
+        "\n"
+        "text[[100,400,900,500]]\n"
+        "Next block\n"
+    )
+
+    doc = parse_unlimited_ocr_markdown(raw, PAGE_SIZE, page_no=1, filename="page.png")
+    markdown = doc.export_to_markdown()
+
+    assert "First line" in markdown
+    assert "Second line" in markdown
+    assert "Next block" in markdown
+    texts = [t.text for t in doc.texts]
+    assert any("First line" in t and "Second line" in t for t in texts)
+
+
+def test_unlimited_ocr_continuation_lines_survive_in_a_text_block():
+    raw = (
+        "<|det|>text [100, 100, 900, 300]<|/det|>First line\n"
+        "Second line\n"
+        "\n"
+        "<|det|>text [100, 400, 900, 500]<|/det|>Next block\n"
+    )
+
+    doc = parse_unlimited_ocr_markdown(raw, PAGE_SIZE, page_no=1, filename="page.png")
+    texts = [t.text for t in doc.texts]
+
+    assert len(texts) >= 2
+    assert any("First line" in t and "Second line" in t for t in texts)
+
+
+def test_annotation_and_blank_line_still_end_a_block():
+    raw = (
+        "text[[100,100,900,300]]\n"
+        "First line\n"
+        "Second line\n"
+        "\n"
+        "\n"
+        "Loose trailing text\n"
+        "text[[100,400,900,500]]\n"
+        "Next block\n"
+    )
+
+    doc = parse_unlimited_ocr_markdown(raw, PAGE_SIZE, page_no=1, filename="page.png")
+    texts = [t.text for t in doc.texts]
+
+    assert any(t == "First line\nSecond line" for t in texts)
+    assert any("Next block" in t for t in texts)
+    assert not any("Loose trailing text" in t for t in texts)

@@ -158,17 +158,16 @@ def _collect_annotation_content(
                 break
             ii += 1
     else:
-        # Original logic for other labels
+        # Collect the block's content lines: consecutive non-empty lines up to the
+        # next annotation or the first blank line, so continuation lines survive.
         while i < len(lines):
             content_line = lines[i].strip()
+            if re.match(annotation_pattern, content_line):
+                break
             if content_line:
-                if re.match(annotation_pattern, content_line):
-                    break
                 visited_lines.add(i)
                 content_lines.append(lines[i].rstrip())
                 i += 1
-                if label_str not in ["figure", "image"]:
-                    break
             else:
                 i += 1
                 if content_lines:
