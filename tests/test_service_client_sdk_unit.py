@@ -5,6 +5,7 @@ import asyncio
 import io
 import json
 import queue
+import socket
 import tempfile
 import threading
 import time
@@ -3314,20 +3315,66 @@ def test_convert_all_materializes_presigned_results_in_order(
         assert pictures and str(pictures[0].image.uri).startswith("data:image")
 
 
+def test_artifact_route_pins_a_public_address() -> None:
+    route = client_module._artifact_route(
+        "https://8.8.8.8:8443/artifact.zip", check_public=True
+    )
+
+    assert route.urls == ["https://8.8.8.8:8443/artifact.zip"]
+    assert route.headers == {"Host": "8.8.8.8:8443"}
+    assert route.extensions == {"sni_hostname": "8.8.8.8"}
+
+
 @pytest.mark.parametrize(
-    "url, expected",
+    "url",
     [
-        ("https://8.8.8.8/artifact.zip", True),
-        ("https://127.0.0.1/artifact.zip", False),
-        ("http://10.1.2.3/artifact.zip", False),
-        ("https://169.254.169.254/artifact.zip", False),
-        ("http://[::1]/artifact.zip", False),
-        ("ftp://8.8.8.8/artifact.zip", False),
-        ("not-a-url", False),
+        "https://127.0.0.1/artifact.zip",
+        "http://10.1.2.3/artifact.zip",
+        "https://169.254.169.254/artifact.zip",
+        "http://[::1]/artifact.zip",
+        "http://[::ffff:127.0.0.1]/artifact.zip",
+        "ftp://8.8.8.8/artifact.zip",
+        "not-a-url",
     ],
 )
-def test_is_safe_artifact_url(url: str, expected: bool) -> None:
-    assert client_module._is_safe_artifact_url(url) is expected
+def test_artifact_route_refuses_non_public_urls(url: str) -> None:
+    with pytest.raises(ArtifactDownloadError, match="non-public URL"):
+        client_module._artifact_route(url, check_public=True)
+
+
+def test_artifact_route_refuses_a_host_with_any_private_address(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A public A record must not hide a loopback AAAA record."""
+
+    def fake_getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
+        return [
+            (socket.AF_INET, socket.SOCK_STREAM, 6, "", ("8.8.8.8", 0)),
+            (socket.AF_INET6, socket.SOCK_STREAM, 6, "", ("::1", 0, 0, 0)),
+        ]
+
+    monkeypatch.setattr(socket, "getaddrinfo", fake_getaddrinfo)
+
+    with pytest.raises(ArtifactDownloadError, match="non-public URL"):
+        client_module._artifact_route(
+            "https://artifacts.example/artifact.zip", check_public=True
+        )
+
+
+def test_artifact_route_keeps_the_hostname_behind_a_proxy(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("HTTPS_PROXY", "http://proxy.invalid:3128")
+    monkeypatch.delenv("NO_PROXY", raising=False)
+    monkeypatch.delenv("no_proxy", raising=False)
+
+    route = client_module._artifact_route(
+        "https://8.8.8.8/artifact.zip", check_public=True
+    )
+
+    assert route.proxy == "http://proxy.invalid:3128"
+    assert route.urls == ["https://8.8.8.8/artifact.zip"]
+    assert route.headers == {}
 
 
 def test_convert_rejects_private_artifact_url_by_default(tmp_path: Path) -> None:
