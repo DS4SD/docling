@@ -63,15 +63,8 @@ _LITERAL_INLINE_PATTERN = re.compile(
 )
 
 
-def _add_inline_text(
-    doc: DoclingDocument,
-    text: str,
-    *,
-    label: DocItemLabel,
-    prov: ProvenanceItem | None = None,
-    parent: NodeItem | None = None,
-) -> bool:
-    """Map Markdown emphasis and inline HTML through the rich HTML builder."""
+def _markdown_inline_html(text: str) -> str:
+    """Render Markdown emphasis as inline HTML; return other text unchanged."""
     html_text = text
     if "*" in text or "_" in text:
         # Markdown is an optional format dependency, also used for DOTS emphasis.
@@ -91,6 +84,11 @@ def _add_inline_text(
             def break_paragraph(
                 cls, source: marko.source.Source, lazy: bool = False
             ) -> bool:
+                return False
+
+            @staticmethod
+            def is_setext_heading(line: str) -> bool:
+                # SetextHeading is not a registered block element below.
                 return False
 
         class InlineParser(marko.Parser):
@@ -133,6 +131,19 @@ def _add_inline_text(
         rendered = markdown.convert(text)
         if "<strong>" in rendered or "<em>" in rendered:
             html_text = rendered
+    return html_text
+
+
+def _add_inline_text(
+    doc: DoclingDocument,
+    text: str,
+    *,
+    label: DocItemLabel,
+    prov: ProvenanceItem | None = None,
+    parent: NodeItem | None = None,
+) -> bool:
+    """Map Markdown emphasis and inline HTML through the rich HTML builder."""
+    html_text = _markdown_inline_html(text)
     if not _HTML_TAG_PATTERN.search(html_text):
         return False
     if parent is None:

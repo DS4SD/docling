@@ -120,6 +120,7 @@ def test_markdown_emphasis_preserves_math_code_and_html(page_size: Size):
         "unmatched **bold",
         "$x_1 * y_2 * z_3$",
         "______",
+        "a *\n=\nb",
     ],
 )
 def test_literal_markers_stay_literal(text: str, page_size: Size):
