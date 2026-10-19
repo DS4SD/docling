@@ -548,7 +548,8 @@ def export_documents(
     chunk_tokenizer: str = "sentence-transformers/all-MiniLM-L6-v2",
     debug_vlm_native_output: bool = False,
     output_file: Path | None = None,
-):
+) -> int:
+    """Export the conversion results and return how many documents failed."""
     success_count = 0
     failure_count = 0
 
@@ -808,6 +809,7 @@ def export_documents(
     _log.info(
         f"Processed {success_count + failure_count} docs, of which {failure_count} failed"
     )
+    return failure_count
 
 
 @app.command(no_args_is_help=True)
@@ -2002,7 +2004,7 @@ def convert(  # noqa: C901
                 output_file.parent if output_file is not None else output
             )
             export_output_dir.mkdir(parents=True, exist_ok=True)
-            export_documents(
+            failure_count = export_documents(
                 conv_results,
                 output_dir=export_output_dir,
                 **export_flags,
@@ -2020,6 +2022,9 @@ def convert(  # noqa: C901
         end_time = time.time() - start_time
 
     _log.info(f"All documents were converted in {end_time:.2f} seconds.")
+
+    if failure_count:
+        raise typer.Exit(1)
 
 
 class EngineStage(str, Enum):

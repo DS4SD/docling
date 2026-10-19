@@ -382,7 +382,7 @@ def convert_remote(
         output.mkdir(parents=True, exist_ok=True)
         conv_results = client.convert_all(source=sources, options=options)
         try:
-            export_documents(
+            failure_count = export_documents(
                 conv_results,
                 output_dir=output,
                 **_export_flags_from_formats(to_formats),
@@ -398,6 +398,8 @@ def convert_remote(
             raise
         except Exception as e:
             err_console.print(f"[red]Conversion failed: {e}[/red]")
+            raise typer.Exit(1)
+        if failure_count:
             raise typer.Exit(1)
 
 

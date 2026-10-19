@@ -137,6 +137,35 @@ def test_remote_converts_local_file(tmp_path, _patch_client):
     assert client.captured_sources == [source]
 
 
+def test_remote_failed_document_exits_1(tmp_path, monkeypatch):
+    class _FailingClient(_FakeClient):
+        def convert_all(self, source=None, options=None, **kwargs):
+            results = list(super().convert_all(source, options, **kwargs))
+            for res in results:
+                res.status = ConversionStatus.FAILURE
+            return iter(results)
+
+    monkeypatch.setattr("docling.cli.remote.DoclingServiceClient", _FailingClient)
+    source = tmp_path / "report.pdf"
+    source.write_bytes(b"%PDF-1.4")
+    output = tmp_path / "out"
+
+    result = runner.invoke(
+        app,
+        [
+            "convert-remote",
+            str(source),
+            "--service-url",
+            "https://docling.example.com",
+            "--output",
+            str(output),
+        ],
+    )
+
+    assert result.exit_code == 1, result.output
+    assert not (output / "report.md").exists()
+
+
 def test_remote_url_source_stays_string(tmp_path, _patch_client):
     output = tmp_path / "out"
     result = runner.invoke(
