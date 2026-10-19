@@ -20,6 +20,7 @@ from docling.utils.ocr_language import OcrLanguageResolver
 
 # Check for CLI dependencies
 try:
+    import rich.markup
     import rich.table
     import typer
 except ImportError as e:
@@ -50,6 +51,11 @@ from pydantic import SecretStr, TypeAdapter, ValidationError
 from rich.console import Console
 from tqdm.contrib.logging import logging_redirect_tqdm
 
+from docling.cli.engine_options import (
+    create_engine_options,
+    describe_options_class,
+    find_options_class,
+)
 from docling.cli.export_utils import (
     _export_flags_from_formats,
     _is_empty_output,
@@ -176,16 +182,6 @@ except ImportError as exc:
 
 if TYPE_CHECKING:
     from docling.models.factories.base_factory import BaseFactory
-
-
-def _first_error_message(err: ValidationError) -> str:
-    """The most useful line of a pydantic error, for a typer.BadParameter."""
-    errors = err.errors()
-    if not errors:
-        return str(err)
-    message = errors[0].get("msg", "")
-    # Pydantic prefixes messages raised from a validator with "Value error, ".
-    return message.removeprefix("Value error, ") or str(err)
 
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
@@ -1024,11 +1020,42 @@ def convert(  # noqa: C901
             ),
         ),
     ] = OcrAutoOptions.kind,
-    rapidocr_model_size: Annotated[
-        Literal["tiny", "small", "medium"] | None,
+    ocr_option: Annotated[
+        list[str] | None,
         typer.Option(
-            "--rapidocr-model-size",
-            help="RapidOCR PP-OCRv6 detection and recognition model size. Defaults to small.",
+            "--ocr-option",
+            metavar="KEY=VALUE",
+            help=(
+                "Set an option of the selected OCR engine, e.g. "
+                "'--ocr-engine rapidocr --ocr-option model_size=tiny'. Repeatable. "
+                'VALUE is read as JSON when possible (0.6, false, ["en","de"]), '
+                "else as a string. Run 'docling options ocr <engine>' to list the keys."
+            ),
+        ),
+    ] = None,
+    layout_option: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--layout-option",
+            metavar="KEY=VALUE",
+            help=(
+                "Set an option of the selected layout engine. Repeatable, same "
+                "format as --ocr-option. Run 'docling options layout <engine>' to "
+                "list the keys."
+            ),
+        ),
+    ] = None,
+    table_structure_option: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--table-structure-option",
+            metavar="KEY=VALUE",
+            help=(
+                "Set an option of the selected table structure engine, e.g. "
+                "'--table-structure-option mode=fast'. Repeatable, same format as "
+                "--ocr-option. Run 'docling options table-structure <engine>' to "
+                "list the keys."
+            ),
         ),
     ] = None,
     ocr_lang: Annotated[
@@ -1057,7 +1084,10 @@ def convert(  # noqa: C901
         int | None,
         typer.Option(
             ...,
-            help="Page Segmentation Mode for the OCR engine (0-13).",
+            help=(
+                "DEPRECATED: use `--ocr-option psm=N` instead. "
+                "Page Segmentation Mode for the Tesseract OCR engines (0-13)."
+            ),
         ),
     ] = None,
     pdf_backend: Annotated[
@@ -1523,31 +1553,44 @@ def convert(  # noqa: C901
         else:
             resolved_ocr_mode = ocr_mode
         ocr_kwargs: dict[str, Any] = {"mode": resolved_ocr_mode}
-        if rapidocr_model_size is not None:
-            if ocr_engine != "rapidocr":
-                raise typer.BadParameter(
-                    "requires --ocr-engine rapidocr",
-                    param_hint="--rapidocr-model-size",
-                )
-            ocr_kwargs["model_size"] = rapidocr_model_size
+        ocr_flag_names = {
+            "mode": "--ocr-mode",
+            "lang": "--ocr-lang",
+            "psm": "--psm",
+        }
+        # `--ocr-mode` always has a value; count it as set only when it differs
+        # from the default, so `--ocr-option mode=...` works on its own.
+        explicit_ocr_fields = (
+            {"mode"} if force_ocr or ocr_mode != OcrMode.DEFAULT else set()
+        )
         ocr_lang_list = _split_list(ocr_lang)
         # `_split_list` returns None only when the option was not given, so an
         # explicitly empty value reaches the engine as `lang=[]`: "your default".
         if ocr_lang_list is not None:
             ocr_kwargs["lang"] = ocr_lang_list
-        try:
-            ocr_options: OcrOptions = ocr_factory.create_options(  # type: ignore
-                kind=ocr_engine,
-                **ocr_kwargs,
+            explicit_ocr_fields.add("lang")
+        if psm is not None:
+            warnings.warn(
+                "`--psm` is deprecated; use `--ocr-option psm=N` instead.",
+                DeprecationWarning,
+                stacklevel=2,
             )
-        except ValidationError as err:
-            raise typer.BadParameter(
-                _first_error_message(err), param_hint="--ocr-lang"
-            ) from err
-        if psm is not None and isinstance(
-            ocr_options, TesseractOcrOptions | TesseractCliOcrOptions
-        ):
-            ocr_options.psm = psm
+            # Only the Tesseract engines know `psm`; the other engines ignore it.
+            if ocr_engine in (TesseractOcrOptions.kind, TesseractCliOcrOptions.kind):
+                ocr_kwargs["psm"] = psm
+                explicit_ocr_fields.add("psm")
+        ocr_options = cast(
+            OcrOptions,
+            create_engine_options(
+                ocr_factory,
+                ocr_engine,
+                flag_kwargs=ocr_kwargs,
+                flag_names=ocr_flag_names,
+                explicit_flag_fields=explicit_ocr_fields,
+                option_values=ocr_option,
+                param_hint="--ocr-option",
+            ),
+        )
         accelerator_options = AcceleratorOptions(num_threads=num_threads, device=device)
         pipeline_options: PipelineOptions
         format_options: dict[InputFormat, FormatOption] = {}
@@ -1556,15 +1599,41 @@ def convert(  # noqa: C901
         layout_factory = get_layout_factory(
             allow_external_plugins=allow_external_plugins
         )
-        layout_options: BaseLayoutOptions = layout_factory.create_options(  # type: ignore
-            kind=layout_engine
+        layout_options = cast(
+            BaseLayoutOptions,
+            create_engine_options(
+                layout_factory,
+                layout_engine,
+                flag_kwargs={},
+                flag_names={},
+                explicit_flag_fields=set(),
+                option_values=layout_option,
+                param_hint="--layout-option",
+            ),
         )
 
         table_structure_factory = get_table_structure_factory(
             allow_external_plugins=allow_external_plugins
         )
-        table_structure_options: BaseTableStructureOptions = (  # type: ignore
-            table_structure_factory.create_options(kind=table_structure_engine)
+        # Only TableFormer V1 has a `mode`; the other engines ignore --table-mode.
+        table_kwargs: dict[str, Any] = (
+            {"mode": table_mode}
+            if table_structure_engine == TableStructureOptions.kind
+            else {}
+        )
+        table_structure_options = cast(
+            BaseTableStructureOptions,
+            create_engine_options(
+                table_structure_factory,
+                table_structure_engine,
+                flag_kwargs=table_kwargs,
+                flag_names={"mode": "--table-mode"},
+                explicit_flag_fields=(
+                    {"mode"} if table_mode != TableFormerMode.ACCURATE else set()
+                ),
+                option_values=table_structure_option,
+                param_hint="--table-structure-option",
+            ),
         )
 
         try:
@@ -1602,11 +1671,6 @@ def convert(  # noqa: C901
                 chart_extraction_options=chart_extraction_options,
                 document_timeout=document_timeout,
             )
-            if isinstance(
-                pipeline_options.table_structure_options, TableStructureOptions
-            ):
-                pipeline_options.table_structure_options.do_cell_matching = True
-                pipeline_options.table_structure_options.mode = table_mode
             if picture_description_max_new_tokens is not None:
                 pipeline_options.picture_description_options.generation_config[
                     "max_new_tokens"
@@ -1935,6 +1999,66 @@ def convert(  # noqa: C901
         end_time = time.time() - start_time
 
     _log.info(f"All documents were converted in {end_time:.2f} seconds.")
+
+
+class EngineStage(str, Enum):
+    OCR = "ocr"
+    LAYOUT = "layout"
+    TABLE_STRUCTURE = "table-structure"
+
+
+@app.command("options")
+def show_engine_options(
+    stage: Annotated[
+        EngineStage,
+        typer.Argument(help="The pipeline stage of the engine."),
+    ],
+    engine: Annotated[
+        str | None,
+        typer.Argument(
+            help="The engine to describe. Omit it to list the engines of the stage."
+        ),
+    ] = None,
+    allow_external_plugins: Annotated[
+        bool,
+        typer.Option(
+            ..., help="Must be enabled for loading modules from third-party plugins."
+        ),
+    ] = False,
+) -> None:
+    """Show the KEY=VALUE options that `docling convert` accepts for an engine.
+
+    The keys go to --ocr-option, --layout-option or --table-structure-option.
+    """
+    _require_local_model_stack("docling options")
+    factory: BaseFactory
+    if stage == EngineStage.OCR:
+        factory = get_ocr_factory(allow_external_plugins=allow_external_plugins)
+    elif stage == EngineStage.LAYOUT:
+        factory = get_layout_factory(allow_external_plugins=allow_external_plugins)
+    else:
+        factory = get_table_structure_factory(
+            allow_external_plugins=allow_external_plugins
+        )
+
+    if engine is None:
+        for kind in factory.registered_kind:
+            console.print(kind, highlight=False)
+        return
+
+    try:
+        options_cls = find_options_class(factory, engine)
+    except typer.BadParameter as err:
+        err.param_hint = "ENGINE"
+        raise
+    table = rich.table.Table(title=f"Options of the {stage.value} engine {engine!r}")
+    table.add_column("Key", style="bold", no_wrap=True)
+    table.add_column("Type")
+    table.add_column("Default")
+    table.add_column("Description")
+    for row in describe_options_class(options_cls):
+        table.add_row(*(rich.markup.escape(cell) for cell in row))
+    console.print(table)
 
 
 # Register `convert-remote` only when the service-client extra is installed.

@@ -226,8 +226,15 @@ options = RapidOcrOptions(lang=["en"], model_size="tiny")
 CLI conversion:
 
 ```sh
-docling convert --from pdf --to dclx --ocr-engine rapidocr --ocr-lang en --rapidocr-model-size tiny document.pdf
+docling convert --from pdf --to dclx --ocr-engine rapidocr --ocr-lang en --ocr-option model_size=tiny document.pdf
 ```
+
+`--ocr-option KEY=VALUE` sets any field of the selected engine's options class and can be
+repeated. The value is read as JSON when possible (`text_score=0.6`, `use_det=false`,
+`lang=["en"]`), otherwise as a string. An unknown key is an error. Run
+`docling options ocr rapidocr` to list the keys, types, and defaults of an engine.
+`--layout-option` and `--table-structure-option` do the same for the layout and table
+structure engines.
 
 CLI prefetch (for offline/`artifacts_path` use). `--rapidocr-model-size` is a single value applied
 to every `--rapidocr-backend-lang` pair given (or to the default pair, if none are given) -- unlike
