@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: The Docling Contributors
 # SPDX-License-Identifier: MIT
 
+from io import BytesIO
 from pathlib import Path
 
 import pytest
@@ -9,7 +10,15 @@ from docling_core.types.doc.base import BoundingBox, Size
 from docling_core.types.doc.labels import DocItemLabel
 from PIL import Image
 
-from tests.verify_utils import verify_docitems, verify_export
+from docling.backend.latex_backend import LatexDocumentBackend
+from docling.datamodel.base_models import ConversionStatus, InputFormat
+from docling.datamodel.document import ConversionResult, InputDocument
+from tests.groundtruth_paths import get_regular_groundtruth_paths
+from tests.verify_utils import (
+    check_conversion_result_v2,
+    verify_docitems,
+    verify_export,
+)
 
 
 def _make_doc_with_bbox(
@@ -195,3 +204,29 @@ def test_verify_export_ignores_embedded_image_data(tmp_path: Path) -> None:
     assert not verify_export(
         prediction.replace("image/png", "image/jpeg"), str(fixture)
     )
+
+
+def test_conversion_check_reports_doctags_failure_and_can_skip_it(tmp_path: Path):
+    stream = BytesIO(b"\\documentclass{article}\\begin{document}Body.\\end{document}")
+    input_doc = InputDocument(
+        path_or_stream=stream,
+        format=InputFormat.LATEX,
+        backend=LatexDocumentBackend,
+        filename="verify.tex",
+    )
+    doc = DoclingDocument(name="verify")
+    doc.add_text(label=DocItemLabel.PARAGRAPH, text="Body.")
+    result = ConversionResult(
+        input=input_doc, status=ConversionStatus.SUCCESS, document=doc
+    )
+    paths = get_regular_groundtruth_paths(tmp_path / "verify.pdf", gt_dir=tmp_path)
+
+    assert not check_conversion_result_v2(paths, result, generate=True)
+    assert paths.doctags.exists()
+    assert not check_conversion_result_v2(paths, result)
+
+    paths.doctags.write_text("wrong DocTags", encoding="utf-8")
+    assert [failure.check for failure in check_conversion_result_v2(paths, result)] == [
+        "doctags"
+    ]
+    assert not check_conversion_result_v2(paths, result, verify_doctags=False)

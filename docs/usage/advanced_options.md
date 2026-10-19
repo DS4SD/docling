@@ -136,6 +136,40 @@ The options in this list require the explicit `enable_remote_services=True` when
 The example file [custom_convert.py](../examples/custom_convert.py) contains multiple ways
 one can adjust the conversion pipeline and features.
 
+### Extract native PDF form fields
+
+Set `PdfPipelineOptions(extract_form_fields=True)` (CLI: `--extract-form-fields`)
+to convert native PDF widgets (AcroForm) into format-neutral `FieldItem` objects
+with fillable `FieldValueItem` children. Each field key comes from printed text
+associated with its widget by page geometry. The key can be text inside or
+beside the widget's cell, or a paragraph that contains the widget. Checkbox and
+radio option text becomes an option key. A shared prompt introduces several
+options and stays as ordinary text. Additional context becomes a field hint.
+A widget inside a detected table goes into its table cell instead (a rich table
+cell holding the field). Its key comes only from text printed in that same
+cell; the table's row and column headers already carry the association.
+Text used as a field key leaves the body text; a section header or formula
+used as a key stays inside the key, as a field heading or a formula. PDF field
+names are not used as keys.
+
+Fields keep the native order of their widgets. Page geometry places them
+among the text printed around them: the reading-order model orders the text
+only, never the widgets. Fields outside a detected form region go in field
+regions of their own between the page's other elements, one region per run
+of consecutive fields.
+
+Here, **key** means text that names one or more field values, and **hint** means
+extra context. **Layout label** means an element class (`DocItemLabel`).
+**Caption** means a document caption associated with a picture, table, code
+block, or form; it does not mean a field key or hint.
+
+The docling-parse backend supplies the widgets. Scanned or flattened forms,
+backends without page widgets and full-page OCR produce no field items; table
+cells need `do_table_structure=True`. Raw widget metadata is not stored in the
+`DoclingDocument`; keep parsed pages with `generate_parsed_pages=True` when
+that PDF-specific data is needed. Field items are not supported by the DocTags
+export.
+
 ### Image resolution and scale
 
 Page coordinates use 72 points per inch. For image inputs, embedded DPI metadata
@@ -310,11 +344,11 @@ doc_converter = DocumentConverter(
 
 See [PDF heading levels](./heading_levels.md) for the signals, their precedence and all options.
 
-### PowerPoint charts
+### PowerPoint and Excel charts
 
-A chart on a PowerPoint slide becomes a picture classified by its kind, with
-the data it plots in the picture's `meta.tabular_chart` and its title as the
-caption. The first column of the data holds the categories, under the title of
+A chart on a PowerPoint slide or an Excel sheet becomes a picture classified by
+its kind, with the data it plots in the picture's `meta.tabular_chart` and its
+title as the caption. The first column of the data holds the categories, under the title of
 the category axis, and each series gets a column. Dates on the category axis
 are written as ISO 8601 dates, such as `2012-01-01`.
 
@@ -333,7 +367,8 @@ for picture in deck.pictures:
 ```
 
 The picture itself is empty unless you set `render_chart_images=True` in
-`MsPowerpointBackendOptions`. That draws each chart with LibreOffice.
+`MsPowerpointBackendOptions` or `MsExcelBackendOptions`. That draws each chart
+with LibreOffice.
 
 ### Apple iWork options
 
@@ -451,6 +486,44 @@ doc_converter = DocumentConverter(
         InputFormat.IWORK_PAGES: IWorkPagesFormatOption(backend_options=limits),
         InputFormat.IWORK_NUMBERS: IWorkNumbersFormatOption(backend_options=limits),
         InputFormat.IWORK_KEYNOTE: IWorkKeynoteFormatOption(backend_options=limits),
+    }
+)
+```
+
+### AsciiDoc comments
+
+AsciiDoc comments carry editorial notes, review remarks and blocks that were
+disabled on purpose, so the backend keeps them in the `notes` content layer
+instead of dropping them. A run of `//` lines is one note and a `////` block is
+another; the line breaks inside each one are kept, because a commented-out block
+is markup rather than prose. Exports leave `notes` out by default, so comments
+reach an export only when you ask for the layer:
+
+```python
+from docling_core.types.doc import ContentLayer
+from docling.document_converter import DocumentConverter
+
+doc = DocumentConverter().convert("manual.adoc").document
+print(doc.export_to_markdown())  # body only, comments left out
+print(doc.export_to_markdown(
+    included_content_layers={ContentLayer.BODY, ContentLayer.NOTES}
+))
+```
+
+A `//` line inside a `----` listing or a `....` literal block is code, not a
+comment, and stays in the block. To drop comments entirely rather than keep
+them in `notes`, turn `capture_comments` off:
+
+```python
+from docling.datamodel.backend_options import AsciiDocBackendOptions
+from docling.datamodel.base_models import InputFormat
+from docling.document_converter import AsciiDocFormatOption, DocumentConverter
+
+converter = DocumentConverter(
+    format_options={
+        InputFormat.ASCIIDOC: AsciiDocFormatOption(
+            backend_options=AsciiDocBackendOptions(capture_comments=False)
+        )
     }
 )
 ```
