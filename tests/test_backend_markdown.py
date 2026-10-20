@@ -300,6 +300,38 @@ def test_local_relative_image_resolves_from_document_dir(tmp_path: Path, as_path
     assert image.getpixel((0, 0)) == (0, 255, 0)
 
 
+def test_local_relative_image_resolved_with_file_uri_source(tmp_path):
+    """Relative image resolution must accept a file:// URI as source_uri."""
+    image_path = tmp_path / "figure.png"
+    Image.new("RGB", (7, 5), color=(0, 255, 0)).save(image_path)
+    md_path = tmp_path / "doc.md"
+    md_path.write_text("# Title\n\n![alt](figure.png)\n", encoding="utf-8")
+
+    converter = DocumentConverter(
+        allowed_formats=[InputFormat.MD],
+        format_options={
+            InputFormat.MD: MarkdownFormatOption(
+                backend_options=MarkdownBackendOptions(
+                    fetch_images=True,
+                    enable_local_fetch=True,
+                    source_uri=md_path.as_uri(),
+                )
+            )
+        },
+    )
+
+    doc = converter.convert(md_path).document
+
+    pictures = [
+        item for item, _ in doc.iterate_items() if isinstance(item, PictureItem)
+    ]
+    assert len(pictures) == 1
+    image = pictures[0].get_image(doc)
+    assert image is not None
+    assert image.size == (7, 5)
+    assert image.getpixel((0, 0)) == (0, 255, 0)
+
+
 def test_code_block_language_detection():
     markdown = (
         "```python\n"

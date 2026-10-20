@@ -153,6 +153,38 @@ def test_resolve_relative_path():
     assert html_doc._resolve_relative_path("#section1") == "#section1"
 
 
+def test_resolve_relative_path_file_uri():
+    html_path = Path("./tests/data/html/sources/example_01.html")
+    in_doc = InputDocument(
+        path_or_stream=html_path,
+        format=InputFormat.HTML,
+        backend=HTMLDocumentBackend,
+        filename="test",
+    )
+    html_doc = HTMLDocumentBackend(path_or_stream=html_path, in_doc=in_doc)
+    html_doc.base_path = html_path.resolve().as_uri()
+
+    resolved = html_doc._resolve_relative_path("subdir/another.html")
+    expected = str((html_path.resolve().parent / "subdir/another.html").resolve())
+    assert resolved == expected
+
+    # file:// URI base_path blocks directory traversal
+    with pytest.raises(ValueError, match="Path traversal blocked"):
+        html_doc._resolve_relative_path("../../../../../../../etc/something")
+
+    # file:// URI base_path blocks absolute paths
+    with pytest.raises(
+        ValueError, match="Absolute paths are not allowed with local base_path"
+    ):
+        html_doc._resolve_relative_path("file:///etc/something")
+
+    # URL-encoded spaces in file URI base path
+    html_doc.base_path = "file:///path%20with%20spaces/doc.html"
+    resolved_spaces = html_doc._resolve_relative_path("image.png")
+    assert "path with spaces" in resolved_spaces
+    assert "image.png" in resolved_spaces
+
+
 def test_heading_levels():
     in_path = Path("tests/data/html/sources/wiki_duck.html")
     in_doc = InputDocument(

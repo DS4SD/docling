@@ -965,7 +965,10 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
         if (
             not self.options.fetch_images
             or self.base_path is None
-            or not ImageResourceLoader.is_local_path(self.base_path)
+            or not (
+                ImageResourceLoader.is_local_path(self.base_path)
+                or ImageResourceLoader.is_file_uri(self.base_path)
+            )
         ):
             return None
 

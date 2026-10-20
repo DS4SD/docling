@@ -722,14 +722,8 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def _mhtml_local_path(value: str) -> str | None:
         """Return a filesystem spelling for local paths and file URIs."""
         value = value.strip()
-        parsed = urlparse(value)
-        if parsed.scheme.lower() == "file":
-            path = unquote(parsed.path)
-            if parsed.netloc and parsed.netloc.lower() != "localhost":
-                path = f"//{parsed.netloc}{path}"
-            if re.match(r"^/[A-Za-z]:[/\\]", path):
-                path = path[1:]
-            return path
+        if ImageResourceLoader.is_file_uri(value):
+            return ImageResourceLoader.file_uri_to_path(value)
         if ImageResourceLoader.is_local_path(value):
             return value
         return None
@@ -1057,8 +1051,13 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         if isinstance(self.path_or_stream, Path):
             return self.path_or_stream.resolve()
 
-        if self.base_path and ImageResourceLoader.is_local_path(self.base_path):
-            return Path(self.base_path).resolve()
+        if self.base_path:
+            if ImageResourceLoader.is_local_path(self.base_path):
+                return Path(self.base_path).resolve()
+            if ImageResourceLoader.is_file_uri(self.base_path):
+                return Path(
+                    ImageResourceLoader.file_uri_to_path(self.base_path)
+                ).resolve()
 
         return None
 

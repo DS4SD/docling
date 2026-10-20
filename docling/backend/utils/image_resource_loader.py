@@ -20,9 +20,9 @@ import warnings
 from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
 from io import BytesIO
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Optional, Union
-from urllib.parse import urljoin, urlparse, urlsplit
+from urllib.parse import unquote, urljoin, urlparse, urlsplit
 
 import certifi
 import requests
@@ -300,22 +300,50 @@ class ImageResourceLoader:
 
     @staticmethod
     def is_absolute_path(loc: str) -> bool:
-        return Path(loc).is_absolute() or (  # Windows-specific absolute paths:
-            len((parsed_loc := urlparse(loc)).scheme) == 1
-            and parsed_loc.scheme.isalpha()
-            and not parsed_loc.netloc
+        return (
+            Path(loc).is_absolute()
+            or PurePosixPath(loc).is_absolute()
+            or (  # Windows-specific absolute paths:
+                len((parsed_loc := urlparse(loc)).scheme) == 1
+                and parsed_loc.scheme.isalpha()
+                and not parsed_loc.netloc
+            )
         )
+
+    @staticmethod
+    def is_file_uri(value: str) -> bool:
+        """Check if value is a file URI."""
+        parsed = urlparse(value)
+        return parsed.scheme.lower() == "file"
+
+    @staticmethod
+    def file_uri_to_path(value: str) -> str:
+        """Convert a file URI to a local filesystem path."""
+        parsed = urlparse(value)
+        if parsed.scheme.lower() != "file":
+            return value
+        path = unquote(parsed.path)
+        if parsed.netloc and parsed.netloc.lower() != "localhost":
+            path = f"//{parsed.netloc}{path}"
+        if re.match(r"^/[A-Za-z]:[/\\]", path):
+            path = path[1:]
+        return path
 
     def resolve_relative_path(self, loc: str, base_path: Optional[str]) -> str:
         loc = loc.strip()
 
-        # Strip file:// prefix for validation as local path
-        if loc.startswith(file_prefix := "file://"):
+        # Strip file:// prefix or normalize file URI for validation as local path
+        if ImageResourceLoader.is_file_uri(loc):
+            loc = ImageResourceLoader.file_uri_to_path(loc)
+        elif loc.startswith(file_prefix := "file://"):
             loc = loc[len(file_prefix) :]
 
         abs_loc = loc
 
         if base_path:
+            if ImageResourceLoader.is_file_uri(base_path):
+                base_path = ImageResourceLoader.file_uri_to_path(base_path)
+
             if loc.startswith("//"):
                 abs_loc = "https:" + loc
             elif not loc.startswith(("http://", "https://", "data:", "#")):
