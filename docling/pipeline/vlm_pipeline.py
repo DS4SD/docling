@@ -55,6 +55,7 @@ from docling.datamodel.pipeline_options_vlm_model import (
     InlineVlmOptions,
     ResponseFormat,
 )
+from docling.datamodel.progress import ProgressReporter
 from docling.datamodel.settings import settings
 
 # VlmResponseFormat is actually ResponseFormat from pipeline_options_vlm_model
@@ -84,9 +85,41 @@ class VlmPipeline(PaginatedPipeline):
         else:
             self._initialize_legacy_vlm_models(pipeline_options)
 
-        self.enrichment_pipe: list = [
-            # Other models working on `NodeItem` elements in the DoclingDocument
-        ]
+    def _enrich_document(self, conv_res: ConversionResult) -> ConversionResult:
+        # Picture enrichments run before each page backend is released.
+        return conv_res
+
+    def _enrich_page_document(
+        self, conv_res: ConversionResult, page: Page, document: DoclingDocument
+    ) -> None:
+        if not document.pictures or not self.enrichment_pipe:
+            return
+
+        # Finalized page documents use local page number 1. The enrichment
+        # models index conv_res.pages using provenance page numbers, so expose
+        # the source page number while running the models.
+        page_item = document.pages.pop(1)
+        page_item.page_no = page.page_no
+        document.pages[page.page_no] = page_item
+        for item, _level in document.iterate_items(
+            traverse_pictures=True, included_content_layers=set(ContentLayer)
+        ):
+            if isinstance(item, DocItem):
+                for provenance in item.prov:
+                    provenance.page_no = page.page_no
+
+        original_document, original_pages = conv_res.document, conv_res.pages
+        original_progress = conv_res._progress
+        try:
+            conv_res.document = document
+            conv_res.pages = [page]
+            # The page is reported once its pictures are enriched, so its page
+            # event covers this work; per-page item counts would only add noise.
+            conv_res._progress = ProgressReporter()
+            super()._enrich_document(conv_res)
+        finally:
+            conv_res.document, conv_res.pages = original_document, original_pages
+            conv_res._progress = original_progress
 
     def _initialize_new_runtime_system(
         self, pipeline_options: VlmPipelineOptions
@@ -243,6 +276,9 @@ class VlmPipeline(PaginatedPipeline):
                 page._backend = page_backend
                 if not page_backend.is_valid():
                     failed_page_nos.add(page.page_no)
+                    conv_res._progress.page_completed(
+                        page.page_no, total_pages=len(pages_by_no), success=False
+                    )
                     conv_res.errors.append(
                         ErrorItem(
                             component_type=DoclingComponentType.DOCUMENT_BACKEND,
@@ -263,6 +299,7 @@ class VlmPipeline(PaginatedPipeline):
                     page_batch=page_batch,
                     page_documents=page_documents,
                     processed_page_nos=processed_page_nos,
+                    total_pages=len(pages_by_no),
                 )
                 page_batch = []
                 if self._document_timed_out(
@@ -279,6 +316,7 @@ class VlmPipeline(PaginatedPipeline):
                     page_batch=page_batch,
                     page_documents=page_documents,
                     processed_page_nos=processed_page_nos,
+                    total_pages=len(pages_by_no),
                 )
                 self._document_timed_out(
                     conv_res=conv_res,
@@ -290,6 +328,9 @@ class VlmPipeline(PaginatedPipeline):
             page_iterator.close()
             for page in pages_by_no.values():
                 self._release_page_resources(page)
+        conv_res._progress.fail_unfinished_pages(
+            expected_page_nos, total_pages=len(pages_by_no)
+        )
 
         if not any(
             error.category == FailureCategory.TIMEOUT for error in conv_res.errors
@@ -328,15 +369,19 @@ class VlmPipeline(PaginatedPipeline):
         page_batch: list[Page],
         page_documents: dict[int, DoclingDocument],
         processed_page_nos: set[int],
+        total_pages: int,
     ) -> None:
         try:
             for page in self._apply_on_pages(conv_res, page_batch):
                 if page.size is None:
                     continue
-                page_documents[page.page_no] = self._finalize_page_document(
-                    conv_res, page
-                )
+                document = self._finalize_page_document(conv_res, page)
+                self._enrich_page_document(conv_res, page, document)
+                page_documents[page.page_no] = document
                 processed_page_nos.add(page.page_no)
+                conv_res._progress.page_completed(
+                    page.page_no, total_pages=total_pages, success=True
+                )
         finally:
             for page in page_batch:
                 self._release_page_resources(page)
