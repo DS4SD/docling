@@ -142,6 +142,7 @@ docling report.pdf --enrich-picture-description --output /tmp/
 | Same line repeated many times | `--pipeline vlm` (or hybrid `force_backend_text`, Python SDK only) |
 | Choose GPU/CPU explicitly | `--device cuda` / `--device cpu` / `--device mps` |
 | HTML images on remote hosts | `--html-image-fetch remote`; add auth with `--html-image-headers '{"Authorization": "Bearer T"}'` (sent only to the source page's origin, or to each `--html-image-headers-origin https://cdn.example.com`) |
+| Script or CI must detect failed documents | Exit code 1 when a document fails; partially converted documents are still written and exit 0. `--fail-on partial` also exits 1 for them, `--fail-on never` always exits 0 (same flag on `convert-remote`). `--abort-on-error` stops at the first failure instead |
 
 ## Remote VLM services from the CLI
 
