@@ -5,6 +5,7 @@
 
 import socket
 import threading
+from pathlib import Path
 from urllib.parse import quote
 
 import pytest
@@ -242,3 +243,48 @@ def test_load_image_data_local_requires_base_path():
     loader = ImageResourceLoader(enable_local_fetch=True)
     with pytest.raises(OperationNotAllowed, match="requires base_path"):
         loader.load_image_data("/some/where/image.png", None)
+
+
+def test_resolve_relative_path_accepts_file_uri_base(tmp_path):
+    loader = ImageResourceLoader()
+    base_path = (tmp_path / "doc.md").as_uri()
+
+    resolved = loader.resolve_relative_path("figure.png", base_path)
+
+    assert Path(resolved) == (tmp_path / "figure.png").resolve()
+
+
+def test_resolve_relative_path_accepts_localhost_file_uri(tmp_path):
+    loader = ImageResourceLoader()
+    base_path = (
+        (tmp_path / "doc.md").as_uri().replace("file:///", "file://localhost/", 1)
+    )
+
+    resolved = loader.resolve_relative_path("figure.png", base_path)
+
+    assert Path(resolved) == (tmp_path / "figure.png").resolve()
+
+
+def test_resolve_relative_path_accepts_unc_file_uri():
+    loader = ImageResourceLoader()
+
+    resolved = loader.resolve_relative_path(
+        "figure.png", "file://server/share/docs/doc.md"
+    )
+
+    assert Path(resolved) == Path("//server/share/docs/figure.png")
+
+
+def test_resolve_relative_path_keeps_file_uri_confinement(tmp_path):
+    loader = ImageResourceLoader()
+    base_path = (tmp_path / "doc.md").as_uri()
+
+    with pytest.raises(ValueError, match="Path traversal blocked"):
+        loader.resolve_relative_path("../outside.png", base_path)
+
+
+def test_resolve_relative_path_rejects_empty_file_uri():
+    loader = ImageResourceLoader()
+
+    with pytest.raises(ValueError, match="empty path"):
+        loader.resolve_relative_path("figure.png", "file://")
