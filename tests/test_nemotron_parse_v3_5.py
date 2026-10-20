@@ -332,6 +332,29 @@ def test_headings_titles_formula_and_code() -> None:
     assert isinstance(heading, SectionHeaderItem) and heading.level == 2
 
 
+@pytest.mark.parametrize(
+    ("raw", "latex"),
+    [
+        (r"\(x^2\)", "x^2"),
+        # Each segment has its own pair, with text between them.
+        (r"(6) \(x_1=\frac{a}{b}\), \(x_2=y\)", r"(6) x_1=\frac{a}{b}, x_2=y"),
+        (
+            r"\(\[\begin{array}{c}1 \\ 2\end{array}\]\)",
+            r"\begin{array}{c}1 \\ 2\end{array}",
+        ),
+        # Truncated output leaves an unpaired delimiter.
+        (r"A = \([\begin{array}{c}1", r"A = [\begin{array}{c}1"),
+    ],
+)
+def test_formula_text_has_no_math_delimiters(raw: str, latex: str) -> None:
+    doc = _parse(_block("Formula", raw))
+
+    formula = doc.texts[0]
+    assert formula.label == DocItemLabel.FORMULA
+    assert (formula.text, formula.orig) == (latex, raw)
+    assert doc.export_to_markdown() == f"$${latex}$$"
+
+
 def test_consecutive_toc_blocks_share_one_group() -> None:
     doc = _parse(
         _block("TOC", "1 Introduction ..... 1")
