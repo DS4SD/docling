@@ -228,7 +228,7 @@ def test_multi_panel_chart_maps_one_picture_per_panel() -> None:
     chart = (
         '<chart type="faceted_bar">\n'
         "panel: p1 ; multi_line ; Early\n"
-        "panel: p2 ; scatter ; Late\n\n"
+        "panel: p2 ; scatter\n\n"  # the model usually omits the label
         "table[p1]:\n| t | v |\n| --- | --- |\n| 1 | 2 |\n\n"
         "table[p2]:\n| t | v |\n| --- | --- |\n| 3 | 4 |\n| 5 | 6 |\n"
         "</chart>"
@@ -247,7 +247,7 @@ def test_multi_panel_chart_maps_one_picture_per_panel() -> None:
     ]
     assert summary == [
         (PictureClassificationLabel.LINE_CHART.value, "Early", 2),
-        (PictureClassificationLabel.SCATTER_PLOT.value, "Late", 3),
+        (PictureClassificationLabel.SCATTER_CHART.value, None, 3),
     ]
 
 

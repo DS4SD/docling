@@ -350,13 +350,18 @@ def _markdown_table_data(rows: list[str]) -> TableData:
 
 
 def _chart_label(chart_type: str) -> PictureClassificationLabel:
+    # DocLang serializes chart data only for the *_CHART labels and HEATMAP.
+    if "heatmap" in chart_type:
+        return PictureClassificationLabel.HEATMAP
+    if "stacked" in chart_type and "bar" in chart_type:
+        return PictureClassificationLabel.STACKED_BAR_CHART
     if "bar" in chart_type:
         return PictureClassificationLabel.BAR_CHART
     if "line" in chart_type:
         return PictureClassificationLabel.LINE_CHART
-    if "scatter" in chart_type:
-        return PictureClassificationLabel.SCATTER_PLOT
-    if "pie" in chart_type:
+    if "scatter" in chart_type or "bubble" in chart_type:
+        return PictureClassificationLabel.SCATTER_CHART
+    if "pie" in chart_type or "donut" in chart_type:
         return PictureClassificationLabel.PIE_CHART
     if "box" in chart_type:
         return PictureClassificationLabel.BOX_PLOT
@@ -408,9 +413,10 @@ def _add_chart(doc: DoclingDocument, text: str, prov: ProvenanceItem) -> None:
         if name == "title":
             title = value.strip()
         elif name == "panel":
+            # "id ; type" with an optional "; label".
             parts = [part.strip() for part in value.split(";", 2)]
-            if len(parts) == 3:
-                panels.append((parts[0], parts[1], parts[2]))
+            if len(parts) >= 2:
+                panels.append((parts[0], parts[1], parts[2] if len(parts) == 3 else ""))
         elif (key_match := _CHART_TABLE_KEY.fullmatch(name)) is not None:
             table_key = key_match.group(1)
 
