@@ -182,6 +182,13 @@ read the language of the document. A replaced page keeps its low `parse_score` i
 docling report.pdf --replace-broken-text-layer
 ```
 
+Docling detects a broken page from characters that do not belong in text, such as control
+characters, `�`, or private-use characters, and from Latin letters that are shifted as a whole, as
+in the example above. It cannot detect a page whose text uses the right alphabet but the wrong
+letters, or the right letters in the wrong order, for example `Cartifecita` instead of
+`Certificate`. Such pages keep their PDF text. To read every page with OCR, set
+`mode=OcrMode.FULL_PAGE` (`--ocr-mode full_page`).
+
 
 ## RapidOCR
 

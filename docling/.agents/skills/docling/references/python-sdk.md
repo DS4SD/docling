@@ -99,6 +99,10 @@ opts = PdfPipelineOptions(
 )
 ```
 
+It does not detect text that uses the right alphabet but the wrong letters, or
+the right letters in the wrong order (e.g. `Cartifecita` for `Certificate`).
+Such pages keep their PDF text; `mode=OcrMode.FULL_PAGE` OCRs every page.
+
 OCR can also run on a remote KServe v2 / Triton server. Page crops are sent to
 that server, so `enable_remote_services=True` is required:
 
