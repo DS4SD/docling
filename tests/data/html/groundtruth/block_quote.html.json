@@ -4,7 +4,7 @@
   "name": "block_quote",
   "origin": {
     "mimetype": "text/html",
-    "binary_hash": 8909998887913349180,
+    "binary_hash": 17529170609826952811,
     "filename": "block_quote.html"
   },
   "furniture": {
@@ -158,16 +158,20 @@
       "content_layer": "body",
       "name": "blockquote",
       "label": "block_quote",
+      "cite": "https://example.org/acts/2017/1#section-2",
       "captions": []
     },
     {
       "self_ref": "#/groups/7",
       "parent": {
-        "$ref": "#/texts/1"
+        "$ref": "#/groups/8"
       },
       "children": [
         {
-          "$ref": "#/texts/15"
+          "$ref": "#/texts/18"
+        },
+        {
+          "$ref": "#/texts/19"
         }
       ],
       "content_layer": "body",
@@ -178,11 +182,58 @@
     {
       "self_ref": "#/groups/8",
       "parent": {
+        "$ref": "#/tables/0"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/17"
+        },
+        {
+          "$ref": "#/groups/7"
+        }
+      ],
+      "content_layer": "body",
+      "name": "rich_cell_group_1_0_0",
+      "label": "unspecified"
+    },
+    {
+      "self_ref": "#/groups/9",
+      "parent": {
         "$ref": "#/texts/1"
       },
       "children": [
         {
-          "$ref": "#/texts/16"
+          "$ref": "#/texts/20"
+        }
+      ],
+      "content_layer": "body",
+      "name": "blockquote",
+      "label": "block_quote",
+      "captions": []
+    },
+    {
+      "self_ref": "#/groups/10",
+      "parent": {
+        "$ref": "#/texts/1"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/21"
+        }
+      ],
+      "content_layer": "body",
+      "name": "blockquote",
+      "label": "block_quote",
+      "captions": []
+    },
+    {
+      "self_ref": "#/groups/11",
+      "parent": {
+        "$ref": "#/texts/1"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/22"
         }
       ],
       "content_layer": "furniture",
@@ -228,10 +279,19 @@
           "$ref": "#/groups/6"
         },
         {
-          "$ref": "#/groups/7"
+          "$ref": "#/texts/16"
         },
         {
-          "$ref": "#/groups/8"
+          "$ref": "#/tables/0"
+        },
+        {
+          "$ref": "#/groups/9"
+        },
+        {
+          "$ref": "#/groups/10"
+        },
+        {
+          "$ref": "#/groups/11"
         }
       ],
       "content_layer": "body",
@@ -401,6 +461,83 @@
       "parent": {
         "$ref": "#/groups/6"
       },
+      "children": [
+        {
+          "$ref": "#/texts/15"
+        }
+      ],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [],
+      "orig": "2 Interpretation",
+      "text": "2 Interpretation",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/15",
+      "parent": {
+        "$ref": "#/texts/14"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "In this Act, an act includes an omission.",
+      "text": "In this Act, an act includes an omission."
+    },
+    {
+      "self_ref": "#/texts/16",
+      "parent": {
+        "$ref": "#/texts/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "The judgment under appeal said:",
+      "text": "The judgment under appeal said:"
+    },
+    {
+      "self_ref": "#/texts/17",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "Text:",
+      "text": "Text:"
+    },
+    {
+      "self_ref": "#/texts/18",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "First quoted paragraph.",
+      "text": "First quoted paragraph."
+    },
+    {
+      "self_ref": "#/texts/19",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [],
+      "orig": "Second quoted paragraph.",
+      "text": "Second quoted paragraph."
+    },
+    {
+      "self_ref": "#/texts/20",
+      "parent": {
+        "$ref": "#/groups/9"
+      },
       "children": [],
       "content_layer": "body",
       "label": "text",
@@ -409,9 +546,9 @@
       "text": "A quote whose relative source cannot be resolved."
     },
     {
-      "self_ref": "#/texts/15",
+      "self_ref": "#/texts/21",
       "parent": {
-        "$ref": "#/groups/7"
+        "$ref": "#/groups/10"
       },
       "children": [],
       "content_layer": "body",
@@ -421,9 +558,9 @@
       "text": "A quote without source or attribution."
     },
     {
-      "self_ref": "#/texts/16",
+      "self_ref": "#/texts/22",
       "parent": {
-        "$ref": "#/groups/8"
+        "$ref": "#/groups/11"
       },
       "children": [],
       "content_layer": "furniture",
@@ -434,7 +571,92 @@
     }
   ],
   "pictures": [],
-  "tables": [],
+  "tables": [
+    {
+      "self_ref": "#/tables/0",
+      "parent": {
+        "$ref": "#/texts/1"
+      },
+      "children": [
+        {
+          "$ref": "#/groups/8"
+        }
+      ],
+      "content_layer": "body",
+      "label": "table",
+      "prov": [],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "data": {
+        "table_cells": [
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "(1)",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "Text:First quoted paragraph. Second quoted paragraph.",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false,
+            "ref": {
+              "$ref": "#/groups/8"
+            }
+          }
+        ],
+        "num_rows": 1,
+        "num_cols": 2,
+        "orientation": "rot_0",
+        "grid": [
+          [
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "(1)",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Text:First quoted paragraph. Second quoted paragraph.",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ]
+        ]
+      },
+      "annotations": []
+    }
+  ],
   "key_value_items": [],
   "form_items": [],
   "pages": {}

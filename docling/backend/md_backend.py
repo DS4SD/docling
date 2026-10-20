@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Literal, cast
 
 from docling_core.types.doc import (
+    BlockQuoteGroup,
     CodeItem,
     DocItemLabel,
     DoclingDocument,
@@ -618,6 +619,15 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         )
         return item
 
+    @staticmethod
+    def _in_block_quote(doc: DoclingDocument, item: NodeItem | None) -> bool:
+        """Whether ``item`` is, or lies inside, a block quote group."""
+        while item is not None:
+            if isinstance(item, BlockQuoteGroup):
+                return True
+            item = item.parent.resolve(doc) if item.parent is not None else None
+        return False
+
     def _create_heading_item(
         self,
         doc: DoclingDocument,
@@ -627,7 +637,8 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         formatting: Formatting | None = None,
         hyperlink: AnyUrl | Path | None = None,
     ):
-        if level == 1:
+        # A heading inside a quote is quoted text, never the document title
+        if level == 1 and not self._in_block_quote(doc, parent_item):
             item = doc.add_title(
                 text=text,
                 parent=parent_item,
@@ -637,7 +648,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         else:
             item = doc.add_heading(
                 text=text,
-                level=level - 1,
+                level=max(level - 1, 1),
                 parent=parent_item,
                 formatting=formatting,
                 hyperlink=hyperlink,

@@ -994,10 +994,10 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         header = None
         # Find all headers first
         all_headers = content.find_all(["h1", "h2", "h3", "h4", "h5", "h6"])
-        # Skip headers that become cell or list item text: they never switch the
-        # layer back to body
+        # Skip headers that become cell, list item or quoted text: they never
+        # switch the layer back to body
         clean_headers = [
-            h for h in all_headers if not self._is_header_in_cell_or_item(h)
+            h for h in all_headers if not self._is_header_in_cell_item_or_quote(h)
         ]
         # Pick the first header from the remaining
         if len(clean_headers):
@@ -1015,12 +1015,12 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
         return doc
 
     @staticmethod
-    def _is_header_in_cell_or_item(header: Tag) -> bool:
-        """Whether a header is emitted as table cell or list item text.
+    def _is_header_in_cell_item_or_quote(header: Tag) -> bool:
+        """Whether a header is emitted as table cell, list item or quoted text.
 
         Headers that are direct children of <ul>/<ol> (or in a <div> there) and
         headers in <menu> items are still emitted as headers."""
-        if header.find_parent(["table", "dl"]):
+        if header.find_parent(["table", "dl", "blockquote"]):
             return True
         item = header.find_parent("li")
         if item is None:
@@ -2723,22 +2723,33 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             content_layer=self.content_layer,
             cite=self._cite_url(tag),
         )
+        # Headings inside the quote move the level and parents within the
+        # quote; the state from before the quote comes back when it closes.
+        original_level = self.level
+        original_parents = self.parents.copy()
         self.parents[self.level + 1] = quote
         self.level += 1
         try:
             yield quote
         finally:
-            self.parents[self.level + 1] = None
-            self.level -= 1
+            self.level = original_level
+            self.parents = original_parents
 
-    def _enclosing_block_quote(self, tag: Tag) -> Optional[BlockQuoteGroup]:
-        """Return the open block quote group that encloses ``tag``, if any."""
+    def _enclosing_block_quote_level(self, tag: Tag) -> Optional[int]:
+        """Return the hierarchy level of the open block quote that encloses ``tag``."""
         if tag.find_parent("blockquote") is None:
             return None
         for level in range(self.level, -1, -1):
-            if isinstance(parent := self.parents.get(level), BlockQuoteGroup):
-                return parent
+            if isinstance(self.parents.get(level), BlockQuoteGroup):
+                return level
         return None
+
+    def _enclosing_block_quote(self, tag: Tag) -> Optional[BlockQuoteGroup]:
+        """Return the open block quote group that encloses ``tag``, if any."""
+        level = self._enclosing_block_quote_level(tag)
+        if level is None:
+            return None
+        return cast(BlockQuoteGroup, self.parents[level])
 
     def _cite_url(self, tag: Tag) -> Optional[AnyUrl]:
         """Return the ``cite`` attribute of a quote as a URL.
@@ -2835,8 +2846,12 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
     def _handle_heading(self, tag: Tag, doc: DoclingDocument) -> list[RefItem]:
         added_ref = []
         tag_name = tag.name.lower()
-        # set default content layer to BODY as soon as we encounter a heading
-        self.content_layer = ContentLayer.BODY
+        # A heading inside a quote is quoted text: it stays in the quote and
+        # neither opens a document section nor closes the enclosing one.
+        quote_level = self._enclosing_block_quote_level(tag)
+        if quote_level is None:
+            # set default content layer to BODY as soon as we encounter a heading
+            self.content_layer = ContentLayer.BODY
         level = int(tag_name[1])
         annotated_text_list = self._extract_text_and_hyperlink_recursively(
             tag, find_parent_annotation=True
@@ -2849,7 +2864,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
             source_tag_id=annotated_text.source_tag_id,
         )
         # the first level is for the title item
-        if level == 1:
+        if level == 1 and quote_level is None:
             for key in self.parents.keys():
                 self.parents[key] = None
             self.level = 0
@@ -2865,7 +2880,13 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 added_ref = [p1.get_ref()]
         # the other levels need to be lowered by 1 if a title was set
         else:
-            level -= 1
+            heading_level = max(level - 1, 1)
+            # The quote is the root of the quoted headings
+            level = (
+                heading_level
+                if quote_level is None
+                else heading_level + quote_level - 1
+            )
             if level > self.level:
                 # add invisible group
                 for i in range(self.level, level):
@@ -2888,7 +2909,7 @@ class HTMLDocumentBackend(DeclarativeDocumentBackend):
                 parent=self.parents[self.level],
                 text=text_clean,
                 orig=annotated_text.text,
-                level=self.level,
+                level=heading_level,
                 content_layer=self.content_layer,
                 formatting=annotated_text.formatting,
                 hyperlink=annotated_text.hyperlink,

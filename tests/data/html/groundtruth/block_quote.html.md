@@ -21,6 +21,15 @@ The court agreed, and quoted the earlier judgment.
 > A quote inside a list item.
 - Second submission.
 
+> ## 2 Interpretation
+>
+> In this Act, an act includes an omission.
+
+The judgment under appeal said:
+
+| (1) | Text:  > First quoted paragraph. Second quoted paragraph. |
+| - | - |
+
 > A quote whose relative source cannot be resolved.
 
 > A quote without source or attribution.

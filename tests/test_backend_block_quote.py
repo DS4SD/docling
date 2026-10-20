@@ -10,6 +10,8 @@ from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
     ListItem,
+    SectionHeaderItem,
+    TitleItem,
 )
 from docling_core.types.doc.document import ContentLayer
 from pydantic import AnyUrl
@@ -48,6 +50,18 @@ def _convert_md(raw: bytes) -> DoclingDocument:
 
 def _quotes(doc: DoclingDocument) -> list[BlockQuoteGroup]:
     return [group for group in doc.groups if isinstance(group, BlockQuoteGroup)]
+
+
+def _text(doc: DoclingDocument, text: str):
+    return next(item for item in doc.texts if item.text == text)
+
+
+def _ancestors(doc: DoclingDocument, item) -> list:
+    chain = []
+    while item.parent is not None:
+        item = item.parent.resolve(doc)
+        chain.append(item)
+    return chain
 
 
 def test_html_blockquote_keeps_cite_and_footer_attribution():
@@ -110,6 +124,81 @@ def test_html_blockquote_inside_list_item_is_a_child_of_the_item():
     assert isinstance(item, ListItem)
     assert item.text == "Submission:"
     assert quote.children[0].resolve(doc).text == "Quoted."
+
+
+def test_html_heading_inside_blockquote_stays_in_the_quote():
+    doc = _convert_html(
+        b"<html><body><h1>Doc</h1><h2>Section</h2><p>Intro.</p>"
+        b"<blockquote><h3>Quoted heading</h3><p>Quoted body.</p>"
+        b"<h1>Quoted title</h1><p>More.</p></blockquote>"
+        b"<p>Author text.</p></body></html>"
+    )
+    (quote,) = _quotes(doc)
+    section = _text(doc, "Section")
+    assert quote.parent == section.get_ref()
+
+    # The quoted headings sit inside the quote, below their own section groups
+    heading = _text(doc, "Quoted heading")
+    assert isinstance(heading, SectionHeaderItem)
+    assert heading.level == 2
+    assert quote in _ancestors(doc, heading)
+    assert heading.children[0].resolve(doc).text == "Quoted body."
+    # An <h1> inside a quote is quoted text, not a second document title
+    quoted_title = _text(doc, "Quoted title")
+    assert isinstance(quoted_title, SectionHeaderItem)
+    assert quoted_title.level == 1
+    assert quoted_title.parent == quote.get_ref()
+    assert [text.text for text in doc.texts if isinstance(text, TitleItem)] == ["Doc"]
+
+    # The quote closes without closing the enclosing section
+    assert _text(doc, "Author text.").parent == section.get_ref()
+    assert (
+        "> ### Quoted heading\n>\n> Quoted body.\n>\n> ## Quoted title\n>\n> More.\n\n"
+        "Author text." in doc.export_to_markdown()
+    )
+
+
+def test_html_first_heading_inside_blockquote_keeps_the_quote_in_the_body():
+    doc = _convert_html(
+        b"<html><body><blockquote><h2>Quoted heading</h2><p>Quoted body.</p>"
+        b"</blockquote><p>Author text.</p></body></html>"
+    )
+    (quote,) = _quotes(doc)
+    assert quote.content_layer == ContentLayer.BODY
+    assert quote.parent == doc.body.get_ref()
+    heading = quote.children[0].resolve(doc)
+    assert isinstance(heading, SectionHeaderItem)
+    assert heading.level == 1
+    assert _text(doc, "Author text.").parent == doc.body.get_ref()
+    assert doc.export_to_markdown().startswith("> ## Quoted heading\n>\n> Quoted body.")
+
+
+def test_html_blockquote_in_table_cell_is_one_markdown_line():
+    doc = _convert_html(
+        b"<html><body><table><tr><td>(1)</td><td>Text:<blockquote>"
+        b"<p>First para.</p><p>Second para.</p></blockquote></td></tr></table>"
+        b"</body></html>"
+    )
+    (quote,) = _quotes(doc)
+    assert [child.resolve(doc).text for child in quote.children] == [
+        "First para.",
+        "Second para.",
+    ]
+    markdown = doc.export_to_markdown()
+    assert "| Text: > First para. Second para. |" in " ".join(markdown.split())
+    assert "> >" not in markdown
+
+
+def test_markdown_heading_inside_blockquote_is_not_a_title():
+    doc = _convert_md(b"# Doc\n\n> # Quoted heading\n>\n> Quoted body.\n\nAfter.\n")
+    (quote,) = _quotes(doc)
+    heading = quote.children[0].resolve(doc)
+    assert isinstance(heading, SectionHeaderItem)
+    assert (heading.text, heading.level) == ("Quoted heading", 1)
+    assert [text.text for text in doc.texts if isinstance(text, TitleItem)] == ["Doc"]
+    assert (
+        "> ## Quoted heading\n>\n> Quoted body.\n\nAfter." in doc.export_to_markdown()
+    )
 
 
 def test_markdown_blockquote_nests_lists_and_quotes():
