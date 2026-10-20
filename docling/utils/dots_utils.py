@@ -62,8 +62,11 @@ _LITERAL_INLINE_PATTERN = re.compile(
     re.IGNORECASE,
 )
 # Literal spans and code spans pass through; `\\` keeps `\\*` from unescaping.
+# A code span opens only at a full backtick run, read atomically with `(?=(`+))\1`:
+# a backtracking `(`+)` takes cubic time on a long unclosed run.
 _MARKDOWN_ESCAPE_PATTERN = re.compile(
-    rf"{_LITERAL_INLINE_PATTERN.pattern}|(`+)[\s\S]*?(?<!`)\1(?!`)|\\([*_])|\\\\",
+    rf"{_LITERAL_INLINE_PATTERN.pattern}"
+    r"|(?<!`)(?=(`+))\1[\s\S]*?(?<!`)\1(?!`)|\\([*_])|\\\\",
     re.IGNORECASE,
 )
 

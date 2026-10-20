@@ -14,6 +14,7 @@ to the page. Bodies are Markdown text, LaTeX ``tabular`` tables, or a
 
 from __future__ import annotations
 
+import html
 import logging
 import re
 from dataclasses import dataclass
@@ -42,7 +43,7 @@ from docling_core.types.doc import (
 )
 from PIL import Image as PILImage
 
-from docling.utils.chandra_utils import _add_html_table
+from docling.utils.chandra_utils import _MAX_TABLE_GRID_CELLS, _add_html_table
 from docling.utils.code_language import detect_code_language
 from docling.utils.dots_utils import (
     _add_inline_text,
@@ -74,13 +75,14 @@ _LATEX_TEXT = re.compile(
     r"|\\([%&#$])"
 )
 _LATEX_TEXT_REPLACEMENTS = {
-    "textless": "&lt;",
-    "textgreater": "&gt;",
+    "textless": "<",
+    "textgreater": ">",
     "textasciitilde": "~",
     "linebreak": "<br>",
     "mbox": "",
-    "&": "&amp;",
 }
+# Inline tags that a table cell keeps as markup; all other text is escaped.
+_CELL_INLINE_TAG = re.compile(r"</?(?:b|br|em|i|strong|sub|sup|u)\s*/?>", re.IGNORECASE)
 _CHART_OPEN = re.compile(r'<chart\s+type="([^"]*)"\s*>')
 _CHART_TABLE_KEY = re.compile(r"table\[(\w+)\]")
 # `\(` and `\)` are not math symbols, so in a formula they are delimiters; `\\` stays.
@@ -258,7 +260,25 @@ def _unwrap_command(text: str, command: str, arg_count: int) -> list[str] | None
 
 
 def _span(value: str) -> int:
-    return int(value) if value.strip().isdigit() and int(value) > 0 else 1
+    digits = value.strip().lstrip("0")
+    if not digits.isdecimal():
+        return 1
+    # Above the limit _add_html_table rejects the table; do not build a huge grid first.
+    if len(digits) > len(str(_MAX_TABLE_GRID_CELLS)):
+        return _MAX_TABLE_GRID_CELLS + 1
+    return min(int(digits), _MAX_TABLE_GRID_CELLS + 1)
+
+
+def _escape_cell_markup(text: str) -> str:
+    """Escape cell text so that it cannot change the table; keep inline tags."""
+    parts: list[str] = []
+    pos = 0
+    for match in _CELL_INLINE_TAG.finditer(text):
+        parts.append(html.escape(text[pos : match.start()], quote=False))
+        parts.append(match.group())
+        pos = match.end()
+    parts.append(html.escape(text[pos:], quote=False))
+    return "".join(parts)
 
 
 def _parse_latex_cell(text: str) -> _LatexCell:
@@ -332,7 +352,7 @@ def latex_tabular_to_html(latex: str) -> str:
             scope = ' scope="col"' if cell.header else ""
             html_cells.append(
                 f'<{tag}{scope} rowspan="{cell.row_span}" colspan="{cell.col_span}">'
-                f"{_markdown_inline_html(cell.text)}</{tag}>"
+                f"{_markdown_inline_html(_escape_cell_markup(cell.text))}</{tag}>"
             )
         html_rows.append(f"<tr>{''.join(html_cells)}</tr>")
     return f"<table>{''.join(html_rows)}</table>"
