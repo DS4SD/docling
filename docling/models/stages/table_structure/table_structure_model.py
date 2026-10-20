@@ -54,6 +54,8 @@ def _reorder_cells_by_geometry(
         edges: list[Optional[float]],
         num_lines: int,
     ) -> int:
+        # Spans are deliberately excluded here: this is an order metric on the
+        # single-slot cells of a line, and spanning cells carry no slot order.
         violations = 0
         for line in range(num_lines):
             in_line = sorted(
@@ -100,20 +102,20 @@ def _reorder_cells_by_geometry(
             if new_centers == cluster_centers:
                 break
             cluster_centers = new_centers
-        rank = {
-            slot: position
-            for position, slot in enumerate(
-                sorted(range(num_slots), key=lambda s: cluster_centers[s])
-            )
-        }
+        ordered = sorted(cluster_centers)
         remapped = []
         for (start, end), center in zip(spans, centers):
             span = end - start
             if center is None or not 0 <= start < end <= num_slots:
                 remapped.append((start, end))
                 continue
-            slot = min(range(num_slots), key=lambda s: abs(center - cluster_centers[s]))
-            new_start = min(rank[slot], num_slots - span)
+            # A span of k slots is anchored over the run of k consecutive slot
+            # centers whose mean is nearest to the cell centre; for k = 1 this
+            # is the nearest single slot centre.
+            new_start = min(
+                range(num_slots - span + 1),
+                key=lambda j: abs(center - sum(ordered[j : j + span]) / span),
+            )
             remapped.append((new_start, new_start + span))
         return remapped
 
@@ -132,11 +134,16 @@ def _reorder_cells_by_geometry(
         if remapped is None:
             return None
         occupied: dict[tuple[int, int], int] = {}
+        # lines are the ORIGINAL spans of the other axis: both remaps are
+        # computed from the original state, so each cell is counted along its
+        # original line range here. Invalid spans are passed through untouched,
+        # so they are skipped entirely rather than counted or clipped.
         for (start, end), line_span in zip(remapped, lines):
-            if end - start == 1:
-                occupied[(line_span[0], start)] = (
-                    occupied.get((line_span[0], start), 0) + 1
-                )
+            if not 0 <= start < end <= num_slots:
+                continue
+            for line in range(line_span[0], line_span[1]):
+                for slot in range(start, end):
+                    occupied[(line, slot)] = occupied.get((line, slot), 0) + 1
         if any(count > 1 for count in occupied.values()):
             return None
         if line_violations(remapped, lines, edges, num_lines) >= before:
