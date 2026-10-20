@@ -2095,6 +2095,7 @@ all = [
     { name = "playwright" },
     { name = "polyfactory" },
     { name = "pylatexenc" },
+    { name = "pypdf" },
     { name = "pypdfium2" },
     { name = "python-docx" },
     { name = "python-dotenv" },
@@ -2180,6 +2181,12 @@ format-audio = [
     { name = "numba" },
     { name = "openai-whisper" },
     { name = "whisper-s2t-reborn", marker = "platform_machine != 'arm64' or sys_platform != 'darwin'" },
+]
+format-cv = [
+    { name = "beautifulsoup4" },
+    { name = "defusedxml" },
+    { name = "marko" },
+    { name = "pypdf" },
 ]
 format-docx = [
     { name = "python-docx" },
@@ -2311,6 +2318,7 @@ standard = [
     { name = "pillow" },
     { name = "polyfactory" },
     { name = "pylatexenc" },
+    { name = "pypdf" },
     { name = "pypdfium2" },
     { name = "python-docx" },
     { name = "python-dotenv" },
@@ -2419,6 +2427,7 @@ requires-dist = [
     { name = "arelle-release", marker = "extra == 'format-xml-xbrl'", specifier = ">=2.38.17,<3.0.0" },
     { name = "beautifulsoup4", marker = "extra == 'format-html'", specifier = ">=4.12.3,<5.0.0" },
     { name = "certifi", specifier = ">=2024.7.4" },
+    { name = "defusedxml", marker = "extra == 'format-cv'", specifier = ">=0.7.1,<0.8.0" },
     { name = "defusedxml", marker = "extra == 'format-iwork'", specifier = ">=0.7.1,<0.8.0" },
     { name = "defusedxml", marker = "extra == 'format-xml-uspto'", specifier = ">=0.7.1,<0.8.0" },
     { name = "defusedxml", marker = "extra == 'models-local'", specifier = ">=0.7.1,<0.8.0" },
@@ -2433,8 +2442,9 @@ requires-dist = [
     { name = "docling-slim", extras = ["format-html"], marker = "extra == 'format-xml-jats'" },
     { name = "docling-slim", extras = ["format-html"], marker = "extra == 'format-xml-uspto'" },
     { name = "docling-slim", extras = ["format-html", "format-markdown"], marker = "extra == 'format-web'" },
-    { name = "docling-slim", extras = ["format-pdf", "models-local", "feat-ocr-rapidocr", "format-office", "format-web", "format-latex", "format-email", "format-iwork", "feat-chunking", "extract-core", "service-client", "cli"], marker = "extra == 'standard'" },
+    { name = "docling-slim", extras = ["format-pdf", "models-local", "feat-ocr-rapidocr", "format-office", "format-web", "format-cv", "format-latex", "format-email", "format-iwork", "feat-chunking", "extract-core", "service-client", "cli"], marker = "extra == 'standard'" },
     { name = "docling-slim", extras = ["format-pdf-pypdfium2", "format-pdf-docling"], marker = "extra == 'format-pdf'" },
+    { name = "docling-slim", extras = ["format-web"], marker = "extra == 'format-cv'" },
     { name = "docling-slim", extras = ["standard", "models-vlm-inline", "format-audio", "format-html-render", "format-xml-jats", "format-xml-uspto", "format-xml-xbrl", "models-remote", "models-onnxruntime", "feat-ocr-easyocr", "feat-ocr-tesserocr", "feat-ocr-mac"], marker = "extra == 'all'" },
     { name = "easyocr", marker = "extra == 'feat-ocr-easyocr'", specifier = ">=1.7,<2.0" },
     { name = "einops", marker = "extra == 'models-vlm-inline'", specifier = ">=0.8.1,<1.0.0" },
@@ -2475,6 +2485,7 @@ requires-dist = [
     { name = "pydantic-settings", specifier = ">=2.3.0,<3.0.0" },
     { name = "pylatexenc", marker = "extra == 'format-latex'", specifier = ">=2.10,<3.0" },
     { name = "pylatexenc", marker = "extra == 'format-pptx'", specifier = ">=2.10,<3.0" },
+    { name = "pypdf", marker = "extra == 'format-cv'", specifier = ">=5.0.0,<7.0.0" },
     { name = "pypdfium2", marker = "extra == 'format-pdf-pypdfium2'", specifier = ">=4.30.0,!=4.30.1,<6.0.0" },
     { name = "python-docx", marker = "extra == 'format-docx'", specifier = ">=1.2.0,<2.0.0" },
     { name = "python-dotenv", marker = "extra == 'cli'", specifier = "~=1.0" },
@@ -2506,7 +2517,7 @@ requires-dist = [
     { name = "websockets", marker = "extra == 'service-client'", specifier = ">=14.0,<17.0" },
     { name = "whisper-s2t-reborn", marker = "(platform_machine != 'arm64' and extra == 'format-audio') or (sys_platform != 'darwin' and extra == 'format-audio')", specifier = ">=1.7.1,<2.0.0" },
 ]
-provides-extras = ["convert-core", "extract-core", "format-pdf-pypdfium2", "format-pdf-docling", "format-pdf", "format-docx", "format-pptx", "format-xlsx", "format-office", "format-opendocument", "format-html", "format-markdown", "format-web", "format-latex", "format-email", "format-iwork", "format-xml-jats", "format-xml-uspto", "format-xml-xbrl", "format-html-render", "format-audio", "format-video", "feat-ocr-rapidocr", "feat-ocr-rapidocr-onnx", "feat-ocr-easyocr", "feat-ocr-tesserocr", "feat-ocr-mac", "feat-ocr-nemotron", "models-local", "models-remote", "models-onnxruntime", "models-vlm-inline", "feat-chunking", "service-client", "cli", "standard", "all"]
+provides-extras = ["convert-core", "extract-core", "format-pdf-pypdfium2", "format-pdf-docling", "format-pdf", "format-docx", "format-pptx", "format-xlsx", "format-office", "format-opendocument", "format-html", "format-markdown", "format-web", "format-cv", "format-latex", "format-email", "format-iwork", "format-xml-jats", "format-xml-uspto", "format-xml-xbrl", "format-html-render", "format-audio", "format-video", "feat-ocr-rapidocr", "feat-ocr-rapidocr-onnx", "feat-ocr-easyocr", "feat-ocr-tesserocr", "feat-ocr-mac", "feat-ocr-nemotron", "models-local", "models-remote", "models-onnxruntime", "models-vlm-inline", "feat-chunking", "service-client", "cli", "standard", "all"]
 
 [package.metadata.requires-dev]
 constraints = [
@@ -7817,6 +7828,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/e4/11/b213bebff182584360cb8d17c72c1677fec5c5c228de439e63bcf8ab1c8f/pyparsing-3.3.3.tar.gz", hash = "sha256:928ae7e20211f3b6f3915a72f06a0cfd29ab9d24279dd6346b6b1a7146397d36", size = 1050487, upload-time = "2026-09-20T20:59:05.609Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/38/bb/d215ee7c73b61497b28a5503f9f53523f294fcc936762b7caf90e0c1c2b5/pyparsing-3.3.3-py3-none-any.whl", hash = "sha256:ece8c00a69cf01b45d0b1dedabb469c90d8caf996d4fda40f147627a122849a4", size = 126420, upload-time = "2026-09-20T20:59:04.025Z" },
+]
+
+[[package]]
+name = "pypdf"
+version = "6.21.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/51/e1/32a9c4dbd94618145f8bab5c623bdb0a528f23fc8719afd77ba0278fd377/pypdf-6.21.1.tar.gz", hash = "sha256:2d62c383acd6e0dff0a96322ba8b1135229343b084d73c6f6cfd947fd291afcb", size = 7088597, upload-time = "2026-10-17T10:29:52.801Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/85/e6/24c944e473c34e818cf1b98085796fcd780465ecfe17663f2bf8fee1958b/pypdf-6.21.1-py3-none-any.whl", hash = "sha256:553e2d42f5bb3bb2a785a7d3de8ef90bb7df74b5413eff5a7b4388007ea9254b", size = 405134, upload-time = "2026-10-17T10:29:50.687Z" },
 ]
 
 [[package]]
