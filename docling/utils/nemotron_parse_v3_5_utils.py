@@ -44,7 +44,11 @@ from PIL import Image as PILImage
 
 from docling.utils.chandra_utils import _add_html_table
 from docling.utils.code_language import detect_code_language
-from docling.utils.dots_utils import _add_inline_text, _markdown_inline_html
+from docling.utils.dots_utils import (
+    _add_inline_text,
+    _markdown_inline_html,
+    _unescape_markdown_literals,
+)
 from docling.utils.vlm_utils import link_adjacent_captions, parse_markdown_heading
 
 _log = logging.getLogger(__name__)
@@ -67,7 +71,7 @@ _LIST_MARKER = re.compile(
 )
 _LATEX_TEXT = re.compile(
     r"\\(textless|textgreater|textasciitilde|linebreak|mbox)(?![A-Za-z])(?:\{\})?"
-    r"|\\([%&#])"
+    r"|\\([%&#$])"
 )
 _LATEX_TEXT_REPLACEMENTS = {
     "textless": "&lt;",
@@ -151,7 +155,13 @@ def _add_rich_text(
 ) -> None:
     first_text, first_group = len(doc.texts), len(doc.groups)
     if not _add_inline_text(doc, text, label=label, prov=prov, parent=parent):
-        doc.add_text(label=label, text=text, prov=prov, parent=parent)
+        doc.add_text(
+            label=label,
+            text=_unescape_markdown_literals(text),
+            orig=text,
+            prov=prov,
+            parent=parent,
+        )
     if label in _FURNITURE_LABELS:
         for item in (*doc.texts[first_text:], *doc.groups[first_group:]):
             item.content_layer = ContentLayer.FURNITURE
@@ -493,7 +503,7 @@ def parse_nemotron_parse_v3_5(
                 prov=prov,
             )
             if not _add_inline_text(doc, body, label=DocItemLabel.TEXT, parent=item):
-                item.text = body
+                item.text = _unescape_markdown_literals(body)
         elif block.label == "TOC":
             if toc_group is None:
                 toc_group = doc.add_group(label=GroupLabel.UNSPECIFIED, name="toc")
@@ -517,19 +527,19 @@ def parse_nemotron_parse_v3_5(
             clean_text, level = parse_markdown_heading(text)
             # Markdown "##" is a level-1 section below the "#" title, as in dots.
             heading = (
-                doc.add_title(text=clean_text, orig=text, prov=prov)
+                doc.add_title(text="", orig=text, prov=prov)
                 if block.label == "Title"
                 else doc.add_heading(
-                    text=clean_text,
+                    text="",
                     orig=text,
                     level=max(1, level - 1) if level is not None else 1,
                     prov=prov,
                 )
             )
-            if _add_inline_text(
+            if not _add_inline_text(
                 doc, clean_text, label=DocItemLabel.TEXT, parent=heading
             ):
-                heading.text = ""
+                heading.text = _unescape_markdown_literals(clean_text)
         elif block.label == "Formula":
             doc.add_formula(text=text, orig=text, prov=prov)
         elif block.label == "Code":

@@ -167,7 +167,7 @@ def test_table_maps_multirow_multicolumn_and_thead() -> None:
         "\n"
         r"\mbox{} & \thead{K<sup>+</sup>} & \thead{**Na**} & \thead{Cl}\\"
         "\n"
-        r"Kin & 145 & \mbox{} & 5 \% \textless{} 6\\"
+        r"Kin \$ & 145 & \mbox{} & 5 \% \textless{} 6\\"
         "\n"
         r"\end{tabular}"
     )
@@ -184,7 +184,7 @@ def test_table_maps_multirow_multicolumn_and_thead() -> None:
     assert all(cells[row, col].column_header for row, col in cells if row < 2)
     assert not cells[2, 0].column_header
     assert isinstance(cells[1, 1], RichTableCell)
-    assert [cells[2, col].text for col in range(4)] == ["Kin", "145", "", "5 % < 6"]
+    assert [cells[2, col].text for col in range(4)] == ["Kin $", "145", "", "5 % < 6"]
 
 
 def test_table_cell_under_multirow_with_text_ends_the_span() -> None:
@@ -313,19 +313,21 @@ def test_page_header_and_formatted_page_footer_are_furniture() -> None:
 
 def test_headings_titles_formula_and_code() -> None:
     doc = _parse(
-        _block("Title", "A Study")
-        + _block("Section-header", "### Methods")
-        + _block("Formula", r"E = mc^2")
+        _block("Title", "**A Study**")
+        + _block("Section-header", r"### Data\_sets")
+        + _block("Formula", r"E\_0 = mc^2")
         + _block("Code", "print('x')")
     )
 
     labels = [(item.label, item.text) for item in doc.texts]
     assert labels == [
         (DocItemLabel.TITLE, "A Study"),
-        (DocItemLabel.SECTION_HEADER, "Methods"),
-        (DocItemLabel.FORMULA, "E = mc^2"),
+        (DocItemLabel.SECTION_HEADER, "Data_sets"),
+        (DocItemLabel.FORMULA, r"E\_0 = mc^2"),
         (DocItemLabel.CODE, "print('x')"),
     ]
+    title = doc.texts[0]
+    assert title.formatting is not None and title.formatting.bold
     heading = doc.texts[1]
     assert isinstance(heading, SectionHeaderItem) and heading.level == 2
 
