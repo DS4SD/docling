@@ -17,6 +17,7 @@ from PIL.Image import Image
 from docling.datamodel.vlm_engine_options import MlxVlmEngineOptions
 from docling.models.inference_engines.vlm._utils import (
     check_min_engine_version,
+    engine_module_available,
     extract_generation_stoppers,
     preprocess_image_batch,
 )
@@ -111,6 +112,15 @@ class MlxVlmEngine(BaseVlmEngine, HuggingFaceModelDownloadMixin):
             return
 
         _log.info("Initializing MLX VLM inference engine...")
+
+        if self.model_config is not None and not engine_module_available(
+            self.model_config.required_module
+        ):
+            raise RuntimeError(
+                "The installed mlx-vlm does not provide native model module "
+                f"{self.model_config.required_module}. Install mlx-vlm with this "
+                "native port, or select the Transformers engine."
+            )
 
         try:
             from mlx_vlm import load, stream_generate
