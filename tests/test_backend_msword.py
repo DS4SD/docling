@@ -2081,12 +2081,12 @@ def test_list_returning_to_starting_level_above_zero_keeps_items(documents):
     assert isinstance(group_of_a, ListGroup)
     assert group_of_c.get_ref() == group_of_a.get_ref()
 
-    # The deeper item must nest inside the same list (as a sub-group of the
-    # outer ListGroup), not become a sibling top-level list -- which is what
-    # the bug produced for Item A/Item B.
+    # The deeper item must nest inside the same list (as a sub-group of
+    # Item A), not become a sibling top-level list -- which is what the bug
+    # produced for Item A/Item B.
     group_of_b = list_items[1].parent.resolve(doc)
     assert isinstance(group_of_b, ListGroup)
-    assert group_of_b.parent == group_of_a.get_ref()
+    assert group_of_b.parent == list_items[0].get_ref()
 
     # The markdown must reflect a single nested list, not two separate lists.
     markdown = doc.export_to_markdown()
@@ -2351,6 +2351,30 @@ def test_fragment_only_rel_does_not_crash_backend():
     assert len(text_items) == 1
     assert text_items[0].text == "Before internal link after"
     assert text_items[0].hyperlink is None
+
+
+@pytest.mark.parametrize("body_style", ["Body Text", None])
+def test_list_style_type_does_not_fail_conversion(tmp_path, body_style):
+    """A style with the invalid type ``list`` must not fail the conversion.
+
+    python-docx raises ``ValueError`` when it reads that type. Both the default
+    style lookup on load and the style of a paragraph without ``w:pStyle``
+    read the type of every style.
+    """
+    document = Document()
+    document.add_paragraph("Quarterly results", style="Heading 1")
+    document.add_paragraph("Revenue grew 3%.", style=body_style)
+    list_style = OxmlElement("w:style")
+    list_style.set(qn("w:type"), "list")
+    list_style.set(qn("w:styleId"), "OutlineList")
+    document.styles.element.append(list_style)
+
+    doc = _convert_built(document, tmp_path)
+
+    assert [item.text for item in doc.texts] == [
+        "Quarterly results",
+        "Revenue grew 3%.",
+    ]
 
 
 _PLAIN_FOOTNOTE_BODY = (

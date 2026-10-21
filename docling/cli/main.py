@@ -20,6 +20,7 @@ from docling.utils.ocr_language import OcrLanguageResolver
 
 # Check for CLI dependencies
 try:
+    import rich.markup
     import rich.table
     import typer
 except ImportError as e:
@@ -50,6 +51,11 @@ from pydantic import SecretStr, TypeAdapter, ValidationError
 from rich.console import Console
 from tqdm.contrib.logging import logging_redirect_tqdm
 
+from docling.cli.engine_options import (
+    create_engine_options,
+    describe_options_class,
+    find_options_class,
+)
 from docling.cli.export_utils import (
     _export_flags_from_formats,
     _is_empty_output,
@@ -143,6 +149,12 @@ from docling.datamodel.pipeline_options import (
 )
 from docling.datamodel.pipeline_options_asr_model import InlineAsrOptions
 from docling.datamodel.settings import DEFAULT_PAGE_RANGE, settings
+from docling.datamodel.vlm_engine_options import (
+    AutoInlineVlmEngineOptions,
+    MlxVlmEngineOptions,
+    TransformersVlmEngineOptions,
+    VllmVlmEngineOptions,
+)
 from docling.utils.profiling import ProfilingItem
 from docling.utils.progress import ProgressPrinter
 
@@ -176,16 +188,6 @@ except ImportError as exc:
 
 if TYPE_CHECKING:
     from docling.models.factories.base_factory import BaseFactory
-
-
-def _first_error_message(err: ValidationError) -> str:
-    """The most useful line of a pydantic error, for a typer.BadParameter."""
-    errors = err.errors()
-    if not errors:
-        return str(err)
-    message = errors[0].get("msg", "")
-    # Pydantic prefixes messages raised from a validator with "Value error, ".
-    return message.removeprefix("Value error, ") or str(err)
 
 
 warnings.filterwarnings(action="ignore", category=UserWarning, module="pydantic|torch")
@@ -277,6 +279,11 @@ def _iter_input_paths_from_directory(
         if path not in seen_paths:
             seen_paths.add(path)
             yield path
+
+
+def _choices_metavar(choices: Iterable[str]) -> str:
+    values = list(choices)
+    return f"[{'|'.join(values)}]" if values else "TEXT"
 
 
 def _expand_from_formats(from_formats: list[str] | None) -> list[InputFormat]:
@@ -822,6 +829,7 @@ def convert(  # noqa: C901
     from_formats: list[str] = typer.Option(
         None,
         "--from",
+        metavar=_choices_metavar([*(fmt.value for fmt in InputFormat), "odf"]),
         help="Input formats to accept. Use 'odf' for odt, ods, and odp. Defaults to all.",
     ),
     to_formats: list[OutputFormat] = typer.Option(
@@ -887,6 +895,7 @@ def convert(  # noqa: C901
         str,
         typer.Option(
             ...,
+            metavar=_choices_metavar(vlm_preset_ids),
             help=f"Choose the VLM preset to use with PDF or image files. Available presets: {', '.join(vlm_preset_ids)}",
         ),
     ] = "granite_docling",
@@ -897,6 +906,17 @@ def convert(  # noqa: C901
             help="Override max_new_tokens for VLM conversion generation.",
         ),
     ] = None,
+    trust_remote_code: Annotated[
+        bool,
+        typer.Option(
+            "--trust-remote-code",
+            help=(
+                "Allow the local VLM engine to run code from the model "
+                "repository. Some --vlm-model presets require it. Review the "
+                "model's code at the preset's pinned revision first."
+            ),
+        ),
+    ] = False,
     debug_vlm_native_output: Annotated[
         bool,
         typer.Option(
@@ -969,6 +989,17 @@ def convert(  # noqa: C901
             help="If enabled, the table structure model will be used to extract table information.",
         ),
     ] = True,
+    extract_form_fields: Annotated[
+        bool,
+        typer.Option(
+            ...,
+            help=(
+                "If enabled, native PDF form widgets (AcroForm) become fillable field "
+                "values with field keys from printed text. Standard and legacy pipelines "
+                "with the docling-parse backend only."
+            ),
+        ),
+    ] = False,
     reading_order_separators: Annotated[
         bool,
         typer.Option(
@@ -983,6 +1014,7 @@ def convert(  # noqa: C901
         str,
         typer.Option(
             ...,
+            metavar=_choices_metavar(o.value for o in layout_engines_enum_internal),
             help=(
                 f"The layout engine to use. When --allow-external-plugins is *not* set, the available values are: "
                 f"{', '.join(o.value for o in layout_engines_enum_internal)}. "
@@ -994,6 +1026,9 @@ def convert(  # noqa: C901
         str,
         typer.Option(
             ...,
+            metavar=_choices_metavar(
+                o.value for o in table_structure_engines_enum_internal
+            ),
             help=(
                 f"The table structure engine to use. When --allow-external-plugins is *not* set, the available values are: "
                 f"{', '.join(o.value for o in table_structure_engines_enum_internal)}. "
@@ -1005,6 +1040,7 @@ def convert(  # noqa: C901
         str,
         typer.Option(
             ...,
+            metavar=_choices_metavar(o.value for o in ocr_engines_enum_internal),
             help=(
                 f"The OCR engine to use. When --allow-external-plugins is *not* set, the available values are: "
                 f"{', '.join(o.value for o in ocr_engines_enum_internal)}. "
@@ -1012,6 +1048,44 @@ def convert(  # noqa: C901
             ),
         ),
     ] = OcrAutoOptions.kind,
+    ocr_option: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--ocr-option",
+            metavar="KEY=VALUE",
+            help=(
+                "Set an option of the selected OCR engine, e.g. "
+                "'--ocr-engine rapidocr --ocr-option model_size=tiny'. Repeatable. "
+                'VALUE is read as JSON when possible (0.6, false, ["en","de"]), '
+                "else as a string. Run 'docling options ocr <engine>' to list the keys."
+            ),
+        ),
+    ] = None,
+    layout_option: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--layout-option",
+            metavar="KEY=VALUE",
+            help=(
+                "Set an option of the selected layout engine. Repeatable, same "
+                "format as --ocr-option. Run 'docling options layout <engine>' to "
+                "list the keys."
+            ),
+        ),
+    ] = None,
+    table_structure_option: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--table-structure-option",
+            metavar="KEY=VALUE",
+            help=(
+                "Set an option of the selected table structure engine, e.g. "
+                "'--table-structure-option mode=fast'. Repeatable, same format as "
+                "--ocr-option. Run 'docling options table-structure <engine>' to "
+                "list the keys."
+            ),
+        ),
+    ] = None,
     ocr_lang: Annotated[
         str | None,
         typer.Option(
@@ -1038,7 +1112,10 @@ def convert(  # noqa: C901
         int | None,
         typer.Option(
             ...,
-            help="Page Segmentation Mode for the OCR engine (0-13).",
+            help=(
+                "DEPRECATED: use `--ocr-option psm=N` instead. "
+                "Page Segmentation Mode for the Tesseract OCR engines (0-13)."
+            ),
         ),
     ] = None,
     pdf_backend: Annotated[
@@ -1409,6 +1486,18 @@ def convert(  # noqa: C901
         )
         raise typer.Abort()
 
+    if to_formats is None:
+        to_formats = [OutputFormat.MARKDOWN]
+    if (
+        extract_form_fields
+        and pipeline in {ProcessingPipeline.STANDARD, ProcessingPipeline.LEGACY}
+        and OutputFormat.DOCTAGS in to_formats
+    ):
+        # DocTags has no tokens for form fields; the export raises on them.
+        raise typer.BadParameter(
+            "--extract-form-fields cannot be combined with `--to doctags`."
+        )
+
     if profiling or save_profiling:
         settings.debug.profile_pipeline_timings = True
 
@@ -1474,9 +1563,6 @@ def convert(  # noqa: C901
                     _log.info(err)  # will print more details if verbose is activated
                     raise typer.Abort()
 
-        if to_formats is None:
-            to_formats = [OutputFormat.MARKDOWN]
-
         if output_file is not None:
             if len(input_doc_paths) != 1:
                 err_console.print(
@@ -1504,24 +1590,44 @@ def convert(  # noqa: C901
         else:
             resolved_ocr_mode = ocr_mode
         ocr_kwargs: dict[str, Any] = {"mode": resolved_ocr_mode}
+        ocr_flag_names = {
+            "mode": "--ocr-mode",
+            "lang": "--ocr-lang",
+            "psm": "--psm",
+        }
+        # `--ocr-mode` always has a value; count it as set only when it differs
+        # from the default, so `--ocr-option mode=...` works on its own.
+        explicit_ocr_fields = (
+            {"mode"} if force_ocr or ocr_mode != OcrMode.DEFAULT else set()
+        )
         ocr_lang_list = _split_list(ocr_lang)
         # `_split_list` returns None only when the option was not given, so an
         # explicitly empty value reaches the engine as `lang=[]`: "your default".
         if ocr_lang_list is not None:
             ocr_kwargs["lang"] = ocr_lang_list
-        try:
-            ocr_options: OcrOptions = ocr_factory.create_options(  # type: ignore
-                kind=ocr_engine,
-                **ocr_kwargs,
+            explicit_ocr_fields.add("lang")
+        if psm is not None:
+            warnings.warn(
+                "`--psm` is deprecated; use `--ocr-option psm=N` instead.",
+                DeprecationWarning,
+                stacklevel=2,
             )
-        except ValidationError as err:
-            raise typer.BadParameter(
-                _first_error_message(err), param_hint="--ocr-lang"
-            ) from err
-        if psm is not None and isinstance(
-            ocr_options, TesseractOcrOptions | TesseractCliOcrOptions
-        ):
-            ocr_options.psm = psm
+            # Only the Tesseract engines know `psm`; the other engines ignore it.
+            if ocr_engine in (TesseractOcrOptions.kind, TesseractCliOcrOptions.kind):
+                ocr_kwargs["psm"] = psm
+                explicit_ocr_fields.add("psm")
+        ocr_options = cast(
+            OcrOptions,
+            create_engine_options(
+                ocr_factory,
+                ocr_engine,
+                flag_kwargs=ocr_kwargs,
+                flag_names=ocr_flag_names,
+                explicit_flag_fields=explicit_ocr_fields,
+                option_values=ocr_option,
+                param_hint="--ocr-option",
+            ),
+        )
         accelerator_options = AcceleratorOptions(num_threads=num_threads, device=device)
         pipeline_options: PipelineOptions
         format_options: dict[InputFormat, FormatOption] = {}
@@ -1530,15 +1636,41 @@ def convert(  # noqa: C901
         layout_factory = get_layout_factory(
             allow_external_plugins=allow_external_plugins
         )
-        layout_options: BaseLayoutOptions = layout_factory.create_options(  # type: ignore
-            kind=layout_engine
+        layout_options = cast(
+            BaseLayoutOptions,
+            create_engine_options(
+                layout_factory,
+                layout_engine,
+                flag_kwargs={},
+                flag_names={},
+                explicit_flag_fields=set(),
+                option_values=layout_option,
+                param_hint="--layout-option",
+            ),
         )
 
         table_structure_factory = get_table_structure_factory(
             allow_external_plugins=allow_external_plugins
         )
-        table_structure_options: BaseTableStructureOptions = (  # type: ignore
-            table_structure_factory.create_options(kind=table_structure_engine)
+        # Only TableFormer V1 has a `mode`; the other engines ignore --table-mode.
+        table_kwargs: dict[str, Any] = (
+            {"mode": table_mode}
+            if table_structure_engine == TableStructureOptions.kind
+            else {}
+        )
+        table_structure_options = cast(
+            BaseTableStructureOptions,
+            create_engine_options(
+                table_structure_factory,
+                table_structure_engine,
+                flag_kwargs=table_kwargs,
+                flag_names={"mode": "--table-mode"},
+                explicit_flag_fields=(
+                    {"mode"} if table_mode != TableFormerMode.ACCURATE else set()
+                ),
+                option_values=table_structure_option,
+                param_hint="--table-structure-option",
+            ),
         )
 
         try:
@@ -1565,6 +1697,7 @@ def convert(  # noqa: C901
                 do_ocr=ocr,
                 ocr_options=ocr_options,
                 do_table_structure=tables,
+                extract_form_fields=extract_form_fields,
                 use_reading_order_separators=reading_order_separators,
                 layout_options=layout_options,
                 table_structure_options=table_structure_options,
@@ -1576,11 +1709,6 @@ def convert(  # noqa: C901
                 chart_extraction_options=chart_extraction_options,
                 document_timeout=document_timeout,
             )
-            if isinstance(
-                pipeline_options.table_structure_options, TableStructureOptions
-            ):
-                pipeline_options.table_structure_options.do_cell_matching = True
-                pipeline_options.table_structure_options.mode = table_mode
             if picture_description_max_new_tokens is not None:
                 pipeline_options.picture_description_options.generation_config[
                     "max_new_tokens"
@@ -1767,6 +1895,17 @@ def convert(  # noqa: C901
                     pipeline_options.vlm_options.model_spec.max_new_tokens = (
                         vlm_max_new_tokens
                     )
+                vlm_engine_options = pipeline_options.vlm_options.engine_options
+                if trust_remote_code and isinstance(
+                    vlm_engine_options,
+                    (
+                        AutoInlineVlmEngineOptions,
+                        TransformersVlmEngineOptions,
+                        MlxVlmEngineOptions,
+                        VllmVlmEngineOptions,
+                    ),
+                ):
+                    vlm_engine_options.trust_remote_code = True
                 _log.info(f"Using VLM preset: {vlm_model}")
             except KeyError:
                 err_console.print(
@@ -1909,6 +2048,66 @@ def convert(  # noqa: C901
         end_time = time.time() - start_time
 
     _log.info(f"All documents were converted in {end_time:.2f} seconds.")
+
+
+class EngineStage(str, Enum):
+    OCR = "ocr"
+    LAYOUT = "layout"
+    TABLE_STRUCTURE = "table-structure"
+
+
+@app.command("options")
+def show_engine_options(
+    stage: Annotated[
+        EngineStage,
+        typer.Argument(help="The pipeline stage of the engine."),
+    ],
+    engine: Annotated[
+        str | None,
+        typer.Argument(
+            help="The engine to describe. Omit it to list the engines of the stage."
+        ),
+    ] = None,
+    allow_external_plugins: Annotated[
+        bool,
+        typer.Option(
+            ..., help="Must be enabled for loading modules from third-party plugins."
+        ),
+    ] = False,
+) -> None:
+    """Show the KEY=VALUE options that `docling convert` accepts for an engine.
+
+    The keys go to --ocr-option, --layout-option or --table-structure-option.
+    """
+    _require_local_model_stack("docling options")
+    factory: BaseFactory
+    if stage == EngineStage.OCR:
+        factory = get_ocr_factory(allow_external_plugins=allow_external_plugins)
+    elif stage == EngineStage.LAYOUT:
+        factory = get_layout_factory(allow_external_plugins=allow_external_plugins)
+    else:
+        factory = get_table_structure_factory(
+            allow_external_plugins=allow_external_plugins
+        )
+
+    if engine is None:
+        for kind in factory.registered_kind:
+            console.print(kind, highlight=False)
+        return
+
+    try:
+        options_cls = find_options_class(factory, engine)
+    except typer.BadParameter as err:
+        err.param_hint = "ENGINE"
+        raise
+    table = rich.table.Table(title=f"Options of the {stage.value} engine {engine!r}")
+    table.add_column("Key", style="bold", no_wrap=True)
+    table.add_column("Type")
+    table.add_column("Default")
+    table.add_column("Description")
+    for row in describe_options_class(options_cls):
+        table.add_row(*(rich.markup.escape(cell) for cell in row))
+    console.print(table)
 
 
 # Register `convert-remote` only when the service-client extra is installed.
