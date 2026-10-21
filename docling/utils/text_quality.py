@@ -31,6 +31,9 @@ _SHORT_PAGE_RUN = 2
 _MANY_REPLACEMENTS = 12
 _MANY_REPLACEMENTS_SHARE = 0.05
 _REPLACEMENT_LINES = 3
+_REPLACEMENT_LINE_SHARE = (
+    0.10  # Lines with U+FFFD, as the per-cell score's 10% quantile.
+)
 _LONG_REPLACEMENT_RUN = 8
 _SOME_REPLACEMENTS_SHARE = 0.025
 
@@ -119,6 +122,11 @@ def _has_replacement_evidence(text: str, lines: list[str]) -> bool:
     return (
         (count >= _MANY_REPLACEMENTS and share >= _MANY_REPLACEMENTS_SHARE)
         or (lines_hit >= _REPLACEMENT_LINES and share >= _SOME_REPLACEMENTS_SHARE)
+        # One U+FFFD in many lines: few characters, but most of the text is affected.
+        or (
+            lines_hit >= _REPLACEMENT_LINES
+            and lines_hit >= _REPLACEMENT_LINE_SHARE * len(lines)
+        )
         or (longest >= _LONG_REPLACEMENT_RUN and share >= _SOME_REPLACEMENTS_SHARE)
     )
 

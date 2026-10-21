@@ -135,6 +135,12 @@ BROKEN = {
     "replacement_characters_in_many_cells": _PROSE
     + "\n"
     + "\n".join("Item " + "\N{REPLACEMENT CHARACTER}" * n for n in (4, 3, 3)),
+    # One U+FFFD in each of many lines: a small share of the characters.
+    "one_replacement_in_many_lines": "\n".join(
+        "BIB@QOLKF@ PB@QOFQFBP QO>AFKD\N{REPLACEMENT CHARACTER} IBKAFKD >KA M>VJBKQ"
+        " PBOSF@BP CLO @LJM>KFBP >KA FKAFSFA§>IP"
+        for _ in range(8)
+    ),
 }
 
 
