@@ -4,7 +4,12 @@
 import pytest
 from pydantic import ValidationError
 
-from docling.datamodel.base_models import ConversionStatus
+from docling.datamodel.base_models import (
+    ConfidenceReport,
+    ConversionStatus,
+    PageConfidenceScores,
+    QualityGrade,
+)
 from docling.datamodel.service.requests import (
     AnyHttpSourceRequest,
     AzureBlobSourceRequest,
@@ -19,6 +24,7 @@ from docling.datamodel.service.requests import (
 )
 from docling.datamodel.service.responses import (
     ArtifactRef,
+    ConfidenceScores,
     DoclingTaskResult,
     DocumentArtifactItem,
     FailureCategory,
@@ -435,3 +441,67 @@ def test_task_status_response_accepts_structured_failure() -> None:
 
     assert response.failure is not None
     assert response.failure.phase == FailurePhase.ORCHESTRATION
+
+
+def test_confidence_scores_from_flat_scores() -> None:
+    scores = PageConfidenceScores(
+        parse_score=0.9, layout_score=0.8, table_score=None, ocr_score=0.95
+    )
+    wire = ConfidenceScores.from_scores(scores)
+
+    assert wire.parse_score == 0.9
+    assert wire.layout_score == 0.8
+    assert wire.table_score is None
+    assert wire.ocr_score == 0.95
+    assert wire.pages == {}
+
+    # JSON serialization must emit an empty dict for pages, not null or a list
+    dump = wire.model_dump(mode="json")
+    assert dump["pages"] == {}
+
+    # Deserializing back into ConfidenceReport succeeds
+    report = ConfidenceReport.model_validate(dump)
+    assert report.parse_score == 0.9
+    assert report.pages == {}
+
+
+def test_confidence_scores_from_report_with_pages() -> None:
+    report = ConfidenceReport(
+        pages={
+            1: PageConfidenceScores(parse_score=0.9, layout_score=0.8),
+            2: PageConfidenceScores(parse_score=0.7, layout_score=0.6),
+        }
+    )
+    wire = ConfidenceScores.from_scores(report)
+
+    assert 1 in wire.pages
+    assert 2 in wire.pages
+    assert wire.pages[1].parse_score == 0.9
+    assert wire.pages[2].parse_score == 0.7
+
+    dump = wire.model_dump(mode="json")
+    assert "1" in dump["pages"]
+    assert "2" in dump["pages"]
+
+    restored = ConfidenceReport.model_validate(dump)
+    assert len(restored.pages) == 2
+    assert restored.pages[1].parse_score == 0.9
+    assert restored.pages[2].parse_score == 0.7
+
+
+def test_confidence_report_tolerant_to_pages_none() -> None:
+    legacy_payload = {
+        "parse_score": 0.85,
+        "layout_score": 0.80,
+        "table_score": None,
+        "ocr_score": 0.90,
+        "mean_score": 0.85,
+        "low_score": 0.80,
+        "mean_grade": QualityGrade.GOOD,
+        "low_grade": QualityGrade.GOOD,
+        "pages": None,
+    }
+
+    restored = ConfidenceReport.model_validate(legacy_payload)
+    assert restored.parse_score == 0.85
+    assert restored.pages == {}

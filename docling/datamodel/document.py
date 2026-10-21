@@ -604,6 +604,11 @@ class ConversionResult(ConversionAssets):
     # conversion result (not on the pipeline) because one pipeline instance is shared
     # by every conversion made through the same DocumentConverter.
     _page_sizes_by_no: dict[int, Size] = PrivateAttr(default_factory=dict)
+    # Absolute (monotonic-clock) deadline for the whole conversion, derived from
+    # `document_timeout` when set. Private transient plumbing, same rationale as
+    # above: the assembly stage reads it to bound work that runs after the page
+    # stages (e.g. reading-order separator extraction).
+    _conversion_deadline: Optional[float] = PrivateAttr(default=None)
 
 
 class _DummyBackend(AbstractDocumentBackend):
@@ -626,6 +631,15 @@ class _DummyBackend(AbstractDocumentBackend):
 
 
 _OFFICE_OPEN_XML_ROOT = "application/vnd.openxmlformats-officedocument"
+
+_CONTENT_SNIFF_BYTES = 8192
+"""How much of a document ``_guess_format`` reads to probe its content.
+
+A path and a stream read the same amount: a limit that differed between them
+would make one document's format depend on how it was handed over, and the
+smaller limit silently drops a document whose first format marker -- an
+``<html>`` root, an XML declaration, a LaTeX preamble -- sits past it.
+"""
 
 _ZIP_SUFFIX_MIMETYPES = {
     ".xlsx": _OFFICE_OPEN_XML_ROOT + ".spreadsheetml.sheet",
@@ -817,7 +831,7 @@ class _DocumentConversionInput(BaseModel):
             )
             if needs_content_sniff:
                 with obj.open("rb") as f:
-                    content = f.read(1024)
+                    content = f.read(_CONTENT_SNIFF_BYTES)
             if mime is not None and mime.lower() == "application/zip":
                 named = _ZIP_SUFFIX_MIMETYPES.get(obj.suffix.lower())
                 if named is not None:
@@ -834,7 +848,7 @@ class _DocumentConversionInput(BaseModel):
                 return InputFormat.XML_DOCLANG
             if _DocumentConversionInput._has_dclx_extension(obj.name):
                 return InputFormat.DCLX
-            content = obj.stream.read(8192)
+            content = obj.stream.read(_CONTENT_SNIFF_BYTES)
             obj.stream.seek(0)
             mime = filetype.guess_mime(content)
             obj_ext = (

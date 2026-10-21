@@ -42,7 +42,7 @@ class ConfidenceScores(BaseModel):
     low_score: Optional[float] = None
     mean_grade: QualityGrade = QualityGrade.UNSPECIFIED
     low_grade: QualityGrade = QualityGrade.UNSPECIFIED
-    pages: Optional[dict[int, "ConfidenceScores"]] = None
+    pages: Optional[dict[int, "ConfidenceScores"]] = {}
 
     @classmethod
     def from_scores(cls, scores: PageConfidenceScores) -> "ConfidenceScores":
@@ -62,7 +62,7 @@ class ConfidenceScores(BaseModel):
                     for page_no, page_scores in pages.items()
                 }
                 if pages
-                else None
+                else {}
             ),
         )
 

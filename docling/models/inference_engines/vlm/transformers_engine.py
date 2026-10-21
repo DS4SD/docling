@@ -164,6 +164,17 @@ class TransformersVlmEngine(BaseVlmEngine, HuggingFaceModelDownloadMixin):
             )
             model_type = _coerce_transformers_model_type(model_type)
 
+            if (
+                self.model_config.extra_config.get("requires_trust_remote_code")
+                and not self.options.trust_remote_code
+            ):
+                raise ValueError(
+                    f"{repo_id} (revision {revision}) runs code from its model "
+                    "repository. Review that code, then opt in with "
+                    "trust_remote_code=True on the VLM engine options, or with "
+                    "--trust-remote-code in the docling CLI."
+                )
+
             _log.info(
                 f"Loading model {repo_id} (revision: {revision}, "
                 f"model_type: {model_type.value})"
@@ -216,7 +227,11 @@ class TransformersVlmEngine(BaseVlmEngine, HuggingFaceModelDownloadMixin):
 
         # Download or locate model artifacts using shared utility
         def download_wrapper(repo_id: str, revision: str) -> Path:
-            return self.download_models(repo_id, revision=revision)
+            return self.download_models(
+                repo_id,
+                revision=revision,
+                trust_remote_code=self.options.trust_remote_code,
+            )
 
         artifacts_path = resolve_model_artifacts_path(
             repo_id=repo_id,
