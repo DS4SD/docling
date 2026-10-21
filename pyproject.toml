@@ -404,8 +404,6 @@ docling = { workspace = true }
 # docling-ibm-models = { git = "https://github.com/docling-project/docling-ibm-models", branch = "main" }
 
 [tool.uv]
-# uv>=0.13.4 distrusts the compromised eMudhra/emSign CA certificates.
-required-version = ">=0.13.4"
 package = true
 default-groups = "all"
 
