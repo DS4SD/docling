@@ -4,12 +4,14 @@
 """Unit tests for the shared image-resource loader and its safety limits."""
 
 import socket
+import sys
 import threading
 from pathlib import Path
 from urllib.parse import quote
 
 import pytest
 
+from docling.backend.utils import image_resource_loader
 from docling.backend.utils.image_resource_loader import (
     ImageResourceLoader,
     validate_url_safety,
@@ -265,6 +267,24 @@ def test_resolve_relative_path_accepts_localhost_file_uri(tmp_path):
     assert Path(resolved) == (tmp_path / "figure.png").resolve()
 
 
+def test_local_base_path_normalizes_unc_authority(monkeypatch):
+    converted_paths: list[str] = []
+
+    def convert_path(path: str) -> str:
+        converted_paths.append(path)
+        return "converted-unc-path"
+
+    monkeypatch.setattr(image_resource_loader, "url2pathname", convert_path)
+
+    result = ImageResourceLoader._local_base_path("file://server/share/docs/doc.md")
+
+    assert converted_paths == ["//server/share/docs/doc.md"]
+    assert result == "converted-unc-path"
+
+
+@pytest.mark.skipif(
+    sys.platform != "win32", reason="UNC filesystem paths require Windows"
+)
 def test_resolve_relative_path_accepts_unc_file_uri():
     loader = ImageResourceLoader()
 
