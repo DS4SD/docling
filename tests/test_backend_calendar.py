@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: The Docling Contributors
 # SPDX-License-Identifier: MIT
 
+import mimetypes
 from io import BytesIO
 from pathlib import Path
 
@@ -149,6 +150,20 @@ def test_empty_calendar_converts_to_an_empty_document(converter):
 
     assert result.status == ConversionStatus.SUCCESS
     assert result.document.texts == []
+
+
+def test_conversion_does_not_depend_on_the_host_mime_table(converter, monkeypatch):
+    """CPython's built-in MIME table has no text/calendar; only a system table adds it.
+
+    Without docling-core accepting the type itself, a host with no
+    /etc/mime.types could not create the document origin.
+    """
+    monkeypatch.setattr(mimetypes, "types_map", {})
+
+    result = _convert(converter, _calendar("BEGIN:VEVENT", "SUMMARY:E", "END:VEVENT"))
+
+    assert result.status == ConversionStatus.SUCCESS
+    assert result.document.origin.mimetype == "text/calendar"
 
 
 def test_text_without_calendar_fails(converter):
