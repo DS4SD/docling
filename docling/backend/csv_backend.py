@@ -50,13 +50,15 @@ def _sniff_dialect(head: str, read_sample: Callable[[], str]) -> type[csv.Dialec
     # A line holding more than one candidate delimiter is ambiguous on its own:
     # the sniffer then picks the first one in its preference order, e.g. `,`
     # for `a;b (x, y);c`. The following rows can tell them apart, so prefer a
-    # sample-based dialect when it detects another delimiter seen in the line.
+    # sample-based dialect when its delimiter splits the line into at least as
+    # many fields. Ragged rows can make the sample favour a delimiter that only
+    # appears inside a header field, like the `:` in `Time (hh:mm)`.
     if sum(delimiter in head for delimiter in _DELIMITERS) > 1:
         try:
             sample_dialect = csv.Sniffer().sniff(read_sample(), _DELIMITERS)
         except csv.Error:
             return dialect
-        if sample_dialect.delimiter in head:
+        if head.count(sample_dialect.delimiter) >= head.count(dialect.delimiter):
             return sample_dialect
     return dialect
 

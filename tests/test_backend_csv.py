@@ -168,15 +168,47 @@ def test_doubled_quotes_with_non_comma_delimiter():
                 "2",
             ],
         ),
+        (
+            b"Date,Time (hh:mm),Value,Note\n2024-01-01,10:30,5,a\n2024-01-02,11:45,6\n",
+            [
+                "Date",
+                "Time (hh:mm)",
+                "Value",
+                "Note",
+                "2024-01-01",
+                "10:30",
+                "5",
+                "a",
+                "2024-01-02",
+                "11:45",
+                "6",
+            ],
+        ),
+        (
+            b"id,ratio (a;b),x,y\n1,2;3,4,5\n2,6;7,8\n",
+            ["id", "ratio (a;b)", "x", "y", "1", "2;3", "4", "5", "2", "6;7", "8"],
+        ),
+        (
+            b"id,ratio (a;b),x,y\n1,0.5,2,3\n2,0.7,4\n",
+            ["id", "ratio (a;b)", "x", "y", "1", "0.5", "2", "3", "2", "0.7", "4"],
+        ),
     ],
-    ids=["semicolon_with_comma_in_header", "comma_with_semicolon_in_header"],
+    ids=[
+        "semicolon_with_comma_in_header",
+        "comma_with_semicolon_in_header",
+        "ragged_comma_with_colon_in_header",
+        "ragged_comma_with_semicolon_in_header",
+        "ragged_comma_sample_not_sniffable",
+    ],
 )
 def test_header_with_second_delimiter_uses_following_rows(payload, expected):
     """A header holding two candidate delimiters is ambiguous on its own.
 
     `csv.Sniffer` then picks the first one in its preference order, so a
     semicolon file whose header contains a comma was split on commas. The
-    following rows disambiguate it (#4895).
+    following rows disambiguate it (#4895), unless their delimiter splits the
+    header into fewer fields, as in ragged comma files with a `:` or `;` inside
+    a header field.
     """
     doc = (
         get_converter()
