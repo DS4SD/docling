@@ -22,7 +22,7 @@ from docling_core.types.doc.page import (
 from PIL import Image, ImageDraw
 
 from docling.datamodel.accelerator_options import AcceleratorOptions
-from docling.datamodel.base_models import POOR_SCORE_BOUND, Page
+from docling.datamodel.base_models import Page
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import OcrMode, OcrOptions
 from docling.datamodel.settings import settings
@@ -148,12 +148,11 @@ def _ocr_full_page(options: OcrOptions, page: Page) -> bool:
     """Whether a page is OCR'd in full and its PDF cells dropped.
 
     True in `OcrMode.FULL_PAGE`, and, with `replace_broken_text_layer`, for a page
-    whose text layer is graded poor. A page without a text layer has no parse score
-    (NaN) and is never poor.
+    whose text layer page preprocessing found broken.
     """
     if options.mode == OcrMode.FULL_PAGE:
         return True
-    return options.replace_broken_text_layer and page._parse_score < POOR_SCORE_BOUND
+    return options.replace_broken_text_layer and page._broken_text_layer
 
 
 class BaseOcrModel(BasePageModel, BaseModelWithOptions):
@@ -263,10 +262,9 @@ class BaseOcrModel(BasePageModel, BaseModelWithOptions):
         if _ocr_full_page(self.options, page):
             if self.options.mode != OcrMode.FULL_PAGE:
                 _log.info(
-                    "Page %s: parse score %.2f is graded poor;"
-                    " replacing its text layer with full-page OCR",
+                    "Page %s: the text layer is broken;"
+                    " replacing it with full-page OCR",
                     page.page_no,
-                    page._parse_score,
                 )
             # A big bbox covering the entire page
             ocr_rects = [

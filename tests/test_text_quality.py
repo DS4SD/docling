@@ -93,6 +93,15 @@ ORDINARY = {
     "single_replacement_character": _PROSE + "\nx \N{REPLACEMENT CHARACTER} y\n",
     # pdfium can mark one end-of-line hyphen with a control character.
     "hyphen_control": _PROSE.replace("regions", "re\x02\ngions", 1),
+    # A figure whose axis labels a parser could not map, on a good page.
+    "glyph_placeholders": _PROSE + "\nGLYPH<s45>GLYPH<s52>GLYPH<s48>" * 60,
+    # Formulas: many one-letter variables and few vowels.
+    "math_variables": (
+        "(p, q, k) and (p, k, q)\n"
+        "PP[(q)] = 5 e2 [(k2 g - k k) - (q2 g - q q)]\n"
+        "= 2 e sin(p ^ q) B (p, q, k) = i2 g sin(k ^ q) (p, q, k) ln(s) ln(p) mn pq\n"
+    )
+    * 6,
     "dotted_capital_i": _PROSE
     + "\nThe office in \N{LATIN CAPITAL LETTER I WITH DOT ABOVE}stanbul opened.\n",
 }

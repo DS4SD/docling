@@ -126,13 +126,14 @@ class PagePreprocessingModel(BasePageModel):
 
         # Some broken text layers only show across the whole page, such as an
         # unmapped font encoding. Judged on visible text, only when the OCR may
-        # replace the layer.
+        # replace the layer. Only this check replaces a page: a low per-cell score
+        # also comes from a few unmapped glyphs, such as bullets, on a good page.
         if self.options.detect_broken_text_layer and not np.isnan(parse_score):
             visible_cells, _ = _segregate_by_visibility(page.cells)
             if is_broken_text_layer("\n".join(c.text for c in visible_cells)):
+                page._broken_text_layer = True
                 parse_score = 0.0
         conv_res.confidence.pages[page.page_no].parse_score = parse_score
-        page._parse_score = parse_score
 
         def draw_cell_boxes(
             image: Image,

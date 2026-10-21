@@ -8,6 +8,7 @@ at patterns broken text produces, such as unmapped font encodings.
 """
 
 import math
+import re
 import unicodedata
 from itertools import groupby
 
@@ -35,6 +36,8 @@ _SOME_REPLACEMENTS_SHARE = 0.025
 
 # Letters shifted by a broken ToUnicode map, as in a substitution cipher.
 _MIN_CIPHER_LETTERS = 200  # Too few letters to judge their frequencies.
+_MIN_WORD_LETTERS = 3  # Shorter tokens, such as math variables, are not counted.
+_GLYPH_PLACEHOLDER = re.compile(r"GLYPH<[^>]*>")  # A parser's unmapped glyph.
 _MAX_VOWEL_SHARE = 0.30  # Latin-script text stays above this.
 _MAX_ENGLISH_COSINE = 0.60  # Letters not where English puts them...
 _MIN_SHAPE_COSINE = 0.90  # ...but with the frequency profile of a language.
@@ -129,13 +132,17 @@ def _is_shifted_latin(text: str) -> bool:
     """Whether ASCII letters look like language with its letters swapped.
 
     A broken ToUnicode map often shifts every letter by a constant. That keeps
-    the shape of the letter-frequency profile but moves each letter. Only tokens
-    with a lowercase letter count, so acronyms and part numbers are skipped.
+    the shape of the letter-frequency profile but moves each letter. Only words
+    count: tokens with a lowercase letter and at least three ASCII letters, so
+    acronyms, part numbers and math variables are skipped. Placeholders for
+    unmapped glyphs, such as ``GLYPH<81>``, are not words either.
     """
     counts = [0.0] * 26
     other_letters = 0
-    for token in text.split():
+    for token in _GLYPH_PLACEHOLDER.sub(" ", text).split():
         if not any("a" <= ch <= "z" for ch in token):
+            continue
+        if sum(ch.isascii() and ch.isalpha() for ch in token) < _MIN_WORD_LETTERS:
             continue
         for ch in token:
             if ch.isascii() and ch.isalpha():

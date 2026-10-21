@@ -131,6 +131,17 @@ def test_good_text_layer_is_kept(tmp_path: Path) -> None:
     assert layer in result.document.export_to_markdown()
 
 
+def test_poor_cell_score_alone_keeps_the_text_layer(tmp_path: Path) -> None:
+    """An unmapped bullet glyph grades the page poor, but its text is good."""
+    layer = "GLYPH<81> Annual Report of the Company"
+    result = _convert(_page_pdf(tmp_path / "bullet.pdf", layer), replace=True)
+
+    assert result.confidence.pages[1].parse_score == 0.0
+    markdown = result.document.export_to_markdown()
+    assert "Annual Report of the Company" in markdown
+    assert _SHOWN not in markdown
+
+
 def test_auto_ocr_engine_replaces_the_broken_layer(tmp_path: Path) -> None:
     """The engine OcrAutoOptions selects gets the option too."""
     ocr = OcrAutoOptions(replace_broken_text_layer=True)
