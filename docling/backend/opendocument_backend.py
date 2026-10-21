@@ -19,6 +19,7 @@ Known gaps to improve:
 
 from __future__ import annotations
 
+import functools
 import logging
 import re
 from collections.abc import Callable
@@ -162,6 +163,12 @@ class _OdfTextRun:
 
 _ODF_HREF_SCHEME_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9+.-]*:")
 
+# Shapes of a notes page that show the slide or a field, not the speaker notes:
+# the slide thumbnail, and the slide number, date, header and footer fields.
+_ODP_NOTES_PAGE_FIELD_CLASSES = frozenset(
+    {"page", "page-number", "date-time", "header", "footer"}
+)
+
 
 def _odf_hyperlink_from_href(href: str | None) -> AnyUrl | Path | None:
     if href is None:
@@ -194,6 +201,68 @@ def _load_odf_document(
         ) from e
 
 
+# Style families looked up by the backends, with the tag odfdo matches for each.
+_ODF_INDEXED_STYLE_TAGS = {
+    "drawing-page": "style:style",
+    "list": "text:list-style",
+    "paragraph": "style:style",
+    "text": "style:style",
+}
+
+
+class _OdfAutomaticStyleIndex:
+    """Look up named styles of ``content.xml`` in a dict.
+
+    ``OdfDocument.get_style()`` scans every style in the container for each new
+    name, which is quadratic for documents with thousands of automatic styles
+    (common in files exported from Word). The index returns what odfdo would:
+    the first style in document order with that family and name. Anything it
+    does not hold goes to odfdo.
+    """
+
+    def __init__(self, odf_obj: OdfDocument) -> None:
+        self._odf_get_style = odf_obj.get_style
+        self._content = odf_obj.content
+        self._styles: dict[tuple[str, str], Any] | None = None
+
+    def _build(self) -> dict[tuple[str, str], Any]:
+        styles: dict[tuple[str, str], Any] = {}
+        for query in ("//office:font-face-decls", "//office:automatic-styles"):
+            container = self._content.get_element(query)
+            if container is None:
+                continue
+            for style in container.children:
+                name = style.attributes.get("style:name")
+                if not name:
+                    continue
+                if style.tag == "text:list-style":
+                    family = "list"
+                else:
+                    family = style.attributes.get("style:family", "")
+                if _ODF_INDEXED_STYLE_TAGS.get(family) == style.tag:
+                    styles.setdefault((family, name), style)
+        return styles
+
+    def get_style(
+        self,
+        family: str,
+        name_or_element: Any = None,
+        display_name: str | None = None,
+    ) -> Any:
+        if (
+            family in _ODF_INDEXED_STYLE_TAGS
+            and isinstance(name_or_element, str)
+            and name_or_element
+            and display_name is None
+        ):
+            if self._styles is None:
+                self._styles = self._build()
+            style = self._styles.get((family, name_or_element))
+            if style is not None:
+                return style
+        return self._odf_get_style(family, name_or_element, display_name)
+
+
 class _OdfBaseBackend(DeclarativeDocumentBackend):
     """Shared loading / validation logic for ODT, ODS and ODP backends."""
 
@@ -215,6 +284,15 @@ class _OdfBaseBackend(DeclarativeDocumentBackend):
         self.odf_obj: OdfDocument = _load_odf_document(
             path_or_stream, self.document_hash
         )
+        # get_style() runs an XPath query over the whole document and is called for
+        # every paragraph and text run; styles do not change during conversion.
+        self.odf_obj.get_style = functools.cache(  # type: ignore[method-assign]
+            _OdfAutomaticStyleIndex(self.odf_obj).get_style
+        )
+        # On each miss, get_style() finds the style containers again with
+        # "//office:..." queries that walk the whole part, body included.
+        for part in (self.odf_obj.content, self.odf_obj.styles):
+            part.get_element = functools.cache(part.get_element)  # type: ignore[method-assign]
         if self._odf_type and self.odf_obj.get_type() != self._odf_type:
             raise RuntimeError(
                 f"Expected an OpenDocument {self._odf_type!r} but got "
@@ -1110,6 +1188,10 @@ def _add_odf_child(
             comments=comments,
         )
     elif isinstance(element, Section):
+        # Writer saves a section hidden with Format > Sections > Hide as
+        # text:display="none", so its content is not shown or printed.
+        if element.get_attribute("text:display") == "none":
+            content_layer = ContentLayer.INVISIBLE
         _add_odf_children(
             doc,
             element.children,
@@ -1409,10 +1491,11 @@ def _add_odf_list(
                 marker=marker,
                 enumerated=current_enumerated,
                 parent=list_group,
-                # Prefer the run-derived text: odfdo's own text_recursive
-                # renders hyperlinked children as "[text](href)" markdown,
-                # which would otherwise leak into the plain item text.
-                text=runs[0].text if runs else text,
+                # Use only the run-derived text: odfdo's own text_recursive
+                # renders hyperlinked children as "[text](href)" markdown, an
+                # image or a chart as "(href)" and a footnote as its citation
+                # and body, which would otherwise leak into the plain item text.
+                text=runs[0].text if runs else "",
                 content_layer=content_layer,
                 formatting=runs[0].formatting if runs else None,
                 hyperlink=runs[0].hyperlink if runs else None,
@@ -1910,7 +1993,11 @@ class OdpDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
     ) -> None:
         seen_text_content = False
         for element in page.children:
-            if getattr(element, "tag", None) in {"anim:par", "presentation:notes"}:
+            tag = getattr(element, "tag", None)
+            if tag == "presentation:notes":
+                self._walk_slide_notes(element, parent=parent, doc=doc)
+                continue
+            if tag == "anim:par":
                 continue
             has_text = bool(
                 _clean_odf_text_lines(getattr(element, "text_recursive", ""))
@@ -1931,6 +2018,34 @@ class OdpDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
                     parent=parent,
                     doc=doc,
                     is_title=is_title,
+                )
+
+    def _walk_slide_notes(
+        self, notes: Element, parent: NodeItem, doc: DoclingDocument
+    ) -> None:
+        """Add the speaker notes of a slide to the notes content layer.
+
+        As in the PowerPoint backend, the notes go under the group of their
+        slide. A notes page also shows a thumbnail of the slide and can show
+        the slide number, date, header and footer, which are not notes.
+        """
+        for element in notes.children:
+            if (
+                element.get_attribute("presentation:class")
+                in _ODP_NOTES_PAGE_FIELD_CLASSES
+            ):
+                continue
+            textboxes = (
+                element.get_elements("descendant::draw:text-box")
+                if isinstance(element, Frame)
+                else [element]
+            )
+            for textbox in textboxes:
+                self._walk_textbox_children(
+                    textbox.children,
+                    parent=parent,
+                    doc=doc,
+                    content_layer=ContentLayer.NOTES,
                 )
 
     @staticmethod
@@ -2006,6 +2121,7 @@ class OdpDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
         doc: DoclingDocument,
         *,
         is_title: bool = False,
+        content_layer: ContentLayer | None = None,
     ) -> None:
         previous_list_state: _OdfListState | None = None
         for el in elements:
@@ -2015,7 +2131,7 @@ class OdpDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
                     doc,
                     el,
                     parent=parent,
-                    content_layer=None,
+                    content_layer=content_layer,
                     odf_obj=self.odf_obj,
                 )
             elif isinstance(el, Paragraph):
@@ -2025,14 +2141,14 @@ class OdpDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
                     _odf_text_runs(el, self.odf_obj),
                     label=DocItemLabel.TITLE if is_title else DocItemLabel.TEXT,
                     parent=parent,
-                    content_layer=None,
+                    content_layer=content_layer,
                 )
             elif isinstance(el, OdfList):
                 previous_list_state = _add_odf_list(
                     doc,
                     el,
                     parent=parent,
-                    content_layer=None,
+                    content_layer=content_layer,
                     odf_obj=self.odf_obj,
                     enumerated=False,
                     continued_state=previous_list_state,
@@ -2340,26 +2456,21 @@ class OdsDocumentBackend(_OdfBaseBackend, PaginatedDocumentBackend):
     ) -> None:
         """Find and extract images from an ODS sheet."""
         try:
-            # Get all images in the table
-            images = table.get_images()
+            # Pictures anchored to a cell are added with that cell. The ones
+            # anchored to the sheet itself are in <table:shapes>.
+            images = table.get_elements("table:shapes//draw:image")
             for img in images:
                 try:
-                    # Get the image data
-                    image_data = img.get_data()
-                    if image_data:
-                        # Convert to PIL Image
-                        from io import BytesIO
-
-                        pil_image = PILImage.open(BytesIO(image_data))
-
-                        # Try to get position information
-                        # ODF images are typically anchored to cells
+                    image_ref = _image_ref_from_odf_image(
+                        self.odf_obj, img, image_loader=self._image_loader
+                    )
+                    if image_ref is not None:
                         # For now, use a default position
                         anchor = (0, 0, 1, 1)
 
                         doc.add_picture(
                             parent=parent,
-                            image=ImageRef.from_pil(image=pil_image, dpi=72),
+                            image=image_ref,
                             caption=None,
                             prov=ProvenanceItem(
                                 page_no=page_no,

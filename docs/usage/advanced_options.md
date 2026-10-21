@@ -36,8 +36,18 @@ docling-tools models download whisper_tiny --output-dir /models
 docling --asr-model whisper_tiny_native --artifacts-path /models audio.wav
 ```
 
+The native Distil-Whisper presets work the same way. Their OpenAI-format
+checkpoints come from Hugging Face and are stored in the output directory in the
+Hugging Face cache layout:
+
+```sh
+docling-tools models download whisper_distil_small_en --output-dir /models
+docling --asr-model whisper_distil_small_en_native --artifacts-path /models audio.wav
+```
+
 `docling-tools models download --all` does not include ASR models. Add `--asr`
-to prefetch all native Whisper model sizes and English-only variants:
+to prefetch all native Whisper model sizes, English-only variants, and
+Distil-Whisper presets:
 
 ```sh
 docling-tools models download --all --asr --output-dir /models
@@ -126,6 +136,40 @@ The options in this list require the explicit `enable_remote_services=True` when
 The example file [custom_convert.py](../examples/custom_convert.py) contains multiple ways
 one can adjust the conversion pipeline and features.
 
+### Extract native PDF form fields
+
+Set `PdfPipelineOptions(extract_form_fields=True)` (CLI: `--extract-form-fields`)
+to convert native PDF widgets (AcroForm) into format-neutral `FieldItem` objects
+with fillable `FieldValueItem` children. Each field key comes from printed text
+associated with its widget by page geometry. The key can be text inside or
+beside the widget's cell, or a paragraph that contains the widget. Checkbox and
+radio option text becomes an option key. A shared prompt introduces several
+options and stays as ordinary text. Additional context becomes a field hint.
+A widget inside a detected table goes into its table cell instead (a rich table
+cell holding the field). Its key comes only from text printed in that same
+cell; the table's row and column headers already carry the association.
+Text used as a field key leaves the body text; a section header or formula
+used as a key stays inside the key, as a field heading or a formula. PDF field
+names are not used as keys.
+
+Fields keep the native order of their widgets. Page geometry places them
+among the text printed around them: the reading-order model orders the text
+only, never the widgets. Fields outside a detected form region go in field
+regions of their own between the page's other elements, one region per run
+of consecutive fields.
+
+Here, **key** means text that names one or more field values, and **hint** means
+extra context. **Layout label** means an element class (`DocItemLabel`).
+**Caption** means a document caption associated with a picture, table, code
+block, or form; it does not mean a field key or hint.
+
+The docling-parse backend supplies the widgets. Scanned or flattened forms,
+backends without page widgets and full-page OCR produce no field items; table
+cells need `do_table_structure=True`. Raw widget metadata is not stored in the
+`DoclingDocument`; keep parsed pages with `generate_parsed_pages=True` when
+that PDF-specific data is needed. Field items are not supported by the DocTags
+export.
+
 ### Image resolution and scale
 
 Page coordinates use 72 points per inch. For image inputs, embedded DPI metadata
@@ -206,6 +250,40 @@ uv run docling convert --from pdf --to dclx \
   --no-reading-order-separators \
   --output-file ./Elsevier-without-separators.dclx \
   ./Elsevier.pdf
+```
+
+
+### Control PDF parser threads
+
+The PDF parser and the model pipeline use separate thread settings.
+`PdfPipelineOptions.accelerator_options.num_threads` controls CPU threads for
+model inference, while `ThreadedDoclingParseBackendOptions.parser_threads`
+controls the docling-parse backend.
+
+For the standard PDF pipeline, configure parser threads on `PdfFormatOption`:
+
+```python
+from docling.datamodel.backend_options import ThreadedDoclingParseBackendOptions
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
+
+pipeline_options = PdfPipelineOptions()
+
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(
+            pipeline_options=pipeline_options,
+            backend_options=ThreadedDoclingParseBackendOptions(parser_threads=8),
+        )
+    }
+)
+```
+
+The equivalent CLI option is independent of `--num-threads`:
+
+```sh
+docling --pipeline native --from pdf --parser-threads 8 FILE
 ```
 
 
@@ -292,11 +370,11 @@ doc_converter = DocumentConverter(
 
 A text item holding superscript or subscript text becomes an inline group of runs.
 
-### PowerPoint charts
+### PowerPoint and Excel charts
 
-A chart on a PowerPoint slide becomes a picture classified by its kind, with
-the data it plots in the picture's `meta.tabular_chart` and its title as the
-caption. The first column of the data holds the categories, under the title of
+A chart on a PowerPoint slide or an Excel sheet becomes a picture classified by
+its kind, with the data it plots in the picture's `meta.tabular_chart` and its
+title as the caption. The first column of the data holds the categories, under the title of
 the category axis, and each series gets a column. Dates on the category axis
 are written as ISO 8601 dates, such as `2012-01-01`.
 
@@ -315,7 +393,8 @@ for picture in deck.pictures:
 ```
 
 The picture itself is empty unless you set `render_chart_images=True` in
-`MsPowerpointBackendOptions`. That draws each chart with LibreOffice.
+`MsPowerpointBackendOptions` or `MsExcelBackendOptions`. That draws each chart
+with LibreOffice.
 
 ### Apple iWork options
 
@@ -437,6 +516,44 @@ doc_converter = DocumentConverter(
 )
 ```
 
+### AsciiDoc comments
+
+AsciiDoc comments carry editorial notes, review remarks and blocks that were
+disabled on purpose, so the backend keeps them in the `notes` content layer
+instead of dropping them. A run of `//` lines is one note and a `////` block is
+another; the line breaks inside each one are kept, because a commented-out block
+is markup rather than prose. Exports leave `notes` out by default, so comments
+reach an export only when you ask for the layer:
+
+```python
+from docling_core.types.doc import ContentLayer
+from docling.document_converter import DocumentConverter
+
+doc = DocumentConverter().convert("manual.adoc").document
+print(doc.export_to_markdown())  # body only, comments left out
+print(doc.export_to_markdown(
+    included_content_layers={ContentLayer.BODY, ContentLayer.NOTES}
+))
+```
+
+A `//` line inside a `----` listing or a `....` literal block is code, not a
+comment, and stays in the block. To drop comments entirely rather than keep
+them in `notes`, turn `capture_comments` off:
+
+```python
+from docling.datamodel.backend_options import AsciiDocBackendOptions
+from docling.datamodel.base_models import InputFormat
+from docling.document_converter import AsciiDocFormatOption, DocumentConverter
+
+converter = DocumentConverter(
+    format_options={
+        InputFormat.ASCIIDOC: AsciiDocFormatOption(
+            backend_options=AsciiDocBackendOptions(capture_comments=False)
+        )
+    }
+)
+```
+
 ### Docling JSON input
 
 A `DoclingDocument` JSON file can be converted again, e.g. to re-export it to
@@ -462,7 +579,7 @@ converter = DocumentConverter(
         )
     }
 )
-doc = converter.convert("saved_document.json").document
+doc = converter.convert("saved_document.json")
 ```
 
 Relative image paths are resolved against the current working directory. The
@@ -652,3 +769,25 @@ Things to know:
 ## Limit resource usage
 
 You can limit the CPU threads used by Docling by setting the environment variable `OMP_NUM_THREADS` accordingly. The default setting is using 4 CPU threads.
+
+Peak memory on large or image-heavy PDFs is driven by how many decoded pages are held at once.
+`queue_max_size` bounds the pages buffered between pipeline stages, and `max_concurrent_results`
+bounds the pages the threaded docling-parse backend decodes ahead of the pipeline:
+
+```python
+from docling.datamodel.backend_options import ThreadedDoclingParseBackendOptions
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import PdfPipelineOptions
+from docling.document_converter import DocumentConverter, PdfFormatOption
+
+pipeline_options = PdfPipelineOptions(queue_max_size=1)
+
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.PDF: PdfFormatOption(
+            pipeline_options=pipeline_options,
+            backend_options=ThreadedDoclingParseBackendOptions(max_concurrent_results=1),
+        )
+    }
+)
+```

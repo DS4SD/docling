@@ -22,11 +22,13 @@ from docling_core.types.doc import (
 
 from docling.backend.docx.drawingml.utils import get_libreoffice_cmd
 from docling.backend.mspowerpoint_backend import (
-    _MAX_CHART_TABLE_CELLS,
     MsPowerpointDocumentBackend,
-    _build_chart_table,
     _is_metafile,
+)
+from docling.backend.utils.charts import (
+    MAX_CHART_TABLE_CELLS,
     _last_populated_row,
+    build_chart_table,
 )
 from docling.datamodel.backend_options import MsPowerpointBackendOptions
 from docling.datamodel.base_models import InputFormat, ItemAndImageEnrichmentElement
@@ -504,27 +506,25 @@ def test_last_populated_row_trims_only_trailing_empty_rows():
 
 def test_chart_with_no_populated_data_returns_no_table():
     """A chart whose declared range holds no data at all yields no table."""
-    assert _build_chart_table(["", "", ""], [("s1", [])]) is None
+    assert build_chart_table(["", "", ""], [("s1", [])]) is None
 
 
 def test_chart_data_table_capped_at_max_cells(caplog):
     """Genuinely huge charts are truncated at the cell cap with a warning.
 
     60k populated points in 2 series would emit 180k cells; the table is cut to
-    ``_MAX_CHART_TABLE_CELLS`` cells instead of ballooning.
+    ``MAX_CHART_TABLE_CELLS`` cells instead of ballooning.
     """
     n_points = 60_000
     values = [str(i) for i in range(n_points)]
     categories = [f"c{i}" for i in range(n_points)]
 
-    with caplog.at_level(
-        logging.WARNING, logger="docling.backend.mspowerpoint_backend"
-    ):
-        table_data = _build_chart_table(categories, [("s1", values), ("s2", values)])
+    with caplog.at_level(logging.WARNING, logger="docling.backend.utils.charts"):
+        table_data = build_chart_table(categories, [("s1", values), ("s2", values)])
 
     assert table_data is not None
     assert table_data.num_cols == 3
-    capped_rows = _MAX_CHART_TABLE_CELLS // 3
+    capped_rows = MAX_CHART_TABLE_CELLS // 3
     assert table_data.num_rows == capped_rows + 1
     assert "cell cap" in caplog.text
     grid = {
@@ -1322,6 +1322,60 @@ def test_pptx_hidden_slide_goes_to_invisible_layer(tmp_path: Path):
     assert texts(ContentLayer.NOTES) == [
         "Notes for Visible slide",
         "Notes for Hidden slide",
+    ]
+
+
+def test_pptx_footer_placeholders_go_to_furniture_layer(tmp_path: Path):
+    """Footer, date and slide-number placeholders are slide chrome, not body text."""
+    from lxml import etree
+    from pptx import Presentation
+    from pptx.util import Inches
+
+    ns = (
+        'xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" '
+        'xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"'
+    )
+
+    prs = Presentation()
+    for body, hidden in [("Presented text", False), ("Backup text", True)]:
+        slide = prs.slides.add_slide(prs.slide_layouts[6])
+        box = slide.shapes.add_textbox(Inches(1), Inches(1), Inches(4), Inches(1))
+        box.text_frame.text = body
+        for idx, (ph_type, text) in enumerate(
+            [("dt", "10 October 2026"), ("ftr", "Confidential"), ("sldNum", "1")],
+            start=10,
+        ):
+            slide.shapes._spTree.append(
+                etree.fromstring(
+                    f'<p:sp {ns}><p:nvSpPr><p:cNvPr id="{idx}" name="{ph_type}"/>'
+                    "<p:cNvSpPr/><p:nvPr>"
+                    f'<p:ph type="{ph_type}" idx="{idx}"/></p:nvPr></p:nvSpPr>'
+                    f"<p:spPr/><p:txBody><a:bodyPr/><a:p><a:r><a:t>{text}</a:t>"
+                    "</a:r></a:p></p:txBody></p:sp>"
+                )
+            )
+        if hidden:
+            slide._element.set("show", "0")
+
+    pptx_path = tmp_path / "footer.pptx"
+    prs.save(pptx_path)
+
+    doc = get_converter().convert(pptx_path).document
+
+    def texts(layer: ContentLayer) -> list[str]:
+        return [
+            item.text
+            for item, _ in doc.iterate_items(included_content_layers={layer})
+            if isinstance(item, TextItem)
+        ]
+
+    assert doc.export_to_markdown() == "Presented text"
+    assert texts(ContentLayer.FURNITURE) == ["10 October 2026", "Confidential", "1"]
+    assert texts(ContentLayer.INVISIBLE) == [
+        "Backup text",
+        "10 October 2026",
+        "Confidential",
+        "1",
     ]
 
 
