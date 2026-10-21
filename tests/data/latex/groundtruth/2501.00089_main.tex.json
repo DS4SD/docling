@@ -1358,7 +1358,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\documentclass[apj,twocolumn,twocolappendix]{aastex631}",
@@ -1370,7 +1370,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{amsmath,amsfonts,amssymb,bm,bbm}",
@@ -1382,7 +1382,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage[colorlinks=true]{hyperref}",
@@ -1394,7 +1394,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{xcolor}",
@@ -1406,7 +1406,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{graphbox}",
@@ -1418,7 +1418,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{lipsum}",
@@ -1430,7 +1430,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{booktabs}",

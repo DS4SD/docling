@@ -7,6 +7,7 @@ from unittest.mock import patch
 from xml.etree import ElementTree as ET
 
 import pytest
+from doclang.validation import validate
 from docling_core.types.doc import ContentLayer, DocItemLabel
 
 from docling.backend.latex_backend import LatexDocumentBackend
@@ -48,6 +49,40 @@ Important content. \term
 """
     )
     assert doc.export_to_markdown() == "Important content. FirstSecond"
+
+
+@pytest.mark.parametrize("comment", ["% comment\n", "% comment\n% more\n"])
+def test_comment_inside_definition_preserves_control_word_boundary(comment: str):
+    doc = _convert(
+        "\\documentclass{article}\n\\newcommand{\\brand}{Docling}\n"
+        "\\newcommand{\\term}[1]{\\brand" + comment + "rocks #1}\n\\begin{document}\n"
+        "Important content. \\term{now}\n\\end{document}\n"
+    )
+    assert doc.export_to_markdown() == "Important content. Doclingrocks now"
+
+
+def test_comment_inside_math_definition_preserves_control_word_boundary():
+    doc = _convert(
+        r"""\documentclass{article}
+\newcommand{\expression}{\alpha% comment
+beta}
+\begin{document}
+$\expression$
+\end{document}
+"""
+    )
+    formulas = [item.text for item in doc.texts if item.label == DocItemLabel.FORMULA]
+    assert formulas == [r"\alpha{}beta"]
+
+
+def test_default_doclang_export_validates_with_source_commands(tmp_path):
+    doc = _convert(
+        r"\documentclass{article}\newcommand{\term}{Defined}"
+        r"\begin{document}Body.\end{document}"
+    )
+    path = tmp_path / "source-commands.dclg"
+    path.write_text(doc.export_to_doclang(), encoding="utf-8")
+    validate(path, allow_empty_namespace=True, xsd_only=True)
 
 
 def test_body_footnotes_keep_source_order():
@@ -173,7 +208,7 @@ def test_verbatim_definition_is_preserved():
     assert r"\newcommand{\foo}{First}" in doc.export_to_markdown()
 
 
-def test_body_definitions_are_invisible():
+def test_body_definitions_are_supplementary():
     declarations = [
         r"\newcommand{\term}{Defined}",
         r"\newenvironment{custom}{Start}{End}",
@@ -189,10 +224,12 @@ def test_body_definitions_are_invisible():
         + "\nVisible body.\\end{document}"
     )
 
-    invisible = [
-        item.text for item in doc.texts if item.content_layer == ContentLayer.INVISIBLE
+    source_commands = [
+        item.text for item in doc.texts if item.content_layer == ContentLayer.FURNITURE
     ]
-    assert not (set(declarations) - set(invisible)), set(declarations) - set(invisible)
+    assert not (set(declarations) - set(source_commands)), set(declarations) - set(
+        source_commands
+    )
     markdown = doc.export_to_markdown()
     assert "Visible body." in markdown
     assert all(command not in markdown for command in declarations)

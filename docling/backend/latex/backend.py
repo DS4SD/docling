@@ -149,7 +149,7 @@ class LatexDocumentBackend(
             doc.add_text(label=DocItemLabel.TEXT, text=self.latex_text)
             return doc
 
-        self._preserve_invisible_commands(nodes, doc)
+        self._preserve_source_commands(nodes, doc)
 
         workers = max(1, (os.cpu_count() or 2) - 1)
         self._tikz_executor = concurrent.futures.ThreadPoolExecutor(max_workers=workers)
@@ -176,8 +176,8 @@ class LatexDocumentBackend(
 
         return doc
 
-    def _preserve_invisible_commands(self, nodes, doc: DoclingDocument) -> None:
-        """Keep definitions and ignored preamble commands in the invisible layer."""
+    def _preserve_source_commands(self, nodes, doc: DoclingDocument) -> None:
+        """Keep source commands in a layer supported by DocLang."""
         commands = [
             (start, self.latex_text[start:end])
             for start, end in self._masked_macro_spans
@@ -209,7 +209,7 @@ class LatexDocumentBackend(
             doc.add_text(
                 label=DocItemLabel.TEXT,
                 text=command,
-                content_layer=ContentLayer.INVISIBLE,
+                content_layer=ContentLayer.FURNITURE,
             )
 
     def convert(self) -> DoclingDocument:
@@ -256,7 +256,7 @@ class LatexDocumentBackend(
     @staticmethod
     def _normalize_document_text(doc: DoclingDocument) -> DoclingDocument:
         for item in doc.texts:
-            if item.content_layer == ContentLayer.INVISIBLE or item.label in {
+            if item.content_layer == ContentLayer.FURNITURE or item.label in {
                 DocItemLabel.FORMULA,
                 DocItemLabel.CODE,
             }:

@@ -240,7 +240,7 @@ def test_e2e_latex_conversions(latex_paths):
             SourceLaTeXDocSerializer(
                 doc=doc,
                 params=LaTeXParams(
-                    layers={ContentLayer.BODY, ContentLayer.INVISIBLE},
+                    layers={ContentLayer.BODY, ContentLayer.FURNITURE},
                     document_class="",
                     packages=[],
                     include_annotations=False,

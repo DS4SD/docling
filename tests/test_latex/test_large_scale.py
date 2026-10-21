@@ -21,7 +21,6 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 import pytest
-from docling_core.transforms.serializer.doclang import DocLangParams
 from docling_core.transforms.serializer.latex import LaTeXParams
 from docling_core.types.doc import ContentLayer, DocItemLabel
 from pydantic import BaseModel, ValidationError as PydanticValidationError
@@ -216,7 +215,7 @@ def test_arxiv_latex_corpus(
             row_failed = bool(backend_errors)
 
             for item in document.texts:
-                if item.content_layer == ContentLayer.INVISIBLE or item.label in {
+                if item.content_layer == ContentLayer.FURNITURE or item.label in {
                     DocItemLabel.FORMULA,
                     DocItemLabel.CODE,
                 }:
@@ -239,23 +238,7 @@ def test_arxiv_latex_corpus(
                 row_failed = True
 
             try:
-                # The current DocLang XSD does not define the invisible layer.
-                # Keep source commands in the document and JSON, but omit them
-                # from the XSD-validated corpus export.
-                dclg = (
-                    SourceDocLangSerializer(
-                        doc=document,
-                        params=DocLangParams(
-                            layers={
-                                ContentLayer.BODY,
-                                ContentLayer.FURNITURE,
-                                ContentLayer.BACKGROUND,
-                            }
-                        ),
-                    )
-                    .serialize()
-                    .text
-                )
+                dclg = SourceDocLangSerializer(doc=document).serialize().text
                 dclg_path.write_text(dclg, encoding="utf-8")
             except Exception as exc:
                 report(row, "serialize", repr(exc))
@@ -282,7 +265,7 @@ def test_arxiv_latex_corpus(
             if write_success and not row_failed:
                 try:
                     params = LaTeXParams(
-                        layers={ContentLayer.BODY, ContentLayer.INVISIBLE},
+                        layers={ContentLayer.BODY, ContentLayer.FURNITURE},
                         include_annotations=False,
                         enable_chart_tables=False,
                         document_class="",

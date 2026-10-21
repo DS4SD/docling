@@ -1363,7 +1363,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\documentclass[a4paper,fleqn]{cas-dc}",
@@ -1375,7 +1375,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage[authoryear,longnamesfirst]{natbib}",
@@ -1387,7 +1387,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\def\\tsc#1{\\csdef{#1}{\\textsc{\\lowercase{#1}}\\xspace}}",
@@ -1399,7 +1399,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\def\\floatpagepagefraction{1}",
@@ -1411,7 +1411,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\def\\textpagefraction{.001}",

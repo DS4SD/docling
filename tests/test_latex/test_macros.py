@@ -43,7 +43,7 @@ def test_latex_unknown_macro_fallback():
     assert "Known Content" in md
 
 
-def test_latex_preserves_invisible_source_commands():
+def test_latex_preserves_source_commands():
     latex_content = rb"""\documentclass{article}
 \usepackage[utf8]{inputenc}
 \newenvironment{custom}[1]{\textbf{#1}}{\par}
@@ -70,18 +70,20 @@ Body text.
         "\\newcommand{\\myterm}[1]{first #1\n\tsecond}",
         r"\def\legacy{old}",
     ]
-    invisible = [
-        item for item in doc.texts if item.content_layer == ContentLayer.INVISIBLE
+    source_commands = [
+        item for item in doc.texts if item.content_layer == ContentLayer.FURNITURE
     ]
-    assert [item.label for item in invisible] == [DocItemLabel.TEXT] * len(expected)
-    assert [item.text for item in invisible] == expected
-    assert [item.orig for item in invisible] == expected
+    assert [item.label for item in source_commands] == [DocItemLabel.TEXT] * len(
+        expected
+    )
+    assert [item.text for item in source_commands] == expected
+    assert [item.orig for item in source_commands] == expected
     assert all(command in doc.export_to_doclang() for command in expected)
     restored = DoclingDocument.model_validate_json(doc.model_dump_json())
     assert [
         item.text
         for item in restored.texts
-        if item.content_layer == ContentLayer.INVISIBLE
+        if item.content_layer == ContentLayer.FURNITURE
     ] == expected
     assert "Body text." in doc.export_to_markdown()
     assert all(command not in doc.export_to_markdown() for command in expected)
@@ -90,7 +92,7 @@ Body text.
         SourceLaTeXDocSerializer(
             doc=doc,
             params=LaTeXParams(
-                layers={ContentLayer.BODY, ContentLayer.INVISIBLE},
+                layers={ContentLayer.BODY, ContentLayer.FURNITURE},
                 document_class="",
                 packages=[],
                 include_annotations=False,
@@ -131,17 +133,17 @@ def test_latex_preserves_complete_newtheorem_declarations():
     )
     doc = LatexDocumentBackend(in_doc=in_doc, path_or_stream=stream).convert()
 
-    invisible = [
-        item.text for item in doc.texts if item.content_layer == ContentLayer.INVISIBLE
+    source_commands = [
+        item.text for item in doc.texts if item.content_layer == ContentLayer.FURNITURE
     ]
-    assert invisible[1:] == declarations
+    assert source_commands[1:] == declarations
     assert all(command in doc.export_to_doclang() for command in declarations)
 
     parsed = (
         SourceLaTeXDocSerializer(
             doc=doc,
             params=LaTeXParams(
-                layers={ContentLayer.BODY, ContentLayer.INVISIBLE},
+                layers={ContentLayer.BODY, ContentLayer.FURNITURE},
                 document_class="",
                 packages=[],
                 include_annotations=False,
@@ -287,7 +289,7 @@ def test_latex_section_heading_and_title_keep_inline_formulas():
         SourceLaTeXDocSerializer(
             doc=doc,
             params=LaTeXParams(
-                layers={ContentLayer.BODY, ContentLayer.INVISIBLE},
+                layers={ContentLayer.BODY, ContentLayer.FURNITURE},
                 document_class="",
                 packages=[],
                 include_annotations=False,

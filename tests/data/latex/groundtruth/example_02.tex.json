@@ -76,7 +76,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\documentclass{article}",

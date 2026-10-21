@@ -1,125 +1,125 @@
 <doclang version="0.7">
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \documentclass[11pt, a4paper, logo, copyright, nonumbering]{deepseek}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
 <![CDATA[\usepackage[authoryear, sort&compress, round]{natbib}]]>  </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{dblfloatfix}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{ulem}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{caption}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{dramatist}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{xspace}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{pifont}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{multirow}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{tcolorbox}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{xltabular}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{longtable}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{hyperref}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{amsfonts}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{amsmath}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{amssymb}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{lineno}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{multirow}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{adjustbox}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage[bottom]{footmisc}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{CJKutf8}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{subfigure}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{setspace}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{dsfont}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{array}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{tabularx}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{subfigure}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{xcolor}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{lipsum}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{multicol}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     <content>\makeatletter
                   
                           
@@ -138,7 +138,7 @@
 </content>
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     <content>\def\@BTrule[#1]{%
   \ifx\longtable\undefined
     \let\@BTswitch\@BTnormal
@@ -155,120 +155,120 @@
   \@BTswitch}</content>
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \makeatother
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\chapterautorefname{Chapter}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\sectionautorefname{Section}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\paragraphautorefname{Section}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\subparagraphautorefname{Section}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\paragraphautorefname{Paragraph}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\tableautorefname{Table}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\equationautorefname{Equation}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newenvironment
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \setlength{\leftmargin}{#1}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \bibliographystyle{abbrvnat}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \renewcommand{\today}{}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\dsvi}{DeepSeek 67B}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\dsvic}{DeepSeek 67B Chat}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\dsvii}{DeepSeek-V2}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\dsviic}{DeepSeek-V2 Chat}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\dsviisft}{DeepSeek-V2 Chat (SFT)}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\dsviirl}{DeepSeek-V2 Chat (RL)}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\dsattn}{MLA}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\dsmoe}{DeepSeekMoE}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\dsviilite}{DeepSeek-V2-Lite}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\dsviii}{DeepSeek-V3}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\fix}{\marginpar{FIX}}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\new}{\marginpar{NEW}}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\zdaxie}[1]{\textcolor[rgb]{0.545,0,0.071}{#1}}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newpage
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newpage
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     <content>\newpage
 </content>
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newpage
   </text>
   <heading>DeepSeek-V3 Technical Report</heading>

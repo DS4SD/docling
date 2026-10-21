@@ -1,30 +1,30 @@
 <doclang version="0.7">
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \documentclass{article}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage[preprint]{neurips_2023}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage[numbers]{natbib}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{graphicx}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage[utf8]{inputenc}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage[T1]{fontenc}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     <content>\usepackage[colorlinks,
     colorlinks=true, 
     linkcolor=blue, 
@@ -33,111 +33,111 @@
     urlcolor=blue]{hyperref}</content>
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{url}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{booktabs}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{amsfonts}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{amsmath}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{amsthm}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{amssymb}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{nicefrac}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{microtype}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{xcolor}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage[font=small,labelfont=bf]{caption}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{enumitem}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{wrapfig}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{listings}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{caption}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage[normalem]{ulem}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{xspace}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{float}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{tabularx}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage[normalem]{ulem}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\todo}[1]{{\color{red}[\textbf{G}:#1]}}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\gui}[1]{{\color{blue}[\textbf{G}:#1]}}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\llama{Llama\xspace}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\mistral{Mistral~7B\xspace}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\mistralV{Mistral~7B~v0.1\xspace}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\mistralchat{Mistral~7B~--~Instruct\xspace}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\mistralchatV{Mistral~7B~v0.1~--~Instruct\xspace}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \newcommand{\bt}{\textasciigrave}
   </text>
   <heading>Mistral~7B\xspace</heading>

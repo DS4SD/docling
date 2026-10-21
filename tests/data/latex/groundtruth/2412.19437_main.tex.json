@@ -2968,7 +2968,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\documentclass[11pt, a4paper, logo, copyright, nonumbering]{deepseek}",
@@ -2980,7 +2980,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage[authoryear, sort&compress, round]{natbib}",
@@ -2992,7 +2992,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{dblfloatfix}",
@@ -3004,7 +3004,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{ulem}",
@@ -3016,7 +3016,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{caption}",
@@ -3028,7 +3028,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{dramatist}",
@@ -3040,7 +3040,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{xspace}",
@@ -3052,7 +3052,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{pifont}",
@@ -3064,7 +3064,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{multirow}",
@@ -3076,7 +3076,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{tcolorbox}",
@@ -3088,7 +3088,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{xltabular}",
@@ -3100,7 +3100,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{longtable}",
@@ -3112,7 +3112,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{hyperref}",
@@ -3124,7 +3124,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{amsfonts}",
@@ -3136,7 +3136,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{amsmath}",
@@ -3148,7 +3148,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{amssymb}",
@@ -3160,7 +3160,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{lineno}",
@@ -3172,7 +3172,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{multirow}",
@@ -3184,7 +3184,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{adjustbox}",
@@ -3196,7 +3196,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage[bottom]{footmisc}",
@@ -3208,7 +3208,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{CJKutf8}",
@@ -3220,7 +3220,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{subfigure}",
@@ -3232,7 +3232,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{setspace}",
@@ -3244,7 +3244,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{dsfont}",
@@ -3256,7 +3256,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{array}",
@@ -3268,7 +3268,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{tabularx}",
@@ -3280,7 +3280,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{subfigure}",
@@ -3292,7 +3292,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{xcolor}",
@@ -3304,7 +3304,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{lipsum}",
@@ -3316,7 +3316,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\usepackage{multicol}",
@@ -3328,7 +3328,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\makeatletter\n                  \n                          \n                            \n                          \n            \n                           \n       \n                             \n        \n                                 \n                                                     \n                                                    \n                                                         \n             \n",
@@ -3340,7 +3340,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\def\\@BTrule[#1]{%\n  \\ifx\\longtable\\undefined\n    \\let\\@BTswitch\\@BTnormal\n  \\else\\ifx\\hline\\LT@hline\n    \\nobreak\n    \\let\\@BTswitch\\@BLTrule\n  \\else\n     \\let\\@BTswitch\\@BTnormal\n  \\fi\\fi\n  \\global\\@thisrulewidth=#1\\relax\n  \\ifnum\\@thisruleclass=\\tw@\\vskip\\@aboverulesep\\else\n  \\ifnum\\@lastruleclass=\\z@\\vskip\\@aboverulesep\\else\n  \\ifnum\\@lastruleclass=\\@ne\\vskip\\doublerulesep\\fi\\fi\\fi\n  \\@BTswitch}",
@@ -3352,7 +3352,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\makeatother",
@@ -3364,7 +3364,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\def\\chapterautorefname{Chapter}",
@@ -3376,7 +3376,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\def\\sectionautorefname{Section}",
@@ -3388,7 +3388,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\def\\paragraphautorefname{Section}",
@@ -3400,7 +3400,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\def\\subparagraphautorefname{Section}",
@@ -3412,7 +3412,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\def\\paragraphautorefname{Paragraph}",
@@ -3424,7 +3424,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\def\\tableautorefname{Table}",
@@ -3436,7 +3436,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\def\\equationautorefname{Equation}",
@@ -3448,7 +3448,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newenvironment",
@@ -3460,7 +3460,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\setlength{\\leftmargin}{#1}",
@@ -3472,7 +3472,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\bibliographystyle{abbrvnat}",
@@ -3484,7 +3484,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\renewcommand{\\today}{}",
@@ -3496,7 +3496,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newcommand{\\dsvi}{DeepSeek 67B}",
@@ -3508,7 +3508,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newcommand{\\dsvic}{DeepSeek 67B Chat}",
@@ -3520,7 +3520,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newcommand{\\dsvii}{DeepSeek-V2}",
@@ -3532,7 +3532,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newcommand{\\dsviic}{DeepSeek-V2 Chat}",
@@ -3544,7 +3544,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newcommand{\\dsviisft}{DeepSeek-V2 Chat (SFT)}",
@@ -3556,7 +3556,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newcommand{\\dsviirl}{DeepSeek-V2 Chat (RL)}",
@@ -3568,7 +3568,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newcommand{\\dsattn}{MLA}",
@@ -3580,7 +3580,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newcommand{\\dsmoe}{DeepSeekMoE}",
@@ -3592,7 +3592,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newcommand{\\dsviilite}{DeepSeek-V2-Lite}",
@@ -3604,7 +3604,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newcommand{\\dsviii}{DeepSeek-V3}",
@@ -3616,7 +3616,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newcommand{\\fix}{\\marginpar{FIX}}",
@@ -3628,7 +3628,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newcommand{\\new}{\\marginpar{NEW}}",
@@ -3640,7 +3640,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newcommand{\\zdaxie}[1]{\\textcolor[rgb]{0.545,0,0.071}{#1}}",
@@ -3652,7 +3652,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newpage",
@@ -3664,7 +3664,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newpage",
@@ -3676,7 +3676,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newpage\n",
@@ -3688,7 +3688,7 @@
         "$ref": "#/body"
       },
       "children": [],
-      "content_layer": "invisible",
+      "content_layer": "furniture",
       "label": "text",
       "prov": [],
       "orig": "\\newpage",

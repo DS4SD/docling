@@ -1,6 +1,6 @@
 <doclang version="0.7">
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \documentclass{article}
   </text>
   <heading>Sample Document</heading>

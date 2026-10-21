@@ -36,9 +36,9 @@ LaTeX formula items. Equations mixed with text or list content retain their orde
 
 For LaTeX input, front matter such as authors, affiliations, institutes, email
 addresses, and dates is stored as text items. Inline formulas remain formula
-children. The item's `meta.latex__classification` field records the source role,
-such as `author` or `affiliation`. `\thanks` and `\altaffiliation` use footnote
-items with the same classification field.
+children. The `metadata`, `authors`, and `affiliations` groups record source roles.
+`\thanks` and `\altaffiliation` use footnote items in these groups. Retained
+source commands use the furniture layer and do not appear in default Markdown.
 
 Schema-specific support:
 

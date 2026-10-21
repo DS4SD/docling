@@ -107,6 +107,7 @@ def _latex_group_end(text: str, start: int, opening: str, closing: str) -> int:
 
 
 def _strip_latex_comments(text: str) -> str:
+    command_letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@"
     parts: list[str] = []
     index = 0
     while index < len(text):
@@ -116,7 +117,22 @@ def _strip_latex_comments(text: str) -> str:
             continue
         if text[index] == "%":
             newline = text.find("\n", index)
-            index = len(text) if newline < 0 else newline + 1
+            next_index = len(text) if newline < 0 else newline + 1
+            while next_index < len(text) and text[next_index] == "%":
+                newline = text.find("\n", next_index)
+                next_index = len(text) if newline < 0 else newline + 1
+            if next_index < len(text) and text[next_index] in command_letters:
+                word_start = index
+                while word_start > 0 and text[word_start - 1] in command_letters:
+                    word_start -= 1
+                slash = word_start - 1
+                if slash >= 0 and text[slash] == "\\":
+                    while slash > 0 and text[slash - 1] == "\\":
+                        slash -= 1
+                    if (word_start - slash) % 2 == 1:
+                        # An empty group ends the command without adding text.
+                        parts.append("{}")
+            index = next_index
             continue
         parts.append(text[index])
         index += 1

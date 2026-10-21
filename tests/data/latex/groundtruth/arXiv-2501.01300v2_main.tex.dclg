@@ -1,22 +1,22 @@
 <doclang version="0.7">
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \documentclass[a4paper,fleqn]{cas-dc}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage[authoryear,longnamesfirst]{natbib}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\tsc#1{\csdef{#1}{\textsc{\lowercase{#1}}\xspace}}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\floatpagepagefraction{1}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \def\textpagefraction{.001}
   </text>
   <text>Thermodynamics of charmed hadrons across chiral crossover from lattice QCD S.Sharma et al.</text>

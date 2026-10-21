@@ -79,7 +79,7 @@ class SourceLaTeXInlineSerializer(LaTeXInlineSerializer):
 
 
 class SourceLaTeXTextSerializer(LaTeXTextSerializer):
-    """Keep invisible source commands as LaTeX rather than escaped text."""
+    """Keep source commands as LaTeX rather than escaped text."""
 
     def serialize(
         self,
@@ -89,7 +89,7 @@ class SourceLaTeXTextSerializer(LaTeXTextSerializer):
         doc: DoclingDocument,
         **kwargs: Any,
     ) -> SerializationResult:
-        if item.content_layer == ContentLayer.INVISIBLE:
+        if item.content_layer == ContentLayer.FURNITURE:
             return create_ser_result(text=item.text, span_source=item)
         if isinstance(item, SectionHeaderItem) and item.level in (4, 5):
             if item.text == "" and len(item.children) == 1:
@@ -127,7 +127,7 @@ class SourceLaTeXDocSerializer(LaTeXDocSerializer):
         for part in parts:
             items = part.get_unique_doc_items()
             if items and all(
-                item.content_layer == ContentLayer.INVISIBLE for item in items
+                item.content_layer == ContentLayer.FURNITURE for item in items
             ):
                 preamble_parts.append(part)
             else:

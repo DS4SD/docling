@@ -87,7 +87,7 @@ def test_latex_front_matter_keeps_roles_and_inline_math():
         SourceLaTeXDocSerializer(
             doc=doc,
             params=LaTeXParams(
-                layers={ContentLayer.BODY, ContentLayer.INVISIBLE},
+                layers={ContentLayer.BODY, ContentLayer.FURNITURE},
                 document_class="",
                 packages=[],
                 include_annotations=False,
@@ -148,7 +148,7 @@ def test_latex_author_inst_markers_are_inline_formulas():
         SourceLaTeXDocSerializer(
             doc=doc,
             params=LaTeXParams(
-                layers={ContentLayer.BODY, ContentLayer.INVISIBLE},
+                layers={ContentLayer.BODY, ContentLayer.FURNITURE},
                 document_class="",
                 packages=[],
                 include_annotations=False,

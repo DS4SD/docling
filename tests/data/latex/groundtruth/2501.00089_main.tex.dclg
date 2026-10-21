@@ -1,30 +1,30 @@
 <doclang version="0.7">
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \documentclass[apj,twocolumn,twocolappendix]{aastex631}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{amsmath,amsfonts,amssymb,bm,bbm}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage[colorlinks=true]{hyperref}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{xcolor}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{graphbox}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{lipsum}
   </text>
   <text>
-    <layer value="invisible"/>
+    <layer value="furniture"/>
     \usepackage{booktabs}
   </text>
   <heading>Insights on Galaxy Evolution from Interpretable Sparse Feature Networks</heading>
