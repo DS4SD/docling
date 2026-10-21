@@ -135,3 +135,37 @@ def decide_device(
 
     _log.info("Accelerator device: '%s'", device)
     return device
+
+
+def resolve_torch_dtype(
+    preferred: Optional[str], device: str, fallback: str = "float32"
+) -> Optional[str]:
+    r"""
+    Return the preferred torch dtype if the device runs it natively, otherwise the fallback.
+
+    Only bfloat16 is checked. It falls back on CUDA devices older than Ampere and
+    on CPUs without AVX-512, where PyTorch emulates it at several times the cost
+    of float32. Other dtypes and other devices (e.g. MPS, XPU) are kept as is.
+    """
+    if preferred != "bfloat16" or _device_supports_bfloat16(device):
+        return preferred
+
+    _log.info(
+        "Device '%s' has no native support for torch dtype '%s', using '%s'.",
+        device,
+        preferred,
+        fallback,
+    )
+    return fallback
+
+
+def _device_supports_bfloat16(device: str) -> bool:
+    import torch
+
+    if device.startswith("cuda"):
+        major, _ = torch.cuda.get_device_capability(device)
+        return major >= 8
+    if device == "cpu":
+        # The oneDNN bfloat16 kernels need AVX-512; AMX CPUs also report AVX512.
+        return torch.backends.cpu.get_cpu_capability() == "AVX512"
+    return True
