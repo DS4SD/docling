@@ -69,6 +69,7 @@ try:  # pragma: no cover - import-time guard
     from docx.document import Document as DocxDocument
     from docx.enum.style import WD_STYLE_TYPE
     from docx.opc.constants import RELATIONSHIP_TYPE as DOCX_RT
+    from docx.opc.part import XmlPart
     from docx.oxml import parse_xml as docx_parse_xml
     from docx.oxml.ns import qn
     from docx.oxml.simpletypes import ST_Merge
@@ -895,6 +896,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         self._pending_code_blank_lines: int = 0
         # The document default style's font is not evidence of code.
         self._default_paragraph_style: BaseStyle | None = None
+        # Whether any part uses w:vanish; most documents do not, and then the
+        # per-run hidden checks are skipped.
+        self._uses_hidden_text = False
 
         self.docx_obj = self.load_msword_file(
             path_or_stream=self.path_or_stream, document_hash=self.document_hash
@@ -903,6 +907,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             self.valid = True
             self.current_part = self.docx_obj.part
             _normalize_list_style_types(self.docx_obj)
+            self._uses_hidden_text = any(
+                part.element.xpath(".//w:vanish")
+                for part in self.docx_obj.part.package.iter_parts()
+                if isinstance(part, XmlPart)
+            )
             self._default_paragraph_style = self.docx_obj.styles.default(
                 WD_STYLE_TYPE.PARAGRAPH
             )
@@ -2337,10 +2346,51 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         return None
 
+    def _is_hidden_run(
+        self, run: Run, paragraph_style_chain: Sequence[CharacterStyle]
+    ) -> bool:
+        """Return True if Word hides ``run`` (the Hidden font property, ``w:vanish``).
+
+        The first explicit setting wins: the run's own formatting, then its
+        character style chain, then the paragraph style chain.
+        """
+        if not self._uses_hidden_text:
+            return False
+        fonts = (
+            run.font,
+            *(style.font for style in self._get_style_chain(run.style)),
+            *(style.font for style in paragraph_style_chain),
+        )
+        for font in fonts:
+            if font.hidden is not None:
+                return font.hidden
+        return False
+
+    def _is_hidden_paragraph(self, paragraph: Paragraph) -> bool:
+        """Return True if ``paragraph`` has text and Word hides all of it."""
+        if not self._uses_hidden_text:
+            return False
+        runs = [
+            Run(r_el, paragraph)
+            for r_el in paragraph._p.iter(f"{_W_NS_CLARK}r")
+            if r_el.find(f"{_W_NS_CLARK}t") is not None
+        ]
+        return bool(runs) and all(
+            self._is_hidden_run(run, self._get_style_chain(paragraph.style))
+            for run in runs
+        )
+
     def _iter_paragraph_content(
         self, paragraph: Paragraph
     ) -> list[tuple[str, Formatting | None, AnyUrl | Path | None]]:
         content: list[tuple[str, Formatting | None, AnyUrl | Path | None]] = []
+        # A fully hidden paragraph keeps its text; it goes to the invisible layer.
+        keep_hidden = self._is_hidden_paragraph(paragraph)
+
+        def _is_shown(run: Run) -> bool:
+            return keep_hidden or not self._is_hidden_run(
+                run, self._get_style_chain(paragraph.style)
+            )
 
         def _get_children_recursive(node):
             for child in node:
@@ -2354,24 +2404,24 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             tag_name = etree.QName(child).localname
 
             if tag_name == "sdt":
-                text = "".join(
-                    child.xpath(
-                        ".//w:sdtContent//w:t/text()",
-                        namespaces=_OOXML_NAMESPACES,
+                runs = [
+                    run
+                    for run in (
+                        Run(r_el, paragraph)
+                        for r_el in child.xpath(
+                            ".//w:sdtContent//w:r",
+                            namespaces=_OOXML_NAMESPACES,
+                        )
                     )
-                )
+                    if _is_shown(run)
+                ]
+                text = "".join(t for run in runs for t in run._r.xpath("./w:t/text()"))
                 if len(text) == 0:
                     continue
 
-                runs = child.xpath(
-                    ".//w:sdtContent//w:r",
-                    namespaces=_OOXML_NAMESPACES,
-                )
                 fmt = (
                     self._get_format_from_run(
-                        Run(runs[0], paragraph),
-                        paragraph,
-                        self._get_style_chain(paragraph.style),
+                        runs[0], paragraph, self._get_style_chain(paragraph.style)
                     )
                     if runs
                     else None
@@ -2392,11 +2442,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 # Hyperlink.text and Hyperlink.runs only read the direct w:r
                 # children, so also read the runs nested in the same wrappers
                 # as above (e.g. a tracked insertion inside the link).
-                runs = [
+                all_runs = [
                     Run(r_el, paragraph)
                     for r_el in _get_children_recursive(child)
                     if r_el.tag == f"{_W_NS_CLARK}r"
                 ]
+                runs = [run for run in all_runs if _is_shown(run)]
+                if all_runs and not runs:
+                    continue  # a fully hidden link
                 content.append(
                     (
                         "".join(run.text for run in runs),
@@ -2412,7 +2465,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                         self._get_hyperlink_target(item),
                     )
                 )
-            elif isinstance(item, Run):
+            elif _is_shown(item):
                 content.append(
                     (
                         item.text,
@@ -2933,6 +2986,17 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     ) -> list[RefItem]:
         elem_ref: list[RefItem] = []
         paragraph = Paragraph(element, self.docx_obj)
+        if self.content_layer != ContentLayer.INVISIBLE and self._is_hidden_paragraph(
+            paragraph
+        ):
+            # Word does not show it: keep it, like a hidden slide or sheet,
+            # but out of the default exports.
+            previous_layer = self.content_layer
+            self.content_layer = ContentLayer.INVISIBLE
+            try:
+                return self._handle_text_elements(element, doc, skip_empty_text)
+            finally:
+                self.content_layer = previous_layer
         paragraph_elements = self._get_paragraph_elements(paragraph)
         text, equations = self._handle_equations_in_text(
             element=element, text=self._get_paragraph_text(paragraph)
@@ -3870,7 +3934,26 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     element=cell._element, text=cell.text
                 )
                 if len(equations) == 0:
-                    text = cell.text
+                    # cell.text includes hidden runs, so rebuild it from the
+                    # paragraphs' visible content when the cell has any. A cell
+                    # has no layer of its own, so fully hidden paragraphs are
+                    # left out.
+                    has_hidden = any(
+                        self._is_hidden_run(
+                            Run(r_el, p), self._get_style_chain(p.style)
+                        )
+                        for p in cell.paragraphs
+                        for r_el in p._p.xpath(".//w:r")
+                    )
+                    text = (
+                        "\n".join(
+                            self._get_paragraph_text(p)
+                            for p in cell.paragraphs
+                            if not self._is_hidden_paragraph(p)
+                        )
+                        if has_hidden
+                        else cell.text
+                    )
                 else:
                     text = text.replace("<eq>", "$").replace("</eq>", "$")
 
