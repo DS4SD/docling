@@ -141,6 +141,25 @@ def test_pa_preserves_per_pixel_alpha_in_png() -> None:
         assert decoded.getpixel((1, 0)) == (10, 20, 30, 200)
 
 
+def test_integer_image_preserves_png_values() -> None:
+    image = Image.new("I", (6, 1))
+    image.putdata([-1, 0, 255, 256, 65535, 65536])
+    buffer = BytesIO()
+
+    normalize_image_for_png(image).save(buffer, format="PNG")
+
+    buffer.seek(0)
+    with Image.open(buffer) as decoded:
+        assert [decoded.getpixel((x, 0)) for x in range(6)] == [
+            0,
+            0,
+            255,
+            256,
+            65535,
+            65535,
+        ]
+
+
 @pytest.mark.parametrize(
     "mode, color", [("RGB", (10, 20, 30)), ("RGBA", (10, 20, 30, 40))]
 )
