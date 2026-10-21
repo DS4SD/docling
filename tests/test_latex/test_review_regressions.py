@@ -72,7 +72,45 @@ $\expression$
 """
     )
     formulas = [item.text for item in doc.texts if item.label == DocItemLabel.FORMULA]
-    assert formulas == [r"\alpha{}beta"]
+    assert formulas == [r"\alpha beta"]
+
+
+def test_comment_before_sqrt_argument_keeps_argument():
+    doc = _convert(
+        r"""\documentclass{article}
+\newcommand{\expression}{\sqrt% comment
+x}
+\begin{document}
+$\expression$
+\end{document}
+"""
+    )
+    equivalent = _convert(
+        r"\documentclass{article}\newcommand{\expression}{\sqrt x}"
+        r"\begin{document}$\expression$\end{document}"
+    )
+    formulas = [item.text for item in doc.texts if item.label == DocItemLabel.FORMULA]
+    assert formulas == [r"\sqrt x"]
+    assert doc.export_to_markdown() == equivalent.export_to_markdown() == r"$\sqrt x$"
+
+
+def test_comment_before_frac_arguments_keeps_arguments():
+    doc = _convert(
+        r"""\documentclass{article}
+\newcommand{\expression}{\frac% comment
+ab}
+\begin{document}
+$\expression$
+\end{document}
+"""
+    )
+    equivalent = _convert(
+        r"\documentclass{article}\newcommand{\expression}{\frac ab}"
+        r"\begin{document}$\expression$\end{document}"
+    )
+    formulas = [item.text for item in doc.texts if item.label == DocItemLabel.FORMULA]
+    assert formulas == [r"\frac ab"]
+    assert doc.export_to_markdown() == equivalent.export_to_markdown() == r"$\frac ab$"
 
 
 def test_default_doclang_export_validates_with_source_commands(tmp_path):

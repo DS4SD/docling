@@ -130,8 +130,8 @@ def _strip_latex_comments(text: str) -> str:
                     while slash > 0 and text[slash - 1] == "\\":
                         slash -= 1
                     if (word_start - slash) % 2 == 1:
-                        # An empty group ends the command without adding text.
-                        parts.append("{}")
+                        # A space ends the command without taking its argument.
+                        parts.append(" ")
             index = next_index
             continue
         parts.append(text[index])
