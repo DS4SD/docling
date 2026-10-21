@@ -201,8 +201,8 @@ class TransformersImageClassificationEngine(HfImageClassificationEngineBase):
             batch_outputs.append(
                 self._build_output(
                     input_item=input_item,
-                    labels=labels,
-                    scores=scores,
+                    labels=labels.tolist(),
+                    scores=scores.tolist(),
                 )
             )
 
