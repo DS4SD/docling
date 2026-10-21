@@ -39,6 +39,7 @@ from docling.backend.opendocument_backend import (
     OdpDocumentBackend,
     OdsDocumentBackend,
     OdtDocumentBackend,
+    _resolve_paragraph_list_style,
 )
 from docling.datamodel.base_models import ConversionStatus, DocumentStream, InputFormat
 from docling.datamodel.document import ConversionResult, DoclingDocument, InputDocument
@@ -2177,3 +2178,195 @@ def test_odp_speaker_notes_go_to_notes_layer(tmp_path: Path):
     assert document.export_to_markdown() == (
         "# Slide 1\n\nSlide text 1\n\n# Slide 2\n\nSlide text 2"
     )
+
+
+def _build_odt_with_paragraph_list_styles(path: Path) -> Path:
+    """ODT whose paragraphs carry ``style:list-style-name`` (no ``<text:list>``).
+
+    Covers the direct attribute, inheritance through one and through two
+    ``style:parent-style-name`` levels, and a paragraph style pointing at a
+    missing list style.
+    """
+    doc = OdfDocument("text")
+    body = doc.body
+    body.clear()
+
+    bullet = Style("list", name="BulletList")
+    bullet.set_level_style(1, bullet_char="•")
+    numbered = Style("list", name="NumberedList")
+    numbered.set_level_style(1, num_format="1", suffix=".")
+    doc.insert_style(bullet)
+    doc.insert_style(numbered)
+
+    def paragraph_style(
+        name: str,
+        list_style_name: str | None = None,
+        parent_style_name: str | None = None,
+    ) -> Style:
+        style = Style("paragraph", name=name)
+        if list_style_name is not None:
+            style.set_attribute("style:list-style-name", list_style_name)
+        if parent_style_name is not None:
+            style.set_attribute("style:parent-style-name", parent_style_name)
+        return style
+
+    for style in (
+        paragraph_style("BulletPara", list_style_name="BulletList"),
+        paragraph_style("ChildPara", parent_style_name="BulletPara"),
+        paragraph_style("GrandchildPara", parent_style_name="ChildPara"),
+        paragraph_style("NumberedPara", list_style_name="NumberedList"),
+        paragraph_style("DanglingPara", list_style_name="MissingList"),
+    ):
+        doc.insert_style(style)
+
+    def styled_paragraph(text: str, style_name: str) -> Paragraph:
+        paragraph = Paragraph(text)
+        paragraph.style = style_name
+        return paragraph
+
+    body.append(styled_paragraph("bullet one", "BulletPara"))
+    body.append(styled_paragraph("bullet two (child style)", "ChildPara"))
+    body.append(styled_paragraph("bullet three (grandchild style)", "GrandchildPara"))
+    body.append(Paragraph("a plain paragraph"))
+    body.append(styled_paragraph("number one", "NumberedPara"))
+    body.append(styled_paragraph("number two", "NumberedPara"))
+    body.append(styled_paragraph("dangling list style", "DanglingPara"))
+    doc.save(str(path))
+    return path
+
+
+def test_odt_paragraph_list_style_name_becomes_list_item(tmp_path: Path):
+    """Paragraphs styled via ``style:list-style-name`` become list items.
+
+    Regression test for https://github.com/docling-project/docling/issues/4950:
+    per ODF 1.2 such paragraphs are list items even when they are not enclosed
+    in a ``<text:list>`` element.
+    """
+    path = _build_odt_with_paragraph_list_styles(tmp_path / "style_list_name.odt")
+
+    res = DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path)
+    document = res.document
+    list_items = [
+        item
+        for item, _level in document.iterate_items()
+        if isinstance(item, TextItem) and item.label == "list_item"
+    ]
+
+    assert [(item.text, item.enumerated, item.marker) for item in list_items] == [
+        ("bullet one", False, ""),
+        ("bullet two (child style)", False, ""),
+        ("bullet three (grandchild style)", False, ""),
+        ("number one", True, "1."),
+        ("number two", True, "2."),
+    ]
+    # Consecutive paragraphs sharing a list style share one list group; the
+    # plain paragraph in between breaks the group.
+    groups = [item.parent.resolve(document) for item in list_items]
+    assert groups[0] == groups[1] == groups[2]
+    assert groups[3] == groups[4]
+    assert groups[2] != groups[3]
+    # A paragraph style pointing at a missing list style stays plain text.
+    assert any(
+        item.text == "dangling list style" and item.label == "text"
+        for item in document.texts
+    )
+
+
+def test_odt_paragraph_list_style_name_multi_run_item(tmp_path: Path):
+    """A styled paragraph with several text runs keeps its runs in the item."""
+    path = tmp_path / "style_list_name_runs.odt"
+    doc = OdfDocument("text")
+    body = doc.body
+    body.clear()
+
+    bullet = Style("list", name="BulletList")
+    bullet.set_level_style(1, bullet_char="•")
+    doc.insert_style(bullet)
+    style = Style("paragraph", name="BulletPara")
+    style.set_attribute("style:list-style-name", "BulletList")
+    doc.insert_style(style)
+
+    paragraph = Paragraph("mixed ")
+    paragraph.append(Span("bold text"))
+    paragraph.append(" tail")
+    paragraph.style = "BulletPara"
+    body.append(paragraph)
+    doc.save(str(path))
+
+    res = DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path)
+    document = res.document
+    list_items = [
+        item
+        for item, _level in document.iterate_items()
+        if isinstance(item, TextItem) and item.label == "list_item"
+    ]
+    assert len(list_items) == 1
+    inline_group = list_items[0].children[0].resolve(document)
+    assert isinstance(inline_group, InlineGroup)
+    assert [child.resolve(document).text for child in inline_group.children] == [
+        "mixed",
+        " ",
+        "bold text",
+        " ",
+        "tail",
+    ]
+
+
+def test_resolve_paragraph_list_style(tmp_path: Path):
+    path = _build_odt_with_paragraph_list_styles(tmp_path / "style_list_name.odt")
+    odf_obj = OdfDocument(str(path))
+
+    assert _resolve_paragraph_list_style(odf_obj, "BulletPara") == "BulletList"
+    assert _resolve_paragraph_list_style(odf_obj, "ChildPara") == "BulletList"
+    # The name lives two parent levels up; the whole chain must be walked.
+    assert _resolve_paragraph_list_style(odf_obj, "GrandchildPara") == "BulletList"
+    assert _resolve_paragraph_list_style(odf_obj, "NumberedPara") == "NumberedList"
+    assert _resolve_paragraph_list_style(odf_obj, "DanglingPara") == "MissingList"
+    assert _resolve_paragraph_list_style(odf_obj, "NoSuchStyle") is None
+    assert _resolve_paragraph_list_style(odf_obj, None) is None
+    assert _resolve_paragraph_list_style(None, "BulletPara") is None
+
+
+def test_resolve_paragraph_list_style_cyclic_parent(tmp_path: Path):
+    """A ``style:parent-style-name`` cycle must not hang the resolver."""
+    path = tmp_path / "cyclic.odt"
+    doc = OdfDocument("text")
+    doc.body.clear()
+    cyclic = Style("paragraph", name="CyclicPara")
+    cyclic.set_attribute("style:parent-style-name", "CyclicPara")
+    doc.insert_style(cyclic)
+    doc.save(str(path))
+
+    odf_obj = OdfDocument(str(path))
+    assert _resolve_paragraph_list_style(odf_obj, "CyclicPara") is None
+
+
+def test_odt_paragraph_list_style_name_in_table_cell(tmp_path: Path):
+    """A styled paragraph inside a table cell becomes a list item as well."""
+    path = tmp_path / "style_list_name_cell.odt"
+    doc = OdfDocument("text")
+    body = doc.body
+    body.clear()
+
+    bullet = Style("list", name="BulletList")
+    bullet.set_level_style(1, bullet_char="•")
+    doc.insert_style(bullet)
+    style = Style("paragraph", name="BulletPara")
+    style.set_attribute("style:list-style-name", "BulletList")
+    doc.insert_style(style)
+
+    table = Table("T", width=1, height=1)
+    cell = table.get_cell("A1")
+    bullet_para = Paragraph("cell bullet")
+    bullet_para.style = "BulletPara"
+    cell.append(bullet_para)
+    cell.append(Paragraph("cell plain"))
+    table.set_cell("A1", cell)
+    body.append(table)
+    doc.save(str(path))
+
+    res = DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path)
+    document = res.document
+    by_text = {item.text: item.label for item in document.texts}
+    assert by_text["cell bullet"] == "list_item"
+    assert by_text["cell plain"] == "text"
