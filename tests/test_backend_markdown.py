@@ -1306,3 +1306,61 @@ def test_rich_table_cell_no_stray_body_items():
     # The only direct body child must be the table itself.
     body_crefs = {ref.cref for ref in doc.body.children}
     assert body_crefs == {"#/tables/0"}
+
+
+def test_task_list_items_become_checkboxes():
+    """GFM task-list items keep their state, as the HTML backend does (#4930)."""
+    markdown = "- [x] done item\n- [ ] open item\n- [X] upper case\n- plain item\n"
+    conv_result = get_converter().convert_string(markdown, format=InputFormat.MD)
+    assert conv_result.status == ConversionStatus.SUCCESS
+
+    doc = conv_result.document
+    assert [(t.label, t.text) for t in doc.texts] == [
+        (DocItemLabel.CHECKBOX_SELECTED, "done item"),
+        (DocItemLabel.CHECKBOX_UNSELECTED, "open item"),
+        (DocItemLabel.CHECKBOX_SELECTED, "upper case"),
+        (DocItemLabel.LIST_ITEM, "plain item"),
+    ]
+    # the checkboxes stay inside the list
+    assert {t.parent.cref for t in doc.texts} == {"#/groups/0"}
+    assert doc.export_to_markdown() == (
+        "- [x] done item\n- [ ] open item\n- [x] upper case\n- plain item"
+    )
+
+
+def test_nested_task_list_items_become_checkboxes():
+    markdown = "- [x] parent\n  - [ ] child\n- plain\n"
+    conv_result = get_converter().convert_string(markdown, format=InputFormat.MD)
+    assert conv_result.status == ConversionStatus.SUCCESS
+
+    doc = conv_result.document
+    assert [(t.label, t.text) for t in doc.texts] == [
+        (DocItemLabel.CHECKBOX_SELECTED, "parent"),
+        (DocItemLabel.CHECKBOX_UNSELECTED, "child"),
+        (DocItemLabel.LIST_ITEM, "plain"),
+    ]
+    assert doc.export_to_markdown() == "- [x] parent\n    - [ ] child\n- plain"
+
+
+@pytest.mark.parametrize(
+    "markdown",
+    [
+        "[x] I accept the terms\n",
+        "[ ] Not yet decided\n",
+        "> [x] quoted\n",
+        "- item\n\n  [x] second paragraph of the item\n",
+    ],
+)
+def test_task_markers_outside_a_list_items_first_paragraph_are_text(markdown):
+    """GFM task markers only apply to a list item's first paragraph; elsewhere the
+    brackets are text and must not be dropped (#4930)."""
+    conv_result = get_converter().convert_string(markdown, format=InputFormat.MD)
+    assert conv_result.status == ConversionStatus.SUCCESS
+
+    texts = [t.text for t in conv_result.document.texts]
+    marker = "[x]" if "[x]" in markdown else "[ ]"
+    assert any(text.startswith(f"{marker} ") for text in texts), texts
+    assert not any(
+        t.label in (DocItemLabel.CHECKBOX_SELECTED, DocItemLabel.CHECKBOX_UNSELECTED)
+        for t in conv_result.document.texts
+    )
