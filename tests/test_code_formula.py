@@ -88,3 +88,63 @@ def test_formula_conversion_with_page_range():
     gt = "a ^ { 2 } + 8 = 1 2"
     predicted = formula_blocks[0].text
     assert predicted == gt, f"mismatch in text {predicted=}, {gt=}"
+
+
+@pytest.mark.parametrize(
+    ("cpu_capability", "expected"), [("AVX2", "float32"), ("AVX512", "bfloat16")]
+)
+def test_code_formula_model_dtype_follows_cpu(
+    monkeypatch, tmp_path, cpu_capability, expected
+):
+    """CodeFormulaV2 is not loaded in emulated bfloat16 on CPUs without it."""
+    import torch
+    import transformers
+    from packaging import version
+
+    from docling.datamodel.accelerator_options import AcceleratorOptions
+    from docling.models.stages.code_formula.code_formula_model import (
+        CodeFormulaModel,
+        CodeFormulaModelOptions,
+    )
+
+    captured_kwargs = {}
+
+    class FakeModel:
+        def eval(self):
+            return None
+
+    def fake_model_from_pretrained(*args, **kwargs):
+        captured_kwargs.update(kwargs)
+        return FakeModel()
+
+    class FakeTokenizer:
+        model_max_length = 8192
+
+    class FakeProcessor:
+        tokenizer = FakeTokenizer()
+
+    monkeypatch.setattr(
+        torch.backends.cpu, "get_cpu_capability", lambda: cpu_capability
+    )
+    monkeypatch.setattr(
+        transformers.AutoProcessor,
+        "from_pretrained",
+        lambda *args, **kwargs: FakeProcessor(),
+    )
+    monkeypatch.setattr(
+        transformers.AutoModelForImageTextToText,
+        "from_pretrained",
+        fake_model_from_pretrained,
+    )
+
+    CodeFormulaModel(
+        enabled=True,
+        artifacts_path=tmp_path,
+        options=CodeFormulaModelOptions(),
+        accelerator_options=AcceleratorOptions(device="cpu"),
+    )
+
+    dtype_arg_name = (
+        "dtype" if version.parse(transformers.__version__).major >= 5 else "torch_dtype"
+    )
+    assert captured_kwargs.get(dtype_arg_name) == expected

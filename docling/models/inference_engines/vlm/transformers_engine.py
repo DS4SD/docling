@@ -50,7 +50,7 @@ from docling.models.utils.generation_utils import (
 )
 from docling.models.utils.hf_model_download import HuggingFaceModelDownloadMixin
 from docling.models.utils.hf_stopping_criteria import HFStoppingCriteriaWrapper
-from docling.utils.accelerator_utils import decide_device
+from docling.utils.accelerator_utils import decide_device, resolve_torch_dtype
 from docling.utils.granite_vision_utils import (
     GRANITE_VISION_4_REPO_ID,
     granite_vision_4_needs_remote_code,
@@ -271,11 +271,14 @@ class TransformersVlmEngine(BaseVlmEngine, HuggingFaceModelDownloadMixin):
             tokenizer.padding_side = "left"
 
         # Resolve torch_dtype: options override > model_config field > extra_config > None
+        # A dtype from the model config is a preference: fall back if the device
+        # cannot run it natively. An explicit options dtype is used as is.
         torch_dtype = self.options.torch_dtype
         if torch_dtype is None and self.model_config is not None:
-            torch_dtype = (
+            torch_dtype = resolve_torch_dtype(
                 self.model_config.torch_dtype
-                or self.model_config.extra_config.get("torch_dtype")
+                or self.model_config.extra_config.get("torch_dtype"),
+                self.device,  # type: ignore[arg-type]
             )
 
         # Load model
