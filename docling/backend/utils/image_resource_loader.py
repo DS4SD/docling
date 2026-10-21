@@ -27,7 +27,7 @@ from urllib.parse import urljoin, urlparse, urlsplit
 import certifi
 import requests
 import urllib3
-from docling_core.types.doc.document import ImageRef
+from docling_core.types.doc.document import ImageRef, Size
 from PIL import Image, UnidentifiedImageError
 from pydantic import ValidationError
 from requests.utils import get_environ_proxies, select_proxy
@@ -38,6 +38,15 @@ _log = logging.getLogger(__name__)
 
 
 _IPAddress = Union[ipaddress.IPv4Address, ipaddress.IPv6Address]
+
+# The media type of a base64 `data:` URI, e.g. `image/svg+xml` in
+# `data:image/svg+xml;base64,...`.
+_DATA_URI_MIMETYPE_RE = re.compile(r"^data:([^;,]+)[^,]*;base64,", re.IGNORECASE)
+# The root element of an SVG document and its attributes. The element is matched
+# with a regular expression instead of parsed, so that malformed or hostile
+# documents (entity expansions included) cannot affect the loader.
+_SVG_ELEMENT_RE = re.compile(rb"<svg\b[^>]*>")
+_SVG_ATTRIBUTE_RE = re.compile(rb"""\b([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')""")
 
 # NAT64 well-known prefix (RFC 6052): 64:ff9b::/96 embeds an IPv4 address in its
 # low 32 bits.
@@ -252,6 +261,70 @@ class RemoteResource:
     content: bytes
 
 
+def _svg_length(value: Optional[bytes]) -> Optional[float]:
+    """Parse an SVG length in user units, ignoring other units."""
+    if value is None:
+        return None
+    match = re.fullmatch(rb"\s*([0-9]*\.?[0-9]+)\s*(?:px)?", value)
+    return float(match.group(1)) if match else None
+
+
+def _svg_declared_size(data: bytes) -> tuple[float, float]:
+    """Return the size an SVG document declares, or ``(0.0, 0.0)``.
+
+    Only the ``width``/``height`` of the root element and, when one of them is
+    missing, its ``viewBox`` are read. A percentage or a unit other than ``px``
+    declares no size in user units, so it is ignored.
+    """
+    if (element := _SVG_ELEMENT_RE.search(data)) is None:
+        return 0.0, 0.0
+
+    attributes = {
+        name.lower(): double_quoted or single_quoted
+        for name, double_quoted, single_quoted in _SVG_ATTRIBUTE_RE.findall(
+            element.group(0)
+        )
+    }
+    width = _svg_length(attributes.get(b"width"))
+    height = _svg_length(attributes.get(b"height"))
+    if (view_box := attributes.get(b"viewbox")) is not None:
+        parts = re.split(rb"[\s,]+", view_box.strip())
+        if len(parts) == 4:
+            try:
+                box_width, box_height = float(parts[2]), float(parts[3])
+            except ValueError:
+                pass
+            else:
+                width = width if width is not None else box_width
+                height = height if height is not None else box_height
+    return width or 0.0, height or 0.0
+
+
+def _inline_svg_image_ref(src_url: str, data: bytes) -> Optional[ImageRef]:
+    """Keep the payload of an inline SVG data URI as an image resource.
+
+    Pillow cannot decode SVG, so there are no pixels to build the ref from. The
+    ref instead carries the declared media type, the size the document declares,
+    and the original data URI, which the Markdown and HTML serializers emit
+    as-is, so the payload survives exports and round trips. Rendering the SVG
+    into an image needs an SVG renderer; ``ImageRef.pil_image`` is therefore not
+    available for such a ref.
+
+    Returns ``None`` for any other source, and the caller keeps its warning.
+    """
+    declared = _DATA_URI_MIMETYPE_RE.match(src_url)
+    if declared is None or declared.group(1).lower() != "image/svg+xml":
+        return None
+
+    width, height = _svg_declared_size(data)
+    return ImageRef(
+        mimetype="image/svg+xml",
+        dpi=72,
+        size=Size(width=width, height=height),
+        uri=src_url,
+    )
+
+
 class ImageResourceLoader:
     """Resolve and load image resources for declarative document backends.
 
@@ -347,7 +420,15 @@ class ImageResourceLoader:
         try:
             img_data = self.load_image_data(src_url, base_path)
             if img_data:
-                img = Image.open(BytesIO(img_data))
+                try:
+                    img = Image.open(BytesIO(img_data))
+                except UnidentifiedImageError:
+                    # Pillow cannot decode an inline SVG. Keep its decoded
+                    # payload as the image resource rather than losing the image
+                    # of the picture. Any other payload keeps the warning.
+                    if (svg_ref := _inline_svg_image_ref(src_url, img_data)) is None:
+                        raise
+                    return svg_ref
                 return ImageRef.from_pil(img, dpi=int(img.info.get("dpi", (72,))[0]))
         except (
             requests.RequestException,

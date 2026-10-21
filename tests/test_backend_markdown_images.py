@@ -1,6 +1,8 @@
 # SPDX-FileCopyrightText: The Docling Contributors
 # SPDX-License-Identifier: MIT
 
+import base64
+import warnings
 from pathlib import Path
 
 import pytest
@@ -13,6 +15,16 @@ from docling.document_converter import DocumentConverter, MarkdownFormatOption
 from tests.test_backend_markdown import _convert_markdown, _png_data_uri
 
 pytestmark = pytest.mark.cross_platform
+
+_SVG_RECT = (
+    '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="80">'
+    '<rect width="120" height="80" fill="#1e64c8"/></svg>'
+)
+
+
+def _svg_data_uri(svg: str = _SVG_RECT) -> str:
+    encoded = base64.b64encode(svg.encode()).decode()
+    return f"data:image/svg+xml;base64,{encoded}"
 
 
 @pytest.mark.parametrize(
@@ -163,3 +175,52 @@ def test_converter_keeps_an_image_inside_a_markdown_table_cell() -> None:
     assert "data:image/png;base64," in doc.export_to_markdown(
         image_mode=ImageRefMode.EMBEDDED
     )
+
+
+@pytest.mark.parametrize("fetch_images", [True, False])
+def test_inline_svg_data_uri_keeps_the_image(fetch_images: bool) -> None:
+    svg_uri = _svg_data_uri()
+    markdown = f"![red box]({_png_data_uri(120, 80)})\n\n![blue box]({svg_uri})\n"
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        doc = _convert_markdown(
+            markdown, MarkdownBackendOptions(fetch_images=fetch_images)
+        )
+
+    assert len(doc.pictures) == 2
+    if not fetch_images:
+        assert all(picture.image is None for picture in doc.pictures)
+        return
+
+    assert not [w for w in caught if "Could not process an image" in str(w.message)]
+    png_picture, svg_picture = doc.pictures
+    # A raster payload still goes through Pillow.
+    assert png_picture.image is not None
+    assert png_picture.image.mimetype == "image/png"
+    assert png_picture.get_image(doc).getpixel((0, 0)) == (255, 0, 0)
+    # Pillow cannot decode SVG, so the picture keeps the decoded payload.
+    assert svg_picture.image is not None
+    assert svg_picture.image.mimetype == "image/svg+xml"
+    assert svg_picture.image.size.as_tuple() == (120.0, 80.0)
+    assert str(svg_picture.image.uri) == svg_uri
+
+    # The payload survives an export and a round trip through the model.
+    assert svg_uri in doc.export_to_markdown(image_mode=ImageRefMode.EMBEDDED)
+    restored = DoclingDocument.model_validate(doc.export_to_dict())
+    assert len(restored.pictures) == 2
+    assert restored.pictures[1].image is not None
+    assert restored.pictures[1].image.mimetype == "image/svg+xml"
+    assert str(restored.pictures[1].image.uri) == svg_uri
+
+
+def test_inline_svg_data_uri_size_comes_from_the_view_box() -> None:
+    svg_uri = _svg_data_uri(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 16">'
+        '<rect width="32" height="16" fill="#1e64c8"/></svg>'
+    )
+    doc = _convert_markdown(
+        f"![blue box]({svg_uri})\n", MarkdownBackendOptions(fetch_images=True)
+    )
+    assert len(doc.pictures) == 1
+    assert doc.pictures[0].image is not None
+    assert doc.pictures[0].image.size.as_tuple() == (32.0, 16.0)
