@@ -27,25 +27,28 @@ _DELIMITERS: Final[str] = ",;\t|:"
 
 
 def _sniff_dialect(head: str, read_sample: Callable[[], str]) -> type[csv.Dialect]:
-    """Detect the dialect from the first line, falling back to a larger sample.
+    """Detect the dialect from a sample of rows, falling back to the first line.
 
-    The first line is enough for most files and is what the sniffer reads best:
-    it rejects samples whose rows hold different numbers of delimiters. A
-    successful sniff must also parse as a complete record: a line cut inside a
-    quoted field can otherwise mistake its content for a delimiter. Retrying
-    with a sample that closes the quote recovers those.
-    `read_sample` is only called on that fallback path.
+    A multi-line sample allows the sniffer to measure row-to-row delimiter
+    consistency, avoiding misidentifying characters inside cell values or
+    column headers (such as commas in 'Weight (kg, net)') as the delimiter.
+    If multi-line sniffing fails (for example, on a ragged file with varying
+    numbers of columns across rows), fall back to sniffing the first line alone,
+    validating that it parses as a complete record.
 
     Raises csv.Error if neither can be detected.
     """
     try:
+        dialect = csv.Sniffer().sniff(read_sample(), _DELIMITERS)
+        dialect.quotechar = '"'
+        return dialect
+    except csv.Error:
         dialect = csv.Sniffer().sniff(head, _DELIMITERS)
+        dialect.quotechar = '"'
         # Sniffer can succeed on a delimiter inside an unfinished quoted field.
         # Only trust the first-line dialect if it also parses a complete record.
         next(csv.reader([head], dialect=dialect, doublequote=True, strict=True))
         return dialect
-    except csv.Error:
-        return csv.Sniffer().sniff(read_sample(), _DELIMITERS)
 
 
 class CsvDocumentBackend(DeclarativeDocumentBackend):
@@ -95,9 +98,9 @@ class CsvDocumentBackend(DeclarativeDocumentBackend):
     def convert(self) -> DoclingDocument:
         """Parse the CSV content into a DoclingDocument.
 
-        Dialect detection sniffs and validates the first line; a larger sample
-        is only read when that fails (e.g. a quoted field spanning multiple
-        lines cuts the first line mid-quote). If sniffing fails entirely, `csv.excel`
+        Dialect detection sniffs a multi-line sample to check row-to-row
+        delimiter consistency; if that fails (e.g. on ragged files), the
+        first line is sniffed and validated. If sniffing fails entirely, `csv.excel`
         (comma delimiter) is used as the fallback.
 
         `doublequote=True` is passed explicitly because `csv.Sniffer` only
@@ -107,7 +110,7 @@ class CsvDocumentBackend(DeclarativeDocumentBackend):
         """
         # Rewind before sniffing so repeated conversions use the same dialect.
         self.content.seek(0)
-        # Dialect detection: the larger sample is only read on fallback.
+        # Dialect detection: sniff sample first, falling back to head.
         head = self.content.readline()
         while head in ("\n", "\r\n", "\r"):
             head = self.content.readline()

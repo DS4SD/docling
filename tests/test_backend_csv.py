@@ -412,3 +412,52 @@ def test_repeated_backend_conversion_preserves_dialect(delimiter: str):
             "1",
         ]
     assert first.export_to_dict() == second.export_to_dict()
+
+
+def test_semicolon_delimited_csv_with_comma_in_header():
+    """A semicolon-separated CSV with commas in the header line must not be split on commas."""
+    csv_bytes = b"Product;Weight (kg, net);Price\nApple;0,2;1,50\nPear;0,35;2\n"
+    doc = (
+        get_converter()
+        .convert(
+            DocumentStream(name="prices.csv", stream=BytesIO(csv_bytes)),
+            raises_on_error=True,
+        )
+        .document
+    )
+
+    table_data = doc.tables[0].data
+    assert (table_data.num_rows, table_data.num_cols) == (3, 3)
+    grid_texts = [[cell.text for cell in row] for row in table_data.grid]
+    assert grid_texts == [
+        ["Product", "Weight (kg, net)", "Price"],
+        ["Apple", "0,2", "1,50"],
+        ["Pear", "0,35", "2"],
+    ]
+
+
+@pytest.mark.parametrize("delimiter", [";", "\t", "|"])
+def test_non_comma_delimiter_with_comma_in_header_cell(delimiter: str):
+    """Candidate delimiters inside cell text must not override the row-consistent delimiter."""
+    csv_bytes = (
+        f"Item{delimiter}Note (a, b){delimiter}Cost\n"
+        f"Item1{delimiter}Detail{delimiter}10\n"
+        f"Item2{delimiter}Detail{delimiter}20\n"
+    ).encode()
+    doc = (
+        get_converter()
+        .convert(
+            DocumentStream(name="test.csv", stream=BytesIO(csv_bytes)),
+            raises_on_error=True,
+        )
+        .document
+    )
+
+    table_data = doc.tables[0].data
+    assert (table_data.num_rows, table_data.num_cols) == (3, 3)
+    grid_texts = [[cell.text for cell in row] for row in table_data.grid]
+    assert grid_texts == [
+        ["Item", "Note (a, b)", "Cost"],
+        ["Item1", "Detail", "10"],
+        ["Item2", "Detail", "20"],
+    ]
