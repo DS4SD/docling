@@ -618,6 +618,35 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
 
         return
 
+    def _add_citation_segments(
+        self, doc: DoclingDocument, parent: NodeItem, segments: list[InlineSegment]
+    ) -> None:
+        segments = JatsDocumentBackend._strip_segments(segments)
+        if not segments:
+            return
+        if isinstance(parent, GroupItem) and parent.label == GroupLabel.LIST:
+            if len(segments) == 1:
+                doc.add_list_item(
+                    text=segments[0].text,
+                    enumerated=False,
+                    formatting=segments[0].formatting,
+                    hyperlink=segments[0].hyperlink,
+                    parent=parent,
+                )
+            else:
+                item = doc.add_list_item(text="", enumerated=False, parent=parent)
+                container = doc.add_inline_group(parent=item)
+                for segment in segments:
+                    doc.add_text(
+                        label=segment.label,
+                        text=segment.text,
+                        formatting=segment.formatting,
+                        hyperlink=segment.hyperlink,
+                        parent=container,
+                    )
+        else:
+            JatsDocumentBackend._emit_inline(doc, parent, segments)
+
     def _parse_element_citation(self, node: etree._Element) -> str:
         citation: Citation = {
             "author_names": "",
@@ -1411,8 +1440,10 @@ class JatsDocumentBackend(DeclarativeDocumentBackend):
                 self._add_citation(doc, parent, text)
                 stop_walk = True
             elif child.tag == "mixed-citation":
-                text = JatsDocumentBackend._get_text(child).strip()
-                self._add_citation(doc, parent, text)
+                citation_segments = self._walk_linear(
+                    doc, parent, child, current, current_hyperlink
+                )
+                self._add_citation_segments(doc, parent, citation_segments)
                 stop_walk = True
             elif child.tag == "tex-math":
                 self._add_equation(doc, parent, child)

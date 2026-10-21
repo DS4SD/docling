@@ -1492,3 +1492,74 @@ def test_jats_empty_article_title_does_not_crash():
     exported = doc.export_to_markdown()
     # Empty title is serialized as an H1 with no text.
     assert exported == "# "
+
+
+def test_jats_mixed_citation_preserves_external_hyperlinks():
+    """External links in mixed citations are preserved as hyperlinks."""
+    doc = convert_jats_body(
+        '<ref-list><ref><mixed-citation publication-type="other">'
+        "BRAVO-CITATION. A work. 2020. "
+        '<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://example.org/c2-citation">'
+        "https://example.org/c2-citation"
+        "</ext-link></mixed-citation></ref></ref-list>"
+    )
+    texts = [
+        item
+        for item, _level in doc.iterate_items()
+        if isinstance(item, TextItem)
+        and str(item.hyperlink) == "https://example.org/c2-citation"
+    ]
+    assert len(texts) == 1
+    assert texts[0].text == "https://example.org/c2-citation"
+    assert (
+        "[https://example.org/c2-citation](https://example.org/c2-citation)"
+        in doc.export_to_markdown()
+    )
+
+
+def test_jats_mixed_citation_plain_text_without_links():
+    """Mixed citations without external links remain single list items."""
+    doc = convert_jats_body(
+        '<ref-list><ref><mixed-citation publication-type="other">'
+        "CHARLIE-CITATION. Plain work without links. 2021."
+        "</mixed-citation></ref></ref-list>"
+    )
+    citations = [
+        item
+        for item, _level in doc.iterate_items()
+        if isinstance(item, TextItem) and item.label == DocItemLabel.LIST_ITEM
+    ]
+    assert len(citations) == 1
+    assert citations[0].text == "CHARLIE-CITATION. Plain work without links. 2021."
+    assert citations[0].hyperlink is None
+
+
+def test_jats_mixed_citation_multiple_links_and_formatting():
+    """Mixed citations with multiple links and nested formatting retain all attributes."""
+    doc = convert_jats_body(
+        '<ref-list><ref><mixed-citation publication-type="journal">'
+        "Smith J. <italic>Title of Paper</italic>. Nature. 2022. "
+        '<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://doi.org/10.1234/test">doi:10.1234/test</ext-link>, '
+        '<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="https://example.org/extra">web</ext-link>.'
+        "</mixed-citation></ref></ref-list>"
+    )
+    links = [
+        (item.text, str(item.hyperlink))
+        for item, _level in doc.iterate_items()
+        if isinstance(item, TextItem) and item.hyperlink is not None
+    ]
+    assert links == [
+        ("doi:10.1234/test", "https://doi.org/10.1234/test"),
+        ("web", "https://example.org/extra"),
+    ]
+    italics = [
+        item
+        for item, _level in doc.iterate_items()
+        if isinstance(item, TextItem) and item.formatting and item.formatting.italic
+    ]
+    assert len(italics) == 1
+    assert italics[0].text == "Title of Paper"
+    markdown = doc.export_to_markdown()
+    assert "*Title of Paper*" in markdown
+    assert "[doi:10.1234/test](https://doi.org/10.1234/test)" in markdown
+    assert "[web](https://example.org/extra)" in markdown
