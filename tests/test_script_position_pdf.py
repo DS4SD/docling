@@ -123,9 +123,9 @@ _LINES = [
 ]
 
 
-def _write_pdf(path: Path, page: str) -> None:
+def _write_pdf(path: Path, page: str, render_mode: int = 0) -> None:
     """Write a one-page PDF of ``_LINES`` with the given page box entries."""
-    ops = ["BT", "13 TL", "72 700 Td"]
+    ops = ["BT", f"{render_mode} Tr", "13 TL", "72 700 Td"]
     for number, line in enumerate(_LINES):
         if number:
             ops.append("T*")
@@ -182,3 +182,23 @@ def test_matches_characters_on_rotated_and_cropped_pages(tmp_path, backend, page
         ("st", Script.SUPER),
         ("12", Script.SUPER),
     ]
+
+
+@pytest.mark.parametrize(
+    "backend", [ThreadedDoclingParseDocumentBackend, PyPdfiumDocumentBackend]
+)
+def test_leaves_invisible_text_unchanged(tmp_path, backend):
+    """An invisible text layer, such as OCR over a scan, has no typeset baseline."""
+    pdf = tmp_path / "page.pdf"
+    _write_pdf(pdf, "/MediaBox [0 0 612 792]", render_mode=3)
+    options = PdfPipelineOptions(do_ocr=False, do_table_structure=False)
+    options.script_position_options = ScriptPositionOptions(enabled=True)
+    converter = DocumentConverter(
+        format_options={
+            InputFormat.PDF: PdfFormatOption(pipeline_options=options, backend=backend)
+        }
+    )
+    document = converter.convert(pdf).document
+
+    assert "confirmed by the team today" in document.export_to_markdown()
+    assert _scripts(_runs(document)) == []

@@ -28,6 +28,8 @@ if TYPE_CHECKING:
 
 # Characters rotated by more than this (radians) are not horizontal text.
 _MAX_HORIZONTAL_ANGLE = 0.01
+# PDF 32000 text rendering modes that paint no ink: invisible (3) and clipping only (7).
+_INVISIBLE_RENDER_MODES = frozenset({3, 7})
 
 
 @dataclass(frozen=True)
@@ -126,6 +128,15 @@ def _read_chars(raw, count: int, pdfium_c) -> list[PdfChar]:
     for index in range(count):
         code = pdfium_c.FPDFText_GetUnicode(raw, index)
         if code <= 0 or not pdfium_c.FPDFText_GetLooseCharBox(raw, index, box):
+            continue
+        # Invisible text, such as an OCR layer over a scan, follows the scanned lines
+        # and not a typeset baseline.
+        text_object = pdfium_c.FPDFText_GetTextObject(raw, index)
+        if (
+            text_object
+            and pdfium_c.FPDFTextObj_GetTextRenderMode(text_object)
+            in _INVISIBLE_RENDER_MODES
+        ):
             continue
         if not pdfium_c.FPDFText_GetCharOrigin(raw, index, origin_x, origin_y):
             continue

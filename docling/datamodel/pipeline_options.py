@@ -2088,7 +2088,8 @@ class ScriptPositionOptions(BaseModel):
         - Character positions are read with pypdfium2 whichever backend parsed the page; the
           step is skipped with a warning when pypdfium2 is not installed.
         - Body text, list items and footnotes are handled; headings, captions, tables, code,
-          formulas and OCR text are left unchanged.
+          formulas, OCR text and invisible text (such as an OCR layer over a scan) are left
+          unchanged.
     """
 
     enabled: Annotated[
