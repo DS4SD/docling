@@ -717,6 +717,34 @@ def _odf_paragraph_style_names(
     return style_names
 
 
+def _resolve_paragraph_list_style(
+    odf_obj: OdfDocument | None, style_name: str | None
+) -> str | None:
+    """Return the ``style:list-style-name`` of a paragraph style, if any.
+
+    Walks the ``style:parent-style-name`` chain (using ``odf_obj.get_style``,
+    the same lookup ``_odf_paragraph_style_names`` relies on) and returns the
+    first non-empty ``style:list-style-name`` found. Per ODF 1.2, a paragraph
+    whose resolved paragraph style carries ``style:list-style-name`` is a
+    list item even when it is not enclosed in a ``<text:list>`` element.
+    """
+    if odf_obj is None or style_name is None or style_name == "":
+        return None
+    seen: set[str] = set()
+    current: str | None = style_name
+    while current is not None and current not in seen:
+        seen.add(current)
+        style = odf_obj.get_style("paragraph", current)
+        if style is None:
+            return None
+        list_style_name = style.attributes.get("style:list-style-name")
+        if isinstance(list_style_name, str) and list_style_name:
+            return list_style_name
+        parent_style_name = style.attributes.get("style:parent-style-name")
+        current = parent_style_name if isinstance(parent_style_name, str) else None
+    return None
+
+
 def _add_odf_paragraph(
     doc: DoclingDocument,
     element: Paragraph,
@@ -726,7 +754,9 @@ def _add_odf_paragraph(
     odf_obj: OdfDocument | None,
     image_loader: ImageResourceLoader | None = None,
     comments: _OdfComments | None = None,
-) -> None:
+    continued_state: _OdfListState | None = None,
+    list_style_name: str | None = None,
+) -> _OdfListState | None:
     chart_count = _add_odf_charts(doc, element, parent, content_layer, odf_obj)
     images = element.get_images()
     image_count = _add_odf_images(
@@ -746,9 +776,9 @@ def _add_odf_paragraph(
             runs = [_OdfTextRun(text=stripped_text)] if stripped_text else []
             text = stripped_text
     if image_count > 0 and _odf_text_is_generated_image_references(text, images):
-        return
+        return None
     if chart_count > 0 and ("ObjectReplacements" in text or not text):
-        return
+        return None
 
     style_names = _odf_paragraph_style_names(odf_obj, element)
     if "Title" in style_names:
@@ -759,6 +789,7 @@ def _add_odf_paragraph(
             parent=parent,
             content_layer=content_layer,
         )
+        state = None
     elif "Subtitle" in style_names:
         item = _add_odf_rich_block(
             doc,
@@ -766,6 +797,22 @@ def _add_odf_paragraph(
             add_block=lambda **kwargs: doc.add_heading(level=1, **kwargs),
             parent=parent,
             content_layer=content_layer,
+        )
+        state = None
+    elif (
+        list_style_name is not None
+        and list_style_name != ""
+        and odf_obj is not None
+        and odf_obj.get_style("list", list_style_name) is not None
+    ):
+        item, state = _add_odf_list_styled_paragraph(
+            doc,
+            runs,
+            parent=parent,
+            content_layer=content_layer,
+            odf_obj=odf_obj,
+            list_style_name=list_style_name,
+            continued_state=continued_state,
         )
     else:
         item = _add_odf_text_runs(
@@ -775,8 +822,94 @@ def _add_odf_paragraph(
             parent=parent,
             content_layer=content_layer,
         )
+        state = None
     if comments is not None:
         comments.attach(doc, item, [element])
+    return state
+
+
+def _add_odf_list_styled_paragraph(
+    doc: DoclingDocument,
+    runs: list[_OdfTextRun],
+    *,
+    parent: NodeItem | None,
+    content_layer: ContentLayer | None,
+    odf_obj: OdfDocument,
+    list_style_name: str,
+    continued_state: _OdfListState | None = None,
+) -> tuple[NodeItem | None, _OdfListState | None]:
+    """Emit a paragraph styled via ``style:list-style-name`` as a list item.
+
+    The paragraph is a level-1 item of the referenced ``<text:list-style>``,
+    mirroring how ``_add_odf_list`` builds items. A ``continued_state`` from a
+    preceding paragraph with the same list style name keeps appending to the
+    same list group (so e.g. numbering continues); otherwise a new list group
+    is started.
+    """
+    if not runs:
+        # Nothing to emit; keep a continued group open for following items.
+        return None, continued_state
+
+    level_style = _odf_list_level_style_by_name(odf_obj, list_style_name, 1)
+    enumerated = (
+        level_style is not None and level_style.tag == "text:list-level-style-number"
+    )
+    if continued_state is not None:
+        list_group = continued_state.group
+        counter = continued_state.counter
+    else:
+        list_group = doc.add_list_group(
+            name="list", parent=parent, content_layer=content_layer
+        )
+        start_value = 1
+        if level_style is not None:
+            raw_start = level_style.attributes.get("text:start-value")
+            if raw_start is not None:
+                try:
+                    start_value = max(1, int(raw_start))
+                except ValueError:
+                    start_value = 1
+        counter = start_value - 1
+    counter += 1
+    # Mirror _odf_list_marker: the suffix lookup needs no enumerated guard.
+    suffix = "."
+    if level_style is not None:
+        suffix = level_style.attributes.get("style:num-suffix") or suffix
+    marker = f"{counter}{suffix}" if enumerated else ""
+    if len(runs) == 1:
+        item = doc.add_list_item(
+            marker=marker,
+            enumerated=enumerated,
+            parent=list_group,
+            text=runs[0].text,
+            content_layer=content_layer,
+            formatting=runs[0].formatting,
+            hyperlink=runs[0].hyperlink,
+        )
+    else:
+        item = doc.add_list_item(
+            marker=marker,
+            enumerated=enumerated,
+            parent=list_group,
+            text="",
+            content_layer=content_layer,
+        )
+        inline_group = doc.add_inline_group(parent=item, content_layer=content_layer)
+        for run in runs:
+            doc.add_text(
+                label=DocItemLabel.TEXT,
+                parent=inline_group,
+                text=run.text,
+                content_layer=content_layer,
+                formatting=run.formatting,
+                hyperlink=run.hyperlink,
+            )
+    return item, _OdfListState(
+        group=list_group,
+        last_item=item,
+        enumerated=enumerated,
+        counter=counter,
+    )
 
 
 def _odf_element_text_lines(element: Any) -> list[str]:
@@ -893,14 +1026,10 @@ def _odf_list_has_renderable_content(
     return False
 
 
-def _odf_list_level_style(
-    odf_obj: OdfDocument | None, odf_list: OdfList, level: int
+def _odf_list_level_style_by_name(
+    odf_obj: OdfDocument | None, style_name: str | None, level: int
 ) -> Any | None:
-    if odf_obj is None:
-        return None
-
-    style_name = odf_list.attributes.get("text:style-name")
-    if style_name is None:
+    if odf_obj is None or style_name is None:
         return None
 
     style = odf_obj.get_style("list", style_name)
@@ -908,6 +1037,14 @@ def _odf_list_level_style(
         return None
 
     return style.get_level_style(level)
+
+
+def _odf_list_level_style(
+    odf_obj: OdfDocument | None, odf_list: OdfList, level: int
+) -> Any | None:
+    return _odf_list_level_style_by_name(
+        odf_obj, odf_list.attributes.get("text:style-name"), level
+    )
 
 
 def _odf_list_level_is_enumerated(
@@ -1146,6 +1283,8 @@ def _add_odf_child(
     odf_obj: OdfDocument | None,
     image_loader: ImageResourceLoader | None = None,
     comments: _OdfComments | None = None,
+    continued_state: _OdfListState | None = None,
+    list_style_name: str | None = None,
 ) -> _OdfListState | None:
     if isinstance(element, Header):
         _add_odf_heading(
@@ -1157,7 +1296,14 @@ def _add_odf_child(
             comments=comments,
         )
     elif isinstance(element, Paragraph) and not isinstance(element, Header):
-        _add_odf_paragraph(
+        if list_style_name is None:
+            # Resolved here (rather than only by _add_odf_children) so that
+            # styled paragraphs reached through other dispatch paths (e.g.
+            # table cells via _add_rich_cell_children) are handled as well.
+            list_style_name = _resolve_paragraph_list_style(
+                odf_obj, element.attributes.get("text:style-name")
+            )
+        return _add_odf_paragraph(
             doc,
             element,
             parent=parent,
@@ -1165,6 +1311,8 @@ def _add_odf_child(
             odf_obj=odf_obj,
             image_loader=image_loader,
             comments=comments,
+            continued_state=continued_state,
+            list_style_name=list_style_name,
         )
     elif isinstance(element, OdfList):
         return _add_odf_list(
@@ -1241,6 +1389,10 @@ def _add_odf_children(
     comments: _OdfComments | None = None,
 ) -> None:
     previous_list_state: _OdfListState | None = None
+    # ``style:list-style-name`` of the list the ``previous_list_state`` belongs
+    # to when it was built from styled paragraphs (``None`` for ``<text:list>``
+    # groups, which keep their own continuation rules).
+    paragraph_list_style: str | None = None
     for element in elements:
         if isinstance(element, OdfList):
             previous_list_state = _add_odf_list(
@@ -1250,13 +1402,30 @@ def _add_odf_children(
                 content_layer=content_layer,
                 odf_obj=odf_obj,
                 enumerated=False,
-                continued_state=previous_list_state,
+                continued_state=previous_list_state
+                if paragraph_list_style is None
+                else None,
                 flatten_nested_text=False,
                 comments=comments,
             )
+            paragraph_list_style = None
         else:
+            list_style_name = (
+                _resolve_paragraph_list_style(
+                    odf_obj, element.attributes.get("text:style-name")
+                )
+                if isinstance(element, Paragraph) and not isinstance(element, Header)
+                else None
+            )
+            continued_state = (
+                previous_list_state
+                if paragraph_list_style is not None
+                and paragraph_list_style == list_style_name
+                else None
+            )
             previous_list_state = None
-            _add_odf_child(
+            paragraph_list_style = None
+            state = _add_odf_child(
                 doc,
                 element,
                 parent=parent,
@@ -1264,7 +1433,12 @@ def _add_odf_children(
                 odf_obj=odf_obj,
                 image_loader=image_loader,
                 comments=comments,
+                continued_state=continued_state,
+                list_style_name=list_style_name,
             )
+            if state is not None and list_style_name is not None:
+                previous_list_state = state
+                paragraph_list_style = list_style_name
 
 
 def _embedded_odf_content_path(href: str) -> str:
