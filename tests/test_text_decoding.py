@@ -9,31 +9,44 @@ from io import BytesIO
 import pytest
 
 from docling.exceptions import DocumentLoadError
-from docling.utils.text_decoding import decode_text, drop_utf8_bom, is_utf8
-
-BOM = codecs.BOM_UTF8
+from docling.utils.text_decoding import decode_text
 
 
 def test_explicit_utf8_drops_leading_bom_like_autodetect() -> None:
     # A UTF-8 file that starts with a byte-order mark must decode identically
     # whether the encoding is auto-detected or explicitly requested as "utf-8".
     # See https://github.com/docling-project/docling/issues/4846
-    content = BOM + b"# Title\nHello"
+    content = codecs.BOM_UTF8 + b"# Title\nHello"
 
     auto = decode_text(BytesIO(content), encoding=None)
     explicit = decode_text(BytesIO(content), encoding="utf-8")
 
-    assert not auto.startswith("﻿")
-    assert not explicit.startswith("﻿")
+    assert not auto.startswith("\ufeff")
+    assert not explicit.startswith("\ufeff")
     assert auto == explicit
 
 
-@pytest.mark.parametrize("encoding", ["utf-8", "utf8", "UTF-8", "utf_8", "UTF8", "u8"])
-def test_every_utf8_alias_drops_leading_bom(encoding: str) -> None:
-    # The codec registry folds "-" to "_" and ignores case, so every alias it
-    # accepts names the same UTF-8 codec and must drop the mark the way "utf-8"
-    # does. See https://github.com/docling-project/docling/issues/4846
-    content = BOM + b"# Title\nHello"
+@pytest.mark.parametrize(
+    ("encoding", "bom"),
+    [
+        ("utf-8", codecs.BOM_UTF8),
+        ("utf8", codecs.BOM_UTF8),
+        ("UTF-8", codecs.BOM_UTF8),
+        ("utf_8", codecs.BOM_UTF8),
+        ("UTF8", codecs.BOM_UTF8),
+        ("u8", codecs.BOM_UTF8),
+        ("utf-16-le", codecs.BOM_UTF16_LE),
+        ("utf-16-be", codecs.BOM_UTF16_BE),
+        ("utf-32-le", codecs.BOM_UTF32_LE),
+        ("utf-32-be", codecs.BOM_UTF32_BE),
+    ],
+)
+def test_every_unicode_encoding_drops_leading_bom(encoding: str, bom: bytes) -> None:
+    # A leading byte-order mark is never content, so every Unicode codec —
+    # under any alias Python accepts, and with either endianness spelled out
+    # explicitly — must decode it away, exactly as the auto-detect path does.
+    # See https://github.com/docling-project/docling/issues/4846
+    content = bom + "# Title\nHello".encode(encoding)
 
     assert decode_text(BytesIO(content), encoding=encoding) == "# Title\nHello"
 
@@ -48,14 +61,15 @@ def test_plain_utf8_without_bom_is_unchanged() -> None:
 
 
 def test_explicit_utf8_sig_keeps_behaviour() -> None:
-    content = BOM + b"# Title\nHello"
-    assert not decode_text(BytesIO(content), encoding="utf-8-sig").startswith("﻿")
+    content = codecs.BOM_UTF8 + b"# Title\nHello"
+    assert not decode_text(BytesIO(content), encoding="utf-8-sig").startswith("\ufeff")
 
 
 def test_other_encodings_still_read_the_mark_as_content() -> None:
-    # Only a UTF-8 request drops the mark. Any other codec decodes those bytes
-    # the way it always did, so a file that really is cp1252 keeps its bytes.
-    content = BOM + b"# Title\nHello"
+    # Only a Unicode codec decodes the mark to U+FEFF. A single-byte codec
+    # such as cp1252 decodes those bytes as the characters they always were,
+    # so a file that really is cp1252 keeps its bytes.
+    content = codecs.BOM_UTF8 + b"# Title\nHello"
 
     assert decode_text(BytesIO(content), encoding="cp1252") == "ï»¿# Title\nHello"
 
@@ -63,18 +77,3 @@ def test_other_encodings_still_read_the_mark_as_content() -> None:
 def test_unknown_encoding_is_reported() -> None:
     with pytest.raises(DocumentLoadError):
         decode_text(BytesIO(b"# Title\nHello"), encoding="not-a-codec")
-
-
-def test_is_utf8_matches_the_codec_registry() -> None:
-    for alias in ("utf-8", "utf8", "UTF-8", "utf_8", "UTF8", "u8"):
-        assert is_utf8(alias)
-    # "utf-8-sig" drops the mark on its own, so it needs no upgrade; everything
-    # else is either a different codec or no codec at all.
-    for other in ("utf-8-sig", "utf-16", "cp1252", "not-a-codec"):
-        assert not is_utf8(other)
-
-
-def test_drop_utf8_bom_strips_the_mark_only() -> None:
-    assert drop_utf8_bom(BOM + b"data") == b"data"
-    assert drop_utf8_bom(b"data") == b"data"
-    assert drop_utf8_bom(codecs.BOM_UTF16_LE + b"data") == codecs.BOM_UTF16_LE + b"data"

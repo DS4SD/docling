@@ -96,48 +96,22 @@ def _utf8_high_byte_coverage(raw: bytes) -> float:
     return covered / high if high else 0.0
 
 
-def is_utf8(encoding: str) -> bool:
-    """Whether *encoding* names UTF-8, under any of the aliases Python accepts.
-
-    The codec registry folds ``-`` to ``_`` and ignores case, so ``utf-8``,
-    ``utf_8``, ``UTF8`` and ``u8`` all name the same codec. Resolving the name
-    through :func:`codecs.lookup` therefore matches every alias, where a
-    comparison against the spelling as written matches only the ones written
-    out in it. A name that is no codec at all is not UTF-8; it is left for
-    ``decode`` to report as the ``LookupError`` it is.
-    """
-    try:
-        return codecs.lookup(encoding).name == "utf-8"
-    except LookupError:
-        return False
-
-
-def drop_utf8_bom(raw: bytes) -> bytes:
-    """*raw* without its leading UTF-8 byte-order mark, if it has one.
-
-    For content that is validated as bytes rather than decoded, where a mark
-    left in place is rejected as an unexpected character.
-    """
-    return raw.removeprefix(codecs.BOM_UTF8)
-
-
 def _decode_bytes(raw: bytes, encoding: Optional[str] = None) -> str:
     if encoding is not None:
-        # An explicit ``utf-8`` request must still drop a leading byte-order
-        # mark, matching the auto-detect path; otherwise the BOM leaks into the
-        # decoded text (see issue #4846). ``utf-8-sig`` is identical to
-        # ``utf-8`` when no BOM is present, so this only changes behaviour for
-        # UTF-8 content that actually starts with a BOM. Every alias of UTF-8
-        # counts, so ``utf_8`` and ``u8`` behave as ``utf-8`` does.
-        if raw.startswith(codecs.BOM_UTF8) and is_utf8(encoding):
-            encoding = UTF8_BOM_ENCODING
         try:
-            return raw.decode(encoding)
+            text = raw.decode(encoding)
         except (UnicodeDecodeError, LookupError) as error:
             raise DocumentLoadError(
                 f"Could not decode the document with the requested encoding "
                 f"{encoding!r}: {error}"
             ) from error
+        # A leading U+FEFF is a byte-order mark, never content, so it is
+        # dropped whatever codec was asked for: ``utf-8-sig`` and the
+        # auto-detecting UTF-16/32 codecs strip it on their own, while an
+        # explicit-endianness variant such as ``utf-16-le`` keeps it (see
+        # issue #4846). Codecs that are not Unicode never decode the mark to
+        # U+FEFF -- cp1252 yields "ï»¿" -- so only a real mark is dropped.
+        return text.removeprefix("\ufeff")
 
     for bom, bom_encoding in _BOM_ENCODINGS:
         if raw.startswith(bom):
@@ -180,9 +154,10 @@ def decode_text(
     """Read a plain-text document and decode it.
 
     With ``encoding`` set, the content is decoded with it and nothing is
-    guessed. Without it, a byte-order mark is honoured, then UTF-8 is tried,
-    then cp1252; input that is none of those raises ``DocumentLoadError``
-    rather than being re-decoded into mojibake.
+    guessed; a leading byte-order mark is dropped either way, whichever
+    Unicode codec was asked for. Without it, a byte-order mark is honoured,
+    then UTF-8 is tried, then cp1252; input that is none of those raises
+    ``DocumentLoadError`` rather than being re-decoded into mojibake.
 
     Line endings are translated as text-mode ``open()`` does, so a document
     converts the same way whether it arrives as a path or as a stream.
