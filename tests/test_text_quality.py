@@ -93,6 +93,8 @@ ORDINARY = {
     "single_replacement_character": _PROSE + "\nx \N{REPLACEMENT CHARACTER} y\n",
     # pdfium can mark one end-of-line hyphen with a control character.
     "hyphen_control": _PROSE.replace("regions", "re\x02\ngions", 1),
+    "dotted_capital_i": _PROSE
+    + "\nThe office in \N{LATIN CAPITAL LETTER I WITH DOT ABOVE}stanbul opened.\n",
 }
 
 # Text layers from fonts whose glyphs were not mapped to real characters.

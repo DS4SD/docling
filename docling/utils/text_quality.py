@@ -138,7 +138,7 @@ def _is_shifted_latin(text: str) -> bool:
         if not any("a" <= ch <= "z" for ch in token):
             continue
         for ch in token:
-            if "a" <= ch.lower() <= "z":
+            if ch.isascii() and ch.isalpha():
                 counts[ord(ch.lower()) - ord("a")] += 1
             elif ch.isalpha():
                 other_letters += 1
