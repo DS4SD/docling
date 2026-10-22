@@ -150,7 +150,8 @@ pipeline_options = VlmPipelineOptions(
 Pass these options to the `PdfFormatOption` in the example above. The presets
 use the `grounding` prompt. Docling parses the block labels and normalized
 bounding boxes, Markdown text, HTML tables, image descriptions, and chart tables.
-Markdown section heading levels and LaTeX math are preserved.
+Section headings use the document-wide depth normalization described below.
+LaTeX math is preserved.
 Coordinates belong to blocks; derived text and table cells do not receive
 separate boxes. Continuation blocks keep their base labels without being merged.
 Lists keep their structure, without assigning the block box to individual items.

@@ -79,6 +79,7 @@ _RAW_HEADING_DEPTH_FORMATS = frozenset(
         ResponseFormat.CHANDRA_HTML,
         ResponseFormat.DEEPSEEKOCR_MARKDOWN,
         ResponseFormat.DOTS_JSON,
+        ResponseFormat.LIGHTONOCR_MARKDOWN,
         ResponseFormat.NEMOTRON_PARSE_V2,
         ResponseFormat.NEMOTRON_PARSE_V3_5,
         ResponseFormat.UNLIMITED_OCR_MARKDOWN,
@@ -568,6 +569,7 @@ class VlmPipeline(PaginatedPipeline):
                 page_no=page.page_no,
                 filename=conv_res.input.file.name or "file",
                 page_image=page.image,
+                normalize_heading_levels=False,
             )
         elif response_format == ResponseFormat.MARKDOWN:
             document = self._convert_text_page(

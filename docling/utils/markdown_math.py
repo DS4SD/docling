@@ -14,7 +14,8 @@ if TYPE_CHECKING:
 
 _MATH = re.compile(
     r"(?<!\\)(?:\$\$([\s\S]*?)(?<!\\)\$\$"
-    r"|(?<!\$)\$(?![\s$])([^\n$]*?)(?<![\\\s])\$(?!\$)"
+    # A dollar before a digit starts an amount, not a closing math delimiter.
+    r"|(?<!\$)\$(?![\s$])([^\n$]*?)(?<![\\\s])\$(?![\d$])"
     r"|\\\(([\s\S]*?)\\\)|\\\[([\s\S]*?)\\\])"
 )
 
@@ -69,6 +70,10 @@ def create_markdown_parser(*, inline_only: bool = False) -> marko.Markdown:
         def break_paragraph(
             cls, source: marko.source.Source, lazy: bool = False
         ) -> bool:
+            return False
+
+        @staticmethod
+        def is_setext_heading(line: str) -> bool:
             return False
 
     class InlineParser(marko.Parser):

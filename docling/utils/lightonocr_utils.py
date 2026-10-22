@@ -22,7 +22,10 @@ from PIL import Image as PILImage
 
 from docling.utils.chandra_utils import _add_html_fragment
 from docling.utils.markdown_math import create_markdown_parser
-from docling.utils.vlm_utils import strip_math_delimiters
+from docling.utils.vlm_utils import (
+    normalize_section_header_levels,
+    strip_math_delimiters,
+)
 
 _MARKER = re.compile(
     r"^ {0,3}!\[([a-z_]+)\+?\]\(([^)\n]*,[^)\n]*,[^)\n]*,[^)\n]*)\)[ \t]*(.*)$"
@@ -81,11 +84,15 @@ def parse_lightonocr_markdown(
     page_no: int,
     filename: str = "file",
     page_image: PILImage.Image | None = None,
+    *,
+    normalize_heading_levels: bool = True,
 ) -> DoclingDocument:
     """Preserve Markdown/HTML content and assign each block bbox at most once.
 
     Continuation labels retain their base class. Separate blocks are not merged
     or associated by proximity. Plain transcription is recovered without boxes.
+    Heading depths normalize per page unless the pipeline defers normalization
+    until all pages are joined with ``normalize_heading_levels=False``.
     """
     markdown = create_markdown_parser()
     # The parser above checks this optional dependency before its types are used.
@@ -143,4 +150,6 @@ def parse_lightonocr_markdown(
                 picture.meta.description.created_by = "lightonocr"
             if label in {"header_image", "footer_image"}:
                 picture.content_layer = ContentLayer.FURNITURE
+    if normalize_heading_levels:
+        normalize_section_header_levels(doc)
     return doc
