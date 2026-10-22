@@ -1876,7 +1876,7 @@ wheels = [
 
 [[package]]
 name = "docling"
-version = "2.141.0"
+version = "2.142.0"
 source = { editable = "packages/docling" }
 dependencies = [
     { name = "docling-slim", extra = ["standard"] },
@@ -1932,7 +1932,7 @@ provides-extras = ["easyocr", "tesserocr", "ocrmac", "vlm", "rapidocr", "asr", "
 
 [[package]]
 name = "docling-client"
-version = "2.141.0"
+version = "2.142.0"
 source = { editable = "packages/docling-client" }
 dependencies = [
     { name = "docling-slim", extra = ["service-client"] },
@@ -2043,7 +2043,7 @@ wheels = [
 
 [[package]]
 name = "docling-slim"
-version = "2.141.0"
+version = "2.142.0"
 source = { editable = "." }
 default-groups = "all"
 dependencies = [
@@ -2377,7 +2377,7 @@ docs = [
 ]
 examples = [
     { name = "datasets" },
-    { name = "gliner", version = "0.2.24", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.14' and sys_platform != 'darwin') or (python_full_version < '3.12' and sys_platform == 'darwin')" },
+    { name = "gliner", version = "0.2.24", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12' or (python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform != 'darwin')" },
     { name = "gliner", version = "0.2.29", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform == 'darwin'" },
     { name = "langchain-huggingface" },
     { name = "langchain-milvus" },
@@ -3138,7 +3138,7 @@ resolution-markers = [
 dependencies = [
     { name = "huggingface-hub" },
     { name = "onnxruntime", version = "1.23.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or python_full_version >= '3.14'" },
-    { name = "onnxruntime", version = "1.30.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.11' and python_full_version < '3.14' and sys_platform != 'darwin') or (python_full_version == '3.11.*' and sys_platform == 'darwin')" },
+    { name = "onnxruntime", version = "1.30.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*' or (python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform != 'darwin')" },
     { name = "sentencepiece" },
     { name = "torch", version = "2.11.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.12.*' and platform_machine == 'x86_64' and sys_platform == 'linux'" },
     { name = "torch", version = "2.14.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version != '3.12.*' or platform_machine != 'x86_64' or sys_platform != 'linux'" },
@@ -10343,7 +10343,7 @@ dependencies = [
     { name = "jinja2" },
     { name = "networkx", version = "3.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "networkx", version = "3.6.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
-    { name = "networkx", version = "3.7", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and platform_machine != 'x86_64') or (python_full_version >= '3.13' and platform_machine == 'x86_64' and sys_platform == 'linux') or (python_full_version >= '3.12' and sys_platform != 'linux')" },
+    { name = "networkx", version = "3.7", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' or (python_full_version == '3.12.*' and platform_machine != 'x86_64') or (python_full_version == '3.12.*' and sys_platform != 'linux')" },
     { name = "nvidia-cudnn-cu13", version = "9.24.0.43", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'linux'" },
     { name = "nvidia-cusparselt-cu13", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'linux'" },
     { name = "nvidia-nccl-cu13", version = "2.30.7", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'linux'" },
@@ -10426,7 +10426,7 @@ resolution-markers = [
 dependencies = [
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
-    { name = "numpy", version = "2.5.3", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and platform_machine != 'x86_64') or (python_full_version >= '3.13' and platform_machine == 'x86_64' and sys_platform == 'linux') or (python_full_version >= '3.12' and sys_platform != 'linux')" },
+    { name = "numpy", version = "2.5.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' or (python_full_version == '3.12.*' and platform_machine != 'x86_64') or (python_full_version == '3.12.*' and sys_platform != 'linux')" },
     { name = "pillow" },
     { name = "torch", version = "2.14.1", source = { registry = "https://pypi.org/simple" } },
 ]
@@ -10543,7 +10543,7 @@ dependencies = [
     { name = "huggingface-hub" },
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
-    { name = "numpy", version = "2.5.3", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and sys_platform != 'darwin') or (python_full_version >= '3.14' and sys_platform == 'darwin')" },
+    { name = "numpy", version = "2.5.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14' or (python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform != 'darwin')" },
     { name = "packaging" },
     { name = "pyyaml" },
     { name = "regex" },
