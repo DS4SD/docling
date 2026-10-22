@@ -80,14 +80,18 @@ _LATEX_TEXT = re.compile(
     r"|\\([%&#$])"
 )
 _LATEX_TEXT_REPLACEMENTS = {
-    "textless": "<",
-    "textgreater": ">",
+    "textless": "&lt;",
+    "textgreater": "&gt;",
     "textasciitilde": "~",
     "linebreak": "<br>",
     "mbox": "",
+    "&": "&amp;",
 }
-# Inline tags that a table cell keeps as markup; all other text is escaped.
-_CELL_INLINE_TAG = re.compile(r"</?(?:b|br|em|i|strong|sub|sup|u)\s*/?>", re.IGNORECASE)
+# Inline tags that a table cell keeps as markup, and LaTeX text commands that it maps;
+# all other text is escaped.
+_CELL_MARKUP = re.compile(
+    rf"{_LATEX_TEXT.pattern}|(?i:</?(?:b|br|code|em|i|strong|sub|sup|u)\s*/?>)"
+)
 _CHART_OPEN = re.compile(r'<chart\s+type="([^"]*)"\s*>')
 _CHART_TABLE_KEY = re.compile(r"table\[(\w+)\]")
 
@@ -259,9 +263,14 @@ def _escape_cell_markup(text: str) -> str:
     """Escape cell text so that it cannot change the table; keep inline tags."""
     parts: list[str] = []
     pos = 0
-    for match in _CELL_INLINE_TAG.finditer(text):
+    for match in _CELL_MARKUP.finditer(text):
         parts.append(html.escape(text[pos : match.start()], quote=False))
-        parts.append(match.group())
+        command = match.group(1) or match.group(2)
+        parts.append(
+            match.group()
+            if command is None
+            else _LATEX_TEXT_REPLACEMENTS.get(command, command)
+        )
         pos = match.end()
     parts.append(html.escape(text[pos:], quote=False))
     return "".join(parts)
@@ -279,12 +288,7 @@ def _parse_latex_cell(text: str) -> _LatexCell:
             header, text = True, args[0]
         else:
             break
-    text = _LATEX_TEXT.sub(
-        lambda match: _LATEX_TEXT_REPLACEMENTS.get(
-            match.group(1) or match.group(2), match.group(2) or ""
-        ),
-        text,
-    )
+    text = _escape_cell_markup(text)
     return _LatexCell(
         text=text.strip(), row_span=row_span, col_span=col_span, header=header
     )
@@ -324,6 +328,8 @@ def latex_tabular_to_html(latex: str) -> str:
                     continue
                 # Text under a multirow: the predicted row span was too long.
                 owner[0].row_span = row_index - owner[1]
+            if col + cell.col_span > _MAX_TABLE_GRID_CELLS:
+                raise ValueError(f"LaTeX table exceeds {_MAX_TABLE_GRID_CELLS} columns")
             for owned_col in range(col, col + cell.col_span):
                 owners[owned_col] = (cell, row_index)
             cells.append(cell)
@@ -338,7 +344,7 @@ def latex_tabular_to_html(latex: str) -> str:
             scope = ' scope="col"' if cell.header else ""
             html_cells.append(
                 f'<{tag}{scope} rowspan="{cell.row_span}" colspan="{cell.col_span}">'
-                f"{_markdown_inline_html(_escape_cell_markup(cell.text))}</{tag}>"
+                f"{_markdown_inline_html(cell.text)}</{tag}>"
             )
         html_rows.append(f"<tr>{''.join(html_cells)}</tr>")
     return f"<table>{''.join(html_rows)}</table>"
