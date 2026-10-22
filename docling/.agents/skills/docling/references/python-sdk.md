@@ -61,6 +61,7 @@ Useful `PdfPipelineOptions` / base fields:
 |---|---|
 | `do_ocr` | Run OCR (default engine EasyOCR) |
 | `do_table_structure` | Detect table structure |
+| `extract_form_fields` | Convert docling-parse PDF widgets (AcroForm) into fillable fields with keys from printed text |
 | `do_code_enrichment` / `do_formula_enrichment` | Enrich code / formulas |
 | `code_formula_options` | Code/formula model, crop margin (`expansion_factor`), and stopping repeated output (`stop_on_repetition`, on by default) |
 | `ocr_options` | Choose/parametrize the OCR engine (see below) |
@@ -71,6 +72,20 @@ Useful `PdfPipelineOptions` / base fields:
 | `accelerator_options` | Pick device / thread count |
 | `artifacts_path` | Use pre-downloaded model artifacts (offline) |
 | `enable_remote_services` | Gate all outbound HTTP (required for any remote model) |
+
+`extract_form_fields=True` associates each widget with a field key from printed
+text, using page geometry. The key can be text in or beside its cell, or a
+paragraph that contains the widget. Checkbox and radio option text becomes an
+option key; a shared prompt stays as ordinary text. Additional context becomes
+a field hint. A section header or formula used as a key stays inside the key.
+Fields keep their widget order and sit among the surrounding text by page
+geometry. A widget in a detected table goes into its table cell, with a key
+only from text in that same cell. PDF field
+names are not used as keys, and PDF-specific widget metadata is not stored in
+the `DoclingDocument`. Use `generate_parsed_pages=True` to retain raw widgets
+on parsed pages when needed. Backends without page-local widgets produce no
+fields; table cells need `do_table_structure=True`. Not available in the
+service client, and not supported by the DocTags export.
 
 ### Choosing an OCR engine
 
@@ -337,6 +352,21 @@ for result in converter.convert_all(sources, raises_on_error=False):
   `SKIPPED`, `PENDING`, `STARTED`.
 - `allowed_formats=` restricts which input formats the converter will accept.
 
+### Progress events
+
+`DocumentConverter(show_progress=True)` prints progress bars for pages and
+enrichment to stderr with no extra code. For your own UI, `progress_callback=...`
+(on `convert` / `convert_all` for one call, or on the constructor for all
+calls) receives typed events from
+`docling.datamodel.progress` while documents convert: document start and end
+(with `document_index` in the batch and the final `status`), pipeline phases,
+`PageCompletedProgress` (`completed_pages` / `total_pages`) for PDF and image
+pipelines, and `EnrichmentProgress` (`completed_items` / `total_items` per
+enrichment step; match on the stable `step`, not on `label`). Enrichment runs
+after the last page, so a page count at 100% does not mean the document is
+done. The callback must be thread-safe when
+`settings.perf.doc_batch_concurrency > 1`.
+
 ## Audio / video (ASR)
 
 Docling transcribes audio (and video) into a `DoclingDocument` via an ASR
@@ -374,12 +404,25 @@ and the Transformers model files, or to its parent directory with a
 Hugging Face lookup. For MLX Whisper, use `WHISPER_TINY_MLX` and provide an
 MLX checkpoint with `config.json` and `weights.safetensors` or `weights.npz`.
 
-Other explicit Transformers presets are `GRANITE_4_0_1B_SPEECH`,
-`PARAKEET_TDT_0_6B_V3`, and `NEMOTRON_3_5_ASR_STREAMING`. These models return
+Other explicit Transformers presets are `GRANITE_4_0_1B_SPEECH` and
+`NEMOTRON_3_5_ASR_STREAMING`. These models return
 one transcript item that covers the full audio duration. The Transformers
 Whisper presets provide model segment timestamps.
 
 The CLI can also transcribe: `docling interview.wav --to md --output /tmp/`.
+
+Additional presets include `GRANITE_SPEECH_5_0_2B`,
+`GRANITE_SPEECH_5_0_470M_TURBOCTC`, its `_NC` variant,
+`GRANITE_SPEECH_4_1_2B`, its `_PLUS` variant, and
+`NEMOTRON_SPEECH_STREAMING_EN_0_6B`. Copy a preset with
+`.model_copy(deep=True)` before changing `revision`, `language`, or `prompt`.
+Granite and TurboCTC use FP32 weights on MPS to avoid BF16 normalization failures.
+Plus defaults to plain transcription; speaker and timestamp tags are not parsed
+into tracks.
+The `_NC` preset uses a noncommercial license.
+For real decoding checks, use `scripts/validate_asr_models.py` in a repository
+checkout. Repeat `--model` to select presets; without it, the script runs every
+ASR preset on the same fragment. It is outside normal pytest collection.
 
 Video files (`.mp4`, `.mov`, `.mkv`, `.webm`, `.avi`) use `VideoPipeline` with
 `VideoPipelineOptions`, which also samples frames. `max_sampled_frames` defaults

@@ -538,6 +538,37 @@ WHISPER_DISTIL_LARGE_V3_5_NATIVE = InlineAsrNativeWhisperOptions(
     max_time_chunk=30.0,
 )
 
+# Distil-Whisper models are not part of openai-whisper's model registry, but
+# their Hugging Face repos publish the checkpoint in the original OpenAI
+# format, which whisper.load_model() accepts as a local file path.
+_DISTIL_WHISPER_OPENAI_CHECKPOINTS: dict[str, tuple[str, str, str]] = {
+    "distil-small.en": (
+        "distil-whisper/distil-small.en",
+        "original-model.bin",
+        "9e4a67ca4569c30be43a3fe7fba1621e504f0093",
+    ),
+    "distil-medium.en": (
+        "distil-whisper/distil-medium.en",
+        "original-model.bin",
+        "6e61418885eaf4d5cc9f64e508e80ac5b4c052b7",
+    ),
+    "distil-large-v3": (
+        "distil-whisper/distil-large-v3-openai",
+        "model.bin",
+        "81941037893cb90dc82af45bc5dc5146ab0a818f",
+    ),
+    "distil-large-v3.5": (
+        "distil-whisper/distil-large-v3.5-openai",
+        "model.bin",
+        "24c117e115e74a9979c49f65cff75c5552dc3652",
+    ),
+}
+
+
+def _distil_whisper_prefetch_name(model_name: str) -> str:
+    return "whisper_" + model_name.replace("-", "_").replace(".", "_")
+
+
 # =============================================================================
 # WhisperS2T Models (CTranslate2 backend - fastest option for CPU/CUDA)
 # =============================================================================
@@ -752,16 +783,6 @@ GRANITE_4_0_1B_SPEECH_PRESET = AsrModelPreset(
         supported_engines={InferenceAsrFramework.TRANSFORMERS},
     ),
 )
-PARAKEET_TDT_0_6B_V3_PRESET = AsrModelPreset(
-    preset_id="parakeet_tdt_0_6b_v3",
-    default_engine_type=InferenceAsrFramework.TRANSFORMERS,
-    model_spec=AsrModelSpec(
-        name="Parakeet TDT 0.6B v3",
-        default_repo_id="nvidia/parakeet-tdt-0.6b-v3",
-        model_family="parakeet",
-        supported_engines={InferenceAsrFramework.TRANSFORMERS},
-    ),
-)
 NEMOTRON_3_5_ASR_STREAMING_PRESET = AsrModelPreset(
     preset_id="nemotron_3_5_asr_streaming_0_6b",
     default_engine_type=InferenceAsrFramework.TRANSFORMERS,
@@ -774,13 +795,128 @@ NEMOTRON_3_5_ASR_STREAMING_PRESET = AsrModelPreset(
 )
 
 GRANITE_4_0_1B_SPEECH = GRANITE_4_0_1B_SPEECH_PRESET.to_options()
-PARAKEET_TDT_0_6B_V3 = PARAKEET_TDT_0_6B_V3_PRESET.to_options()
 NEMOTRON_3_5_ASR_STREAMING = NEMOTRON_3_5_ASR_STREAMING_PRESET.to_options()
 
 
+GRANITE_SPEECH_5_0_2B_PRESET = AsrModelPreset(
+    preset_id="granite_speech_5_0_2b",
+    default_engine_type=InferenceAsrFramework.TRANSFORMERS,
+    model_spec=AsrModelSpec(
+        name="Granite Speech 5.0 2B",
+        default_repo_id="ibm-granite/granite-speech-5.0-2b",
+        revision="f4e68169fa2a5751acc4b5da9957855e5e8fc3f1",
+        model_family="granite",
+        supported_engines={InferenceAsrFramework.TRANSFORMERS},
+    ),
+)
+GRANITE_SPEECH_5_0_2B = GRANITE_SPEECH_5_0_2B_PRESET.to_options()
+
+GRANITE_SPEECH_5_0_470M_TURBOCTC_PRESET = AsrModelPreset(
+    preset_id="granite_speech_5_0_470m_turboctc",
+    default_engine_type=InferenceAsrFramework.TRANSFORMERS,
+    model_spec=AsrModelSpec(
+        name="Granite Speech 5.0 470M TurboCTC",
+        default_repo_id="ibm-granite/granite-speech-5.0-470m-turboctc",
+        revision="1dd23f46f6d4e6eae2531982ba2e33220086dd97",
+        model_family="granite_ctc",
+        supported_engines={InferenceAsrFramework.TRANSFORMERS},
+    ),
+)
+GRANITE_SPEECH_5_0_470M_TURBOCTC = GRANITE_SPEECH_5_0_470M_TURBOCTC_PRESET.to_options()
+
+GRANITE_SPEECH_5_0_470M_TURBOCTC_NC_PRESET = AsrModelPreset(
+    preset_id="granite_speech_5_0_470m_turboctc_nc",
+    default_engine_type=InferenceAsrFramework.TRANSFORMERS,
+    model_spec=AsrModelSpec(
+        name="Granite Speech 5.0 470M TurboCTC NC",
+        default_repo_id="ibm-granite/granite-speech-5.0-470m-turboctc-nc",
+        revision="af0a8e8663defc902944ebdae0d29a5219be11a3",
+        model_family="granite_ctc",
+        supported_engines={InferenceAsrFramework.TRANSFORMERS},
+    ),
+)
+GRANITE_SPEECH_5_0_470M_TURBOCTC_NC = (
+    GRANITE_SPEECH_5_0_470M_TURBOCTC_NC_PRESET.to_options()
+)
+
+GRANITE_SPEECH_4_1_2B_PRESET = AsrModelPreset(
+    preset_id="granite_speech_4_1_2b",
+    default_engine_type=InferenceAsrFramework.TRANSFORMERS,
+    model_spec=AsrModelSpec(
+        name="Granite Speech 4.1 2B",
+        default_repo_id="ibm-granite/granite-speech-4.1-2b",
+        revision="de575db64086f84fdc79da4932d1076e965bc546",
+        model_family="granite",
+        supported_engines={InferenceAsrFramework.TRANSFORMERS},
+    ),
+)
+GRANITE_SPEECH_4_1_2B = GRANITE_SPEECH_4_1_2B_PRESET.to_options()
+
+GRANITE_SPEECH_4_1_2B_PLUS_PRESET = AsrModelPreset(
+    preset_id="granite_speech_4_1_2b_plus",
+    default_engine_type=InferenceAsrFramework.TRANSFORMERS,
+    model_spec=AsrModelSpec(
+        name="Granite Speech 4.1 2B Plus",
+        default_repo_id="ibm-granite/granite-speech-4.1-2b-plus",
+        revision="e69efe37f97b6283c61f5a8dadda2b3eb67765d6",
+        model_family="granite",
+        supported_engines={InferenceAsrFramework.TRANSFORMERS},
+    ),
+)
+GRANITE_SPEECH_4_1_2B_PLUS = GRANITE_SPEECH_4_1_2B_PLUS_PRESET.to_options()
+
+NEMOTRON_SPEECH_STREAMING_EN_0_6B_PRESET = AsrModelPreset(
+    preset_id="nemotron_speech_streaming_en_0_6b",
+    default_engine_type=InferenceAsrFramework.TRANSFORMERS,
+    model_spec=AsrModelSpec(
+        name="Nemotron Speech Streaming English 0.6B",
+        default_repo_id="nvidia/nemotron-speech-streaming-en-0.6b",
+        revision="ebe59e5a817142986528bbbee5dba8db7b38ed50",
+        model_family="nemotron",
+        supported_engines={InferenceAsrFramework.TRANSFORMERS},
+    ),
+)
+NEMOTRON_SPEECH_STREAMING_EN_0_6B = (
+    NEMOTRON_SPEECH_STREAMING_EN_0_6B_PRESET.to_options()
+)
+
+PARAKEET_CTC_1_1B_PRESET = AsrModelPreset(
+    preset_id="parakeet_ctc_1_1b",
+    default_engine_type=InferenceAsrFramework.TRANSFORMERS,
+    model_spec=AsrModelSpec(
+        name="Parakeet CTC 1.1B",
+        default_repo_id="nvidia/parakeet-ctc-1.1b",
+        revision="20e63a0fed6aedba145b74b826dbd41df0941730",
+        model_family="parakeet",
+        supported_engines={InferenceAsrFramework.TRANSFORMERS},
+    ),
+)
+PARAKEET_CTC_1_1B = PARAKEET_CTC_1_1B_PRESET.to_options()
+
+
+ADDITIONAL_ASR_PRESETS: dict[str, AsrModelPreset] = {
+    preset.preset_id: preset
+    for preset in (
+        GRANITE_SPEECH_5_0_2B_PRESET,
+        GRANITE_SPEECH_5_0_470M_TURBOCTC_PRESET,
+        GRANITE_SPEECH_5_0_470M_TURBOCTC_NC_PRESET,
+        GRANITE_SPEECH_4_1_2B_PRESET,
+        GRANITE_SPEECH_4_1_2B_PLUS_PRESET,
+        NEMOTRON_SPEECH_STREAMING_EN_0_6B_PRESET,
+        PARAKEET_CTC_1_1B_PRESET,
+    )
+}
+
+
 class AsrModelType(str, Enum):
+    GRANITE_SPEECH_5_0_2B = "granite_speech_5_0_2b"
+    GRANITE_SPEECH_5_0_470M_TURBOCTC = "granite_speech_5_0_470m_turboctc"
+    GRANITE_SPEECH_5_0_470M_TURBOCTC_NC = "granite_speech_5_0_470m_turboctc_nc"
+    GRANITE_SPEECH_4_1_2B = "granite_speech_4_1_2b"
+    GRANITE_SPEECH_4_1_2B_PLUS = "granite_speech_4_1_2b_plus"
+    NEMOTRON_SPEECH_STREAMING_EN_0_6B = "nemotron_speech_streaming_en_0_6b"
+    PARAKEET_CTC_1_1B = "parakeet_ctc_1_1b"
     GRANITE_4_0_1B_SPEECH = "granite_4_0_1b_speech"
-    PARAKEET_TDT_0_6B_V3 = "parakeet_tdt_0_6b_v3"
     NEMOTRON_3_5_ASR_STREAMING = "nemotron_3_5_asr_streaming"
     # Auto-selecting models (choose best implementation for hardware)
     WHISPER_TINY = "whisper_tiny"

@@ -113,6 +113,7 @@ class ResponseFormat(str, Enum):
     CHANDRA_HTML = "chandra_html"
     DOTS_JSON = "dots_json"
     NEMOTRON_PARSE_V2 = "nemotron_parse_v2"
+    NEMOTRON_PARSE_V3_5 = "nemotron_parse_v3_5"
     MINERU2 = "mineru2"
 
 

@@ -80,6 +80,16 @@ class AsciiDocBackendOptions(TextBackendOptions):
             ),
         ),
     ] = None
+    capture_comments: Annotated[
+        bool,
+        Field(
+            description=(
+                "Whether to keep AsciiDoc comments (`//` lines and `////` blocks) in "
+                "the notes content layer, which exports leave out by default. When "
+                "disabled, comments are dropped."
+            )
+        ),
+    ] = True
 
 
 class HTMLBackendOptions(BaseBackendOptions):
@@ -309,6 +319,15 @@ class ThreadedDoclingParseBackendOptions(PdfBackendOptions):
         description=(
             "Number of parser threads to use for the threaded docling-parse backend. "
             "If unset, the backend falls back to global accelerator thread settings."
+        ),
+    )
+    max_concurrent_results: Optional[PositiveInt] = Field(
+        None,
+        description=(
+            "Maximum number of decoded pages the threaded docling-parse backend buffers "
+            "ahead of the pipeline before its workers pause. Each buffered page holds its "
+            "decoded content and rendered image in memory, so lowering this bounds peak "
+            "memory on large or image-heavy PDFs. If unset, the docling-parse default is used."
         ),
     )
     render_pages: bool = Field(

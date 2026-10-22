@@ -3,11 +3,10 @@
 
 """ASR model specifications with engine-specific checkpoint exports."""
 
-from typing import Literal
-
 from pydantic import BaseModel, Field
 
 from docling.datamodel.pipeline_options_asr_model import (
+    AsrModelFamily,
     InferenceAsrFramework,
     InlineAsrMlxWhisperOptions,
     InlineAsrOptions,
@@ -36,7 +35,7 @@ class AsrModelSpec(BaseModel):
     name: str
     default_repo_id: str
     revision: str = "main"
-    model_family: Literal["whisper", "granite", "parakeet", "nemotron"] = "whisper"
+    model_family: AsrModelFamily = "whisper"
     supported_engines: set[InferenceAsrFramework]
     engine_overrides: dict[InferenceAsrFramework, AsrEngineConfig] = Field(
         default_factory=dict

@@ -180,6 +180,58 @@ def test_heading_levels():
     assert found_lvl_1 and found_lvl_2
 
 
+@pytest.mark.parametrize(
+    ("heading", "bold", "hyperlink"),
+    [
+        # Formatting or a link on one word does not apply to the whole heading
+        ("<h2>Section <strong>bold</strong> heading</h2>", False, None),
+        ("<h2><a href='https://example.com/'>Docs</a> and more</h2>", False, None),
+        # Formatting or a link on all of the text is kept
+        ("<h2><strong>All</strong> <strong>bold</strong></h2>", True, None),
+        (
+            "<h2><a href='https://example.com/'>Docs</a></h2>",
+            False,
+            "https://example.com/",
+        ),
+    ],
+)
+def test_heading_keeps_only_formatting_of_all_its_text(
+    heading: str, bold: bool, hyperlink: str | None
+):
+    html = f"<html><body>{heading}<p>text</p></body></html>".encode()
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(html),
+        format=InputFormat.HTML,
+        backend=HTMLDocumentBackend,
+        filename="test",
+    )
+    doc = in_doc._backend.convert()
+    headers = [item for item in doc.texts if isinstance(item, SectionHeaderItem)]
+    assert len(headers) == 1
+    header = headers[0]
+    assert bool(header.formatting and header.formatting.bold) is bold
+    assert (str(header.hyperlink) if header.hyperlink else None) == hyperlink
+
+
+def test_caption_with_partial_link_has_no_hyperlink():
+    html = (
+        b"<html><body><figure><img src='a.png' alt=''>"
+        b"<figcaption>Female mallard in <a href='/wiki/Cornwall'>Cornwall</a>,"
+        b" England</figcaption></figure></body></html>"
+    )
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(html),
+        format=InputFormat.HTML,
+        backend=HTMLDocumentBackend,
+        filename="test",
+    )
+    doc = in_doc._backend.convert()
+    captions = [item for item in doc.texts if item.label == DocItemLabel.CAPTION]
+    assert len(captions) == 1
+    assert captions[0].text.startswith("Female mallard in Cornwall")
+    assert captions[0].hyperlink is None
+
+
 def test_table_header_rowspan_without_body_does_not_crash():
     # A table whose only row is a `th` with rowspan (no body rows to span into)
     # used to raise IndexError: get_html_table_row_col counts no rows for an
@@ -664,6 +716,41 @@ def test_ordered_lists():
             "1. 1st item\n2. 2nd item",
         )
     )
+    # A start that is not an HTML integer (superscript two, Roman numeral eight,
+    # Arabic-Indic three, fullwidth nine, empty) or that exceeds the 32-bit range
+    # is ignored, as in browsers. None of these values fails the conversion.
+    for invalid in [
+        "\u00b2",
+        "\u2167",
+        "\u0663",
+        "\uff19",
+        "",
+        "2147483648",
+        "9" * 4300,
+    ]:
+        test_set.append(
+            (
+                f'<html><body><ol start="{invalid}"><li>1st item</li><li>2nd item</li></ol></body></html>'.encode(),
+                "1. 1st item\n2. 2nd item",
+            )
+        )
+    # The HTML rules for parsing integers accept leading whitespace, a plus sign
+    # and leading zeros, and they ignore the text after the digits.
+    for valid, number in [
+        (" 3", 3),
+        ("+3", 3),
+        ("007", 7),
+        ("3 ", 3),
+        ("3.5", 3),
+        ("3abc", 3),
+        ("2147483647", 2147483647),
+    ]:
+        test_set.append(
+            (
+                f'<html><body><ol start="{valid}"><li>1st item</li><li>2nd item</li></ol></body></html>'.encode(),
+                f"{number}. 1st item\n{number + 1}. 2nd item",
+            )
+        )
 
     for idx, pair in enumerate(test_set):
         in_doc = InputDocument(
@@ -2100,6 +2187,52 @@ def _require_chromium() -> None:
         pytest.skip(f"Chromium is not available: {exc}")
 
 
+def _make_stream_backend(src: bytes, name: str) -> HTMLDocumentBackend:
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(src),
+        format=InputFormat.HTML,
+        backend=HTMLDocumentBackend,
+        filename=name,
+    )
+    return HTMLDocumentBackend(
+        in_doc=in_doc,
+        path_or_stream=BytesIO(src),
+        options=HTMLBackendOptions(render_page=True),
+    )
+
+
+def test_browser_render_decodes_stream_with_declared_encoding():
+    """A rendered stream keeps the text of a non-UTF-8 document.
+
+    A stream reaches Chromium through `page.set_content`, so the bytes are
+    decoded here instead of by the browser honouring `<meta charset>` the way
+    a `page.goto` on a path does. Decoding as UTF-8 garbled every non-ASCII
+    character of a legacy encoded document while the conversion still
+    reported success.
+    """
+    text = "Привет, мир"
+    src = (
+        '<html><head><meta charset="windows-1251"></head>'
+        f"<body><p>{text}</p></body></html>"
+    ).encode("cp1251")
+
+    backend = _make_stream_backend(src, "page.html")
+
+    rendered = backend._get_render_html_text()
+    assert text in rendered
+    assert BeautifulSoup(rendered, "html.parser").get_text() == text
+
+
+def test_browser_render_decodes_utf8_stream_unchanged():
+    """A UTF-8 document without a charset declaration still decodes as UTF-8."""
+    text = "café"
+    src = f"<html><body><p>{text}</p></body></html>".encode()
+
+    rendered = _make_stream_backend(src, "page.html")._get_render_html_text()
+
+    assert BeautifulSoup(rendered, "html.parser").get_text() == text
+
+
 def test_browser_render_fetches_remote_resources_through_image_loader(
     tmp_path, monkeypatch
 ):
@@ -2379,6 +2512,52 @@ Text with pre-existing sentinel{_BR_SENTINEL}character should be cleaned.
     assert "sentinelcharacter" in markdown or "sentinel character" in markdown, (
         "Text should still be present after sentinel cleanup"
     )
+
+
+def test_html_line_break_outside_paragraphs():
+    # A <br> outside a paragraph or a table cell, e.g. in a heading or a list
+    # item, left the internal sentinel (U+E000) in the text. It is now a line
+    # break, as in a paragraph. The text of a checkbox stays on one line.
+    src = (
+        b"<html><body>"
+        b"<h1>Title<br>line</h1>"
+        b"<h2>Heading<br>line</h2>"
+        b"<ul><li>Item<br>line</li><li><b>Bold</b><br><i>italic</i></li></ul>"
+        b"<dl><dt>Term<br>line</dt><dd>Definition<br>line</dd></dl>"
+        b"<table><caption>Caption<br>line</caption>"
+        b"<tr><td>A</td><td>B</td></tr></table>"
+        b"<figure><img src='a.png'><figcaption>Figure<br>line</figcaption></figure>"
+        b"<pre>Code<br>line</pre>"
+        b"<pre><b>bold</b><br><i>code</i></pre>"
+        b"<ul><li><input type='checkbox' checked>Task<br>line</li></ul>"
+        b"</body></html>"
+    )
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(src),
+        format=InputFormat.HTML,
+        backend=HTMLDocumentBackend,
+        filename="t.html",
+    )
+    doc = HTMLDocumentBackend(in_doc=in_doc, path_or_stream=BytesIO(src)).convert()
+
+    assert [item.text for item in doc.texts] == [
+        "Title\nline",
+        "Heading\nline",
+        "Item\nline",
+        "",  # the list item with formatting: its text is in the two runs below
+        "Bold",
+        "italic",
+        "Term\nline",
+        "Definition\nline",
+        "Caption\nline",
+        "Figure\nline",
+        "Code\nline",
+        "bold",
+        "code",
+        "Task line",
+    ]
+    assert not any(_BR_SENTINEL in item.orig for item in doc.texts)
+    assert "## Heading line" in doc.export_to_markdown()
 
 
 def test_gfm_task_list_renders_checkbox_with_text():

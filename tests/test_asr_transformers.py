@@ -12,9 +12,8 @@ import pytest
 
 from docling.datamodel.accelerator_options import AcceleratorOptions
 from docling.datamodel.asr_model_specs import (
-    GRANITE_4_0_1B_SPEECH,
     NEMOTRON_3_5_ASR_STREAMING,
-    PARAKEET_TDT_0_6B_V3,
+    PARAKEET_CTC_1_1B,
     WHISPER_ASR_PRESETS,
 )
 from docling.datamodel.pipeline_options_asr_model import (
@@ -120,8 +119,7 @@ def test_mlx_uses_local_checkpoint(tmp_path: Path, monkeypatch: pytest.MonkeyPat
 @pytest.mark.parametrize(
     ("options", "family"),
     [
-        (GRANITE_4_0_1B_SPEECH, "granite"),
-        (PARAKEET_TDT_0_6B_V3, "parakeet"),
+        (PARAKEET_CTC_1_1B, "parakeet"),
         (NEMOTRON_3_5_ASR_STREAMING, "nemotron"),
     ],
 )
