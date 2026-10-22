@@ -31,7 +31,10 @@ from docling.backend.latex_backend import LatexDocumentBackend
 from docling.backend.md_backend import MarkdownDocumentBackend
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
-from docling.utils.vlm_utils import strip_math_delimiters
+from docling.utils.vlm_utils import (
+    normalize_section_header_levels,
+    strip_math_delimiters,
+)
 
 _log = logging.getLogger(__name__)
 
@@ -256,8 +259,14 @@ def parse_nemotron_parse_v2(
     page_no: int,
     filename: str = "file",
     page_image: PILImage.Image | None = None,
+    *,
+    normalize_heading_levels: bool = True,
 ) -> DoclingDocument:
-    """Parse one page of Nemotron Parse 2.0 native output."""
+    """Parse one page of Nemotron Parse 2.0 native output.
+
+    Set ``normalize_heading_levels`` to False to keep raw heading depths for a
+    later document-wide :func:`normalize_section_header_levels`.
+    """
     origin = DocumentOrigin(filename=filename, mimetype="text/plain", binary_hash=0)
     document = DoclingDocument(name=filename.rsplit(".", 1)[0], origin=origin)
     image_dpi = 72
@@ -312,15 +321,11 @@ def parse_nemotron_parse_v2(
             )
         elif region.label == "Section-header":
             heading_match = _HEADING_PATTERN.match(raw_text)
-            level = (
-                max(1, len(heading_match.group(1)) - 1)
-                if heading_match is not None
-                else 1
-            )
             document.add_heading(
                 text=_markdown_to_text(raw_text),
                 orig=raw_text,
-                level=level,
+                # Raw markup depth, normalized per document later.
+                level=len(heading_match.group(1)) if heading_match is not None else 2,
                 prov=provenance,
             )
         else:
@@ -337,4 +342,6 @@ def parse_nemotron_parse_v2(
                 prov=provenance,
             )
 
+    if normalize_heading_levels:
+        normalize_section_header_levels(document)
     return document

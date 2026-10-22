@@ -12,6 +12,7 @@ from docling_core.types.doc import (
     DocItemLabel,
     DoclingDocument,
     FloatingItem,
+    SectionHeaderItem,
     Size,
     TextItem,
 )
@@ -69,6 +70,24 @@ def parse_markdown_heading(text: str) -> tuple[str, int | None]:
     if match is None:
         return text, None
     return match.group(2), len(match.group(1))
+
+
+def normalize_section_header_levels(doc: DoclingDocument) -> None:
+    """Turn the raw heading depths of a whole document into section levels.
+
+    VLM mappers store a section header with N Markdown ``#`` or HTML ``<hN>``
+    at level N, and one without markup at level 2 (like ``##``). Docling exports
+    section level N one step deeper, below the title. If no section header has
+    level 1, all levels go up one step, so exports keep the source depth.
+    Otherwise nothing changes, so two source depths never share one level.
+    The layout label alone decides title versus section header. Call this once
+    per document, after pages are joined, so a depth maps to one level on all
+    pages. ``doc.texts`` holds every text item, in every layer and container.
+    """
+    headers = [item for item in doc.texts if isinstance(item, SectionHeaderItem)]
+    if all(item.level > 1 for item in headers):
+        for item in headers:
+            item.level -= 1
 
 
 # `\(` and `\)` are not math symbols, so in a formula they are delimiters; `\\` stays.
