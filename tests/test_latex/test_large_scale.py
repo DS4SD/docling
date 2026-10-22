@@ -14,6 +14,10 @@ Add ``--recheck-failures`` to convert the files that failed earlier again, for
 example after a fix. The latest result of each file replaces the earlier one.
 ``latex-failures.jsonl`` keeps every failure found, also failures that a later
 recheck cleared.
+The stream starts with shard 0, which holds the arXiv papers of 2007 and 2008.
+Use ``--corpus-shard N`` (0-79, repeatable) to read other shards, and
+``--corpus-dir DIR`` to write the output files outside the repository, for
+example one folder for each of several parallel runs.
 """
 
 import hashlib
@@ -41,7 +45,14 @@ from .latex_serializer import (
 )
 
 _DATASET = "secemp9/arxiv-complete"
+_SHARD_COUNT = 80
 _SOURCE_EXTENSIONS = {"tex", "ltx"}
+
+
+def _shard_files(shards: list[int]) -> list[str]:
+    return [
+        f"latex/train-{shard:05d}-of-{_SHARD_COUNT:05d}.parquet" for shard in shards
+    ]
 
 
 class _ManifestEntry(BaseModel):
@@ -116,6 +127,13 @@ def test_recheck_replaces_earlier_failure(tmp_path: Path) -> None:
     assert not _failure_counts(completed.values())
 
 
+def test_shard_files_name_the_latex_parquet_files() -> None:
+    assert _shard_files([0, 79]) == [
+        "latex/train-00000-of-00080.parquet",
+        "latex/train-00079-of-00080.parquet",
+    ]
+
+
 def _local_name(tag: str) -> str:
     return tag.rsplit("}", 1)[-1]
 
@@ -154,23 +172,28 @@ def test_arxiv_latex_corpus(
         pytest.fail("--max-items must be a positive integer")
     write_success: bool = pytestconfig.getoption("--write-success")
     recheck_failures: bool = pytestconfig.getoption("--recheck-failures")
+    shards: list[int] = pytestconfig.getoption("--corpus-shard") or []
+    if any(not 0 <= shard < _SHARD_COUNT for shard in shards):
+        pytest.fail(f"--corpus-shard must be between 0 and {_SHARD_COUNT - 1}")
+    corpus_dir: Path | None = pytestconfig.getoption("--corpus-dir")
 
     from datasets import load_dataset
     from doclang import ValidationError, validate
 
-    repo_root = Path(__file__).resolve().parents[2]
-    manifest_path = repo_root / "latex-manifest.jsonl"
+    output_dir = corpus_dir or Path(__file__).resolve().parents[2]
+    output_dir.mkdir(parents=True, exist_ok=True)
+    manifest_path = output_dir / "latex-manifest.jsonl"
     completed = _read_manifest(manifest_path)
-    report_path = repo_root / "latex-failures.jsonl"
+    report_path = output_dir / "latex-failures.jsonl"
     if completed:
         report_path.touch(exist_ok=True)
     else:
         report_path.write_text("", encoding="utf-8")
     dclg_path = tmp_path / "current.dclg"
-    artifacts_dir = repo_root / "latex-failures"
+    artifacts_dir = output_dir / "latex-failures"
     source_dir = artifacts_dir / "sources"
     invalid_dir = artifacts_dir / "invalid-dclg"
-    success_dir = repo_root / "latex-success"
+    success_dir = output_dir / "latex-success"
     if write_success:
         success_dir.mkdir(exist_ok=True)
     checked = 0
@@ -205,7 +228,12 @@ def test_arxiv_latex_corpus(
             output.write(json.dumps(entry, ensure_ascii=False) + "\n")
         row_stages.append(stage)
 
-    corpus = load_dataset(_DATASET, "latex", split="train", streaming=True)
+    if shards:
+        corpus = load_dataset(
+            _DATASET, data_files=_shard_files(shards), split="train", streaming=True
+        )
+    else:
+        corpus = load_dataset(_DATASET, "latex", split="train", streaming=True)
     with caplog.at_level(logging.WARNING, logger="docling.backend.latex"):
         for row in corpus:
             if max_items is not None and checked >= max_items:
