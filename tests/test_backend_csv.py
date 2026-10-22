@@ -250,6 +250,48 @@ def test_doubled_quotes_with_non_comma_delimiter():
                 "'tbd'",
             ],
         ),
+        (
+            b"Product;Weight (kg, net);Note\nApple;0,2;'n/a'\nPear;0,35;'90s music\n",
+            [
+                "Product",
+                "Weight (kg, net)",
+                "Note",
+                "Apple",
+                "0,2",
+                "'n/a'",
+                "Pear",
+                "0,35",
+                "'90s music",
+            ],
+        ),
+        (
+            b"Product;Weight (kg, net);Note\nApple;0,2;'tbd'\nPear;0,35;'tbd'\n",
+            [
+                "Product",
+                "Weight (kg, net)",
+                "Note",
+                "Apple",
+                "0,2",
+                "'tbd'",
+                "Pear",
+                "0,35",
+                "'tbd'",
+            ],
+        ),
+        (
+            b'Product;Weight (kg, net);Note\nApple;0,2;"a; b"\nPear;0,35;c\n',
+            [
+                "Product",
+                "Weight (kg, net)",
+                "Note",
+                "Apple",
+                "0,2",
+                "a; b",
+                "Pear",
+                "0,35",
+                "c",
+            ],
+        ),
     ],
     ids=[
         "semicolon_with_comma_in_header",
@@ -264,6 +306,9 @@ def test_doubled_quotes_with_non_comma_delimiter():
         "comma_with_unclosed_single_quote",
         "comma_with_unclosed_single_quote_semicolon_in_header",
         "comma_keeps_closed_single_quotes",
+        "semicolon_with_unclosed_single_quote",
+        "semicolon_keeps_closed_single_quotes",
+        "semicolon_with_quoted_delimiter",
     ],
 )
 def test_header_with_second_delimiter_uses_following_rows(payload, expected):
