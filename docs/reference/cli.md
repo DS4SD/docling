@@ -85,6 +85,7 @@ docling convert [OPTIONS] source
 | `--allow-external-plugins` / `--no-allow-external-plugins` | flag | `false` | Must be enabled for loading modules from third-party plugins. |
 | `--show-external-plugins` / `--no-show-external-plugins` | flag | `false` | List the third-party plugins which are available when the option --allow-external-plugins is set. |
 | `--abort-on-error` / `--no-abort-on-error` | flag | `false` | If enabled, the processing will be aborted when the first error is encountered. |
+| `--fail-on` | `never`, `failure`, `partial` | `failure` | Which outcome makes docling exit with code 1: 'failure' (default) if any document fails, 'partial' also if any document is only partially converted, 'never' to always exit 0. |
 | `--output` | `path` | `.` | Output directory where results are saved. |
 | `--verbose` / `-v` | `integer` | `0` | Set the verbosity level. -v for info logging, -vv for debug logging. |
 | `--quiet` / `-q` | flag | `false` | Suppress the per-file progress log emitted at default verbosity, restoring fully silent output (warnings and errors only). Has no effect when -v/--verbose is given. |
@@ -151,6 +152,7 @@ docling convert-remote [OPTIONS] source
 | `--page-range` | `text` |  | Only convert a range of pages, e.g. 1-4 (page numbers start at 1). |
 | `--document-timeout` | `float` |  | Server-side timeout for processing each document, in seconds. |
 | `--abort-on-error` / `--no-abort-on-error` | flag | `false` | If enabled, the service aborts the batch on the first error. |
+| `--fail-on` | `never`, `failure`, `partial` | `failure` | Which outcome makes docling exit with code 1: 'failure' (default) if any document fails, 'partial' also if any document is only partially converted, 'never' to always exit 0. |
 | `--max-concurrency` | `integer` | `8` | Maximum number of documents converted concurrently against the service. |
 | `--timeout` | `float` | `300.0` | Client-side timeout waiting for each job to finish, in seconds. |
 | `--watcher` | `websocket`, `polling` | `websocket` | How the client tracks job status: websocket (default) or polling. |
