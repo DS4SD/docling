@@ -37,6 +37,11 @@ def pytest_addoption(parser: pytest.Parser) -> None:
         action="store_true",
         help="Save successful arXiv LaTeX sources and DocLang output.",
     )
+    parser.addoption(
+        "--recheck-failures",
+        action="store_true",
+        help="Convert again the arXiv LaTeX files that failed in an earlier run.",
+    )
 
 
 @pytest.fixture(scope="module")
