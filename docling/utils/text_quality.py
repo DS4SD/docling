@@ -71,12 +71,19 @@ def _is_private_use(ch: str) -> bool:
 
 
 def _non_ascii_latin_share(text: str) -> float:
-    """Share of Latin letters outside ASCII, on text where Latin letters dominate."""
+    """Share of Latin letters outside ASCII, on text where Latin letters dominate.
+
+    Phonetic symbols (IPA) are not counted as Latin: no 8-bit code page decodes to
+    them, so they are never the accented Latin of a misread font.
+    """
     letters = [ch for ch in text if ch.isalpha()]
     latin = [
         ch
         for ch in letters
-        if "LATIN" in unicodedata.name(ch, "") and not "\uff00" <= ch <= "\uffef"
+        if "LATIN" in unicodedata.name(ch, "")
+        and not "\uff00" <= ch <= "\uffef"
+        and not "\u0250" <= ch <= "\u02af"
+        and not "\u1d00" <= ch <= "\u1dbf"
     ]
     if len(latin) < _MIN_LATIN_LETTERS or len(latin) * 2 < len(letters):
         return 0.0

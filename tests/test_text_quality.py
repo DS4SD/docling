@@ -104,6 +104,14 @@ ORDINARY = {
     * 6,
     "dotted_capital_i": _PROSE
     + "\nThe office in \N{LATIN CAPITAL LETTER I WITH DOT ABOVE}stanbul opened.\n",
+    # The 25 vowels of an IPA vowel chart, in three rows: phonetic symbols, not mojibake.
+    "ipa_vowel_chart": "\n".join(
+        [
+            "\u026a \u028f \u028a e \u00f8 \u0259 \u0250 \u00e6 a \u0251 \u0252 \u028c "
+            "\u0254 \u0153 \u025c \u025e \u0264 o \u0258 \u0275 \u026f \u0268 \u0289 y u"
+        ]
+        * 3
+    ),
 }
 
 # Text layers from fonts whose glyphs were not mapped to real characters.
