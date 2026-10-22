@@ -443,6 +443,19 @@ def test_task_status_response_accepts_structured_failure() -> None:
     assert response.failure.phase == FailurePhase.ORCHESTRATION
 
 
+def test_task_status_response_serializes_cancelled_status() -> None:
+    response = TaskStatusResponse.model_validate(
+        {
+            "task_id": "task-1",
+            "task_type": "convert",
+            "task_status": "cancelled",
+        }
+    )
+
+    assert response.task_status is ConversionStatus.CANCELLED
+    assert response.model_dump(mode="json")["task_status"] == "cancelled"
+
+
 def test_confidence_scores_from_flat_scores() -> None:
     scores = PageConfidenceScores(
         parse_score=0.9, layout_score=0.8, table_score=None, ocr_score=0.95
