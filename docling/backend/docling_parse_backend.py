@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import re
 import warnings
 from collections.abc import Iterable, Iterator
 from io import BytesIO
@@ -286,45 +285,41 @@ class ThreadedDoclingParsePageBackend(PdfPageBackend):
         return None
 
 
-# Number of trailing bytes scanned for the /Encrypt trailer entry. The PDF
-# trailer sits at the end of the file (after `startxref`), so this keeps the
-# encryption probe O(1) regardless of document size.
-_ENCRYPTION_PROBE_TAIL_BYTES = 8192
+def _pdfium_reports_password_error(
+    path_or_stream: Union[BytesIO, Path], password: Optional[str]
+) -> bool:
+    """Classify a failed PDF load with PDFium when that backend is installed.
 
-# Matches an /Encrypt entry in a PDF trailer dictionary, either as an indirect
-# reference (`/Encrypt 5 0 R`) or as an inline dictionary (`/Encrypt << ...`).
-_ENCRYPT_ENTRY_PATTERN = re.compile(rb"/Encrypt\s*(?:<<|\d+\s+\d+\s+R)")
-
-
-def _pdf_trailer_indicates_encryption(path_or_stream: Union[BytesIO, Path]) -> bool:
-    """Check whether a PDF trailer declares the document encrypted.
-
-    This is a cheap heuristic, not a full trailer parse: it scans only the last
-    few kilobytes of the input for an `/Encrypt` trailer entry. It runs only on
-    the load-failure path, so the happy path pays nothing. Unreadable input
-    yields False, keeping the generic load-failure message for corrupt files.
+    The normal ``docling`` installation includes both PDF backends, but
+    ``format-pdf-docling`` can be installed on its own. In the latter case we
+    preserve docling-parse's original error instead of guessing from PDF bytes.
     """
     try:
-        if isinstance(path_or_stream, BytesIO):
-            pos = path_or_stream.tell()
-            try:
-                path_or_stream.seek(0, 2)
-                size = path_or_stream.tell()
-                path_or_stream.seek(max(0, size - _ENCRYPTION_PROBE_TAIL_BYTES))
-                tail = path_or_stream.read(_ENCRYPTION_PROBE_TAIL_BYTES)
-            finally:
-                path_or_stream.seek(pos)
-        elif isinstance(path_or_stream, Path):
-            with open(path_or_stream, "rb") as f:
-                f.seek(0, 2)
-                size = f.tell()
-                f.seek(max(0, size - _ENCRYPTION_PROBE_TAIL_BYTES))
-                tail = f.read(_ENCRYPTION_PROBE_TAIL_BYTES)
-        else:
-            return False
-    except (OSError, ValueError):
+        import pypdfium2 as pdfium
+    except ImportError:
         return False
-    return _ENCRYPT_ENTRY_PATTERN.search(tail) is not None
+
+    stream_position: int | None = None
+    if isinstance(path_or_stream, BytesIO):
+        stream_position = path_or_stream.tell()
+        path_or_stream.seek(0)
+
+    try:
+        document = pdfium.PdfDocument(
+            path_or_stream,
+            password=password,
+            autoclose=False,
+        )
+    except pdfium.PdfiumError as exc:
+        return exc.err_code == pdfium.raw.FPDF_ERR_PASSWORD
+    except (OSError, TypeError, ValueError):
+        return False
+    else:
+        document.close()
+        return False
+    finally:
+        if stream_position is not None:
+            path_or_stream.seek(stream_position)
 
 
 class ThreadedDoclingParseDocumentBackend(PdfDocumentBackend):
@@ -407,11 +402,11 @@ class ThreadedDoclingParseDocumentBackend(PdfDocumentBackend):
         except (RuntimeError, ValueError) as e:
             # The threaded parser surfaces native parse failures on unreadable bytes
             # as RuntimeError or ValueError. Tag both as load failures.
-            if _pdf_trailer_indicates_encryption(self.path_or_stream):
-                # docling-parse reports an encrypted PDF with the same generic
-                # load failure as a corrupt file. Probe the trailer so callers
-                # can tell "needs a password" apart from "broken file",
-                # mirroring the iWork backend's password-protected error.
+            if _pdfium_reports_password_error(self.path_or_stream, password):
+                # Released docling-parse versions report an encrypted PDF with
+                # the same generic load failure as a corrupt file. Ask a real
+                # PDF parser to classify the failure rather than inferring it
+                # from the document's byte layout.
                 raise DocumentLoadError(
                     f"docling-parse could not load document {self.document_hash}: "
                     "the PDF document appears to be password-protected "

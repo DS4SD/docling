@@ -2,13 +2,17 @@
 # SPDX-License-Identifier: MIT
 
 from dataclasses import dataclass
+from io import BytesIO
 from pathlib import Path
 from typing import Iterable, Iterator, Optional, Type
 
 import pytest
 
 from docling.backend.abstract_backend import AbstractDocumentBackend
-from docling.backend.docling_parse_backend import ThreadedDoclingParseDocumentBackend
+from docling.backend.docling_parse_backend import (
+    ThreadedDoclingParseDocumentBackend,
+    _pdfium_reports_password_error,
+)
 from docling.backend.pypdfium2_backend import (
     PyPdfiumDocumentBackend,
 )
@@ -129,3 +133,14 @@ def test_encrypted_pdf_error_identifies_encryption(
         f"{type(exc).__name__}: {exc}" for exc in _walk_causes(exc_info.value)
     )
     assert expected_fragment in chain_text
+
+
+def test_password_probe_parses_pdf_structure_beyond_trailing_window(
+    test_doc_path: Path,
+):
+    """Password detection must not depend on where `/Encrypt` occurs in the bytes."""
+    padded_pdf = BytesIO(test_doc_path.read_bytes() + b"\n%" + b"x" * 16_384)
+    padded_pdf.seek(17)
+
+    assert _pdfium_reports_password_error(padded_pdf, password=None)
+    assert padded_pdf.tell() == 17
