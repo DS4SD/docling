@@ -73,7 +73,7 @@ from docling.utils.vlm_utils import normalize_section_header_levels
 
 _log = logging.getLogger(__name__)
 _DOCLANG_OPEN_RE = re.compile(r"<doclang(?:\s[^>]*)?>")
-# Their mappers keep raw heading depths per page; the joined document is normalized.
+# Formats whose mappers keep raw heading depths per page; the joined document is normalized.
 _RAW_HEADING_DEPTH_FORMATS = frozenset(
     {
         ResponseFormat.CHANDRA_HTML,
