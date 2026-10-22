@@ -32,3 +32,12 @@ def test_multiline_formula_keeps_latex_and_line_breaks() -> None:
     doc = parse_nemotron_parse_v2(source, size, size, page_no=1)
     assert doc.texts[0].text == latex
     assert doc.export_to_markdown() == f"$${latex}$$"
+
+
+def test_formula_segments_lose_every_inline_delimiter() -> None:
+    raw = r"(6) \(x_1=a\), \(x_2=b\)"
+    source = f"<x_0.2><y_0.2>{raw}<x_0.8><y_0.4><class_Formula>"
+    size = Size(width=600, height=800)
+    doc = parse_nemotron_parse_v2(source, size, size, page_no=1)
+    assert doc.texts[0].text == "(6) x_1=a, x_2=b"
+    assert doc.texts[0].orig == raw
