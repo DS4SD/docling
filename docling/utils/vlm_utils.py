@@ -71,16 +71,24 @@ def parse_markdown_heading(text: str) -> tuple[str, int | None]:
     return match.group(2), len(match.group(1))
 
 
+# `\(` and `\)` are not math symbols, so in a formula they are delimiters; `\\` stays.
+_INLINE_MATH_DELIMITER = re.compile(r"\\\\|\\[()]")
+_OUTER_MATH = re.compile(
+    r"\$\$((?:(?!\$\$).)*)\$\$|\\\[((?:(?!\\[\[\]]).)*)\\\]|\$([^$]*)\$", re.DOTALL
+)
+
+
 def strip_math_delimiters(text: str) -> str:
-    """Remove one matching outer math pair without interpreting its LaTeX."""
-    text = text.strip()
-    for opening, closing in (("$$", "$$"), (r"\[", r"\]"), (r"\(", r"\)"), ("$", "$")):
-        if (
-            len(text) >= len(opening) + len(closing)
-            and text.startswith(opening)
-            and text.endswith(closing)
-        ):
-            return text[len(opening) : -len(closing)].strip()
+    """Formula LaTeX without math delimiters; the serializer adds its own.
+
+    VLMs can wrap each segment in ``\\(...\\)``, often with text between them
+    (``(6) \\(x_1=a\\), \\(x_2=b\\)``), and leave single ones in truncated output.
+    """
+    text = _INLINE_MATH_DELIMITER.sub(
+        lambda match: match.group() if match.group() == "\\\\" else "", text
+    ).strip()
+    while (outer := _OUTER_MATH.fullmatch(text)) is not None:
+        text = next(group for group in outer.groups() if group is not None).strip()
     return text
 
 

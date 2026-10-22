@@ -49,7 +49,11 @@ from docling.utils.dots_utils import (
     _markdown_inline_html,
     _unescape_markdown_literals,
 )
-from docling.utils.vlm_utils import link_adjacent_captions, parse_markdown_heading
+from docling.utils.vlm_utils import (
+    link_adjacent_captions,
+    parse_markdown_heading,
+    strip_math_delimiters,
+)
 
 _log = logging.getLogger(__name__)
 
@@ -83,11 +87,6 @@ _LATEX_TEXT_REPLACEMENTS = {
 }
 _CHART_OPEN = re.compile(r'<chart\s+type="([^"]*)"\s*>')
 _CHART_TABLE_KEY = re.compile(r"table\[(\w+)\]")
-# `\(` and `\)` are not math symbols, so in a formula they are delimiters; `\\` stays.
-_INLINE_MATH_DELIMITER = re.compile(r"\\\\|\\[()]")
-_OUTER_MATH = re.compile(
-    r"\$\$((?:(?!\$\$).)*)\$\$|\\\[((?:(?!\\[\[\]]).)*)\\\]|\$([^$]*)\$", re.DOTALL
-)
 
 
 @dataclass(frozen=True)
@@ -148,20 +147,6 @@ def _page_bbox(bbox: tuple[float, float, float, float], size: Size) -> BoundingB
         b=max(y1, y2) * size.height,
         coord_origin=CoordOrigin.TOPLEFT,
     )
-
-
-def _formula_latex(text: str) -> str:
-    """Formula LaTeX without math delimiters; the serializer adds its own.
-
-    The model wraps each segment in ``\\(...\\)``, often with text between them
-    (``(6) \\(x_1=a\\), \\(x_2=b\\)``), and leaves single ones in truncated output.
-    """
-    text = _INLINE_MATH_DELIMITER.sub(
-        lambda match: match.group() if match.group() == "\\\\" else "", text
-    ).strip()
-    while (outer := _OUTER_MATH.fullmatch(text)) is not None:
-        text = next(group for group in outer.groups() if group is not None).strip()
-    return text
 
 
 def _add_rich_text(
@@ -560,7 +545,7 @@ def parse_nemotron_parse_v3_5(
             ):
                 heading.text = _unescape_markdown_literals(clean_text)
         elif block.label == "Formula":
-            doc.add_formula(text=_formula_latex(text), orig=text, prov=prov)
+            doc.add_formula(text=strip_math_delimiters(text), orig=text, prov=prov)
         elif block.label == "Code":
             doc.add_code(
                 text=text,
