@@ -296,7 +296,6 @@ def parse_paddleocr_vl_result(
     *,
     filename: str | None = None,
     page_no: int | None = None,
-    normalize_heading_levels: bool = True,
 ) -> DoclingDocument:
     """Convert one saved PaddleOCR-VL page result into a ``DoclingDocument``.
 
@@ -310,8 +309,6 @@ def parse_paddleocr_vl_result(
             0-based ``page_index`` is converted to Docling's 1-based numbering.
             This cannot make a concatenated multi-page payload valid; those
             results remain unsupported and must be parsed per page.
-        normalize_heading_levels: If False, keep raw heading depths for a later
-            document-wide :func:`normalize_section_header_levels`.
 
     Returns:
         A single-page ``DoclingDocument`` with typed items and provenance in
@@ -341,6 +338,6 @@ def parse_paddleocr_vl_result(
     for block in page.parsing_res_list:
         _add_block(doc, block, page=page, page_no=resolved_page_no)
 
-    if normalize_heading_levels:
-        normalize_section_header_levels(doc)
+    # One page is one document here, so its heading levels are normalized now.
+    normalize_section_header_levels(doc)
     return doc

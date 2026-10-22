@@ -160,7 +160,7 @@ def _collect_annotation_content(
                 break
             ii += 1
     else:
-        # Text and captions can span lines and paragraphs within one annotation.
+        # Every non-table block keeps its lines up to the next annotation.
         while i < len(lines):
             if re.match(annotation_pattern, lines[i].strip()):
                 break
