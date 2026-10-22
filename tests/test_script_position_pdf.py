@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 from docling_core.types.doc.document import InlineGroup, Script, TextItem
+from PIL import Image
 
 from docling.backend.docling_parse_backend import ThreadedDoclingParseDocumentBackend
 from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
@@ -15,7 +16,11 @@ from docling.datamodel.pipeline_options import (
     PdfPipelineOptions,
     ScriptPositionOptions,
 )
-from docling.document_converter import DocumentConverter, PdfFormatOption
+from docling.document_converter import (
+    DocumentConverter,
+    ImageFormatOption,
+    PdfFormatOption,
+)
 
 pytestmark = pytest.mark.ml_pdf_model
 
@@ -202,3 +207,19 @@ def test_leaves_invisible_text_unchanged(tmp_path, backend):
 
     assert "confirmed by the team today" in document.export_to_markdown()
     assert _scripts(_runs(document)) == []
+
+
+def test_image_input_is_skipped_without_a_warning(tmp_path, caplog):
+    """The PDF pipeline also converts images, which have no PDF characters."""
+    image = tmp_path / "page.png"
+    Image.new("RGB", (200, 100), "white").save(image)
+    options = PdfPipelineOptions(do_ocr=False, do_table_structure=False)
+    options.script_position_options = ScriptPositionOptions(enabled=True)
+    converter = DocumentConverter(
+        format_options={InputFormat.IMAGE: ImageFormatOption(pipeline_options=options)}
+    )
+
+    with caplog.at_level("WARNING", logger="docling.models.stages.script_position"):
+        converter.convert(image)
+
+    assert not [r for r in caplog.records if "recovery" in r.getMessage()]

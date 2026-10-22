@@ -2088,7 +2088,7 @@ class ScriptPositionOptions(BaseModel):
 
     When ``enabled``, characters drawn smaller than their line and raised or lowered against
     it (footnote markers, "1st", "mc2", "H2O") are marked with ``formatting.script``. A text
-    item holding them becomes an inline group of runs, as the Word backend produces.
+    item holding them keeps its place, and its text moves into an inline group of runs.
 
     Notes:
         - Character positions are read with pypdfium2 whichever backend parsed the page; the

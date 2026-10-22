@@ -3,6 +3,8 @@
 
 """Tests for finding superscript and subscript text from PDF character geometry."""
 
+import re
+
 import pytest
 from docling_core.types.doc import (
     BoundingBox,
@@ -264,12 +266,72 @@ def test_stage_rewrites_paragraphs_and_list_items():
         [("E = mc", B), ("2", SUP), ("here", B)],
         [("H", B), ("2", SUB), ("O", B)],
     ]
-    # The paragraph is replaced; the list item keeps its marker and holds the runs.
-    assert all(t.text != "E = mc 2 here" for t in document.texts)
-    list_items = [t for t in document.texts if isinstance(t, ListItem)]
-    assert len(list_items) == 1 and list_items[0].text == ""
-    assert groups[1].parent == list_items[0].get_ref()
+    # Each item keeps its place and holds its runs; the list item keeps its marker.
+    paragraph_item, list_item_item = document.texts[0], document.texts[1]
+    assert isinstance(list_item_item, ListItem)
+    assert paragraph_item.text == "" and list_item_item.text == ""
+    assert groups[0].parent == paragraph_item.get_ref()
+    assert groups[1].parent == list_item_item.get_ref()
     # A run's box is the box of its own characters.
     superscript = groups[0].children[1].resolve(document)
     assert isinstance(superscript, TextItem)
     assert superscript.prov[0].bbox == _box([paragraph[6]])
+
+
+def _stage(document: DoclingDocument, pages: dict[int, list[PdfChar]]) -> None:
+    lookup = {
+        page_no: _Page(
+            PdfPageChars(
+                chars=chars,
+                rotation=0,
+                display_size=Size(width=612, height=792),
+                origin=(0.0, 0.0),
+            )
+        )
+        for page_no, chars in pages.items()
+    }
+    model = ScriptPositionModel(ScriptPositionOptions(enabled=True))
+    model.apply_scripts(document, model.find_scripts(document, lookup.get))
+
+
+def test_paragraphs_stay_separate_blocks_in_html():
+    """Two paragraphs in a row with scripts must not run together in a browser."""
+    first = _line(("E = mc", 12, 0), ("2", 7, 4.5), y=700.0)
+    second = _line(("H", 12, 0), ("2", 7, -2.5), ("O", 12, 0), y=650.0)
+    document = DoclingDocument(name="test")
+    document.add_page(page_no=1, size=Size(width=612, height=792))
+    for text, chars in (("E = mc 2", first), ("H 2 O", second)):
+        document.add_text(
+            label=DocItemLabel.TEXT,
+            text=text,
+            prov=ProvenanceItem(page_no=1, bbox=_box(chars), charspan=(0, len(text))),
+        )
+    _stage(document, {1: first + second})
+
+    html = document.export_to_html()
+    assert len(re.findall(r"<p>\s*<span class='inline-group'>", html)) == 2
+
+
+def test_run_crossing_a_page_break_keeps_both_pages():
+    """The text after a script can continue on the next page."""
+    page_1 = _line(("Water is H", 12, 0), ("2", 7, -2.5), ("O and", 12, 0), y=60.0)
+    page_2 = _line(("more text", 12, 0), y=740.0)
+    document = DoclingDocument(name="test")
+    for page_no in (1, 2):
+        document.add_page(page_no=page_no, size=Size(width=612, height=792))
+    text = "Water is H 2 O and more text"
+    item = document.add_text(
+        label=DocItemLabel.TEXT,
+        text=text,
+        prov=ProvenanceItem(page_no=1, bbox=_box(page_1), charspan=(0, 18)),
+    )
+    item.prov.append(
+        ProvenanceItem(page_no=2, bbox=_box(page_2), charspan=(18, len(text)))
+    )
+    _stage(document, {1: page_1, 2: page_2})
+
+    last = next(t for t in document.texts if t.text.startswith("O"))
+    assert last.text == "O and more text"
+    assert [p.page_no for p in last.prov] == [1, 2]
+    assert [last.text[slice(*p.charspan)] for p in last.prov] == ["O and ", "more text"]
+    assert last.prov[1].bbox == _box(page_2)

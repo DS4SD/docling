@@ -368,7 +368,8 @@ doc_converter = DocumentConverter(
 )
 ```
 
-A text item holding superscript or subscript text becomes an inline group of runs.
+A text item holding superscript or subscript text keeps its place, and its text moves into
+an inline group of runs that the item holds.
 
 ### PowerPoint and Excel charts
 

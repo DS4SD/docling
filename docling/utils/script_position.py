@@ -90,6 +90,8 @@ class ScriptRun:
     script: Script
     # Indexes of the PDF characters matched to the run.
     chars: tuple[int, ...]
+    # Position in ``text`` of each of ``chars``.
+    offsets: tuple[int, ...] = ()
 
 
 def script_positions(chars: Sequence[ScriptChar]) -> list[Script]:
@@ -139,18 +141,19 @@ def script_runs(text: str, chars: Sequence[ScriptChar]) -> list[ScriptRun] | Non
             for i in range(left + 1, right):
                 roles[i] = roles[left]
 
-    pieces: list[tuple[str, Script, list[int]]] = []
+    pieces: list[tuple[str, Script, list[int], list[int]]] = []
     for i, ch in enumerate(text):
         role = roles[i]
         if role is None:
             continue
         if not pieces or pieces[-1][1] != role:
-            pieces.append(("", role, []))
-        piece_text, _, piece_chars = pieces[-1]
+            pieces.append(("", role, [], []))
+        piece_text, _, piece_chars, piece_offsets = pieces[-1]
         if i in mapping and mapping[i] not in piece_chars:
             piece_chars.append(mapping[i])
-        pieces[-1] = (piece_text + ch, role, piece_chars)
-    return [ScriptRun(t, role, tuple(c)) for t, role, c in pieces]
+            piece_offsets.append(len(piece_text))
+        pieces[-1] = (piece_text + ch, role, piece_chars, piece_offsets)
+    return [ScriptRun(t, role, tuple(c), tuple(o)) for t, role, c, o in pieces]
 
 
 def _measurable(char: ScriptChar) -> bool:

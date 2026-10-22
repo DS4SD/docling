@@ -3,8 +3,8 @@
 
 """Mark superscript and subscript text in documents converted from PDF.
 
-A text item holding such text becomes an inline group of runs with ``formatting.script``,
-as the Word backend produces.
+A text item holding such text keeps its place, and its text moves into an inline group of
+runs with ``formatting.script``, which the item holds.
 """
 
 from __future__ import annotations
@@ -31,6 +31,7 @@ from docling_core.types.doc.document import (
 )
 
 from docling.datamodel.backend_options import PdfBackendOptions
+from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import ScriptPositionOptions
 from docling.utils.pdf_char_geometry import (
@@ -105,7 +106,8 @@ class _Rewrite:
 
     item: TextItem
     runs: list[ScriptRun]
-    provs: list[ProvenanceItem]
+    # The provenance of each run, one per page it is on.
+    provs: list[list[ProvenanceItem]]
 
 
 class ScriptPositionModel:
@@ -115,7 +117,12 @@ class ScriptPositionModel:
     def __call__(self, conv_res: ConversionResult) -> DoclingDocument:
         document = conv_res.document
         backend = conv_res.input._backend
-        if not self.options.enabled or backend.path_or_stream is None:
+        # The PDF pipeline also converts images, which have no PDF characters to read.
+        if (
+            not self.options.enabled
+            or conv_res.input.format != InputFormat.PDF
+            or backend.path_or_stream is None
+        ):
             return document
         if not pypdfium2_available():
             _log.warning(
@@ -146,14 +153,9 @@ class ScriptPositionModel:
     def apply_scripts(
         self, document: DoclingDocument, rewrites: list[_Rewrite]
     ) -> None:
-        """Replace each rewritten item by an inline group of its runs."""
+        """Move the text of each rewritten item into an inline group of its runs."""
         for rewrite in rewrites:
             _apply(document, rewrite)
-        replaced: list[NodeItem] = [
-            r.item for r in rewrites if not isinstance(r.item, ListItem)
-        ]
-        if replaced:
-            document.delete_items(node_items=replaced)
 
     def find_scripts(
         self, document: DoclingDocument, page_for: PageLookup
@@ -216,7 +218,7 @@ def _rewrite_for(
     runs = script_runs(item.text, chars)
     if runs is None:
         return None
-    return _Rewrite(item, runs, [_run_prov(item, r, owners, page_for) for r in runs])
+    return _Rewrite(item, runs, [_run_provs(item, r, owners, page_for) for r in runs])
 
 
 def _item_chars(
@@ -239,66 +241,82 @@ def _item_chars(
     return chars, owners
 
 
-def _run_prov(
+def _run_provs(
     item: TextItem, run: ScriptRun, owners: list[tuple[int, int]], page_for: PageLookup
-) -> ProvenanceItem:
-    """Box the run's characters, falling back to the item's first box."""
-    hits = [owners[k] for k in run.chars]
-    if hits:
-        page_no = hits[0][0]
+) -> list[ProvenanceItem]:
+    """Box the run's characters on each page they are on, else use the item's first box.
+
+    A run can cross a page break, as the text after a script at the end of a page.
+    """
+    # Per page, the position in the run's text and the index of each character.
+    by_page: dict[int, list[tuple[int, int]]] = {}
+    for k, offset in zip(run.chars, run.offsets, strict=True):
+        page_no, index = owners[k]
+        by_page.setdefault(page_no, []).append((offset, index))
+    pages = sorted(by_page, key=lambda p: min(o for o, _ in by_page[p]))
+    provs = []
+    for n, page_no in enumerate(pages):
         page = page_for(page_no)
-        if page is not None:
-            return ProvenanceItem(
+        if page is None:
+            continue
+        start = 0 if n == 0 else min(o for o, _ in by_page[page_no])
+        end = (
+            len(run.text)
+            if n == len(pages) - 1
+            else min(o for o, _ in by_page[pages[n + 1]])
+        )
+        provs.append(
+            ProvenanceItem(
                 page_no=page_no,
-                bbox=page.box_of([i for p, i in hits if p == page_no]),
-                charspan=(0, len(run.text)),
+                bbox=page.box_of([i for _, i in by_page[page_no]]),
+                charspan=(start, end),
             )
-    return ProvenanceItem(
-        page_no=item.prov[0].page_no,
-        bbox=item.prov[0].bbox,
-        charspan=(0, len(run.text)),
-    )
+        )
+    if provs:
+        return provs
+    return [
+        ProvenanceItem(
+            page_no=item.prov[0].page_no,
+            bbox=item.prov[0].bbox,
+            charspan=(0, len(run.text)),
+        )
+    ]
 
 
 def _apply(document: DoclingDocument, rewrite: _Rewrite) -> None:
-    """Add the inline group of an item's runs; the caller deletes the replaced items."""
-    item = rewrite.item
-    if isinstance(item, ListItem):
-        # As in the Word backend, the list item keeps its marker and holds the runs.
-        if item.children:
-            group = document.insert_inline_group(
-                sibling=item.children[0].resolve(document),
-                content_layer=item.content_layer,
-                after=False,
-            )
-        else:
-            group = document.add_inline_group(
-                parent=item, content_layer=item.content_layer
-            )
-        label = DocItemLabel.TEXT
-    else:
-        group = document.insert_inline_group(
-            sibling=item, content_layer=item.content_layer, after=False
-        )
-        label = item.label
+    """Move an item's text into an inline group of its runs, held by the item.
 
-    for run, prov in zip(rewrite.runs, rewrite.provs, strict=True):
+    The item keeps its place, so a paragraph stays a paragraph block in the export and
+    a list item keeps its marker, as in the Word backend.
+    """
+    item = rewrite.item
+    if item.children:
+        group = document.insert_inline_group(
+            sibling=item.children[0].resolve(document),
+            content_layer=item.content_layer,
+            after=False,
+        )
+    else:
+        group = document.add_inline_group(parent=item, content_layer=item.content_layer)
+    label = DocItemLabel.TEXT if isinstance(item, ListItem) else item.label
+
+    for run, provs in zip(rewrite.runs, rewrite.provs, strict=True):
         formatting = None
         if run.script != Script.BASELINE or item.formatting is not None:
             formatting = (item.formatting or Formatting()).model_copy(
                 update={"script": run.script}
             )
-        document.add_text(
+        text_item = document.add_text(
             label=label,
             text=run.text,
             orig=run.text,
-            prov=prov,
+            prov=provs[0],
             parent=group,
             formatting=formatting,
             hyperlink=item.hyperlink,
             content_layer=item.content_layer,
         )
+        text_item.prov.extend(provs[1:])
 
-    if isinstance(item, ListItem):
-        item.text = ""
-        item.orig = ""
+    item.text = ""
+    item.orig = ""
