@@ -620,6 +620,47 @@ converter = DocumentConverter()
 result = converter.convert(source, max_num_pages=100, max_file_size=20971520)
 ```
 
+### Limits on the decompressed size of DOCX, XLSX and EPUB files
+
+DOCX, XLSX and EPUB files are ZIP archives, so a small file can decompress to a
+much larger size. Docling checks the decompressed sizes that the archive declares
+before it parses the file, and stops each read once the decompressed bytes go
+above the limit. A file that exceeds a limit fails to convert with an
+`ArchiveLimitError`, which is a `DocumentLoadError`.
+
+| Option | `MsWordBackendOptions` / `MsExcelBackendOptions` | `EpubBackendOptions` |
+| --- | --- | --- |
+| `max_file_bytes` | 128 MiB per member | 10 MB per content document |
+| `max_total_bytes` | 512 MiB for all members | 100 MB for all content documents |
+| `max_member_count` | 10,000 members | 1,000 content documents |
+
+The DOCX and XLSX limits apply to every member of the package, because
+python-docx and openpyxl load the package members into memory. The EPUB limits
+apply to the container, the package document and the content documents in the
+spine, and also to the members extracted for image processing. Raise the limits
+for large trusted files:
+
+```python
+from docling.datamodel.backend_options import MsExcelBackendOptions, MsWordBackendOptions
+from docling.datamodel.base_models import InputFormat
+from docling.document_converter import (
+    DocumentConverter,
+    ExcelFormatOption,
+    WordFormatOption,
+)
+
+doc_converter = DocumentConverter(
+    format_options={
+        InputFormat.DOCX: WordFormatOption(
+            backend_options=MsWordBackendOptions(max_file_bytes=512 * 1024 * 1024)
+        ),
+        InputFormat.XLSX: ExcelFormatOption(
+            backend_options=MsExcelBackendOptions(max_total_bytes=2 * 1024**3)
+        ),
+    }
+)
+```
+
 ## Convert from binary PDF streams
 
 You can convert PDFs from a binary stream instead of from the filesystem as follows:

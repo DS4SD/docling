@@ -53,6 +53,12 @@ from docling.backend.docx.drawingml.utils import (
     crop_whitespace,
     get_docx_to_pdf_converter,
 )
+from docling.backend.utils.archive_limits import (
+    ArchiveLimitError,
+    ArchiveLimits,
+    check_archive_limits,
+    read_member,
+)
 from docling.backend.utils.charts import (
     MAX_CHART_TABLE_CELLS,
     build_chart_table,
@@ -338,8 +344,8 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
           parsing, so threaded comments are not available for that format.
     """
 
-    # Maximum uncompressed byte sizes accepted when reading members from the XLSX zip.
-    # These caps guard against decompression-bomb payloads in drawing XML / image files.
+    # Maximum decompressed byte sizes accepted when this backend reads drawing XML
+    # and image members from the XLSX zip itself (openpyxl reads the rest).
     _MAX_DRAWING_BYTES: Final[int] = 10 * 1024 * 1024  # 10 MB
     _MAX_IMAGE_BYTES: Final[int] = 50 * 1024 * 1024  # 50 MB
 
@@ -367,6 +373,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         if options is None:
             options = MsExcelBackendOptions()
         super().__init__(in_doc, path_or_stream, options)
+        self._archive_limits = ArchiveLimits.from_options(options)
 
         self.page_range = in_doc.limits.page_range
 
@@ -382,6 +389,7 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
 
         self.workbook = None
         try:
+            self._check_archive_limits()
             # Suppress the openpyxl warning for WMF/EMF images being dropped:
             # those formats are handled separately via LibreOffice conversion.
             with warnings.catch_warnings():
@@ -407,12 +415,29 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
                     )
 
             self.valid = self.workbook is not None
+        except ArchiveLimitError:
+            self.valid = False
+            raise
         except Exception as e:
             self.valid = False
 
             raise DocumentLoadError(
                 f"MsExcelDocumentBackend could not load document with hash {self.document_hash}"
             ) from e
+
+    def _check_archive_limits(self) -> None:
+        """Check the decompressed sizes the XLSX archive declares.
+
+        openpyxl decompresses the workbook members while it loads them, so the
+        check runs before ``load_workbook``.
+
+        Raises:
+            ArchiveLimitError: If the archive exceeds the configured limits.
+        """
+        with ZipFile(self.path_or_stream, "r") as zip_file:
+            check_archive_limits(zip_file, self._archive_limits)
+        if isinstance(self.path_or_stream, BytesIO):
+            self.path_or_stream.seek(0)
 
     def _parse_threaded_comments(
         self, sheet_name: str
@@ -452,7 +477,11 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
 
                 person_map: dict[str, str] = {}
                 try:
-                    person_xml = zip_file.read("xl/persons/person.xml")
+                    person_xml = read_member(
+                        zip_file,
+                        "xl/persons/person.xml",
+                        self._archive_limits.max_file_bytes,
+                    )
                     person_tree = etree.fromstring(person_xml, parser=_SAFE_XML_PARSER)
                     person_map = {
                         person.get("id"): person.get("displayName")
@@ -475,7 +504,9 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
 
                 threaded_file = f"xl/threadedComments/threadedComment{sheet_num}.xml"
                 try:
-                    threaded_xml = zip_file.read(threaded_file)
+                    threaded_xml = read_member(
+                        zip_file, threaded_file, self._archive_limits.max_file_bytes
+                    )
                     threaded_tree = etree.fromstring(
                         threaded_xml, parser=_SAFE_XML_PARSER
                     )
@@ -1356,7 +1387,12 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
         if drawing_path not in zf.namelist():
             return doc
 
-        tree = etree.fromstring(zf.read(drawing_path), parser=_SAFE_XML_PARSER)
+        try:
+            drawing_xml = read_member(zf, drawing_path, self._MAX_DRAWING_BYTES)
+        except ArchiveLimitError as exc:
+            _log.warning("Skipping EMF/WMF scan of %s: %s", drawing_path, exc)
+            return doc
+        tree = etree.fromstring(drawing_xml, parser=_SAFE_XML_PARSER)
         try:
             drawing = SpreadsheetDrawing.from_tree(tree)
         except TypeError:
@@ -1372,7 +1408,11 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
             if dep.Type != IMAGE_NS or dep.target not in zf.namelist():
                 continue
 
-            image_bytes = zf.read(dep.target)
+            try:
+                image_bytes = read_member(zf, dep.target, self._MAX_IMAGE_BYTES)
+            except ArchiveLimitError as exc:
+                _log.warning("Skipping image %s: %s", dep.target, exc)
+                continue
 
             # Skip images PIL can already handle — openpyxl already added those.
             try:

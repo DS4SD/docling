@@ -53,6 +53,11 @@ from docling.backend.docx.drawingml.utils import (
     get_pil_from_dml_docx,
 )
 from docling.backend.docx.latex.omml import oMath2Latex
+from docling.backend.utils.archive_limits import (
+    ArchiveLimits,
+    check_archive_limits,
+    read_member,
+)
 from docling.backend.utils.image import normalize_image_for_png
 from docling.datamodel.backend_options import MsWordBackendOptions
 from docling.datamodel.base_models import FormatToMimeType
@@ -181,11 +186,10 @@ _OOXML_ROOT_RELS: Final[str] = "_rels/.rels"
 _MAX_ROOT_RELS_SIZE: Final[int] = 64 * 1024
 """Read cap (64 KiB) for ``_rels/.rels`` during Strict detection (the part is typically ~500 bytes)."""
 
-_MAX_MEMBER_UNCOMPRESSED_SIZE: Final[int] = 512 * 1024 * 1024
-"""Per-member uncompressed size cap (512 MiB) applied during Strict-to-Transitional rewriting."""
-
-_MAX_TOTAL_UNCOMPRESSED_SIZE: Final[int] = 2 * 1024 * 1024 * 1024
-"""Total uncompressed size cap (2 GiB) for all members during Strict-to-Transitional rewriting."""
+_DEFAULT_ARCHIVE_LIMITS: Final[ArchiveLimits] = ArchiveLimits.from_options(
+    MsWordBackendOptions()
+)
+"""Decompressed size limits for a .docx package, from the ``MsWordBackendOptions`` defaults."""
 
 _STRICT_OOXML_NS_OVERRIDES: Final[dict[str, str]] = {
     "http://purl.oclc.org/ooxml/descriptions/base": "http://descriptions.openxmlformats.org/description/base",
@@ -528,7 +532,7 @@ def _is_safe_zip_member(name: str) -> bool:
     return not any(part == ".." for part in normalized.split("/"))
 
 
-def _has_fragment_only_rels(archive: zipfile.ZipFile) -> bool:
+def _has_fragment_only_rels(archive: zipfile.ZipFile, limits: ArchiveLimits) -> bool:
     """Return True if any ``*.rels`` part contains a fragment-only relationship target.
 
     A fragment-only target (e.g. ``Target="#_Procédures_spéciales"``) is an
@@ -540,8 +544,8 @@ def _has_fragment_only_rels(archive: zipfile.ZipFile) -> bool:
     for info in archive.infolist():
         if not info.filename.endswith(".rels"):
             continue
+        content = read_member(archive, info, limits.max_file_bytes)
         try:
-            content = archive.read(info.filename)
             root = etree.fromstring(content, _SAFE_XML_PARSER)
             for rel in root.iter(rels_tag):
                 target = rel.get("Target", "")
@@ -575,7 +579,7 @@ def _remove_fragment_only_rels(content: bytes) -> bytes:
     return etree.tostring(root, xml_declaration=True, encoding="UTF-8", standalone=True)
 
 
-def _sanitize_docx(archive: zipfile.ZipFile) -> BytesIO:
+def _sanitize_docx(archive: zipfile.ZipFile, limits: ArchiveLimits) -> BytesIO:
     """Rewrite a DOCX archive in memory, removing fragment-only relationship targets.
 
     Fragment-only targets (``Target="#anchor"``) are internal bookmark references
@@ -583,25 +587,18 @@ def _sanitize_docx(archive: zipfile.ZipFile) -> BytesIO:
     offending ``Relationship`` elements from every ``*.rels`` part so that
     ``python-docx`` can load the document without raising ``KeyError``.
 
-    The archive is validated against zip-slip and zip-bomb attacks while it is
-    read.  Non-``.rels`` members are copied through unchanged.
+    The archive is validated against zip-slip and checked against the
+    decompressed size ``limits`` before it is read.  Non-``.rels`` members are
+    copied through unchanged.
     """
+    for info in archive.infolist():
+        if not _is_safe_zip_member(info.filename):
+            raise SecurityError(f"ZIP slip attempt: {info.filename}")
+    check_archive_limits(archive, limits)
     sanitized = BytesIO()
-    total_uncompressed = 0
     with zipfile.ZipFile(sanitized, "w", zipfile.ZIP_DEFLATED) as target:
         for info in archive.infolist():
-            if not _is_safe_zip_member(info.filename):
-                raise SecurityError(f"ZIP slip attempt: {info.filename}")
-            if info.file_size > _MAX_MEMBER_UNCOMPRESSED_SIZE:
-                raise SecurityError(
-                    f"Refusing to expand oversized OOXML part: {info.filename}"
-                )
-            total_uncompressed += info.file_size
-            if total_uncompressed > _MAX_TOTAL_UNCOMPRESSED_SIZE:
-                raise SecurityError(
-                    "Refusing to expand OOXML package exceeding the uncompressed size limit"
-                )
-            content = archive.read(info.filename)
+            content = read_member(archive, info, limits.max_file_bytes)
             if info.filename.endswith(".rels"):
                 content = _remove_fragment_only_rels(content)
             target.writestr(info, content)
@@ -609,35 +606,28 @@ def _sanitize_docx(archive: zipfile.ZipFile) -> BytesIO:
     return sanitized
 
 
-def _normalize_strict_ooxml(archive: zipfile.ZipFile) -> BytesIO:
+def _normalize_strict_ooxml(archive: zipfile.ZipFile, limits: ArchiveLimits) -> BytesIO:
     """Rewrite an open Strict OOXML package to Transitional namespaces in memory.
 
     Only XML/relationship parts that actually carry a Strict namespace are
     decoded and rewritten; every other member (images, fonts, ...) is copied
     through with its original compression, avoiding a needless decode pass. Each
     member is decompressed exactly once. The archive is validated against
-    zip-slip and zip-bomb attacks while it is read.
+    zip-slip and checked against the decompressed size ``limits`` before it is
+    read.
 
     Fragment-only relationship targets are also removed in this pass (see
     ``_remove_fragment_only_rels``), so a combined Strict + fragment-only
     document is handled in a single archive traversal.
     """
+    for info in archive.infolist():
+        if not _is_safe_zip_member(info.filename):
+            raise SecurityError(f"ZIP slip attempt: {info.filename}")
+    check_archive_limits(archive, limits)
     normalized = BytesIO()
-    total_uncompressed = 0
     with zipfile.ZipFile(normalized, "w", zipfile.ZIP_DEFLATED) as target:
         for info in archive.infolist():
-            if not _is_safe_zip_member(info.filename):
-                raise SecurityError(f"ZIP slip attempt: {info.filename}")
-            if info.file_size > _MAX_MEMBER_UNCOMPRESSED_SIZE:
-                raise SecurityError(
-                    f"Refusing to expand oversized OOXML part: {info.filename}"
-                )
-            total_uncompressed += info.file_size
-            if total_uncompressed > _MAX_TOTAL_UNCOMPRESSED_SIZE:
-                raise SecurityError(
-                    "Refusing to expand OOXML package exceeding the uncompressed size limit"
-                )
-            content = archive.read(info.filename)
+            content = read_member(archive, info, limits.max_file_bytes)
             if info.filename.endswith((".xml", ".rels")) and (
                 _STRICT_OOXML_MARKER in content
             ):
@@ -816,6 +806,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 path_or_stream, in_doc.format.value, "docx"
             )
         super().__init__(in_doc, path_or_stream, options)
+        self._archive_limits = ArchiveLimits.from_options(options)
         self.XML_KEY = f"{_W_NS_CLARK}val"
         self.blip_xpath_expr = etree.XPath(".//a:blip", namespaces=_OOXML_NAMESPACES)
         self.vml_imagedata_xpath_expr = etree.XPath(
@@ -897,7 +888,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         self._default_paragraph_style: BaseStyle | None = None
 
         self.docx_obj = self.load_msword_file(
-            path_or_stream=self.path_or_stream, document_hash=self.document_hash
+            path_or_stream=self.path_or_stream,
+            document_hash=self.document_hash,
+            limits=self._archive_limits,
         )
         if self.docx_obj:
             self.valid = True
@@ -974,35 +967,50 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
     @staticmethod
     def load_msword_file(
-        path_or_stream: BytesIO | Path, document_hash: str
+        path_or_stream: BytesIO | Path,
+        document_hash: str,
+        limits: ArchiveLimits = _DEFAULT_ARCHIVE_LIMITS,
     ) -> DocxDocument:
+        """Load a .docx package with python-docx.
+
+        The package is checked against the decompressed size ``limits`` before
+        any member is read. Strict OOXML packages and packages with
+        fragment-only relationship targets are rewritten in memory first.
+
+        Raises:
+            ArchiveLimitError: If the package exceeds the ``limits``.
+            SecurityError: If a rewritten package has an unsafe member name.
+            DocumentLoadError: If python-docx cannot load the package.
+        """
         try:
             if isinstance(path_or_stream, Path):
                 with zipfile.ZipFile(path_or_stream) as archive:
+                    check_archive_limits(archive, limits)
                     is_strict = _is_strict_ooxml(archive)
                     has_fragment_rels = not is_strict and _has_fragment_only_rels(
-                        archive
+                        archive, limits
                     )
                     if is_strict:
-                        return Document(_normalize_strict_ooxml(archive))
+                        return Document(_normalize_strict_ooxml(archive, limits))
                     if has_fragment_rels:
-                        return Document(_sanitize_docx(archive))
+                        return Document(_sanitize_docx(archive, limits))
                 return Document(str(path_or_stream))
             elif isinstance(path_or_stream, BytesIO):
                 with zipfile.ZipFile(path_or_stream) as archive:
+                    check_archive_limits(archive, limits)
                     is_strict = _is_strict_ooxml(archive)
                     has_fragment_rels = not is_strict and _has_fragment_only_rels(
-                        archive
+                        archive, limits
                     )
                     if is_strict:
-                        return Document(_normalize_strict_ooxml(archive))
+                        return Document(_normalize_strict_ooxml(archive, limits))
                     if has_fragment_rels:
-                        return Document(_sanitize_docx(archive))
+                        return Document(_sanitize_docx(archive, limits))
                 path_or_stream.seek(0)
                 return Document(path_or_stream)
             else:
                 return None
-        except SecurityError:
+        except (SecurityError, DocumentLoadError):
             raise
         except Exception as e:
             raise DocumentLoadError(
@@ -4107,7 +4115,9 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # Loaded once per backend instance; del body[:] clears cheaply on every call.
             if self._empty_docx_template is None:
                 self._empty_docx_template = self.load_msword_file(
-                    self.path_or_stream, self.document_hash
+                    self.path_or_stream,
+                    self.document_hash,
+                    self._archive_limits,
                 )
             render_doc = self._empty_docx_template
             body = render_doc._element.body

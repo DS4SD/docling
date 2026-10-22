@@ -268,13 +268,20 @@ class EpubBackendOptions(BaseBackendOptions):
     max_total_bytes: Annotated[
         PositiveInt,
         Field(
-            description="Maximum cumulative size in bytes of all data extracted from the EPUB archive during processing"
+            description=(
+                "Maximum cumulative size in bytes of the content documents read "
+                "from the EPUB archive, and of all data extracted from it for "
+                "image processing"
+            )
         ),
     ] = 100 * 1024 * 1024  # 100 MB
     max_file_bytes: Annotated[
         PositiveInt,
         Field(
-            description="Maximum size in bytes for any single file extracted from the EPUB archive"
+            description=(
+                "Maximum size in bytes for any single file read or extracted "
+                "from the EPUB archive"
+            )
         ),
     ] = 10 * 1024 * 1024  # 10 MB
     max_member_count: Annotated[
@@ -479,6 +486,28 @@ class MsExcelBackendOptions(BaseBackendOptions):
             "Set to None (default) to include all sheets."
         ),
     )
+    max_total_bytes: Annotated[
+        PositiveInt,
+        Field(
+            description=(
+                "Maximum cumulative decompressed size in bytes of all members of "
+                "the XLSX archive. The archive is checked before it is parsed."
+            )
+        ),
+    ] = 512 * 1024 * 1024
+    max_file_bytes: Annotated[
+        PositiveInt,
+        Field(
+            description=(
+                "Maximum decompressed size in bytes of any single member of the "
+                "XLSX archive."
+            )
+        ),
+    ] = 128 * 1024 * 1024
+    max_member_count: Annotated[
+        PositiveInt,
+        Field(description="Maximum number of members in the XLSX archive"),
+    ] = 10_000
 
 
 class MsPowerpointBackendOptions(BaseBackendOptions):
@@ -531,6 +560,28 @@ class MsWordBackendOptions(BaseBackendOptions):
             )
         ),
     ] = True
+    max_total_bytes: Annotated[
+        PositiveInt,
+        Field(
+            description=(
+                "Maximum cumulative decompressed size in bytes of all members of "
+                "the DOCX archive. The archive is checked before it is parsed."
+            )
+        ),
+    ] = 512 * 1024 * 1024
+    max_file_bytes: Annotated[
+        PositiveInt,
+        Field(
+            description=(
+                "Maximum decompressed size in bytes of any single member of the "
+                "DOCX archive."
+            )
+        ),
+    ] = 128 * 1024 * 1024
+    max_member_count: Annotated[
+        PositiveInt,
+        Field(description="Maximum number of members in the DOCX archive"),
+    ] = 10_000
 
 
 class OdsBackendOptions(BaseBackendOptions):

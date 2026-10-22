@@ -33,6 +33,7 @@ from PIL import Image
 import docling.backend.msword_backend as msword_backend_module
 from docling.backend.docx.drawingml.utils import get_libreoffice_cmd
 from docling.backend.msword_backend import MsWordDocumentBackend
+from docling.backend.utils.archive_limits import ArchiveLimitError, ArchiveLimits
 from docling.datamodel.backend_options import MsWordBackendOptions
 from docling.datamodel.base_models import DocumentStream, InputFormat
 from docling.datamodel.document import (
@@ -837,27 +838,26 @@ def test_strict_ooxml_rejects_zip_slip(evil_name):
     with zipfile.ZipFile(buffer) as archive:
         assert msword_backend_module._is_strict_ooxml(archive) is True
         with pytest.raises(SecurityError, match="ZIP slip"):
-            msword_backend_module._normalize_strict_ooxml(archive)
+            msword_backend_module._normalize_strict_ooxml(
+                archive, msword_backend_module._DEFAULT_ARCHIVE_LIMITS
+            )
 
 
 @pytest.mark.parametrize(
-    ("cap_attr", "message"),
+    ("limits", "message"),
     [
-        ("_MAX_TOTAL_UNCOMPRESSED_SIZE", "uncompressed size"),
-        ("_MAX_MEMBER_UNCOMPRESSED_SIZE", "oversized OOXML part"),
+        (ArchiveLimits(4096, 1024, 10), "max_total_bytes"),
+        (ArchiveLimits(1024, 1 << 20, 10), "max_file_bytes"),
     ],
 )
-def test_strict_ooxml_rejects_zip_bomb(monkeypatch, cap_attr, message):
+def test_strict_ooxml_rejects_oversized_package(limits, message):
     """A Strict package exceeding the per-member or total budget is rejected."""
     import zipfile
 
-    from docling.exceptions import SecurityError
-
-    monkeypatch.setattr(msword_backend_module, cap_attr, 128)
     buffer = _make_strict_zip({"word/document.xml": b"A" * 4096})
     with zipfile.ZipFile(buffer) as archive:
-        with pytest.raises(SecurityError, match=message):
-            msword_backend_module._normalize_strict_ooxml(archive)
+        with pytest.raises(ArchiveLimitError, match=message):
+            msword_backend_module._normalize_strict_ooxml(archive, limits)
 
 
 def test_load_msword_file_propagates_security_error():
