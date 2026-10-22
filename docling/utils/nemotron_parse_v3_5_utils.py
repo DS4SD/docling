@@ -14,6 +14,7 @@ to the page. Bodies are Markdown text, LaTeX ``tabular`` tables, or a
 
 from __future__ import annotations
 
+import html
 import logging
 import re
 from dataclasses import dataclass
@@ -42,7 +43,7 @@ from docling_core.types.doc import (
 )
 from PIL import Image as PILImage
 
-from docling.utils.chandra_utils import _add_html_table
+from docling.utils.chandra_utils import _MAX_TABLE_GRID_CELLS, _add_html_table
 from docling.utils.code_language import detect_code_language
 from docling.utils.dots_utils import (
     _add_inline_text,
@@ -86,6 +87,11 @@ _LATEX_TEXT_REPLACEMENTS = {
     "mbox": "",
     "&": "&amp;",
 }
+# Inline tags that a table cell keeps as markup, and LaTeX text commands that it maps;
+# all other text is escaped.
+_CELL_MARKUP = re.compile(
+    rf"{_LATEX_TEXT.pattern}|(?i:</?(?:b|br|code|em|i|strong|sub|sup|u)\s*/?>)"
+)
 _CHART_OPEN = re.compile(r'<chart\s+type="([^"]*)"\s*>')
 _CHART_TABLE_KEY = re.compile(r"table\[(\w+)\]")
 
@@ -244,7 +250,30 @@ def _unwrap_command(text: str, command: str, arg_count: int) -> list[str] | None
 
 
 def _span(value: str) -> int:
-    return int(value) if value.strip().isdigit() and int(value) > 0 else 1
+    digits = value.strip().lstrip("0")
+    if not digits.isdecimal():
+        return 1
+    # Above the limit _add_html_table rejects the table; do not build a huge grid first.
+    if len(digits) > len(str(_MAX_TABLE_GRID_CELLS)):
+        return _MAX_TABLE_GRID_CELLS + 1
+    return min(int(digits), _MAX_TABLE_GRID_CELLS + 1)
+
+
+def _escape_cell_markup(text: str) -> str:
+    """Escape cell text so that it cannot change the table; keep inline tags."""
+    parts: list[str] = []
+    pos = 0
+    for match in _CELL_MARKUP.finditer(text):
+        parts.append(html.escape(text[pos : match.start()], quote=False))
+        command = match.group(1) or match.group(2)
+        parts.append(
+            match.group()
+            if command is None
+            else _LATEX_TEXT_REPLACEMENTS.get(command, command)
+        )
+        pos = match.end()
+    parts.append(html.escape(text[pos:], quote=False))
+    return "".join(parts)
 
 
 def _parse_latex_cell(text: str) -> _LatexCell:
@@ -259,12 +288,7 @@ def _parse_latex_cell(text: str) -> _LatexCell:
             header, text = True, args[0]
         else:
             break
-    text = _LATEX_TEXT.sub(
-        lambda match: _LATEX_TEXT_REPLACEMENTS.get(
-            match.group(1) or match.group(2), match.group(2) or ""
-        ),
-        text,
-    )
+    text = _escape_cell_markup(text)
     return _LatexCell(
         text=text.strip(), row_span=row_span, col_span=col_span, header=header
     )
@@ -304,6 +328,8 @@ def latex_tabular_to_html(latex: str) -> str:
                     continue
                 # Text under a multirow: the predicted row span was too long.
                 owner[0].row_span = row_index - owner[1]
+            if col + cell.col_span > _MAX_TABLE_GRID_CELLS:
+                raise ValueError(f"LaTeX table exceeds {_MAX_TABLE_GRID_CELLS} columns")
             for owned_col in range(col, col + cell.col_span):
                 owners[owned_col] = (cell, row_index)
             cells.append(cell)
