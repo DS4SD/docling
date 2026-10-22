@@ -225,7 +225,9 @@ def test_odt_textboxes_are_extracted_as_blocks(tmp_path: Path):
     )
     source.save(str(path))
 
-    document = DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path).document
+    document = (
+        DocumentConverter(allowed_formats=[InputFormat.ODT]).convert(path).document
+    )
     text_by_value = {item.text: item for item in document.texts}
 
     assert "Anchor paragraph text." in text_by_value
