@@ -51,6 +51,7 @@ from docling.utils.dots_utils import (
 )
 from docling.utils.vlm_utils import (
     link_adjacent_captions,
+    normalize_section_header_levels,
     parse_markdown_heading,
     strip_math_delimiters,
 )
@@ -455,8 +456,14 @@ def parse_nemotron_parse_v3_5(
     page_no: int,
     filename: str = "file",
     page_image: PILImage.Image | None = None,
+    *,
+    normalize_heading_levels: bool = True,
 ) -> DoclingDocument:
-    """Parse one page of Nemotron 3.5 Parse native output."""
+    """Parse one page of Nemotron 3.5 Parse native output.
+
+    Set ``normalize_heading_levels`` to False to keep raw heading depths for a
+    later document-wide :func:`normalize_section_header_levels`.
+    """
     doc = DoclingDocument(
         name=filename.rsplit(".", 1)[0],
         origin=DocumentOrigin(filename=filename, mimetype="text/plain", binary_hash=0),
@@ -529,14 +536,14 @@ def parse_nemotron_parse_v3_5(
                 )
         elif block.label in {"Title", "Section-header"}:
             clean_text, level = parse_markdown_heading(text)
-            # Markdown "##" is a level-1 section below the "#" title, as in dots.
             heading = (
                 doc.add_title(text="", orig=text, prov=prov)
                 if block.label == "Title"
                 else doc.add_heading(
                     text="",
                     orig=text,
-                    level=max(1, level - 1) if level is not None else 1,
+                    # Raw markup depth, normalized per document later.
+                    level=level if level is not None else 2,
                     prov=prov,
                 )
             )
@@ -564,4 +571,6 @@ def parse_nemotron_parse_v3_5(
             )
 
     link_adjacent_captions(doc, block_starts, caption_owners)
+    if normalize_heading_levels:
+        normalize_section_header_levels(doc)
     return doc

@@ -39,7 +39,10 @@ from docling_core.types.doc import (
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from docling.utils.chandra_utils import _add_html_table
-from docling.utils.vlm_utils import parse_markdown_heading
+from docling.utils.vlm_utils import (
+    normalize_section_header_levels,
+    parse_markdown_heading,
+)
 
 _log = logging.getLogger(__name__)
 
@@ -253,13 +256,12 @@ def _add_block(
             text, _ = parse_markdown_heading(text)
         doc.add_title(text=text, prov=prov)
     elif label == "paragraph_title":
-        heading_level = 1
+        # Raw markup depth, normalized per document later.
+        heading_level = 2
         if formatted_content:
             text, markdown_level = parse_markdown_heading(text)
             if markdown_level is not None:
-                # Paddle reserves Markdown H1 for ``doc_title``. Docling's
-                # section level 1 is exported as H2, so remove that offset.
-                heading_level = max(1, markdown_level - 1)
+                heading_level = markdown_level
         doc.add_heading(text=text, level=heading_level, prov=prov)
     elif label == "table":
         if _add_html_table(doc, text, prov) is None:
@@ -294,6 +296,7 @@ def parse_paddleocr_vl_result(
     *,
     filename: str | None = None,
     page_no: int | None = None,
+    normalize_heading_levels: bool = True,
 ) -> DoclingDocument:
     """Convert one saved PaddleOCR-VL page result into a ``DoclingDocument``.
 
@@ -307,6 +310,8 @@ def parse_paddleocr_vl_result(
             0-based ``page_index`` is converted to Docling's 1-based numbering.
             This cannot make a concatenated multi-page payload valid; those
             results remain unsupported and must be parsed per page.
+        normalize_heading_levels: If False, keep raw heading depths for a later
+            document-wide :func:`normalize_section_header_levels`.
 
     Returns:
         A single-page ``DoclingDocument`` with typed items and provenance in
@@ -336,4 +341,6 @@ def parse_paddleocr_vl_result(
     for block in page.parsing_res_list:
         _add_block(doc, block, page=page, page_no=resolved_page_no)
 
+    if normalize_heading_levels:
+        normalize_section_header_levels(doc)
     return doc

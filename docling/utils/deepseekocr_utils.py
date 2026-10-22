@@ -24,6 +24,8 @@ from docling_core.types.doc import (
 from lxml import etree
 from PIL import Image as PILImage
 
+from docling.utils.vlm_utils import normalize_section_header_levels
+
 _log = logging.getLogger(__name__)
 
 
@@ -207,7 +209,8 @@ def _process_annotation_item(
             clean_content = content[hash_count:].strip()
         page_doc.add_title(text=clean_content, prov=prov)
     elif label_str == "sub_title":
-        heading_level = 1
+        # Raw markup depth, normalized per document later.
+        heading_level = 2
         clean_content = content
         if content.startswith("#"):
             hash_count = 0
@@ -216,8 +219,7 @@ def _process_annotation_item(
                     hash_count += 1
                 else:
                     break
-            if hash_count > 1:
-                heading_level = hash_count - 1
+            heading_level = hash_count
             clean_content = content[hash_count:].strip()
         page_doc.add_heading(text=clean_content, level=heading_level, prov=prov)
     else:
@@ -230,6 +232,8 @@ def parse_deepseekocr_markdown(
     page_no: int,
     filename: str = "file",
     page_image: Optional[PILImage.Image] = None,
+    *,
+    normalize_heading_levels: bool = True,
 ) -> DoclingDocument:
     """Parse DeepSeek OCR markdown with label[[x1, y1, x2, y2]] format.
 
@@ -252,6 +256,8 @@ def parse_deepseekocr_markdown(
         page_no: Page number (1-based).
         filename: Source filename.
         page_image: Optional PIL image of the page.
+        normalize_heading_levels: If False, keep raw heading depths for a later
+            document-wide :func:`normalize_section_header_levels`.
 
     Returns:
         DoclingDocument with parsed content
@@ -382,6 +388,8 @@ def parse_deepseekocr_markdown(
             label_str, content_text, prov, caption_item, page_doc, label_map
         )
 
+    if normalize_heading_levels:
+        normalize_section_header_levels(page_doc)
     return page_doc
 
 
@@ -412,6 +420,8 @@ def parse_unlimited_ocr_markdown(
     page_no: int,
     filename: str = "file",
     page_image: Optional[PILImage.Image] = None,
+    *,
+    normalize_heading_levels: bool = True,
 ) -> DoclingDocument:
     """Parse Unlimited-OCR grounding output into a :class:`DoclingDocument`.
 
@@ -424,4 +434,5 @@ def parse_unlimited_ocr_markdown(
         page_no=page_no,
         filename=filename,
         page_image=page_image,
+        normalize_heading_levels=normalize_heading_levels,
     )
