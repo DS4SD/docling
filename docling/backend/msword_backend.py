@@ -4186,7 +4186,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                         pil_image.save(test_bytes, format="PNG")
                         test_bytes.seek(0)
                         pil_image = Image.open(test_bytes)
-                    except (UnidentifiedImageError, OSError) as e:
+                    except (UnidentifiedImageError, OSError, ValueError) as e:
+                        # Pillow 13 reports truncated PNG chunks as ValueError.
                         _log.warning(f"Warning: image cannot be loaded by Pillow: {e}")
                         pil_image = None
 
