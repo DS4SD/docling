@@ -269,6 +269,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         self._pending_hard_line_break = False
         self._pending_soft_line_break = False
         self._html_blocks: int = 0
+        self._html_block_texts: list[str] = []
         self._image_loader: ImageResourceLoader | None = None
 
         # A leading BOM is dropped. Kept, it prefixes the first line, so a
@@ -1004,6 +1005,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 len(element.body) > 0
             ):  # If Marko doesn't return any content for HTML block, skip it
                 html_block = element.body.strip()
+                self._html_block_texts.append(html_block)
 
                 # wrap in markers to enable post-processing in convert()
                 text_to_add = f"{_START_MARKER}{html_block}{_STOP_MARKER}"
@@ -1181,21 +1183,21 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 )
                 html_str = html_payload.text
 
-                def _restore_original_html(txt, regex):
-                    _txt, count = re.subn(regex, "", txt)
-                    if count != self._html_blocks:
-                        raise RuntimeError(
-                            "An internal error has occurred during Markdown conversion."
-                        )
-                    return _txt
-
-                # restore original HTML by removing previously added markers
-                for regex in [
-                    rf"<pre>\s*<code>\s*{_START_MARKER}",
-                    rf"{_STOP_MARKER}\s*</code>\s*</pre>",
-                ]:
-                    html_str = _restore_original_html(txt=html_str, regex=regex)
+                # restore original HTML by replacing each marked code block with its
+                # source: the serializer may escape code text (docling-core 2.104+)
+                blocks = iter(self._html_block_texts)
+                html_str, count = re.subn(
+                    rf"<pre>\s*<code>\s*{_START_MARKER}.*?{_STOP_MARKER}\s*</code>\s*</pre>",
+                    lambda _: next(blocks),
+                    html_str,
+                    flags=re.DOTALL,
+                )
+                if count != self._html_blocks:
+                    raise RuntimeError(
+                        "An internal error has occurred during Markdown conversion."
+                    )
                 self._html_blocks = 0
+                self._html_block_texts = []
                 # delegate to HTML backend
                 stream = BytesIO(bytes(html_str, encoding="utf-8"))
                 md_options = cast(MarkdownBackendOptions, self.options)

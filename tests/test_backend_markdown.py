@@ -93,6 +93,19 @@ def get_converter():
     return converter
 
 
+def test_html_block_becomes_a_table_with_its_entities_intact():
+    converter = get_converter()
+    markdown = (
+        "Some text\n\n<table><tr><th>A &amp; B</th></tr><tr><td>1</td></tr></table>\n"
+    )
+
+    doc = converter.convert_string(markdown, format=InputFormat.MD).document
+
+    assert [item.text for item in doc.texts] == ["Some text"]
+    assert len(doc.tables) == 1
+    assert doc.tables[0].data.table_cells[0].text == "A & B"
+
+
 def test_convert_leading_dash_sequences():
     converter = get_converter()
     markdown = """## Research Article
