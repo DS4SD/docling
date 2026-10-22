@@ -54,10 +54,19 @@ def _sniff_dialect(head: str, read_sample: Callable[[], str]) -> type[csv.Dialec
     # many fields. Only occurrences outside brackets count: ragged rows can make
     # the sample favour a delimiter that only appears inside a header field,
     # like the `:` in `Time (hh:mm:ss)`, and a column name rarely splits there.
+    # The sample never switches the file to `:`: time values make it look
+    # consistent in ragged rows, and colon-separated files are rare.
+    # When both agree on the delimiter, the first-line dialect is kept, since
+    # the sample may pick a different quote character (e.g. `'` for `,'n/a'`).
+    # Limitation: when the data rows hold as many commas as the header, as in
+    # `Name;Size (w, h);Price` with rows like `A;1,5;2`, the sample also prefers
+    # `,` and the header delimiter is not recovered.
     if sum(delimiter in head for delimiter in _DELIMITERS) > 1:
         try:
             sample_dialect = csv.Sniffer().sniff(read_sample(), _DELIMITERS)
         except csv.Error:
+            return dialect
+        if sample_dialect.delimiter in (dialect.delimiter, ":"):
             return dialect
         sample_count = _count_outside_brackets(head, sample_dialect.delimiter)
         if sample_count and sample_count >= _count_outside_brackets(

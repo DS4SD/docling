@@ -200,6 +200,56 @@ def test_doubled_quotes_with_non_comma_delimiter():
             b"Time (hh:mm),Value\n10:30,5\n11:45\n",
             ["Time (hh:mm)", "Value", "10:30", "5", "11:45"],
         ),
+        (
+            b"Name,Time hh:mm:ss,Value\nA,10:30:00,5\nB,11:45:00\n",
+            ["Name", "Time hh:mm:ss", "Value", "A", "10:30:00", "5", "B", "11:45:00"],
+        ),
+        (
+            b"Start: time,Value\n10:30,5\n11:45\n",
+            ["Start: time", "Value", "10:30", "5", "11:45"],
+        ),
+        (
+            b"Date,Time (hh:mm),Note\n2024-01-01,10:30,'n/a'\n2024-01-02,11:45,'90s music\n",
+            [
+                "Date",
+                "Time (hh:mm)",
+                "Note",
+                "2024-01-01",
+                "10:30",
+                "'n/a'",
+                "2024-01-02",
+                "11:45",
+                "'90s music",
+            ],
+        ),
+        (
+            b"id,ratio (a;b),Note\n1,0.5,'n/a'\n2,0.7,'90s music\n",
+            [
+                "id",
+                "ratio (a;b)",
+                "Note",
+                "1",
+                "0.5",
+                "'n/a'",
+                "2",
+                "0.7",
+                "'90s music",
+            ],
+        ),
+        (
+            b"Date,Time (hh:mm),Note\n2024-01-01,10:30,'tbd'\n2024-01-02,11:45,'tbd'\n",
+            [
+                "Date",
+                "Time (hh:mm)",
+                "Note",
+                "2024-01-01",
+                "10:30",
+                "'tbd'",
+                "2024-01-02",
+                "11:45",
+                "'tbd'",
+            ],
+        ),
     ],
     ids=[
         "semicolon_with_comma_in_header",
@@ -209,6 +259,11 @@ def test_doubled_quotes_with_non_comma_delimiter():
         "ragged_comma_sample_not_sniffable",
         "ragged_comma_with_two_colons_in_header",
         "ragged_comma_with_one_colon_in_header",
+        "ragged_comma_with_unbracketed_colons_in_header",
+        "ragged_comma_with_colon_label_in_header",
+        "comma_with_unclosed_single_quote",
+        "comma_with_unclosed_single_quote_semicolon_in_header",
+        "comma_keeps_closed_single_quotes",
     ],
 )
 def test_header_with_second_delimiter_uses_following_rows(payload, expected):
