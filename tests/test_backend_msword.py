@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import threading
+import time
 from contextlib import nullcontext
 from pathlib import Path
 from types import SimpleNamespace
@@ -1975,6 +1976,22 @@ def test_docx_code_detection(tmp_path):
     assert not _code_items(doc), "A code-styled checkbox must not become a CodeItem"
     design = next(it for it in doc.texts if it.text == "Design")
     assert str(getattr(design.label, "value", design.label)).startswith("checkbox")
+
+
+def test_docx_code_call_pattern_is_bounded():
+    pattern = MsWordDocumentBackend._CODE_CALL_PATTERN
+    assert pattern.search("x = foo(1, 2)") is not None
+    assert pattern.search("party(ies)") is None
+
+    # Many unclosed calls in one paragraph must not take quadratic time.
+    for unit in ("a(", "a(,"):
+        text = unit * (64_000 // len(unit))
+        start = time.perf_counter()
+        assert pattern.search(text) is None
+        assert time.perf_counter() - start < 2.0
+
+    # Argument lists past the bound no longer count as a call.
+    assert pattern.search("foo(" + "a" * 300 + ", 1)") is None
 
 
 # ------ Content control (w:sdt) holding a picture ------
