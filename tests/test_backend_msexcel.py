@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: MIT
 
 import logging
+import tracemalloc
+import zipfile
 from collections.abc import Iterator
 from datetime import datetime
 from io import BytesIO
@@ -736,6 +738,89 @@ def test_merged_cells_are_indexed_once_and_preserve_semantics(tmp_path: Path) ->
         (1, 3)
     ] * 10
     assert comment_map[(3, 3)] == [("Codex", "Synthetic note", None)]
+
+
+def _replace_merged_range(path: Path, old_ref: str, new_ref: str) -> None:
+    """Rewrite a merged range of the first sheet, as openpyxl cannot save it."""
+    with zipfile.ZipFile(path) as source:
+        parts = {info.filename: source.read(info) for info in source.infolist()}
+    sheet_part = "xl/worksheets/sheet1.xml"
+    old_attr = f'<mergeCell ref="{old_ref}"/>'.encode()
+    assert old_attr in parts[sheet_part]
+    parts[sheet_part] = parts[sheet_part].replace(
+        old_attr, f'<mergeCell ref="{new_ref}"/>'.encode()
+    )
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as target:
+        for name, data in parts.items():
+            target.writestr(name, data)
+
+
+def test_whole_sheet_merged_range_is_clipped_to_data(tmp_path: Path) -> None:
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet["A1"] = "Quarterly report"
+    sheet["B3"] = "end"
+    sheet.merge_cells("A1:B2")
+    file_path = tmp_path / "whole-sheet-merge.xlsx"
+    workbook.save(file_path)
+    _replace_merged_range(file_path, "A1:B2", "A1:XFD1048576")
+
+    converter = DocumentConverter(allowed_formats=[InputFormat.XLSX])
+    tracemalloc.start()
+    try:
+        doc = converter.convert(file_path).document
+        _, peak = tracemalloc.get_traced_memory()
+    finally:
+        tracemalloc.stop()
+
+    assert peak < 50 * 1024 * 1024
+    assert len(doc.tables) == 1
+    table = doc.tables[0].data
+    assert (table.num_rows, table.num_cols) == (3, 2)
+    [anchor] = [cell for cell in table.table_cells if cell.text == "Quarterly report"]
+    assert (anchor.row_span, anchor.col_span) == (3, 2)
+
+
+def test_merged_range_beyond_data_is_clipped(tmp_path: Path) -> None:
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.append(["Inventory", None, None])
+    sheet.append(["Item", "Count", "Price"])
+    sheet.append(["Fruit", 3, 1.5])
+    sheet.append([None, 4, 2.5])
+    sheet.append(["Total", None, None])
+    sheet.merge_cells("A1:C1")
+    sheet.merge_cells("A3:A4")
+    sheet.merge_cells("A5:B5")
+    file_path = tmp_path / "partial-merge.xlsx"
+    workbook.save(file_path)
+    _replace_merged_range(file_path, "A5:B5", "A5:XFD1000")
+
+    in_doc = InputDocument(
+        path_or_stream=file_path,
+        format=InputFormat.XLSX,
+        filename=file_path.stem,
+        backend=MsExcelDocumentBackend,
+    )
+    backend = MsExcelDocumentBackend(in_doc=in_doc, path_or_stream=file_path)
+    loaded_sheet = backend.workbook.active
+    assert {str(merged) for merged in loaded_sheet.merged_cells.ranges} == {
+        "A1:C1",
+        "A3:A4",
+        "A5:C5",
+    }
+
+    tables, _ = backend._find_data_tables(loaded_sheet)
+
+    assert len(tables) == 1
+    table = tables[0]
+    assert (table.anchor, table.num_rows, table.num_cols) == ((0, 0), 5, 3)
+    spans = {
+        cell.text: (cell.row_span, cell.col_span)
+        for cell in table.data
+        if cell.text in {"Inventory", "Fruit", "Total"}
+    }
+    assert spans == {"Inventory": (1, 3), "Fruit": (2, 1), "Total": (1, 3)}
 
 
 def test_split_leading_section_label_helper() -> None:

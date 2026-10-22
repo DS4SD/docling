@@ -79,7 +79,7 @@ except ImportError:  # pragma: no cover - import-time guard
 _OPENPYXL_AVAILABLE: bool = False
 _OPENPYXL_IMPORT_ERROR: ImportError | None = None
 try:  # pragma: no cover - import-time guard
-    from openpyxl import Workbook, load_workbook
+    from openpyxl import Workbook
     from openpyxl.cell.cell import Cell, MergedCell
     from openpyxl.chart import DoughnutChart, PieChart, PieChart3D, ProjectedPieChart
     from openpyxl.chart.data_source import AxDataSource, NumDataSource
@@ -93,8 +93,10 @@ try:  # pragma: no cover - import-time guard
         TwoCellAnchor,
     )
     from openpyxl.packaging.relationship import get_dependents, get_rels_path
+    from openpyxl.reader.excel import ExcelReader
     from openpyxl.styles import PatternFill
     from openpyxl.utils.cell import range_boundaries
+    from openpyxl.worksheet.merge import MergedCellRange
     from openpyxl.worksheet.worksheet import Worksheet
     from openpyxl.xml.constants import IMAGE_NS
 
@@ -275,6 +277,127 @@ class _MergedCellIndex:
         return self._anchor_spans.get((row, col), (1, 1))
 
 
+# openpyxl creates one ``MergedCell`` object for each covered cell of a merged
+# range while it loads a worksheet. This limits the covered cells that one
+# workbook can make it create.
+_MAX_MERGED_CELLS: Final[int] = 100_000
+
+
+class _MergedRangeClipper:
+    """Clip merged ranges so that openpyxl creates a bounded number of cells.
+
+    Merged ranges are kept unchanged while the workbook stays within the cell
+    budget. A range that does not fit is clipped to the cells with values in its
+    worksheet, and to its top-left cell if it still does not fit.
+    """
+
+    def __init__(self, budget: int) -> None:
+        self._remaining = budget
+        self.clipped = 0
+
+    def bind(self, sheet: Worksheet) -> Callable[[MergedCellRange], None]:
+        """Return a replacement for ``sheet._clean_merge_range``."""
+        clean_merge_range = sheet._clean_merge_range  # type: ignore[attr-defined]
+        value_bounds: list[DataRegion | None] = []
+
+        def clip_and_clean(merged_range: MergedCellRange) -> None:
+            # openpyxl binds all cells of a sheet before its merged ranges, so the
+            # first call sees all values of the sheet.
+            if not value_bounds:
+                value_bounds.append(_value_bounds(sheet))
+            self._fit(merged_range, value_bounds[0])
+            clean_merge_range(merged_range)
+
+        return clip_and_clean
+
+    def _fit(self, merged_range: MergedCellRange, bounds: DataRegion | None) -> None:
+        covered = _covered_cells(merged_range)
+        if covered > self._remaining:
+            self.clipped += 1
+            if bounds is not None:
+                merged_range.max_row = max(
+                    merged_range.min_row, min(merged_range.max_row, bounds.max_row)
+                )
+                merged_range.max_col = max(
+                    merged_range.min_col, min(merged_range.max_col, bounds.max_col)
+                )
+                covered = _covered_cells(merged_range)
+            if covered > self._remaining:
+                merged_range.max_row = merged_range.min_row
+                merged_range.max_col = merged_range.min_col
+                covered = 0
+        self._remaining -= covered
+
+
+def _covered_cells(merged_range: MergedCellRange) -> int:
+    """Return the number of cells of a merged range after its top-left cell."""
+    rows = merged_range.max_row - merged_range.min_row + 1
+    cols = merged_range.max_col - merged_range.min_col + 1
+    return rows * cols - 1
+
+
+def _value_bounds(sheet: Worksheet) -> DataRegion | None:
+    """Return the smallest region that holds all cells with a value."""
+    coords = [coord for coord, cell in sheet._cells.items() if cell.value is not None]
+    if not coords:
+        return None
+    rows = [row for row, _ in coords]
+    cols = [col for _, col in coords]
+    return DataRegion(min(rows), max(rows), min(cols), max(cols))
+
+
+def _read_worksheets_with_clipped_merges(
+    workbook: Workbook, read_worksheets: Callable[[], None]
+) -> None:
+    """Run ``read_worksheets`` with merged ranges clipped on each new worksheet."""
+    # openpyxl expands each merged range in ``Worksheet._clean_merge_range`` and
+    # has no option to limit it. Wrap that method on the worksheets of this
+    # workbook only: ``create_sheet`` is shadowed on this workbook instance while
+    # its sheets load. No class or module attribute of openpyxl changes, so
+    # concurrent loads are not affected.
+    clipper = _MergedRangeClipper(_MAX_MERGED_CELLS)
+    create_sheet = workbook.create_sheet
+    sheets: list[Worksheet] = []
+
+    def create_bounded_sheet(
+        title: str | None = None, index: int | None = None
+    ) -> Worksheet:
+        sheet = create_sheet(title, index)
+        sheet._clean_merge_range = clipper.bind(sheet)
+        sheets.append(sheet)
+        return sheet
+
+    workbook.create_sheet = create_bounded_sheet  # type: ignore[method-assign]
+    try:
+        read_worksheets()
+    finally:
+        del workbook.create_sheet
+        for sheet in sheets:
+            del sheet._clean_merge_range  # type: ignore[attr-defined]
+    if clipper.clipped:
+        _log.warning(
+            "Clipped %d merged cell ranges that cover more than %d cells",
+            clipper.clipped,
+            _MAX_MERGED_CELLS,
+        )
+
+
+def _load_workbook(filename: str | BytesIO) -> Workbook:
+    """Load a workbook like ``load_workbook(filename, data_only=True)``.
+
+    Merged cell ranges are clipped so that they cover a bounded number of cells.
+    """
+    reader = ExcelReader(filename, data_only=True)
+    read_worksheets = reader.read_worksheets
+    # ``reader.wb`` exists once ``read`` has read the workbook part, which openpyxl
+    # does before it reads the worksheets.
+    reader.read_worksheets = lambda: _read_worksheets_with_clipped_merges(  # type: ignore[method-assign]
+        reader.wb, read_worksheets
+    )
+    reader.read()
+    return reader.wb
+
+
 class ExcelCell(BaseModel):
     """Represents an Excel cell.
 
@@ -398,13 +521,9 @@ class MsExcelDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentBacken
                     module=r"openpyxl\.reader\.drawings",
                 )
                 if isinstance(self.path_or_stream, BytesIO):
-                    self.workbook = load_workbook(
-                        filename=self.path_or_stream, data_only=True
-                    )
+                    self.workbook = _load_workbook(self.path_or_stream)
                 elif isinstance(self.path_or_stream, Path):
-                    self.workbook = load_workbook(
-                        filename=str(self.path_or_stream), data_only=True
-                    )
+                    self.workbook = _load_workbook(str(self.path_or_stream))
 
             self.valid = self.workbook is not None
         except Exception as e:
