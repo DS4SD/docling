@@ -22,7 +22,6 @@ from docling_core.types.doc import (
     DocumentOrigin,
     Formatting,
     ImageRef,
-    ListItem,
     MoleculeMetaField,
     NodeItem,
     PictureItem,
@@ -35,6 +34,8 @@ from docling_core.types.doc import (
     TableCell,
     TableData,
     TableItem,
+    TextItem,
+    TitleItem,
 )
 from PIL import Image as PILImage
 from pydantic import AnyUrl, ValidationError
@@ -272,6 +273,14 @@ class _Run:
     formatting: Formatting = field(default_factory=Formatting)
     hyperlink: AnyUrl | Path | None = None
 
+    @property
+    def plain(self) -> bool:
+        return (
+            self.label == DocItemLabel.TEXT
+            and self.formatting == Formatting()
+            and self.hyperlink is None
+        )
+
 
 @dataclass
 class _Provenance:
@@ -392,17 +401,38 @@ class _ChandraDocumentBuilder:
                 merged[-1].text += run.text
             else:
                 merged.append(run)
-        merged = [
-            run
-            for run in merged
-            if run.text.strip()
-            or run.label
-            in {
+        heading = isinstance(parent, (SectionHeaderItem, TitleItem)) or label in {
+            DocItemLabel.SECTION_HEADER,
+            DocItemLabel.TITLE,
+        }
+        runs, merged = merged, []
+        line_break = False
+        for run in runs:
+            edges = run.text.strip(" \t")
+            run.text = run.text.strip()
+            is_text = run.label == DocItemLabel.TEXT
+            line_break = line_break or (is_text and edges.startswith("\n"))
+            if not run.text and run.label not in {
                 DocItemLabel.FIELD_VALUE,
                 DocItemLabel.CHECKBOX_SELECTED,
                 DocItemLabel.CHECKBOX_UNSELECTED,
-            }
-        ]
+            }:
+                continue
+            if line_break and merged and not heading:
+                # shortcut: a break next to a formatted run or in a heading becomes a
+                # space: docling-core's Markdown puts run edge whitespace inside the
+                # emphasis markers ("**  \nX**"). Upgrade when it emits that outside
+                # them and joins heading lines: then always carry it to the next run.
+                if run.plain:
+                    run.text = "\n" + run.text
+                elif merged[-1].plain:
+                    merged[-1].text += "\n"
+            line_break = is_text and edges.endswith("\n")
+            merged.append(run)
+        if heading and len(merged) > 1:
+            # A break inside one run of a multi-run heading would end the heading line.
+            for run in merged:
+                run.text = " ".join(run.text.split())
         if not merged:
             return
         layer = (
@@ -442,15 +472,16 @@ class _ChandraDocumentBuilder:
                 if run.label == DocItemLabel.TEXT and len(merged) == 1
                 else run.label
             )
-            text = run.text.strip()
+            text = run.text
             if (
-                isinstance(parent, ListItem)
+                isinstance(parent, TextItem)
                 and not parent.children
                 and not parent.text
                 and len(merged) == 1
                 and run_label == DocItemLabel.TEXT
             ):
-                parent.text = parent.orig = text
+                parent.text = text
+                parent.orig = parent.orig or text
                 parent.formatting = (
                     run.formatting if run.formatting != Formatting() else None
                 )

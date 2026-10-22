@@ -24,6 +24,7 @@ from docling.datamodel.backend_options import PdfBackendOptions
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.document import InputDocument
 from docling.exceptions import DocumentLoadError
+from docling.utils.image_utils import to_rgb
 
 _log = logging.getLogger(__name__)
 
@@ -67,20 +68,6 @@ def _oriented_frame(image: Image.Image) -> tuple[Image.Image, tuple[float, float
     if oriented.size != image.size:
         dpi_x, dpi_y = dpi_y, dpi_x
     return oriented, (dpi_x, dpi_y)
-
-
-def _to_rgb(frame: Image.Image) -> Image.Image:
-    """Convert a frame to RGB, flattening any transparency onto white.
-
-    A plain ``convert("RGB")`` drops the alpha channel and keeps the colour
-    stored under it, which is usually black for fully transparent pixels. Dark
-    content on a transparent background would then become a black page.
-    """
-    if frame.mode in ("RGBA", "LA", "PA") or "transparency" in frame.info:
-        rgba = frame.convert("RGBA")
-        background = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
-        return Image.alpha_composite(background, rgba).convert("RGB")
-    return frame.convert("RGB")
 
 
 class _ImagePageBackend(PdfPageBackend):
@@ -249,11 +236,11 @@ class ImageDocumentBackend(PdfDocumentBackend):
                         img.seek(i)
                         frame, dpi = _oriented_frame(img)
                         self._frame_dpi.append(dpi)
-                        self._frames.append(_to_rgb(frame))
+                        self._frames.append(to_rgb(frame))
                 else:
                     frame, dpi = _oriented_frame(img)
                     self._frame_dpi.append(dpi)
-                    self._frames.append(_to_rgb(frame))
+                    self._frames.append(to_rgb(frame))
         except Exception as e:
             for frame in self._frames:
                 frame.close()
