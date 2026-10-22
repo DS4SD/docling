@@ -192,6 +192,14 @@ def test_doubled_quotes_with_non_comma_delimiter():
             b"id,ratio (a;b),x,y\n1,0.5,2,3\n2,0.7,4\n",
             ["id", "ratio (a;b)", "x", "y", "1", "0.5", "2", "3", "2", "0.7", "4"],
         ),
+        (
+            b"Time (hh:mm:ss),Value\n10:30:00,5\n11:45:00\n",
+            ["Time (hh:mm:ss)", "Value", "10:30:00", "5", "11:45:00"],
+        ),
+        (
+            b"Time (hh:mm),Value\n10:30,5\n11:45\n",
+            ["Time (hh:mm)", "Value", "10:30", "5", "11:45"],
+        ),
     ],
     ids=[
         "semicolon_with_comma_in_header",
@@ -199,6 +207,8 @@ def test_doubled_quotes_with_non_comma_delimiter():
         "ragged_comma_with_colon_in_header",
         "ragged_comma_with_semicolon_in_header",
         "ragged_comma_sample_not_sniffable",
+        "ragged_comma_with_two_colons_in_header",
+        "ragged_comma_with_one_colon_in_header",
     ],
 )
 def test_header_with_second_delimiter_uses_following_rows(payload, expected):

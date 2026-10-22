@@ -51,16 +51,34 @@ def _sniff_dialect(head: str, read_sample: Callable[[], str]) -> type[csv.Dialec
     # the sniffer then picks the first one in its preference order, e.g. `,`
     # for `a;b (x, y);c`. The following rows can tell them apart, so prefer a
     # sample-based dialect when its delimiter splits the line into at least as
-    # many fields. Ragged rows can make the sample favour a delimiter that only
-    # appears inside a header field, like the `:` in `Time (hh:mm)`.
+    # many fields. Only occurrences outside brackets count: ragged rows can make
+    # the sample favour a delimiter that only appears inside a header field,
+    # like the `:` in `Time (hh:mm:ss)`, and a column name rarely splits there.
     if sum(delimiter in head for delimiter in _DELIMITERS) > 1:
         try:
             sample_dialect = csv.Sniffer().sniff(read_sample(), _DELIMITERS)
         except csv.Error:
             return dialect
-        if head.count(sample_dialect.delimiter) >= head.count(dialect.delimiter):
+        sample_count = _count_outside_brackets(head, sample_dialect.delimiter)
+        if sample_count and sample_count >= _count_outside_brackets(
+            head, dialect.delimiter
+        ):
             return sample_dialect
     return dialect
+
+
+def _count_outside_brackets(line: str, char: str) -> int:
+    """Count `char` in `line`, skipping occurrences inside (), [] or {}."""
+    depth = 0
+    count = 0
+    for c in line:
+        if c in "([{":
+            depth += 1
+        elif c in ")]}":
+            depth = max(depth - 1, 0)
+        elif c == char and depth == 0:
+            count += 1
+    return count
 
 
 class CsvDocumentBackend(DeclarativeDocumentBackend):
