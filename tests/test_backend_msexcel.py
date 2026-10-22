@@ -740,16 +740,14 @@ def test_merged_cells_are_indexed_once_and_preserve_semantics(tmp_path: Path) ->
     assert comment_map[(3, 3)] == [("Codex", "Synthetic note", None)]
 
 
-def _replace_merged_range(path: Path, old_ref: str, new_ref: str) -> None:
-    """Rewrite a merged range of the first sheet, as openpyxl cannot save it."""
+def _rewrite_sheet_xml(
+    path: Path, old: str, new: str, sheet_part: str = "xl/worksheets/sheet1.xml"
+) -> None:
+    """Rewrite a range in a sheet part, as openpyxl cannot save such ranges."""
     with zipfile.ZipFile(path) as source:
         parts = {info.filename: source.read(info) for info in source.infolist()}
-    sheet_part = "xl/worksheets/sheet1.xml"
-    old_attr = f'<mergeCell ref="{old_ref}"/>'.encode()
-    assert old_attr in parts[sheet_part]
-    parts[sheet_part] = parts[sheet_part].replace(
-        old_attr, f'<mergeCell ref="{new_ref}"/>'.encode()
-    )
+    assert old.encode() in parts[sheet_part]
+    parts[sheet_part] = parts[sheet_part].replace(old.encode(), new.encode())
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as target:
         for name, data in parts.items():
             target.writestr(name, data)
@@ -763,7 +761,9 @@ def test_whole_sheet_merged_range_is_clipped_to_data(tmp_path: Path) -> None:
     sheet.merge_cells("A1:B2")
     file_path = tmp_path / "whole-sheet-merge.xlsx"
     workbook.save(file_path)
-    _replace_merged_range(file_path, "A1:B2", "A1:XFD1048576")
+    _rewrite_sheet_xml(
+        file_path, '<mergeCell ref="A1:B2"/>', '<mergeCell ref="A1:XFD1048576"/>'
+    )
 
     converter = DocumentConverter(allowed_formats=[InputFormat.XLSX])
     tracemalloc.start()
@@ -794,7 +794,9 @@ def test_merged_range_beyond_data_is_clipped(tmp_path: Path) -> None:
     sheet.merge_cells("A5:B5")
     file_path = tmp_path / "partial-merge.xlsx"
     workbook.save(file_path)
-    _replace_merged_range(file_path, "A5:B5", "A5:XFD1000")
+    _rewrite_sheet_xml(
+        file_path, '<mergeCell ref="A5:B5"/>', '<mergeCell ref="A5:XFD1000"/>'
+    )
 
     in_doc = InputDocument(
         path_or_stream=file_path,
@@ -821,6 +823,60 @@ def test_merged_range_beyond_data_is_clipped(tmp_path: Path) -> None:
         if cell.text in {"Inventory", "Fruit", "Total"}
     }
     assert spans == {"Inventory": (1, 3), "Fruit": (2, 1), "Total": (1, 3)}
+
+
+def test_hyperlink_range_is_clipped_to_data(tmp_path: Path) -> None:
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet["A1"] = "Docs"
+    sheet["A1"].hyperlink = "https://example.com/docs"
+    sheet["B3"] = "end"
+    small = workbook.create_sheet("Small")
+    small["A1"] = "Home"
+    small["A1"].hyperlink = "https://example.com/"
+    small["C3"] = "end"
+    file_path = tmp_path / "hyperlink-range.xlsx"
+    workbook.save(file_path)
+    _rewrite_sheet_xml(file_path, 'ref="A1" r:id', 'ref="A1:J100000" r:id')
+    _rewrite_sheet_xml(
+        file_path,
+        'ref="A1" r:id',
+        'ref="A1:B2" r:id',
+        sheet_part="xl/worksheets/sheet2.xml",
+    )
+
+    in_doc = InputDocument(
+        path_or_stream=file_path,
+        format=InputFormat.XLSX,
+        filename=file_path.stem,
+        backend=MsExcelDocumentBackend,
+    )
+    tracemalloc.start()
+    try:
+        backend = MsExcelDocumentBackend(in_doc=in_doc, path_or_stream=file_path)
+        doc = backend.convert()
+        _, peak = tracemalloc.get_traced_memory()
+    finally:
+        tracemalloc.stop()
+
+    assert peak < 50 * 1024 * 1024
+    loaded_sheet = backend.workbook["Sheet"]
+    assert loaded_sheet["A1"].hyperlink.target == "https://example.com/docs"
+    assert (loaded_sheet.max_row, loaded_sheet.max_column) == (3, 2)
+    loaded_small = backend.workbook["Small"]
+    linked = {
+        cell.coordinate
+        for row in loaded_small.iter_rows()
+        for cell in row
+        if cell.hyperlink is not None
+    }
+    assert linked == {"A1", "A2", "B1", "B2"}
+    [docs_table] = [
+        table.data
+        for table in doc.tables
+        if any(cell.text == "Docs" for cell in table.data.table_cells)
+    ]
+    assert (docs_table.num_rows, docs_table.num_cols) == (3, 2)
 
 
 def test_split_leading_section_label_helper() -> None:

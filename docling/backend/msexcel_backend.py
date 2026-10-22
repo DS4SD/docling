@@ -277,63 +277,166 @@ class _MergedCellIndex:
         return self._anchor_spans.get((row, col), (1, 1))
 
 
-# openpyxl creates one ``MergedCell`` object for each covered cell of a merged
-# range while it loads a worksheet. This limits the covered cells that one
-# workbook can make it create.
+# While openpyxl loads a worksheet, it creates one ``MergedCell`` object for
+# each covered cell of a merged range, and one cell with its own ``Hyperlink``
+# copy for each cell of a hyperlink range. These limit the cells that the ranges
+# of one workbook can make it create. A hyperlink also sets its target as the
+# value of each empty cell, so these cells become table data: per cell, they
+# cost about five times more than merged cells, and their limit is smaller.
 _MAX_MERGED_CELLS: Final[int] = 100_000
+_MAX_HYPERLINK_CELLS: Final[int] = 10_000
 
 
-class _MergedRangeClipper:
-    """Clip merged ranges so that openpyxl creates a bounded number of cells.
+class _RangeBudget:
+    """Fit cell ranges of one workbook into a budget of created cells.
 
-    Merged ranges are kept unchanged while the workbook stays within the cell
-    budget. A range that does not fit is clipped to the cells with values in its
+    Ranges are kept unchanged while the workbook stays within the budget. A
+    range that does not fit is clipped to the cells with values in its
     worksheet, and to its top-left cell if it still does not fit.
     """
 
-    def __init__(self, budget: int) -> None:
-        self._remaining = budget
+    def __init__(self, cells: int) -> None:
+        self._remaining = cells
         self.clipped = 0
 
-    def bind(self, sheet: Worksheet) -> Callable[[MergedCellRange], None]:
-        """Return a replacement for ``sheet._clean_merge_range``."""
-        clean_merge_range = sheet._clean_merge_range  # type: ignore[attr-defined]
-        value_bounds: list[DataRegion | None] = []
-
-        def clip_and_clean(merged_range: MergedCellRange) -> None:
-            # openpyxl binds all cells of a sheet before its merged ranges, so the
-            # first call sees all values of the sheet.
-            if not value_bounds:
-                value_bounds.append(_value_bounds(sheet))
-            self._fit(merged_range, value_bounds[0])
-            clean_merge_range(merged_range)
-
-        return clip_and_clean
-
-    def _fit(self, merged_range: MergedCellRange, bounds: DataRegion | None) -> None:
-        covered = _covered_cells(merged_range)
+    def fit(self, region: DataRegion, bounds: DataRegion | None) -> DataRegion:
+        """Return the part of a range that fits into the remaining budget."""
+        covered = _covered_cells(region)
+        if covered <= self._remaining:
+            self._remaining -= covered
+            return region
+        self.clipped += 1
+        if bounds is not None:
+            region = DataRegion(
+                region.min_row,
+                max(region.min_row, min(region.max_row, bounds.max_row)),
+                region.min_col,
+                max(region.min_col, min(region.max_col, bounds.max_col)),
+            )
+            covered = _covered_cells(region)
         if covered > self._remaining:
-            self.clipped += 1
-            if bounds is not None:
-                merged_range.max_row = max(
-                    merged_range.min_row, min(merged_range.max_row, bounds.max_row)
-                )
-                merged_range.max_col = max(
-                    merged_range.min_col, min(merged_range.max_col, bounds.max_col)
-                )
-                covered = _covered_cells(merged_range)
-            if covered > self._remaining:
-                merged_range.max_row = merged_range.min_row
-                merged_range.max_col = merged_range.min_col
-                covered = 0
+            region = DataRegion(
+                region.min_row, region.min_row, region.min_col, region.min_col
+            )
+            covered = 0
         self._remaining -= covered
+        return region
 
 
-def _covered_cells(merged_range: MergedCellRange) -> int:
-    """Return the number of cells of a merged range after its top-left cell."""
-    rows = merged_range.max_row - merged_range.min_row + 1
-    cols = merged_range.max_col - merged_range.min_col + 1
-    return rows * cols - 1
+def _covered_cells(region: DataRegion) -> int:
+    """Return the number of cells of a range after its top-left cell."""
+    # An empty range, such as rows past the end of a sheet, covers no cells.
+    if region.width() <= 0 or region.height() <= 0:
+        return 0
+    return region.width() * region.height() - 1
+
+
+class _SheetRangeClipper:
+    """Clip the merged and hyperlink ranges of one worksheet while it loads.
+
+    openpyxl has no option to limit how it expands these ranges. The clipper
+    shadows three methods on the worksheet instance and removes them after the
+    load; no class or module attribute of openpyxl changes, so concurrent loads
+    are not affected.
+
+    - ``_clean_merge_range`` creates the ``MergedCell`` objects of a merged range.
+    - ``iter_rows`` and ``iter_cols`` create the cells of a range lookup such as
+      ``ws["A1:J10"]``. While a worksheet loads, openpyxl looks up ranges only to
+      bind hyperlinks; comments use single-cell lookups.
+    """
+
+    def __init__(
+        self,
+        sheet: Worksheet,
+        merged_budget: _RangeBudget,
+        hyperlink_budget: _RangeBudget,
+    ) -> None:
+        self._sheet = sheet
+        self._merged_budget = merged_budget
+        self._hyperlink_budget = hyperlink_budget
+        self._value_bounds: list[DataRegion | None] = []
+        self._clean_merge_range = sheet._clean_merge_range  # type: ignore[attr-defined]
+        self._iter_rows = sheet.iter_rows
+        self._iter_cols = sheet.iter_cols
+
+    def install(self) -> None:
+        self._sheet._clean_merge_range = self.clean_merge_range  # type: ignore[attr-defined]
+        self._sheet.iter_rows = self.iter_rows  # type: ignore[method-assign]
+        self._sheet.iter_cols = self.iter_cols  # type: ignore[method-assign]
+
+    def uninstall(self) -> None:
+        del self._sheet._clean_merge_range  # type: ignore[attr-defined]
+        del self._sheet.iter_rows
+        del self._sheet.iter_cols
+
+    def _bounds(self) -> DataRegion | None:
+        # openpyxl binds all cells of a sheet before its ranges, so the first
+        # call sees all values of the sheet.
+        if not self._value_bounds:
+            self._value_bounds.append(_value_bounds(self._sheet))
+        return self._value_bounds[0]
+
+    def clean_merge_range(self, merged_range: MergedCellRange) -> None:
+        region = self._merged_budget.fit(
+            DataRegion(
+                merged_range.min_row,
+                merged_range.max_row,
+                merged_range.min_col,
+                merged_range.max_col,
+            ),
+            self._bounds(),
+        )
+        merged_range.max_row = region.max_row
+        merged_range.max_col = region.max_col
+        self._clean_merge_range(merged_range)
+
+    def _fit(
+        self,
+        min_row: int | None,
+        max_row: int | None,
+        min_col: int | None,
+        max_col: int | None,
+    ) -> DataRegion:
+        # Same defaults as ``Worksheet.iter_rows`` and ``Worksheet.iter_cols``.
+        return self._hyperlink_budget.fit(
+            DataRegion(
+                min_row or 1,
+                max_row or self._sheet.max_row,
+                min_col or 1,
+                max_col or self._sheet.max_column,
+            ),
+            self._bounds(),
+        )
+
+    def iter_rows(
+        self,
+        min_row: int | None = None,
+        max_row: int | None = None,
+        min_col: int | None = None,
+        max_col: int | None = None,
+        values_only: bool = False,
+    ) -> Any:
+        if not any((min_row, max_row, min_col, max_col)):
+            return self._iter_rows(values_only=values_only)
+        region = self._fit(min_row, max_row, min_col, max_col)
+        return self._iter_rows(
+            region.min_row, region.max_row, region.min_col, region.max_col, values_only
+        )
+
+    def iter_cols(
+        self,
+        min_col: int | None = None,
+        max_col: int | None = None,
+        min_row: int | None = None,
+        max_row: int | None = None,
+        values_only: bool = False,
+    ) -> Any:
+        if not any((min_row, max_row, min_col, max_col)):
+            return self._iter_cols(values_only=values_only)
+        region = self._fit(min_row, max_row, min_col, max_col)
+        return self._iter_cols(
+            region.min_col, region.max_col, region.min_row, region.max_row, values_only
+        )
 
 
 def _value_bounds(sheet: Worksheet) -> DataRegion | None:
@@ -346,25 +449,24 @@ def _value_bounds(sheet: Worksheet) -> DataRegion | None:
     return DataRegion(min(rows), max(rows), min(cols), max(cols))
 
 
-def _read_worksheets_with_clipped_merges(
+def _read_worksheets_with_clipped_ranges(
     workbook: Workbook, read_worksheets: Callable[[], None]
 ) -> None:
-    """Run ``read_worksheets`` with merged ranges clipped on each new worksheet."""
-    # openpyxl expands each merged range in ``Worksheet._clean_merge_range`` and
-    # has no option to limit it. Wrap that method on the worksheets of this
-    # workbook only: ``create_sheet`` is shadowed on this workbook instance while
-    # its sheets load. No class or module attribute of openpyxl changes, so
-    # concurrent loads are not affected.
-    clipper = _MergedRangeClipper(_MAX_MERGED_CELLS)
+    """Run ``read_worksheets`` with ranges clipped on each new worksheet."""
+    # The worksheet methods can only be shadowed once a worksheet exists, so
+    # ``create_sheet`` is shadowed on this workbook instance while its sheets load.
+    merged_budget = _RangeBudget(_MAX_MERGED_CELLS)
+    hyperlink_budget = _RangeBudget(_MAX_HYPERLINK_CELLS)
     create_sheet = workbook.create_sheet
-    sheets: list[Worksheet] = []
+    clippers: list[_SheetRangeClipper] = []
 
     def create_bounded_sheet(
         title: str | None = None, index: int | None = None
     ) -> Worksheet:
         sheet = create_sheet(title, index)
-        sheet._clean_merge_range = clipper.bind(sheet)
-        sheets.append(sheet)
+        clipper = _SheetRangeClipper(sheet, merged_budget, hyperlink_budget)
+        clipper.install()
+        clippers.append(clipper)
         return sheet
 
     workbook.create_sheet = create_bounded_sheet  # type: ignore[method-assign]
@@ -372,26 +474,33 @@ def _read_worksheets_with_clipped_merges(
         read_worksheets()
     finally:
         del workbook.create_sheet
-        for sheet in sheets:
-            del sheet._clean_merge_range  # type: ignore[attr-defined]
-    if clipper.clipped:
+        for clipper in clippers:
+            clipper.uninstall()
+    if merged_budget.clipped:
         _log.warning(
-            "Clipped %d merged cell ranges that cover more than %d cells",
-            clipper.clipped,
+            "Clipped %d merged cell ranges: together they cover more than %d cells",
+            merged_budget.clipped,
             _MAX_MERGED_CELLS,
+        )
+    if hyperlink_budget.clipped:
+        _log.warning(
+            "Clipped %d hyperlink ranges: together they cover more than %d cells",
+            hyperlink_budget.clipped,
+            _MAX_HYPERLINK_CELLS,
         )
 
 
 def _load_workbook(filename: str | BytesIO) -> Workbook:
     """Load a workbook like ``load_workbook(filename, data_only=True)``.
 
-    Merged cell ranges are clipped so that they cover a bounded number of cells.
+    Merged cell and hyperlink ranges are clipped so that they cover a bounded
+    number of cells.
     """
     reader = ExcelReader(filename, data_only=True)
     read_worksheets = reader.read_worksheets
     # ``reader.wb`` exists once ``read`` has read the workbook part, which openpyxl
     # does before it reads the worksheets.
-    reader.read_worksheets = lambda: _read_worksheets_with_clipped_merges(  # type: ignore[method-assign]
+    reader.read_worksheets = lambda: _read_worksheets_with_clipped_ranges(  # type: ignore[method-assign]
         reader.wb, read_worksheets
     )
     reader.read()
