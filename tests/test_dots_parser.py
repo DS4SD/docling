@@ -94,10 +94,7 @@ def test_markdown_emphasis_preserves_math_code_and_html(page_size: Size):
         },
     ]
     doc = parse_dots_json(json.dumps(data), page_size, page_no=1)
-    assert any(
-        item.text == "Bold $x_1 * y_2 < 2$" and item.formatting.bold
-        for item in doc.texts
-    )
+    assert any(item.text == "Bold" and item.formatting.bold for item in doc.texts)
     assert any(
         item.text == "2" and item.formatting.script == Script.SUB for item in doc.texts
     )
@@ -107,10 +104,11 @@ def test_markdown_emphasis_preserves_math_code_and_html(page_size: Size):
         "_literal_",
         "'**literal**'",
     ]
-    assert (
-        next(item.text for item in doc.texts if item.label == DocItemLabel.FORMULA)
-        == r"x_1 * y_2 * z_3"
-    )
+    assert [item.text for item in doc.texts if isinstance(item, FormulaItem)] == [
+        "x_1 * y_2 < 2",
+        "x_1 * y_2 * z_3",
+    ]
+    assert "$x_1 * y_2 < 2$" in doc.export_to_markdown()
 
 
 @pytest.mark.parametrize(
@@ -360,9 +358,10 @@ class TestParseMultipleCategories:
             item.text == "2" and item.formatting.script == Script.SUB
             for item in doc.texts
         )
-        assert any(
-            item.text == "Keep the inequality $0<a<2$ literal." for item in doc.texts
-        )
+        assert [item.text for item in doc.texts if isinstance(item, FormulaItem)] == [
+            "0<a<2"
+        ]
+        assert "Keep the inequality $0<a<2$ literal." in doc.export_to_markdown()
 
 
 class TestCleanJson:
@@ -411,4 +410,3 @@ def test_standalone_math_becomes_formula_without_inheriting_block_box(page_size:
     assert isinstance(doc.texts[1], FormulaItem)
     assert doc.texts[1].text == "x_1 * y_2 * z_3"
     assert not doc.texts[1].prov
-

@@ -14,7 +14,8 @@ if TYPE_CHECKING:
 
 _MATH = re.compile(
     r"(?<!\\)(?:\$\$([\s\S]*?)(?<!\\)\$\$"
-    r"|(?<!\$)\$(?![\s$])([^\n$]*?)(?<![\\\s])\$(?!\$)"
+    # A dollar before a digit starts an amount, not a closing math delimiter.
+    r"|(?<!\$)\$(?![\s$])([^\n$]*?)(?<![\\\s])\$(?![\d$])"
     r"|\\\(([\s\S]*?)\\\)|\\\[([\s\S]*?)\\\])"
 )
 

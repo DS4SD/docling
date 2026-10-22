@@ -61,3 +61,23 @@ def test_inline_math_preserves_approximation_marks(parser: str) -> None:
         item.formatting.strikethrough for item in doc.texts if item.formatting
     )
     assert [item.text for item in doc.texts if isinstance(item, FormulaItem)] == ["x"]
+
+
+@pytest.mark.parametrize("parser", ["dots", "nemotron"])
+@pytest.mark.parametrize(
+    "price", ["$5-$10", "$5\u2013$10", "$5.00 to $10.00", "$1,000-$2,000"]
+)
+def test_currency_range_remains_text_next_to_math(parser: str, price: str) -> None:
+    text = f"Price {price} and $x$."
+    size = Size(width=600, height=800)
+    if parser == "dots":
+        source = json.dumps(
+            [{"category": "Text", "bbox": [100, 100, 500, 200], "text": text}]
+        )
+        doc = parse_dots_json(source, size, page_no=2)
+    else:
+        source = f"<x_0.2><y_0.2>{text}<x_0.8><y_0.4><class_Text>"
+        doc = parse_nemotron_parse_v2(source, size, size, page_no=2)
+    assert [item.text for item in doc.texts if isinstance(item, FormulaItem)] == ["x"]
+    assert f"Price {price}" in doc.export_to_markdown()
+    assert len([item for item in doc.texts if item.prov]) == 1

@@ -88,7 +88,7 @@ def _markdown_inline_html(text: str) -> str:
     html_text = text
     if any(token in text for token in ("*", "_", "$", r"\(", r"\[", "`")):
         rendered = create_markdown_parser(inline_only=True).convert(text)
-        if re.search(r"<(?:strong|em|math|code)\b", rendered):
+        if re.search(r"<(?:strong|em|math)\b", rendered):
             # Keep soft and hard line breaks as <br>.
             html_text = re.sub(r"(?:<br />)?\n", "<br>", rendered.strip())
         else:
