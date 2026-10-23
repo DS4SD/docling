@@ -100,7 +100,7 @@ python my_docling_script.py
 The main purpose of Docling is to run local models which are not sharing any user data with remote services.
 Anyhow, there are valid use cases for processing part of the pipeline using remote services, for example invoking OCR engines from cloud vendors or the usage of hosted LLMs.
 
-In Docling we decided to allow such models, but we require the user to explicitly opt-in in communicating with external services.
+In Docling we decided to allow such models, but we require the user to explicitly opt in to communicating with external services.
 
 ```py
 from docling.datamodel.base_models import InputFormat
@@ -416,7 +416,7 @@ print(budget.export_to_markdown(
 A chart on a Keynote slide or a Numbers sheet becomes a picture classified by
 its kind, with the data it plots in the picture's `meta.tabular_chart` and its
 title as the caption, which is the shape the PowerPoint backend gives a chart. Neither app keeps
-a picture of a chart, so the picture itself is empty unless you opt into
+a picture of a chart, so the picture itself is empty unless you opt in to
 `render_chart_images`. That rebuilds each chart from its data as an Office chart
 and draws it with LibreOffice, so it needs a LibreOffice installation. The image
 has the chart's kind, data and title but not its colours or fonts, and a mixed,
