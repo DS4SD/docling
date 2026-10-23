@@ -52,7 +52,7 @@ from docling.backend.docx.drawingml.utils import (
     get_docx_to_pdf_converter,
     get_pil_from_dml_docx,
 )
-from docling.backend.docx.latex.omml import oMath2Latex
+from docling.backend.docx.latex.omml import OMML_NS, oMath2Latex
 from docling.backend.utils.archive_limits import (
     ArchiveLimits,
     check_archive_limits,
@@ -74,6 +74,7 @@ try:  # pragma: no cover - import-time guard
     from docx.document import Document as DocxDocument
     from docx.enum.style import WD_STYLE_TYPE
     from docx.opc.constants import RELATIONSHIP_TYPE as DOCX_RT
+    from docx.opc.part import XmlPart
     from docx.oxml import parse_xml as docx_parse_xml
     from docx.oxml.ns import qn
     from docx.oxml.simpletypes import ST_Merge
@@ -890,6 +891,12 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         self._pending_code_blank_lines: int = 0
         # The document default style's font is not evidence of code.
         self._default_paragraph_style: BaseStyle | None = None
+        # Whether any part uses w:vanish; most documents do not, and then the
+        # per-run hidden checks are skipped.
+        self._uses_hidden_text = False
+        # The layer around a hidden paragraph while it is added. List groups
+        # stay on it, so a hidden item does not hide the shown items with it.
+        self._layer_around_hidden: ContentLayer | None = None
 
         self.docx_obj = self.load_msword_file(
             path_or_stream=self.path_or_stream,
@@ -900,6 +907,13 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             self.valid = True
             self.current_part = self.docx_obj.part
             _normalize_list_style_types(self.docx_obj)
+            self._uses_hidden_text = any(
+                part.element.xpath(".//w:vanish")
+                if isinstance(part, XmlPart)
+                # python-docx loads footnotes and endnotes as plain parts.
+                else part.content_type.endswith("+xml") and b"vanish" in part.blob
+                for part in self.docx_obj.part.package.iter_parts()
+            )
             self._default_paragraph_style = self.docx_obj.styles.default(
                 WD_STYLE_TYPE.PARAGRAPH
             )
@@ -1127,7 +1141,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         list_gr = doc.add_list_group(
             name="list",
             parent=parent,
-            content_layer=self.content_layer,
+            content_layer=self._layer_around_hidden or self.content_layer,
         )
         elem_ref.append(list_gr.get_ref())
 
@@ -2349,10 +2363,52 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         return None
 
+    def _is_hidden_run(
+        self, run: Run, paragraph_style_chain: Sequence[CharacterStyle]
+    ) -> bool:
+        """Return True if Word hides ``run`` (the Hidden font property, ``w:vanish``).
+
+        The first explicit setting wins: the run's own formatting, then its
+        character style chain, then the paragraph style chain.
+        """
+        fonts = (
+            run.font,
+            *(style.font for style in self._get_style_chain(run.style)),
+            *(style.font for style in paragraph_style_chain),
+        )
+        for font in fonts:
+            if font.hidden is not None:
+                return font.hidden
+        return False
+
+    def _is_hidden_paragraph(self, paragraph: Paragraph) -> bool:
+        """Return True if ``paragraph`` has text and Word hides all of it.
+
+        An equation counts as shown: its runs are math runs, not ``w:r``.
+        """
+        if not self._uses_hidden_text or (
+            paragraph._p.find(f".//{OMML_NS}oMath") is not None
+        ):
+            return False
+        runs = [
+            Run(r_el, paragraph)
+            for r_el in paragraph._p.iter(f"{_W_NS_CLARK}r")
+            if r_el.find(f"{_W_NS_CLARK}t") is not None
+        ]
+        style_chain = self._get_style_chain(paragraph.style)
+        return bool(runs) and all(self._is_hidden_run(run, style_chain) for run in runs)
+
     def _iter_paragraph_content(
         self, paragraph: Paragraph
     ) -> list[tuple[str, Formatting | None, AnyUrl | Path | None]]:
         content: list[tuple[str, Formatting | None, AnyUrl | Path | None]] = []
+        # A fully hidden paragraph keeps its text; it goes to the invisible layer.
+        show_all = not self._uses_hidden_text or self._is_hidden_paragraph(paragraph)
+
+        def _is_shown(run: Run) -> bool:
+            return show_all or not self._is_hidden_run(
+                run, self._get_style_chain(paragraph.style)
+            )
 
         def _get_children_recursive(node):
             for child in node:
@@ -2366,24 +2422,24 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             tag_name = etree.QName(child).localname
 
             if tag_name == "sdt":
-                text = "".join(
-                    child.xpath(
-                        ".//w:sdtContent//w:t/text()",
-                        namespaces=_OOXML_NAMESPACES,
+                runs = [
+                    run
+                    for run in (
+                        Run(r_el, paragraph)
+                        for r_el in child.xpath(
+                            ".//w:sdtContent//w:r",
+                            namespaces=_OOXML_NAMESPACES,
+                        )
                     )
-                )
+                    if _is_shown(run)
+                ]
+                text = "".join(t for run in runs for t in run._r.xpath("./w:t/text()"))
                 if len(text) == 0:
                     continue
 
-                runs = child.xpath(
-                    ".//w:sdtContent//w:r",
-                    namespaces=_OOXML_NAMESPACES,
-                )
                 fmt = (
                     self._get_format_from_run(
-                        Run(runs[0], paragraph),
-                        paragraph,
-                        self._get_style_chain(paragraph.style),
+                        runs[0], paragraph, self._get_style_chain(paragraph.style)
                     )
                     if runs
                     else None
@@ -2404,11 +2460,14 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 # Hyperlink.text and Hyperlink.runs only read the direct w:r
                 # children, so also read the runs nested in the same wrappers
                 # as above (e.g. a tracked insertion inside the link).
-                runs = [
+                all_runs = [
                     Run(r_el, paragraph)
                     for r_el in _get_children_recursive(child)
                     if r_el.tag == f"{_W_NS_CLARK}r"
                 ]
+                runs = [run for run in all_runs if _is_shown(run)]
+                if all_runs and not runs:
+                    continue  # a fully hidden link
                 content.append(
                     (
                         "".join(run.text for run in runs),
@@ -2424,7 +2483,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                         self._get_hyperlink_target(item),
                     )
                 )
-            elif isinstance(item, Run):
+            elif _is_shown(item):
                 content.append(
                     (
                         item.text,
@@ -2836,10 +2895,31 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         self.parents[level] = original_parent
         return elem_ref
 
+    def _get_hidden_text_elements(
+        self, element: BaseOxmlElement
+    ) -> set[etree._Element]:
+        """Return the ``w:t`` elements of the hidden runs in ``element``.
+
+        Only an element with an equation needs them, so for any other element
+        the result is empty.
+        """
+        hidden: set[etree._Element] = set()
+        if not self._uses_hidden_text or element.find(f".//{OMML_NS}oMath") is None:
+            return hidden
+        for p_el in element.iter(f"{_W_NS_CLARK}p"):
+            paragraph = Paragraph(p_el, self.docx_obj)
+            style_chain = self._get_style_chain(paragraph.style)
+            for r_el in p_el.iter(f"{_W_NS_CLARK}r"):
+                if self._is_hidden_run(Run(r_el, paragraph), style_chain):
+                    hidden.update(r_el.iter(f"{_W_NS_CLARK}t"))
+        return hidden
+
     def _handle_equations_in_text(self, element, text):
         only_texts = []
         only_equations = []
         texts_and_equations = []
+        # ``text`` has no hidden text, so leave it out here too.
+        hidden_texts = self._get_hidden_text_elements(element)
 
         # Collect oMath elements and text runs from the paragraph.
         # Use direct children iteration first; fall back to deep iteration
@@ -2867,7 +2947,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     # Collect text from non-math children (e.g. <w:r> runs)
                     for t_elem in child.iter():
                         t_tag = etree.QName(t_elem).localname
-                        if t_tag == "t" and "math" not in t_elem.tag:
+                        if (
+                            t_tag == "t"
+                            and "math" not in t_elem.tag
+                            and t_elem not in hidden_texts
+                        ):
                             if isinstance(t_elem.text, str):
                                 only_texts.append(t_elem.text)
                                 texts_and_equations.append(t_elem.text)
@@ -2876,7 +2960,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # inside oMathPara or other wrapper elements).
             for subt in element.iter():
                 tag_name = etree.QName(subt).localname
-                if tag_name == "t" and "math" not in subt.tag:
+                if (
+                    tag_name == "t"
+                    and "math" not in subt.tag
+                    and subt not in hidden_texts
+                ):
                     if isinstance(subt.text, str):
                         only_texts.append(subt.text)
                         texts_and_equations.append(subt.text)
@@ -2945,6 +3033,18 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     ) -> list[RefItem]:
         elem_ref: list[RefItem] = []
         paragraph = Paragraph(element, self.docx_obj)
+        if self.content_layer != ContentLayer.INVISIBLE and self._is_hidden_paragraph(
+            paragraph
+        ):
+            # Word does not show it: keep it, like a hidden slide or sheet,
+            # but out of the default exports.
+            self._layer_around_hidden = self.content_layer
+            self.content_layer = ContentLayer.INVISIBLE
+            try:
+                return self._handle_text_elements(element, doc, skip_empty_text)
+            finally:
+                self.content_layer = self._layer_around_hidden
+                self._layer_around_hidden = None
         paragraph_elements = self._get_paragraph_elements(paragraph)
         text, equations = self._handle_equations_in_text(
             element=element, text=self._get_paragraph_text(paragraph)
@@ -3070,9 +3170,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             elem_ref.extend(h1)
 
         elif len(equations) > 0:
-            if (paragraph.text is None or len(paragraph.text.strip()) == 0) and len(
-                text
-            ) > 0:
+            # The paragraph's text without equations or hidden runs.
+            if len(self._get_paragraph_text(paragraph).strip()) == 0 and len(text) > 0:
                 # Standalone equation(s) — emit each as a separate formula
                 level = self._get_level()
                 parent = self.parents[level - 1]
@@ -3320,6 +3419,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             parent=self.parents[parent_level],
             text=text,
             level=add_level,
+            content_layer=self.content_layer,
         )
         self.parents[current_level] = hd
         elem_ref.append(hd.get_ref())
@@ -3353,6 +3453,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                     text=text,
                     formatting=format,
                     hyperlink=hyperlink,
+                    content_layer=self.content_layer,
                 )
         else:
             new_item = doc.add_list_item(
@@ -3360,8 +3461,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 enumerated=enumerated,
                 parent=self.parents[level],
                 text="",
+                content_layer=self.content_layer,
             )
-            new_parent = doc.add_inline_group(parent=new_item)
+            new_parent = doc.add_inline_group(
+                parent=new_item, content_layer=self.content_layer
+            )
             for text, format, hyperlink in elements:
                 if text:
                     doc.add_text(
@@ -3589,7 +3693,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 list_gr1 = doc.add_list_group(
                     name="list",
                     parent=self._sub_list_parent(doc, self.parents.get(i - 1)),
-                    content_layer=self.content_layer,
+                    content_layer=self._layer_around_hidden or self.content_layer,
                 )
                 self.parents[i] = list_gr1
                 elem_ref.append(list_gr1.get_ref())
@@ -3739,6 +3843,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             enumerated=is_numbered,
             parent=self.parents[use_level],
             text="",
+            content_layer=self.content_layer,
         )
 
         inline_group = doc.add_inline_group(
@@ -3877,12 +3982,27 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
                 cell = _Cell(tc, table)
 
+                # cell.text includes hidden runs, so rebuild it from the
+                # paragraphs' visible content when the cell has any. A cell has
+                # no layer of its own, so fully hidden paragraphs are left out.
+                cell_text = cell.text
+                if self._uses_hidden_text and any(
+                    self._is_hidden_run(Run(r_el, p), self._get_style_chain(p.style))
+                    for p in cell.paragraphs
+                    for r_el in p._p.xpath(".//w:r")
+                ):
+                    cell_text = "\n".join(
+                        self._get_paragraph_text(p)
+                        for p in cell.paragraphs
+                        if not self._is_hidden_paragraph(p)
+                    )
+
                 # Detect equations in cell text
                 text, equations = self._handle_equations_in_text(
-                    element=cell._element, text=cell.text
+                    element=cell._element, text=cell_text
                 )
                 if len(equations) == 0:
-                    text = cell.text
+                    text = cell_text
                 else:
                     text = text.replace("<eq>", "$").replace("</eq>", "$")
 
@@ -4777,14 +4897,15 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             for note in root.findall(f"{_W_NS_CLARK}{tag_name}"):
                 if note.get(f"{_W_NS_CLARK}type") in skip_types:
                     continue
+                # A note has no layer per paragraph, so hidden ones are left out.
                 texts = [
                     text
-                    for p_elm in note.findall(f".//{_W_NS_CLARK}p")
-                    if (
-                        text := self._get_paragraph_text(
-                            Paragraph(p_elm, docx_obj)
-                        ).strip()
+                    for paragraph in (
+                        Paragraph(p_elm, docx_obj)
+                        for p_elm in note.findall(f".//{_W_NS_CLARK}p")
                     )
+                    if not self._is_hidden_paragraph(paragraph)
+                    and (text := self._get_paragraph_text(paragraph).strip())
                 ]
                 if not texts:
                     continue
