@@ -118,7 +118,7 @@ _INVISIBLE_RENDERING_MODES = frozenset(
 _PDF_CELLS_POST_PROCESSING_SEGREGATION = True
 
 
-def _segregate_by_visibility(
+def segregate_by_visibility(
     cells: Iterable[TextCell],
 ) -> tuple[list[TextCell], list[TextCell]]:
     """Split cells into (visible, invisible), preserving the order within each group.
@@ -129,14 +129,14 @@ def _segregate_by_visibility(
     visible: list[TextCell] = []
     invisible: list[TextCell] = []
     for cell in cells:
-        if _is_invisible(cell):
+        if is_invisible(cell):
             invisible.append(cell)
         else:
             visible.append(cell)
     return visible, invisible
 
 
-def _is_invisible(cell: TextCell) -> bool:
+def is_invisible(cell: TextCell) -> bool:
     """Whether a PDF cell is drawn with a text rendering mode that paints no ink."""
     return (
         isinstance(cell, PdfTextCell)
@@ -626,8 +626,8 @@ class BaseOcrModel(BasePageModel, BaseModelWithOptions):
         r"""
         Post-process the OCR cells and update the page object according to the algorithm:
 
-        - If FULL_PAGE, or with `replace_broken_text_layer` the page's parse score is
-          graded poor:
+        - If FULL_PAGE, or with `replace_broken_text_layer` the page's text layer is
+          broken (`is_broken_text_layer`):
           Any existing PDF cells are ignored and only the OCR cells are used.
           A page replaced for `replace_broken_text_layer` keeps its invisible cells.
         - If LAYOUT_REGIONS or PDF_AWARE_LAYOUT_REGIONS and the priority parameter is None,
@@ -646,7 +646,7 @@ class BaseOcrModel(BasePageModel, BaseModelWithOptions):
         if full_page:
             final_cells = ocr_cells
             if keep_invisible:
-                _, invisible_cells = _segregate_by_visibility(existing_cells)
+                _, invisible_cells = segregate_by_visibility(existing_cells)
                 final_cells = self._merge_cells_by_priority(
                     final_cells, invisible_cells
                 )
@@ -682,12 +682,12 @@ class BaseOcrModel(BasePageModel, BaseModelWithOptions):
             page.parsed_page.word_cells = [
                 c
                 for c in page.parsed_page.word_cells
-                if c.from_ocr or (keep_invisible and _is_invisible(c))
+                if c.from_ocr or (keep_invisible and is_invisible(c))
             ]
             page.parsed_page.char_cells = [
                 c
                 for c in page.parsed_page.char_cells
-                if c.from_ocr or (keep_invisible and _is_invisible(c))
+                if c.from_ocr or (keep_invisible and is_invisible(c))
             ]
             page.parsed_page.has_words = len(page.parsed_page.word_cells) > 0
             page.parsed_page.has_chars = len(page.parsed_page.char_cells) > 0
@@ -715,7 +715,7 @@ class BaseOcrModel(BasePageModel, BaseModelWithOptions):
         visible_cells: list[TextCell]
         invisible_cells: list[TextCell]
         if segregate_pdf_cells:
-            visible_cells, invisible_cells = _segregate_by_visibility(pdf_cells)
+            visible_cells, invisible_cells = segregate_by_visibility(pdf_cells)
         else:
             visible_cells, invisible_cells = list(pdf_cells), []
 

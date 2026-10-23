@@ -265,13 +265,13 @@ class OcrOptions(BaseOptions):
         Field(
             description=(
                 "Replace a broken PDF text layer with OCR, page by page. When enabled,"
-                " a page's `parse_score` also drops to 0 if its text layer comes from"
-                " a font whose glyphs were not mapped to real characters. A page whose"
-                " `parse_score` is in the `poor` quality grade (below 0.5), from this"
-                " check or from the existing glyph-name checks, is OCR'd in full and"
-                " its OCR text is used instead of its PDF text for that page only."
-                " Its `parse_score` keeps describing the PDF text layer. Other pages,"
-                " and pages without a text layer, keep the usual behaviour."
+                " Docling checks the visible text layer of each page. A page whose"
+                " text layer is broken, for example from a font whose glyphs were not"
+                " mapped to real characters, is read with full-page OCR, and its OCR"
+                " text is used instead of its PDF text for that page only. Its"
+                " `parse_score` drops to 0 and keeps describing the PDF text layer. A"
+                " low `parse_score` alone does not replace a page. Other pages, and"
+                " pages without a text layer, keep the usual behavior."
             ),
             examples=[False, True],
         ),

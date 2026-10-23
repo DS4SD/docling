@@ -19,7 +19,7 @@ from docling.datamodel.document import ConversionResult
 from docling.datamodel.pipeline_options import OcrMode, PdfPipelineOptions
 from docling.datamodel.settings import settings
 from docling.models.base_model import BasePageModel
-from docling.models.base_ocr_model import _segregate_by_visibility
+from docling.models.base_ocr_model import segregate_by_visibility
 from docling.utils.profiling import TimeRecorder
 from docling.utils.text_quality import is_broken_text_layer
 
@@ -129,7 +129,7 @@ class PagePreprocessingModel(BasePageModel):
         # replace the layer. Only this check replaces a page: a low per-cell score
         # also comes from a few unmapped glyphs, such as bullets, on a good page.
         if self.options.detect_broken_text_layer and not np.isnan(parse_score):
-            visible_cells, _ = _segregate_by_visibility(page.cells)
+            visible_cells, _ = segregate_by_visibility(page.cells)
             if is_broken_text_layer("\n".join(c.text for c in visible_cells)):
                 page._broken_text_layer = True
                 parse_score = 0.0
