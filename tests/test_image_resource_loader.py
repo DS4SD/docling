@@ -3,11 +3,16 @@
 
 """Unit tests for the shared image-resource loader and its safety limits."""
 
+import base64
 import socket
+import struct
 import threading
+import zlib
+from io import BytesIO
 from urllib.parse import quote
 
 import pytest
+from PIL import Image
 
 from docling.backend.utils.image_resource_loader import (
     ImageResourceLoader,
@@ -242,3 +247,49 @@ def test_load_image_data_local_requires_base_path():
     loader = ImageResourceLoader(enable_local_fetch=True)
     with pytest.raises(OperationNotAllowed, match="requires base_path"):
         loader.load_image_data("/some/where/image.png", None)
+
+
+def _png_header_data_uri(width: int, height: int) -> str:
+    """A PNG that declares ``width`` x ``height`` pixels but has no pixel data."""
+
+    def chunk(kind: bytes, data: bytes) -> bytes:
+        body = kind + data
+        return struct.pack(">I", len(data)) + body + struct.pack(">I", zlib.crc32(body))
+
+    png = (
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 0, 0, 0, 0))
+        + chunk(b"IDAT", zlib.compress(b""))
+        + chunk(b"IEND", b"")
+    )
+    return "data:image/png;base64," + base64.b64encode(png).decode()
+
+
+def _png_data_uri(width: int, height: int) -> str:
+    buffer = BytesIO()
+    Image.new("RGB", (width, height)).save(buffer, format="PNG")
+    return "data:image/png;base64," + base64.b64encode(buffer.getvalue()).decode()
+
+
+def test_image_over_pixel_limit_is_skipped():
+    loader = ImageResourceLoader(max_image_pixels=63)
+
+    assert loader.create_image_ref(_png_data_uri(7, 9), None) is not None
+    with pytest.warns(UserWarning, match="8x8 pixels exceeds the limit of 63"):
+        assert loader.create_image_ref(_png_data_uri(8, 8), None) is None
+
+
+def test_image_over_pillow_pixel_limit_is_skipped():
+    # Above twice Image.MAX_IMAGE_PIXELS, Pillow refuses to open the image.
+    loader = ImageResourceLoader(max_image_pixels=10**9)
+
+    with pytest.warns(UserWarning, match="400000000 pixels"):
+        assert loader.create_image_ref(_png_header_data_uri(20000, 20000), None) is None
+
+
+def test_data_uri_over_size_limit_is_rejected():
+    loader = ImageResourceLoader(max_image_data_base64_bytes=8)
+
+    assert loader.load_image_data("data:image/png;base64,AAAAAAAAAAA=", None)
+    with pytest.raises(ValueError, match="exceeds size limit of 8 bytes"):
+        loader.load_image_data("data:image/png;base64,AAAAAAAAAAAAAAAA", None)

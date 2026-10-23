@@ -53,14 +53,15 @@ _LIST_ITEM_PATTERN: Final = r"^(\s*)(\*+|-|\.+|\d+\.|[a-zA-Z]\.)\s+(.*)"
 
 # Inline formatting marks, unconstrained (doubled, valid anywhere) before
 # constrained (single, valid only at word boundaries, so "snake_case" and
-# "2*3*4" stay plain text), as in Asciidoctor.
+# "2*3*4" stay plain text), as in Asciidoctor. A constrained span does not
+# contain its own mark, so each scan stops at the next mark on the line.
 _INLINE_FORMAT_RE: Final = re.compile(
     r"``(?P<umono>.+?)``"
     r"|\*\*(?P<ubold>.+?)\*\*"
     r"|__(?P<uitalic>.+?)__"
-    r"|(?<!\w)`(?P<mono>\S(?:.*?\S)?)`(?!\w)"
-    r"|(?<!\w)\*(?P<bold>\S(?:.*?\S)?)\*(?!\w)"
-    r"|(?<!\w)_(?P<italic>\S(?:.*?\S)?)_(?!\w)"
+    r"|(?<!\w)`(?P<mono>[^`\s](?:[^`]*?[^`\s])?)`(?!\w)"
+    r"|(?<!\w)\*(?P<bold>[^*\s](?:[^*]*?[^*\s])?)\*(?!\w)"
+    r"|(?<!\w)_(?P<italic>[^_\s](?:[^_]*?[^_\s])?)_(?!\w)"
 )
 
 
