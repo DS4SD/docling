@@ -20,6 +20,11 @@ from pydantic import (
     model_validator,
 )
 
+# Default limit on the pixels of one decoded image or image frame. It is the
+# default of Pillow's ``Image.MAX_IMAGE_PIXELS`` (about 268 MB once decoded to
+# RGB), fixed here so that the limit does not depend on global Pillow state.
+DEFAULT_MAX_IMAGE_PIXELS = 89_478_485
+
 
 class BaseBackendOptions(BaseModel):
     """Common options for all declarative document backends."""
@@ -196,6 +201,13 @@ class HTMLBackendOptions(BaseBackendOptions):
         20 * 1024 * 1024,  # 20 MB
         description="The maximum number of bytes for remote image downloads.",
     )
+    max_image_pixels: PositiveInt = Field(
+        DEFAULT_MAX_IMAGE_PIXELS,
+        description=(
+            "The maximum number of pixels (width x height) of an embedded or "
+            "fetched image. Larger images are skipped with a warning."
+        ),
+    )
     max_redirects: Annotated[int, Field(ge=0)] = Field(
         5,
         description="Maximum number of HTTP redirects to follow when fetching remote resources. Set to 0 to disable redirects.",
@@ -235,6 +247,13 @@ class MarkdownBackendOptions(TextBackendOptions):
     max_image_data_base64_bytes: PositiveInt = Field(
         20 * 1024 * 1024,  # 20 MB
         description="The maximum number of base64 data bytes that the backend will accept.",
+    )
+    max_image_pixels: PositiveInt = Field(
+        DEFAULT_MAX_IMAGE_PIXELS,
+        description=(
+            "The maximum number of pixels (width x height) of an embedded or "
+            "fetched image. Larger images are skipped with a warning."
+        ),
     )
 
 
@@ -311,6 +330,14 @@ class PdfBackendOptions(BaseBackendOptions):
             "embedded in the page, in addition to their bounding boxes. Needed to "
             "extract native picture images (e.g. by the native PDF pipeline); "
             "decoding costs time and memory, so it is off by default."
+        ),
+    )
+    max_image_pixels: PositiveInt = Field(
+        DEFAULT_MAX_IMAGE_PIXELS,
+        description=(
+            "The maximum number of pixels (width x height) of one page of an "
+            "image input, such as one frame of a multi-page TIFF. Used by the "
+            "image backend; an image with a larger page is rejected."
         ),
     )
 
@@ -643,11 +670,19 @@ class LatexBackendOptions(BaseBackendOptions):
         description=(
             "The engine to use for rendering Tikz diagrams into images. "
             "Set to 'tectonic' to enable asynchronous image generation. "
-            "Without shell escape, Tectonic runs with --untrusted and "
-            "--only-cached, and diagrams whose source names absolute or "
-            "parent-directory files are kept as TikZ code instead of rendered. "
-            "This check is best-effort: process untrusted LaTeX in an isolated "
-            "environment."
+            "Tectonic can read and write files outside the working directory, "
+            "so it runs only when tikz_engine_trusted_input is True. Otherwise "
+            "diagrams are kept as TikZ code."
+        ),
+    )
+    tikz_engine_trusted_input: bool = Field(
+        False,
+        description=(
+            "Confirm that the LaTeX input is trusted, which is required to "
+            "render TikZ diagrams with Tectonic. Tectonic can read and write "
+            "files that the process can access, and the source pre-check is "
+            "not a security boundary. Enable only for trusted input, or run the "
+            "conversion in an isolated environment."
         ),
     )
     tikz_engine_timeout: float = Field(
@@ -658,8 +693,8 @@ class LatexBackendOptions(BaseBackendOptions):
         False,
         description=(
             "Allow Tectonic TikZ rendering to enable shell escape during "
-            "compilation. Disabled by default for safer rendering of untrusted "
-            "LaTeX; enable only for trusted input."
+            "compilation. Has no effect unless tikz_engine_trusted_input is "
+            "True; enable only for trusted input."
         ),
     )
 

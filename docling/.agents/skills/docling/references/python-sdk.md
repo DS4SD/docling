@@ -465,7 +465,8 @@ Or save with `ImageRefMode.EMBEDDED` so the JSON carries its images.
 
 HTML image downloads are off by default. Enable them on the HTML backend
 options; downloads only connect to public addresses, re-check every redirect
-and stop at `max_remote_image_bytes`.
+and stop at `max_remote_image_bytes`. An image larger than `max_image_pixels`
+(width x height, default 89,478,485) is skipped with a warning.
 
 ```python
 from docling.datamodel.backend_options import HTMLBackendOptions

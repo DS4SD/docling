@@ -568,7 +568,9 @@ The HTML backend only downloads images referenced by a page when you opt in with
 `--html-image-fetch remote`). Downloads connect only to public, globally
 routable addresses: every address of a host is checked, every redirect is
 checked again before it is followed (up to `max_redirects`), and downloads stop
-at `max_remote_image_bytes`. When `render_page=True`, the browser requests
+at `max_remote_image_bytes`. An image larger than `max_image_pixels` (width x
+height, default 89,478,485) is skipped with a warning, and the rest of the
+document converts; the Markdown backend has the same option. When `render_page=True`, the browser requests
 remote resources through the same download path, and navigating the page away
 from the source document is refused.
 
@@ -607,6 +609,24 @@ environment variables, downloads go through the proxy and Docling does not check
 the destination addresses; the proxy is then responsible for restricting which
 destinations it connects to.
 
+### XBRL taxonomy references
+
+The XBRL backend reads the schemas and linkbases that an instance document
+references. It needs `enable_local_fetch=True`, `enable_remote_fetch=True`, or
+both, and applies them to every reference:
+
+- Local paths and `file:` URLs are read only with `enable_local_fetch=True`. The
+  instance document and the `taxonomy` folder (including its taxonomy packages)
+  are always read.
+- `http(s)` URLs are downloaded only with `enable_remote_fetch=True`. Without
+  it, they resolve from the Arelle web cache only. Downloads connect only to
+  public, globally routable addresses, and every redirect is checked again.
+  With a proxy, the destination address is checked before the request goes to
+  the proxy.
+- Other URL schemes are refused.
+
+A refused reference stops the conversion with an error that lists it.
+
 ## Impose limits on the document size
 
 You can limit the file size and number of pages which should be allowed to process per document:
@@ -618,6 +638,27 @@ from docling.document_converter import DocumentConverter
 source = "https://arxiv.org/pdf/2408.09869"
 converter = DocumentConverter()
 result = converter.convert(source, max_num_pages=100, max_file_size=20971520)
+```
+
+For image inputs, the page count is checked against `max_num_pages` before any
+page is decoded, and each page (for example each frame of a multi-page TIFF) is
+decoded only when it is processed. The `max_image_pixels` backend option limits
+the pixels (width x height) of one page; the default, 89,478,485, is the default
+of Pillow's `Image.MAX_IMAGE_PIXELS`. A larger first page rejects the document,
+and a larger later page fails that page:
+
+```python
+from docling.datamodel.backend_options import PdfBackendOptions
+from docling.datamodel.base_models import InputFormat
+from docling.document_converter import DocumentConverter, ImageFormatOption
+
+converter = DocumentConverter(
+    format_options={
+        InputFormat.IMAGE: ImageFormatOption(
+            backend_options=PdfBackendOptions(max_image_pixels=50_000_000)
+        )
+    }
+)
 ```
 
 ### Limits on the decompressed size of DOCX, XLSX and EPUB files
