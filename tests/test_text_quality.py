@@ -112,6 +112,11 @@ ORDINARY = {
         ]
         * 3
     ),
+    # Unmapped list bullets: a lone U+FFFD before good item text, in 3 of 25 lines.
+    "bullet_replacement_markers": "\n".join(
+        [f"\N{REPLACEMENT CHARACTER} Revenue grew in region {n}" for n in range(3)]
+        + [f"Line {n}: the regional teams reported stable demand." for n in range(22)]
+    ),
 }
 
 # Text layers from fonts whose glyphs were not mapped to real characters.
