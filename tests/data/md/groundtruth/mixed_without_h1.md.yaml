@@ -23,9 +23,9 @@ groups:
     $ref: '#/body'
   self_ref: '#/groups/0'
 - children:
-  - $ref: '#/texts/2'
-  - $ref: '#/texts/4'
+  - $ref: '#/texts/3'
   - $ref: '#/texts/5'
+  - $ref: '#/texts/6'
   content_layer: body
   label: list
   name: list
@@ -33,17 +33,17 @@ groups:
     $ref: '#/texts/1'
   self_ref: '#/groups/1'
 - children:
-  - $ref: '#/texts/3'
+  - $ref: '#/texts/4'
   content_layer: body
   label: list
   name: list
   parent:
-    $ref: '#/texts/2'
+    $ref: '#/texts/3'
   self_ref: '#/groups/2'
 key_value_items: []
 name: mixed_without_h1
 origin:
-  binary_hash: 11100987453172996924
+  binary_hash: 17689284227306154475
   filename: mixed_without_h1.md
   mimetype: text/html
 pages: {}
@@ -61,8 +61,9 @@ texts:
   self_ref: '#/texts/0'
   text: Content before first heading
 - children:
+  - $ref: '#/texts/2'
   - $ref: '#/groups/1'
-  - $ref: '#/texts/6'
+  - $ref: '#/texts/7'
   content_layer: body
   label: section_header
   level: 1
@@ -72,6 +73,15 @@ texts:
   prov: []
   self_ref: '#/texts/1'
   text: Some heading
+- children: []
+  content_layer: body
+  label: text
+  orig: <!-- This is HTML -->
+  parent:
+    $ref: '#/texts/1'
+  prov: []
+  self_ref: '#/texts/2'
+  text: <!-- This is HTML -->
 - children:
   - $ref: '#/groups/2'
   content_layer: body
@@ -82,7 +92,7 @@ texts:
   parent:
     $ref: '#/groups/1'
   prov: []
-  self_ref: '#/texts/2'
+  self_ref: '#/texts/3'
   text: A. first
 - children: []
   content_layer: body
@@ -93,7 +103,7 @@ texts:
   parent:
     $ref: '#/groups/2'
   prov: []
-  self_ref: '#/texts/3'
+  self_ref: '#/texts/4'
   text: subitem
 - children: []
   content_layer: body
@@ -104,7 +114,7 @@ texts:
   parent:
     $ref: '#/groups/1'
   prov: []
-  self_ref: '#/texts/4'
+  self_ref: '#/texts/5'
   text: B. second
 - children: []
   content_layer: body
@@ -115,7 +125,7 @@ texts:
   parent:
     $ref: '#/groups/1'
   prov: []
-  self_ref: '#/texts/5'
+  self_ref: '#/texts/6'
   text: 2 . strange
 - children: []
   content_layer: body
@@ -124,6 +134,6 @@ texts:
   parent:
     $ref: '#/texts/1'
   prov: []
-  self_ref: '#/texts/6'
+  self_ref: '#/texts/7'
   text: The end!
 version: 1.10.0

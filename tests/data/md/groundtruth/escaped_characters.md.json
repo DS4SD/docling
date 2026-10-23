@@ -4,7 +4,7 @@
   "name": "escaped_characters",
   "origin": {
     "mimetype": "text/html",
-    "binary_hash": 18124772015084648739,
+    "binary_hash": 4867692126015706118,
     "filename": "escaped_characters.md"
   },
   "furniture": {
@@ -167,7 +167,7 @@
       "orig": "& < > \" '",
       "text": "& < > \" '",
       "enumerated": true,
-      "marker": ""
+      "marker": "1."
     },
     {
       "self_ref": "#/texts/5",
@@ -208,8 +208,8 @@
       "content_layer": "body",
       "label": "code",
       "prov": [],
-      "orig": "& < > \" '",
-      "text": "& < > \" '",
+      "orig": "&amp; &lt; &gt; &quot; &#39;",
+      "text": "&amp; &lt; &gt; &quot; &#39;",
       "captions": [],
       "references": [],
       "footnotes": [],
@@ -240,8 +240,8 @@
       "content_layer": "body",
       "label": "code",
       "prov": [],
-      "orig": "& < > \" '",
-      "text": "& < > \" '",
+      "orig": "&amp; &lt; &gt; &quot; &#39;",
+      "text": "&amp; &lt; &gt; &quot; &#39;",
       "captions": [],
       "references": [],
       "footnotes": [],
@@ -334,8 +334,8 @@
       "content_layer": "body",
       "label": "text",
       "prov": [],
-      "orig": "& < > \" '/div>",
-      "text": "& < > \" '/div>"
+      "orig": "<div title=\"\">&amp; &lt; &gt; &quot; &#39;/div>",
+      "text": "<div title=\"\">&amp; &lt; &gt; &quot; &#39;/div>"
     },
     {
       "self_ref": "#/texts/16",

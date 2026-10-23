@@ -4,7 +4,7 @@
   "name": "signature_stamp_01",
   "origin": {
     "mimetype": "text/html",
-    "binary_hash": 3703610756227907514,
+    "binary_hash": 9868313557965626738,
     "filename": "signature_stamp_01.md"
   },
   "furniture": {
@@ -21,13 +21,13 @@
         "$ref": "#/texts/0"
       },
       {
-        "$ref": "#/pictures/0"
+        "$ref": "#/texts/1"
       },
       {
         "$ref": "#/texts/2"
       },
       {
-        "$ref": "#/pictures/1"
+        "$ref": "#/texts/3"
       },
       {
         "$ref": "#/texts/4"
@@ -54,14 +54,14 @@
     {
       "self_ref": "#/texts/1",
       "parent": {
-        "$ref": "#/pictures/0"
+        "$ref": "#/body"
       },
       "children": [],
       "content_layer": "body",
       "label": "text",
       "prov": [],
-      "orig": "My Signature",
-      "text": "My Signature"
+      "orig": "<signature> My Signature </signature>",
+      "text": "<signature> My Signature </signature>"
     },
     {
       "self_ref": "#/texts/2",
@@ -78,14 +78,14 @@
     {
       "self_ref": "#/texts/3",
       "parent": {
-        "$ref": "#/pictures/1"
+        "$ref": "#/body"
       },
       "children": [],
       "content_layer": "body",
       "label": "text",
       "prov": [],
-      "orig": "My Stamp",
-      "text": "My Stamp"
+      "orig": "<stamp> My Stamp </stamp>",
+      "text": "<stamp> My Stamp </stamp>"
     },
     {
       "self_ref": "#/texts/4",
@@ -100,62 +100,7 @@
       "text": "Final text here"
     }
   ],
-  "pictures": [
-    {
-      "self_ref": "#/pictures/0",
-      "parent": {
-        "$ref": "#/body"
-      },
-      "children": [
-        {
-          "$ref": "#/texts/1"
-        }
-      ],
-      "content_layer": "body",
-      "meta": {
-        "classification": {
-          "predictions": [
-            {
-              "class_name": "signature"
-            }
-          ]
-        }
-      },
-      "label": "picture",
-      "prov": [],
-      "captions": [],
-      "references": [],
-      "footnotes": [],
-      "annotations": []
-    },
-    {
-      "self_ref": "#/pictures/1",
-      "parent": {
-        "$ref": "#/body"
-      },
-      "children": [
-        {
-          "$ref": "#/texts/3"
-        }
-      ],
-      "content_layer": "body",
-      "meta": {
-        "classification": {
-          "predictions": [
-            {
-              "class_name": "stamp"
-            }
-          ]
-        }
-      },
-      "label": "picture",
-      "prov": [],
-      "captions": [],
-      "references": [],
-      "footnotes": [],
-      "annotations": []
-    }
-  ],
+  "pictures": [],
   "tables": [],
   "key_value_items": [],
   "form_items": [],

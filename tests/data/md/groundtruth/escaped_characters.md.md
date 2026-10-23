@@ -13,13 +13,13 @@ Text: 00:16.000 ----&gt; 00:18.000 &amp; &lt; &gt; " '
 # Inline code
 
 ```
-& < > " '
+&amp; &lt; &gt; &quot; &#39;
 ```
 
 # Code block
 
 ```
-& < > " '
+&amp; &lt; &gt; &quot; &#39;
 ```
 
 # Table
@@ -37,7 +37,7 @@ The pipe symbol (| or `|` ) only needs to be escaped in tables.
 
 # Raw HTML
 
-&amp; &lt; &gt; " '/div&gt;
+&lt;div title=""&gt;&amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;#39;/div&gt;
 
 ## Link
 
