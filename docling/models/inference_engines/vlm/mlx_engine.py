@@ -17,6 +17,7 @@ from PIL.Image import Image
 from docling.datamodel.vlm_engine_options import MlxVlmEngineOptions
 from docling.models.inference_engines.vlm._utils import (
     check_min_engine_version,
+    engine_module_available,
     extract_generation_stoppers,
     generation_stopper_stop_reason,
     preprocess_image_batch,
@@ -112,6 +113,15 @@ class MlxVlmEngine(BaseVlmEngine, HuggingFaceModelDownloadMixin):
             return
 
         _log.info("Initializing MLX VLM inference engine...")
+
+        if self.model_config is not None and not engine_module_available(
+            self.model_config.required_module
+        ):
+            raise RuntimeError(
+                "The installed mlx-vlm does not provide native model module "
+                f"{self.model_config.required_module}. Install mlx-vlm with this "
+                "native port, or select the Transformers engine."
+            )
 
         try:
             from mlx_vlm import load, stream_generate
@@ -278,14 +288,15 @@ class MlxVlmEngine(BaseVlmEngine, HuggingFaceModelDownloadMixin):
                     "verbose": False,
                     "temperature": input_data.temperature,
                 }
-                if self.options.repetition_penalty is not None:
-                    generation_kwargs["repetition_penalty"] = (
-                        self.options.repetition_penalty
+                for key in ("repetition_penalty", "repetition_context_size"):
+                    if key in input_data.extra_generation_config:
+                        generation_kwargs[key] = input_data.extra_generation_config[key]
+                generation_kwargs.update(
+                    self.options.model_dump(
+                        include={"repetition_penalty", "repetition_context_size"},
+                        exclude_none=True,
                     )
-                if self.options.repetition_context_size is not None:
-                    generation_kwargs["repetition_context_size"] = (
-                        self.options.repetition_context_size
-                    )
+                )
 
                 # Use stream_generate for proper stop string handling
                 for token in self.stream_generate(

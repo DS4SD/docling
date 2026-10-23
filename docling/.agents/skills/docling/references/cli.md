@@ -56,8 +56,14 @@ docling chart.png --from image --to dclx --pipeline vlm --enrich-chart-extractio
 docling report.pdf --pipeline native --from pdf --output /tmp/
 ```
 
-`nemotron_parse_v3_5` runs code from its model repository at a pinned revision.
-Docling refuses to load it until you add `--trust-remote-code` (SDK:
+`nemotron_parse_v3_5` selects the native MLX port on Apple Silicon when its
+model module is installed. Until the port is released upstream, install
+`mlx-vlm @ git+https://github.com/geoHeil/mlx-vlm.git@398153fa9d0ca62e7e3761eef46362348104d628`.
+Without that module, auto-inline falls back to Transformers. MLX uses a
+pinned `geoHeil/Nemotron-3.5-Parse-MLX-bf16` checkpoint and does not require
+remote model code. On CUDA it selects Transformers, which runs code from its
+model repository at a pinned revision. That engine requires
+`--trust-remote-code` (SDK:
 `AutoInlineVlmEngineOptions(trust_remote_code=True)`). Review the model code
 first. For vLLM, run NVIDIA's `vllm serve` server and use the API engine; the
 in-process vLLM engine is not supported for this preset.

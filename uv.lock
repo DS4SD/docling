@@ -1817,14 +1817,14 @@ wheels = [
 
 [[package]]
 name = "datasets"
-version = "2.21.0"
+version = "4.8.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "aiohttp" },
     { name = "dill" },
     { name = "filelock", version = "4.1.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "filelock", version = "4.2.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "fsspec", extra = ["http"] },
+    { name = "httpx" },
     { name = "huggingface-hub" },
     { name = "multiprocess" },
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
@@ -1840,9 +1840,9 @@ dependencies = [
     { name = "tqdm" },
     { name = "xxhash" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e5/a5/38719e5cff7aa0537a6be37d21cc1fdd7096e9565e8fce2d46a822e10b5b/datasets-2.21.0.tar.gz", hash = "sha256:998f85a8460f1bd982e5bd058f8a0808eef424249e3df1e8cdd594ccd0dc8ba2", size = 2215317, upload-time = "2024-08-14T06:40:44.314Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/66/34/14cd8e76f907f7d4dca2334cfeec9f81d30fd15c25a015f99aaea694eaed/datasets-4.8.5.tar.gz", hash = "sha256:0f0c1c3d56ffff2c93b2f4c63c95bac94f3d7e8621aea2a2a576275233bba772", size = 605649, upload-time = "2026-04-27T15:43:57.384Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/72/b3/33c4ad44fa020e3757e9b2fad8a5de53d9079b501e6bbc45bdd18f82f893/datasets-2.21.0-py3-none-any.whl", hash = "sha256:25e4e097110ce28824b746a107727ada94024cba11db8bc588d468414692b65a", size = 527251, upload-time = "2024-08-14T06:40:39.612Z" },
+    { url = "https://files.pythonhosted.org/packages/65/99/00f3196036501b53032c4b1ab8337a0b978dee832ed276dae3815df4e8b5/datasets-4.8.5-py3-none-any.whl", hash = "sha256:5079900781719c0e063a8efdd2cd95a31ad0c63209178669cd23cf1b926149ff", size = 528973, upload-time = "2026-04-27T15:43:53.702Z" },
 ]
 
 [[package]]
@@ -2513,7 +2513,7 @@ requires-dist = [
     { name = "lxml", marker = "extra == 'format-xml-jats'", specifier = ">=4.0.0,<7.0.0" },
     { name = "mail-parser", marker = "extra == 'format-email'", specifier = ">=4.1.4,<5.0.0" },
     { name = "marko", marker = "extra == 'format-markdown'", specifier = ">=2.1.2,<3.0.0" },
-    { name = "mlx-vlm", marker = "python_full_version >= '3.10' and platform_machine == 'arm64' and sys_platform == 'darwin' and extra == 'models-vlm-inline'", specifier = ">=0.7.0,<1.0.0" },
+    { name = "mlx-vlm", marker = "python_full_version >= '3.10' and platform_machine == 'arm64' and sys_platform == 'darwin' and extra == 'models-vlm-inline'", git = "https://github.com/geoHeil/mlx-vlm.git?rev=398153fa9d0ca62e7e3761eef46362348104d628" },
     { name = "mlx-whisper", marker = "python_full_version >= '3.10' and platform_machine == 'arm64' and sys_platform == 'darwin' and extra == 'format-audio'", specifier = ">=0.4.3" },
     { name = "nemotron-ocr", marker = "python_full_version == '3.12.*' and platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'feat-ocr-nemotron'", specifier = ">=2.0.0" },
     { name = "numba", marker = "extra == 'format-audio'", specifier = ">=0.63.0" },
@@ -2619,7 +2619,7 @@ docs = [
     { name = "zensical", specifier = ">=0.0.40,<0.1" },
 ]
 examples = [
-    { name = "datasets", specifier = "~=2.21" },
+    { name = "datasets", specifier = ">=4.0.0,<5" },
     { name = "gliner", marker = "python_full_version < '3.14'", specifier = ">=0.2.21" },
     { name = "langchain-huggingface", specifier = ">=0.0.3" },
     { name = "langchain-milvus", specifier = "~=0.1" },
@@ -5402,10 +5402,11 @@ wheels = [
 
 [[package]]
 name = "mlx-vlm"
-version = "0.7.6"
-source = { registry = "https://pypi.org/simple" }
+version = "0.7.9"
+source = { git = "https://github.com/geoHeil/mlx-vlm.git?rev=398153fa9d0ca62e7e3761eef46362348104d628#398153fa9d0ca62e7e3761eef46362348104d628" }
 dependencies = [
     { name = "cryptography" },
+    { name = "datasets" },
     { name = "fastapi" },
     { name = "jinja2" },
     { name = "llguidance" },
@@ -5427,10 +5428,6 @@ dependencies = [
     { name = "transformers", version = "5.20.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12' or python_full_version >= '3.14'" },
     { name = "uvicorn" },
     { name = "websockets" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/df/36/461e23fd3cdab42938e8c8cb4a2f18ea7be05d6f997183ab141c1106fce0/mlx_vlm-0.7.6.tar.gz", hash = "sha256:8076e29bdaf98d00eeaac16b17a05bfd139e58502939648422710cef700e9546", size = 2519473, upload-time = "2026-10-05T19:15:28.265Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/8c/77/407c016eebabb69d64b608e86149453986d72bf313006116cc5f92d48bcc/mlx_vlm-0.7.6-py3-none-any.whl", hash = "sha256:17fad1745e6c43dc0fd4d3b8593967b29928a1da5dbf6f781ca783922f68115d", size = 3159230, upload-time = "2026-10-05T19:15:26.248Z" },
 ]
 
 [[package]]
