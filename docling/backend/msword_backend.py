@@ -53,7 +53,6 @@ from docling.backend.docx.drawingml.utils import (
     get_pil_from_dml_docx,
 )
 from docling.backend.docx.latex.omml import OMML_NS, oMath2Latex
-from docling.backend.docx.latex.omml import oMath2Latex
 from docling.backend.utils.archive_limits import (
     ArchiveLimits,
     check_archive_limits,
