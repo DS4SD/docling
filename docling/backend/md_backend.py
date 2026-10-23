@@ -1112,6 +1112,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 enable_local_fetch=md_options.enable_local_fetch,
                 enable_remote_fetch=md_options.enable_remote_fetch,
                 max_image_data_base64_bytes=md_options.max_image_data_base64_bytes,
+                max_image_pixels=md_options.max_image_pixels,
             )
         return self._image_loader
 

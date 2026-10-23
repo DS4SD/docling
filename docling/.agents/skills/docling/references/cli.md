@@ -51,9 +51,16 @@ docling report.pdf --pipeline vlm --output /tmp/
 docling report.pdf --pipeline vlm --vlm-model granite_docling --output /tmp/
 docling report.pdf --pipeline vlm --vlm-model smoldocling --output /tmp/
 docling report.pdf --pipeline vlm --vlm-model nemotron_parse_v2 --output /tmp/
+docling report.pdf --pipeline vlm --vlm-model nemotron_parse_v3_5 --trust-remote-code --output /tmp/
 docling chart.png --from image --to dclx --pipeline vlm --enrich-chart-extraction
 docling report.pdf --pipeline native --from pdf --output /tmp/
 ```
+
+`nemotron_parse_v3_5` runs code from its model repository at a pinned revision.
+Docling refuses to load it until you add `--trust-remote-code` (SDK:
+`AutoInlineVlmEngineOptions(trust_remote_code=True)`). Review the model code
+first. For vLLM, run NVIDIA's `vllm serve` server and use the API engine; the
+in-process vLLM engine is not supported for this preset.
 
 VLM picture enrichment runs after conversion. `--enrich-chart-extraction`
 classifies pictures first and adds chart data only where the VLM has not
@@ -142,6 +149,7 @@ docling report.pdf --enrich-picture-description --output /tmp/
 | Same line repeated many times | `--pipeline vlm` (or hybrid `force_backend_text`, Python SDK only) |
 | Choose GPU/CPU explicitly | `--device cuda` / `--device cpu` / `--device mps` |
 | HTML images on remote hosts | `--html-image-fetch remote`; add auth with `--html-image-headers '{"Authorization": "Bearer T"}'` (sent only to the source page's origin, or to each `--html-image-headers-origin https://cdn.example.com`) |
+| Script or CI must detect failed documents | Exit code 1 when a document fails; partially converted documents are still written and exit 0. `--fail-on partial` also exits 1 for them, `--fail-on never` always exits 0 (same flag on `convert-remote`). `--abort-on-error` stops at the first failure instead |
 
 ## Remote VLM services from the CLI
 

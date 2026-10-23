@@ -3,9 +3,11 @@
 
 import glob
 import threading
+import time
 from io import BytesIO
 from pathlib import Path
 
+import pytest
 from docling_core.types.doc import (
     CodeItem,
     CodeLanguageLabel,
@@ -880,6 +882,54 @@ No marks here.
     plain = [item.text for item in doc.texts if item.formatting is None]
     assert "and snake_case_name and 2*3*4." in plain
     assert "No marks here." in plain
+
+
+def test_inline_formatting_marks_and_spans() -> None:
+    source = b"""Text with __ui__, ``um`` and *a b c* marks.
+
+Nested **bold _and italic_** text.
+"""
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(source),
+        format=InputFormat.ASCIIDOC,
+        backend=AsciiDocBackend,
+        filename="inline-spans.adoc",
+    )
+    doc = in_doc._backend.convert()
+
+    styled = [
+        (item.text, item.formatting.bold, item.formatting.italic)
+        for item in doc.texts
+        if item.formatting is not None
+    ]
+    assert styled == [
+        ("ui", False, True),
+        ("a b c", True, False),
+        ("bold", True, False),
+        ("and italic", True, True),
+    ]
+    assert [item.text for item in doc.texts if isinstance(item, CodeItem)] == ["um"]
+
+
+@pytest.mark.parametrize("mark", ["*", "_", "`"])
+def test_many_unclosed_inline_marks_stay_plain_text(mark: str) -> None:
+    # A long line of opening marks that never close must convert in linear
+    # time and keep the marks as plain text.
+    line = f" {mark}a" * 16_000
+    in_doc = InputDocument(
+        path_or_stream=BytesIO(line.encode()),
+        format=InputFormat.ASCIIDOC,
+        backend=AsciiDocBackend,
+        filename="unclosed-marks.adoc",
+    )
+
+    start = time.monotonic()
+    doc = in_doc._backend.convert()
+    elapsed = time.monotonic() - start
+
+    assert [item.text for item in doc.texts] == [line.strip()]
+    assert doc.texts[0].formatting is None
+    assert elapsed < 2.0
 
 
 def test_heading_flushes_pending_paragraph() -> None:

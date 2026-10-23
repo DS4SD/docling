@@ -769,7 +769,7 @@ class RapidOcrModel(BaseOcrModel):
                         high_res_image = page._backend.get_page_image(
                             scale=self.scale, cropbox=ocr_rect
                         )
-                        im = numpy.array(high_res_image)
+                        im = numpy.asarray(high_res_image)
                         result = self.reader(
                             im,
                             use_det=self.options.use_det,

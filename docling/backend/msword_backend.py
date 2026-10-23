@@ -773,13 +773,17 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
     """
 
     _CODE_CALL_PATTERN: Final[re.Pattern[str]] = re.compile(
-        r"[A-Za-z_]\((?:\s*\)|[^)]*[\d,._='\"][^)]*\))"
+        r"[A-Za-z_]\((?:\s*\)|[^)\d,._='\"]{0,200}[\d,._='\"][^)]{0,200}\))"
     )
     """Matches a function/method call whose arguments look code-like.
 
     Accepts an empty call (``set()``) or one whose arguments carry code-ish
     characters (``print(sys.argv)``). Plain ``word(word)`` shapes like
     ``party(ies)`` are intentionally excluded.
+
+    The argument runs are bounded, and the first run stops at the first
+    code-ish character, so the search stays linear in time on long paragraphs
+    with many unclosed ``(``. Longer argument lists do not count as a call.
     """
 
     _CODE_DEF_PATTERN: Final[re.Pattern[str]] = re.compile(
@@ -4186,7 +4190,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                         pil_image.save(test_bytes, format="PNG")
                         test_bytes.seek(0)
                         pil_image = Image.open(test_bytes)
-                    except (UnidentifiedImageError, OSError) as e:
+                    except (UnidentifiedImageError, OSError, ValueError) as e:
+                        # Pillow 13 reports truncated PNG chunks as ValueError.
                         _log.warning(f"Warning: image cannot be loaded by Pillow: {e}")
                         pil_image = None
 
