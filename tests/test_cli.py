@@ -172,6 +172,18 @@ def test_cli_convert(tmp_path):
     assert converted.exists()
 
 
+def test_cli_convert_exits_nonzero_when_a_document_fails(tmp_path):
+    source = tmp_path / "broken.pdf"
+    source.write_bytes(b"this is not a PDF")
+    output = tmp_path / "out"
+    output.mkdir()
+
+    result = runner.invoke(app, [str(source), "--output", str(output)])
+
+    assert result.exit_code == 1
+    assert not (output / "broken.md").exists()
+
+
 def test_cli_exports_doclang(tmp_path):
     source = tmp_path / "input.md"
     source.write_text("# DocLang CLI\n\nHello from Markdown.", encoding="utf-8")
