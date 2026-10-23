@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "docling-slim"
-version = "2.142.0"  # DO NOT EDIT, updated automatically
+version = "2.142.1"  # DO NOT EDIT, updated automatically
 description = "Modular version of the Docling package: SDK and CLI for parsing PDF, DOCX, HTML, and more, to a unified document representation for powering downstream workflows such as gen AI applications."
 license = "MIT"
 keywords = [
@@ -182,6 +182,12 @@ format-audio = [
   'openai-whisper>=20250625',
   'numba>=0.63.0',
   'whisper-s2t-reborn>=1.7.1,<2.0.0 ; sys_platform != "darwin" or platform_machine != "arm64"',
+]
+
+feat-asr-transformers = [
+  'docling-slim[format-audio]',
+  'transformers>=5.16.0,<6.0.0',
+  'torchaudio>=2.2.2,<3.0.0',
 ]
 
 # Video pipeline: transcription (format-audio) plus speaker diarization.

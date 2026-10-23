@@ -1,5 +1,9 @@
 # Docling CLI reference
 
+For Transformers ASR, install `docling-slim[feat-asr-transformers]` and select
+`--asr-model granite_speech_5_0_2b` (or another speech preset). The same ASR
+settings apply to video.
+
 The `docling` CLI is the quickest way to understand the content of any supported
 document. It ships with the `docling` package (`pip install docling`) and needs
 no code. Use it any time you need to read, convert, or extract content from a
