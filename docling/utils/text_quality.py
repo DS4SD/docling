@@ -115,16 +115,16 @@ def _is_broken_line(line: str) -> bool:
     return False
 
 
-def _has_replacement_in_text(line: str) -> bool:
-    """Whether a line has U+FFFD other than a lone one at its start.
+def _without_bullet(line: str) -> str:
+    """Return the line without a lone U+FFFD at its start.
 
     An unmapped bullet glyph is a lone U+FFFD before the item text; a broken font puts
     U+FFFD inside words and numbers.
     """
     stripped = line.lstrip()
-    if stripped[:1] == "�" and (len(stripped) == 1 or stripped[1].isspace()):
-        stripped = stripped[1:]
-    return "�" in stripped
+    if stripped[:1] == "\ufffd" and (len(stripped) == 1 or stripped[1].isspace()):
+        return stripped[1:]
+    return line
 
 
 def _has_replacement_evidence(text: str, lines: list[str]) -> bool:
@@ -138,14 +138,13 @@ def _has_replacement_evidence(text: str, lines: list[str]) -> bool:
         return True
     share = count / chars
     lines_hit = sum("\ufffd" in line for line in lines)
-    lines_damaged = sum(_has_replacement_in_text(line) for line in lines)
     return (
         (count >= _MANY_REPLACEMENTS and share >= _MANY_REPLACEMENTS_SHARE)
         or (lines_hit >= _REPLACEMENT_LINES and share >= _SOME_REPLACEMENTS_SHARE)
         # One U+FFFD in many lines: few characters, but most of the text is affected.
         or (
-            lines_damaged >= _REPLACEMENT_LINES
-            and lines_damaged >= _REPLACEMENT_LINE_SHARE * len(lines)
+            lines_hit >= _REPLACEMENT_LINES
+            and lines_hit >= _REPLACEMENT_LINE_SHARE * len(lines)
         )
         or (longest >= _LONG_REPLACEMENT_RUN and share >= _SOME_REPLACEMENTS_SHARE)
     )
@@ -205,13 +204,16 @@ def is_broken_text_layer(text: str) -> bool:
     if len(stripped) < _MIN_CHARS:
         return False
     lines = stripped.splitlines()
+    # The U+FFFD checks skip unmapped bullets, which precede good item text.
+    item_lines = [_without_bullet(line) for line in lines]
+    item_text = "\n".join(item_lines)
 
     # A font whose glyphs were mapped to control or private-use code points.
-    if _share(stripped, _CONTROL, replacement=True) >= _CONTROL_SHARE:
+    if _share(item_text, _CONTROL, replacement=True) >= _CONTROL_SHARE:
         return True
     if _share(stripped, frozenset({"Co"}), replacement=False) >= _PRIVATE_USE_SHARE:
         return True
-    if _has_replacement_evidence(stripped, lines):
+    if _has_replacement_evidence(item_text, item_lines):
         return True
     # The same, in one cell of an otherwise good page.
     if any(_is_broken_line(line) for line in lines):

@@ -117,6 +117,18 @@ ORDINARY = {
         [f"\N{REPLACEMENT CHARACTER} Revenue grew in region {n}" for n in range(3)]
         + [f"Line {n}: the regional teams reported stable demand." for n in range(22)]
     ),
+    # A short slide: a title and 3 items, each bullet in its own cell.
+    "bullet_slide": "Quarterly results\n"
+    + "\n".join(
+        f"\N{REPLACEMENT CHARACTER}\n{item}"
+        for item in ("Revenue grew by 5%", "Costs fell", "Margins improved")
+    ),
+    # An agenda slide: 5 short items, each a bullet, a space and the item text.
+    "bullet_agenda": "Agenda\n"
+    + "\n".join(
+        f"\N{REPLACEMENT CHARACTER} {item}"
+        for item in ("Welcome", "Results", "Outlook", "Questions", "Close")
+    ),
 }
 
 # Text layers from fonts whose glyphs were not mapped to real characters.
