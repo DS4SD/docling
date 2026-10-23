@@ -607,6 +607,24 @@ environment variables, downloads go through the proxy and Docling does not check
 the destination addresses; the proxy is then responsible for restricting which
 destinations it connects to.
 
+### XBRL taxonomy references
+
+The XBRL backend reads the schemas and linkbases that an instance document
+references. It needs `enable_local_fetch=True`, `enable_remote_fetch=True`, or
+both, and applies them to every reference:
+
+- Local paths and `file:` URLs are read only with `enable_local_fetch=True`. The
+  instance document and the `taxonomy` folder (including its taxonomy packages)
+  are always read.
+- `http(s)` URLs are downloaded only with `enable_remote_fetch=True`. Without
+  it, they resolve from the Arelle web cache only. Downloads connect only to
+  public, globally routable addresses, and every redirect is checked again.
+  With a proxy, the destination address is checked before the request goes to
+  the proxy.
+- Other URL schemes are refused.
+
+A refused reference stops the conversion with an error that lists it.
+
 ## Impose limits on the document size
 
 You can limit the file size and number of pages which should be allowed to process per document:
