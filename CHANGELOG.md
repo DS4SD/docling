@@ -1,3 +1,18 @@
+## [v2.142.1](https://github.com/docling-project/docling/releases/tag/v2.142.1) - 2026-10-23
+
+### Fix
+
+* Clamp page_range bounds to sys.maxsize ([#4980](https://github.com/docling-project/docling/issues/4980)) ([`0db3aea`](https://github.com/docling-project/docling/commit/0db3aea34d93f370bd797f085b75f90a936f327e))
+* Limit the decompressed size of DOCX, XLSX and EPUB archive members ([#4977](https://github.com/docling-project/docling/issues/4977)) ([`ce0f04c`](https://github.com/docling-project/docling/commit/ce0f04c4353800cb46475dff2ec6ace4606ca36e))
+* **xlsx:** Clip merged-cell and hyperlink ranges while loading workbooks ([#4979](https://github.com/docling-project/docling/issues/4979)) ([`a63ec34`](https://github.com/docling-project/docling/commit/a63ec343ade9c994fabc0927083d39daae065421))
+* Decode image pages on demand and limit decoded image pixels ([#4976](https://github.com/docling-project/docling/issues/4976)) ([`bae7aa3`](https://github.com/docling-project/docling/commit/bae7aa3f24fe98b71e5aee9eb8f0d589e081ba73))
+* **xbrl:** Apply the fetch options to taxonomy references ([#4975](https://github.com/docling-project/docling/issues/4975)) ([`cf8959f`](https://github.com/docling-project/docling/commit/cf8959f769f16cf134c3395110806ff57e5bc86a))
+* **latex:** Clamp \multicolumn and \multirow spans ([#4974](https://github.com/docling-project/docling/issues/4974)) ([`c066288`](https://github.com/docling-project/docling/commit/c06628838b12557a90cf8d2c622a213ea4eb80fd))
+* **docx:** Bound argument runs in code call detection pattern ([#4973](https://github.com/docling-project/docling/issues/4973)) ([`be69ba3`](https://github.com/docling-project/docling/commit/be69ba3e55be98b8719b91f69c106998ca587016))
+* **asciidoc:** Stop constrained inline marks at the next mark ([#4972](https://github.com/docling-project/docling/issues/4972)) ([`7f574a0`](https://github.com/docling-project/docling/commit/7f574a0fd7a45627171c9d41b26dced7e4cb06aa))
+* Bound the ODF mimetype read during ZIP format detection ([#4971](https://github.com/docling-project/docling/issues/4971)) ([`a296007`](https://github.com/docling-project/docling/commit/a29600709c0428afb1df63dd139614c3ace8feb0))
+* **latex:** Require trusted input for Tectonic TikZ rendering ([#4970](https://github.com/docling-project/docling/issues/4970)) ([`3980c86`](https://github.com/docling-project/docling/commit/3980c8672c73c218163f4249edcf7fb2fb73ed1f))
+
 ## [v2.142.0](https://github.com/docling-project/docling/releases/tag/v2.142.0) - 2026-10-22
 
 ### Feature

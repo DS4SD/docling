@@ -1938,7 +1938,7 @@ wheels = [
 
 [[package]]
 name = "docling"
-version = "2.142.0"
+version = "2.142.1"
 source = { editable = "packages/docling" }
 dependencies = [
     { name = "docling-slim", extra = ["standard"] },
@@ -1994,7 +1994,7 @@ provides-extras = ["easyocr", "tesserocr", "ocrmac", "vlm", "rapidocr", "asr", "
 
 [[package]]
 name = "docling-client"
-version = "2.142.0"
+version = "2.142.1"
 source = { editable = "packages/docling-client" }
 dependencies = [
     { name = "docling-slim", extra = ["service-client"] },
@@ -2106,7 +2106,7 @@ wheels = [
 
 [[package]]
 name = "docling-slim"
-version = "2.142.0"
+version = "2.142.1"
 source = { editable = "." }
 default-groups = "all"
 dependencies = [
