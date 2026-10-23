@@ -1787,10 +1787,136 @@ class OdtDocumentBackend(_OdfBaseBackend):
         self._walk(self.odf_obj.body.children, parent=None, doc=doc, comments=comments)
         self._add_footnotes(doc, comments)
         comments.attach_rest(doc)
+        self._add_header_footer(doc)
         return doc
 
-    def _detach_annotations(self) -> _OdfComments:
-        """Remove the comments (``office:annotation``) from the body.
+    def _used_master_pages(self) -> list[Element]:
+        """Return potentially used page definitions, without laying out pages."""
+        if "styles.xml" not in self.odf_obj.container.get_parts():
+            return []
+        container = self.odf_obj.styles.get_element("office:master-styles")
+        if container is None:
+            return []
+        masters = {
+            master.get_attribute("style:name"): master
+            for master in container.get_elements("style:master-page")
+        }
+        if not masters:
+            return []
+
+        style_masters: dict[tuple[str, str | None], str | None] = {}
+
+        def master_for_style(family: str, name: str | None) -> str | None:
+            key = (family, name)
+            if key in style_masters:
+                return style_masters[key]
+            visited: set[str | None] = set()
+            master_name = None
+            while name not in visited:
+                cached_key = (family, name)
+                if cached_key in style_masters:
+                    master_name = style_masters[cached_key]
+                    break
+                visited.add(name)
+                style = self.odf_obj.get_style(family, name)
+                if style is None:
+                    break
+                master_name = style.get_attribute("style:master-page-name")
+                if master_name:
+                    break
+                name = style.get_attribute("style:parent-style-name")
+                if name is None:
+                    break
+            # Parent lookup conservatively retains potentially used definitions.
+            for visited_name in visited:
+                style_masters[(family, visited_name)] = master_name
+            return master_name
+
+        selected: list[str] = []
+        seen: set[str] = set()
+
+        def select(name: str | None) -> None:
+            if name and name in masters and name not in seen:
+                seen.add(name)
+                selected.append(name)
+
+        first = True
+        for block in self.odf_obj.body.get_elements(
+            "descendant::text:p | descendant::text:h | descendant::table:table"
+        ):
+            ancestor = block.parent
+            while ancestor is not None and ancestor != self.odf_obj.body:
+                if ancestor.tag in (
+                    "table:table",
+                    "draw:frame",
+                    "text:note",
+                    "office:annotation",
+                    "text:tracked-changes",
+                ) or (
+                    ancestor.tag == "text:section"
+                    and ancestor.get_attribute("text:display") == "none"
+                ):
+                    break
+                ancestor = ancestor.parent
+            if ancestor is not None and ancestor != self.odf_obj.body:
+                continue
+            family = "table" if block.tag == "table:table" else "paragraph"
+            name = block.get_attribute(
+                "table:style-name" if family == "table" else "text:style-name"
+            )
+            master_name = master_for_style(family, name)
+            if first and not master_name:
+                # Non-normative producer fallback: LibreOffice uses Standard.
+                select("Standard" if "Standard" in masters else next(iter(masters)))
+            first = False
+            select(master_name)
+        if first:
+            select("Standard" if "Standard" in masters else next(iter(masters)))
+        # A next style can be used on a subsequent page. No page count is inferred.
+        for name in selected:
+            select(masters[name].get_attribute("style:next-style-name"))
+        return [masters[name] for name in selected]
+
+    def _add_header_footer(self, doc: DoclingDocument) -> None:
+        for master in self._used_master_pages():
+            for tag in (
+                "header",
+                "header-left",
+                "header-first",
+                "footer",
+                "footer-left",
+                "footer-first",
+            ):
+                part = master.get_element(f"style:{tag}")
+                if part is None or part.attributes.get("style:display") in (
+                    "false",
+                    "0",
+                ):
+                    continue
+                comments = self._detach_annotations(part)
+                if not part.text_content.strip() and not part.get_elements(
+                    "descendant::table:table | descendant::draw:image | descendant::draw:object"
+                ):
+                    comments.attach_rest(doc)
+                    continue
+                parent = doc.add_group(
+                    label=GroupLabel.SECTION,
+                    name="page header" if tag.startswith("header") else "page footer",
+                    content_layer=ContentLayer.FURNITURE,
+                )
+                _add_odf_children(
+                    doc,
+                    part.children,
+                    parent=parent,
+                    content_layer=ContentLayer.FURNITURE,
+                    odf_obj=self.odf_obj,
+                    image_loader=self._image_loader,
+                    comments=comments,
+                )
+                comments.attach_rest(doc)
+
+    def _detach_annotations(self, root: Element | None = None) -> _OdfComments:
+        """Remove the comments (``office:annotation``) from a body or furniture part.
 
         The text paths for paragraphs, headings, list items and table cells all
         read an annotation's creator, date and body as inline text, so the
@@ -1801,7 +1927,7 @@ class OdtDocumentBackend(_OdfBaseBackend):
         backend. A thread is keyed by the paragraph or heading around its first
         comment.
         """
-        body = self.odf_obj.body
+        body = self.odf_obj.body if root is None else root
         # The walk drops deleted tracked-change text, so drop its comments too.
         for annotation in body.get_elements(
             "descendant::text:tracked-changes//office:annotation"
