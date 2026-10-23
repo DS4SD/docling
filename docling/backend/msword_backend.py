@@ -861,6 +861,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         # Empty paragraphs before a resumed list item, deleted at the end of
         # convert(); keyed by reference, as a later resume finds them again
         self._deferred_empty_paragraphs: dict[str, TextItem] = {}
+        self._saved_list_state: dict[str, Any] | None = None
+        self._pending_list_empty_paragraphs: list[TextItem] = []
         # Lists nested under an open list's item by left indentation, innermost
         # last, and the last list item's effective left indentation in twips
         self.nested_lists: list[_NestedList] = []
@@ -968,6 +970,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             self.paragraph_comment_map.clear()
             self.paragraph_to_items.clear()
             self._deferred_empty_paragraphs.clear()
+            self._saved_list_state = None
+            self._pending_list_empty_paragraphs.clear()
             doc, _ = self._walk_linear(self.docx_obj.element.body, doc)
             self._add_header_footer(self.docx_obj, doc)
             # Add comments and link them to annotated paragraphs
@@ -1165,11 +1169,66 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # document tree; keep the paragraphs rather than fail the conversion
             _log.warning(f"Kept the empty paragraphs before resumed list items: {err}")
 
+    def _save_list_state(self) -> None:
+        """Snapshot active list state before processing empty spacing paragraphs."""
+        self._saved_list_state = {
+            "parents": self.parents.copy(),
+            "level_at_new_list": self.level_at_new_list,
+            "level_start_ilevel": self.level_start_ilevel,
+            "nested_lists": self.nested_lists.copy(),
+            "last_list_left_indent": self.last_list_left_indent,
+            "level": self.level,
+            "prev_numid": self._prev_numid(),
+            "prev_indent": self._prev_indent(),
+        }
+
+    def _restore_saved_list_state(self) -> None:
+        """Restore list hierarchy and context after empty spacing paragraphs."""
+        if self._saved_list_state is None:
+            return
+        self.parents = self._saved_list_state["parents"]
+        self.level_at_new_list = self._saved_list_state["level_at_new_list"]
+        self.level_start_ilevel = self._saved_list_state["level_start_ilevel"]
+        self.nested_lists = self._saved_list_state["nested_lists"]
+        self.last_list_left_indent = self._saved_list_state["last_list_left_indent"]
+        self.level = self._saved_list_state["level"]
+
+        # Restore history to point to the list item preceding the empty paragraphs
+        self.history["numids"][-1] = self._saved_list_state["prev_numid"]
+        self.history["indents"][-1] = self._saved_list_state["prev_indent"]
+
+        for item in self._pending_list_empty_paragraphs:
+            self._deferred_empty_paragraphs[item.self_ref] = item
+        self._pending_list_empty_paragraphs.clear()
+        self._saved_list_state = None
+
+    def _discard_saved_list_state(self) -> None:
+        """Discard cached list state when non-list or different list content follows."""
+        self._saved_list_state = None
+        self._pending_list_empty_paragraphs.clear()
+
+    def _check_and_restore_saved_list_state(
+        self, numid: int | None, left_indent: float | None
+    ) -> None:
+        """Restore saved list state if continuing the same list or entering a sub-list."""
+        if self._saved_list_state is not None and (
+            numid == self._saved_list_state["prev_numid"]
+            or (
+                self._saved_list_state["last_list_left_indent"]
+                and left_indent is not None
+                and left_indent > self._saved_list_state["last_list_left_indent"]
+            )
+        ):
+            self._restore_saved_list_state()
+        else:
+            self._discard_saved_list_state()
+
     def _clear_list_group_cache(self) -> None:
         """Clear the cached list group to prevent reuse across contexts."""
         self.last_list_group = None
         self.last_list_group_numid = None
         self.last_list_group_parent = None
+        self._discard_saved_list_state()
 
     def _end_list_on_body_text(self, text: str) -> None:
         """Drop the cached list group once body text follows a list.
@@ -1181,6 +1240,28 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         """
         if text:
             self._clear_list_group_cache()
+
+    def _handle_list_continuity_on_non_list_paragraph(self, text: str) -> None:
+        """Handle list continuity or caching when encountering non-list text."""
+        if text and text.strip():
+            # Substantive body text breaks list continuity
+            self._clear_list_group_cache()
+            return
+
+        # Empty/whitespace paragraph — cache list state for potential resume
+        if self._saved_list_state is None and self.level_at_new_list is not None:
+            self._save_list_state()
+        if (
+            self.level_at_new_list is not None
+            and self.level_at_new_list in self.parents
+        ):
+            parent_item = self.parents.get(self.level_at_new_list)
+            if isinstance(parent_item, ListGroup):
+                self.last_list_group = parent_item
+                self.last_list_group_numid = self._prev_numid()
+                self.last_list_group_parent = self.parents.get(
+                    self.level_at_new_list - 1
+                )
 
     @contextmanager
     def _isolated_list_context(self):
@@ -1206,6 +1287,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
         saved_last_list_group = self.last_list_group
         saved_last_list_group_numid = self.last_list_group_numid
         saved_last_list_group_parent = self.last_list_group_parent
+        saved_saved_list_state = self._saved_list_state
+        saved_pending_list_empty_paragraphs = self._pending_list_empty_paragraphs.copy()
         self._clear_list_group_cache()
 
         try:
@@ -1220,6 +1303,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             self.last_list_group = saved_last_list_group
             self.last_list_group_numid = saved_last_list_group_numid
             self.last_list_group_parent = saved_last_list_group_parent
+            self._saved_list_state = saved_saved_list_state
+            self._pending_list_empty_paragraphs = saved_pending_list_empty_paragraphs
 
     def _walk_linear(
         self,
@@ -1345,6 +1430,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
             # Check for Tables
             if tag_name == "tbl":
+                self._discard_saved_list_state()
                 try:
                     t = self._handle_tables(element, doc)
                     added_elements.extend(t)
@@ -3081,9 +3167,11 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
 
         # Handle lists
         if self._should_handle_as_list(numid, ilevel, p_style_id):
+            left_indent = self._get_list_left_indent(paragraph, numid, ilevel)
+            self._check_and_restore_saved_list_state(numid, left_indent)
+
             # Check if this is actually a numbered list by examining the numFmt
             is_numbered = self._has_visible_numbering_format(numid, ilevel)
-            left_indent = self._get_list_left_indent(paragraph, numid, ilevel)
 
             # If there are equations in the list item, handle them specially
             if len(equations) > 0:
@@ -3117,27 +3205,16 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             # by the Code branch below (otherwise it nests inside the ListGroup).
             # Lists nested by left indentation close with the outermost list,
             # whose group is the one cached below.
+            self._handle_list_continuity_on_non_list_paragraph(text)
+
             self.last_numid = (
                 self.nested_lists[0].outer_numid
                 if self.nested_lists and self.level_at_new_list is not None
                 else self._prev_numid()
             )
             self.nested_lists = []
-            if text and text.strip():
-                # Substantive body text breaks list continuity
-                self._clear_list_group_cache()
-            else:
-                # Empty/whitespace paragraph — cache the group for potential reuse
-                if self.level_at_new_list and self.level_at_new_list in self.parents:
-                    parent_item = self.parents.get(self.level_at_new_list)
-                    if isinstance(parent_item, ListGroup):
-                        self.last_list_group = parent_item
-                        self.last_list_group_numid = self.last_numid
-                        self.last_list_group_parent = self.parents.get(
-                            self.level_at_new_list - 1
-                        )
 
-            if self.level_at_new_list:
+            if self.level_at_new_list is not None:
                 for key in range(len(self.parents)):
                     if key >= self.level_at_new_list:
                         self.parents[key] = None
@@ -3149,6 +3226,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 self.level = 0
 
         if p_style_id in ["Title"]:
+            self._discard_saved_list_state()
             for key in range(len(self.parents)):
                 self.parents[key] = None
             # Same reason as for headings below: the parents stack is cleared here.
@@ -3162,6 +3240,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
             self.parents[0] = te
             elem_ref.append(te.get_ref())
         elif "Heading" in p_style_id:
+            self._discard_saved_list_state()
             # _add_heading clears the parents tail; reset list context so the
             # next list item opens fresh under this heading.
             self.level_at_new_list = None
@@ -3211,6 +3290,7 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 )
 
         elif p_style_id == "Code" and not checkbox_label:
+            self._discard_saved_list_state()
             # Code-styled checkboxes fall through to the text branch,
             # keeping their label.
             level = self._get_level()
@@ -3311,6 +3391,8 @@ class MsWordDocumentBackend(DeclarativeDocumentBackend):
                 content_layer=self.content_layer,
             )
             elem_ref.append(text_item.get_ref())
+            if self._saved_list_state is not None and not clean_text.strip():
+                self._pending_list_empty_paragraphs.append(text_item)
 
         return elem_ref
 

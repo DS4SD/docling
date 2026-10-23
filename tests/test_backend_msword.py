@@ -2706,3 +2706,129 @@ def test_body_level_alternate_content_with_no_usable_branch_adds_nothing(tmp_pat
         "Paragraph before AlternateContent",
         "Paragraph after AlternateContent",
     ]
+
+
+def test_nested_list_items_separated_by_empty_paragraphs_preserve_nesting(tmp_path):
+    """Empty spacing paragraphs between list items must not flatten sub-level items.
+
+    Regression test for docling-project/docling#4947:
+    When an empty paragraph separates list items, the sub-level items (w:ilvl > 0)
+    must remain nested under their parent item rather than flattening to level 0.
+    """
+    doc = Document()
+
+    # Setup numbering definition with level 0 and level 1
+    numbering_part = doc.part.numbering_part
+    numbering = numbering_part.element
+
+    abstract_num = OxmlElement("w:abstractNum")
+    abstract_num.set(qn("w:abstractNumId"), "500")
+
+    lvl0 = OxmlElement("w:lvl")
+    lvl0.set(qn("w:ilvl"), "0")
+    start0 = OxmlElement("w:start")
+    start0.set(qn("w:val"), "1")
+    lvl0.append(start0)
+    lvl0_fmt = OxmlElement("w:numFmt")
+    lvl0_fmt.set(qn("w:val"), "decimal")
+    lvl0.append(lvl0_fmt)
+    lvl0_text = OxmlElement("w:lvlText")
+    lvl0_text.set(qn("w:val"), "%1.")
+    lvl0.append(lvl0_text)
+    abstract_num.append(lvl0)
+
+    lvl1 = OxmlElement("w:lvl")
+    lvl1.set(qn("w:ilvl"), "1")
+    start1 = OxmlElement("w:start")
+    start1.set(qn("w:val"), "1")
+    lvl1.append(start1)
+    lvl1_fmt = OxmlElement("w:numFmt")
+    lvl1_fmt.set(qn("w:val"), "decimal")
+    lvl1.append(lvl1_fmt)
+    lvl1_text = OxmlElement("w:lvlText")
+    lvl1_text.set(qn("w:val"), "%1.%2.")
+    lvl1.append(lvl1_text)
+    abstract_num.append(lvl1)
+
+    numbering.append(abstract_num)
+
+    num_elem = OxmlElement("w:num")
+    num_elem.set(qn("w:numId"), "500")
+    abstract_ref = OxmlElement("w:abstractNumId")
+    abstract_ref.set(qn("w:val"), "500")
+    num_elem.append(abstract_ref)
+    numbering.append(num_elem)
+
+    def add_item(text: str, ilvl: int):
+        p = doc.add_paragraph(text)
+        pPr = p._p.get_or_add_pPr()
+        numPr = OxmlElement("w:numPr")
+        ilvl_el = OxmlElement("w:ilvl")
+        ilvl_el.set(qn("w:val"), str(ilvl))
+        numId_el = OxmlElement("w:numId")
+        numId_el.set(qn("w:val"), "500")
+        numPr.append(ilvl_el)
+        numPr.append(numId_el)
+        pPr.append(numPr)
+
+    # List items separated by empty paragraphs (as reported in #4947)
+    add_item("Prepare the site", ilvl=0)
+    doc.add_paragraph("")
+    add_item("Clear debris", ilvl=1)
+    doc.add_paragraph("")
+    add_item("Level the ground", ilvl=1)
+    doc.add_paragraph("")
+    add_item("Install the inverter", ilvl=0)
+    doc.add_paragraph("")
+    add_item("Mount the bracket", ilvl=1)
+
+    result = _convert_built(doc, tmp_path)
+
+    list_items = [
+        item for item, _ in result.iterate_items() if isinstance(item, ListItem)
+    ]
+    assert len(list_items) == 5
+    assert [item.text for item in list_items] == [
+        "Prepare the site",
+        "Clear debris",
+        "Level the ground",
+        "Install the inverter",
+        "Mount the bracket",
+    ]
+
+    # Item 1 (level 0) is in root list group
+    root_group = list_items[0].parent.resolve(result)
+    assert isinstance(root_group, ListGroup)
+
+    # Item 1.1 and Item 1.2 are nested in a sub-group under Item 1
+    sub_group_1 = list_items[1].parent.resolve(result)
+    assert isinstance(sub_group_1, ListGroup)
+    assert sub_group_1.parent == list_items[0].get_ref()
+    assert list_items[2].parent == list_items[1].parent
+
+    # Item 2 is in root list group
+    assert list_items[3].parent == list_items[0].parent
+
+    # Item 2.1 is nested in a sub-group under Item 2
+    sub_group_2 = list_items[4].parent.resolve(result)
+    assert isinstance(sub_group_2, ListGroup)
+    assert sub_group_2.parent == list_items[3].get_ref()
+
+    # Empty spacer paragraphs must not survive as empty text items in the document
+    empty_texts = [
+        it.text
+        for it in result.texts
+        if isinstance(it, TextItem) and not it.text.strip()
+    ]
+    assert empty_texts == []
+
+    # Markdown export reflects the hierarchical structure
+    md = result.export_to_markdown()
+    lines = [line for line in md.splitlines() if line.strip()]
+    assert any("Prepare the site" in lines[0] for _ in [1])
+    assert any("Clear debris" in line and line.startswith(" ") for line in lines)
+    assert any("Level the ground" in line and line.startswith(" ") for line in lines)
+    assert any(
+        "Install the inverter" in line and not line.startswith(" ") for line in lines
+    )
+    assert any("Mount the bracket" in line and line.startswith(" ") for line in lines)
