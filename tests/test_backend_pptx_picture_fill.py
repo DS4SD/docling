@@ -93,3 +93,34 @@ def test_pptx_picture_fill_with_missing_part_is_skipped(tmp_path: Path):
 
     assert len(doc.pictures) == 0
     assert [t.text for t in doc.texts] == ["Dangling fill"]
+
+
+@pytest.mark.parametrize(
+    "xml",
+    [
+        # No p:spPr at all.
+        '<p:sp xmlns:p="{p}"/>',
+        # p:spPr with a non-picture fill.
+        '<p:sp xmlns:p="{p}" xmlns:a="{a}"><p:spPr><a:solidFill/></p:spPr></p:sp>',
+        # a:blip with an empty r:embed.
+        '<p:sp xmlns:p="{p}" xmlns:a="{a}" xmlns:r="{r}"><p:spPr><a:blipFill>'
+        '<a:blip r:embed=""/></a:blipFill></p:spPr></p:sp>',
+    ],
+    ids=["no_sppr", "solid_fill", "empty_embed"],
+)
+def test_picture_fill_rid_without_embedded_fill(xml: str):
+    """Shapes without an embedded picture fill give no relationship id."""
+    from types import SimpleNamespace
+
+    from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
+
+    element = etree.fromstring(
+        xml.format(
+            p="http://schemas.openxmlformats.org/presentationml/2006/main",
+            a="http://schemas.openxmlformats.org/drawingml/2006/main",
+            r="http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        )
+    )
+    shape = SimpleNamespace(_element=element)
+
+    assert MsPowerpointDocumentBackend._picture_fill_rid(shape) is None
