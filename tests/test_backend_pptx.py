@@ -4,6 +4,7 @@
 import logging
 import re
 import struct
+import sys
 import warnings
 import zipfile
 import zlib
@@ -961,6 +962,10 @@ def test_metafile_detection(image_bytes: bytes, expected: bool):
     assert _is_metafile(image_bytes) is expected
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 11),
+    reason="Pillow 12 stores the WMF handler on the module, not the image class",
+)
 def test_pptx_emf_picture_survives_without_pillow_metafile_support(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
 ):
@@ -978,9 +983,9 @@ def test_pptx_emf_picture_survives_without_pillow_metafile_support(
 
     import docling.backend.mspowerpoint_backend as _pptx_backend
 
-    # The plugin registers a GDI-backed handler at import time on Windows only;
-    # on other platforms this attribute is already None.
-    monkeypatch.setattr(WmfImagePlugin, "_handler", None)
+    # The plugin registers a GDI-backed handler on Windows only. Pillow stores
+    # it on the image class; on other platforms the value is already None.
+    monkeypatch.setattr(WmfImagePlugin.WmfStubImageFile, "_handler", None)
     # Patch get_docx_to_pdf_converter in the pptx backend's own namespace so
     # LibreOffice is reported as unavailable regardless of PATH, environment
     # variables, or hardcoded install paths on the test machine.
@@ -1038,6 +1043,10 @@ def test_pptx_undecodable_raster_picture_is_still_skipped(tmp_path: Path):
     assert "Quarterly results" in [t.text for t in doc.texts]
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 11),
+    reason="Pillow 12 stores the WMF handler on the module, not the image class",
+)
 def test_pptx_emf_picture_rasterized_via_libreoffice(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, libreoffice_available: bool
 ):
@@ -1054,7 +1063,7 @@ def test_pptx_emf_picture_rasterized_via_libreoffice(
 
     from PIL import WmfImagePlugin
 
-    monkeypatch.setattr(WmfImagePlugin, "_handler", None)
+    monkeypatch.setattr(WmfImagePlugin.WmfStubImageFile, "_handler", None)
 
     deck_path = _deck_with_picture(tmp_path, _emf_bytes(drawable=True), ".emf")
     doc = get_converter().convert(deck_path).document
