@@ -485,6 +485,28 @@ converter = DocumentConverter(
     format_options={InputFormat.HTML: HTMLFormatOption(backend_options=html_options)}
 )
 ```
+## DOCX, XLSX and EPUB size limits
+
+These formats are ZIP archives. Docling checks the decompressed sizes before it
+parses them and fails the file with `ArchiveLimitError` (a `DocumentLoadError`)
+when one is too large. Defaults: DOCX/XLSX 128 MiB per member, 512 MiB in total,
+10,000 members; EPUB content documents 10 MB each, 100 MB in total. Raise them
+for large trusted files with `max_file_bytes`, `max_total_bytes` and
+`max_member_count` on `MsWordBackendOptions`, `MsExcelBackendOptions` or
+`EpubBackendOptions`:
+
+```python
+from docling.datamodel.backend_options import MsWordBackendOptions
+from docling.datamodel.base_models import InputFormat
+from docling.document_converter import DocumentConverter, WordFormatOption
+
+converter = DocumentConverter(format_options={
+    InputFormat.DOCX: WordFormatOption(
+        backend_options=MsWordBackendOptions(max_file_bytes=512 * 1024 * 1024)
+    ),
+})
+```
+
 ## Offline / air-gapped models
 
 Pre-download model artifacts, then point conversions at them so no network is
