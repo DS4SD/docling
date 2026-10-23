@@ -4,6 +4,7 @@
 import logging
 import re
 import struct
+import sys
 import warnings
 import zipfile
 import zlib
@@ -961,6 +962,10 @@ def test_metafile_detection(image_bytes: bytes, expected: bool):
     assert _is_metafile(image_bytes) is expected
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 11),
+    reason="Pillow 12 stores the WMF handler on the module, not the image class",
+)
 def test_pptx_emf_picture_survives_without_pillow_metafile_support(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
 ):
@@ -1038,6 +1043,10 @@ def test_pptx_undecodable_raster_picture_is_still_skipped(tmp_path: Path):
     assert "Quarterly results" in [t.text for t in doc.texts]
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 11),
+    reason="Pillow 12 stores the WMF handler on the module, not the image class",
+)
 def test_pptx_emf_picture_rasterized_via_libreoffice(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, libreoffice_available: bool
 ):
