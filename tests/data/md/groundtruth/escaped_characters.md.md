@@ -37,7 +37,7 @@ The pipe symbol (| or `|` ) only needs to be escaped in tables.
 
 # Raw HTML
 
-&lt;div title=""&gt;&amp;amp; &amp;lt; &amp;gt; &amp;quot; &amp;#39;/div&gt;
+&amp; &lt; &gt; " '/div&gt;
 
 ## Link
 

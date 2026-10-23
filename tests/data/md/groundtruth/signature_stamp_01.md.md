@@ -1,9 +1,13 @@
 Some text here
 
-&lt;signature&gt; My Signature &lt;/signature&gt;
+<!-- image -->
+
+Signature
 
 More text here
 
-&lt;stamp&gt; My Stamp &lt;/stamp&gt;
+<!-- image -->
+
+Stamp
 
 Final text here

@@ -4,7 +4,7 @@
   "name": "escaped_characters",
   "origin": {
     "mimetype": "text/html",
-    "binary_hash": 4867692126015706118,
+    "binary_hash": 3824621944112159534,
     "filename": "escaped_characters.md"
   },
   "furniture": {
@@ -334,8 +334,8 @@
       "content_layer": "body",
       "label": "text",
       "prov": [],
-      "orig": "<div title=\"\">&amp; &lt; &gt; &quot; &#39;/div>",
-      "text": "<div title=\"\">&amp; &lt; &gt; &quot; &#39;/div>"
+      "orig": "& < > \" '/div>",
+      "text": "& < > \" '/div>"
     },
     {
       "self_ref": "#/texts/16",
