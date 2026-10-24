@@ -4,6 +4,7 @@
 import logging
 import re
 import struct
+import sys
 import warnings
 import zipfile
 import zlib
@@ -22,11 +23,13 @@ from docling_core.types.doc import (
 
 from docling.backend.docx.drawingml.utils import get_libreoffice_cmd
 from docling.backend.mspowerpoint_backend import (
-    _MAX_CHART_TABLE_CELLS,
     MsPowerpointDocumentBackend,
-    _build_chart_table,
     _is_metafile,
+)
+from docling.backend.utils.charts import (
+    MAX_CHART_TABLE_CELLS,
     _last_populated_row,
+    build_chart_table,
 )
 from docling.datamodel.backend_options import MsPowerpointBackendOptions
 from docling.datamodel.base_models import InputFormat, ItemAndImageEnrichmentElement
@@ -504,27 +507,25 @@ def test_last_populated_row_trims_only_trailing_empty_rows():
 
 def test_chart_with_no_populated_data_returns_no_table():
     """A chart whose declared range holds no data at all yields no table."""
-    assert _build_chart_table(["", "", ""], [("s1", [])]) is None
+    assert build_chart_table(["", "", ""], [("s1", [])]) is None
 
 
 def test_chart_data_table_capped_at_max_cells(caplog):
     """Genuinely huge charts are truncated at the cell cap with a warning.
 
     60k populated points in 2 series would emit 180k cells; the table is cut to
-    ``_MAX_CHART_TABLE_CELLS`` cells instead of ballooning.
+    ``MAX_CHART_TABLE_CELLS`` cells instead of ballooning.
     """
     n_points = 60_000
     values = [str(i) for i in range(n_points)]
     categories = [f"c{i}" for i in range(n_points)]
 
-    with caplog.at_level(
-        logging.WARNING, logger="docling.backend.mspowerpoint_backend"
-    ):
-        table_data = _build_chart_table(categories, [("s1", values), ("s2", values)])
+    with caplog.at_level(logging.WARNING, logger="docling.backend.utils.charts"):
+        table_data = build_chart_table(categories, [("s1", values), ("s2", values)])
 
     assert table_data is not None
     assert table_data.num_cols == 3
-    capped_rows = _MAX_CHART_TABLE_CELLS // 3
+    capped_rows = MAX_CHART_TABLE_CELLS // 3
     assert table_data.num_rows == capped_rows + 1
     assert "cell cap" in caplog.text
     grid = {
@@ -961,6 +962,10 @@ def test_metafile_detection(image_bytes: bytes, expected: bool):
     assert _is_metafile(image_bytes) is expected
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 11),
+    reason="Pillow 12 stores the WMF handler on the module, not the image class",
+)
 def test_pptx_emf_picture_survives_without_pillow_metafile_support(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
 ):
@@ -978,9 +983,9 @@ def test_pptx_emf_picture_survives_without_pillow_metafile_support(
 
     import docling.backend.mspowerpoint_backend as _pptx_backend
 
-    # The plugin registers a GDI-backed handler at import time on Windows only;
-    # on other platforms this attribute is already None.
-    monkeypatch.setattr(WmfImagePlugin, "_handler", None)
+    # The plugin registers a GDI-backed handler on Windows only. Pillow stores
+    # it on the image class; on other platforms the value is already None.
+    monkeypatch.setattr(WmfImagePlugin.WmfStubImageFile, "_handler", None)
     # Patch get_docx_to_pdf_converter in the pptx backend's own namespace so
     # LibreOffice is reported as unavailable regardless of PATH, environment
     # variables, or hardcoded install paths on the test machine.
@@ -1038,6 +1043,10 @@ def test_pptx_undecodable_raster_picture_is_still_skipped(tmp_path: Path):
     assert "Quarterly results" in [t.text for t in doc.texts]
 
 
+@pytest.mark.skipif(
+    sys.version_info < (3, 11),
+    reason="Pillow 12 stores the WMF handler on the module, not the image class",
+)
 def test_pptx_emf_picture_rasterized_via_libreoffice(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, libreoffice_available: bool
 ):
@@ -1054,7 +1063,7 @@ def test_pptx_emf_picture_rasterized_via_libreoffice(
 
     from PIL import WmfImagePlugin
 
-    monkeypatch.setattr(WmfImagePlugin, "_handler", None)
+    monkeypatch.setattr(WmfImagePlugin.WmfStubImageFile, "_handler", None)
 
     deck_path = _deck_with_picture(tmp_path, _emf_bytes(drawable=True), ".emf")
     doc = get_converter().convert(deck_path).document

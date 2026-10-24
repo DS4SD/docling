@@ -135,11 +135,12 @@ def _download_distil_whisper_models(
         disable_progress_bars()
 
     for model_name in model_names:
-        repo_id, filename = _DISTIL_WHISPER_OPENAI_CHECKPOINTS[model_name]
+        repo_id, filename, revision = _DISTIL_WHISPER_OPENAI_CHECKPOINTS[model_name]
         _log.info("Downloading Distil-Whisper model %s...", model_name)
         hf_hub_download(
             repo_id=repo_id,
             filename=filename,
+            revision=revision,
             cache_dir=output_dir,
             force_download=force,
         )

@@ -1,8 +1,10 @@
 # SPDX-FileCopyrightText: The Docling Contributors
 # SPDX-License-Identifier: MIT
 
+import json
 import logging
 import shutil
+import subprocess
 import sys
 import tempfile
 from io import BytesIO
@@ -42,9 +44,11 @@ from docling.datamodel.pipeline_options_asr_model import (
     InlineAsrMlxWhisperOptions,
     InlineAsrNativeWhisperOptions,
     InlineAsrOptions,
+    InlineAsrTransformersOptions,
     InlineAsrWhisperS2TOptions,
 )
 from docling.exceptions import OperationNotAllowed
+from docling.pipeline.asr_transformers import TransformersAsrDecoder
 from docling.pipeline.base_pipeline import BasePipeline
 from docling.utils.accelerator_utils import decide_device
 from docling.utils.profiling import ProfilingScope, TimeRecorder
@@ -187,6 +191,41 @@ class _ConversationItem(BaseModel):
         return result
 
 
+def _resolve_asr_artifacts(artifacts_path: Path, repo_id: str) -> Path:
+    """Find a local checkpoint, either directly or under its repo cache folder."""
+    roots = (
+        artifacts_path,
+        artifacts_path / repo_id.replace("/", "--"),
+    )
+    for candidate in roots:
+        if (candidate / "config.json").is_file():
+            return candidate
+    raise FileNotFoundError(
+        f"ASR model {repo_id} was not found in {artifacts_path}. "
+        "Expected config.json in that directory or its repo cache folder."
+    )
+
+
+def _audio_duration_seconds(fpath: Path) -> float:
+    """Read audio duration for ASR models that return text without timestamps."""
+    result = subprocess.run(
+        [
+            "ffprobe",
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "json",
+            str(fpath),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return float(json.loads(result.stdout)["format"]["duration"])
+
+
 class _NativeWhisperModel:
     def __init__(
         self,
@@ -232,7 +271,7 @@ class _NativeWhisperModel:
                 from huggingface_hub import hf_hub_download
                 from huggingface_hub.utils import LocalEntryNotFoundError
 
-                repo_id, filename = distil_checkpoint
+                repo_id, filename, revision = distil_checkpoint
                 _log.info(
                     f"loading {self.model_name} from OpenAI-format checkpoint "
                     f"{repo_id}/{filename}"
@@ -244,6 +283,7 @@ class _NativeWhisperModel:
                         checkpoint_path = hf_hub_download(
                             repo_id=repo_id,
                             filename=filename,
+                            revision=revision,
                             cache_dir=str(artifacts_path),
                             local_files_only=True,
                         )
@@ -258,7 +298,7 @@ class _NativeWhisperModel:
                         ) from err
                 else:
                     checkpoint_path = hf_hub_download(
-                        repo_id=repo_id, filename=filename
+                        repo_id=repo_id, filename=filename, revision=revision
                     )
                 self.model = whisper.load_model(
                     name=checkpoint_path, device=self.device
@@ -402,8 +442,18 @@ class _MlxWhisperModel:
             self.model_name = asr_options.repo_id
             _log.info(f"loading _MlxWhisperModel({self.model_name})")
 
-            # MLX Whisper models are loaded differently - they use HuggingFace repos
-            self.model_path = self.model_name
+            self.model_path = (
+                str(_resolve_asr_artifacts(artifacts_path, self.model_name))
+                if artifacts_path is not None
+                else self.model_name
+            )
+            if artifacts_path is not None and not any(
+                (Path(self.model_path) / name).is_file()
+                for name in ("weights.safetensors", "weights.npz")
+            ):
+                raise FileNotFoundError(
+                    f"MLX Whisper weights are missing from {self.model_path}"
+                )
 
             # Store MLX-specific options
             self.language = asr_options.language
@@ -453,7 +503,7 @@ class _MlxWhisperModel:
             return conv_res
 
         except Exception as exc:
-            _log.error(f"MLX Audio transcription has an error: {exc}")
+            _log.error(f"ASR transcription has an error: {exc}")
             conv_res.status = ConversionStatus.FAILURE
             return conv_res
 
@@ -511,6 +561,91 @@ class _MlxWhisperModel:
             convo.append(item)
 
         return convo
+
+
+class _TransformersAsrModel(_MlxWhisperModel):
+    """Transcribe speech with a Transformers ASR pipeline."""
+
+    def __init__(
+        self,
+        enabled: bool,
+        artifacts_path: Path | None,
+        accelerator_options: AcceleratorOptions,
+        asr_options: InlineAsrTransformersOptions,
+    ):
+        self.enabled = enabled
+        if not enabled:
+            return
+        self.asr_options = asr_options
+        self.device = decide_device(
+            accelerator_options.device,
+            supported_devices=asr_options.supported_devices,
+        )
+        model = (
+            str(_resolve_asr_artifacts(artifacts_path, asr_options.repo_id))
+            if artifacts_path is not None
+            else asr_options.repo_id
+        )
+        self.decoder: TransformersAsrDecoder | None = None
+        if asr_options.model_family in {"granite", "granite_ctc"}:
+            self.decoder = TransformersAsrDecoder(
+                asr_options, self.device, model, artifacts_path is not None
+            )
+            return
+
+        try:
+            from transformers import pipeline
+        except ImportError as exc:
+            raise ImportError(
+                "Transformers ASR requires transformers. Install the "
+                "`feat-asr-transformers` extra."
+            ) from exc
+        pipeline_kwargs = {
+            "task": "automatic-speech-recognition",
+            "model": model,
+            "device": self.device,
+        }
+        if artifacts_path is not None:
+            pipeline_kwargs["model_kwargs"] = {"local_files_only": True}
+        else:
+            pipeline_kwargs["revision"] = asr_options.revision
+        if asr_options.torch_dtype is not None:
+            pipeline_kwargs["dtype"] = asr_options.torch_dtype
+        self.asr_pipeline = pipeline(**pipeline_kwargs)
+
+    def transcribe(self, fpath: Path) -> list[_ConversationItem]:
+        if self.asr_options.model_family == "whisper":
+            generate_kwargs: dict[str, str] = {"task": self.asr_options.task}
+            if self.asr_options.language is not None:
+                generate_kwargs["language"] = self.asr_options.language
+            result = self.asr_pipeline(
+                str(fpath),
+                return_timestamps=True,
+                generate_kwargs=generate_kwargs,
+            )
+            return [
+                _ConversationItem(
+                    start_time=chunk["timestamp"][0],
+                    end_time=chunk["timestamp"][1],
+                    text=chunk["text"].strip(),
+                )
+                for chunk in result["chunks"]
+            ]
+
+        if self.decoder is not None:
+            text = self.decoder.transcribe(fpath)
+        else:
+            result = self.asr_pipeline(str(fpath))
+            text = result["text"].strip()
+        if not text:
+            return []
+        return [
+            _ConversationItem(
+                start_time=0.0,
+                end_time=_audio_duration_seconds(fpath),
+                text=text,
+            )
+        ]
 
 
 class _WhisperS2TModel:
@@ -835,8 +970,9 @@ def _merge_into_sentences(
     """Merge Whisper segments into complete sentences.
 
     Consecutive segments are merged until a sentence-ending punctuation
-    mark (. ? !) is found. The merged item spans the full time range
-    of all contributing segments and concatenates their text.
+    mark (. ? ! or its full-width CJK form) is found. The merged item spans
+    the full time range of all contributing segments and concatenates their
+    text.
 
     This produces one block per sentence, which maps cleanly to one
     speaker per block for diarization.
@@ -869,7 +1005,7 @@ def _merge_into_sentences(
                 current.words = (current.words or []) + list(item.words)
 
         # Flush on sentence boundary
-        if current.text.rstrip().endswith((".", "?", "!")):
+        if current.text.rstrip().endswith((".", "?", "!", "。", "？", "！")):  # noqa: RUF001
             merged.append(current)
             current = None
 
@@ -923,6 +1059,13 @@ class _AsrModelFactory:
             )
         elif isinstance(asr_options, InlineAsrMlxWhisperOptions):
             return _MlxWhisperModel(
+                enabled=True,
+                artifacts_path=artifacts_path,
+                accelerator_options=accelerator_options,
+                asr_options=asr_options,
+            )
+        elif isinstance(asr_options, InlineAsrTransformersOptions):
+            return _TransformersAsrModel(
                 enabled=True,
                 artifacts_path=artifacts_path,
                 accelerator_options=accelerator_options,
