@@ -63,30 +63,12 @@ try:  # pragma: no cover - import-time guard
     from marko.ext.gfm import elements as _gfm_el
     from marko.helpers import MarkoExtension
 
-    class _GfmParagraph(_gfm_el.Paragraph):
-        # GFM task-list markers ("[x] " / "[ ] ") belong only at the start of a list
-        # item's first paragraph. marko's GFM paragraph strips them from every
-        # paragraph, which would delete the text of e.g. "[x] I accept the terms".
-        @classmethod
-        def parse(cls, source):
-            state = source.state
-            opens_list_item = isinstance(state, marko.block.ListItem) and not getattr(
-                state, "_docling_has_paragraph", False
-            )
-            if isinstance(state, marko.block.ListItem):
-                setattr(state, "_docling_has_paragraph", True)
-            result = super().parse(source)
-            if hasattr(result, "__dict__") and not isinstance(
-                result, marko.block.BlockElement
-            ):
-                setattr(result, "docling_task_list_candidate", opens_list_item)
-            return result
-
-        def __init__(self, lines: list[str]) -> None:
-            if getattr(lines, "docling_task_list_candidate", False):
-                super().__init__(lines)
-            else:
-                marko.block.Paragraph.__init__(self, lines)
+    class _GfmParagraph(marko.block.Paragraph):
+        # Based on marko's plain Paragraph rather than the GFM one: GFM's strips a
+        # leading task-list marker ("[x] " / "[ ] ") and keeps it only in
+        # `checked`, which a DoclingDocument list item cannot carry, so the marker
+        # was lost. Here it stays part of the text, in list items and elsewhere.
+        override = True
 
         @classmethod
         def break_paragraph(
@@ -153,7 +135,6 @@ class _ListItemCreationPayload(BaseModel):
     kind: Literal["list_item"] = "list_item"
     enumerated: bool
     marker: str = ""
-    checkbox: DocItemLabel | None = None
 
 
 _CreationPayload = Annotated[
@@ -632,18 +613,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
         marker: str = "",
         formatting: Formatting | None = None,
         hyperlink: AnyUrl | Path | None = None,
-        checkbox: DocItemLabel | None = None,
     ):
-        if checkbox is not None:
-            # A GFM task-list item: a checkbox in the list, as the HTML backend
-            # produces for <li><input type="checkbox">.
-            return doc.add_text(
-                label=checkbox,
-                text=text,
-                parent=parent_item,
-                formatting=formatting,
-                hyperlink=hyperlink,
-            )
         item = doc.add_list_item(
             text=text,
             enumerated=enumerated,
@@ -712,7 +682,6 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                     marker=to_create.marker,
                     formatting=formatting,
                     hyperlink=hyperlink,
-                    checkbox=to_create.checkbox,
                 )
                 if parent_ref:
                     list_last_item_by_ref[parent_ref] = cast(ListItem, parent_item)
@@ -825,14 +794,6 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                 start = list_start_by_ref.get(parent_ref, 1)
                 count = list_item_counter_by_ref.get(parent_ref, 0)
                 marker = f"{start + count}."
-            checked: bool | None = getattr(child, "checked", None)
-            checkbox: DocItemLabel | None = None
-            if checked is not None:
-                checkbox = (
-                    DocItemLabel.CHECKBOX_SELECTED
-                    if checked
-                    else DocItemLabel.CHECKBOX_UNSELECTED
-                )
             non_list_children: list[marko.element.Element] = [
                 item
                 for item in child.children
@@ -853,7 +814,6 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                     marker=marker,
                     formatting=formatting,
                     hyperlink=hyperlink,
-                    checkbox=checkbox,
                 )
                 if parent_ref:
                     list_last_item_by_ref[parent_ref] = cast(ListItem, parent_item)
@@ -862,9 +822,7 @@ class MarkdownDocumentBackend(DeclarativeDocumentBackend):
                     )
             else:
                 creation_stack.append(
-                    _ListItemCreationPayload(
-                        enumerated=enumerated, marker=marker, checkbox=checkbox
-                    )
+                    _ListItemCreationPayload(enumerated=enumerated, marker=marker)
                 )
 
         elif isinstance(element, marko.inline.Image):
