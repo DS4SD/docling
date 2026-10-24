@@ -632,6 +632,23 @@ class _DummyBackend(AbstractDocumentBackend):
 
 _OFFICE_OPEN_XML_ROOT = "application/vnd.openxmlformats-officedocument"
 
+_CONTENT_SNIFF_BYTES = 8192
+"""How much of a document ``_guess_format`` reads to probe its content.
+
+A path and a stream read the same amount: a limit that differed between them
+would make one document's format depend on how it was handed over, and the
+smaller limit silently drops a document whose first format marker -- an
+``<html>`` root, an XML declaration, a LaTeX preamble -- sits past it.
+"""
+
+_ODF_MIMETYPE_MAX_BYTES = 256
+"""Longest ``mimetype`` member that ZIP detection accepts as OpenDocument.
+
+The member holds a short ASCII media type such as
+``application/vnd.oasis.opendocument.text``; a longer one is not ODF and is not
+read in full.
+"""
+
 _ZIP_SUFFIX_MIMETYPES = {
     ".xlsx": _OFFICE_OPEN_XML_ROOT + ".spreadsheetml.sheet",
     ".docx": _OFFICE_OPEN_XML_ROOT + ".wordprocessingml.document",
@@ -822,7 +839,7 @@ class _DocumentConversionInput(BaseModel):
             )
             if needs_content_sniff:
                 with obj.open("rb") as f:
-                    content = f.read(1024)
+                    content = f.read(_CONTENT_SNIFF_BYTES)
             if mime is not None and mime.lower() == "application/zip":
                 named = _ZIP_SUFFIX_MIMETYPES.get(obj.suffix.lower())
                 if named is not None:
@@ -839,7 +856,7 @@ class _DocumentConversionInput(BaseModel):
                 return InputFormat.XML_DOCLANG
             if _DocumentConversionInput._has_dclx_extension(obj.name):
                 return InputFormat.DCLX
-            content = obj.stream.read(8192)
+            content = obj.stream.read(_CONTENT_SNIFF_BYTES)
             obj.stream.seek(0)
             mime = filetype.guess_mime(content)
             obj_ext = (
@@ -943,10 +960,18 @@ class _DocumentConversionInput(BaseModel):
                     return mime_root + ".spreadsheetml.sheet"
                 elif "ppt/presentation.xml" in names:
                     return mime_root + ".presentationml.presentation"
-                if "mimetype" in names:
-                    odf_mime = zf.read("mimetype").decode("ascii", errors="ignore")
-                    if odf_mime.startswith("application/vnd.oasis.opendocument."):
-                        return odf_mime.strip()
+                if (
+                    "mimetype" in names
+                    and zf.getinfo("mimetype").file_size <= _ODF_MIMETYPE_MAX_BYTES
+                ):
+                    # Read one byte past the limit so that a member whose real
+                    # size differs from the declared one is still rejected.
+                    with zf.open("mimetype") as fp:
+                        raw = fp.read(_ODF_MIMETYPE_MAX_BYTES + 1)
+                    if len(raw) <= _ODF_MIMETYPE_MAX_BYTES:
+                        odf_mime = raw.decode("ascii", errors="ignore")
+                        if odf_mime.startswith("application/vnd.oasis.opendocument."):
+                            return odf_mime.strip()
         except (zipfile.BadZipFile, OSError):
             pass
         finally:
