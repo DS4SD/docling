@@ -97,6 +97,31 @@ def test_removed_bitmap_area_threshold_is_accepted_as_deprecated(options_cls):
     assert options.page_bitmap_area_threshold == 0.97
 
 
+@pytest.mark.parametrize("options_cls", OCR_OPTION_CLASSES)
+def test_removed_bitmap_area_threshold_is_accepted_on_assignment(options_cls):
+    """Code written before `OcrMode` also set the field on a built object."""
+    options = options_cls()
+
+    with pytest.deprecated_call(match="page_bitmap_area_threshold"):
+        options.bitmap_area_threshold = 0.97
+
+    assert options.page_bitmap_area_threshold == 0.97
+    assert "bitmap_area_threshold" not in options.model_dump()
+
+
+def test_deprecation_warning_points_to_the_caller():
+    """Python hides a DeprecationWarning that points to library code."""
+    options = EasyOcrOptions()
+
+    with pytest.deprecated_call() as constructor_warnings:
+        EasyOcrOptions(bitmap_area_threshold=0.97)
+    with pytest.deprecated_call() as assignment_warnings:
+        options.bitmap_area_threshold = 0.97
+
+    for caught in (constructor_warnings, assignment_warnings):
+        assert [w.filename for w in caught] == [__file__]
+
+
 def test_explicit_threshold_wins_over_the_deprecated_one():
     with pytest.deprecated_call():
         options = EasyOcrOptions(

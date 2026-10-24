@@ -270,10 +270,7 @@ class BaseOcrModel(BasePageModel, BaseModelWithOptions):
     def _has_enough_bitmap_area(self, page: Page) -> bool:
         r"""
         Whether bitmaps cover at least `page_bitmap_area_threshold` of the page.
-
-        Without a threshold every page qualifies. So does a page without a
-        backend: its bitmaps cannot be measured, and skipping OCR on it could
-        lose its only text.
+        True without a threshold, or without a backend to measure the bitmaps.
         """
         threshold = self.options.page_bitmap_area_threshold
         if threshold is None or page._backend is None:
@@ -645,8 +642,7 @@ class BaseOcrModel(BasePageModel, BaseModelWithOptions):
         # Get existing cells from the read-only property
         existing_cells = page.cells
 
-        # A page that `page_bitmap_area_threshold` kept from OCR has no OCR
-        # cells to replace its PDF cells with, also in FULL_PAGE mode
+        # False on a FULL_PAGE page that `page_bitmap_area_threshold` kept from OCR
         full_page_ocr = (
             self.options.mode == OcrMode.FULL_PAGE
             and self._has_enough_bitmap_area(page)

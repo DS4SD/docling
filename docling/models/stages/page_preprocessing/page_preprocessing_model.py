@@ -31,8 +31,7 @@ def resolve_skip_cell_extraction(pipeline_options: PdfPipelineOptions) -> bool:
     that decode costs multiple GiB regardless of cell content levels.
     See https://github.com/docling-project/docling/issues/4058.
 
-    A `page_bitmap_area_threshold` keeps the decode: the pages below it skip
-    OCR, so their native text cells are the only text they have.
+    A `page_bitmap_area_threshold` keeps the decode: the pages below it skip OCR.
     """
     ocr_options = pipeline_options.ocr_options
     return (

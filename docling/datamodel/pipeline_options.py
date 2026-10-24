@@ -193,6 +193,11 @@ class GraniteVisionTableStructureOptions(BaseTableStructureOptions):
     kind: ClassVar[str] = "granite_vision_table"
 
 
+_BITMAP_AREA_THRESHOLD_DEPRECATION = (
+    "`bitmap_area_threshold` is deprecated; set `page_bitmap_area_threshold` instead."
+)
+
+
 class OcrOptions(BaseOptions):
     """Base configuration for Optical Character Recognition engines.
 
@@ -313,17 +318,13 @@ class OcrOptions(BaseOptions):
     @classmethod
     def _accept_bitmap_area_threshold(cls, data: Any) -> Any:
         r"""
-        Accept the removed `bitmap_area_threshold` keyword as the page-level
-        gate it is closest to, so configurations written before `OcrMode` keep
-        skipping OCR on pages with little bitmap content instead of failing.
+        Accept the deprecated `bitmap_area_threshold` constructor keyword and
+        translate it into `page_bitmap_area_threshold`.
         """
         if not isinstance(data, dict) or "bitmap_area_threshold" not in data:
             return data
         warnings.warn(
-            "`bitmap_area_threshold` is deprecated; set "
-            "`page_bitmap_area_threshold` instead.",
-            DeprecationWarning,
-            stacklevel=2,
+            _BITMAP_AREA_THRESHOLD_DEPRECATION, DeprecationWarning, stacklevel=3
         )
         threshold = data.pop("bitmap_area_threshold")
         data.setdefault("page_bitmap_area_threshold", threshold)
@@ -346,6 +347,23 @@ class OcrOptions(BaseOptions):
     def force_full_page_ocr(self, value: bool) -> None:
         if value:
             self.mode = OcrMode.FULL_PAGE
+
+    # Deprecated: superseded by `page_bitmap_area_threshold`. A plain property,
+    # not a computed field, so it stays out of dumps.
+    @property
+    def bitmap_area_threshold(self) -> float | None:
+        warnings.warn(
+            _BITMAP_AREA_THRESHOLD_DEPRECATION, DeprecationWarning, stacklevel=2
+        )
+        return self.page_bitmap_area_threshold
+
+    @bitmap_area_threshold.setter
+    def bitmap_area_threshold(self, value: float | None) -> None:
+        # stacklevel=4: pydantic calls the setter through two frames
+        warnings.warn(
+            _BITMAP_AREA_THRESHOLD_DEPRECATION, DeprecationWarning, stacklevel=4
+        )
+        self.page_bitmap_area_threshold = value
 
 
 class OcrAutoOptions(OcrOptions):
