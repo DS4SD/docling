@@ -198,7 +198,7 @@ class OcrOptions(BaseOptions):
 
     Defines the common interface shared by all OCR engine implementations.
     Subclasses provide engine-specific parameters while inheriting the shared
-    language selection, full-page OCR toggle, and bitmap area threshold.
+    language selection, OCR mode, and page bitmap area threshold.
 
     See Also:
         `OcrAutoOptions`: Automatic engine selection based on availability.
@@ -260,6 +260,22 @@ class OcrOptions(BaseOptions):
         ),
     ] = 3.0
 
+    page_bitmap_area_threshold: Annotated[
+        float | None,
+        Field(
+            description=(
+                "Minimum fraction of the page area (0.0-1.0) that bitmaps must cover "
+                "for the page to be processed with OCR. Pages below it skip OCR, "
+                "whatever the `mode`. With `mode=OcrMode.FULL_PAGE`, a high value "
+                "such as 0.97 OCRs only scanned pages and skips programmatic pages "
+                "that only carry logos or photos. `None` processes every page."
+            ),
+            examples=[None, 0.97],
+            ge=0.0,
+            le=1.0,
+        ),
+    ] = None
+
     model_config = ConfigDict(
         validate_assignment=True,
         validate_default=True,
@@ -291,6 +307,26 @@ class OcrOptions(BaseOptions):
         """
         if isinstance(data, dict) and data.pop("force_full_page_ocr", False):
             data["mode"] = OcrMode.FULL_PAGE
+        return data
+
+    @model_validator(mode="before")
+    @classmethod
+    def _accept_bitmap_area_threshold(cls, data: Any) -> Any:
+        r"""
+        Accept the removed `bitmap_area_threshold` keyword as the page-level
+        gate it is closest to, so configurations written before `OcrMode` keep
+        skipping OCR on pages with little bitmap content instead of failing.
+        """
+        if not isinstance(data, dict) or "bitmap_area_threshold" not in data:
+            return data
+        warnings.warn(
+            "`bitmap_area_threshold` is deprecated; set "
+            "`page_bitmap_area_threshold` instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        threshold = data.pop("bitmap_area_threshold")
+        data.setdefault("page_bitmap_area_threshold", threshold)
         return data
 
     # Deprecated: superseded by `OcrMode.FULL_PAGE`. Kept for backwards

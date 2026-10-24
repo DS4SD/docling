@@ -74,6 +74,7 @@ class OcrAutoModel(BaseOcrModel):
                         options=OcrMacOptions(
                             mode=self.options.mode,
                             lang=self.options.lang,
+                            page_bitmap_area_threshold=self.options.page_bitmap_area_threshold,
                         ),
                         accelerator_options=accelerator_options,
                     )
@@ -99,6 +100,7 @@ class OcrAutoModel(BaseOcrModel):
                         options=NemotronOcrOptions(
                             mode=self.options.mode,
                             lang=self.options.lang,
+                            page_bitmap_area_threshold=self.options.page_bitmap_area_threshold,
                         ),
                         accelerator_options=accelerator_options,
                     )
@@ -130,6 +132,7 @@ class OcrAutoModel(BaseOcrModel):
                             backend="onnxruntime",
                             mode=self.options.mode,
                             lang=self.options.lang,
+                            page_bitmap_area_threshold=self.options.page_bitmap_area_threshold,
                         ),
                         accelerator_options=accelerator_options,
                     )
@@ -159,6 +162,7 @@ class OcrAutoModel(BaseOcrModel):
                         options=EasyOcrOptions(
                             mode=self.options.mode,
                             lang=self.options.lang,
+                            page_bitmap_area_threshold=self.options.page_bitmap_area_threshold,
                         ),
                         accelerator_options=accelerator_options,
                     )
@@ -184,6 +188,7 @@ class OcrAutoModel(BaseOcrModel):
                             backend="torch",
                             mode=self.options.mode,
                             lang=self.options.lang,
+                            page_bitmap_area_threshold=self.options.page_bitmap_area_threshold,
                         ),
                         accelerator_options=accelerator_options,
                     )

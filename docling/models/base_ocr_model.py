@@ -240,6 +240,9 @@ class BaseOcrModel(BasePageModel, BaseModelWithOptions):
         """
         assert page.size is not None
 
+        if not self._has_enough_bitmap_area(page):
+            return []
+
         # Compute the OCR rects according to the mode
         ocr_rects: list[BoundingBox]
 
@@ -263,6 +266,33 @@ class BaseOcrModel(BasePageModel, BaseModelWithOptions):
                 )
             ]
         return ocr_rects
+
+    def _has_enough_bitmap_area(self, page: Page) -> bool:
+        r"""
+        Whether bitmaps cover at least `page_bitmap_area_threshold` of the page.
+
+        Without a threshold every page qualifies. So does a page without a
+        backend: its bitmaps cannot be measured, and skipping OCR on it could
+        lose its only text.
+        """
+        threshold = self.options.page_bitmap_area_threshold
+        if threshold is None or page._backend is None:
+            return True
+        assert page.size is not None
+
+        coverage, _ = self._deduplicate_rects(
+            page.size, page._backend.get_bitmap_rects()
+        )
+        if coverage < threshold:
+            _log.debug(
+                "Page %s: bitmaps cover %.3f of the page, below "
+                "page_bitmap_area_threshold=%.3f; skipping OCR.",
+                page.page_no,
+                coverage,
+                threshold,
+            )
+            return False
+        return True
 
     def _find_layout_ocr_rects(self, page: Page) -> list[BoundingBox]:
         r"""
@@ -604,7 +634,8 @@ class BaseOcrModel(BasePageModel, BaseModelWithOptions):
         r"""
         Post-process the OCR cells and update the page object according to the algorithm:
 
-        - If FULL_PAGE: Any existing PDF cells are ignored and only the OCR cells are used.
+        - If FULL_PAGE: Any existing PDF cells are ignored and only the OCR cells are used,
+          unless `page_bitmap_area_threshold` skipped OCR on the page: it keeps its PDF cells.
         - If LAYOUT_REGIONS or PDF_AWARE_LAYOUT_REGIONS and the priority parameter is None,
           the priority is auto-selected based on the OcrMode:
               - OCR_FIRST when LAYOUT_REGIONS
@@ -616,7 +647,11 @@ class BaseOcrModel(BasePageModel, BaseModelWithOptions):
 
         # Combine existing and OCR cells with overlap filtering
         if self.options.mode == OcrMode.FULL_PAGE:
-            final_cells = ocr_cells
+            # A page that `page_bitmap_area_threshold` kept from OCR has no
+            # OCR cells to replace its PDF cells with
+            final_cells = (
+                ocr_cells if self._has_enough_bitmap_area(page) else existing_cells
+            )
         else:
             if priority is None:
                 priority = (
