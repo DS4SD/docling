@@ -3,6 +3,7 @@
 
 """Tests for PowerPoint shapes filled with a picture (``a:blipFill``)."""
 
+import warnings
 from io import BytesIO
 from pathlib import Path
 
@@ -77,7 +78,8 @@ def test_pptx_linked_picture_fill_is_ignored(tmp_path: Path):
     pptx_path = tmp_path / "blipfill_link.pptx"
     _picture_filled_shape_pptx(pptx_path, text="Linked fill", embed=False)
 
-    doc = get_converter().convert(pptx_path).document
+    with pytest.warns(UserWarning, match="picture fill without an embedded image"):
+        doc = get_converter().convert(pptx_path).document
 
     assert len(doc.pictures) == 0
     assert [t.text for t in doc.texts] == ["Linked fill"]
@@ -102,14 +104,27 @@ def test_pptx_picture_fill_with_missing_part_is_skipped(tmp_path: Path):
         '<p:sp xmlns:p="{p}"/>',
         # p:spPr with a non-picture fill.
         '<p:sp xmlns:p="{p}" xmlns:a="{a}"><p:spPr><a:solidFill/></p:spPr></p:sp>',
-        # a:blip with an empty r:embed.
-        '<p:sp xmlns:p="{p}" xmlns:a="{a}" xmlns:r="{r}"><p:spPr><a:blipFill>'
-        '<a:blip r:embed=""/></a:blipFill></p:spPr></p:sp>',
     ],
-    ids=["no_sppr", "solid_fill", "empty_embed"],
+    ids=["no_sppr", "solid_fill"],
 )
-def test_picture_fill_rid_without_embedded_fill(xml: str):
-    """Shapes without an embedded picture fill give no relationship id."""
+def test_picture_fill_rid_without_picture_fill(xml: str):
+    """Shapes without a picture fill give no relationship id and no warning."""
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        assert _picture_fill_rid_from_xml(xml) is None
+
+
+def test_picture_fill_rid_with_empty_embed_warns():
+    """A picture fill with an empty r:embed gives no relationship id."""
+    xml = (
+        '<p:sp xmlns:p="{p}" xmlns:a="{a}" xmlns:r="{r}"><p:spPr><a:blipFill>'
+        '<a:blip r:embed=""/></a:blipFill></p:spPr></p:sp>'
+    )
+    with pytest.warns(UserWarning, match="picture fill without an embedded image"):
+        assert _picture_fill_rid_from_xml(xml) is None
+
+
+def _picture_fill_rid_from_xml(xml: str):
     from types import SimpleNamespace
 
     from docling.backend.mspowerpoint_backend import MsPowerpointDocumentBackend
@@ -121,6 +136,6 @@ def test_picture_fill_rid_without_embedded_fill(xml: str):
             r="http://schemas.openxmlformats.org/officeDocument/2006/relationships",
         )
     )
-    shape = SimpleNamespace(_element=element)
-
-    assert MsPowerpointDocumentBackend._picture_fill_rid(shape) is None
+    return MsPowerpointDocumentBackend._picture_fill_rid(
+        SimpleNamespace(_element=element)
+    )

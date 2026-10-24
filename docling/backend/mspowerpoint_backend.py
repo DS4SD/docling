@@ -1172,8 +1172,10 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
 
         A shape filled with a picture (Format Shape > Fill > Picture) is a
         ``p:sp`` whose ``p:spPr`` holds an ``a:blipFill``; python-pptx reads it
-        as an ``Autoshape``, not a ``Picture``. Linked (not embedded) fills and
-        other fill kinds give ``None``.
+        as an ``Autoshape``, not a ``Picture``. Other fill kinds give ``None``.
+        A picture fill without an embedded image (for example one that only
+        links an external file with ``r:link``) also gives ``None``, with a
+        warning, because its image is not in the package.
         """
         sp_pr = shape._element.find(qn("p:spPr"))
         if sp_pr is None:
@@ -1181,7 +1183,15 @@ class MsPowerpointDocumentBackend(DeclarativeDocumentBackend, PaginatedDocumentB
         blip = sp_pr.find(f"{qn('a:blipFill')}/{qn('a:blip')}")
         if blip is None:
             return None
-        return blip.get(qn("r:embed")) or None
+        rid = blip.get(qn("r:embed"))
+        if not rid:
+            warnings.warn(
+                "Skipping picture fill without an embedded image",
+                UserWarning,
+                stacklevel=2,
+            )
+            return None
+        return rid
 
     def _handle_pictures(
         self, shape, parent_slide, slide_ind, doc, slide_size, fill_rid=None
