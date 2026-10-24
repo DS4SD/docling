@@ -5,8 +5,9 @@
 
 It restores the "OCR only scanned pages" use case of the `bitmap_area_threshold`
 removed with the introduction of `OcrMode` (#4834). A page below the threshold
-skips OCR, so it must keep its native text, also in `FULL_PAGE` mode, where OCR
-cells normally replace the native cells and their extraction is skipped.
+skips OCR, so it must keep its native text, line, word and character cells, also
+in `FULL_PAGE` mode, where OCR cells normally replace the native cells and their
+extraction is skipped.
 """
 
 from collections.abc import Iterable
@@ -16,7 +17,7 @@ from types import SimpleNamespace
 import pytest
 from docling_core.types.doc import BoundingBox
 
-from docling.backend.pypdfium2_backend import PyPdfiumDocumentBackend
+from docling.backend.docling_parse_backend import ThreadedDoclingParseDocumentBackend
 from docling.datamodel.accelerator_options import AcceleratorOptions
 from docling.datamodel.base_models import ConfidenceReport, InputFormat, Page
 from docling.datamodel.document import ConversionResult, InputDocument
@@ -28,6 +29,7 @@ from docling.datamodel.pipeline_options import (
     RapidOcrOptions,
     TesseractOcrOptions,
 )
+from docling.datamodel.settings import DocumentLimits
 from docling.models.base_ocr_model import BaseOcrModel
 from docling.models.stages.page_preprocessing.page_preprocessing_model import (
     resolve_skip_cell_extraction,
@@ -66,11 +68,17 @@ def _model(mode: OcrMode, threshold: float | None) -> _OcrRectsOnlyModel:
 
 
 def _first_page(pdf: Path) -> Page:
+    """The first page, parsed by the default backend, with its word cells."""
     in_doc = InputDocument(
-        path_or_stream=pdf, format=InputFormat.PDF, backend=PyPdfiumDocumentBackend
+        path_or_stream=pdf,
+        format=InputFormat.PDF,
+        backend=ThreadedDoclingParseDocumentBackend,
+        limits=DocumentLimits(page_range=(1, 1)),
     )
+    doc_backend = in_doc._backend
     page = Page(page_no=1)
-    page._backend = in_doc._backend.load_page(0)
+    page._backend = next(doc_backend.iter_pages())
+    doc_backend.unload()
     page.size = page._backend.get_size()
     page.parsed_page = page._backend.get_segmented_page()
     return page
@@ -113,13 +121,18 @@ def test_without_threshold_every_page_is_ocred():
 def test_full_page_ocr_keeps_the_native_text_of_a_skipped_page():
     """With no OCR cells, a skipped page would otherwise lose all its text."""
     page = _first_page(PROGRAMMATIC_PDF)
+    assert page.parsed_page is not None
     native_text = [cell.text for cell in page.cells]
-    assert native_text
+    native_words = [cell.text for cell in page.parsed_page.word_cells]
+    native_chars = [cell.text for cell in page.parsed_page.char_cells]
+    assert native_text and native_words
 
     model = _model(OcrMode.FULL_PAGE, threshold=0.97)
     model.post_process_cells([], page, SimpleNamespace(confidence=ConfidenceReport()))
 
     assert [cell.text for cell in page.cells] == native_text
+    assert [cell.text for cell in page.parsed_page.word_cells] == native_words
+    assert [cell.text for cell in page.parsed_page.char_cells] == native_chars
 
 
 def test_full_page_ocr_with_threshold_extracts_the_native_text():

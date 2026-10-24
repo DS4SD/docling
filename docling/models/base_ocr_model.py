@@ -645,13 +645,18 @@ class BaseOcrModel(BasePageModel, BaseModelWithOptions):
         # Get existing cells from the read-only property
         existing_cells = page.cells
 
+        # A page that `page_bitmap_area_threshold` kept from OCR has no OCR
+        # cells to replace its PDF cells with, also in FULL_PAGE mode
+        full_page_ocr = (
+            self.options.mode == OcrMode.FULL_PAGE
+            and self._has_enough_bitmap_area(page)
+        )
+
         # Combine existing and OCR cells with overlap filtering
-        if self.options.mode == OcrMode.FULL_PAGE:
-            # A page that `page_bitmap_area_threshold` kept from OCR has no
-            # OCR cells to replace its PDF cells with
-            final_cells = (
-                ocr_cells if self._has_enough_bitmap_area(page) else existing_cells
-            )
+        if full_page_ocr:
+            final_cells = ocr_cells
+        elif self.options.mode == OcrMode.FULL_PAGE:
+            final_cells = existing_cells
         else:
             if priority is None:
                 priority = (
@@ -680,7 +685,7 @@ class BaseOcrModel(BasePageModel, BaseModelWithOptions):
         page.parsed_page.has_lines = len(final_cells) > 0
 
         # In OcrMode.FULL_PAGE, PDF-extracted word/char cells are unreliable. Keep only OCR cells
-        if self.options.mode == OcrMode.FULL_PAGE:
+        if full_page_ocr:
             page.parsed_page.word_cells = [
                 c for c in page.parsed_page.word_cells if c.from_ocr
             ]
