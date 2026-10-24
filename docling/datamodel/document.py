@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: The Docling Contributors
 # SPDX-License-Identifier: MIT
 
+import codecs
 import csv
 import json
 import logging
@@ -895,6 +896,7 @@ class _DocumentConversionInput(BaseModel):
                 mime = detected_afp
         mime = mime or _DocumentConversionInput._detect_html_xhtml(content)
         mime = mime or _DocumentConversionInput._detect_latex(content, obj_ext)
+        mime = mime or _DocumentConversionInput._detect_calendar(content, obj_ext)
         mime = mime or _DocumentConversionInput._detect_csv(content)
         mime = mime or "text/plain"
         formats = MimeTypeToFormat.get(mime, [])
@@ -1115,6 +1117,8 @@ class _DocumentConversionInput(BaseModel):
                 if ext == "msg"
                 else FormatToMimeType[InputFormat.EMAIL][0]
             )
+        elif ext in FormatToExtensions[InputFormat.CALENDAR]:
+            mime = FormatToMimeType[InputFormat.CALENDAR][0]
         return mime
 
     @staticmethod
@@ -1194,6 +1198,31 @@ class _DocumentConversionInput(BaseModel):
         content_str = content.decode("utf-8", errors="ignore").lstrip("﻿")
         if re.search(r"^[ \t]*\\document(?:class|style)\b", content_str, re.MULTILINE):
             return FormatToMimeType[InputFormat.LATEX][0]
+        return None
+
+    @staticmethod
+    def _detect_calendar(content: bytes, ext: Optional[str] = None) -> Optional[str]:
+        """Guess the mime type of an iCalendar file from its first line.
+
+        Args:
+            content: A short piece of a document from its beginning.
+            ext: The file extension, if any. A plain-text extension keeps its
+              Markdown fallback.
+
+        Returns:
+            The iCalendar mime type if the first non-blank line is
+              ``BEGIN:VCALENDAR``, or None.
+        """
+        if (ext or "").lower() in FormatToExtensions[InputFormat.MD]:
+            return None
+        codec = (
+            "utf-16"
+            if content.startswith((codecs.BOM_UTF16_LE, codecs.BOM_UTF16_BE))
+            else "utf-8"
+        )
+        content_str = content.decode(codec, errors="ignore").lstrip("﻿ \t\r\n")
+        if re.match(r"BEGIN:VCALENDAR\b", content_str, re.IGNORECASE):
+            return FormatToMimeType[InputFormat.CALENDAR][0]
         return None
 
     @staticmethod
